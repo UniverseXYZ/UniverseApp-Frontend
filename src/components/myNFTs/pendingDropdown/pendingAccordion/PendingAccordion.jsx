@@ -4,7 +4,7 @@ import Slider from 'react-slick';
 import arrowDown from '../../../../assets/images/arrow-down.svg';
 import PendingNextArrow from '../misc/PendingNextArrow';
 import PendingPrevArrow from '../misc/PendingPrevArrow';
-import './PendingAccordion.scss';
+// import './PendingAccordion.scss';
 
 const PendingAccordion = ({ title, dataLength, children }) => {
   const [isAccordionOpened, setIsAccordionOpened] = useState(false);

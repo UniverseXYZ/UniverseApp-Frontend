@@ -9,7 +9,7 @@ import backgroundTextLeft from '../../assets/images/mint-polymorph-welcome-bg-le
 import backgroundTextRight from '../../assets/images/mint-polymorph-welcome-bg-right.png';
 import Button from '../button/Button.jsx';
 import SubscribePopup from '../popups/SubscribePopup.jsx';
-import './styles/WelcomeWrapper.scss';
+// import './styles/WelcomeWrapper.scss';
 
 const WelcomeWrapper = (props) => {
   const {

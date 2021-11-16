@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import './styles/Tabs.scss';
+// import './styles/Tabs.scss';
 
 const Tabs = (props) => {
   const { headerLabels, content, active, onChange } = props;

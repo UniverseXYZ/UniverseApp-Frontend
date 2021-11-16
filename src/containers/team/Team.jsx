@@ -4,13 +4,13 @@ import UniverseContributors from '../../components/team/UniverseContributors.jsx
 import UniverseCreators from '../../components/team/UniverseCreators.jsx';
 import Welcome from '../../components/team/Welcome.jsx';
 import { useThemeContext } from '../../contexts/ThemeContext.jsx';
-import './Team.scss';
+// import './Team.scss';
 
 const Team = () => {
   const { setDarkMode } = useThemeContext();
-  useEffect(() => {
-    setDarkMode(true);
-  }, []);
+
+  useEffect(() => setDarkMode(true), []);
+
   return (
     <div className="team__page">
       <Helmet>

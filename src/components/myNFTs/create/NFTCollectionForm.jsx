@@ -2,7 +2,7 @@
 import React, { useState, useRef, useEffect, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import Popup from 'reactjs-popup';
-import { useHistory, useLocation } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import Input from '../../input/Input.jsx';
 import Button from '../../button/Button.jsx';
 import NFTCollectible from './NFTCollectible.jsx';
@@ -52,7 +52,6 @@ const NFTCollectionForm = ({ showCollectible, setShowCollectible }) => {
     useAuthContext();
   const { setShowError, setErrorTitle, setErrorBody } = useErrorContext();
   const [showPrompt, setShowPrompt] = useState(false);
-  const location = useLocation();
 
   const inputFile = useRef(null);
   const history = useHistory();

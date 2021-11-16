@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import Popup from 'reactjs-popup';
-import { useHistory } from 'react-router';
 import RarityRankPopup from '../../popups/RarityRankPopup.jsx';
 import { getPolymorphMeta } from '../../../utils/api/polymorphs.js';
 import { renderLoaderWithData } from '../../../containers/rarityCharts/renderLoaders.js';
+import { useRouter } from 'next/router';
 
 const MyPolymorphCard = ({ item }) => {
-  const history = useHistory();
+  const router = useRouter();
   const [loading, setLoading] = useState(false);
   const fetchMetadata = async () => {
     setLoading(true);
@@ -20,7 +20,7 @@ const MyPolymorphCard = ({ item }) => {
   ) : (
     <div
       className="card"
-      onClick={() => history.push(`/polymorphs/${item.tokenid}`)}
+      onClick={() => router.push(`/polymorphs/${item.tokenid}`)}
       aria-hidden="true"
     >
       <div className="card--header">

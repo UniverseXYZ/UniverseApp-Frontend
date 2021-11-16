@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import RaritySortBySelect from '../../input/RaritySortBySelect';
 import RaritySortByOrder from '../../input/RaritySortByOrder';
 import priceIcon from '../../../assets/images/eth-icon-new.svg';
-import './LobsterRarityFilters.scss';
+// import './LobsterRarityFilters.scss';
 import RaritySearchField from '../../input/RaritySearchField';
 
 const LobsterRarityFilters = (props) => {

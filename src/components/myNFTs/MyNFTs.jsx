@@ -1,8 +1,7 @@
 import React, { useContext, useEffect, useState, useRef } from 'react';
 import Popup from 'reactjs-popup';
-import { useLocation, useHistory } from 'react-router-dom';
 import uuid from 'react-uuid';
-import './MyNFTs.scss';
+// import './MyNFTs.scss';
 import { number } from 'prop-types';
 import Wallet from './Wallet.jsx';
 import SavedNFTs from './SavedNFTs.jsx';
@@ -33,6 +32,7 @@ import { usePolymorphContext } from '../../contexts/PolymorphContext';
 import { useErrorContext } from '../../contexts/ErrorContext';
 
 import { getMyNfts, getSavedNfts } from '../../utils/api/mintNFT';
+import { useRouter } from 'next/router';
 
 const MyNFTs = () => {
   const {
@@ -94,9 +94,8 @@ const MyNFTs = () => {
   ];
   const emptyTabs = ['Wallet', 'Collections'];
   const [filteredNFTs, setFilteredNFTs] = useState([]);
-  const location = useLocation();
-  const isCreatingAction = location.pathname === '/select-nfts';
-  const history = useHistory();
+  const router = useRouter();
+  const isCreatingAction = router.asPath === '/select-nfts';
   const ref = useRef(null);
   const ref2 = useRef(null);
   const refMobile = useRef(null);
@@ -274,7 +273,7 @@ const MyNFTs = () => {
           <div
             className="back-rew"
             onClick={() => {
-              history.push('/reward-tiers');
+              router.push('/reward-tiers');
             }}
             aria-hidden="true"
           >
@@ -299,7 +298,7 @@ const MyNFTs = () => {
                 <button
                   type="button"
                   className="light-border-button"
-                  onClick={() => history.push('/polymorph-rarity')}
+                  onClick={() => router.push('/polymorph-rarity')}
                 >
                   Polymorph rarity chart
                 </button>
@@ -320,17 +319,13 @@ const MyNFTs = () => {
                       <ul>
                         <li
                           aria-hidden="true"
-                          onClick={() =>
-                            history.push('/my-nfts/create', { tabIndex: 1, nftType: 'single' })
-                          }
+                          onClick={() => router.push('/my-nfts/create?tabIndex=1&nftType=single')}
                         >
                           NFT
                         </li>
                         <li
                           aria-hidden="true"
-                          onClick={() =>
-                            history.push('/my-nfts/create', { tabIndex: 1, nftType: 'collection' })
-                          }
+                          onClick={() => router.push('/my-nfts/create?tabIndex=1&nftType=collection')}
                         >
                           Collection
                         </li>
@@ -354,17 +349,13 @@ const MyNFTs = () => {
                       <ul>
                         <li
                           aria-hidden="true"
-                          onClick={() =>
-                            history.push('/my-nfts/create', { tabIndex: 1, nftType: 'single' })
-                          }
+                          onClick={() => router.push('/my-nfts/create?tabIndex=1&nftType=single')}
                         >
                           NFT
                         </li>
                         <li
                           aria-hidden="true"
-                          onClick={() =>
-                            history.push('/my-nfts/create', { tabIndex: 1, nftType: 'collection' })
-                          }
+                          onClick={() => router.push('/my-nfts/create?tabIndex=1&nftType=collection')}
                         >
                           Collection
                         </li>
@@ -408,7 +399,7 @@ const MyNFTs = () => {
                           <li
                             aria-hidden="true"
                             onClick={() =>
-                              history.push('/my-nfts/create', { tabIndex: 1, nftType: 'single' })
+                              router.push('/my-nfts/create?tabIndex=1&nftType=single')
                             }
                           >
                             NFT
@@ -416,10 +407,7 @@ const MyNFTs = () => {
                           <li
                             aria-hidden="true"
                             onClick={() =>
-                              history.push('/my-nfts/create', {
-                                tabIndex: 1,
-                                nftType: 'collection',
-                              })
+                              router.push('/my-nfts/create?tabIndex=1&nftType=collection')
                             }
                           >
                             Collection
@@ -434,7 +422,7 @@ const MyNFTs = () => {
                 <button
                   type="button"
                   className="light-border-button light--button--mobile"
-                  onClick={() => history.push('/polymorph-rarity')}
+                  onClick={() => router.push('/polymorph-rarity')}
                 >
                   Polymorph rarity chart
                 </button>
@@ -456,20 +444,13 @@ const MyNFTs = () => {
                       <ul>
                         <li
                           aria-hidden="true"
-                          onClick={() =>
-                            history.push('/my-nfts/create', { tabIndex: 1, nftType: 'single' })
-                          }
+                          onClick={() => router.push('/my-nfts/create?tabIndex=1&nftType=single')}
                         >
                           NFT
                         </li>
                         <li
                           aria-hidden="true"
-                          onClick={() =>
-                            history.push('/my-nfts/create', {
-                              tabIndex: 1,
-                              nftType: 'collection',
-                            })
-                          }
+                          onClick={() => router.push('/my-nfts/create?tabIndex=1&nftType=collection')}
                         >
                           Collection
                         </li>
@@ -509,7 +490,7 @@ const MyNFTs = () => {
   //       <div
   //         className="back-rew"
   //         onClick={() => {
-  //           history.push('/reward-tiers');
+  //           router.push('/reward-tiers');
   //         }}
   //         aria-hidden="true"
   //       >
@@ -570,7 +551,7 @@ const MyNFTs = () => {
   //                         <li
   //                           aria-hidden="true"
   //                           onClick={() =>
-  //                             history.push('/my-nfts/create', { tabIndex: 1, nftType: 'single' })
+  //                             router.push('/my-nfts/create?tabIndex=1&nftType=single')
   //                           }
   //                         >
   //                           NFT
@@ -578,10 +559,7 @@ const MyNFTs = () => {
   //                         <li
   //                           aria-hidden="true"
   //                           onClick={() =>
-  //                             history.push('/my-nfts/create', {
-  //                               tabIndex: 1,
-  //                               nftType: 'collection',
-  //                             })
+  //                             router.push('/my-nfts/create?tabIndex=1&nftType=collection')
   //                           }
   //                         >
   //                           Collection
@@ -622,7 +600,7 @@ const MyNFTs = () => {
   //                         <li
   //                           aria-hidden="true"
   //                           onClick={() =>
-  //                             history.push('/my-nfts/create', { tabIndex: 1, nftType: 'single' })
+  //                             router.push('/my-nfts/create?tabIndex=1&nftType=single')
   //                           }
   //                         >
   //                           NFT
@@ -630,10 +608,7 @@ const MyNFTs = () => {
   //                         <li
   //                           aria-hidden="true"
   //                           onClick={() =>
-  //                             history.push('/my-nfts/create', {
-  //                               tabIndex: 1,
-  //                               nftType: 'collection',
-  //                             })
+  //                             router.push('/my-nfts/create?tabIndex=1&nftType=collection')
   //                           }
   //                         >
   //                           Collection

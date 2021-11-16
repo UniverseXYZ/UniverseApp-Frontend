@@ -7,7 +7,7 @@ import salesIcon from '../../assets/images/my-profile/types-icons/sales-icon.svg
 import transferrsIcon from '../../assets/images/my-profile/types-icons/transferrs-icon.svg';
 import offersIcon from '../../assets/images/my-profile/types-icons/offer-icon.svg';
 import burnsIcon from '../../assets/images/my-profile/types-icons/burn-icon.svg';
-import './styles/RecentActivity.scss';
+// import './styles/RecentActivity.scss';
 
 const headerLabels = [
   { text: 'Posts', className: 'posts' },

@@ -41,5 +41,5 @@ export const queryLobstersGraph = async (graphQuery) => {
     `,
   });
 
-  return graphData.data;
+  return graphData?.data;
 };

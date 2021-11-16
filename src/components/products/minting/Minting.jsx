@@ -1,17 +1,16 @@
 import React, { useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
-import './Minting.scss';
+// import './Minting.scss';
 import singleIcon from '../../../assets/images/collectionicon.svg';
 import collectionIcon from '../../../assets/images/singleicon.svg';
 import { useThemeContext } from '../../../contexts/ThemeContext';
+import { useRouter } from 'next/router';
 
 const MintingPage = () => {
-  const history = useHistory();
+  const history = useRouter();
   const { setDarkMode } = useThemeContext();
 
-  useEffect(() => {
-    setDarkMode(false);
-  }, []);
+  useEffect(() => setDarkMode(false), []);
 
   return (
     <div className="minting-page">

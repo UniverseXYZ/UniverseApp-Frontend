@@ -1,5 +1,4 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { useLocation } from 'react-router-dom';
 import uuid from 'react-uuid';
 import './AuctionLandingPage.scss';
 import AuctionDetails from '../../components/auctionLandingPage/AuctionDetails.jsx';
@@ -15,7 +14,6 @@ import { useAuctionContext } from '../../contexts/AuctionContext';
 const AuctionLandingPage = () => {
   const { auction } = useAuctionContext();
   const { setDarkMode } = useThemeContext();
-  const location = useLocation();
   const selectedAuction = auction || null;
   const artist = selectedAuction?.artist;
 

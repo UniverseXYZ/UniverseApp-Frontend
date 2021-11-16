@@ -7,7 +7,7 @@ import Characters from '../../components/polymorphs/Characters';
 import Section4 from '../../components/polymorphs/Section4';
 import PolymorphsActivity from '../../components/polymorphs/PolymorphsActivity';
 import Section6 from '../../components/polymorphs/Section6';
-import './Polymorphs.scss';
+// import './Polymorphs.scss';
 import { morphedPolymorphs, queryPolymorphsGraph } from '../../utils/graphql/polymorphQueries';
 import { useGraphQueryHook } from '../../utils/hooks/useGraphQueryHook';
 import { useThemeContext } from '../../contexts/ThemeContext';
@@ -37,7 +37,6 @@ const marquee = () => (
 
 const Polymorphs = () => {
   const { setDarkMode } = useThemeContext();
-  const history = useHistory();
   const [mobile, setMobile] = useState(false);
   const { data } = useGraphQueryHook(queryPolymorphsGraph(morphedPolymorphs));
   const { polymorphsFilter, navigateToMyUniverseNFTsTab } = useMyNftsContext();

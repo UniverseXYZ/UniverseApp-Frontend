@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState, useRef } from 'react';
-import { Link, useHistory, withRouter } from 'react-router-dom';
+import { useHistory, withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import {
   PLACEHOLDER_MARKETPLACE_AUCTIONS,
@@ -9,7 +9,7 @@ import {
   PLACEHOLDER_MARKETPLACE_COMMUNITIES,
   PLACEHOLDER_MARKETPLACE_GALLERIES,
 } from '../../utils/fixtures/BrowseNFTsDummyData';
-import './Header.scss';
+// import './Header.scss';
 import Button from '../button/Button';
 import DesktopView from './dimensions/desktop/DesktopView.jsx';
 import TabletView from './dimensions/tablet/TabletView.jsx';
@@ -25,8 +25,10 @@ import { defaultColors } from '../../utils/helpers';
 import { CONNECTORS_NAMES } from '../../utils/dictionary';
 import { useAuthContext } from '../../contexts/AuthContext';
 import { useThemeContext } from '../../contexts/ThemeContext';
+import { useRouter } from 'next/router';
+import Link from 'next/link'
 
-const Header = ({ location }) => {
+const Header = () => {
   const {
     isWalletConnected,
     setIsWalletConnected,
@@ -35,9 +37,10 @@ const Header = ({ location }) => {
     address,
   } = useAuthContext();
 
+  const router = useRouter();
+
   const { darkMode } = useThemeContext();
 
-  const history = useHistory();
   const [selectedWallet, setSelectedWallet] = useState('');
   const [installed, setInstalled] = useState(true);
   const [showMenu, setShowMenu] = useState(false);
@@ -53,14 +56,14 @@ const Header = ({ location }) => {
   const handleSearchKeyDown = (e) => {
     if (e.keyCode === 13) {
       if (searchValue) {
-        history.push(`/search`, { query: searchValue });
+        router.push(`/search`, { query: searchValue });
         setSearchValue('');
         searchRef.current.blur();
       }
     }
   };
   const handleAllResults = () => {
-    history.push(`/search`, { query: searchValue });
+    router.push(`/search`, { query: searchValue });
     setSearchValue('');
     searchRef.current.blur();
   };
@@ -101,24 +104,24 @@ const Header = ({ location }) => {
     return () => {
       document.removeEventListener('click', handleClickOutside, true);
     };
-  });
+  }, []);
 
   useEffect(() => {
     setShowMenu(false);
     if (
-      location.pathname === '/' ||
-      location.pathname === '/about' ||
-      location.pathname === '/minting-and-auctions/marketplace/active-auctions' ||
-      location.pathname === '/minting-and-auctions/marketplace/future-auctions' ||
-      location.pathname === '/polymorphs' ||
-      location.pathname === '/mint-polymorph' ||
-      location.pathname === '/team'
+      router.asPath === '/' ||
+      router.asPath === '/about' ||
+      router.asPath === '/minting-and-auctions/marketplace/active-auctions' ||
+      router.asPath === '/minting-and-auctions/marketplace/future-auctions' ||
+      router.asPath === '/polymorphs' ||
+      router.asPath === '/mint-polymorph' ||
+      router.asPath === '/team'
     ) {
       document.querySelector('header').classList.add('dark');
     } else {
       document.querySelector('header').classList.remove('dark');
     }
-  }, [location.pathname]);
+  }, [router.asPath]);
 
   useEffect(() => {
     if (darkMode && showMenu) {
@@ -131,11 +134,15 @@ const Header = ({ location }) => {
   return (
     <header>
       <div className="app__logo">
-        <Link className="dark" to="/">
-          <img src={appDarkLogo} alt="App Logo" />
+        <Link href="/">
+          <a className="dark">
+            <img src={appDarkLogo} alt="App Logo" />
+          </a>
         </Link>
-        <Link className="light" to="/">
-          <img src={appLightLogo} alt="App Logo" />
+        <Link href="/">
+          <a className="light">
+            <img src={appLightLogo} alt="App Logo" />
+          </a>
         </Link>
         {/* <div className="search--field">
           <div className={`search--field--wrapper ${searchFocus || searchValue ? 'focus' : ''}`}>
@@ -377,8 +384,4 @@ const Header = ({ location }) => {
   );
 };
 
-Header.propTypes = {
-  location: PropTypes.oneOfType([PropTypes.any]).isRequired,
-};
-
-export default withRouter(Header);
+export default Header;

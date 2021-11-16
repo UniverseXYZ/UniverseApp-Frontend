@@ -1,5 +1,5 @@
 import React from 'react';
-import './LatestFeaturesSection.scss';
+// import './LatestFeaturesSection.scss';
 import { useHistory } from 'react-router-dom';
 import arrowRight from '../../../assets/images/arrow-right.svg';
 import rarityChartIcon from '../../../assets/images/rarity-chart-icon.svg';

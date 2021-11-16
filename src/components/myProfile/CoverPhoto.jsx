@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import defaultCoverPhoto from '../../assets/images/my-profile-cover-photo.png';
 import uploadIcon from '../../assets/images/upload.svg';
-import './styles/CoverPhoto.scss';
+// import './styles/CoverPhoto.scss';
 
 const CoverPhoto = (props) => {
   const { coverPhoto, className, color } = props;

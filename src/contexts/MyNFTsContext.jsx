@@ -1,6 +1,6 @@
+
 import React, { createContext, useState, useEffect, useContext } from 'react';
 import PropTypes from 'prop-types';
-import { useHistory } from 'react-router';
 import { useAuthContext } from './AuthContext';
 import {
   getMyMintableCollections,
@@ -13,6 +13,7 @@ import {
   getSavedNfts,
 } from '../utils/api/mintNFT';
 import universeIcon from '../assets/images/universe-img.svg';
+import { useRouter } from 'next/router';
 
 const MyNFTsContext = createContext(null);
 
@@ -24,7 +25,7 @@ const MyNFTsContextProvider = ({ children }) => {
     setDeployedCollections,
     isAuthenticated,
   } = useAuthContext();
-  const history = useHistory();
+  const history = useRouter();
 
   const allCharactersFilter = 'All Characters';
   const polymorphsFilter = 'Polymorphs';

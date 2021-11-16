@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import SortDownIcon from '../../assets/images/rarity-charts/sortDownIcon.svg';
 import SortUpIcon from '../../assets/images/rarity-charts/sortUpIcon.svg';
 import AppContext from '../../ContextAPI';
-import './SortByOrder.scss';
+// import './SortByOrder.scss';
 
 const SortByOrder = ({ setSortDir, sortDir, setApiPage, resetPagination }) => {
   const handleChange = () => {

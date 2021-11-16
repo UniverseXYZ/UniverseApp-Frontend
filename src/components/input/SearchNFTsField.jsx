@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import searchIcon from '../../assets/images/search-gray.svg';
-import './SearchField.scss';
+// import './SearchField.scss';
 
 const SearchNFTsField = ({
   searchValue,

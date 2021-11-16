@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import './PendingCollections.scss';
+// import './PendingCollections.scss';
 import { useMyNftsContext } from '../../../../contexts/MyNFTsContext';
 import { SpinningLoader } from '../misc/SpinningLoader';
 import PendingAccordion from '../pendingAccordion/PendingAccordion';

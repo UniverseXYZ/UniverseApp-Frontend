@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import loadingBg from '../../assets/images/loading-white-background.png';
-import './LoadingImage.scss';
+// import './LoadingImage.scss';
 
 const LoadingImage = React.memo(({ placeholderImage, src, alt, className, showSpinner, style }) => {
   const [loading, setLoading] = useState(true);

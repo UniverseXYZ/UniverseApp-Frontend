@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Button from '../button/Button';
-import './Pagination.scss';
+// import './Pagination.scss';
 
 const LoadMore = ({ quantity, setQuantity, perPage }) => (
   <div className="load--more--btn">

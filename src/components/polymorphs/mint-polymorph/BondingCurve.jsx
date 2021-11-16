@@ -1,6 +1,5 @@
 import React, { useState, useContext, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { useHistory } from 'react-router-dom';
 
 import HorizontalSlider from '../../ui-elements/HorizontalSlider';
 import Button from '../../button/Button.jsx';
@@ -33,7 +32,6 @@ const BondingCurve = (props) => {
     title,
     soldOut,
   } = props;
-  const history = useHistory();
   const { lobstersFilter, navigateToMyUniverseNFTsTab } = useMyNftsContext();
   return (
     <div className={`welcome--slider--bonding--curve ${soldOut ? 'sold--out' : ''}`}>

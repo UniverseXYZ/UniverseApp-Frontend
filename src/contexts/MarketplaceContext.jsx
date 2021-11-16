@@ -1,11 +1,11 @@
 import React, { createContext, useState, useEffect, useContext } from 'react';
 import PropTypes from 'prop-types';
-import { useLocation } from 'react-router';
+import { useRouter } from 'next/router';
 
 const MarketplaceContext = createContext(null);
 
 const MarketplaceContextProvider = ({ children }) => {
-  const location = useLocation();
+  const router = useRouter();
 
   const [stepsData, setStepsData] = useState({
     selectedItem: null,
@@ -65,15 +65,15 @@ const MarketplaceContextProvider = ({ children }) => {
   useEffect(() => {
     window.scrollTo(0, 0);
     if (
-      (location.pathname === '/nft-marketplace/settings' &&
+      (router.asPath === '/nft-marketplace/settings' &&
         stepsData.selectedMethod === 'bundle') ||
-      location.pathname === '/marketplace'
+      router.asPath === '/marketplace'
     ) {
       document.querySelector('header').style.position = 'absolute';
     } else {
       document.querySelector('header').style.position = 'fixed';
     }
-  }, [location]);
+  }, [router.asPath]);
 
   return (
     <MarketplaceContext.Provider

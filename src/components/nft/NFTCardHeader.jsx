@@ -251,7 +251,7 @@ const NFTCardHeader = ({ nft, creator, owner, collection }) => {
 
 NFTCardHeader.propTypes = {
   owner: PropTypes.oneOfType([PropTypes.object]).isRequired,
-  creator: PropTypes.oneOfType([PropTypes.object]).isRequired,
+  creator: PropTypes.oneOfType([PropTypes.object]),
   collection: PropTypes.oneOfType([PropTypes.object]).isRequired,
   nft: PropTypes.oneOfType([PropTypes.object]).isRequired,
 };

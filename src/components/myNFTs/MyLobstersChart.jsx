@@ -1,10 +1,10 @@
-import './UniverseNFTs.scss';
+// import './UniverseNFTs.scss';
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import '../pagination/Pagination.scss';
+// import '../pagination/Pagination.scss';
 
 import LobsterRarityFilters from '../rarityCharts/filters/LobsterRarityFilters';
-import '../../containers/rarityCharts/LobsterRarityCharts.scss';
+// import '../../containers/rarityCharts/LobsterRarityCharts.scss';
 import { categoriesArray } from '../../containers/rarityCharts/categories';
 import LobsterRarityList from '../rarityCharts/list/LobsterRarityList';
 import CollectionDropdown from './CollectionDropdown';

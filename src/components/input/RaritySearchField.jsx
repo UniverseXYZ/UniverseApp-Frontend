@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import searchIcon from '../../assets/images/search-gray.svg';
 import closeIcon from '../../assets/images/close-menu.svg';
 import AppContext from '../../ContextAPI';
-import './SearchField.scss';
+// import './SearchField.scss';
 
 const SearchField = (props) => {
   const { searchText, setSearchText, setApiPage, resetPagination, ...resProps } = props;

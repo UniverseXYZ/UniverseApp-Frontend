@@ -2,10 +2,9 @@
 import React, { useRef, useState, useEffect, useMemo } from 'react';
 import uuid from 'react-uuid';
 import Popup from 'reactjs-popup';
-import { useLocation } from 'react-router-dom';
 import { Contract, utils } from 'ethers';
 import { DebounceInput } from 'react-debounce-input';
-import './CreateSingleNft.scss';
+// import './CreateSingleNft.scss';
 import Button from '../../button/Button.jsx';
 import Input from '../../input/Input.jsx';
 import LoadingPopup from '../../popups/LoadingPopup.jsx';
@@ -40,6 +39,7 @@ import { useMyNftsContext } from '../../../contexts/MyNFTsContext';
 import { useAuthContext } from '../../../contexts/AuthContext';
 import { useErrorContext } from '../../../contexts/ErrorContext';
 import CollectionChoice from './CollectionChoice';
+import { useRouter } from 'next/router';
 
 const MAX_FIELD_CHARS_LENGTH = {
   name: 32,
@@ -95,12 +95,21 @@ const SingleNFTForm = () => {
 
   const { setShowError, setErrorTitle, setErrorBody } = useErrorContext();
 
+  const router = useRouter();
+
   const [errors, setErrors] = useState({
     name: '',
     edition: '',
     previewImage: '',
   });
-  const location = useLocation();
+  // TODO: fix
+  // const location = useLocation();
+  const location = {
+    state: {
+      collection: ''
+    }
+  };
+
 
   const [saveForLateClick, setSaveForLateClick] = useState(false);
   const [mintNowClick, setMintNowClick] = useState(false);
@@ -713,7 +722,7 @@ const SingleNFTForm = () => {
 
   useEffect(() => {
     setShowPrompt(true);
-  }, [location.pathname]);
+  }, [router.asPath]);
 
   useEffect(() => {
     if (!showLoadingPopup) setActiveTxHashes([]);
@@ -1111,7 +1120,7 @@ const SingleNFTForm = () => {
                           placeholder="0x89205A3A3b2A69De6Dbf7f01ED13B2108B2c43e7"
                           value={elm.address}
                           onChange={(e) => propertyChangesAddress(i, e.target.value)}
-                          hoverBoxShadowGradient
+                          // hoverBoxShadowGradient
                         />
                         {error && <p className="error-message">{error}</p>}
                       </div>

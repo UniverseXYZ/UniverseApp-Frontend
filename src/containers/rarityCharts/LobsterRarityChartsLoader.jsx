@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import './RarityCharsLoader.scss';
-import './RarityCharts.scss';
+// import './RarityCharsLoader.scss';
+// import './RarityCharts.scss';
 import uuid from 'react-uuid';
 import lobsterLoadingBg from '../../assets/images/lobby-lobsters/img_placeholder.png';
 

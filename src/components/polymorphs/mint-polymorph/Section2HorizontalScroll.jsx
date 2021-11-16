@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useLayoutEffect } from 'react';
 import PropTypes from 'prop-types';
-import { useLocation } from 'react-router-dom';
 import './styles/Section2HorizontalScroll.scss';
 
 const child = (data) =>
@@ -12,7 +11,6 @@ const child = (data) =>
   ));
 
 const Section2HorizontalScroll = (props) => {
-  const location = useLocation();
   const { width, height, title, desktopHeightValue, mobileHeightValue, data } = props;
   // const [scrollWidth, setScrollWidth] = useState(width);
   const [transparentBlockHeight, setTransparentBlockHeight] = useState(width);

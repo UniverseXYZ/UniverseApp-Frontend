@@ -1,8 +1,7 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 import React, { useState, useEffect, useRef } from 'react';
-import './NFTCard.scss';
-import { useHistory, useLocation } from 'react-router-dom';
+// import './NFTCard.scss';
 import PropTypes from 'prop-types';
 import uuid from 'react-uuid';
 import videoIcon from '../../assets/images/marketplace/video-icon.svg';
@@ -17,17 +16,17 @@ import PendingPrevArrow from '../myNFTs/pendingDropdown/misc/PendingPrevArrow';
 import PendingNextArrow from '../myNFTs/pendingDropdown/misc/PendingNextArrow';
 import NftEditions from './NftEditions';
 import SVGImageLoader from '../marketplaceNFT/InlineSVG';
+import { useRouter } from 'next/router';
 
 const NFTCard = React.memo(
   ({ nft, canSelect, collectionAddress, selectedNFTsIds, setSelectedNFTsIds }) => {
     const { loggedInArtist } = useAuthContext();
-    const history = useHistory();
-    const location = useLocation();
+    const router = useRouter();
     const [showDropdown, setShowDropdown] = useState(false);
     const [searchValue, setSearchValue] = useState('');
 
     const { creator } = nft;
-    const owner = location.pathname === '/my-nfts' ? loggedInArtist : nft.owner;
+    const owner = router.asPath === '/my-nfts' ? loggedInArtist : nft.owner;
 
     const ref = useRef();
 
@@ -83,7 +82,7 @@ const NFTCard = React.memo(
             <div
               onClick={() =>
                 !canSelect
-                  ? history.push(
+                  ? router.push(
                       `/nft/${nft.collection?.address || collectionAddress}/${nft.tokenId}`,
                       {
                         nft,
@@ -140,7 +139,7 @@ const NFTCard = React.memo(
                           className="slider--box"
                           onClick={() =>
                             !canSelect
-                              ?history.push(`/nft/${nft.collection?.address || collectionAddress}/${nft.tokenId}`, { nft })
+                              ?router.push(`/nft/${nft.collection?.address || collectionAddress}/${nft.tokenId}`, { nft })
                               : handleSelectNFT(nft.id)
                           }
                           aria-hidden="true"
@@ -175,7 +174,7 @@ const NFTCard = React.memo(
                 <div
                   className="slider--box"
                   onClick={() =>
-                    history.push(
+                    router.push(
                       `/nft/${nft.collection?.address || collectionAddress}/${nft.tokenId}`,
                       { nft }
                     )
@@ -219,7 +218,7 @@ const NFTCard = React.memo(
           <div className="quantity--and--offer">
             {/* // TODO:: we need a property from the BE about the total editions count */}
             <NftEditions
-              push={history.push}
+              push={router.push}
               searchValue={searchValue}
               nft={nft}
               setSearchValue={setSearchValue}

@@ -10,7 +10,7 @@ import copyIcon from '../../assets/images/copy1.svg';
 import shareIcon from '../../assets/images/share-arrow.svg';
 import instagramIcon from '../../assets/images/instagram-outlined.svg';
 import twitterIcon from '../../assets/images/icons_twitter.svg';
-import './styles/UserDataBlock.scss';
+// import './styles/UserDataBlock.scss';
 
 const lookTextUid = (text) => {
   const lengthText = text.length;

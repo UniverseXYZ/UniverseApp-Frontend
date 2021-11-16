@@ -26,9 +26,10 @@ import GeneParser from '../../../utils/helpers/GeneParser.js';
 import PolymorphMetadataLoading from '../../popups/PolymorphMetadataLoading';
 import { useGraphQueryHook } from '../../../utils/hooks/useGraphQueryHook';
 import { useAuthContext } from '../../../contexts/AuthContext';
+import { useRouter } from 'next/router';
 
 const PolymorphScramblePage = () => {
-  const history = useHistory();
+  const history = useRouter();
   const { address } = useAuthContext();
   const [propertiesTabSelected, setPropertiesTabSelected] = useState(true);
   const [metadataTabSelected, setMetadataTabSelected] = useState(false);

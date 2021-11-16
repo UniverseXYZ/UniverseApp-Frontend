@@ -12,7 +12,7 @@ import marketplaceIcon from '../../assets/images/nft-marketplace.svg';
 import galleryIcon from '../../assets/images/my-nfts.svg';
 import auctionIcon from '../../assets/images/auction-house.svg';
 import btnAddIcon from '../../assets/images/add-icon.svg';
-import './styles/MyProfileContainer.scss';
+// import './styles/MyProfileContainer.scss';
 
 const rightTopLinks = [
   { text: 'NFTs', className: 'nfts', href: '/my-profile', icon: galleryIcon },

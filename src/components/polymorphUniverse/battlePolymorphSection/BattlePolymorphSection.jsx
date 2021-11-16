@@ -1,5 +1,5 @@
 import React from 'react';
-import './BattlePolymorphSection.scss';
+// import './BattlePolymorphSection.scss';
 import battlePolymorphImage from '../../../assets/images/battle-polymorph-section-image.png';
 import Button from '../../button/Button';
 

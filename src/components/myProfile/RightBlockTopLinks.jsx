@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
 import downIcon from '../../assets/images/browse-nft-arrow-down.svg';
-import './styles/RightBlockTopLinks.scss';
+// import './styles/RightBlockTopLinks.scss';
+import Link from 'next/link';
 
 const RightBlockTopLinks = (props) => {
   const { links } = props;
@@ -21,11 +21,13 @@ const RightBlockTopLinks = (props) => {
         return (
           <div key={key} className="links--item--parent" style={{ width: `${itemWidth}%` }}>
             <div className={`links--item item--${elem.className}`}>
-              <Link to={elem.href}>
-                <span className="icon">
+              <Link href={elem.href}>
+                <a>
+                  <span className="icon">
                   {!!elem.icon.length && <img src={elem.icon} alt="img" />}
                 </span>
-                {elem.text}
+                  {elem.text}
+                </a>
               </Link>
               <span className="right--icon">
                 <img src={downIcon} alt="img" />

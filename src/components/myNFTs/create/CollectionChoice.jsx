@@ -41,7 +41,7 @@ const CollectionChoice = ({ col, selectedCollection, setSelectedCollection }) =>
 
 CollectionChoice.propTypes = {
   col: PropTypes.oneOfType([PropTypes.object]).isRequired,
-  selectedCollection: PropTypes.oneOfType([PropTypes.object]).isRequired,
+  selectedCollection: PropTypes.oneOfType([PropTypes.object]),
   setSelectedCollection: PropTypes.func.isRequired,
 };
 

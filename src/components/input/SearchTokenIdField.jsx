@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import searchIcon from '../../assets/images/search-gray.svg';
-import './SearchTokenIdField.scss';
+// import './SearchTokenIdField.scss';
 
 const SearchTokenIdField = ({ searchValue, setSearchValue }) => {
   const [focusField, setFocusField] = useState('');

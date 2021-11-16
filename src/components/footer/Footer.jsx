@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import Popup from 'reactjs-popup';
-import './Footer.scss';
+// import './Footer.scss';
 import { useHistory } from 'react-router-dom';
 import Logo from '../../assets/images/light.svg';
 import twitterIcon from '../../assets/images/twitter-icon.svg';

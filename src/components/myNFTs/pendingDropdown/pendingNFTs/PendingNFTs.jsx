@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import './PendingNFTs.scss';
+// import './PendingNFTs.scss';
 import Blockies from 'react-blockies';
 import mp3Icon from '../../../../assets/images/mp3-icon.png';
 import { useMyNftsContext } from '../../../../contexts/MyNFTsContext';

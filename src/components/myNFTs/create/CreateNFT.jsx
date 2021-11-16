@@ -1,15 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import './CreateNFT.scss';
-import { useHistory, useLocation } from 'react-router-dom';
+// import './CreateNFT.scss';
 import arrow from '../../../assets/images/arrow.svg';
 import SingleNFTForm from './SingleNFTForm';
 import NFTCollectionForm from './NFTCollectionForm';
 import { useMyNftsContext } from '../../../contexts/MyNFTsContext';
 import { useAuthContext } from '../../../contexts/AuthContext';
+import { useRouter } from 'next/router';
 
 const CreateNFT = () => {
-  const history = useHistory();
-  const location = useLocation();
+  const router = useRouter();
   const { savedNFTsID, savedCollectionID } = useMyNftsContext();
   const { deployedCollections } = useAuthContext();
   const [selectedTabIndex, setSelectedTabIndex] = useState(0);
@@ -18,7 +17,7 @@ const CreateNFT = () => {
 
   const goToCollectionPage = () => {
     const findCollection = deployedCollections.filter((item) => item.id === savedCollectionID);
-    history.push(`/collection/${findCollection[0].address}`, {
+    router.push(`/collection/${findCollection[0].address}`, {
       collection: deployedCollections.filter((item) => item.id === savedCollectionID)[0],
       saved: false,
     });
@@ -29,9 +28,18 @@ const CreateNFT = () => {
       setSelectedTabIndex(1);
       setSelectedNFTType('single');
     }
-    if (location.state) {
-      setSelectedTabIndex(location.state.tabIndex);
-      setSelectedNFTType(location.state.nftType);
+
+    const search = window.location?.search?.substr(1);
+    const state = JSON.parse(
+      `{"${search.replace(/&/g, '","').replace(/=/g, '":"')}"}`,
+      (key, value) => (key === '' ? value : decodeURIComponent(value))
+    );
+
+    state.tabIndex = +state.tabIndex;
+
+    if (state) {
+      setSelectedTabIndex(state.tabIndex);
+      setSelectedNFTType(state.nftType);
     }
   }, []);
 
@@ -45,8 +53,8 @@ const CreateNFT = () => {
               <div
                 className="back-btn"
                 onClick={() =>
-                  history.push(
-                    location.pathname === '/create-tiers/my-nfts/create'
+                  router.push(
+                    router.asPath === '/create-tiers/my-nfts/create'
                       ? '/create-tiers'
                       : '/my-nfts'
                   )
@@ -55,7 +63,7 @@ const CreateNFT = () => {
               >
                 <img src={arrow} alt="back" />
                 <span>
-                  {location.pathname === '/create-tiers/my-nfts/create'
+                  {router.asPath === '/create-tiers/my-nfts/create'
                     ? 'Create reward tier'
                     : 'My NFTs'}
                 </span>

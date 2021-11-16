@@ -8,7 +8,7 @@ import saleWhiteIcon from '../../assets/images/my-profile/types-icons/sales-whit
 import transferWhiteIcon from '../../assets/images/my-profile/types-icons/transferrs-white-icon.svg';
 import offerWhiteIcon from '../../assets/images/my-profile/types-icons/offer-white-icon.svg';
 import burnWhiteIcon from '../../assets/images/my-profile/types-icons/burn-white-icon.svg';
-import './styles/Transactions.scss';
+// import './styles/Transactions.scss';
 
 const icons = [
   { name: 'listing', icon: listingWhiteIcon, text: 'Listed by' },

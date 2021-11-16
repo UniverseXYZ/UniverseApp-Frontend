@@ -3,7 +3,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { handleTabLeftScrolling, handleTabRightScrolling } from '../../utils/scrollingHandlers';
 import tabArrow from '../../assets/images/tab-arrow.svg';
-import './Tabs.scss';
+// import './Tabs.scss';
 
 const Tabs = ({ items }) => (
   <div className="container tabs__wrapper">

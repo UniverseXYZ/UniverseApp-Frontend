@@ -1,6 +1,6 @@
 import React from 'react';
 import cogWheel from '../../assets/images/cog.png';
-import './BrokenNFT.scss';
+// import './BrokenNFT.scss';
 
 const BrokenNFT = () => (
   <div className="wrap">

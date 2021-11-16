@@ -73,5 +73,5 @@ export const queryPolymorphsGraph = async (graphQuery) => {
     `,
   });
 
-  return graphData.data;
+  return graphData?.data;
 };

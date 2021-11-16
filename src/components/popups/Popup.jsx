@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import Popup from 'reactjs-popup';
 import Button from '../button/Button.jsx';
 import closeIcon from '../../assets/images/cross.svg';
-import './PopupStyle.scss';
+// import './PopupStyle.scss';
 
 const PopupComponent = ({ onClose }) => (
   <Popup

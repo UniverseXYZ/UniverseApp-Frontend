@@ -1,8 +1,8 @@
-import './UniverseNFTs.scss';
+// import './UniverseNFTs.scss';
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import '../pagination/Pagination.scss';
-import '../../containers/rarityCharts/PolymorphRarityCharts.scss';
+// import '../pagination/Pagination.scss';
+// import '../../containers/rarityCharts/PolymorphRarityCharts.scss';
 import { useSearchPolymorphs } from '../../utils/hooks/useMyNftsRarityDebouncer';
 import { categoriesArray } from '../../containers/rarityCharts/categories';
 import CollectionDropdown from './CollectionDropdown';

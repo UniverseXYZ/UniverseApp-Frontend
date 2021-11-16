@@ -13,6 +13,7 @@ import { useMyNftsContext } from '../../contexts/MyNFTsContext';
 import SimplePagination from '../pagination/SimplePaginations';
 import ItemsPerPageDropdown from '../pagination/ItemsPerPageDropdown';
 import LoadingImage from '../general/LoadingImage';
+import { useRouter } from 'next/router';
 
 const SavedNFTs = () => {
   const { savedNfts, setSavedNfts, setActiveView, setSavedNFTsID } = useMyNftsContext();
@@ -24,7 +25,7 @@ const SavedNFTs = () => {
   const [page, setPage] = useState(8);
 
   const ref = useRef(null);
-  const history = useHistory();
+  const history = useRouter();
 
   const handleSavedNfts = (index) => {
     const newSavedNfts = [...savedNfts];
@@ -90,7 +91,7 @@ const SavedNFTs = () => {
     // document.body.classList.add('no__scroll');
     setSavedNFTsID(id);
     setActiveView('single');
-    history.push('/my-nfts/create', { tabIndex: 1, nftType: 'single' });
+    history.push('/my-nfts/create?tabIndex=1&nftType=single');
   };
 
   return (
@@ -269,7 +270,7 @@ const SavedNFTs = () => {
             <p>Create NFTs or NFT collections with our platform by clicking the button below</p>
             <Button
               className="light-button"
-              onClick={() => history.push('/my-nfts/create', { tabIndex: 1, nftType: 'single' })}
+              onClick={() => history.push('/my-nfts/create?tabIndex=1&nftType=single')}
             >
               Create NFT
             </Button>

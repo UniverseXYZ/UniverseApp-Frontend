@@ -1,6 +1,6 @@
 import React from 'react';
 import Skeleton from 'react-loading-skeleton';
-import './NftCardSkeleton.scss';
+// import './NftCardSkeleton.scss';
 
 const NftCardSkeleton = () => (
   <div className="nft--card--skeleton">

@@ -312,7 +312,7 @@ ProfileForm.propTypes = {
   setInstagramLink: PropTypes.func,
   saveChanges: PropTypes.func,
   cancelChanges: PropTypes.func,
-  fetchedUserData: PropTypes.string,
+  fetchedUserData: PropTypes.object,
 };
 
 ProfileForm.defaultProps = {

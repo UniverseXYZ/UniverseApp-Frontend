@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import '../pagination/Pagination.scss';
-import './UniverseNFTs.scss';
+// import '../pagination/Pagination.scss';
+// import './UniverseNFTs.scss';
 import MyPolymorphsChart from './MyPolymorphsChart';
 import MyLobstersChart from './MyLobstersChart';
 import { useMyNftsContext } from '../../contexts/MyNFTsContext';

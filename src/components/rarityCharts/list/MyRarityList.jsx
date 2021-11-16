@@ -1,13 +1,13 @@
 /* eslint-disable array-callback-return */
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import './RarityList.scss';
+// import './RarityList.scss';
 import uuid from 'react-uuid';
 import MyPolymorphCard from './MyPolymorphCard';
 import ItemsPerPageDropdown from '../../pagination/ItemsPerPageDropdown';
 import Pagination from '../../pagination/Pagionation';
-import '../../../containers/rarityCharts/RarityCharsLoader.scss';
-import '../../../containers/rarityCharts/RarityCharts.scss';
+// import '../../../containers/rarityCharts/RarityCharsLoader.scss';
+// import '../../../containers/rarityCharts/RarityCharts.scss';
 import closeIcon from '../../../assets/images/close-menu.svg';
 import { renderLoaders } from '../../../containers/rarityCharts/renderLoaders';
 import CategoriesFilter from './CategoriesFilter';
@@ -95,11 +95,11 @@ const MyRarityList = ({
         <div className="selected--filters">
           {showClearALL && <div className="result">{results.length} results</div>}
           {categories.map((item, index) => (
-            <>
+            <React.Fragment key={index}>
               {item.traits.map(
                 (trait, idx) =>
                   trait.checked && (
-                    <button type="button" className="light-border-button">
+                    <button type="button" className="light-border-button" key={idx}>
                       {trait.name}
                       <img
                         className="close"
@@ -111,7 +111,7 @@ const MyRarityList = ({
                     </button>
                   )
               )}
-            </>
+            </React.Fragment>
           ))}
           {showClearALL && (
             <button type="button" className="clear--all" onClick={() => handleClearAll()}>
