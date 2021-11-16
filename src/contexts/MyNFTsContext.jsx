@@ -50,6 +50,8 @@ const MyNFTsContextProvider = ({ children }) => {
   const [mintingNftsCount, setMintingNftsCount] = useState(0);
   const [mintingCollectionsCount, setMintingCollectionsCount] = useState(0);
   const [universeCollection, setUniverseCollection] = useState(null);
+  const [myNftsLoading, setMyNftsLoading] = useState(true);
+  const [myMintableCollections, setMyMintableCollections] = useState([]);
 
   let nftPollInterval = null;
   let collPollInterval = null;
@@ -57,6 +59,7 @@ const MyNFTsContextProvider = ({ children }) => {
 
   const fetchNfts = async () => {
     try {
+      setMyNftsLoading(true);
       const [
         savedNFTS,
         myNfts,
@@ -76,13 +79,16 @@ const MyNFTsContextProvider = ({ children }) => {
       setSavedNfts(savedNFTS || []);
 
       setMyNFTs(myNfts || []);
+      setMyNftsLoading(false);
       setMyMintingNFTs(mintingNfts || []);
 
       setDeployedCollections(mintedCollectionsRequest.collections || []);
+      setMyMintableCollections(mintableCollections.collections || []);
       setMyMintingCollections(mintingcollectionsRequest.collections || []);
-
       const universeColl = mintableCollections.collections.filter(
-        (coll) => coll.address === '0xd3ccbb9f3e5b9678c5f4fef91055704df81a104c'
+        (coll) =>
+          coll.address.toLowerCase() ===
+          process.env.REACT_APP_UNIVERSE_ERC_721_ADDRESS.toLowerCase()
       )[0];
 
       if (!universeColl) {
@@ -105,7 +111,9 @@ const MyNFTsContextProvider = ({ children }) => {
       alert(
         'Failed to fetch nfts. Most likely due to failed notifcation. Please sign out and sign in again.'
       );
+      setMyNftsLoading(false);
     }
+    setMyNftsLoading(false);
   };
 
   useEffect(() => {
@@ -146,11 +154,13 @@ const MyNFTsContextProvider = ({ children }) => {
       collPollInterval = setInterval(async () => {
         const apiMintingCount = await getMyMintingCollectionsCount();
         if (apiMintingCount !== mintingCollectionsCount) {
-          const [mintedCollections, mintingCollections] = await Promise.all([
+          const [mintedCollections, mintableCollections, mintingCollections] = await Promise.all([
             getMyMintedCollections(),
+            getMyMintableCollections(),
             getMyMintingCollections(),
           ]);
           setDeployedCollections(mintedCollections.collections);
+          setMyMintableCollections(mintableCollections.collections);
           setMyMintingCollections(mintingCollections.collections);
           setMintingCollectionsCount(mintingCollections?.collections?.length || 0);
 
@@ -235,6 +245,8 @@ const MyNFTsContextProvider = ({ children }) => {
         mintingCollectionsCount,
         setMintingCollectionsCount,
         universeCollection,
+        myNftsLoading,
+        myMintableCollections,
       }}
     >
       {children}

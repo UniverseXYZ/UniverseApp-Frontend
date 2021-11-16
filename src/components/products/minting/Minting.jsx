@@ -18,7 +18,7 @@ const MintingPage = () => {
       <div className="select--title">
         <div className="container">
           <h1>Minting</h1>
-          <p>Create a single NFT or mint a collection</p>
+          <p>Mint NFTs or create a collection</p>
         </div>
       </div>
       <div className="selecttype--section container">
@@ -33,7 +33,10 @@ const MintingPage = () => {
             </div>
             <div className="text-section">
               <h3>Create NFT</h3>
-              <p className="single-text">One of a kind ERC-721 non-fungible token</p>
+              <p className="single-text">
+                Mint your artwork as NFTs from one of your collections or from the Universe
+                Singularity Collection
+              </p>
             </div>
           </div>
           <div className="singlebox-shadow" />
@@ -50,7 +53,7 @@ const MintingPage = () => {
             <div className="text-section">
               <h3>Create Collection</h3>
               <p className="collection-box">
-                ERC-721 non-fungible token with built-in ERC-721 tokens inside
+                Create a new ERC721 Collection to mint your NFTs from
               </p>
             </div>
           </div>

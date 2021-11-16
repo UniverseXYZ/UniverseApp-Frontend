@@ -346,6 +346,8 @@
 
         .intup-l {
           width: 100%;
+          background: $white;
+          border-radius: 12px;
           @include lg {
             width: 100%;
             max-width: 540px;
@@ -427,7 +429,8 @@
             z-index: -9;
             left: -4px;
             right: 0;
-            bottom: -4px;
+            top: -4px;
+            // bottom: -4px;
             margin: auto;
             border-radius: 12px;
             opacity: 0;
@@ -464,6 +467,9 @@
               background: linear-gradient($white, $white) padding-box,
                 linear-gradient(to right, #bceb00, #00eaea) border-box;
               border: 1px solid transparent;
+              + .box--shadow--effect--block {
+                opacity: 0.2;
+              }
             }
           }
           .box--shadow--effect--block {

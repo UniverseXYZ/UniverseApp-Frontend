@@ -1,5 +1,5 @@
-@import '../../assets/scss/variables';
-@import '../../assets/scss/mixins';
+@import "../../assets/scss/variables";
+@import "../../assets/scss/mixins";
 
 .sort--by--order {
   width: 54px;
@@ -39,7 +39,6 @@
 }
 
 .sort--by--order:hover {
-  border-color: transparent;
   .box--shadow--effect--block {
     opacity: 0.2;
   }

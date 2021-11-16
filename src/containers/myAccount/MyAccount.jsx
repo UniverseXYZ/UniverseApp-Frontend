@@ -15,7 +15,7 @@ import { useAuctionContext } from '../../contexts/AuctionContext.jsx';
 const MyAccount = () => {
   const { isWalletConnected, loggedInArtist, setLoggedInArtist } = useAuthContext();
   const { editProfileButtonClick, setEditProfileButtonClick } = useAuctionContext();
-  const { setShowError } = useErrorContext();
+  const { setShowError, setErrorTitle, setErrorBody } = useErrorContext();
   const { setDarkMode } = useThemeContext();
 
   const history = useHistory();
@@ -59,7 +59,7 @@ const MyAccount = () => {
       setShowLoading(true);
       setEditProfileButtonClick(true);
       if (
-        !accountImage ||
+        // !accountImage ||
         !accountName ||
         accountPage === 'universe.xyz/' ||
         accountPage === 'universe.xyz/your-address' ||
@@ -71,7 +71,6 @@ const MyAccount = () => {
       if (page === 'your-address') {
         page = '';
       }
-      setAccountPage(page);
       const artistData = {
         ...loggedInArtist,
         name: accountName,
@@ -85,17 +84,35 @@ const MyAccount = () => {
       const result = await saveProfileInfo(artistData);
       if (typeof accountImage === 'object') {
         const saveImageRequest = await saveUserImage(accountImage);
+        if (!saveImageRequest.ok) {
+          setShowLoading(false);
+          setShowError(true);
+          return;
+        }
         if (saveImageRequest.profileImageUrl) {
           artistData.avatar = saveImageRequest.profileImageUrl;
         }
       }
 
       if (!result.ok) {
+        setShowLoading(false);
+        if (result.status === 409) {
+          setErrorTitle('Universe address already taken');
+          setErrorBody('Please choose another one.');
+        }
         setShowError(true);
         return;
       }
-
+      setAccountPage(`universe.xyz/${page}`);
       setLoggedInArtist({ ...artistData });
+      setFetchedUserData({
+        accountPage: `universe.xyz/${page}`,
+        accountName,
+        accountImage,
+        about,
+        instagramLink: instagramLink.replace('@', ''),
+        twitterLink: twitterLink.replace('@', ''),
+      });
 
       setTimeout(() => {
         if (accountName && accountImage && accountPage !== 'universe.xyz/your-address') {
@@ -108,7 +125,7 @@ const MyAccount = () => {
       setShowError(true);
     }
   };
-
+  console.log(accountPage);
   const cancelChanges = () => {
     setAccountName(loggedInArtist.name);
     if (loggedInArtist.universePageAddress) {

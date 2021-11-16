@@ -25,6 +25,7 @@ import mintingIcon from '../../../../assets/images/Minting.svg';
 import forumIcon from '../../../../assets/images/forum.svg';
 import signalIcon from '../../../../assets/images/signal.svg';
 import docsIcon from '../../../../assets/images/docs.svg';
+import supportIcon from '../../../../assets/images/supportIcon.svg';
 import myProfileIcon from '../../../../assets/images/my-profile.svg';
 import myNFTsIcon from '../../../../assets/images/my-nfts.svg';
 import signOutIcon from '../../../../assets/images/sign-out.svg';
@@ -59,6 +60,7 @@ const DesktopView = ({
     yourEnsDomain,
     usdEthBalance,
     resetConnectionState,
+    loggedInArtist,
   } = useAuthContext();
 
   return (
@@ -242,6 +244,16 @@ const DesktopView = ({
                 <img src={docsIcon} alt="Docs" />
                 <span>Docs</span>
               </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setIsDAODropdownOpened(false);
+                  window.open('https://universe.freshdesk.com/support/home');
+                }}
+              >
+                <img src={supportIcon} alt="Support" />
+                <span>Support</span>
+              </button>
             </div>
           </div>
         </li>
@@ -314,7 +326,24 @@ const DesktopView = ({
             <div className="dropdown drop-account">
               <div className="dropdown__header">
                 <div className="copy-div">
-                  <HeaderAvatar scale={4} />
+                  <button
+                    type="button"
+                    style={{ background: 'transparent' }}
+                    onClick={() => {
+                      if (!loggedInArtist.universePageAddress && !address) return;
+
+                      const path = loggedInArtist.universePageAddress
+                        ? loggedInArtist.universePageAddress
+                        : address;
+                      history.push(`/${path}`, {
+                        id: loggedInArtist.id,
+                      });
+
+                      setIsAccountDropdownOpened(false);
+                    }}
+                  >
+                    <HeaderAvatar scale={4} />
+                  </button>
                   <div className="ethereum__address">
                     {yourEnsDomain
                       ? shortenEnsDomain(yourEnsDomain)

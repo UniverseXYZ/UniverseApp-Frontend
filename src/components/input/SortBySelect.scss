@@ -1,5 +1,5 @@
-@import '../../assets/scss/variables';
-@import '../../assets/scss/mixins';
+@import "../../assets/scss/variables";
+@import "../../assets/scss/mixins";
 
 .sort--by--select--parent {
   // display: grid;
@@ -85,7 +85,7 @@
     left: -4px;
     right: 0;
     top: 0;
-    bottom: 3px;
+    bottom: 0px;
     margin: auto;
     width: calc(100% + 8px);
     min-height: 58px;
@@ -99,13 +99,4 @@
   .box--shadow--effect--block {
     opacity: 0.2;
   }
-  .dropdown {
-    border-color: transparent;
-    border-radius: 10px;
-  }
 }
-// .sort--by--select--parent--active {
-//     .box--shadow--effect--block {
-//         opacity: 0.2 !important;
-//     }
-// }

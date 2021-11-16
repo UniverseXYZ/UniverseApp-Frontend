@@ -77,10 +77,6 @@ const Collection = () => {
     setIsSearching(true);
   };
 
-  useEffect(() => {
-    setPage(0);
-    setOffset(0);
-  }, [perPage]);
   return !collectionData ? (
     <div className="loader-wrapper">
       <CollectionPageLoader />
@@ -160,6 +156,9 @@ const Collection = () => {
                   perPage={perPage}
                   setPerPage={setPerPage}
                   itemsPerPage={[8, 16, 32]}
+                  offset={offset}
+                  page={page}
+                  setPage={setPage}
                 />
               </div>
             </>

@@ -19,6 +19,8 @@ import closeIcon from '../../../../assets/images/close-menu.svg';
 import AppContext from '../../../../ContextAPI';
 import { defaultColors, getCollectionBackgroundColor } from '../../../../utils/helpers';
 import { useAuthContext } from '../../../../contexts/AuthContext';
+import { useMyNftsContext } from '../../../../contexts/MyNFTsContext';
+import universeIcon from '../../../../assets/images/universe-img.svg';
 
 const SortingFilters = ({
   saleTypeButtons,
@@ -37,17 +39,8 @@ const SortingFilters = ({
   setSelectedCreators,
   savedCreators,
   setSavedCreators,
+  nfts,
 }) => {
-  const [showSaleDropdown, setShowSaleDropdown] = useState(false);
-  const [showPriceDropdown, setShowPriceDropdown] = useState(false);
-  const [singleItems, setSingleItems] = useState(true);
-  const [showPriceItems, setShowPriceItems] = useState(false);
-  const [disabledMin, setDisabledMin] = useState(false);
-  const [disabledMax, setDisabledMax] = useState(false);
-  const [showCollectionsDropdown, setShowCollectionsDropdown] = useState(false);
-  const [showArtistsDropdown, setShowArtistsDropdown] = useState(false);
-  // const [selectedTokenIndex, setSelectedTokenIndex] = useState(0);
-
   const bidTokens = [
     {
       icon: ethereumIcon,
@@ -75,17 +68,53 @@ const SortingFilters = ({
       subtitle: 'Synthetix Network Token',
     },
   ];
-  const { deployedCollections } = useAuthContext();
+
+  const [showSaleDropdown, setShowSaleDropdown] = useState(false);
+  const [showPriceDropdown, setShowPriceDropdown] = useState(false);
+  const [singleItems, setSingleItems] = useState(true);
+  const [showPriceItems, setShowPriceItems] = useState(false);
+  const [disabledMin, setDisabledMin] = useState(false);
+  const [disabledMax, setDisabledMax] = useState(false);
+  const [showCollectionsDropdown, setShowCollectionsDropdown] = useState(false);
+  const [showArtistsDropdown, setShowArtistsDropdown] = useState(false);
+  // const [selectedTokenIndex, setSelectedTokenIndex] = useState(0);
+
   const [selectedButtons, setSelectedButtons] = useState([...saleTypeButtons]);
   const [searchByCollections, setSearchByCollections] = useState('');
-  const [collections, setCollections] = useState(deployedCollections);
   const [creators, setCreators] = useState(PLACEHOLDER_MARKETPLACE_USERS);
   const [searchByCreators, setSearchByCreators] = useState('');
+  const [collections, setCollections] = useState([]);
+  const [collectionsNFTMap, setCollectionsNFTMap] = useState([]);
 
   const ref1 = useRef(null);
   const ref2 = useRef(null);
   const ref3 = useRef(null);
   const ref4 = useRef(null);
+
+  const getDistinctCollectionFromNfts = () => {
+    const newDistinct = [...new Map([...nfts].map((item) => [item.collectionId, item])).values()];
+    console.log(newDistinct);
+    const map = newDistinct.map((d) => d.collection);
+    console.log(map);
+    return map;
+  };
+
+  useEffect(() => {
+    const distinctCollection = getDistinctCollectionFromNfts();
+    const collectionNFTsCountMap = distinctCollection.reduce(
+      (res, curr) => {
+        const collectionItems = nfts.filter((nft) => nft.collectionId === curr.id);
+
+        if (!res[curr.id]) res[curr.id] = collectionItems.length;
+        return res;
+      },
+      {},
+      []
+    );
+
+    setCollectionsNFTMap(collectionNFTsCountMap);
+    setCollections(distinctCollection);
+  }, [nfts]);
 
   const handleSelect = (idx) => {
     const newSaleTypeButtons = [...selectedButtons];
@@ -219,6 +248,7 @@ const SortingFilters = ({
       document.removeEventListener('click', handleClickOutside, true);
     };
   });
+
   // TODO: Uncomment for marketplace
   return (
     <div className="sorting--filters--list">
@@ -427,7 +457,10 @@ const SortingFilters = ({
               <div className="collection--dropdown--selected">
                 {selectedCollections.map((coll, index) => (
                   <button type="button" className="light-border-button" key={uuid()}>
-                    {!coll.coverUrl ? (
+                    {coll.address ===
+                    process.env.REACT_APP_UNIVERSE_ERC_721_ADDRESS.toLowerCase() ? (
+                      <img className="sell__collection" src={universeIcon} alt={coll.name} />
+                    ) : !coll.coverUrl ? (
                       <div
                         className="random--avatar--color"
                         style={{
@@ -464,14 +497,18 @@ const SortingFilters = ({
                   .filter((item) =>
                     item.name.toLowerCase().includes(searchByCollections.toLowerCase())
                   )
+                  .sort((a, b) => collectionsNFTMap[b.id] - collectionsNFTMap[a.id])
                   .map((coll, index) => (
                     <div
                       className="collection__item"
-                      key={uuid()}
+                      key={coll.id}
                       onClick={() => handleSelectCollection(coll)}
                       aria-hidden="true"
                     >
-                      {!coll.coverUrl ? (
+                      {coll.address ===
+                      process.env.REACT_APP_UNIVERSE_ERC_721_ADDRESS.toLowerCase() ? (
+                        <img className="collection__avatar" src={universeIcon} alt={coll.name} />
+                      ) : !coll.coverUrl ? (
                         <div
                           className="random--avatar--color"
                           style={{
@@ -483,7 +520,9 @@ const SortingFilters = ({
                       ) : (
                         <img className="collection__avatar" src={coll.coverUrl} alt={coll.name} />
                       )}
-                      <p>{coll.name}</p>
+                      <p>
+                        {coll.name} ({collectionsNFTMap[coll.id]})
+                      </p>
                     </div>
                   ))}
               </div>
@@ -599,6 +638,7 @@ SortingFilters.propTypes = {
   setSelectedCreators: PropTypes.func,
   savedCreators: PropTypes.oneOfType([PropTypes.array]),
   setSavedCreators: PropTypes.func,
+  nfts: PropTypes.oneOfType([PropTypes.array]),
 };
 
 SortingFilters.defaultProps = {
@@ -618,6 +658,7 @@ SortingFilters.defaultProps = {
   setSelectedCreators: () => {},
   savedCreators: [],
   setSavedCreators: () => {},
+  nfts: [],
 };
 
 export default SortingFilters;
