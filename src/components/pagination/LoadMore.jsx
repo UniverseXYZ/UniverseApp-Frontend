@@ -3,18 +3,16 @@ import PropTypes from 'prop-types';
 import Button from '../button/Button';
 import './Pagination.scss';
 
-const LoadMore = ({ quantity, setQuantity, perPage }) => (
+const LoadMore = ({ handleLoadMore }) => (
   <div className="load--more--btn">
-    <Button className="light-border-button" onClick={() => setQuantity(quantity + perPage)}>
+    <Button className="light-border-button" onClick={handleLoadMore}>
       Load more
     </Button>
   </div>
 );
 
 LoadMore.propTypes = {
-  quantity: PropTypes.number.isRequired,
-  setQuantity: PropTypes.func.isRequired,
-  perPage: PropTypes.number.isRequired,
+  handleLoadMore: PropTypes.func.isRequired,
 };
 
 export default LoadMore;
