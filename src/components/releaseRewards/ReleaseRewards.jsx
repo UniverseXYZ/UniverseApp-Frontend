@@ -26,8 +26,16 @@ import LoadingPopup from '../popups/LoadingPopup';
 import { useMyNftsContext } from '../../contexts/MyNFTsContext';
 
 const ReleaseRewards = () => {
-  const { view, auctionData, bidders, rewardTiersSlots, myBid, winningSlot, slotsInfo } =
-    useLocation().state;
+  const {
+    view,
+    auctionData,
+    bidders,
+    rewardTiersSlots,
+    myBid,
+    winningSlot,
+    slotsInfo,
+    backButtonText,
+  } = useLocation().state;
 
   const history = useHistory();
   const { setActiveTxHashes } = useMyNftsContext();
@@ -188,13 +196,11 @@ const ReleaseRewards = () => {
           className="back-rew"
           aria-hidden="true"
           onClick={() => {
-            history.push(`./${auction.artist.displayName}/${auction.auction.link}`, {
-              auction,
-            });
+            history.goBack();
           }}
         >
           <img src={arrow} alt="back" />
-          <span>{auction?.auction?.headline}</span>
+          <span>{backButtonText}</span>
           <h1 className="set-text">Release rewards</h1>
         </div>
         <p className="description">

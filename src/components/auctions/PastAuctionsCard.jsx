@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import CopyToClipboard from 'react-copy-to-clipboard';
 import PropTypes from 'prop-types';
 import { useHistory } from 'react-router';
 import { format } from 'date-fns';
+import { utils, BigNumber } from 'ethers';
 import Button from '../button/Button';
 import copyIcon from '../../assets/images/copy1.svg';
 import bidIcon from '../../assets/images/bid_icon.svg';
@@ -10,26 +11,138 @@ import arrowUp from '../../assets/images/Arrow_Up.svg';
 import arrowDown from '../../assets/images/ArrowDown.svg';
 import infoIcon from '../../assets/images/icon.svg';
 import { useAuthContext } from '../../contexts/AuthContext';
-import NoAuctionsFound from './NoAuctionsFound';
+import PastAuctionActionSection from './PastAuctionActionSection';
 
 const PastAuctionsCard = ({ auction }) => {
   const history = useHistory();
 
-  const { loggedInArtist, ethPrice } = useAuthContext();
+  const { loggedInArtist, ethPrice, universeAuctionHouseContract, address } = useAuthContext();
 
   const [copiedUrl, setCopiedUrl] = useState(false);
   const [showMore, setShowMore] = useState(false);
   const [showAuctioneerTooltip, setShowAuctioneerTooltip] = useState(false);
   const [showRewardsTooltip, setShowRewardsTooltip] = useState(false);
-
+  const [slotsToWithdraw, setSlotsToWithdraw] = useState([]);
+  const [slotsInfo, setSlotsInfo] = useState([]);
+  const [mySlot, setMySlot] = useState(null);
+  const [mySlotIndex, setMySlotIndex] = useState(-1);
+  const [claimableFunds, setClaimableFunds] = useState(0);
+  const [unreleasedFunds, setUnreleasedFunds] = useState(0);
+  const [rewardTiersSlots, setRewardTiersSlots] = useState([]);
   const auctionTotalNfts = auction.rewardTiers
     .map((tier) => tier.nfts.length)
     .reduce((totalNfts, currentNftsCount) => totalNfts + currentNftsCount, 0);
   const startDate = format(new Date(auction.startDate), 'MMMM dd, HH:mm');
   const endDate = format(new Date(auction.endDate), 'MMMM dd, HH:mm');
+  const ethPriceUsd = ethPrice?.market_data?.current_price?.usd;
+
+  const getAuctionSlotsInfo = async () => {
+    if (
+      address &&
+      universeAuctionHouseContract &&
+      auction &&
+      !auction.canceled &&
+      auction.onChainId &&
+      auction.onChain
+    ) {
+      const tierSlots = [];
+      let slotIndexCounter = 1;
+      auction.rewardTiers
+        .sort((a, b) => a.tierPosition - b.tierPosition)
+        .forEach((rewardTier) => {
+          for (let i = 0; i < rewardTier.numberOfWinners; i += 1) {
+            // eslint-disable-next-line no-loop-func
+            const nfts = rewardTier.nfts.filter((t) => t.slot === slotIndexCounter);
+            tierSlots.push({
+              ...rewardTier,
+              nfts,
+              // winner: auction.bidders[i]?.user?.address,
+            });
+            slotIndexCounter += 1;
+          }
+        });
+      setRewardTiersSlots(tierSlots);
+
+      const onChainAuction = await universeAuctionHouseContract.auctions(auction.onChainId);
+
+      const auctionSlotsInfo = {};
+      for (let i = 1; i <= onChainAuction.numberOfSlots; i += 1) {
+        // eslint-disable-next-line no-await-in-loop
+        const slotInfo = await universeAuctionHouseContract.getSlotInfo(auction.onChainId, i);
+        auctionSlotsInfo[i] = slotInfo;
+      }
+      setSlotsInfo(auctionSlotsInfo);
+
+      // eslint-disable-next-line no-restricted-syntax
+      for (const [slotIndex, slotInfo] of Object.entries(auctionSlotsInfo)) {
+        if (slotInfo.winner === utils.getAddress(address)) {
+          setMySlot(slotInfo);
+          setMySlotIndex(slotIndex);
+          break;
+        } else if (
+          slotInfo.winner === '0x0000000000000000000000000000000000000000' &&
+          slotInfo.revenueCaptured &&
+          slotInfo.totalWithdrawnNfts.toNumber() !== slotInfo.totalDepositedNfts.toNumber()
+        ) {
+          setSlotsToWithdraw([...slotsToWithdraw, +slotIndex]);
+        }
+      }
+    }
+  };
+
+  const getAuctionRevenue = async () => {
+    if (universeAuctionHouseContract && Object.values(slotsInfo).length) {
+      const revenueToClaim = await universeAuctionHouseContract.auctionsRevenue(auction.onChainId);
+
+      const totalBids = Object.values(slotsInfo).reduce(
+        (acc, slot) => acc.add(slot.winningBidAmount),
+        BigNumber.from('0')
+      );
+
+      const toClaim = utils.formatEther(revenueToClaim);
+      setClaimableFunds(toClaim);
+
+      const unreleased = utils.formatEther(
+        totalBids.sub(revenueToClaim).sub(auction.claimedFunds || 0)
+      );
+      setUnreleasedFunds(unreleased);
+    }
+  };
+
+  useEffect(() => {
+    getAuctionRevenue();
+  }, [universeAuctionHouseContract, slotsInfo]);
+
+  useEffect(() => {
+    getAuctionSlotsInfo();
+  }, [universeAuctionHouseContract, auction]);
+
+  const handleClaimFunds = async () => {
+    try {
+      const tx = await universeAuctionHouseContract.distributeCapturedAuctionRevenue(
+        auction.onChainId
+      );
+      setShowLoading(true);
+      setActiveTxHashes([tx.hash]);
+
+      const txReceipt = await tx.wait();
+      if (txReceipt.status === 1) {
+        // const result = await claimAuctionFunds({
+        //   auctionId: onAuction.auction.id,
+        //   amount: claimableFunds,
+        // });
+        setShowLoading(false);
+        setActiveTxHashes([]);
+        setClaimableFunds(0);
+      }
+    } catch (err) {
+      setShowLoading(false);
+      setActiveTxHashes([]);
+      console.log(err);
+    }
+  };
 
   console.log(auction);
-
   return (
     <div className="auction past-auction" key={auction.id}>
       <div className="past-left-border-effect" />
@@ -125,7 +238,7 @@ const PastAuctionsCard = ({ auction }) => {
             {auction.bids.highestBid} ETH
             <span className="dollar-val">
               ~$
-              {(auction?.bids?.highestBid * ethPrice?.market_data?.current_price?.usd)?.toFixed(2)}
+              {(auction?.bids?.highestBid * ethPriceUsd)?.toFixed(2)}
             </span>
           </span>
         </div>
@@ -137,7 +250,7 @@ const PastAuctionsCard = ({ auction }) => {
             {auction.bids.totalBids} ETH
             <span className="dollar-val">
               ~$
-              {(auction?.bids?.totalBids * ethPrice?.market_data?.current_price?.usd)?.toFixed(2)}
+              {(auction?.bids?.totalBids * ethPriceUsd)?.toFixed(2)}
             </span>
           </span>
         </div>
@@ -148,86 +261,117 @@ const PastAuctionsCard = ({ auction }) => {
             {auction.bids.lowestBid} ETH
             <span className="dollar-val">
               ~$
-              {(auction?.bids?.lowestBid * ethPrice?.market_data?.current_price.usd)?.toFixed(2)}
+              {(auction?.bids?.lowestBid * ethPriceUsd)?.toFixed(2)}
             </span>
           </span>
         </div>
       </div>
-
-      <div className="funds-and-balance">
-        <div>
-          <div className="unreleased-funds">
-            <div className="head">
-              <span>Unreleased funds</span>
-              <span
-                onMouseOver={() => setShowAuctioneerTooltip(true)}
-                onFocus={() => setShowAuctioneerTooltip(true)}
-                onMouseLeave={() => setShowAuctioneerTooltip(false)}
-                onBlur={() => setShowAuctioneerTooltip(false)}
-              >
-                <img src={infoIcon} alt="Info Icon" />
-              </span>
-              {showAuctioneerTooltip === auction.id && (
-                <div className="info-text1">
-                  <p>
-                    For the auctioneer to be able to collect their winnings and for the users to be
-                    able to claim their NFTs the rewards need to be released first.
-                  </p>
-                </div>
-              )}
-            </div>
-            <div className="balance-body">
-              <span className="value-section">
-                <img src={bidIcon} alt="unreleased funds" />
-                <span className="value">
-                  120.42
-                  <span className="dollar-val">~$41,594</span>
+      {auction.bids.bidsCount !== 0 ? (
+        <div style={{ display: 'block', padding: '20px 0px' }} className="funds-and-balance">
+          <div>
+            <div className="unreleased-funds">
+              <div className="head">
+                <span>Unreleased funds</span>
+                <span
+                  onMouseOver={() => setShowAuctioneerTooltip(true)}
+                  onFocus={() => setShowAuctioneerTooltip(true)}
+                  onMouseLeave={() => setShowAuctioneerTooltip(false)}
+                  onBlur={() => setShowAuctioneerTooltip(false)}
+                >
+                  <img src={infoIcon} alt="Info Icon" />
                 </span>
-              </span>
-              <Button className="light-button ">
-                <span>Release rewards</span>
-              </Button>
-            </div>
-          </div>
-          <div className="available-balance">
-            <div className="head">
-              <span>Available balance</span>
-              <span
-                onMouseOver={() => setShowRewardsTooltip(true)}
-                onFocus={() => setShowRewardsTooltip(true)}
-                onMouseLeave={() => setShowRewardsTooltip(false)}
-                onBlur={() => setShowRewardsTooltip(false)}
-              >
-                <img src={infoIcon} alt="Info Icon" />
-              </span>
-              {showRewardsTooltip === auction.id && (
-                <div className="info-text2">
-                  <p>This is the released reward amount availble for claiming</p>
-                </div>
-              )}
-            </div>
-            <div className="balance-body">
-              <span className="value-section">
-                <img src={bidIcon} alt="unreleased funds" />
-                <span className="value">
-                  14.24
-                  <span className="dollar-val">~$41,594</span>
+                {showAuctioneerTooltip && (
+                  <div className="info-text1">
+                    <p>
+                      For the auctioneer to be able to collect their winnings and for the users to
+                      be able to claim their NFTs the rewards need to be released first.
+                    </p>
+                  </div>
+                )}
+              </div>
+              <div className="balance-body">
+                <span className="value-section">
+                  <img src={bidIcon} alt="unreleased funds" />
+                  <span className="value">
+                    {unreleasedFunds}
+                    <span className="dollar-val">
+                      ~${Math.round(unreleasedFunds * ethPriceUsd)}
+                    </span>
+                  </span>
                 </span>
-              </span>
-              <Button className="light-button ">
-                <span>Claim funds</span>
-              </Button>
+                <Button
+                  className="light-button"
+                  onClick={() =>
+                    history.push('/release-rewards', {
+                      auctionData: { auction },
+                      myBid: null,
+                      view: 'Auctioneer',
+                      bidders: [],
+                      rewardTiersSlots,
+                      winningSlot: null,
+                      slotsInfo,
+                      mySlot,
+                      mySlotIndex,
+                      backButtonText: 'My auctions',
+                    })
+                  }
+                >
+                  <span>Release rewards</span>
+                </Button>
+              </div>
+            </div>
+            <div className="available-balance">
+              <div className="head">
+                <span>Available balance</span>
+                <span
+                  onMouseOver={() => setShowRewardsTooltip(true)}
+                  onFocus={() => setShowRewardsTooltip(true)}
+                  onMouseLeave={() => setShowRewardsTooltip(false)}
+                  onBlur={() => setShowRewardsTooltip(false)}
+                >
+                  <img src={infoIcon} alt="Info Icon" />
+                </span>
+                {showRewardsTooltip && (
+                  <div className="info-text2">
+                    <p>This is the released reward amount availble for claiming</p>
+                  </div>
+                )}
+              </div>
+              <div className="balance-body">
+                <span className="value-section">
+                  <img src={bidIcon} alt="unreleased funds" />
+                  <span className="value">
+                    {claimableFunds}
+                    <span className="dollar-val">~${Math.round(claimableFunds * ethPriceUsd)}</span>
+                  </span>
+                </span>
+                <Button
+                  className="light-button"
+                  disabled={!+claimableFunds}
+                  onClick={handleClaimFunds}
+                >
+                  <span>Claim funds</span>
+                </Button>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-      <div className="empty-section">
-        <NoAuctionsFound
-          title="The auction didn’t get bids on all the slots"
-          desc="You can withdraw your NFTs by clicking a button below."
-          btnText="Withdraw NFTs"
-        />
-      </div>
+      ) : (
+        <></>
+      )}
+
+      {auction.canceled || auction.bids.bidsCount === 0 ? (
+        <div className="empty-section">
+          <PastAuctionActionSection
+            auction={auction}
+            slotsToWithdraw={slotsToWithdraw}
+            setSlotsToWithdraw={slotsToWithdraw}
+            slotsInfo={slotsInfo}
+          />
+        </div>
+      ) : (
+        <></>
+      )}
       {showMore ? (
         <div className="auctions-tier">
           {auction.rewardTiers.map((tier) => (
