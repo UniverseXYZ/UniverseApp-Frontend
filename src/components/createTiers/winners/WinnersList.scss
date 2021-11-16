@@ -49,7 +49,7 @@
       overflow: unset;
       overflow-x: clip;
       @include md {
-        overflow: unset !important;
+        margin: 0 -20px;
       }
     }
   }
