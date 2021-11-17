@@ -15,8 +15,6 @@ const DepositNftsSection = ({
   handleWithdraw,
   isCanceledAuction,
 }) => {
-  console.log(transactions);
-
   // Maybe count this in transaction config
   const getTotalTxNftsCount = () => {
     let totalCount = 0;

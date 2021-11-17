@@ -51,13 +51,14 @@ const AuctionReview = () => {
 
       if (res?.id) {
         document.getElementById('congrats-hidden-btn').click();
-      } else if (res.error) {
+      } else if (res?.error || res?.statusCode >= 500) {
         document.getElementById('congrats-hidden-btn').click();
         const errorMsg =
-          res?.errors[0]?.message || 'An error occured, please check the network tab !';
+          (res?.errors?.length && res.errors[0]?.message) ||
+          'Failed to update/create auction, please try again in few minutes!';
 
         setShowError(true);
-        setErrorTitle('Failed to update/create auction !');
+        setErrorTitle('An error occured!');
         setErrorBody(errorMsg);
       }
     }

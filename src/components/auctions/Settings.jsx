@@ -18,6 +18,7 @@ import addIcon from '../../assets/images/Add.svg';
 import StartDateCalendar from '../calendar/StartDateCalendar.jsx';
 import EndDateCalendar from '../calendar/EndDateCalendar.jsx';
 import { useAuctionContext } from '../../contexts/AuctionContext';
+import { parseDateForDatePicker } from '../calendar/utils';
 
 const MAX_FIELD_CHARS_LENGTH = {
   name: 100,
@@ -66,20 +67,13 @@ const AuctionSettings = () => {
     auction && auction.properties ? [...auction.properties] : [{ address: '', amount: '' }]
   );
 
-  const hasRoyalties = properties[0].address.length > 0;
+  const hasRoyalties = properties && properties.length && properties[0].address.length > 0;
   const [royalities, useRoyalities] = useState(hasRoyalties);
   const parseDate = (dateString) => {
     const date = dateString ? new Date(dateString) : new Date();
 
-    return {
-      month: monthNames[date.getMonth()],
-      day: date.getDate(),
-      year: date.getFullYear(),
-      hours: date.getHours(),
-      minutes: date.getMinutes() < 10 ? `0${date.getMinutes()}` : date.getMinutes(),
-      timezone: 'GMT +04:00', // // TODO:: this shoud be dynamic ?
-      format: 'AM',
-    };
+    const formatedDate = parseDateForDatePicker(date);
+    return formatedDate;
   };
 
   const startDate =
@@ -101,9 +95,9 @@ const AuctionSettings = () => {
       values.name ||
       values.startDate ||
       values.endDate ||
-      properties[0].address ||
-      properties[0].amount ||
-      properties[1]
+      (properties.length && properties[0].address) ||
+      (properties.length && properties[0].amount) ||
+      (properties.length && properties[1])
     ) {
       setAuctionSetupState(true);
     }
@@ -117,7 +111,7 @@ const AuctionSettings = () => {
         ...prevValues,
         startDate: values.startDate.length !== 0,
         endDate: values.endDate.length !== 0,
-        name: values.name.trim().length !== 0,
+        name: values.name?.trim().length !== 0,
         properties: royalities ? properties : [{ address: '', amount: '' }],
       }));
     }, 2000);
@@ -249,6 +243,8 @@ const AuctionSettings = () => {
       setRoyaltyValidAddress(true);
     }
   }, [handleAddAuction]);
+
+  const continueButtonDisabled = !values.startDate || !values.endDate || !values.name;
 
   return (
     <div className="auction-settings container">
@@ -492,13 +488,6 @@ const AuctionSettings = () => {
                   onClick={() => removeProperty(i)}
                   aria-hidden="true"
                 />
-                <Button
-                  className="light-border-button remove-btn"
-                  onClick={() => removeProperty(i)}
-                >
-                  <img src={delIcon} alt="Delete" aria-hidden="true" />
-                  Remove
-                </Button>
               </div>
             ))}
 
@@ -528,7 +517,11 @@ const AuctionSettings = () => {
         <Button className="light-border-button" onClick={() => history.push('/my-auctions')}>
           Back
         </Button>
-        <Button className="light-button" onClick={handleAddAuction}>
+        <Button
+          disabled={continueButtonDisabled}
+          className="light-button"
+          onClick={handleAddAuction}
+        >
           Continue
         </Button>
       </div>
