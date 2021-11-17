@@ -6,14 +6,26 @@ import arrow from '../../assets/images/arrow.svg';
 import closeIcon from '../../assets/images/cross.svg';
 import Button from '../button/Button.jsx';
 import { parseDateForDatePicker } from './utils';
+import { getTimezoneOffset } from '../../utils/dates';
 
 const StartDateCalendar = React.forwardRef(
   (
-    { monthNames, values, setValues, startDateTemp, setStartDateTemp, setShowStartDate, onClose },
+    {
+      auction,
+      monthNames,
+      values,
+      setValues,
+      startDateTemp,
+      setStartDateTemp,
+      setShowStartDate,
+      setEndDateTemp,
+      onClose,
+    },
     ref
   ) => {
     const d = new Date();
     const weekNames = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
+    const UTCHoursFromNow = getTimezoneOffset() / -60;
     const [currentMonth, setCurrentMonth] = useState([]);
     const [minDateTimeError, setMinDateTimeError] = useState(false);
     const [minHours, setMinHours] = useState(new Date().getHours() + 1);
@@ -96,17 +108,17 @@ const StartDateCalendar = React.forwardRef(
           ...prevState,
           minutes: value,
         }));
-      }
 
-      if (
-        new Date().getDate() === startDateTemp.day &&
-        Number(startDateTemp.hours) <= minHours &&
-        Number(value) < minMins
-      ) {
-        setMinDateTimeError(true);
-        return;
+        if (
+          new Date().getDate() === startDateTemp.day &&
+          Number(startDateTemp.hours) <= minHours &&
+          Number(value) < minMins
+        ) {
+          setMinDateTimeError(true);
+          return;
+        }
+        setMinDateTimeError(false);
       }
-      setMinDateTimeError(false);
     };
 
     const handleDayClick = (day) => {
@@ -117,6 +129,7 @@ const StartDateCalendar = React.forwardRef(
         ) {
           alert('Start date can not be before today!');
         } else if (
+          !auction.initialised &&
           values.endDate &&
           new Date(new Date(selectedDate.year, selectedDate.month, day).toDateString()) >
             new Date(
@@ -160,17 +173,39 @@ const StartDateCalendar = React.forwardRef(
 
     const handleSaveClick = () => {
       if (startDateTemp.hours && startDateTemp.minutes) {
-        setValues((prevValues) => ({
-          ...prevValues,
-          startDate: new Date(
-            startDateTemp.year,
-            monthNames.indexOf(startDateTemp.month),
-            startDateTemp.day,
-            startDateTemp.hours,
-            startDateTemp.minutes
-          ),
-        }));
-        onClose();
+        const startDate = new Date(
+          startDateTemp.year,
+          monthNames.indexOf(startDateTemp.month),
+          startDateTemp.day,
+          startDateTemp.hours,
+          startDateTemp.minutes
+        );
+        if (auction.initialised && startDate > values.endDate) {
+          setValues((prevValues) => ({
+            ...prevValues,
+            startDate,
+            endDate: startDate,
+          }));
+          setEndDateTemp((prevState) => ({
+            ...prevState,
+            month: monthNames[selectedDate.month],
+            day: startDateTemp.day,
+            year: startDateTemp.year,
+          }));
+          onClose();
+        } else {
+          setValues((prevValues) => ({
+            ...prevValues,
+            startDate: new Date(
+              startDateTemp.year,
+              monthNames.indexOf(startDateTemp.month),
+              startDateTemp.day,
+              startDateTemp.hours,
+              startDateTemp.minutes
+            ),
+          }));
+          onClose();
+        }
       } else {
         setStartDateTemp((prevState) => ({
           ...prevState,
@@ -307,7 +342,9 @@ const StartDateCalendar = React.forwardRef(
             <div className="timezone">
               <div className="label">Select time</div>
               <div className="selected__timezone" aria-hidden="true">
-                {`Your time zone is ${startDateTemp.timezone}`}
+                {`Your time zone is UTC${
+                  UTCHoursFromNow > 0 ? `+${UTCHoursFromNow}` : UTCHoursFromNow
+                }`}
               </div>
             </div>
             <div className="time">
@@ -348,11 +385,13 @@ const StartDateCalendar = React.forwardRef(
 );
 
 StartDateCalendar.propTypes = {
+  auction: PropTypes.oneOfType([PropTypes.object]).isRequired,
   monthNames: PropTypes.oneOfType([PropTypes.array]).isRequired,
   values: PropTypes.oneOfType([PropTypes.any]).isRequired,
   setValues: PropTypes.func.isRequired,
   startDateTemp: PropTypes.oneOfType([PropTypes.object]).isRequired,
   setStartDateTemp: PropTypes.func.isRequired,
+  setEndDateTemp: PropTypes.func.isRequired,
   setShowStartDate: PropTypes.func,
   onClose: PropTypes.func.isRequired,
 };

@@ -44,6 +44,12 @@
       .property-name {
         width: 150%;
         margin-right: 12px;
+
+        input {
+          font-family: "Space Grotesk", sans-serif;
+          font-size: 16px;
+          line-height: 20px;
+        }
       }
       .property-name,
       .property-value {
@@ -87,6 +93,8 @@
         display: grid;
       }
       .remove-img {
+        margin: auto;
+        margin-top: 23px;
         margin-left: 12px;
         align-self: flex-end;
         width: 52px;

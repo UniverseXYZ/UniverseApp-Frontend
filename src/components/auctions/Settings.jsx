@@ -1,6 +1,8 @@
 import { useLocation, useHistory } from 'react-router-dom';
 import React, { useEffect, useState, useRef } from 'react';
+import { DebounceInput } from 'react-debounce-input';
 import 'react-datepicker/dist/react-datepicker.css';
+import { utils } from 'ethers';
 import Popup from 'reactjs-popup';
 import uuid from 'react-uuid';
 import './AuctionSettings.scss';
@@ -19,10 +21,13 @@ import StartDateCalendar from '../calendar/StartDateCalendar.jsx';
 import EndDateCalendar from '../calendar/EndDateCalendar.jsx';
 import { useAuctionContext } from '../../contexts/AuctionContext';
 import { parseDateForDatePicker } from '../calendar/utils';
+import { useAuthContext } from '../../contexts/AuthContext';
 
 const MAX_FIELD_CHARS_LENGTH = {
   name: 100,
 };
+
+const INVALID_ADDRESS_TEXT = 'Please enter valid address or ENS';
 
 const AuctionSettings = () => {
   const monthNames = [
@@ -51,6 +56,7 @@ const AuctionSettings = () => {
   const startDateRef = useRef(null);
   const endDateRef = useRef(null);
   const [dropDown, setDropDown] = useState('');
+  const { web3Provider } = useAuthContext();
 
   const [isValidFields, setIsValidFields] = useState({
     name: true,
@@ -61,12 +67,12 @@ const AuctionSettings = () => {
 
   const [bidValues, setBidValues] = useState([]);
   const isEditingAuction = location.state !== undefined;
-
-  const [properties, setProperties] = useState(
+  const [royaltyAddress, setRoyaltyAddress] = useState(
     auction && auction.properties ? [...auction.properties] : [{ address: '', amount: '' }]
   );
-
-  const hasRoyalties = properties && properties.length && properties[0].address.length > 0;
+  const [royaltiesMapIndexes, setRoyaltiesMapIndexes] = useState({});
+  const hasRoyalties =
+    royaltyAddress && royaltyAddress.length && royaltyAddress[0].address.length > 0;
   const [royalities, useRoyalities] = useState(hasRoyalties);
   const parseDate = (dateString) => {
     const date = dateString ? new Date(dateString) : new Date();
@@ -89,19 +95,6 @@ const AuctionSettings = () => {
     endDate: auction.endDate ? auction.endDate : '',
   });
 
-  useEffect(() => {
-    if (
-      values.name ||
-      values.startDate ||
-      values.endDate ||
-      (properties.length && properties[0].address) ||
-      (properties.length && properties[0].amount) ||
-      (properties.length && properties[1])
-    ) {
-      setAuctionSetupState(true);
-    }
-  }, [values, properties]);
-
   const bid = options.find((element) => element.value === bidtype);
 
   const handleAddAuction = () => {
@@ -110,14 +103,14 @@ const AuctionSettings = () => {
         ...prevValues,
         startDate: values.startDate.length !== 0,
         endDate: values.endDate.length !== 0,
-        name: values.name?.trim().length !== 0,
-        properties: royalities ? properties : [{ address: '', amount: '' }],
+        name: values.name.trim().length !== 0,
+        properties: royalities ? royaltyAddress : [{ address: '', amount: '' }],
       }));
     }, 2000);
 
     let auctionFieldsValid = false;
     let bidFieldsValid = false;
-    setProperties(royalities ? properties : [{ address: '', amount: '' }]);
+    setRoyaltyAddress(royalities ? royaltyAddress : [{ address: '', amount: '' }]);
 
     if (values.name && values.startDate && values.endDate) {
       if (isValidFields.startDate && isValidFields.endDate) {
@@ -154,7 +147,7 @@ const AuctionSettings = () => {
           rewardTiers: minBid
             ? prevValue.rewardTiers.map((tier, idx) => ({ ...tier, minBid: bidValues[idx] }))
             : prevValue.rewardTiers,
-          properties: royalities ? properties : null,
+          properties: royalities ? royaltyAddress : null,
         }));
       } else {
         setAuction((prevValue) => ({
@@ -162,7 +155,7 @@ const AuctionSettings = () => {
           name: values.name,
           startDate: formatISO(values.startDate),
           endDate: formatISO(values.endDate),
-          properties: royalities ? properties : null,
+          properties: royalities ? royaltyAddress : null,
           rewardTiers: minBid
             ? prevValue.rewardTiers.map((tier) => ({ ...tier, minBid: bidValues[tier.id] }))
             : prevValue.rewardTiers,
@@ -175,21 +168,72 @@ const AuctionSettings = () => {
     }
   };
 
+  const hasAddressError = (royalty, index) => {
+    if (royalty && royaltiesMapIndexes[royalty]) {
+      const isRepeated = royaltiesMapIndexes[royalty].length > 1;
+      if (!isRepeated) return '';
+      const firstAppearenceIndex = royaltiesMapIndexes[royalty][0];
+      if (index !== firstAppearenceIndex) return 'Duplicated address';
+    }
+    return '';
+  };
+
   const handleOnChange = (event) => {
     setValues((prevValues) => ({ ...prevValues, [event.target.id]: event.target.value }));
   };
 
   const addProperty = () => {
-    const prevProperties = [...properties];
+    const prevProperties = [...royaltyAddress];
     const temp = { address: '', percentAmount: '' };
     prevProperties.push(temp);
-    setProperties(prevProperties);
+    setRoyaltyAddress(prevProperties);
   };
 
-  const propertyChangesAddress = (index, val) => {
-    const prevProperties = [...properties];
-    prevProperties[index].address = val;
-    setProperties(prevProperties);
+  const propertyChangesAddress = async (index, val) => {
+    const prevProperties = [...royaltyAddress];
+
+    try {
+      const ens = await web3Provider.resolveName(val);
+      const ensToAddress = utils.isAddress(ens);
+      prevProperties[index].address = ensToAddress ? ens.toLowerCase() : val;
+      prevProperties[index].error = !ensToAddress ? INVALID_ADDRESS_TEXT : '';
+    } catch (e) {
+      prevProperties[index].address = val.toLowerCase();
+      prevProperties[index].error = !utils.isAddress(val) ? INVALID_ADDRESS_TEXT : '';
+    }
+
+    const addressErrors = prevProperties.filter((prop) => prop.error);
+    const lastAddress = prevProperties[index].address;
+
+    // eslint-disable-next-line no-restricted-syntax
+    for (const r in royaltiesMapIndexes) {
+      if (royaltiesMapIndexes[r].includes(index)) {
+        if (royaltiesMapIndexes[r].length > 1) {
+          royaltiesMapIndexes[r].splice(royaltiesMapIndexes[r].indexOf(index), 1);
+        } else {
+          delete royaltiesMapIndexes[r];
+        }
+      }
+    }
+
+    if (royaltiesMapIndexes[lastAddress] && royaltiesMapIndexes[lastAddress].includes(index)) {
+      if (royaltiesMapIndexes.length === 1) {
+        delete royaltiesMapIndexes[lastAddress];
+      } else {
+        royaltiesMapIndexes[lastAddress].splice(royaltiesMapIndexes[r].indexOf(index), 1);
+      }
+    }
+    const value = prevProperties[index].address;
+    if (royaltiesMapIndexes[value] && !royaltiesMapIndexes[value].includes(index)) {
+      royaltiesMapIndexes[value].push(index);
+    } else {
+      royaltiesMapIndexes[value] = [];
+      royaltiesMapIndexes[value].push(index);
+    }
+
+    setRoyaltiesMapIndexes(royaltiesMapIndexes);
+    setRoyaltyAddress(prevProperties);
+    setRoyaltyValidAddress(!addressErrors.length);
   };
 
   const propertyChangesAmount = (index, val, inp) => {
@@ -198,7 +242,7 @@ const AuctionSettings = () => {
     } else {
       inp.classList.remove('withsign');
     }
-    const newProperties = properties.map((property, propertyIndex) => {
+    const newProperties = royaltyAddress.map((property, propertyIndex) => {
       if (propertyIndex === index) {
         return {
           ...property,
@@ -212,14 +256,22 @@ const AuctionSettings = () => {
       0
     );
     if (result <= 100 && val >= 0) {
-      setProperties(newProperties);
+      setRoyaltyAddress(newProperties);
     }
   };
 
-  const removeProperty = (index) => {
-    const temp = [...properties];
-    temp.splice(index, 1);
-    setProperties(temp);
+  const removeRoyaltyAddress = (index) => {
+    const temp = [...royaltyAddress];
+    const removed = temp.splice(index, 1)[0];
+    setRoyaltyAddress(temp);
+
+    const tempIndexes = { ...royaltiesMapIndexes };
+    const occuranceArray = tempIndexes[removed.address];
+    if (occuranceArray) occuranceArray?.pop();
+    setRoyaltiesMapIndexes(tempIndexes);
+
+    const addressErrors = temp.filter((prop) => prop.error && prop.error !== '');
+    setRoyaltyValidAddress(!addressErrors.length);
   };
 
   useEffect(() => {
@@ -233,7 +285,7 @@ const AuctionSettings = () => {
   }, []);
 
   useEffect(() => {
-    const notValidAddress = properties.find(
+    const notValidAddress = royaltyAddress.find(
       (el) => el.address.trim().length !== 0 && EthereumAddress.isAddress(el.address) === false
     );
     if (notValidAddress) {
@@ -338,12 +390,14 @@ const AuctionSettings = () => {
                   >
                     {(close) => (
                       <StartDateCalendar
+                        auction={auction}
                         ref={startDateRef}
                         monthNames={monthNames}
                         values={values}
                         setValues={setValues}
                         startDateTemp={startDateTemp}
                         setStartDateTemp={setStartDateTemp}
+                        setEndDateTemp={setEndDateTemp}
                         onClose={close}
                       />
                     )}
@@ -452,45 +506,58 @@ const AuctionSettings = () => {
         </div>
         {royalities && (
           <div className="royalty-form">
-            {properties.map((elm, i) => (
-              // eslint-disable-next-line react/no-array-index-key
-              <div className="properties" key={i}>
-                <div className="property-name">
-                  <Input
-                    id="address"
-                    label="Wallet address"
-                    placeholder="0x89205A3A3b2A69De6Dbf7f01ED13B2108B2c43e7"
-                    className="address-inp"
-                    value={elm.address}
-                    hoverBoxShadowGradient
-                    onChange={(e) => propertyChangesAddress(i, e.target.value)}
-                  />
-                </div>
-                <div className="property-value">
-                  <span className="percent-sign">%</span>
-                  <Input
-                    id="amount"
-                    type="number"
-                    label="Percent amount"
-                    pattern="\d*"
-                    placeholder="5%"
-                    className="amount-inp"
-                    value={elm.percentAmount}
-                    hoverBoxShadowGradient
-                    onChange={(e) => propertyChangesAmount(i, e.target.value, e.target)}
-                  />
-                </div>
-                <img
-                  src={delateIcon}
-                  alt="Delete"
-                  className="remove-img"
-                  onClick={() => removeProperty(i)}
-                  aria-hidden="true"
-                />
-              </div>
-            ))}
+            {royaltyAddress.map((elm, i) => {
+              const error = elm.error || hasAddressError(elm.address, i);
 
-            {properties.length < 5 && (
+              return (
+                // eslint-disable-next-line react/no-array-index-key
+                <div className="properties" key={i}>
+                  <div className="property-name">
+                    <label className="inp-label">Wallet address</label>
+                    <DebounceInput
+                      debounceTimeout={150}
+                      id="address"
+                      placeholder="0x89205A3A3b2A69De6Dbf7f01ED13B2108B2c43e7"
+                      className={`${error ? 'error-inp inp' : 'inp'}`}
+                      value={elm.address}
+                      hoverBoxShadowGradient
+                      onChange={(e) => propertyChangesAddress(i, e.target.value)}
+                    />
+                    {error && <p className="error-message">{error}</p>}
+                  </div>
+                  <div className="property-value">
+                    <span className="percent-sign">%</span>
+                    <Input
+                      id="amount"
+                      type="number"
+                      label="Percent amount"
+                      pattern="\d*"
+                      placeholder="5%"
+                      className="amount-inp"
+                      value={elm.percentAmount}
+                      hoverBoxShadowGradient
+                      onChange={(e) => propertyChangesAmount(i, e.target.value, e.target)}
+                    />
+                  </div>
+                  <img
+                    src={delateIcon}
+                    alt="Delete"
+                    className="remove-img"
+                    onClick={() => removeRoyaltyAddress(i)}
+                    aria-hidden="true"
+                  />
+                  <Button
+                    className="light-border-button remove-btn"
+                    onClick={() => removeRoyaltyAddress(i)}
+                  >
+                    <img src={delIcon} alt="Delete" aria-hidden="true" />
+                    Remove
+                  </Button>
+                </div>
+              );
+            })}
+
+            {royaltyAddress.length < 5 && (
               <div className="property-add" onClick={() => addProperty()} aria-hidden="true">
                 <h5>
                   <img src={addIcon} alt="Add" />

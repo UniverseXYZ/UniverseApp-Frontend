@@ -6,6 +6,7 @@ import { parseDateForDatePicker } from './utils';
 import arrow from '../../assets/images/arrow.svg';
 import closeIcon from '../../assets/images/cross.svg';
 import Button from '../button/Button.jsx';
+import { getTimezoneOffset } from '../../utils/dates';
 
 const EndDateCalendar = React.forwardRef(
   (
@@ -14,6 +15,7 @@ const EndDateCalendar = React.forwardRef(
   ) => {
     const d = new Date();
     const weekNames = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
+    const UTCHoursFromNow = getTimezoneOffset() / -60;
     const [currentMonth, setCurrentMonth] = useState([]);
     const [minDateTimeError, setMinDateTimeError] = useState(false);
     const [minHours, setMinHours] = useState(new Date().getHours() + 1);
@@ -348,7 +350,9 @@ const EndDateCalendar = React.forwardRef(
             <div className="timezone">
               <div className="label">Select time</div>
               <div className="selected__timezone" aria-hidden="true">
-                {`Your time zone is ${endDateTemp.timezone}`}
+                {`Your time zone is UTC${
+                  UTCHoursFromNow > 0 ? `+${UTCHoursFromNow}` : UTCHoursFromNow
+                }`}
               </div>
             </div>
             <div className="time">

@@ -18,6 +18,8 @@ export const isAfterNow = (_date, now = getNow()) => {
   return date > now;
 };
 
+export const getTimezoneOffset = () => new Date().getTimezoneOffset();
+
 // export const getActive = (_startDate, _endDate) => {
 //   const now = getNow();
 //   const startDate = getDate(_startDate);
