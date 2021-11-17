@@ -51,7 +51,7 @@ const AuctionReview = () => {
 
       if (res?.id) {
         document.getElementById('congrats-hidden-btn').click();
-      } else if (res?.error) {
+      } else if (res?.error || res?.statusCode >= 500) {
         document.getElementById('congrats-hidden-btn').click();
         const errorMsg =
           (res?.errors?.length && res.errors[0]?.message) ||
