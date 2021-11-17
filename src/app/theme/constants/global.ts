@@ -1,3 +1,11 @@
 export const global = {
-  h2: {},
+  body: {
+    paddingTop: '80px',
+  },
+  'header + div': {
+    paddingTop: '0 !important',
+  },
+  h1: {
+    fontFamily: 'Sharp Grotesk Medium'
+  },
 };
