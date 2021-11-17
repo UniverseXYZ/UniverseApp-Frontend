@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import './Calendar.scss';
 import uuid from 'react-uuid';
+import { parseDateForDatePicker } from './utils';
 import arrow from '../../assets/images/arrow.svg';
 import closeIcon from '../../assets/images/cross.svg';
 import Button from '../button/Button.jsx';
@@ -172,16 +173,7 @@ const EndDateCalendar = React.forwardRef(
 
     const handleCancelClick = () => {
       if (!values.endDate) {
-        setEndDateTemp({
-          month: monthNames[d.getMonth()],
-          day: d.getDate(),
-          year: d.getFullYear(),
-          hours: new Date().getHours(),
-          minutes:
-            new Date().getMinutes() < 10 ? `0${new Date().getMinutes()}` : new Date().getMinutes(),
-          timezone: 'GMT +04:00',
-          format: 'AM',
-        });
+        setEndDateTemp(parseDateForDatePicker(d));
       } else {
         setEndDateTemp({
           month: values.endDate.toString().split(' ')[1],
@@ -356,7 +348,7 @@ const EndDateCalendar = React.forwardRef(
             <div className="timezone">
               <div className="label">Select time</div>
               <div className="selected__timezone" aria-hidden="true">
-                Your time zone is UTC+3
+                {`Your time zone is ${endDateTemp.timezone}`}
               </div>
             </div>
             <div className="time">
