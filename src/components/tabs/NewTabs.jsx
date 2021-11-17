@@ -55,7 +55,9 @@ const NewTabs = (props) => {
 
             const nftIds = slotNFTs.map((data) => data.id);
 
-            winnersData[index] = { slot: index, nftsData: slotNFTs, nftIds };
+            const slot = tier.slots.find((s) => s.index === Number(key));
+            const minimumBid = slot.minimumBid || 0;
+            winnersData[index] = { slot: index, nftsData: slotNFTs, nftIds, minimumBid };
           });
 
           // Update the Auction object

@@ -19,6 +19,7 @@ const WinnersList = ({
   selectedWinner,
   setSelectedWinner,
   showReservePrice,
+  compareSlotMinBidValueWithExistingTiers,
 }) => {
   const [maxWinnersShown, setMaxWinnersShown] = useState(MAX_WINNERS_SHOWN);
   const [sliderSettings, setSliderSettings] = useState({
@@ -29,6 +30,22 @@ const WinnersList = ({
     slidesToScroll: 1,
     variableWidth: true,
   });
+
+  const handleReservePriceChange = (value, idx) => {
+    const winnersCopy = [...winnersData];
+    const prevWinner = winnersCopy[idx - 1];
+
+    const validComparedToPrevTiers = compareSlotMinBidValueWithExistingTiers(value);
+    if (!validComparedToPrevTiers) return;
+
+    if (prevWinner) {
+      const validMinBid = prevWinner.minimumBid >= Number(value);
+      if (!validMinBid) return;
+    }
+
+    winnersCopy[idx].minimumBid = value;
+    setWinnersData(winnersCopy);
+  };
 
   useEffect(() => {
     if (winnersData.length > maxWinnersShown) {
@@ -67,6 +84,7 @@ const WinnersList = ({
                 selectedWinner={selectedWinner}
                 setSelectedWinner={setSelectedWinner}
                 showReservePrice={showReservePrice}
+                setReservedPrice={handleReservePriceChange}
               />
             );
           })}
@@ -84,6 +102,7 @@ const WinnersList = ({
                 selectedWinner={selectedWinner}
                 setSelectedWinner={setSelectedWinner}
                 showReservePrice={showReservePrice}
+                setReservedPrice={handleReservePriceChange}
               />
             );
           })}
@@ -99,6 +118,7 @@ WinnersList.propTypes = {
   selectedWinner: PropTypes.number.isRequired,
   setSelectedWinner: PropTypes.func.isRequired,
   showReservePrice: PropTypes.bool.isRequired,
+  compareSlotMinBidValueWithExistingTiers: PropTypes.func.isRequired,
 };
 
 export default WinnersList;

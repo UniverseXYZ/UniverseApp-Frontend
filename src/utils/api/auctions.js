@@ -458,6 +458,10 @@ export const removeRewardTier = async (id) => {
 export const addRewardTier = async (body) => {
   const requestOptions = {
     method: 'POST',
+    headers: {
+      'Content-type': 'application/json; charset=UTF-8',
+      Authorization: `Bearer ${localStorage.getItem('xyz_access_token')}`,
+    },
     body: JSON.stringify(body),
   };
 
