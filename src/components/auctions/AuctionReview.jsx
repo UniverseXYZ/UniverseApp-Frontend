@@ -51,7 +51,7 @@ const AuctionReview = () => {
 
       if (res?.id) {
         document.getElementById('congrats-hidden-btn').click();
-      } else if (res.error) {
+      } else if (res?.error) {
         document.getElementById('congrats-hidden-btn').click();
         const errorMsg =
           res?.errors[0]?.message || 'An error occured, please check the network tab !';
