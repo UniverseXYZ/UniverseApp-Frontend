@@ -8,7 +8,6 @@ import completedCheckmark from '../../assets/images/completedCheckmark.svg';
 
 const ApproveCollection = ({ collection, approveCollection, isApproved, auctionOnChainId }) => {
   const [isApproving, setIsApproving] = useState(false);
-  console.log(`is approved: ${isApproved}`);
   // TODO: Add image blur condtion from auction.backgroundImageBlur prop
   return (
     <div className="collection__div" key={uuid()}>

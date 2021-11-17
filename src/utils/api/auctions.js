@@ -495,3 +495,19 @@ export const cancelAuction = async (id) => {
   const result = await request.text().then((data) => JSON.parse(data));
   return result;
 };
+
+export const patchAuction = async (id, requestBody) => {
+  const requestOptions = {
+    method: 'PATCH',
+    headers: {
+      'Content-type': 'application/json; charset=UTF-8',
+      Authorization: `Bearer ${localStorage.getItem('xyz_access_token')}`,
+    },
+    body: JSON.stringify(requestBody),
+  };
+
+  const request = await fetch(EDIT_AUCTION_URL(id), requestOptions);
+
+  const result = await request.text().then((data) => JSON.parse(data));
+  return result;
+};
