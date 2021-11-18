@@ -1,4 +1,4 @@
-import { Button, Center, Flex, Heading, Image, Text } from '@chakra-ui/react';
+import { Center, Flex, Heading, Image, Text } from '@chakra-ui/react';
 import { useCallback } from 'react';
 
 export interface IBoxSelectItem {
@@ -35,13 +35,21 @@ export const BoxSelect = ({ options, onSelect }: IBoxSelectProps) => {
           h="290px"
           textAlign={'center'}
           p={'20px'}
+          transition={'200ms'}
           sx={{
+            img: {
+              position: 'relative',
+              transition: '100ms'
+            },
             _hover: {
               boxShadow: 'xl',
               bg: `
                 linear-gradient(#ffffff, #ffffff) padding-box, 
                 linear-gradient(135deg, #bceb00 15.57%, #00eaea 84.88%) border-box`,
               cursor: 'pointer',
+              img: {
+                transform: 'translateY(-6px)'
+              }
             }
           }}
           onClick={() => handleOnClick(option.value)}
@@ -50,7 +58,6 @@ export const BoxSelect = ({ options, onSelect }: IBoxSelectProps) => {
             <Image src={option.image} maxW={'72px'} maxH={'72px'} mb={'24px'} />
             <Heading as={'h4'} fontFamily={'Space Grotesk'} fontSize={'18px'} mb={'4px'}>{option.title}</Heading>
             <Text color={'rgba(0, 0, 0, 0.4)'} fontSize={'14px'} mb={'20px'}>{option.description}</Text>
-            <Button>Select</Button>
           </Flex>
         </Center>
       ))}
