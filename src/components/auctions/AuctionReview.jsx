@@ -20,11 +20,12 @@ import { getFutureAuctions } from '../../utils/api/auctions';
 import { useAuctionContext } from '../../contexts/AuctionContext';
 import { useErrorContext } from '../../contexts/ErrorContext';
 import { getBidTypeByValue } from '../../utils/fixtures/BidOptions.js';
+import { getTimezoneOffset } from '../../utils/dates';
 
 const AuctionReview = () => {
   const { auction, bidtype, options, myAuctions, setMyAuctions } = useAuctionContext();
   const { setShowError, setErrorTitle, setErrorBody } = useErrorContext();
-
+  const UTCHoursFromNow = getTimezoneOffset() / -60;
   const location = useLocation();
   const history = useHistory();
   const [hideIcon, setHideIcon] = useState(false);
@@ -32,8 +33,12 @@ const AuctionReview = () => {
   const isEditingAuction = myAuctions.filter((a) => a.id === auction.id);
 
   useEffect(() => {
-    const bidIcon = getBidTypeByValue(bidtype, options).img;
-    setBidicon(bidIcon);
+    if (!auction.id) {
+      history.push('./my-auctions');
+    } else {
+      const bidIcon = getBidTypeByValue(bidtype, options).img;
+      setBidicon(bidIcon);
+    }
   }, []);
 
   const handleSetAuction = async () => {
@@ -106,74 +111,70 @@ const AuctionReview = () => {
 
         <div className="auction-settings-head">
           <h2 className="auction-settings-title">Auction settings</h2>
-          {auction.name && auction.startingBid && auction.startDate && auction.endDate && (
-            <button
-              type="button"
-              className="edit-auction-settings"
-              onClick={() => {
-                history.push('/setup-auction/auction-settings', auction.id);
-              }}
-            >
-              Edit <img src={pencil} alt="edit-icon" />
-            </button>
-          )}
+          <button
+            type="button"
+            className="edit-auction-settings"
+            onClick={() => {
+              history.push('/setup-auction/auction-settings', auction.id);
+            }}
+          >
+            Edit <img src={pencil} alt="edit-icon" />
+          </button>
         </div>
-        {auction.name && auction.startingBid && auction.startDate && auction.endDate && (
-          <div className="auction-inf">
-            <div className="name-bid">
-              <div className="tName">
-                <p>Auction name</p>
-                <span>{auction.name}</span>
-              </div>
-              <div className="startDate">
-                <p>Start date</p>
-                <span>{startDate} EST</span>
-              </div>
+        <div className="auction-inf">
+          <div className="name-bid">
+            <div className="tName">
+              <p>Auction name</p>
+              <span>{auction.name}</span>
             </div>
-            <div className="date-part">
-              <div className="bid-part">
-                <div className="bidToken">
-                  <p>Bid token (ERC-20)</p>
-                  <span className="bidtype">
-                    {bidicon && <img src={bidicon} alt="icon" />}
-                    {bidtype}
-                  </span>
-                </div>
-                <div className="startingBid">
-                  <p>Starting bid</p>
-                  <span>{auction.startingBid}</span>
-                </div>
-              </div>
-              <div className="endDate">
-                <p>End date</p>
-                <span>{endDate} EST</span>
-                <span className="auction-ext">
-                  Ending auction extension timer: 3 minutes
-                  <img
-                    src={infoIcon}
-                    alt="Info Icon"
-                    onMouseOver={() => setHideIcon(true)}
-                    onFocus={() => setHideIcon(true)}
-                    onMouseLeave={() => setHideIcon(false)}
-                    onBlur={() => setHideIcon(false)}
-                  />
-                  {hideIcon && (
-                    <div className="info-text">
-                      <p>
-                        Any bid in the last 3 minutes of an auction will extend the auction for an
-                        additional 3 minutes.
-                      </p>
-                    </div>
-                  )}
+            <div className="startDate">
+              <p>Start date</p>
+              <span>
+                {startDate} UTC{UTCHoursFromNow > 0 ? `+${UTCHoursFromNow}` : UTCHoursFromNow}
+              </span>
+            </div>
+          </div>
+          <div className="date-part">
+            <div className="bid-part">
+              <div className="bidToken">
+                <p>Bid token (ERC-20)</p>
+                <span className="bidtype">
+                  {bidicon && <img src={bidicon} alt="icon" />}
+                  {bidtype}
                 </span>
               </div>
             </div>
+            <div className="endDate">
+              <p>End date</p>
+              <span>
+                {endDate} UTC{UTCHoursFromNow > 0 ? `+${UTCHoursFromNow}` : UTCHoursFromNow}
+              </span>
+              <span className="auction-ext">
+                Ending auction extension timer: 3 minutes
+                <img
+                  src={infoIcon}
+                  alt="Info Icon"
+                  onMouseOver={() => setHideIcon(true)}
+                  onFocus={() => setHideIcon(true)}
+                  onMouseLeave={() => setHideIcon(false)}
+                  onBlur={() => setHideIcon(false)}
+                />
+                {hideIcon && (
+                  <div className="info-text">
+                    <p>
+                      Any bid in the last 3 minutes of an auction will extend the auction for an
+                      additional 3 minutes.
+                    </p>
+                  </div>
+                )}
+              </span>
+            </div>
           </div>
-        )}
+        </div>
 
-        {auction.properties &&
-          auction.properties.length &&
-          auction.properties
+        {auction.royaltySplits &&
+          auction.royaltySplits.length &&
+          auction.royaltySplits
             .map((item) => item.address !== '' && item.percentAmount !== '')
             .find((element) => element) && (
             <div className="royalty-settings-head">
@@ -181,9 +182,9 @@ const AuctionReview = () => {
             </div>
           )}
 
-        {auction.properties && auction.properties.length && (
+        {auction.royaltySplits && auction.royaltySplits.length && (
           <div className="royalty-inf">
-            {auction.properties.map(
+            {auction.royaltySplits.map(
               (item) =>
                 item.address &&
                 item.percentAmount && (

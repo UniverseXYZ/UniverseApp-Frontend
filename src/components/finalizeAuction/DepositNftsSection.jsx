@@ -4,6 +4,9 @@ import Button from '../button/Button';
 import emptyMark from '../../assets/images/emptyMark.svg';
 import emptyWhite from '../../assets/images/emptyWhite.svg';
 import warningIcon from '../../assets/images/Exclamation.svg';
+import LoadingImage from '../general/LoadingImage';
+import SVGImageLoader from '../marketplaceNFT/InlineSVG';
+import videoIcon from '../../assets/images/video-icon.svg';
 
 const DepositNftsSection = ({
   transactions,
@@ -124,19 +127,44 @@ const DepositNftsSection = ({
                 </div>
               </div>
               <div className="transaction__body">
-                {slotNfts.map((nft) => (
-                  <div>
-                    <div className="transaction__image" key={nft.id}>
-                      {nft.count > 1 ? <div className="first" /> : <></>}
-                      {nft.count > 2 ? <div className="second" /> : <></>}
+                {slotNfts.map((nft) => {
+                  const { artworkType, url, count, nftName } = nft;
+                  const nftIsImage =
+                    artworkType === 'png' ||
+                    artworkType === 'jpg' ||
+                    artworkType === 'jpeg' ||
+                    artworkType === 'mpeg' ||
+                    artworkType === 'webp';
 
-                      <div className="image-main">
-                        <img src={nft.thumbnail_url} alt={nft.name} />
+                  return (
+                    <div>
+                      <div className="transaction__image" key={nft.id}>
+                        {count > 1 ? <div className="first" /> : <></>}
+                        {count > 2 ? <div className="second" /> : <></>}
+
+                        <div className="image-main">
+                          {artworkType === 'mp4' && (
+                            <video
+                              className="preview-video"
+                              onMouseOver={(event) => event.target.play()}
+                              onFocus={(event) => event.target.play()}
+                              onMouseOut={(event) => event.target.pause()}
+                              onBlur={(event) => event.target.pause()}
+                            >
+                              <source src={url} type="video/mp4" />
+                              <track kind="captions" />
+                              Your browser does not support the video tag.
+                            </video>
+                          )}
+                          {nftIsImage && <img className="preview-image" src={url} alt={nftName} />}
+                          {artworkType === 'mp4' && (
+                            <img className="video-icon" src={videoIcon} alt="Video Icon" />
+                          )}
+                        </div>
                       </div>
                     </div>
-                    {/* <>{nft.count > 3 ? <span>+{nft.count - 3}</span> : <></>}</> */}
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             </div>
             <div className="deposit__button">{showActionButton(txIndex)}</div>

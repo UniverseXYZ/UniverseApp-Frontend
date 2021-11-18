@@ -29,6 +29,7 @@ import { useMyNftsContext } from '../../contexts/MyNFTsContext';
 import { calculateTransactions } from '../../utils/helpers/depositNfts';
 import DepositNftsSection from './DepositNftsSection';
 import ERC721ABI from '../../contracts/ERC721.json';
+import GoBackPopup from './GoBackPopup';
 
 const FinalizeAuction = () => {
   const history = useHistory();
@@ -41,7 +42,7 @@ const FinalizeAuction = () => {
 
   const [showAuctionDeployLoading, setShowAuctionDeployLoading] = useState(false);
   const [showSuccessPopup, setShowSuccessPopup] = useState(false);
-
+  const [showGoBackPopup, setShowGoBackPopup] = useState(false);
   const [transactions, setTransactions] = useState(null);
   const [approvedTxCount, setApprovedTxCount] = useState(0);
   const [approvedTxs, setApprovedTxs] = useState([]);
@@ -333,7 +334,11 @@ const FinalizeAuction = () => {
           className="back-rew"
           aria-hidden="true"
           onClick={() => {
-            history.push('/my-auctions');
+            if (!auction.onChain || !auction.depositedNfts) {
+              setShowGoBackPopup(true);
+            } else {
+              history.push('/my-auctions');
+            }
           }}
         >
           <img src={arrow} alt="back" />
@@ -462,6 +467,17 @@ const FinalizeAuction = () => {
       </Popup>
       <Popup closeOnDocumentClick={false} open={showSuccessPopup}>
         <SuccessPopup onClose={() => setShowSuccessPopup(false)} onAuction={auction} />
+      </Popup>
+      <Popup closeOnDocumentClick={false} open={showGoBackPopup}>
+        <GoBackPopup
+          onLeave={() => {
+            setShowGoBackPopup(false);
+            history.push('/my-auctions');
+          }}
+          closePopup={() => {
+            setShowGoBackPopup(false);
+          }}
+        />
       </Popup>
     </div>
   );
