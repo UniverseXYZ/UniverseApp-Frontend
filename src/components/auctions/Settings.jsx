@@ -303,7 +303,7 @@ const AuctionSettings = () => {
         <div className="head-part">
           <h2 className="tier-title">Auction settings</h2>
           <p className="tier-description">
-            Start setting up your auction with filling out the name, starting bid and schedule.
+            Start setting up your auction with filling out the name, bid token and schedule.
           </p>
         </div>
         <div className="setting-form">
@@ -375,7 +375,10 @@ const AuctionSettings = () => {
                               {`${startDateTemp.month} ${startDateTemp.day}, ${startDateTemp.year}, `}
                             </b>
                             {`${startDateTemp.hours}:${startDateTemp.minutes}
-                              ${startDateTemp.timezone?.toString().split(' ')[0]}`}
+                              ${startDateTemp.timezone
+                                ?.toString()
+                                .split(' ')[0]
+                                .replace('GMT', 'UTC')}`}
                           </p>
                         )}
                         <img
@@ -426,7 +429,10 @@ const AuctionSettings = () => {
                               {`${endDateTemp.month} ${endDateTemp.day}, ${endDateTemp.year}, `}
                             </b>
                             {`${endDateTemp.hours}:${endDateTemp.minutes}
-                              ${endDateTemp.timezone?.toString().split(' ')[0]}`}
+                              ${endDateTemp.timezone
+                                ?.toString()
+                                .split(' ')[0]
+                                .replace('GMT', 'UTC')}`}
                           </p>
                         )}
                         <img
