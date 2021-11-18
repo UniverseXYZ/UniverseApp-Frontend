@@ -100,6 +100,10 @@ export const sendSaveCollectionRequest = async ({ collection, helpers }) => {
 //
 
 export const sendCreateAuctionRequest = async ({ requestObject }) => {
+  // Remvoe the locally deleted reward tiers from the Create Auction request
+  const rewardTiers = requestObject.rewardTiers.filter((t) => !t.removed);
+  requestObject.rewardTiers = rewardTiers;
+
   const res = await createAuction(requestObject);
   return res;
 };
@@ -109,7 +113,7 @@ export const sendUpdateAuctionRequest = async ({ requestObject }) => {
 
   const auctionId = requestObject.id;
   const newTiers = requestObject.rewardTiers.filter(
-    (tier) => typeof tier.id === 'string' && tier.id.startsWith('new-tier')
+    (tier) => !tier.removed && typeof tier.id === 'string' && tier.id.startsWith('new-tier')
   );
   const updateTiers = requestObject.rewardTiers.filter(
     (tier) =>

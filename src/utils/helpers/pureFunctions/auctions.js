@@ -70,13 +70,19 @@ export const attachTierNftsIds = ({ auction, requestObject }) => {
   // We should prepare all rewardTiers slots indexes for the BE in sequence 1,2,3,4,5 etc..
   let slotIndex = 1;
   auction.rewardTiers.forEach((t) => {
+    // Update the slot index only if the tier is not removed
     const updatedSlotIndexes = t.nftSlots.map((slot) => {
       const slotCopy = { ...slot };
-      slotCopy.slot = slotIndex;
       slotCopy.minimumBid = Number(slotCopy.minimumBid);
-      slotIndex += 1;
+
+      if (!t.removed) {
+        slotCopy.slot = slotIndex;
+        slotIndex += 1;
+      }
+
       return slotCopy;
     });
+
     const tierObject = {
       name: t.name,
       numberOfWinners: t.winners || t.numberOfWinners,
