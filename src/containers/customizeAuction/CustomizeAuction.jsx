@@ -90,6 +90,7 @@ const CustomizeAuction = () => {
     !accountName ||
     accountPage === 'universe.xyz/' ||
     accountPage === 'universe.xyz/your-address' ||
+    !accountPage ||
     !about;
 
   const setContext = (_loggedInArtistClone, _editedAuction, action) => {
@@ -105,11 +106,17 @@ const CustomizeAuction = () => {
     }
   };
 
-  const handleStatus = (errorMessages, loggedInArtistClone, editedAuction, action) => {
+  const handleStatus = (errors, loggedInArtistClone, editedAuction, action) => {
     setLoading(false);
-    if (errorMessages.length) {
+    if (errors.length) {
       setErrorTitle('Unexpected error');
-      setErrorBody(errorMessages.join(', '));
+      const erorrMessagesMarkup = errors.map((error) => {
+        if (error) {
+          return <p>{error.message}</p>;
+        }
+        return null;
+      });
+      setErrorBody(erorrMessagesMarkup);
       setShowError(true);
     } else {
       setContext(loggedInArtistClone, editedAuction, action);
@@ -172,17 +179,31 @@ const CustomizeAuction = () => {
     );
 
     if (canEditAuction) {
-      newAuctionData = await editAuction(editedAuction);
+      try {
+        newAuctionData = await editAuction(editedAuction);
+        if (newAuctionData.error) {
+          return newAuctionData;
+        }
+      } catch (error) {
+        console.error(error);
+      }
     }
 
     let updatedAuction = { ...editedAuction, ...newAuctionData };
 
     if (canEditAuctionImages) {
-      newAuctionData = await uploadImagesForTheLandingPage(
-        editedAuction.promoImage,
-        editedAuction.backgroundImage,
-        editedAuction.id
-      );
+      try {
+        newAuctionData = await uploadImagesForTheLandingPage(
+          editedAuction.promoImage,
+          editedAuction.backgroundImage,
+          editedAuction.id
+        );
+        if (newAuctionData.error) {
+          return newAuctionData;
+        }
+      } catch (error) {
+        console.info(error);
+      }
     }
 
     updatedAuction = { ...updatedAuction, ...newAuctionData };
@@ -220,19 +241,30 @@ const CustomizeAuction = () => {
     const profileResponses = await saveProfile(loggedInArtistClone);
     const rewardTierResponses = await saveRewardTiers();
 
-    const errorMessages = [];
+    const errors = [];
 
     if (rewardTierResponses.length) {
-      rewardTierResponses.forEach((res) => res.error && errorMessages.push(res.message));
-      if (!errorMessages.length) {
+      rewardTierResponses.forEach((res) => res.error && errors.push(res));
+      if (!errors.length) {
         newAuctionData.rewardTiers = rewardTierResponses;
       }
     }
 
-    profileResponses.forEach((res) => res.error && errorMessages.push(res.message));
-    if (newAuctionData.error) errorMessages.push(newAuctionData.message);
+    if (profileResponses?.length) {
+      profileResponses.forEach((res) => {
+        if (res) {
+          if (res.error) {
+            errors.push(res);
+          }
+        }
+      });
+    }
 
-    handleStatus(errorMessages, loggedInArtistClone, newAuctionData, action);
+    if (newAuctionData.error) {
+      errors.push(newAuctionData);
+    }
+
+    handleStatus(errors, loggedInArtistClone, newAuctionData, action);
   };
 
   const handleSave = async (action) => {
@@ -252,11 +284,8 @@ const CustomizeAuction = () => {
         ...domainAndBranding,
       };
 
-      let page = accountPage.substring(13);
-      if (page === 'your-address') {
-        page = '';
-      }
-      setAccountPage(page);
+      const page = accountPage.substring(13);
+      // setAccountPage(page);
       const loggedInArtistClone = {
         ...loggedInArtist,
         name: accountName,
