@@ -20,6 +20,7 @@ import { useThemeContext } from '../../contexts/ThemeContext';
 
 const newTabData = [
   {
+    id: 1,
     labelText: 'Auction settings',
     icon: SettingIcon,
     iconActive: SettingIconActive,
@@ -28,6 +29,7 @@ const newTabData = [
     content: <AuctionSettings />,
   },
   {
+    id: 2,
     labelText: 'Reward tiers',
     icon: RewardIcon,
     iconActive: RewardIconActive,
@@ -36,6 +38,7 @@ const newTabData = [
     content: <RewardTiers />,
   },
   {
+    id: 3,
     labelText: 'Review auction',
     icon: ReviewIcon,
     iconActive: ReviewIconActive,
