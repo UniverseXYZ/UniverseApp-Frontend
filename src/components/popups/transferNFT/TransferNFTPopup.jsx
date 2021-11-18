@@ -17,26 +17,24 @@ const TransferNFTPopup = ({ close, nft }) => {
   const { signer } = useAuthContext();
 
   const contract = useMemo(
-    () => new Contract(nft.collection.address, contractsData.ERC721.abi, signer),
+    () => new Contract(nft.collection.address, contractsData[nft.standard].abi, signer),
     [nft, signer]
   );
 
   const handleSubmit = useCallback(async () => {
-    const gasLimit = await contract.estimateGas['safeTransferFrom(address,address,uint256)'](
-      nft.owner,
-      receiverAddress,
-      nft.tokenId
-    );
+    const address = await signer.getAddress();
+    let methodName = 'safeTransferFrom(address,address,uint256)';
+    let params = [address, receiverAddress, nft.tokenId];
+
+    if (nft.standard === 'ERC1155') {
+      methodName = 'safeTransferFrom';
+      params = [address, receiverAddress, nft.tokenId, nft.amount, 0x0];
+    }
+
+    const gasLimit = await contract.estimateGas[methodName](...params);
     try {
       setStep(Steps.Loading);
-      const res = await contract['safeTransferFrom(address,address,uint256)'](
-        nft.owner,
-        receiverAddress,
-        nft.tokenId,
-        {
-          gasLimit,
-        }
-      );
+      const res = await contract[methodName](...params, { gasLimit });
       await res.wait();
     } catch (e) {
       console.error(e);
