@@ -6,7 +6,7 @@ import React from 'react';
 
 export const TieredAuctionsBanner = () => {
   return (
-    <Box bgColor={'black'} h={'200px'}>
+    <Box bgColor={'black'} h={'200px'} mt={'250px'}>
       <Container maxW={'var(--container-max-width)'} p={0}>
         <Box
           bgGradient={`

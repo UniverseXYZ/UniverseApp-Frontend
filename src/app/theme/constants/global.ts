@@ -6,6 +6,6 @@ export const global = {
     paddingTop: '0 !important',
   },
   h1: {
-    fontFamily: 'Sharp Grotesk Medium'
+    fontFamily: 'Sharp Grotesk SemiBold'
   },
 };
