@@ -57,7 +57,7 @@ const AuctionSettings = () => {
   const endDateRef = useRef(null);
   const [dropDown, setDropDown] = useState('');
   const { web3Provider } = useAuthContext();
-
+  console.log(auction);
   const [isValidFields, setIsValidFields] = useState({
     name: true,
     startDate: true,
@@ -68,7 +68,7 @@ const AuctionSettings = () => {
   const [bidValues, setBidValues] = useState([]);
   const isEditingAuction = location.state !== undefined;
   const [royaltyAddress, setRoyaltyAddress] = useState(
-    auction && auction.properties ? [...auction.properties] : [{ address: '', amount: '' }]
+    auction && auction.royaltySplits ? [...auction.royaltySplits] : [{ address: '', amount: '' }]
   );
   const [royaltiesMapIndexes, setRoyaltiesMapIndexes] = useState({});
   const hasRoyalties =
@@ -104,7 +104,7 @@ const AuctionSettings = () => {
         startDate: values.startDate.length !== 0,
         endDate: values.endDate.length !== 0,
         name: values.name.trim().length !== 0,
-        properties: royalities ? royaltyAddress : [{ address: '', amount: '' }],
+        royaltySplits: royalities ? royaltyAddress : [{ address: '', amount: '' }],
       }));
     }, 2000);
 
@@ -147,7 +147,7 @@ const AuctionSettings = () => {
           rewardTiers: minBid
             ? prevValue.rewardTiers.map((tier, idx) => ({ ...tier, minBid: bidValues[idx] }))
             : prevValue.rewardTiers,
-          properties: royalities ? royaltyAddress : null,
+          royaltySplits: royalities ? royaltyAddress : null,
         }));
       } else {
         setAuction((prevValue) => ({
@@ -155,7 +155,7 @@ const AuctionSettings = () => {
           name: values.name,
           startDate: formatISO(values.startDate),
           endDate: formatISO(values.endDate),
-          properties: royalities ? royaltyAddress : null,
+          royaltySplits: royalities ? royaltyAddress : null,
           rewardTiers: minBid
             ? prevValue.rewardTiers.map((tier) => ({ ...tier, minBid: bidValues[tier.id] }))
             : prevValue.rewardTiers,
@@ -205,43 +205,39 @@ const AuctionSettings = () => {
     const addressErrors = prevProperties.filter((prop) => prop.error);
     const lastAddress = prevProperties[index].address;
 
+    const newRoyaltyMapIndexes = { ...royaltiesMapIndexes };
     // eslint-disable-next-line no-restricted-syntax
-    for (const r in royaltiesMapIndexes) {
-      if (royaltiesMapIndexes[r].includes(index)) {
-        if (royaltiesMapIndexes[r].length > 1) {
-          royaltiesMapIndexes[r].splice(royaltiesMapIndexes[r].indexOf(index), 1);
+    for (const r in newRoyaltyMapIndexes) {
+      if (newRoyaltyMapIndexes[r].includes(index)) {
+        if (newRoyaltyMapIndexes[r].length > 1) {
+          newRoyaltyMapIndexes[r].splice(newRoyaltyMapIndexes[r].indexOf(index), 1);
         } else {
-          delete royaltiesMapIndexes[r];
+          delete newRoyaltyMapIndexes[r];
         }
       }
     }
 
-    if (royaltiesMapIndexes[lastAddress] && royaltiesMapIndexes[lastAddress].includes(index)) {
-      if (royaltiesMapIndexes.length === 1) {
-        delete royaltiesMapIndexes[lastAddress];
+    if (newRoyaltyMapIndexes[lastAddress] && newRoyaltyMapIndexes[lastAddress].includes(index)) {
+      if (newRoyaltyMapIndexes.length === 1) {
+        delete newRoyaltyMapIndexes[lastAddress];
       } else {
-        royaltiesMapIndexes[lastAddress].splice(royaltiesMapIndexes[r].indexOf(index), 1);
+        newRoyaltyMapIndexes[lastAddress].splice(newRoyaltyMapIndexes[r].indexOf(index), 1);
       }
     }
     const value = prevProperties[index].address;
-    if (royaltiesMapIndexes[value] && !royaltiesMapIndexes[value].includes(index)) {
-      royaltiesMapIndexes[value].push(index);
+    if (newRoyaltyMapIndexes[value] && !newRoyaltyMapIndexes[value].includes(index)) {
+      newRoyaltyMapIndexes[value].push(index);
     } else {
-      royaltiesMapIndexes[value] = [];
-      royaltiesMapIndexes[value].push(index);
+      newRoyaltyMapIndexes[value] = [];
+      newRoyaltyMapIndexes[value].push(index);
     }
 
-    setRoyaltiesMapIndexes(royaltiesMapIndexes);
+    setRoyaltiesMapIndexes(newRoyaltyMapIndexes);
     setRoyaltyAddress(prevProperties);
     setRoyaltyValidAddress(!addressErrors.length);
   };
 
   const propertyChangesAmount = (index, val, inp) => {
-    if (val) {
-      inp.classList.add('withsign');
-    } else {
-      inp.classList.remove('withsign');
-    }
     const newProperties = royaltyAddress.map((property, propertyIndex) => {
       if (propertyIndex === index) {
         return {
@@ -284,19 +280,23 @@ const AuctionSettings = () => {
     }
   }, []);
 
-  useEffect(() => {
-    const notValidAddress = royaltyAddress.find(
-      (el) => el.address.trim().length !== 0 && EthereumAddress.isAddress(el.address) === false
+  const continueButtonDisabled =
+    !values.startDate ||
+    !values.endDate ||
+    !values.name ||
+    royaltyAddress.find(
+      (el, i) =>
+        el.address.trim().length === 0 ||
+        !utils.isAddress(el.address) ||
+        !+el.percentAmount ||
+        hasAddressError(el.address, i)
     );
-    if (notValidAddress) {
-      setRoyaltyValidAddress(false);
-    } else {
-      setRoyaltyValidAddress(true);
-    }
-  }, [handleAddAuction]);
-
-  const continueButtonDisabled = !values.startDate || !values.endDate || !values.name;
-
+  console.log(continueButtonDisabled);
+  console.log(
+    royaltyAddress.find(
+      (el) => el.address.trim().length === 0 || !utils.isAddress(el.address) || !+el.percentAmount
+    )
+  );
   return (
     <div className="auction-settings container">
       <div>
@@ -334,7 +334,6 @@ const AuctionSettings = () => {
                 <div className="drop-down">
                   <Popup
                     nested
-                    handleEdit
                     closeOnDocumentClick={false}
                     trigger={
                       <button type="button" className={dropDown}>
@@ -526,33 +525,36 @@ const AuctionSettings = () => {
                     {error && <p className="error-message">{error}</p>}
                   </div>
                   <div className="property-value">
-                    <span className="percent-sign">%</span>
                     <Input
                       id="amount"
-                      type="number"
                       label="Percent amount"
                       pattern="\d*"
-                      placeholder="5%"
-                      className="amount-inp"
+                      placeholder="5"
+                      className="amount-inp withsign"
                       value={elm.percentAmount}
                       hoverBoxShadowGradient
                       onChange={(e) => propertyChangesAmount(i, e.target.value, e.target)}
                     />
+                    <span className="percent-sign">%</span>
                   </div>
-                  <img
-                    src={delateIcon}
-                    alt="Delete"
-                    className="remove-img"
-                    onClick={() => removeRoyaltyAddress(i)}
-                    aria-hidden="true"
-                  />
-                  <Button
-                    className="light-border-button remove-btn"
-                    onClick={() => removeRoyaltyAddress(i)}
-                  >
-                    <img src={delIcon} alt="Delete" aria-hidden="true" />
-                    Remove
-                  </Button>
+                  {i > 0 && (
+                    <>
+                      <img
+                        src={delateIcon}
+                        alt="Delete"
+                        className="remove-img"
+                        onClick={() => removeRoyaltyAddress(i)}
+                        aria-hidden="true"
+                      />
+                      <Button
+                        className="light-border-button remove-btn"
+                        onClick={() => removeRoyaltyAddress(i)}
+                      >
+                        <img src={delIcon} alt="Delete" aria-hidden="true" />
+                        Remove
+                      </Button>
+                    </>
+                  )}
                 </div>
               );
             })}
