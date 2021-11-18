@@ -1,7 +1,7 @@
 import singleIcon from '../../../../../../assets/images/sellNft/single-icon.svg';
 import collectionIcon from '../../../../../../assets/images/sellNft/collection-icon.svg';
 
-export const amountOptions = [
+export const sellAmountOptions = [
   {
     value: 'single',
     title: 'Single Item',
