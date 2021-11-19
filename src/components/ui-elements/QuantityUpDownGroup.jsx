@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import './styles/QuantityUpDownGroup.scss';
+// import './styles/QuantityUpDownGroup.scss';
 
 const QuantityUpDownGroup = (props) => {
   const { labelText, min, max, value, onChange, className, btnLeftText, btnRightText } = props;

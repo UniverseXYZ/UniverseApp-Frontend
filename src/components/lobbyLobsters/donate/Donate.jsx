@@ -1,6 +1,6 @@
 import React from 'react';
 import donatebox from '../../../assets/images/lobby-lobsters/donatebox.png';
-import './Donate.scss';
+// import './Donate.scss';
 
 const Donate = () => (
   <div className="donate--general--section">

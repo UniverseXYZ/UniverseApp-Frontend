@@ -80,6 +80,16 @@ import '../src/components/myNFTs/create/CreateNFT.scss';
 import '../src/components/myNFTs/create/CreateSingleNft.scss';
 import '../src/components/nft/SearchFilters.scss';
 import '../src/containers/collection/Collection.scss';
+import '../src/components/lobbyLobsters/donate/Donate.scss';
+import '../src/components/lobbyLobsters/helpUs/HelpUsBeHeard.scss';
+import '../src/components/lobbyLobsters/heroSection/HeroSection.scss';
+import '../src/components/lobbyLobsters/mintSection/MintLobbyLobsterSection.scss';
+import '../src/components/lobbyLobsters/sliderSection/SliderSection.scss';
+import '../src/components/polymorphs/mint-polymorph/styles/BondingCurve.scss';
+import '../src/components/popups/PopupStyle.scss';
+import '../src/components/popups/LobsterLoader.scss';
+import '../src/components/ui-elements/styles/HorizontalSlider.scss';
+import '../src/components/ui-elements/styles/QuantityUpDownGroup.scss';
 
 import type { AppProps } from 'next/app'
 import React, { useEffect, useState } from 'react';

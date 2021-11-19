@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import './styles/HorizontalSlider.scss';
+// import './styles/HorizontalSlider.scss';
 
 const calculate = (value, max, min) => {
   if (value > max) return 100;
