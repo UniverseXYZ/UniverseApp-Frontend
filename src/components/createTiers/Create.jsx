@@ -30,7 +30,6 @@ const MAX_FIELD_CHARS_LENGTH = {
 const Create = () => {
   const { auction, setAuction, availableNFTs, setAvailableNFTs, getAvailableNFTs } =
     useAuctionContext();
-  console.log('rerender');
   const history = useHistory();
   const location = useLocation();
   const tierId = location.state;
