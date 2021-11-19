@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { utils } from 'ethers';
 import Tabs from '../tabs/Tabs';
 import Button from '../button/Button';
-import '../polymorphs/scramble/styles/PolymorphScramblePopup.scss';
+// import '../polymorphs/scramble/styles/PolymorphScramblePopup.scss';
 import closeIcon from '../../assets/images/cross.svg';
 import ethIcon from '../../assets/images/eth.svg';
 import SelectComponent from '../select/SelectComponent';
@@ -236,9 +236,9 @@ PolymorphScramblePopup.propTypes = {
   setPolymorphGene: PropTypes.func.isRequired,
   polymorph: PropTypes.oneOfType([PropTypes.object]).isRequired,
   id: PropTypes.string.isRequired,
-  setShowCongratulations: PropTypes.bool.isRequired,
-  setShowLoading: PropTypes.bool.isRequired,
-  setShowMetadataLoading: PropTypes.bool.isRequired,
+  setShowCongratulations: PropTypes.func.isRequired,
+  setShowLoading: PropTypes.func.isRequired,
+  setShowMetadataLoading: PropTypes.func.isRequired,
 };
 
 export default PolymorphScramblePopup;

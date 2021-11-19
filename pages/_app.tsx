@@ -93,9 +93,13 @@ import '../src/components/ui-elements/styles/QuantityUpDownGroup.scss';
 import '../src/components/auctionsCard/ActiveAuctionsCard.scss';
 import '../src/components/auctionsCard/FutureAuctionsCard.scss';
 import '../src/containers/artist/Artist.scss';
+import '../src/components/polymorphs/scramble/styles/PolymorphScramblePage.scss';
+import '../src/components/polymorphs/scramble/styles/PolymorphScrambleProp.scss';
+import '../src/components/select/SelectComponent.scss';
 
 import type { AppProps } from 'next/app'
 import React, { useEffect, useState } from 'react';
+import { QueryClient, QueryClientProvider } from 'react-query';
 
 import { AuthContextProvider } from '../src/contexts/AuthContext';
 import { ThemeContextProvider } from '../src/contexts/ThemeContext';
@@ -109,6 +113,8 @@ import Footer from '../src/components/footer/Footer';
 import { PolymorphContextProvider } from '../src/contexts/PolymorphContext';
 import { Popups } from '../src/app/components/AppPopups';
 
+const queryClient = new QueryClient();
+
 function MyApp({ Component, pageProps }: AppProps) {
   const [mounted, setMounted] = useState(false);
 
@@ -120,25 +126,27 @@ function MyApp({ Component, pageProps }: AppProps) {
 
   return (
     <ErrorContextProvider>
-      <AuthContextProvider>
-        <ThemeContextProvider>
-          {/*<Component {...pageProps} />*/}
-          <PolymorphContextProvider>
-            <LobsterContextProvider>
-              <MyNFTsContextProvider>
-                <AuctionContextProvider>
-                  <MarketplaceContextProvider>
-                    <Header />
-                    <Component {...pageProps} />
-                    <Footer />
-                    <Popups />
-                  </MarketplaceContextProvider>
-                </AuctionContextProvider>
-              </MyNFTsContextProvider>
-            </LobsterContextProvider>
-          </PolymorphContextProvider>
-        </ThemeContextProvider>
-      </AuthContextProvider>
+      <QueryClientProvider client={queryClient}>
+        <AuthContextProvider>
+          <ThemeContextProvider>
+            {/*<Component {...pageProps} />*/}
+            <PolymorphContextProvider>
+              <LobsterContextProvider>
+                <MyNFTsContextProvider>
+                  <AuctionContextProvider>
+                    <MarketplaceContextProvider>
+                      <Header />
+                      <Component {...pageProps} />
+                      <Footer />
+                      <Popups />
+                    </MarketplaceContextProvider>
+                  </AuctionContextProvider>
+                </MyNFTsContextProvider>
+              </LobsterContextProvider>
+            </PolymorphContextProvider>
+          </ThemeContextProvider>
+        </AuthContextProvider>
+      </QueryClientProvider>
     </ErrorContextProvider>
   );
 }

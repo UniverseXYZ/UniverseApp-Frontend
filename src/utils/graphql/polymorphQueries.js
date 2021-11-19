@@ -1,4 +1,5 @@
 import { gql, ApolloClient, InMemoryCache } from '@apollo/client';
+import { request, gql as gql2 } from 'graphql-request';
 
 export const morphedPolymorphs = `
   query Polymorphs {
@@ -75,3 +76,10 @@ export const queryPolymorphsGraph = async (graphQuery) => {
 
   return graphData?.data;
 };
+
+export const queryPolymorphsGraph2 = async (graphQuery) => {
+  return await request(
+    process.env.REACT_APP_POLYMORPHS_GRAPH_URL,
+    gql2`${graphQuery}`
+  );
+}

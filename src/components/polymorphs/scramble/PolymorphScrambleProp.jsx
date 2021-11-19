@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { queryPolymorphsGraph, traitRarity } from '../../../utils/graphql/polymorphQueries';
-import './styles/PolymorphScrambleProp.scss';
+// import './styles/PolymorphScrambleProp.scss';
 import { useGraphQueryHook } from '../../../utils/hooks/useGraphQueryHook';
 
 const PolymorphScrambleProp = ({ data }) => {
@@ -25,8 +25,8 @@ const PolymorphScrambleProp = ({ data }) => {
 PolymorphScrambleProp.propTypes = {
   data: PropTypes.shape({
     trait: PropTypes.string.isRequired,
-    name: PropTypes.string.isRequired,
-    chance: PropTypes.string.isRequired,
+    name: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+    chance: PropTypes.string,
   }).isRequired,
 };
 
