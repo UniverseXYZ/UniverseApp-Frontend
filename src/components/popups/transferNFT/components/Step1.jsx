@@ -40,7 +40,7 @@ export const Step1 = ({ close, nft, formik, showAmount, onSubmit }) => {
             hoverBoxShadowGradient
           />
         </div>
-        {nft.tokenIds.length > 0 && (
+        {nft.tokenIds.length > 1 && (
           <div className="receiver--address tokenID">
             <label>Choose token ID</label>
             <ChooseTokenIdDropdown
