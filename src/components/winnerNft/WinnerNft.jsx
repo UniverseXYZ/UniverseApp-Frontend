@@ -34,7 +34,13 @@ const WinnerNFT = ({ nft, onRemoveEdition }) => {
 
       {image && <img className="smallView-image" src={nft.url} alt={nft.name} />}
 
-      {nft.count > 1 && <span className="for-editions-count">{nft.count}</span>}
+      {nft.count > 1 && (
+        <>
+          <div className="auction-reward__box__highlight__one" />
+          <div className="auction-reward__box__highlight__two" />
+          <span className="for-editions-count">{nft.count}</span>
+        </>
+      )}
 
       <div className="delete-hover">
         {nft.count > 1 ? (
