@@ -1,5 +1,4 @@
 import React, { useRef, useState, useEffect } from 'react';
-import { useHistory } from 'react-router-dom';
 import uuid from 'react-uuid';
 import bubbleIcon from '../../assets/images/text-bubble.png';
 import plusIcon from '../../assets/images/plus.svg';
@@ -10,11 +9,12 @@ import { getCollectionBackgroundColor } from '../../utils/helpers';
 import PendingCollections from './pendingDropdown/pendingCollections/PendingCollections';
 import universeIcon from '../../assets/images/universe-img.svg';
 import { useMyNftsContext } from '../../contexts/MyNFTsContext';
+import { useRouter } from 'next/router';
 
 const DeployedCollections = () => {
   const { deployedCollections } = useAuthContext();
   const { myMintableCollections } = useMyNftsContext();
-  const history = useHistory();
+  const history = useRouter();
   const ref2 = useRef(null);
   const [isDropdownOpened, setIsDropdownOpened] = useState(false);
   const [offset, setOffset] = useState(0);
@@ -58,10 +58,7 @@ const DeployedCollections = () => {
                 key={uuid()}
                 aria-hidden="true"
                 onClick={() =>
-                  history.push(`/collection/${collection.address}`, {
-                    collection,
-                    saved: true,
-                  })
+                  history.push(`/collection/${collection.address}?saved=1`)
                 }
               >
                 <div className="saved__collection__box__header">

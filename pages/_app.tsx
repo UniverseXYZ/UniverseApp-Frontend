@@ -78,6 +78,8 @@ import '../src/containers/rarityCharts/RarityChartsLoader';
 import '../src/containers/marketplaceNFT/MarketplaceNFT.scss';
 import '../src/components/myNFTs/create/CreateNFT.scss';
 import '../src/components/myNFTs/create/CreateSingleNft.scss';
+import '../src/components/nft/SearchFilters.scss';
+import '../src/containers/collection/Collection.scss';
 
 import type { AppProps } from 'next/app'
 import React, { useEffect, useState } from 'react';
