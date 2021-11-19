@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import './Artist.scss';
+// import './Artist.scss';
 import { utils } from 'ethers';
 import Skeleton from 'react-loading-skeleton';
 import ArtistDetails from '../../components/artist/ArtistDetails.jsx';
@@ -10,10 +10,12 @@ import { useThemeContext } from '../../contexts/ThemeContext';
 import { getProfilePage } from '../../utils/api/profile';
 import { mapUserData } from '../../utils/helpers';
 import { getUserNfts } from '../../utils/api/mintNFT';
+import { useRouter } from 'next/router';
 
 const Artist = () => {
+  const router = useRouter();
   const { setDarkMode } = useThemeContext();
-  const { artistUsername } = useParams();
+  const { artistUsername } = router.query;
   const [artist, setArtist] = useState(null);
   const [loading, setLoading] = useState(true);
   const [artistNFTs, setArtistNFTs] = useState([]);
@@ -28,6 +30,10 @@ const Artist = () => {
   }, [artist]);
 
   useEffect(() => {
+    if (!artistUsername) {
+      return;
+    }
+
     const getInfo = async () => {
       try {
         if (!utils.isAddress(artistUsername)) {
@@ -58,7 +64,7 @@ const Artist = () => {
       setLoading(false);
     };
     getInfo();
-  }, []);
+  }, [artistUsername]);
 
   return loading ? (
     <div className="artist__details__section">

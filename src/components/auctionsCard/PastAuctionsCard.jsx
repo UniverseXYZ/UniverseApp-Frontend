@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Animated } from 'react-animated-css';
 import { useHistory } from 'react-router-dom';
-import './ActiveAuctionsCard.scss';
+// import './ActiveAuctionsCard.scss';
 
 const PastAuctionsCard = ({ data }) => {
   const history = useHistory();

@@ -90,6 +90,9 @@ import '../src/components/popups/PopupStyle.scss';
 import '../src/components/popups/LobsterLoader.scss';
 import '../src/components/ui-elements/styles/HorizontalSlider.scss';
 import '../src/components/ui-elements/styles/QuantityUpDownGroup.scss';
+import '../src/components/auctionsCard/ActiveAuctionsCard.scss';
+import '../src/components/auctionsCard/FutureAuctionsCard.scss';
+import '../src/containers/artist/Artist.scss';
 
 import type { AppProps } from 'next/app'
 import React, { useEffect, useState } from 'react';
