@@ -23,6 +23,7 @@ import RarityChartsLoader from '../rarityCharts/RarityChartsLoader.jsx';
 import { renderLoaders } from '../rarityCharts/renderLoaders.js';
 import { CollectionPageLoader } from './CollectionPageLoader.jsx';
 import { useRouter } from 'next/router';
+import Head from 'next/head';
 
 const Collection = (props) => {
   const { setSavedCollectionID } = useMyNftsContext();
@@ -91,6 +92,9 @@ const Collection = (props) => {
     </div>
   ) : collectionData ? (
     <div className="collection__page">
+      <Head>
+        <title>{collectionData?.collection?.name}</title>
+      </Head>
       <Cover selectedCollection={collectionData.collection} />
 
       <div className="collection__details__section">
