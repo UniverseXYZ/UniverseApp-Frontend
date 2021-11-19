@@ -81,28 +81,40 @@ const MyAccount = () => {
         twitterLink: twitterLink.replace('@', ''),
       };
 
-      const result = await saveProfileInfo(artistData);
-      if (typeof accountImage === 'object') {
-        const saveImageRequest = await saveUserImage(accountImage);
-        if (!saveImageRequest.ok) {
+      try {
+        const result = await saveProfileInfo(artistData);
+        if (result.error) {
           setShowLoading(false);
+          if (result.status === 409) {
+            setErrorTitle('Universe address already taken');
+            setErrorBody('Please choose another one.');
+          } else {
+            setErrorBody(result.message);
+          }
+
           setShowError(true);
           return;
         }
-        if (saveImageRequest.profileImageUrl) {
-          artistData.avatar = saveImageRequest.profileImageUrl;
+      } catch (error) {
+        console.error(error);
+      }
+      try {
+        if (typeof accountImage === 'object') {
+          const saveImageRequest = await saveUserImage(accountImage);
+          if (saveImageRequest.error) {
+            setShowLoading(false);
+            setErrorBody(saveImageRequest.message);
+            setShowError(true);
+            return;
+          }
+          if (saveImageRequest.profileImageUrl) {
+            artistData.avatar = saveImageRequest.profileImageUrl;
+          }
         }
+      } catch (error) {
+        console.info(error);
       }
 
-      if (!result.ok) {
-        setShowLoading(false);
-        if (result.status === 409) {
-          setErrorTitle('Universe address already taken');
-          setErrorBody('Please choose another one.');
-        }
-        setShowError(true);
-        return;
-      }
       setAccountPage(`universe.xyz/${page}`);
       setLoggedInArtist({ ...artistData });
       setFetchedUserData({
@@ -125,7 +137,7 @@ const MyAccount = () => {
       setShowError(true);
     }
   };
-  console.log(accountPage);
+
   const cancelChanges = () => {
     setAccountName(loggedInArtist.name);
     if (loggedInArtist.universePageAddress) {
