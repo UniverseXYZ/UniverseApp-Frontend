@@ -3,23 +3,20 @@ import uuid from 'react-uuid';
 import PropTypes from 'prop-types';
 import arrowDown from '../../../../assets/images/browse-nft-arrow-down.svg';
 
-export const ChooseTokenIdDropdown = ({ nft }) => {
+export const ChooseTokenIdDropdown = ({ selectedTokenId, tokenIds, onSelect }) => {
   const ref = useRef(null);
   const [showDropdown, setShowDropdown] = useState(false);
-  const [selectedTokenId, setSelectedTokenId] = useState(nft.tokenIds[0]);
-
-  const handleClickOutside = (event) => {
-    if (ref.current && !ref.current.contains(event.target)) {
-      setShowDropdown(false);
-    }
-  };
 
   useEffect(() => {
-    document.addEventListener('click', handleClickOutside, true);
-    return () => {
-      document.removeEventListener('click', handleClickOutside, true);
+    const handleClickOutside = (event) => {
+      if (ref.current && !ref.current.contains(event.target)) {
+        setShowDropdown(false);
+      }
     };
-  });
+
+    document.addEventListener('click', handleClickOutside, true);
+    return () => document.removeEventListener('click', handleClickOutside, true);
+  }, []);
 
   return (
     <div className="tokenID--dropdown--container">
@@ -34,12 +31,12 @@ export const ChooseTokenIdDropdown = ({ nft }) => {
         {showDropdown ? (
           <div className="dropdown--items">
             <div className="dropdown--items--container">
-              {nft.tokenIds.map((tokenId) => (
+              {tokenIds.map((tokenId) => (
                 <div
                   className="dropdown--item"
                   key={uuid()}
                   aria-hidden="true"
-                  onClick={() => setSelectedTokenId(tokenId)}
+                  onClick={() => onSelect(tokenId)}
                 >
                   {`#${tokenId}`}
                 </div>
@@ -56,5 +53,7 @@ export const ChooseTokenIdDropdown = ({ nft }) => {
 };
 
 ChooseTokenIdDropdown.propTypes = {
-  nft: PropTypes.oneOfType([PropTypes.object]).isRequired,
+  tokenIds: PropTypes.oneOfType([PropTypes.array]).isRequired,
+  selectedTokenId: PropTypes.oneOfType([PropTypes.string]).isRequired,
+  onSelect: PropTypes.func.isRequired,
 };
