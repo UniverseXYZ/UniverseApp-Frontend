@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import './styles/PolymorphScrambleProp.scss';
+// import './styles/PolymorphScrambleProp.scss';
 import { lobsterTraitRarity, queryLobstersGraph } from '../../../utils/graphql/lobsterQueries';
 
 const LobsterTrait = ({ traitData }) => {
