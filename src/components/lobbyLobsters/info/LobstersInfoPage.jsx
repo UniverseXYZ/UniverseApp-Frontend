@@ -4,7 +4,7 @@ import uuid from 'react-uuid';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import backArrow from '../../../assets/images/go-back-arrow.svg';
 import Tabs from '../../tabs/Tabs';
-import './styles/LobstersInfoPage.scss';
+// import './styles/LobstersInfoPage.scss';
 import { getLobsterMeta } from '../../../utils/api/lobsters.js';
 import { shortenEthereumAddress } from '../../../utils/helpers/format.js';
 import loadingBg from '../../../assets/images/lobby-lobsters/img_placeholder.png';
@@ -12,12 +12,13 @@ import GeneParser from '../../../utils/helpers/LobsterGeneParser';
 import { lobsterOwner, queryLobstersGraph } from '../../../utils/graphql/lobsterQueries';
 import AppContext from '../../../ContextAPI';
 import LobsterTrait from '../../polymorphs/scramble/LobsterTrait';
+import { useRouter } from 'next/router';
 
 const LobsterInfoPage = () => {
-  const history = useHistory();
+  const router = useRouter();
   const [propertiesTabSelected, setPropertiesTabSelected] = useState(true);
   const [metadataTabSelected, setMetadataTabSelected] = useState(false);
-  const [lobsterId, setLobsterId] = useState(useParams().id);
+  const [lobsterId, setLobsterId] = useState();
   const [lobsterData, setLobsterData] = useState({});
   const [lobsterGene, setLobsterGene] = useState('');
   const [loading, setLoading] = useState(false);
@@ -25,6 +26,10 @@ const LobsterInfoPage = () => {
   const [geneCopied, setGeneCopied] = useState(false);
   const [traitsMap, setTraitsMap] = useState({});
   const [readMore, setReadMore] = useState(false);
+
+  useEffect(() => {
+    setLobsterId(router.query?.id);
+  }, [router.query?.id]);
 
   useEffect(async () => {
     if (!lobsterId) return;
@@ -89,12 +94,17 @@ const LobsterInfoPage = () => {
       ),
     [lobsterData?.data?.attributes, traitsMap]
   );
+
+  if (!lobsterId) {
+    return null;
+  }
+
   return (
     <div className="container scramble--wrapper">
       <div
         className="go--back--wrapper"
         aria-hidden="true"
-        onClick={() => history.push('/my-nfts')}
+        onClick={() => router.push('/my-nfts')}
       >
         <img src={backArrow} alt="go back" />
         <span>My NFTs</span>
