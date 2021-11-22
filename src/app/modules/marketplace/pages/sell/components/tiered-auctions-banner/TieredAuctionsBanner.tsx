@@ -45,7 +45,10 @@ export const TieredAuctionsBanner = () => {
         >
           <Box textAlign={'center'}>
             <Heading size={'lg'} mb={'28px'}>Universe tiered auctions</Heading>
-            <Button rightIcon={<Image src={arrowRight} />}>Go to Universe auctions</Button>
+            <Button
+              boxShadow={'xl'}
+              rightIcon={<Image src={arrowRight} />}
+            >Go to Universe auctions</Button>
           </Box>
         </Center>
       </Box>
