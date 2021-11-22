@@ -54,7 +54,7 @@ const AuctionReview = () => {
 
   const handleSetAuction = async () => {
     if (auction && auction?.rewardTiers?.length) {
-      showLoading(true);
+      setShowLoading(true);
       let res;
       if (isEditingAuction.length) {
         res = await AuctionUpdate({ auction, bidtype, options });
@@ -62,9 +62,9 @@ const AuctionReview = () => {
         res = await AuctionCreate({ auction, bidtype, options });
       }
 
-      showLoading(false);
+      setShowLoading(false);
       if (res?.id) {
-        showCongrats(true);
+        setShowCongrats(true);
       } else if (res?.error || res?.statusCode >= 500) {
         // document.getElementById('congrats-hidden-btn').click();
         const errorMsg =
