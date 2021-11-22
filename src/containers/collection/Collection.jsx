@@ -24,6 +24,7 @@ import { renderLoaders } from '../rarityCharts/renderLoaders.js';
 import { CollectionPageLoader } from './CollectionPageLoader.jsx';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
+import { useSearchParam } from 'react-use';
 
 const Collection = (props) => {
   const { setSavedCollectionID } = useMyNftsContext();
@@ -33,15 +34,7 @@ const Collection = (props) => {
   const { collectionAddress } = router.query;
   const ref = useRef(null);
 
-  const location = useMemo(() => {
-    const search = window.location?.search?.substr(1);
-
-    let state = search ? JSON.parse(
-      `{"${search.replace(/&/g, '","').replace(/=/g, '":"')}"}`,
-      (key, value) => (key === '' ? value : decodeURIComponent(value))
-    ) : {};
-    return { state };
-  }, []);
+  const saved = useSearchParam('saved');
 
   const {
     inputText,
@@ -102,7 +95,7 @@ const Collection = (props) => {
           <Avatar selectedCollection={collectionData.collection} />
           <Title
             selectedCollection={collectionData.collection}
-            saved={location.state?.saved}
+            saved={saved}
             nftsCount={collectionData?.pagination?.totalCount}
             ownersCount={ownersCount}
           />

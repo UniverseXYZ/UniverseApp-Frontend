@@ -35,6 +35,7 @@ import { getCollectionBackgroundColor } from '../../utils/helpers';
 import SearchTokenIdField from '../input/SearchTokenIdField.jsx';
 import LoadingImage from '../general/LoadingImage';
 import InlineSVG from './InlineSVG';
+import { useWindowSize } from 'react-use';
 
 const MarketplaceNFTDetails = ({ data, onNFT }) => {
   const { myNFTs, setMyNFTs } = useMyNftsContext();
@@ -44,6 +45,7 @@ const MarketplaceNFTDetails = ({ data, onNFT }) => {
   const sharePopupRef = useRef(null);
   const reportPopupRef = useRef(null);
   const customPlayerRef = useRef(null);
+  const windowSize = useWindowSize();
 
   const [selectedNFT, setSelectedNFT] = useState(onNFT.nft);
   const { moreFromCollection, collection, owner, creator, tokenIds } = onNFT;
@@ -136,7 +138,7 @@ const MarketplaceNFTDetails = ({ data, onNFT }) => {
   });
 
   useEffect(() => {
-    if (Number(window.innerWidth) <= 1230) {
+    if (Number(windowSize.width) <= 1230) {
       setTablet(true);
       setCount(3);
     } else {

@@ -17,12 +17,14 @@ import lightCopyIcon from '../../assets/images/copy2.svg';
 import currencyETHIcon from '../../assets/images/currency-eth.svg';
 import smallCongratsIcon from '../../assets/images/congrats-small.png';
 import frankie from '../../assets/images/frankie.png';
+import { useLocation, useWindowSize } from 'react-use';
 
 const AuctionDetails = ({ onAuction, bidders, setBidders }) => {
   const { myAuctions } = useAuctionContext();
   const { loggedInArtist } = useAuthContext();
   const getAllAuctionsForCurrentArtist = myAuctions;
   const [selectedAuction, setSelectedAuction] = useState(onAuction);
+  const location = useLocation();
 
   const [sliderSettings, setSliderSettings] = useState({
     dots: false,
@@ -43,6 +45,7 @@ const AuctionDetails = ({ onAuction, bidders, setBidders }) => {
   });
   const [selectedAuctionEnded, setSelectedAuctionEnded] = useState(false);
   const history = useHistory();
+  const windowSize = useWindowSize();
 
   const convertDate = (date) => {
     const dLeft = (new Date(date) - Date.now()) / 1000;
@@ -97,22 +100,16 @@ const AuctionDetails = ({ onAuction, bidders, setBidders }) => {
   }, [loading]);
 
   useEffect(() => {
-    function handleResize() {
-      if (window.innerWidth < 1200) {
-        setSliderSettings({ ...sliderSettings, slidesToShow: 3 });
-      }
-      if (window.innerWidth < 993) {
-        setSliderSettings({ ...sliderSettings, slidesToShow: 2 });
-      }
-      if (window.innerWidth < 576) {
-        setSliderSettings({ ...sliderSettings, slidesToShow: 1 });
-      }
+    if (windowSize.width < 1200) {
+      setSliderSettings({ ...sliderSettings, slidesToShow: 3 });
     }
-    window.addEventListener('resize', handleResize);
-    handleResize();
-
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
+    if (windowSize.width < 993) {
+      setSliderSettings({ ...sliderSettings, slidesToShow: 2 });
+    }
+    if (windowSize.width < 576) {
+      setSliderSettings({ ...sliderSettings, slidesToShow: 1 });
+    }
+  }, [windowSize]);
 
   useEffect(() => {
     // Prev Icon
@@ -262,7 +259,7 @@ const AuctionDetails = ({ onAuction, bidders, setBidders }) => {
                         <span />
                       </div>
                       <CopyToClipboard
-                        text={window.location.href}
+                        text={location.href}
                         onCopy={() => {
                           setCopied(true);
                           setTimeout(() => {
@@ -420,7 +417,7 @@ const AuctionDetails = ({ onAuction, bidders, setBidders }) => {
         ) : (
           <div className="auction__details__box">
             <div className="auction__details__box__image">
-              <Skeleton height={window.innerWidth > 768 ? 445 : 335} />
+              <Skeleton height={windowSize.width > 768 ? 445 : 335} />
             </div>
             <div className="auction__details__box__info">
               <h1 className="title">
@@ -481,10 +478,10 @@ const AuctionDetails = ({ onAuction, bidders, setBidders }) => {
               </div>
               <div className="auction__details__box__top__bidders__footer">
                 <div className="your__bid">
-                  <Skeleton width={window.innerWidth > 576 && 100} />
+                  <Skeleton width={windowSize.width > 576 && 100} />
                 </div>
                 <div className="place__bid">
-                  <Skeleton width={window.innerWidth > 576 && 100} height={40} />
+                  <Skeleton width={windowSize.width > 576 && 100} height={40} />
                 </div>
               </div>
             </div>

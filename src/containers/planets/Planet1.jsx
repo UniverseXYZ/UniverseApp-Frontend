@@ -8,10 +8,12 @@ import kuapoImgSection5 from '../../assets/images/planet3-charachters/kuapo-foot
 import LeftTopImg from '../../assets/images/planet1-section2-left-top.png';
 import LeftTopImgMobile from '../../assets/images/planet1-section2-left-top-mobile.png';
 import './Planet1.scss';
+import { useWindowSize } from 'react-use';
 
 const Planet1 = () => {
   const history = useHistory();
   const [legendaryBgFlag, setLegendaryBgFlag] = useState(LeftTopImg);
+  const windowSize = useWindowSize();
 
   const section5Planet1 = {
     planet: 'planet 2',
@@ -37,10 +39,10 @@ const Planet1 = () => {
   };
 
   useEffect(() => {
-    if (window.innerWidth <= 576) {
+    if (windowSize.width <= 576) {
       setLegendaryBgFlag(LeftTopImgMobile);
     }
-  }, []);
+  }, [windowSize]);
 
   return (
     <PlanetContainer

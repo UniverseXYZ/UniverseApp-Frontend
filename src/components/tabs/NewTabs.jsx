@@ -14,6 +14,7 @@ import arrowWhiteMobile from '../../assets/images/arrow-tabs/arrow-white-mobile.
 import arrowHoverDesktop from '../../assets/images/arrow-tabs/arrow-hover-desktop.png';
 import arrowHoverTablet from '../../assets/images/arrow-tabs/arrow-hover-tablet.png';
 import arrowHoverMobile from '../../assets/images/arrow-tabs/arrow-hover-mobile.png';
+import { useWindowSize } from 'react-use';
 
 const NewTabs = (props) => {
   const { tabData } = props;
@@ -25,6 +26,7 @@ const NewTabs = (props) => {
   const [mobile, setMobile] = useState(false);
   const [tablet, setTablet] = useState(false);
   const [hover, setHover] = useState(-1);
+  const windowSize = useWindowSize();
 
   useEffect(() => {
     const routes = tabData.map((elem) => elem.route);
@@ -32,12 +34,9 @@ const NewTabs = (props) => {
   }, [pathname]);
 
   useEffect(() => {
-    if (Number(window.innerWidth) <= 768) setMobile(true);
-    else setMobile(false);
-
-    if (Number(window.innerWidth) > 768 && Number(window.innerWidth) <= 1230) setTablet(true);
-    else setTablet(false);
-  }, []);
+    setMobile(Number(windowSize.width) <= 768);
+    setTablet(Number(windowSize.width) > 768 && Number(windowSize.width) <= 1230);
+  }, [windowSize]);
 
   return (
     <div className="new--tab--parent--block">

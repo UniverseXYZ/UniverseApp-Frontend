@@ -35,8 +35,10 @@ import ViktorTodorov from '../../assets/images/team/Viktor-Todorov.png';
 import RaduGurau from '../../assets/images/team/Radu-Gurau.png';
 import ValeriiaGorenich from '../../assets/images/team/Valeriia-Gorenich.png';
 import AzamZafar from '../../assets/images/team/Azam-Zafar.png';
+import { useWindowSize } from 'react-use';
 
 const UniverseCreators = () => {
+  const windowSize = useWindowSize();
   const [creators, setCreators] = useState([
     {
       id: 1,
@@ -260,7 +262,7 @@ const UniverseCreators = () => {
               {!creator.loaded && (
                 <Skeleton
                   height={255}
-                  style={{ width: window.innerWidth < 576 ? '255px' : '100%' }}
+                  style={{ width: windowSize.width < 576 ? '255px' : '100%' }}
                 />
               )}
               <img

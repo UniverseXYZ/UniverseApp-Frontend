@@ -13,6 +13,7 @@ import { useGraphQueryHook } from '../../utils/hooks/useGraphQueryHook';
 import { useThemeContext } from '../../contexts/ThemeContext';
 import { useMyNftsContext } from '../../contexts/MyNFTsContext';
 import { useAuthContext } from '../../contexts/AuthContext';
+import { useWindowSize } from 'react-use';
 
 const marquee = () => (
   <p>
@@ -41,21 +42,19 @@ const Polymorphs = () => {
   const { data } = useGraphQueryHook(queryPolymorphsGraph(morphedPolymorphs));
   const { polymorphsFilter, navigateToMyUniverseNFTsTab } = useMyNftsContext();
   const { ethPrice } = useAuthContext();
-  useLayoutEffect(() => {
-    function handleResize() {
-      if (+window.innerWidth <= 575) setMobile(true);
-      else setMobile(false);
-    }
-    window.addEventListener('resize', handleResize);
-  });
+  const windowSize = useWindowSize();
+
+  useEffect(() => {
+    setMobile(+windowSize.width <= 575);
+  }, [windowSize]);
 
   useEffect(() => {
     setDarkMode(true);
   }, []);
 
   useEffect(() => {
-    if (+window.innerWidth <= 575) setMobile(true);
-  }, [window.innerWidth]);
+    if (+windowSize.width <= 575) setMobile(true);
+  }, [windowSize.width]);
 
   const redirectToMyPolymorphs = () => {
     navigateToMyUniverseNFTsTab(polymorphsFilter);

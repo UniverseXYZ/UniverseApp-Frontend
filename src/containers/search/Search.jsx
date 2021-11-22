@@ -23,6 +23,7 @@ import tabArrow from '../../assets/images/tab-arrow.svg';
 import searchIcon from '../../assets/images/search-gray.svg';
 import closeIcon from '../../assets/images/close-menu.svg';
 import bigSearchIcon from '../../assets/images/marketplace/big-search.png';
+import { useWindowSize } from 'react-use';
 
 const Search = () => {
   const location = useLocation();
@@ -33,6 +34,7 @@ const Search = () => {
   const [resultsCount, setResultsCount] = useState(0);
   const [searchValue, setSearchValue] = useState(location.state.query);
   const searchRef = useRef();
+  const windowSize = useWindowSize();
 
   const handleSearchKeyDown = (e) => {
     if (e.keyCode === 13) {
@@ -78,23 +80,15 @@ const Search = () => {
   }, [query]);
 
   useEffect(() => {
-    function handleResize() {
-      if (document.querySelector('.tab__right__arrow')) {
-        if (window.innerWidth < 600) {
-          document.querySelector('.tab__right__arrow').style.display = 'flex';
-        } else {
-          document.querySelector('.tab__right__arrow').style.display = 'none';
-          document.querySelector('.tab__left__arrow').style.display = 'none';
-        }
+    if (document && document.querySelector('.tab__right__arrow')) {
+      if (windowSize.innerWidth < 600) {
+        document.querySelector('.tab__right__arrow').style.display = 'flex';
+      } else {
+        document.querySelector('.tab__right__arrow').style.display = 'none';
+        document.querySelector('.tab__left__arrow').style.display = 'none';
       }
     }
-    window.addEventListener('resize', handleResize);
-    setTimeout(() => {
-      handleResize();
-    }, 1000);
-
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
+  }, [windowSize]);
 
   return query ? (
     <div className="search--page">

@@ -7,26 +7,22 @@ import Section3Randomise from '../../components/polymorphs/mint-polymorph/Sectio
 import './MintPolymorph.scss';
 import data from '../../utils/fixtures/horizontalScrollCharactersData';
 import { useThemeContext } from '../../contexts/ThemeContext';
+import { useWindowSize } from 'react-use';
 
 const MintPolymorph = () => {
   const { setDarkMode } = useThemeContext();
   const [quantity, setQuantity] = useState(1);
   const [sliderValue, setSliderValue] = useState(0);
   const [mobile, setMobile] = useState(false);
-  const [windowSize, setWindowSize] = useState({
-    width: window.innerWidth,
-    height: window.innerHeight,
-  });
+  const windowSize = useWindowSize();
 
   useEffect(() => {
     setDarkMode(true);
   }, []);
 
   useEffect(() => {
-    setWindowSize({ width: window.innerWidth, height: window.innerHeight });
-    if (+window.innerWidth <= 576) setMobile(true);
-    else setMobile(false);
-  }, []);
+    setMobile(+windowSize.width <= 576);
+  }, [windowSize]);
 
   return (
     <div className="mint--polymorph">

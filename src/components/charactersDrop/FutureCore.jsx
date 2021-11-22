@@ -3,12 +3,14 @@ import Frame from '../../assets/images/char-frame-future-core-drops.png';
 import FrameMobile from '../../assets/images/char-frame-future-core-drops-mobile.png';
 import BookVector from '../../assets/images/play-vector.svg';
 import PlayVector from '../../assets/images/book-vector.svg';
+import { useWindowSize } from 'react-use';
 
 const FutureCore = () => {
   const [frame, setFrame] = useState(Frame);
+  const windowSize = useWindowSize();
 
   useEffect(() => {
-    if (window.innerWidth <= 576) {
+    if (windowSize.width <= 576) {
       setFrame(FrameMobile);
     }
   }, []);

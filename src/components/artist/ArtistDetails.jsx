@@ -13,7 +13,8 @@ import Button from '../button/Button';
 import { useAuctionContext } from '../../contexts/AuctionContext';
 import { useAuthContext } from '../../contexts/AuthContext';
 import { shortenEthereumAddress } from '../../utils/helpers/format';
-import { useWindowSize } from '../../utils/hooks/useWindowSize';
+import { useWindowSize } from 'react-use';
+// import { useWindowSize } from '../../utils/hooks/useWindowSize';
 
 const ArtistDetails = ({ artistAddress, onArtist, loading }) => {
   const blockieSizes = {
@@ -35,7 +36,8 @@ const ArtistDetails = ({ artistAddress, onArtist, loading }) => {
   const [copied, setCopied] = useState(false);
   const [copiedAddress, setCopiedAddress] = useState(false);
   const [blockieScale, setBlockieScale] = useState(31);
-  const [width, height] = useWindowSize();
+  // const [width, height] = useWindowSize();
+  const { width, height } = useWindowSize();
 
   useEffect(() => {
     if (width < blockieResizePoints.small && blockieScale !== blockieSizes.small) {

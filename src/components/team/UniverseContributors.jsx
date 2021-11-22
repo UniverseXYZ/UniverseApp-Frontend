@@ -54,8 +54,10 @@ import AndréNabais from '../../assets/images/team/André-Nabais.png';
 import LukeLombe from '../../assets/images/team/Luke-Lombe.png';
 import HarrisonHines from '../../assets/images/team/Harrison-Hines.png';
 import ScottPlowman from '../../assets/images/team/Scott-Plowman.png';
+import { useWindowSize } from 'react-use';
 
 const UniverseContributors = () => {
+  const windowSize = useWindowSize();
   const [contributors, setContributors] = useState([
     {
       id: 1,
@@ -393,7 +395,7 @@ const UniverseContributors = () => {
               {!contributor.loaded && (
                 <Skeleton
                   height={160}
-                  style={{ width: window.innerWidth < 576 ? '160px' : '100%' }}
+                  style={{ width: windowSize.width < 576 ? '160px' : '100%' }}
                 />
               )}
               <img

@@ -33,6 +33,7 @@ import { useErrorContext } from '../../contexts/ErrorContext';
 
 import { getMyNfts, getSavedNfts } from '../../utils/api/mintNFT';
 import { useRouter } from 'next/router';
+import { useWindowSize } from 'react-use';
 
 const MyNFTs = () => {
   const {
@@ -100,6 +101,7 @@ const MyNFTs = () => {
   const ref2 = useRef(null);
   const refMobile = useRef(null);
   const [isDropdownOpened, setIsDropdownOpened] = useState(false);
+  const windowSize = useWindowSize();
 
   const handleClickOutside = (event) => {
     if (ref2.current && !ref2.current.contains(event.target)) {
@@ -120,21 +122,15 @@ const MyNFTs = () => {
   };
 
   useEffect(() => {
-    function handleResize() {
-      if (document.querySelector('.tab__right__arrow')) {
-        if (window.innerWidth < 660) {
-          document.querySelector('.tab__right__arrow').style.display = 'flex';
-        } else {
-          document.querySelector('.tab__right__arrow').style.display = 'none';
-          document.querySelector('.tab__left__arrow').style.display = 'none';
-        }
+    if (document && document.querySelector('.tab__right__arrow')) {
+      if (windowSize.width < 660) {
+        document.querySelector('.tab__right__arrow').style.display = 'flex';
+      } else {
+        document.querySelector('.tab__right__arrow').style.display = 'none';
+        document.querySelector('.tab__left__arrow').style.display = 'none';
       }
     }
-    window.addEventListener('resize', handleResize);
-    handleResize();
-
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
+  }, [windowSize]);
 
   const handleMintSelected = async () => {
     setShowLoading(true);

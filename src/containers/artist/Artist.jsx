@@ -11,6 +11,7 @@ import { getProfilePage } from '../../utils/api/profile';
 import { mapUserData } from '../../utils/helpers';
 import { getUserNfts } from '../../utils/api/mintNFT';
 import { useRouter } from 'next/router';
+import { useWindowSize } from 'react-use';
 
 const Artist = () => {
   const router = useRouter();
@@ -20,6 +21,7 @@ const Artist = () => {
   const [loading, setLoading] = useState(true);
   const [artistNFTs, setArtistNFTs] = useState([]);
   const [notFound, setNotFound] = useState(false);
+  const windowSize = useWindowSize();
 
   useEffect(() => {
     setDarkMode(false);
@@ -72,8 +74,8 @@ const Artist = () => {
         <div className="artist__details__section__container">
           <div className="avatar">
             <Skeleton
-              height={window.innerWidth > 576 ? 280 : 90}
-              width={window.innerWidth > 576 ? 280 : 90}
+              height={windowSize.width > 576 ? 280 : 90}
+              width={windowSize.width > 576 ? 280 : 90}
               circle
             />
             <h2 className="show__on__mobile">

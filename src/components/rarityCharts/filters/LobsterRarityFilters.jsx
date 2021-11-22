@@ -5,6 +5,7 @@ import RaritySortByOrder from '../../input/RaritySortByOrder';
 import priceIcon from '../../../assets/images/eth-icon-new.svg';
 // import './LobsterRarityFilters.scss';
 import RaritySearchField from '../../input/RaritySearchField';
+import { useWindowSize } from 'react-use';
 
 const LobsterRarityFilters = (props) => {
   const {
@@ -18,19 +19,9 @@ const LobsterRarityFilters = (props) => {
     CollectionFilter,
   } = props;
 
-  const [width, setWidth] = useState(window.innerWidth);
-  function handleWindowSizeChange() {
-    setWidth(window.innerWidth);
-  }
+  const windowSize = useWindowSize();
 
-  useEffect(() => {
-    window.addEventListener('resize', handleWindowSizeChange);
-    return () => {
-      window.removeEventListener('resize', handleWindowSizeChange);
-    };
-  }, []);
-
-  const isMobile = width <= 768;
+  const isMobile = windowSize.width <= 768;
 
   return (
     <div className="lobsters-rarity--charts--search--and--filters--container">

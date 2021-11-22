@@ -7,11 +7,13 @@ import cloudIcon from '../../assets/images/ion_cloud.svg';
 import defaultImage from '../../assets/images/default-img.svg';
 import CustomColorPicker from './CustomColorPicker.jsx';
 import { useAuctionContext } from '../../contexts/AuctionContext.jsx';
+import { useWindowSize } from 'react-use';
 
 const RewardTiersAuction = ({ values, onChange, editButtonClick }) => {
   const { auction, bidtype } = useAuctionContext();
   const arrLength = auction.rewardTiers.length;
   const [elRefs, setElRefs] = useState([]);
+  const windowSize = useWindowSize();
 
   const handleDescriptionChange = (event, tierId) => {
     onChange((prevValues) =>
@@ -58,7 +60,7 @@ const RewardTiersAuction = ({ values, onChange, editButtonClick }) => {
               <div className="tier__header">
                 <div className="tier__title">
                   <h4>{tier.name}</h4>
-                  {window.innerWidth < 576 && (
+                  {windowSize.width < 576 && (
                     <div className="pick__color">
                       <p>Pick tier color</p>
                       <CustomColorPicker index={i} onChange={onChange} onColor={tier.color} />
@@ -83,7 +85,7 @@ const RewardTiersAuction = ({ values, onChange, editButtonClick }) => {
                     )}
                   </div>
                 </div>
-                {window.innerWidth > 576 && (
+                {windowSize.width > 576 && (
                   <div className="pick__color">
                     <p>Pick tier color</p>
                     <CustomColorPicker index={i} onChange={onChange} onColor={tier.color} />

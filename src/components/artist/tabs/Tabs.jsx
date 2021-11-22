@@ -6,24 +6,20 @@ import ActiveAuctionsTab from './activeAuctions/ActiveAuctionsTab.jsx';
 import FutureAuctionsTab from './futureAuctions/FutureAuctionsTab.jsx';
 import PastAuctionsTab from './pastAuctions/PastAuctionsTab.jsx';
 import { handleTabLeftScrolling, handleTabRightScrolling } from '../../../utils/scrollingHandlers';
+import { useWindowSize } from 'react-use';
 
 const Tabs = ({ nfts }) => {
   const [selectedTabIndex, setSelectedTabIndex] = useState(0);
+  const windowSize = useWindowSize();
 
   useEffect(() => {
-    function handleResize() {
-      if (window.innerWidth < 600) {
-        document.querySelector('.tab__right__arrow').style.display = 'flex';
-      } else {
-        document.querySelector('.tab__right__arrow').style.display = 'none';
-        document.querySelector('.tab__left__arrow').style.display = 'none';
-      }
+    if (windowSize.width < 600) {
+      document.querySelector('.tab__right__arrow').style.display = 'flex';
+    } else {
+      document.querySelector('.tab__right__arrow').style.display = 'none';
+      document.querySelector('.tab__left__arrow').style.display = 'none';
     }
-    window.addEventListener('resize', handleResize);
-    handleResize();
-
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
+  }, [windowSize]);
 
   return (
     <div className="tabs__section">
