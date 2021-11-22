@@ -289,6 +289,8 @@ const RewardTiers = () => {
         <div
           className="create-rew-tier"
           onClick={() => {
+            // TODO:: Disable this button if the user has reached maximum Slots(Winners) count
+            // TODO:: Create a config file, with all the limitations, they will be reused in different files
             history.push('/create-tiers');
           }}
           aria-hidden="true"

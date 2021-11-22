@@ -5,7 +5,8 @@ import { ReactComponent as IncreaseIcon } from '../../assets/images/plus.svg';
 import { ReactComponent as DecreaseIcon } from '../../assets/images/minus.svg';
 import { ReactComponent as InfoIcon } from '../../assets/images/icon.svg';
 
-const MAX_WINNERS_COUNT = 10; // TODO:: where the heck this came from ?
+// TODO:: Move this into a config file and use it here
+const MAX_WINNERS_COUNT = 10;
 
 const NumberOfWinners = ({ values, setValues }) => {
   const [showNumberOfWinnersInfoBox, setShowNumberOfWinnersInfoBox] = useState(false);
