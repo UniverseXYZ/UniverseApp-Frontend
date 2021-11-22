@@ -1,15 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import {
-  Box,
-  Container,
-  Heading,
-  Image,
-  Link,
-  Tab,
-  TabList,
-  TabPanels,
-  Tabs,
-} from '@chakra-ui/react';
+import { Box, Container, Heading, Image, Link, Tab, TabList, TabPanels, Tabs } from '@chakra-ui/react';
 
 import bg from '../../../../../assets/images/marketplace/v2/bg.png';
 import arrow from '../../../../../assets/images/arrow.svg';
@@ -17,20 +7,20 @@ import arrow from '../../../../../assets/images/arrow.svg';
 import { useThemeContext } from '../../../../../contexts/ThemeContext';
 import { sellPageTabs, MarketplaceSellContext } from './constants';
 import { SelectAmountTab, SelectMethodType, SummaryTab, TabPanel } from './components';
-import { SellPageTabs } from './enums';
+import { SellAmountType, SellPageTabs, SellMethod } from './enums';
 import { IMarketplaceSellContextData } from './types';
 
 export const MarketplaceSell = () => {
   const { setDarkMode } = useThemeContext() as any;
   const [activeTab, setActiveTab] = useState(SellPageTabs.SUMMARY);
 
-  const handleSelectAmount = useCallback((amount: string) => {
-    console.log('handleSelectAmount:', amount);
+  const handleSelectAmount = useCallback((amountType: SellAmountType) => {
+    console.log('handleSelectAmount:', amountType);
     setActiveTab(SellPageTabs.SELL_METHOD);
   }, []);
 
-  const handleSelectSellMethod = useCallback((sellType: string) => {
-    console.log('handleSelectSellType:', sellType);
+  const handleSelectSellMethod = useCallback((sellMethod: SellMethod) => {
+    console.log('handleSelectSellType:', sellMethod);
     setActiveTab(SellPageTabs.SUMMARY); // TODO: change to SellPageTabs.SETTINGS
   }, []);
 

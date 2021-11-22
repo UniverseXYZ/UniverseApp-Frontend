@@ -15,28 +15,40 @@ export const SummaryTab = () => {
       <Flex
         borderRadius={'12px'}
         boxShadow={'0 10px 36px rgba(136, 120, 172, 0.14)'}
-        padding={'50px'}
+        padding={{ base: '20px', md: '50px' }}
         mb={'40px'}
+        flexDir={{ base: 'column', lg: 'row', }}
         sx={{
-          '--image-size': '390px',
-          '--image-margin': '60px',
+          '--image-size': {
+            base: '100%',
+            lg: '290px',
+            xl: '390px',
+          },
+          '--image-margin-right': {
+            base: '0',
+            lg: '60px',
+          },
           fontSize: '14px',
           h4: {
             fontFamily: 'Space Grotesk',
             fontSize: '18px',
             mb: '6px'
           },
-          img: {
-            display: 'inline',
-            ml: 2,
-            mr: 1,
-          }
         }}
       >
-        <Box mr={'var(--image-margin)'}>
+        <Box mr={'var(--image-margin-right)'} mb={{ base: '30px', md: '40px', lg: 0 }}>
           <Image src={nft} h={'var(--image-size)'} w={'var(--image-size)'} />
         </Box>
-        <Flex width={'calc(100% - var(--image-size) - var(--image-margin))'}>
+        <Flex
+          width={'calc(100% - var(--image-size) - var(--image-margin-right))'}
+          sx={{
+            img: {
+              display: 'inline',
+              ml: 2,
+              mr: 1,
+            }
+          }}
+        >
           <Center flexDir={'column'} alignItems={'flex-start'} w={'100%'}>
             <Heading as={'h4'}>Listing</Heading>
             <Text mb={'30px'}>
