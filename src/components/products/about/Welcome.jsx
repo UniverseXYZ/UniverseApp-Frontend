@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
 import { useHistory } from 'react-router-dom';
 import { AnimatedOnScroll } from 'react-animated-css-onscroll';
@@ -8,7 +8,12 @@ import welcomeImg from '../../../assets/images/about-page-welcome.png';
 
 const Welcome = () => {
   const [loaded, setLoaded] = useState(false);
+  const [mounted, setMounted] = useState(false);
   const history = useHistory();
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   return (
     <div className="welcome__section">
@@ -46,12 +51,14 @@ const Welcome = () => {
                 <Skeleton circle height={300} width={300} />
               </SkeletonTheme>
             )}
-            <img
-              src={welcomeImg}
-              alt="Welcome"
-              onLoad={() => setLoaded(true)}
-              style={{ display: loaded ? 'block' : 'none' }}
-            />
+            {mounted && (
+              <img
+                src={welcomeImg}
+                alt="Welcome"
+                onLoad={() => setLoaded(true)}
+                style={{ display: loaded ? 'block' : 'none' }}
+              />
+            )}
           </div>
         </AnimatedOnScroll>
       </div>

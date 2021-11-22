@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import Skeleton from 'react-loading-skeleton';
 import { AnimatedOnScroll } from 'react-animated-css-onscroll';
 import Justin3LAU from '../../assets/images/team/Justin-3LAU.png';
@@ -58,6 +58,7 @@ import { useWindowSize } from 'react-use';
 
 const UniverseContributors = () => {
   const windowSize = useWindowSize();
+  const [mounted, setMounted] = useState(false);
   const [contributors, setContributors] = useState([
     {
       id: 1,
@@ -379,11 +380,13 @@ const UniverseContributors = () => {
     },
   ]);
 
-  const handleLoaded = (idx) => {
+  const handleLoaded = useCallback((idx) => {
     const newContributors = [...contributors];
     newContributors[idx].loaded = true;
     setContributors(newContributors);
-  };
+  }, [contributors]);
+
+  useEffect(() => setMounted(true), []);
 
   return (
     <div className="contributors__section">
@@ -398,13 +401,15 @@ const UniverseContributors = () => {
                   style={{ width: windowSize.width < 576 ? '160px' : '100%' }}
                 />
               )}
-              <img
-                src={contributor.avatar}
-                alt={contributor.name}
-                title={contributor.name}
-                onLoad={() => handleLoaded(index)}
-                style={{ display: contributor.loaded ? 'block' : 'none' }}
-              />
+              {mounted && (
+                <img
+                  src={contributor.avatar}
+                  alt={contributor.name}
+                  title={contributor.name}
+                  onLoad={() => handleLoaded(index)}
+                  style={{ display: contributor.loaded ? 'block' : 'none' }}
+                />
+              )}
               <h2>{contributor.name}</h2>
             </div>
           </AnimatedOnScroll>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import Skeleton from 'react-loading-skeleton';
 import { AnimatedOnScroll } from 'react-animated-css-onscroll';
 import TimKang from '../../assets/images/team/Tim-Kang.png';
@@ -39,6 +39,7 @@ import { useWindowSize } from 'react-use';
 
 const UniverseCreators = () => {
   const windowSize = useWindowSize();
+  const [mounted, setMounted] = useState(false);
   const [creators, setCreators] = useState([
     {
       id: 1,
@@ -246,11 +247,13 @@ const UniverseCreators = () => {
     },
   ]);
 
-  const handleLoaded = (idx) => {
+  const handleLoaded = useCallback((idx) => {
     const newCreators = [...creators];
     newCreators[idx].loaded = true;
     setCreators(newCreators);
-  };
+  }, [creators]);
+
+  useEffect(() => setMounted(true), []);
 
   return (
     <div className="creators__section">
@@ -265,13 +268,15 @@ const UniverseCreators = () => {
                   style={{ width: windowSize.width < 576 ? '255px' : '100%' }}
                 />
               )}
-              <img
-                src={creator.avatar}
-                alt={creator.name}
-                title={creator.name}
-                onLoad={() => handleLoaded(index)}
-                style={{ display: creator.loaded ? 'block' : 'none' }}
-              />
+              {mounted && (
+                <img
+                  src={creator.avatar}
+                  alt={creator.name}
+                  title={creator.name}
+                  onLoad={() => handleLoaded(index)}
+                  style={{ display: creator.loaded ? 'block' : 'none' }}
+                />
+              )}
               <h2>{creator.name}</h2>
             </div>
           </AnimatedOnScroll>
