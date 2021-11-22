@@ -67,7 +67,7 @@ const Create = () => {
   useEffect(async () => {
     setFetchingData(true);
     const available = await getAvailableNFTs(offset, perPage);
-    if (available.nfts.length) {
+    if (available?.nfts?.length) {
       const parsedForFilters = available.nfts.map((data) => ({ ...data, ...data.nfts }));
 
       setAvailableNFTs(parsedForFilters);
