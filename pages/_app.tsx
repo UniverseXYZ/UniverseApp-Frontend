@@ -118,20 +118,19 @@ import { Popups } from '../src/app/components/AppPopups';
 const queryClient = new QueryClient();
 
 function MyApp({ Component, pageProps }: AppProps) {
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => setMounted(true), []);
-
-  if (!mounted) {
-    return null;
-  }
+  // const [mounted, setMounted] = useState(false);
+  //
+  // useEffect(() => setMounted(true), []);
+  //
+  // if (!mounted) {
+  //   return null;
+  // }
 
   return (
     <ErrorContextProvider>
       <QueryClientProvider client={queryClient}>
         <AuthContextProvider>
           <ThemeContextProvider>
-            {/*<Component {...pageProps} />*/}
             <PolymorphContextProvider>
               <LobsterContextProvider>
                 <MyNFTsContextProvider>
