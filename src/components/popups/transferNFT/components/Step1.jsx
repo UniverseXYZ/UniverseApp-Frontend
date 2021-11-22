@@ -1,34 +1,27 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
-import EthereumAddress from 'ethereum-address';
 import Input from '../../../input/Input.jsx';
 import Button from '../../../button/Button.jsx';
 import { ChooseTokenIdDropdown } from './ChooseTokenIdDropdown.jsx';
 
-export const Step1 = ({ close, nft, receiverAddress, setReceiverAddress, onSubmit }) => {
-  const [receiverAddressError, setReceiverAddressError] = useState('');
+export const Step1 = ({ close, nft, formik, showAmount, onSubmit }) => {
+  const handleReceiverAddressChange = useCallback((e) => {
+    formik.setFieldValue('receiverAddress', e.target.value);
+  }, []);
 
-  const handleReceiverAddressChange = useCallback(
-    (e) => {
-      setReceiverAddress(e.target.value);
-      if (e.target.value) {
-        setReceiverAddressError(
-          !EthereumAddress.isAddress(e.target.value) ? 'Wallet address is not valid' : ''
-        );
-      } else {
-        setReceiverAddressError('This field can’t be empty');
-      }
-    },
-    [setReceiverAddress]
-  );
+  const handleTokenIdChange = useCallback((tokenId) => {
+    formik.setFieldValue('tokenId', tokenId);
+  }, []);
+
+  const handleAmountChange = useCallback((e) => {
+    formik.setFieldValue('amount', e.target.value);
+  }, []);
 
   const handleContinueClick = useCallback(() => {
-    if (!receiverAddress) {
-      setReceiverAddressError('This field can’t be empty');
-    } else {
-      onSubmit();
+    if (formik.isValid) {
+      onSubmit(formik.values);
     }
-  }, [setReceiverAddressError, receiverAddress, onSubmit]);
+  }, [onSubmit, formik]);
 
   return (
     <div className="step1">
@@ -40,16 +33,35 @@ export const Step1 = ({ close, nft, receiverAddress, setReceiverAddress, onSubmi
           <Input
             placeholder="e.g. 0x3v042b..."
             className="inp"
-            value={receiverAddress}
+            value={formik.values.receiverAddress}
+            error={formik.touched?.receiverAddress && formik.errors?.receiverAddress}
             onChange={handleReceiverAddressChange}
-            error={receiverAddressError}
+            onBlur={() => formik.setFieldTouched('receiverAddress', true)}
             hoverBoxShadowGradient
           />
         </div>
         {nft.tokenIds.length > 1 && (
-          <div className="tokenID">
+          <div className="receiver--address tokenID">
             <label>Choose token ID</label>
-            <ChooseTokenIdDropdown nft={nft} />
+            <ChooseTokenIdDropdown
+              tokenIds={nft.tokenIds}
+              selectedTokenId={formik.values.tokenId}
+              onSelect={handleTokenIdChange}
+            />
+          </div>
+        )}
+        {showAmount && (
+          <div className="receiver--address">
+            <label>Amount</label>
+            <Input
+              placeholder="e.g. 0x3v042b..."
+              className="inp"
+              value={formik.values.amount}
+              error={formik.touched?.amount && formik.errors?.amount}
+              onChange={handleAmountChange}
+              onBlur={() => formik.setFieldTouched('amount')}
+              hoverBoxShadowGradient
+            />
           </div>
         )}
       </div>
@@ -57,11 +69,7 @@ export const Step1 = ({ close, nft, receiverAddress, setReceiverAddress, onSubmi
         <Button className="light-border-button" onClick={close}>
           Cancel
         </Button>
-        <Button
-          className="light-button"
-          disabled={receiverAddressError}
-          onClick={handleContinueClick}
-        >
+        <Button className="light-button" disabled={!formik.isValid} onClick={handleContinueClick}>
           Continue
         </Button>
       </div>
@@ -72,7 +80,7 @@ export const Step1 = ({ close, nft, receiverAddress, setReceiverAddress, onSubmi
 Step1.propTypes = {
   close: PropTypes.func.isRequired,
   nft: PropTypes.oneOfType([PropTypes.object]).isRequired,
-  receiverAddress: PropTypes.string.isRequired,
-  setReceiverAddress: PropTypes.func.isRequired,
+  formik: PropTypes.oneOfType([PropTypes.object]).isRequired,
+  showAmount: PropTypes.oneOfType([PropTypes.bool]).isRequired,
   onSubmit: PropTypes.func.isRequired,
 };
