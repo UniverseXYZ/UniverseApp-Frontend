@@ -10,6 +10,7 @@ import { getProfileInfo, setChallenge, userAuthenticate } from '../utils/api/pro
 import { mapUserData } from '../utils/helpers';
 import { useErrorContext } from './ErrorContext';
 import { useRouter } from 'next/router';
+import Cookies from 'js-cookie'
 
 const AuthContext = createContext(null);
 
@@ -30,7 +31,7 @@ const AuthContextProvider = ({ children }) => {
   const [myBalance, setMyBalance] = useState(48.24);
   const [polymorphContract, setPolymorphContract] = useState(null);
   const [lobsterContract, setLobsterContract] = useState(null);
-  const [providerName, setProviderName] = useState(localStorage.getItem('providerName') || '');
+  const [providerName, setProviderName] = useState(Cookies.get('providerName') || '');
   const [web3Provider, setWeb3Provider] = useState(null);
   const [address, setAddress] = useState('');
   const [signer, setSigner] = useState(null);
@@ -62,9 +63,9 @@ const AuthContextProvider = ({ children }) => {
 
   // HELPERS
   const clearStorageAuthData = () => {
-    localStorage.removeItem('xyz_access_token');
-    localStorage.removeItem('user_address');
-    localStorage.removeItem('providerName');
+    Cookies.remove('xyz_access_token');
+    Cookies.remove('user_address');
+    Cookies.remove('providerName');
   };
 
   // Authentication and Web3
@@ -153,7 +154,7 @@ const AuthContextProvider = ({ children }) => {
 
     setProviderName(() => {
       const name = CONNECTORS_NAMES.MetaMask;
-      localStorage.setItem('providerName', name);
+      Cookies.set('providerName', name);
       return name;
     });
 
@@ -203,7 +204,7 @@ const AuthContextProvider = ({ children }) => {
 
       setProviderName(() => {
         const name = CONNECTORS_NAMES.WalletConnect;
-        localStorage.setItem('providerName', name);
+        Cookies.set('providerName', name);
         return name;
       });
       // setProviderObject(provider);
@@ -238,7 +239,7 @@ const AuthContextProvider = ({ children }) => {
 
   useEffect(() => {
     if (
-      !(providerName === CONNECTORS_NAMES.WalletConnect && !localStorage.getItem('walletconnect'))
+      !(providerName === CONNECTORS_NAMES.WalletConnect && !Cookies.get('walletconnect'))
     ) {
       connectWeb3();
     }
@@ -248,8 +249,8 @@ const AuthContextProvider = ({ children }) => {
   const signMessage = async () => {
     try {
       if (signer) {
-        const sameUser = address === localStorage.getItem('user_address');
-        const hasSigned = sameUser && localStorage.getItem('xyz_access_token');
+        const sameUser = address === Cookies.get('user_address');
+        const hasSigned = sameUser && Cookies.get('xyz_access_token');
 
         if (!hasSigned) {
           const chanllenge = uuid();
@@ -266,8 +267,8 @@ const AuthContextProvider = ({ children }) => {
             setLoggedInArtist(mapUserData(authInfo.user));
 
             // Save xyz_access_token into the local storage for later API requests usage
-            localStorage.setItem('xyz_access_token', authInfo.token);
-            localStorage.setItem('user_address', address);
+            Cookies.set('xyz_access_token', authInfo.token);
+            Cookies.set('user_address', address);
           } else {
             setIsAuthenticated(false);
           }

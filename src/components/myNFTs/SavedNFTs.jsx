@@ -14,6 +14,7 @@ import SimplePagination from '../pagination/SimplePaginations';
 import ItemsPerPageDropdown from '../pagination/ItemsPerPageDropdown';
 import LoadingImage from '../general/LoadingImage';
 import { useRouter } from 'next/router';
+import Cookies from 'js-cookie';
 
 const SavedNFTs = () => {
   const { savedNfts, setSavedNfts, setActiveView, setSavedNFTsID } = useMyNftsContext();
@@ -35,10 +36,10 @@ const SavedNFTs = () => {
   };
 
   const toggleSelection = () => {
-    if (localStorage.localChecked) {
-      localStorage.localChecked = localStorage.localChecked === 'true' ? 'false' : 'true';
+    if (Cookies.get('localChecked')) {
+      Cookies.set('localChecked', Cookies.get('localChecked') === 'true' ? 'false' : 'true');
     } else {
-      localStorage.localChecked = 'true';
+      Cookies.set('localChecked', 'true');
     }
     setSelectAllIsChecked(!selectAllIsChecked);
 
@@ -73,10 +74,10 @@ const SavedNFTs = () => {
     const res = savedNfts.filter((nft) => !nft.selected);
     if (res.length) {
       setSelectAllIsChecked(false);
-      localStorage.localChecked = 'false';
+      Cookies.set('localChecked', 'false');
     } else {
       setSelectAllIsChecked(true);
-      localStorage.localChecked = 'true';
+      Cookies.set('localChecked', 'true');
     }
   }, [savedNfts]);
 
