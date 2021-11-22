@@ -19,7 +19,7 @@ const MyAuction = () => {
     useAuctionContext();
   const { loggedInArtist } = useAuthContext();
 
-  const tabTitles = ['My bids', 'Active auctions', 'Future auctions', 'Past auctions'];
+  const tabTitles = ['My bids', 'Active auctions', 'Draft auctions', 'Past auctions'];
   const tabs = { MyBids: 0, ActiveAuctions: 1, FutureAuctions: 2, PastAuctions: 3 };
 
   const [showButton, setShowButton] = useState(true);
