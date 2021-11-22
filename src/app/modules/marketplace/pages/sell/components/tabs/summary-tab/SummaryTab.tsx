@@ -1,0 +1,97 @@
+import { Box, Button, Center, Flex, Heading, Image, Text } from '@chakra-ui/react';
+import React from 'react';
+
+import nft from '../../../../../mocks/assets/nft.png';
+import ethereumIcon from '../../../../../../../../assets/images/eth-icon-new.svg';
+import { fees } from '../../../../../mocks/fees';
+import { useMarketplaceSellData } from '../../../hooks';
+import { GreyBox } from '../../grey-box';
+
+export const SummaryTab = () => {
+  const sellData = useMarketplaceSellData();
+
+  return (
+    <>
+      <Flex
+        borderRadius={'12px'}
+        boxShadow={'0 10px 36px rgba(136, 120, 172, 0.14)'}
+        padding={'50px'}
+        mb={'40px'}
+        sx={{
+          '--image-size': '390px',
+          '--image-margin': '60px',
+          fontSize: '14px',
+          h4: {
+            fontFamily: 'Space Grotesk',
+            fontSize: '18px',
+            mb: '6px'
+          },
+          img: {
+            display: 'inline',
+            ml: 2,
+            mr: 1,
+          }
+        }}
+      >
+        <Box mr={'var(--image-margin)'}>
+          <Image src={nft} h={'var(--image-size)'} w={'var(--image-size)'} />
+        </Box>
+        <Flex width={'calc(100% - var(--image-size) - var(--image-margin))'}>
+          <Center flexDir={'column'} alignItems={'flex-start'} w={'100%'}>
+            <Heading as={'h4'}>Listing</Heading>
+            <Text mb={'30px'}>
+              Your bundle will be listed for
+              <Image
+                src={ethereumIcon}
+                alt='Ethereum icon'
+                w={'11px'}
+              />
+              <strong>0.8</strong>
+            </Text>
+
+            <Heading as={'h4'}>Fees</Heading>
+            <Text mb={'20px'} color={'#00000066'}>
+              Listing is free! At the time of the sale, the following fees will be deducted.
+            </Text>
+
+            <GreyBox
+              p={'28px 30px'}
+              mb={'30px'}
+              sx={{
+                color: '#00000066',
+                '> div': {
+                  _last: {
+                    color: 'black',
+                    fontWeight: 'bold',
+                  },
+                },
+              }}
+            >
+              {fees.map((fee, i) => (
+                <Flex py={'5px'} key={i}>
+                  <Box>{fee.name}</Box>
+                  <Flex flex={1} borderBottom={'2px dotted rgba(0, 0, 0, 0.1)'} m={'5px'} />
+                  <Box>{fee.value}%</Box>
+                </Flex>
+              ))}
+            </GreyBox>
+
+            <Heading as={'h4'} mb={'0 !important'}>
+              You will receive:
+              <Image
+                src={ethereumIcon}
+                alt='Ethereum icon'
+                width={'14px'}
+              />
+              0.7
+            </Heading>
+          </Center>
+        </Flex>
+      </Flex>
+      <Box textAlign={'right'} mb={'50px'}>
+        <Button mr={'10px'} variant={'outline'} onClick={sellData.backToSettings}>Back</Button>
+        <Button boxShadow={'xl'} onClick={sellData.save}>Post your listing</Button>
+      </Box>
+    </>
+  );
+};
