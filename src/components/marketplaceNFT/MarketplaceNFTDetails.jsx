@@ -1,6 +1,6 @@
 /* eslint-disable no-inner-declarations */
 import React, { useState, useRef, useEffect, useContext } from 'react';
-import '../marketplace/browseNFT/NFTsList.scss';
+// import '../marketplace/browseNFT/NFTsList.scss';
 import uuid from 'react-uuid';
 import Popup from 'reactjs-popup';
 import PropTypes from 'prop-types';

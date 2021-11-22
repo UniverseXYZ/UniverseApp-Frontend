@@ -97,6 +97,7 @@ import '../src/components/polymorphs/scramble/styles/PolymorphScramblePage.scss'
 import '../src/components/polymorphs/scramble/styles/PolymorphScrambleProp.scss';
 import '../src/components/select/SelectComponent.scss';
 import '../src/components/lobbyLobsters/info/styles/LobstersInfoPage.scss';
+import '../src/components/marketplaceTabComponents/MarketplaceTabComponent.scss';
 
 import type { AppProps } from 'next/app'
 import React, { useEffect, useState } from 'react';

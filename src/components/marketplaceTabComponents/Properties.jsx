@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import './MarketplaceTabComponent.scss';
+// import './MarketplaceTabComponent.scss';
 
 const Properties = ({ properties }) => (
   <>

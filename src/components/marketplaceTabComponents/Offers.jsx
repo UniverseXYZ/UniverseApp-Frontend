@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import './MarketplaceTabComponent.scss';
+// import './MarketplaceTabComponent.scss';
 import offers1 from '../../assets/images/offers1.svg';
 import offers2 from '../../assets/images/offers2.svg';
 import offers3 from '../../assets/images/offers3.svg';
