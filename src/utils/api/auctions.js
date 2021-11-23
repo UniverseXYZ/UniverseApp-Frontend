@@ -19,7 +19,9 @@ const EDIT_REWARD_TIER_IMAGE = (id) =>
 const GET_AVAILABLE_NFTS = (offset, limit, auctionId) =>
   `${
     process.env.REACT_APP_API_BASE_URL
-  }/api/nfts/my-nfts/availability?offset=${offset}&limit=${limit}&auctionId=${auctionId || ''}`;
+  }/api/nfts/my-nfts/availability?offset=${offset}&limit=${limit}${
+    auctionId ? `&auctionId=${auctionId}` : ''
+  }`;
 const ADD_DEPLOY_INFO = `${process.env.REACT_APP_API_BASE_URL}/api/auctions/deploy`;
 const DEPOSIT_NFTS_TO_AUCTION = `${process.env.REACT_APP_API_BASE_URL}/api/auctions/depositNfts`;
 const WITHDRAW_NFTS_FROM_AUCTION = `${process.env.REACT_APP_API_BASE_URL}/api/auctions/withdrawNfts`;
