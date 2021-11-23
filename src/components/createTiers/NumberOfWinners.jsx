@@ -32,6 +32,7 @@ const NumberOfWinners = ({ values, setValues }) => {
       <div className="counter">
         <Button
           className="light-button"
+          style={{ opacity: values.numberOfWinners === 1 ? '0.3' : 1 }}
           onClick={() =>
             values.numberOfWinners > 1 &&
             setValues((prevValues) => ({
@@ -45,6 +46,7 @@ const NumberOfWinners = ({ values, setValues }) => {
         <span>{values.numberOfWinners}</span>
         <Button
           className="light-button"
+          style={{ opacity: values.numberOfWinners === MAX_WINNERS_COUNT ? '0.3' : 1 }}
           onClick={() =>
             values.numberOfWinners < MAX_WINNERS_COUNT &&
             setValues((prevValues) => ({
