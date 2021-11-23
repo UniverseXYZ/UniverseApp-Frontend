@@ -15,6 +15,7 @@ import NumberOfWinners from './NumberOfWinners';
 import arrow from '../../assets/images/arrow.svg';
 import IncludeReservePrice from './IncludeReservePrice';
 import WinnersList from './winners/WinnersList';
+import { TIER_SETTINGS_LIMITATION } from '../../utils/config';
 
 const ACTION_TYPES = {
   ADD: 'select-option',
@@ -66,7 +67,8 @@ const Create = () => {
   const perPage = 20;
   useEffect(async () => {
     setFetchingData(true);
-    const available = await getAvailableNFTs(offset, perPage, auction.id);
+    const id = typeof auction.id === 'string' ? '' : auction.id;
+    const available = await getAvailableNFTs(offset, perPage, id);
     if (available?.nfts?.length) {
       const parsedForFilters = available.nfts.map((data) => ({ ...data, ...data.nfts }));
 
@@ -91,7 +93,11 @@ const Create = () => {
     const winnersCopy = [...winnersData];
 
     if (actionMeta.action === ACTION_TYPES.ADD) {
-      // TODO:: make sure that, the winner selected NFTs is not above the maximum <= 100
+      const winnerNFTsCount = winnersCopy[selectedWinner].nftIds.length;
+      // Return if the user has reached max nfts count
+      if (winnerNFTsCount === TIER_SETTINGS_LIMITATION.MAX_WINNER_NFT_COUNT) return;
+
+      const leftNTFsCount = TIER_SETTINGS_LIMITATION.MAX_WINNER_NFT_COUNT - winnerNFTsCount;
 
       // If the option is select all, we will receive all the available editions to select in array
       const selectedValues =
@@ -99,7 +105,8 @@ const Create = () => {
           ? actionMeta.option.value.selectValues
           : [actionMeta.option];
 
-      selectedValues.forEach((d) => {
+      // Loop only trough the available NFTs space to the winner
+      selectedValues.slice(0, leftNTFsCount).forEach((d) => {
         const [
           edition,
           id,
@@ -402,8 +409,12 @@ const Create = () => {
             <div className="head-part">
               <h2 className="tier-title">Create reward tier</h2>
               <p className="create-p">
-                Each reward tier can contain up to 10 winners and up to 5 NFTs for each winner
-                (total: 50 NFTs).
+                Each reward tier can contain up to {TIER_SETTINGS_LIMITATION.MAX_WINNERS_COUNT}{' '}
+                winners and up to {TIER_SETTINGS_LIMITATION.MAX_WINNER_NFT_COUNT} NFTs for each
+                winner (total:{' '}
+                {TIER_SETTINGS_LIMITATION.MAX_WINNERS_COUNT *
+                  TIER_SETTINGS_LIMITATION.MAX_WINNER_NFT_COUNT}{' '}
+                NFTs).
               </p>
             </div>
           </div>
