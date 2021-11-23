@@ -70,6 +70,9 @@ const AuctionLandingPage = () => {
               ...rewardTier,
               nfts,
               winner: auctionInfo.bidders[i]?.user?.address,
+              slotIndex: slotIndexCounter,
+              // eslint-disable-next-line no-loop-func
+              minimumBid: rewardTier.slots.find((s) => s.index === slotIndexCounter)?.minimumBid,
             });
             slotIndexCounter += 1;
           }
