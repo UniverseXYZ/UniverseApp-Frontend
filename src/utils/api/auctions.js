@@ -16,8 +16,10 @@ const UPLAD_IMAGES_FOR_LANDING_PAGE_URL = (id) =>
 const EDIT_REWARD_TIER_URL = (id) => `${process.env.REACT_APP_API_BASE_URL}/api/reward-tiers/${id}`;
 const EDIT_REWARD_TIER_IMAGE = (id) =>
   `${process.env.REACT_APP_API_BASE_URL}/api/reward-tiers/${id}/image`;
-const GET_AVAILABLE_NFTS = (offset, limit) =>
-  `${process.env.REACT_APP_API_BASE_URL}/api/nfts/my-nfts/availability?offset=${offset}&limit=${limit}`;
+const GET_AVAILABLE_NFTS = (offset, limit, auctionId) =>
+  `${
+    process.env.REACT_APP_API_BASE_URL
+  }/api/nfts/my-nfts/availability?offset=${offset}&limit=${limit}&auctionId=${auctionId || ''}`;
 const ADD_DEPLOY_INFO = `${process.env.REACT_APP_API_BASE_URL}/api/auctions/deploy`;
 const DEPOSIT_NFTS_TO_AUCTION = `${process.env.REACT_APP_API_BASE_URL}/api/auctions/depositNfts`;
 const WITHDRAW_NFTS_FROM_AUCTION = `${process.env.REACT_APP_API_BASE_URL}/api/auctions/withdrawNfts`;
@@ -311,7 +313,7 @@ export const uploadImagesForTheLandingPage = async (
 };
 
 // Create Auction Tier
-export const getAvailableNFTs = async (offset, limit) => {
+export const getAvailableNFTs = async (offset, limit, auctionId) => {
   const requestOptions = {
     method: 'GET',
     headers: {
@@ -320,7 +322,7 @@ export const getAvailableNFTs = async (offset, limit) => {
   };
 
   // TODO:: Discuss how much NFTS needs to fetch
-  const request = await fetch(`${GET_AVAILABLE_NFTS(offset, limit)}`, requestOptions);
+  const request = await fetch(`${GET_AVAILABLE_NFTS(offset, limit, auctionId)}`, requestOptions);
 
   const result = await request.text().then((data) => JSON.parse(data));
 
