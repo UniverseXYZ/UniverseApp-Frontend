@@ -109,19 +109,18 @@ const FinalizeAuction = () => {
       const minimumReserveValues = [];
       // TODO: Order by slotIndex
       auction.rewardTiers
-        .sort((a, b) => +a.tierPosition - +b.tierPosition)
+        .sort((a, b) => a.tierPosition - b.tierPosition)
         .forEach((tier) => {
-          const minimumBids = Array.from(Array(tier.numberOfWinners).keys()).map((slot) =>
-            utils.parseEther('0.01').toString()
-          );
-          minimumReserveValues.push(...minimumBids);
-          numberOfSlots += tier.numberOfWinners;
+          tier.slots.forEach((slot) => {
+            minimumReserveValues.push(utils.parseEther(slot.minimumBid.toString()));
+            numberOfSlots += 1;
+          });
         });
 
       if (auction.royaltySplits) {
         paymentSplits = auction.royaltySplits.map((royalty) => [
           royalty.address,
-          royalty.percentAmount * 1000,
+          royalty.percentAmount * 100,
         ]);
       }
       const startTime = (
