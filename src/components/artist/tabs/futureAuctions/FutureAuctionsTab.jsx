@@ -5,6 +5,7 @@ import ReactPaginate from 'react-paginate';
 import bubleIcon from '../../../../assets/images/text-bubble.png';
 import Exclamation from '../../../../assets/images/Exclamation.svg';
 import { useAuthContext } from '../../../../contexts/AuthContext';
+import { useAuctionContext } from '../../../../contexts/AuctionContext';
 import FutureAuctionsList from '../../../auctionsCard/futureAuction/FutureAuctionsList.jsx';
 import AuctionsCardSkeleton from '../../../auctionsCard/skeleton/AuctionsCardSkeleton';
 import ItemsPerPageDropdown from '../../../pagination/ItemsPerPageDropdown.jsx';
@@ -24,6 +25,7 @@ const FutureAuctionsTab = ({
   handlePageClick,
 }) => {
   const { loggedInArtist } = useAuthContext();
+  const { setAuction } = useAuctionContext();
   const history = useHistory();
 
   return loading ? (

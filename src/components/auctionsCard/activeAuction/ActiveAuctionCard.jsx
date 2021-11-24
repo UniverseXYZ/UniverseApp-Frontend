@@ -30,7 +30,7 @@ const ActiveAuctionCard = ({ auction }) => {
     <div
       className="active__auction__item"
       onClick={() => {
-        history.push(`/${loggedInArtist.universePageAddress}/${auction.name}`);
+        history.push(`/${loggedInArtist.universePageAddress}/${auction.link}`);
       }}
     >
       <div
