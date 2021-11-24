@@ -6,27 +6,83 @@ import arrow from '../../../../../assets/images/arrow.svg';
 
 import { useThemeContext } from '../../../../../contexts/ThemeContext';
 import { sellPageTabs, MarketplaceSellContext } from './constants';
-import { SelectAmountTab, SelectMethodType, SummaryTab, TabPanel } from './components';
+import { SelectAmountTab, SelectMethodType, SettingsTab, SummaryTab, TabPanel } from './components';
 import { SellAmountType, SellPageTabs, SellMethod } from './enums';
 import { IMarketplaceSellContextData } from './types';
+import { useFormik } from 'formik';
+
+const settingsAmountTypeTitleText: Record<SellAmountType, string> = {
+  [SellAmountType.SINGLE]: 'Single item',
+  [SellAmountType.BUNDLE]: 'Bundle',
+};
+
+const settingsMethodsTitleText: Record<SellMethod, string> = {
+  [SellMethod.FIXED]: 'Fixed Listing',
+  [SellMethod.DUTCH]: 'Dutch auction',
+  [SellMethod.ENGLISH]: 'English auction',
+};
 
 export const MarketplaceSell = () => {
   const { setDarkMode } = useThemeContext() as any;
-  const [activeTab, setActiveTab] = useState(SellPageTabs.SUMMARY);
+  const [activeTab, setActiveTab] = useState<SellPageTabs>(SellPageTabs.SETTINGS);
+
+  const form = useFormik({
+    initialValues: {
+      amountType: '',
+      sellMethod: '',
+      price: {
+        value: 0,
+        currency: '',
+      },
+      withPrivacy: false,
+      buyerAddress: '',
+    },
+    onSubmit: values => {
+      alert(JSON.stringify(values, null, 2));
+    },
+  });
+
+  useEffect(() => {
+    console.log('1234'); // TODO: ERROR
+  }, []);
 
   const handleSelectAmount = useCallback((amountType: SellAmountType) => {
-    console.log('handleSelectAmount:', amountType);
+    form.setFieldValue('amountType', amountType);
     setActiveTab(SellPageTabs.SELL_METHOD);
   }, []);
 
   const handleSelectSellMethod = useCallback((sellMethod: SellMethod) => {
-    console.log('handleSelectSellType:', sellMethod);
-    setActiveTab(SellPageTabs.SUMMARY); // TODO: change to SellPageTabs.SETTINGS
-  }, []);
-
-  const handleBackToSettings = useCallback(() => {
+    form.setFieldValue('sellMethod', sellMethod);
     setActiveTab(SellPageTabs.SETTINGS);
   }, []);
+
+  const handleGoBack = useCallback(() => {
+    const prevTabsMap: Partial<Record<SellPageTabs, SellPageTabs>> = {
+      [SellPageTabs.SELL_METHOD]: SellPageTabs.SELL_AMOUNT,
+      [SellPageTabs.SETTINGS]: SellPageTabs.SELL_METHOD,
+      [SellPageTabs.SUMMARY]: SellPageTabs.SETTINGS,
+    };
+
+    const prevTab = prevTabsMap[activeTab];
+
+    if (prevTab) {
+      setActiveTab(prevTab);
+    }
+  }, [activeTab]);
+
+  const handleContinue = useCallback(() => {
+    const nextTabsMap: Partial<Record<SellPageTabs, SellPageTabs>> = {
+      [SellPageTabs.SELL_AMOUNT]: SellPageTabs.SELL_METHOD,
+      [SellPageTabs.SELL_METHOD]: SellPageTabs.SETTINGS,
+      [SellPageTabs.SETTINGS]: SellPageTabs.SUMMARY,
+    };
+
+    const nextTab = nextTabsMap[activeTab];
+
+    if (nextTab) {
+      setActiveTab(nextTab);
+    }
+  }, [activeTab]);
 
   const handleSave = useCallback(() => {
     console.log('SAVE');
@@ -35,11 +91,18 @@ export const MarketplaceSell = () => {
   useEffect(() => setDarkMode(false), []);
 
   const contextValue: IMarketplaceSellContextData = {
+    form: form,
     selectAmount: handleSelectAmount,
     selectMethod: handleSelectSellMethod,
-    backToSettings: handleBackToSettings,
+    goBack: handleGoBack,
+    goContinue: handleContinue,
     save: handleSave,
   };
+
+  const settingsTabName = `
+    ${settingsAmountTypeTitleText[form.values.amountType as SellAmountType]} -
+    ${settingsMethodsTitleText[form.values.sellMethod as SellMethod]}
+  ` ;
 
   return (
     <MarketplaceSellContext.Provider value={contextValue}>
@@ -82,7 +145,9 @@ export const MarketplaceSell = () => {
                 <TabPanel name="Select your sell method">
                   <SelectMethodType />
                 </TabPanel>
-                <TabPanel name="Single item - Dutch auction">3</TabPanel>
+                <TabPanel name={settingsTabName}>
+                  <SettingsTab />
+                </TabPanel>
                 <TabPanel name="Summary">
                   <SummaryTab />
                 </TabPanel>
