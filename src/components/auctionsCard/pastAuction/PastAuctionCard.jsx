@@ -1,3 +1,5 @@
+/* eslint-disable jsx-a11y/click-events-have-key-events */
+/* eslint-disable jsx-a11y/no-static-element-interactions */
 import React from 'react';
 import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
@@ -24,7 +26,12 @@ const PastAuctionCard = ({ auction }) => {
   const promoImageProps = getPromoImageProps(auction.promoImageUrl, loggedInArtist.avatar);
 
   return (
-    <div className="past__auction__item">
+    <div
+      className="past__auction__item"
+      onClick={() => {
+        history.push(`/${loggedInArtist.universePageAddress}/${auction.name}`);
+      }}
+    >
       <div
         className={`past__auction__image timeLeft ${auction.promoImageUrl ? '' : 'show__avatar'}`}
       >
@@ -35,14 +42,7 @@ const PastAuctionCard = ({ auction }) => {
           <h2>{auction.name}</h2>
         </div>
         <div className="creator">
-          <img
-            src={
-              typeof loggedInArtist.avatar === 'string'
-                ? loggedInArtist.avatar
-                : URL.createObjectURL(loggedInArtist.avatar)
-            }
-            alt={loggedInArtist.name}
-          />
+          <img src={loggedInArtist.avatar} alt={loggedInArtist.name} />
           <span>by</span>
           <a
             aria-hidden="true"
