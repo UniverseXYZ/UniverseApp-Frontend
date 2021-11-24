@@ -6,9 +6,54 @@ import ActiveAuctionsTab from './activeAuctions/ActiveAuctionsTab.jsx';
 import FutureAuctionsTab from './futureAuctions/FutureAuctionsTab.jsx';
 import PastAuctionsTab from './pastAuctions/PastAuctionsTab.jsx';
 import { handleTabLeftScrolling, handleTabRightScrolling } from '../../../utils/scrollingHandlers';
+import { useAuthContext } from '../../../contexts/AuthContext';
+import {
+  getUserActiveAuctions,
+  getUserFutureAuctions,
+  getUserPastAuctions,
+} from '../../../utils/api/auctions';
 
 const Tabs = ({ nfts }) => {
+  const { loggedInArtist } = useAuthContext();
   const [selectedTabIndex, setSelectedTabIndex] = useState(0);
+  const [auctions, setAuctions] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [perPage, setPerPage] = useState(12);
+  const [pageCount, setPageCount] = useState(0);
+
+  const getAuctions = async (request, offset) => {
+    setLoading(true);
+    try {
+      const response = await request(loggedInArtist.id, offset, perPage);
+
+      if (response.auctions?.length) {
+        setAuctions(response.auctions);
+      } else {
+        setAuctions([]);
+      }
+
+      if (response.pagination) {
+        const { total } = response.pagination;
+        const pages = Math.ceil(total / perPage);
+        setPageCount(pages);
+      }
+      setLoading(false);
+    } catch (error) {
+      // TODO: handle errors
+      console.error(error);
+    }
+  };
+
+  useEffect(async () => {
+    // window.scrollTo(0, 360);
+    if (selectedTabIndex === 1) {
+      getAuctions(getUserActiveAuctions, 0, perPage);
+    } else if (selectedTabIndex === 2) {
+      getAuctions(getUserFutureAuctions, 0, perPage);
+    } else if (selectedTabIndex === 3) {
+      getAuctions(getUserPastAuctions, 0, perPage);
+    }
+  }, [selectedTabIndex, perPage]);
 
   useEffect(() => {
     function handleResize() {
@@ -24,6 +69,19 @@ const Tabs = ({ nfts }) => {
 
     return () => window.removeEventListener('resize', handleResize);
   }, []);
+
+  const handlePageClick = (item) => {
+    // let the user see the tabs after changing page
+    window.scrollTo(0, 360);
+    const offset = Math.ceil(item.selected * perPage);
+    if (selectedTabIndex === 1) {
+      getAuctions(getUserActiveAuctions, offset);
+    } else if (selectedTabIndex === 2) {
+      getAuctions(getUserFutureAuctions, offset);
+    } else if (selectedTabIndex === 3) {
+      getAuctions(getUserPastAuctions, offset);
+    }
+  };
 
   return (
     <div className="tabs__section">
@@ -46,7 +104,7 @@ const Tabs = ({ nfts }) => {
               >
                 {`NFTs (${nfts.length})`}
               </button>
-              {/* <button
+              <button
                 type="button"
                 onClick={() => setSelectedTabIndex(1)}
                 className={selectedTabIndex === 1 ? 'active' : ''}
@@ -66,7 +124,7 @@ const Tabs = ({ nfts }) => {
                 className={selectedTabIndex === 3 ? 'active' : ''}
               >
                 Past auctions
-              </button> */}
+              </button>
             </div>
           </div>
           <div className="tab__right__arrow">
@@ -80,9 +138,39 @@ const Tabs = ({ nfts }) => {
         </div>
         <div className="tab__content">
           {selectedTabIndex === 0 && <NFTsTab showMintPrompt={false} nftData={nfts} />}
-          {selectedTabIndex === 1 && <ActiveAuctionsTab showMintPrompt={false} />}
-          {selectedTabIndex === 2 && <FutureAuctionsTab showMintPrompt={false} />}
-          {selectedTabIndex === 3 && <PastAuctionsTab showMintPrompt={false} />}
+          {selectedTabIndex === 1 && (
+            <ActiveAuctionsTab
+              showMintPrompt={false}
+              auctions={auctions}
+              loading={loading}
+              handlePageClick={handlePageClick}
+              pageCount={pageCount}
+              perPage={perPage}
+              setPerPage={setPerPage}
+            />
+          )}
+          {selectedTabIndex === 2 && (
+            <FutureAuctionsTab
+              showMintPrompt={false}
+              auctions={auctions}
+              loading={loading}
+              handlePageClick={handlePageClick}
+              pageCount={pageCount}
+              perPage={perPage}
+              setPerPage={setPerPage}
+            />
+          )}
+          {selectedTabIndex === 3 && (
+            <PastAuctionsTab
+              showMintPrompt={false}
+              auctions={auctions}
+              loading={loading}
+              handlePageClick={handlePageClick}
+              pageCount={pageCount}
+              perPage={perPage}
+              setPerPage={setPerPage}
+            />
+          )}
         </div>
       </div>
     </div>

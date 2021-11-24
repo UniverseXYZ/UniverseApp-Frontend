@@ -1,3 +1,5 @@
+/* eslint-disable jsx-a11y/click-events-have-key-events */
+/* eslint-disable jsx-a11y/no-static-element-interactions */
 import React from 'react';
 import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
@@ -5,10 +7,12 @@ import './ActiveAuctionCard.scss';
 import { getPromoImageProps, bidsInUsd, createNftsPerWinnerMarkup } from '../utils';
 import { useAuctionContext } from '../../../contexts/AuctionContext';
 import { getBidTypeByName } from '../../../utils/fixtures/BidOptions';
+import { useAuthContext } from '../../../contexts/AuthContext';
 import AuctionsTabsCountdown from '../../auctions/AuctionsTabsCountdown';
 
 const ActiveAuctionCard = ({ auction }) => {
   const history = useHistory();
+  const { loggedInArtist } = useAuthContext();
   const { options } = useAuctionContext();
 
   const bids = bidsInUsd(auction);
@@ -20,10 +24,15 @@ const ActiveAuctionCard = ({ auction }) => {
 
   const { tokenSymbol } = auction;
   const tokenLogo = getBidTypeByName(tokenSymbol, options).img;
-  const promoImageProps = getPromoImageProps(auction.promoImageUrl);
+  const promoImageProps = getPromoImageProps(auction.promoImageUrl, loggedInArtist.avatar);
 
   return (
-    <div className="active__auction__item">
+    <div
+      className="active__auction__item"
+      onClick={() => {
+        history.push(`/${loggedInArtist.universePageAddress}/${auction.link}`);
+      }}
+    >
       <div
         className={`active__auction__image timeLeft ${auction.promoImageUrl ? '' : 'show__avatar'}`}
       >
@@ -39,17 +48,17 @@ const ActiveAuctionCard = ({ auction }) => {
           <h2>{auction.name}</h2>
         </div>
         <div className="creator">
-          <img src="" alt={auction.artist?.name} />
+          <img src={loggedInArtist.avatar} alt={loggedInArtist.name} />
           <span>by</span>
           <a
             aria-hidden="true"
             onClick={() =>
-              history.push(`/${auction.artist?.name.split(' ')[0]}`, {
-                id: auction.artist.id,
+              history.push(`/${loggedInArtist.name.split(' ')[0]}`, {
+                id: loggedInArtist.id,
               })
             }
           >
-            {auction.artist?.name}
+            {loggedInArtist.name}
           </a>
         </div>
         <div className="statistics">

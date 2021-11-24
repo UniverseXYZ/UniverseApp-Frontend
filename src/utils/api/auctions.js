@@ -22,6 +22,8 @@ const GET_AVAILABLE_NFTS = (offset, limit, auctionId) =>
   }/api/nfts/my-nfts/availability?offset=${offset}&limit=${limit}${
     auctionId ? `&auctionId=${auctionId}` : ''
   }`;
+const GET_USER_AUCTIONS = (userId, type, offset, limit) =>
+  `${process.env.REACT_APP_API_BASE_URL}/api/pages/auctions/${type}?userId=${userId}&offset=${offset}&limit=${limit}`;
 const ADD_DEPLOY_INFO = `${process.env.REACT_APP_API_BASE_URL}/api/auctions/deploy`;
 const DEPOSIT_NFTS_TO_AUCTION = `${process.env.REACT_APP_API_BASE_URL}/api/auctions/depositNfts`;
 const WITHDRAW_NFTS_FROM_AUCTION = `${process.env.REACT_APP_API_BASE_URL}/api/auctions/withdrawNfts`;
@@ -277,6 +279,60 @@ export const getMyBids = async () => {
   };
 
   const request = await fetch(GET_MY_BIDS, requestOptions);
+
+  const result = await request.text().then((data) => JSON.parse(data));
+
+  return result;
+};
+
+export const getUserActiveAuctions = async (id, offset, limit) => {
+  if (!id) {
+    return false;
+  }
+  const requestOptions = {
+    method: 'GET',
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem('xyz_access_token')}`,
+    },
+  };
+
+  const request = await fetch(GET_USER_AUCTIONS(id, 'active', offset, limit), requestOptions);
+
+  const result = await request.text().then((data) => JSON.parse(data));
+
+  return result;
+};
+
+export const getUserFutureAuctions = async (id, offset, limit) => {
+  if (!id) {
+    return false;
+  }
+  const requestOptions = {
+    method: 'GET',
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem('xyz_access_token')}`,
+    },
+  };
+
+  const request = await fetch(GET_USER_AUCTIONS(id, 'future', offset, limit), requestOptions);
+
+  const result = await request.text().then((data) => JSON.parse(data));
+
+  return result;
+};
+
+export const getUserPastAuctions = async (id, offset, limit) => {
+  if (!id) {
+    return false;
+  }
+  const requestOptions = {
+    method: 'GET',
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem('xyz_access_token')}`,
+    },
+  };
+
+  const request = await fetch(GET_USER_AUCTIONS(id, 'past', offset, limit), requestOptions);
 
   const result = await request.text().then((data) => JSON.parse(data));
 

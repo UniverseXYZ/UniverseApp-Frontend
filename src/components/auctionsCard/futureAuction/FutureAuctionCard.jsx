@@ -4,9 +4,11 @@ import { useHistory } from 'react-router-dom';
 import './FutureAuctionCard.scss';
 import AuctionsTabsCountdown from '../../auctions/AuctionsTabsCountdown';
 import { createNftsPerWinnerMarkup } from '../utils';
+import { useAuthContext } from '../../../contexts/AuthContext';
 
 const FutureAuctionCard = ({ auction }) => {
   const history = useHistory();
+  const { loggedInArtist } = useAuthContext();
 
   const winnersCount = auction.rewardTiers.reduce(
     (winners, tier) => winners + tier.numberOfWinners,
@@ -29,10 +31,17 @@ const FutureAuctionCard = ({ auction }) => {
       <div className="title">
         <h1>{auction.name}</h1>
         <div className="artist__details">
-          <img src="" alt="" />
+          <img src={loggedInArtist.avatar} alt={loggedInArtist.name} />
           <span>by</span>
-          <button type="button" onClick={() => console.info('redirect')}>
-            artist name
+          <button
+            type="button"
+            onClick={() =>
+              history.push(`/${loggedInArtist.name.split(' ')[0]}`, {
+                id: loggedInArtist.id,
+              })
+            }
+          >
+            {loggedInArtist.name}
           </button>
         </div>
       </div>

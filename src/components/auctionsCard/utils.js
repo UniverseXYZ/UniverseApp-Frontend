@@ -24,10 +24,10 @@ import { useAuthContext } from '../../contexts/AuthContext';
 //   return timeLeft;
 // };
 
-export const getPromoImageProps = (imageUrl) => {
+export const getPromoImageProps = (imageUrl, userImage) => {
   const promoImageProps = {
     class: 'artist__image',
-    src: '',
+    src: userImage,
   };
   if (imageUrl) {
     promoImageProps.class = 'original';

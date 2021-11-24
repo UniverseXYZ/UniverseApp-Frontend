@@ -1,26 +1,59 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import { PLACEHOLDER_AUCTIONS } from '../../../../utils/fixtures/AuctionsDummyData';
+import ReactPaginate from 'react-paginate';
 import bubleIcon from '../../../../assets/images/text-bubble.png';
 import Exclamation from '../../../../assets/images/Exclamation.svg';
-import { useAuctionContext } from '../../../../contexts/AuctionContext';
 import { useAuthContext } from '../../../../contexts/AuthContext';
-import { isAfterNow, isBeforeNow } from '../../../../utils/dates';
+import { useAuctionContext } from '../../../../contexts/AuctionContext';
 import ActiveAuctionsList from '../../../auctionsCard/activeAuction/ActiveAuctionsList';
+import AuctionsCardSkeleton from '../../../auctionsCard/skeleton/AuctionsCardSkeleton';
+import ItemsPerPageDropdown from '../../../pagination/ItemsPerPageDropdown.jsx';
+import leftArrow from '../../../../assets/images/left-arrow.svg';
+import rightArrow from '../../../../assets/images/right-arrow.svg';
 
-const ActiveAuctionsTab = ({ onArtist, showCreatePrompt }) => {
-  const { myAuctions, setAuction } = useAuctionContext();
+const LeftArrow = () => <img src={leftArrow} alt="left arrow" />;
+const RightArrow = () => <img src={rightArrow} alt="right arrow" />;
+
+const ActiveAuctionsTab = ({
+  auctions,
+  loading,
+  showCreatePrompt,
+  perPage,
+  setPerPage,
+  pageCount,
+  handlePageClick,
+}) => {
   const { loggedInArtist } = useAuthContext();
+  const { setAuction } = useAuctionContext();
   const history = useHistory();
 
-  const artistActiveAuctions =
-    loggedInArtist.id === onArtist?.id
-      ? myAuctions.filter((item) => isAfterNow(item.startDate) && isBeforeNow(item.endDate))
-      : PLACEHOLDER_AUCTIONS;
-
-  return artistActiveAuctions.length ? (
-    <ActiveAuctionsList data={artistActiveAuctions} />
+  return loading ? (
+    <div className="active__auctions__list">
+      <AuctionsCardSkeleton />
+      <AuctionsCardSkeleton />
+      <AuctionsCardSkeleton />
+    </div>
+  ) : auctions.length ? (
+    <>
+      <ActiveAuctionsList data={auctions} />
+      <div className="pagination__container">
+        <ReactPaginate
+          previousLabel={<LeftArrow />}
+          nextLabel={<RightArrow />}
+          breakLabel="..."
+          breakClassName="break-me"
+          pageCount={pageCount}
+          marginPagesDisplayed={1}
+          pageRangeDisplayed={3}
+          onPageChange={handlePageClick}
+          containerClassName="pagination"
+          subContainerClassName="pages pagination"
+          activeClassName="active"
+        />
+        <ItemsPerPageDropdown perPage={perPage} setPerPage={setPerPage} itemsPerPage={[12, 24]} />
+      </div>
+    </>
   ) : showCreatePrompt ? (
     <div className="empty__auction">
       <img src={bubleIcon} alt="Buble" />
@@ -60,8 +93,13 @@ const ActiveAuctionsTab = ({ onArtist, showCreatePrompt }) => {
 };
 
 ActiveAuctionsTab.propTypes = {
-  onArtist: PropTypes.oneOfType([PropTypes.object]).isRequired,
+  auctions: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
+  loading: PropTypes.bool.isRequired,
   showCreatePrompt: PropTypes.bool,
+  handlePageClick: PropTypes.func.isRequired,
+  pageCount: PropTypes.number.isRequired,
+  perPage: PropTypes.number.isRequired,
+  setPerPage: PropTypes.func.isRequired,
 };
 
 ActiveAuctionsTab.defaultProps = {
