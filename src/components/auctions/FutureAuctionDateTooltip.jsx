@@ -5,7 +5,7 @@ import { format } from 'date-fns';
 import infoIconRed from '../../assets/images/Vector.svg';
 import { isBeforeNow } from '../../utils/dates';
 
-const FutureAuctionDateTooltip = ({ date }) => {
+const FutureAuctionDateTooltip = ({ date, dateType }) => {
   const [showIcon, setShowIcon] = useState(false);
   const formattedDate = format(new Date(date), 'MMMM dd, HH:mm');
 
@@ -17,7 +17,7 @@ const FutureAuctionDateTooltip = ({ date }) => {
         onMouseLeave={() => setShowIcon(false)}
         onBlur={() => setShowIcon(false)}
       >
-        Launch date:{' '}
+        {dateType}
         <b>
           <time>{formattedDate}</time>
         </b>
@@ -39,6 +39,8 @@ const FutureAuctionDateTooltip = ({ date }) => {
   );
 };
 FutureAuctionDateTooltip.propTypes = {
+  dateType: PropTypes.string.isRequired,
   date: PropTypes.string.isRequired,
 };
+
 export default FutureAuctionDateTooltip;
