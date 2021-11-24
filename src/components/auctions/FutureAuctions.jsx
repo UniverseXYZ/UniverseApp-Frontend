@@ -79,7 +79,8 @@ const FutureAuctions = ({ myAuctions, setMyAuctions, setAuction }) => {
       try {
         const response = await deleteFutureAuction(id);
         if (response) {
-          setMyAuctions((d) => d.filter((item) => item.id !== id));
+          setMyAuctions((auctions) => auctions.filter((item) => item.id !== id));
+          setFilteredAuctions((auctions) => auctions.filter((item) => item.id !== id));
           setRemovedAuction(auctionToDelete);
         }
       } catch (error) {
@@ -282,7 +283,7 @@ const FutureAuctions = ({ myAuctions, setMyAuctions, setAuction }) => {
       ) : (
         filteredAuctions.slice(offset, offset + perPage).map((futureAuction) => {
           const removeButtonDisabled =
-            (!futureAuction.canceled && futureAuction.depositedNfts) || futureAuction.onChainId;
+            futureAuction.depositedNfts || (!futureAuction.canceled && futureAuction.onChain);
           return (
             <div className="auction" key={futureAuction.id}>
               <div

@@ -57,7 +57,6 @@ const AuctionSettings = () => {
   const endDateRef = useRef(null);
   const [dropDown, setDropDown] = useState('');
   const { web3Provider } = useAuthContext();
-  console.log(auction);
   const [isValidFields, setIsValidFields] = useState({
     name: true,
     startDate: true,
@@ -280,23 +279,29 @@ const AuctionSettings = () => {
     }
   }, []);
 
+  useEffect(() => {
+    if (isEditingAuction && royaltyAddress.length > 0) {
+      const royaltiesMapIndexesValues = {};
+
+      royaltyAddress.forEach((element, index) => {
+        royaltiesMapIndexesValues[element.address] = [index];
+      });
+      setRoyaltiesMapIndexes(royaltiesMapIndexesValues);
+    }
+  }, []);
+
   const continueButtonDisabled =
     !values.startDate ||
     !values.endDate ||
     !values.name ||
-    royaltyAddress.find(
-      (el, i) =>
-        el.address.trim().length === 0 ||
-        !utils.isAddress(el.address) ||
-        !+el.percentAmount ||
-        hasAddressError(el.address, i)
-    );
-  console.log(continueButtonDisabled);
-  console.log(
-    royaltyAddress.find(
-      (el) => el.address.trim().length === 0 || !utils.isAddress(el.address) || !+el.percentAmount
-    )
-  );
+    (royalities &&
+      royaltyAddress.find(
+        (el, i) =>
+          el.address.trim().length === 0 ||
+          !utils.isAddress(el.address) ||
+          !+el.percentAmount ||
+          hasAddressError(el.address, i)
+      ));
   return (
     <div className="auction-settings container">
       <div>

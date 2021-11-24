@@ -10,7 +10,7 @@ import universeIcon from '../../assets/images/universe-img.svg';
 import { getCollectionBackgroundColor } from '../../utils/helpers';
 
 const NFTCard = React.memo(
-  ({ data, onEditionClick, canSelect, winnersData, selectedWinner, auction }) => {
+  ({ data, onEditionClick, canSelect, winnersData, selectedWinner, auction, currentTierId }) => {
     const { nfts, collection, optimized_url: url, artworkType } = data;
 
     const selectOptions = nfts.rewardAndTokenIds.map(({ tokenId, id }) => ({
@@ -43,23 +43,22 @@ const NFTCard = React.memo(
       return infoCopy;
     });
 
-    // Mark editions as used if they are being used in other tiers only if winner object in winnersData array has nftsData added
-    // winnersData is an array of winners that is set and manipulated in Create.jsx file depending on the number of winners selected by the user in custom mode, the nfts and nft editions selected
-    const canSetRewardTiersUsedNFTsIds = winnersData.filter((winner) => winner.nftsData?.length);
-
-    const rewardTiersUsedNFTsIds =
+    // Mark editions as used if they are being used in other tiers
+    const otherRewardTiersUsedNFTsIds =
       auction.rewardTiers &&
-      auction.rewardTiers.reduce((res, curr) => {
-        const ids = [];
+      auction.rewardTiers
+        .filter((t) => t.id !== currentTierId)
+        .reduce((res, curr) => {
+          const ids = [];
 
-        // We are displaying auction currently being created
-        if (curr.nftSlots && canSetRewardTiersUsedNFTsIds && !curr.removed) {
-          curr.nftSlots.forEach((slot) => ids.push(...slot.nftIds));
-        }
+          // We are displaying auction currently being created
+          if (curr.nftSlots && !curr.removed) {
+            curr.nftSlots.forEach((slot) => ids.push(...slot.nftIds));
+          }
 
-        res.push(...ids);
-        return res;
-      }, []);
+          res.push(...ids);
+          return res;
+        }, []);
 
     const updateOptionsWithAllTiersData = updatedOptionsForCurrentTier.map((info) => {
       const infoCopy = { ...info };
@@ -69,8 +68,8 @@ const NFTCard = React.memo(
       const isSelectedByCurrentWinner =
         selectedWinnerIds && selectedWinnerIds.includes(parseInt(id, 10));
       if (
-        rewardTiersUsedNFTsIds &&
-        rewardTiersUsedNFTsIds.includes(parseInt(id, 10)) &&
+        otherRewardTiersUsedNFTsIds &&
+        otherRewardTiersUsedNFTsIds.includes(parseInt(id, 10)) &&
         !isSelectedByCurrentWinner
       ) {
         infoCopy.isDisabled = true;
@@ -179,6 +178,7 @@ NFTCard.propTypes = {
   onEditionClick: PropTypes.func.isRequired,
   canSelect: PropTypes.bool.isRequired,
   selectedWinner: PropTypes.number.isRequired,
+  currentTierId: PropTypes.number.isRequired,
 };
 
 export default NFTCard;

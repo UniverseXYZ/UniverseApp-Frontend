@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
 import uuid from 'react-uuid';
 import './RewardTiers.scss';
@@ -15,13 +15,25 @@ import Button from '../button/Button.jsx';
 import delateIcon from '../../assets/images/RemoveBtn.svg';
 import { useAuctionContext } from '../../contexts/AuctionContext';
 import RewardTierRemovePopup from '../popups/RewardTierRemovePopup';
+import { AUCTION_SETTINGS_LIMITATION } from '../../utils/config';
 
 const RewardTiers = () => {
   const history = useHistory();
   const location = useLocation();
   const [shownActionId, setShownActionId] = useState(null);
+  const [totalWinners, setTotalWinners] = useState(0);
 
   const { auction, bidtype } = useAuctionContext();
+
+  useEffect(() => {
+    if (auction?.rewardTiers?.length) {
+      let count = 0;
+      auction.rewardTiers.forEach((t) => {
+        count += t.nftSlots.length;
+      });
+      setTotalWinners(count);
+    }
+  }, [auction]);
 
   return (
     <div className="container reward-tiers">
@@ -29,8 +41,9 @@ const RewardTiers = () => {
         <div className="head-part">
           <h2 className="tier-title">Reward tiers</h2>
           <p>
-            Reward Tiers are the NFT bundles that users are bidding for to win. There can be up to
-            10 tiers in one auction.
+            Reward Tiers are the NFT bundles that users are bidding for to win. There can be up to{' '}
+            {AUCTION_SETTINGS_LIMITATION.TOTAL_WINNERS_COUNT} winners distrubted into the Auction
+            Tiers.
           </p>
         </div>
         {auction.rewardTiers &&
@@ -288,7 +301,11 @@ const RewardTiers = () => {
             })}
         <div
           className="create-rew-tier"
+          style={{
+            opacity: totalWinners >= AUCTION_SETTINGS_LIMITATION.TOTAL_WINNERS_COUNT ? '0.3' : 1,
+          }}
           onClick={() => {
+            if (totalWinners >= AUCTION_SETTINGS_LIMITATION.TOTAL_WINNERS_COUNT) return;
             history.push('/create-tiers');
           }}
           aria-hidden="true"

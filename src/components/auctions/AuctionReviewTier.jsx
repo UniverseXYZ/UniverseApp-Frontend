@@ -13,8 +13,6 @@ const AuctionReviewTier = ({ tier, tierOptions, bidToken }) => {
     return res;
   }, []);
 
-  console.log(tier);
-
   const [selectedWinner, setSelectedWinner] = useState(0);
   const reservePrices = () => {
     try {
@@ -22,11 +20,9 @@ const AuctionReviewTier = ({ tier, tierOptions, bidToken }) => {
       let min = 0;
       const sorted = [...tier.nftSlots].sort((a, b) => b.minimumBid - a.minimumBid);
       const noReservePrice = sorted.find((slot) => slot.minimumBid === 0);
+      max = sorted[0].minimumBid;
       if (!noReservePrice) {
-        max = sorted[0].minimumBid;
         min = sorted[sorted.length - 1].minimumBid;
-      } else {
-        max = noReservePrice.minimumBid;
       }
 
       if (max === min) {

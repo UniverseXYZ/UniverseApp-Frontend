@@ -4,6 +4,7 @@ import Input from '../../input/Input.jsx';
 import ETHIcon from '../../../assets/images/bid_icon.svg';
 import { ReactComponent as ErrorIcon } from '../../../assets/images/Vector.svg';
 import { ReactComponent as WinnerIcon } from '../../../assets/images/winner-icon.svg';
+import { TIER_SETTINGS_LIMITATION } from '../../../utils/config';
 
 const WinnerCard = ({
   data,
@@ -13,6 +14,7 @@ const WinnerCard = ({
   setSelectedWinner,
   showReservePrice,
   setReservedPrice,
+  currencyImg,
 }) => (
   <div
     className={`winner-box${selectedWinner === index ? ' selected' : ''}`}
@@ -23,17 +25,17 @@ const WinnerCard = ({
   >
     <WinnerIcon className="winner--icon" />
     <p>{`Winner #${winnerNumber}`}</p>
-    <span>{`${data.nftsData?.length} NFTs`}</span>
+    <span>{`${data.nftsData?.length} / ${TIER_SETTINGS_LIMITATION.MAX_WINNER_NFT_COUNT} NFTs`}</span>
     {showReservePrice && (
       <div className="reserve--price">
         <label>Reserve price</label>
         <div className="reserve--price--field">
-          <img className="eth--icon" src={ETHIcon} alt="eth" />
+          <img className="eth--icon" src={currencyImg} alt="eth" />
           <Input
             type="number"
             min="0"
             placeholder="0"
-            value={data.minimumBid}
+            value={data.minimumBid || ''}
             onChange={(e) => {
               setReservedPrice(e.target.value, index);
             }}
@@ -64,6 +66,7 @@ WinnerCard.propTypes = {
   selectedWinner: PropTypes.number.isRequired,
   setSelectedWinner: PropTypes.func.isRequired,
   showReservePrice: PropTypes.bool.isRequired,
+  currencyImg: PropTypes.string.isRequired,
 };
 
 export default WinnerCard;

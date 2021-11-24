@@ -28,7 +28,8 @@ const AuctionReview = () => {
   const [bidicon, setBidicon] = useState(null);
   const isEditingAuction = myAuctions.filter((a) => a.id === auction.id);
   const [tierOptions, setTierOption] = useState([]);
-
+  const [showLoading, setShowLoading] = useState(false);
+  const [showCongrats, setShowCongrats] = useState(false);
   useEffect(() => {
     const newTierOptions = [];
     auction.rewardTiers.forEach((tier) => {
@@ -53,10 +54,7 @@ const AuctionReview = () => {
 
   const handleSetAuction = async () => {
     if (auction && auction?.rewardTiers?.length) {
-      document.getElementById('loading-hidden-btn').click();
-      const popupRoot = document.getElementById('popup-root');
-      if (popupRoot) popupRoot.remove();
-
+      setShowLoading(true);
       let res;
       if (isEditingAuction.length) {
         res = await AuctionUpdate({ auction, bidtype, options });
@@ -64,10 +62,11 @@ const AuctionReview = () => {
         res = await AuctionCreate({ auction, bidtype, options });
       }
 
+      setShowLoading(false);
       if (res?.id) {
-        document.getElementById('congrats-hidden-btn').click();
+        setShowCongrats(true);
       } else if (res?.error || res?.statusCode >= 500) {
-        document.getElementById('congrats-hidden-btn').click();
+        // document.getElementById('congrats-hidden-btn').click();
         const errorMsg =
           (res?.errors?.length && res.errors[0]?.message) ||
           'Failed to update/create auction, please try again in few minutes!';
@@ -89,29 +88,11 @@ const AuctionReview = () => {
 
   return (
     <div className="container auction-reward">
-      <Popup
-        trigger={
-          <button
-            type="button"
-            id="loading-hidden-btn"
-            aria-label="hidden"
-            style={{ display: 'none' }}
-          />
-        }
-      >
-        {(close) => <LoadingPopup onClose={close} />}
+      <Popup closeOnDocumentClick={false} open={showLoading}>
+        <LoadingPopup />
       </Popup>
-      <Popup
-        trigger={
-          <button
-            type="button"
-            id="congrats-hidden-btn"
-            aria-label="hidden"
-            style={{ display: 'none' }}
-          />
-        }
-      >
-        {(close) => <CongratsAuctionPopup onClose={handleAuctionPopupSuccess} />}
+      <Popup closeOnDocumentClick={false} open={showCongrats}>
+        <CongratsAuctionPopup onClose={handleAuctionPopupSuccess} />
       </Popup>
       <div>
         <div className="head-part">
@@ -199,13 +180,7 @@ const AuctionReview = () => {
                 item.address &&
                 item.percentAmount && (
                   <div key={item.address} className="royalty">
-                    <p className="show--on--desktop">{item.address}</p>
-                    <p className="hide--on--desktop">
-                      {`${item.address.substring(0, 13)}...${item.address.substring(
-                        27,
-                        item.address.length
-                      )}`}
-                    </p>
+                    <p>{item.address}</p>
                     <span>{item.percentAmount}%</span>
                   </div>
                 )

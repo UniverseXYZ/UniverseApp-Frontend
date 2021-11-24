@@ -46,7 +46,7 @@ export const attachTokenData = ({ auction, bidtype, requestObject, options }) =>
 };
 
 export const parseNumbers = ({ auction, requestObject }) => {
-  const royaltiesParsed = auction.royaltySplits.map((r) => ({
+  const royaltiesParsed = (auction.royaltySplits || []).map((r) => ({
     address: r.address,
     percentAmount: +r.percentAmount,
   }));

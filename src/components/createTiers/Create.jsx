@@ -15,6 +15,7 @@ import NumberOfWinners from './NumberOfWinners';
 import arrow from '../../assets/images/arrow.svg';
 import IncludeReservePrice from './IncludeReservePrice';
 import WinnersList from './winners/WinnersList';
+import { TIER_SETTINGS_LIMITATION } from '../../utils/config';
 
 const ACTION_TYPES = {
   ADD: 'select-option',
@@ -35,6 +36,7 @@ const Create = () => {
   const tierId = location.state;
   const editedTier = auction?.rewardTiers?.find((element) => element.id === tierId);
 
+  const [currentTierId, setCurrentTierId] = useState(null);
   const [showReservePrice, setShowReservePrice] = useState(false);
 
   const [offset, setOffset] = useState(0);
@@ -51,31 +53,6 @@ const Create = () => {
   const [loadMore, setLoadMore] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    if (values.name) {
-      if (!tierNameError) {
-        if (tierId) {
-          setAuction({
-            ...auction,
-            rewardTiers: [
-              ...auction?.rewardTiers?.filter((tier) => tier.id !== tierId),
-              { ...editedTier, ...values },
-            ],
-          });
-        } else {
-          const createdTierId = uuid();
-          setAuction({
-            ...auction,
-            rewardTiers: [
-              ...auction.rewardTiers,
-              { ...values, id: createdTierId, nfts: [], minBid: '' },
-            ],
-          });
-        }
-      }
-    }
-  }, [tierNameError]);
-
   const handleTierNameChange = (value) => {
     if (value.length <= MAX_FIELD_CHARS_LENGTH.name) {
       setValues((prevValues) => ({ ...prevValues, name: value }));
@@ -90,8 +67,9 @@ const Create = () => {
   const perPage = 20;
   useEffect(async () => {
     setFetchingData(true);
-    const available = await getAvailableNFTs(offset, perPage);
-    if (available.nfts.length) {
+    const id = typeof auction.id === 'string' ? '' : auction.id;
+    const available = await getAvailableNFTs(offset, perPage, id);
+    if (available?.nfts?.length) {
       const parsedForFilters = available.nfts.map((data) => ({ ...data, ...data.nfts }));
 
       setAvailableNFTs(parsedForFilters);
@@ -115,13 +93,20 @@ const Create = () => {
     const winnersCopy = [...winnersData];
 
     if (actionMeta.action === ACTION_TYPES.ADD) {
+      const winnerNFTsCount = winnersCopy[selectedWinner].nftIds.length;
+      // Return if the user has reached max nfts count
+      if (winnerNFTsCount === TIER_SETTINGS_LIMITATION.MAX_WINNER_NFT_COUNT) return;
+
+      const leftNTFsCount = TIER_SETTINGS_LIMITATION.MAX_WINNER_NFT_COUNT - winnerNFTsCount;
+
       // If the option is select all, we will receive all the available editions to select in array
       const selectedValues =
         actionMeta.option?.label === 'Select all'
           ? actionMeta.option.value.selectValues
           : [actionMeta.option];
 
-      selectedValues.forEach((d) => {
+      // Loop only trough the available NFTs space to the winner
+      selectedValues.slice(0, leftNTFsCount).forEach((d) => {
         const [
           edition,
           id,
@@ -232,15 +217,26 @@ const Create = () => {
   };
 
   const compareSlotMinBidValueWithExistingTiers = (slotValue) => {
-    const numericValue = Number(slotValue);
-    const prevTier = auction.rewardTiers[auction.rewardTiers.length - 1];
+    const slotNumericValue = Number(slotValue);
+    const currentTierIndex = auction.rewardTiers.findIndex((t) => t.id === currentTierId);
+    let prevTier = null;
+
+    if (currentTierIndex === -1) {
+      // This means that this tier has not been saved into the local state yet aka is New
+      // So we asume that the last tier is the prev one
+      prevTier = auction.rewardTiers[auction.rewardTiers.length - 1];
+    } else {
+      // Else we search for the index before the current tier
+      prevTier = auction.rewardTiers[currentTierIndex - 1];
+    }
+
     if (!prevTier) {
       // There is no need of other tiers min bid comparisons
       return true;
     }
 
     const lastTierSlot = prevTier.nftSlots[prevTier.nftSlots.length - 1];
-    const validBid = lastTierSlot.minimumBid >= numericValue;
+    const validBid = lastTierSlot.minimumBid >= slotNumericValue;
     return validBid;
   };
 
@@ -260,7 +256,7 @@ const Create = () => {
         rewardTiers: [
           ...auction?.rewardTiers,
           {
-            id: `new-tier-${uuid()}`, // Tiers with 'new-tier' IDs attached to them indicates that those are new tiers, that needs to be added to the Auction
+            id: currentTierId, // Tiers with 'new-tier' IDs attached to them indicates that those are new tiers, that needs to be added to the Auction
             name: values.name,
             winners: Number(values.numberOfWinners),
             nftSlots,
@@ -323,7 +319,7 @@ const Create = () => {
   }, [values.numberOfWinners]);
 
   useEffect(async () => {
-    // Const if we are editing Tier we will pass this if check and pre-populate the Data
+    // If we are editing Tier we will pass this if check and pre-populate the Data
     if (editedTier) {
       const { name, numberOfWinners, winners } = editedTier;
 
@@ -346,6 +342,11 @@ const Create = () => {
 
       const hasReservedPrice = winnersDataCopy.some((w) => w.minimumBid > 0);
       setShowReservePrice(hasReservedPrice);
+      setCurrentTierId(editedTier.id);
+    } else if (!currentTierId) {
+      // Create brand new ID, for the newly created Tier, so we can reference it upon min bid comparison
+      const id = `new-tier-${uuid()}`;
+      setCurrentTierId(id);
     }
   }, [editedTier]);
 
@@ -388,6 +389,8 @@ const Create = () => {
     }
   };
 
+  // TODO:: Update the follwoing text, based on the Limiations in the config
+
   return (
     <>
       <div className="background-part">
@@ -406,8 +409,12 @@ const Create = () => {
             <div className="head-part">
               <h2 className="tier-title">Create reward tier</h2>
               <p className="create-p">
-                Each reward tier can contain up to 10 winners and up to 5 NFTs for each winner
-                (total: 50 NFTs).
+                Each reward tier can contain up to {TIER_SETTINGS_LIMITATION.MAX_WINNERS_COUNT}{' '}
+                winners and up to {TIER_SETTINGS_LIMITATION.MAX_WINNER_NFT_COUNT} NFTs for each
+                winner (total:{' '}
+                {TIER_SETTINGS_LIMITATION.MAX_WINNERS_COUNT *
+                  TIER_SETTINGS_LIMITATION.MAX_WINNER_NFT_COUNT}{' '}
+                NFTs).
               </p>
             </div>
           </div>
@@ -432,7 +439,12 @@ const Create = () => {
               {values.name.length}/{MAX_FIELD_CHARS_LENGTH.name}
             </p>
           </div>
-          <NumberOfWinners values={values} setValues={setValues} />
+          <NumberOfWinners
+            values={values}
+            setValues={setValues}
+            auction={auction}
+            currentTierId={currentTierId}
+          />
         </div>
         <IncludeReservePrice
           showReservePrice={showReservePrice}
@@ -445,6 +457,7 @@ const Create = () => {
           setSelectedWinner={setSelectedWinner}
           showReservePrice={showReservePrice}
           compareSlotMinBidValueWithExistingTiers={compareSlotMinBidValueWithExistingTiers}
+          currentTierId={currentTierId}
         />
       </div>
       <span className="hr-line" />
@@ -475,6 +488,7 @@ const Create = () => {
                 winnersData={winnersData}
                 selectedWinner={selectedWinner}
                 auction={auction}
+                currentTierId={currentTierId}
               />
             ))
           ) : (

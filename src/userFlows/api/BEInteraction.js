@@ -121,23 +121,27 @@ export const sendUpdateAuctionRequest = async ({ requestObject }) => {
   );
 
   const removeTiers = requestObject.rewardTiers.filter((t) => t.removed);
+  let error = null;
 
-  const removeRewardTiersPromises = removeTiers.map(async (tier) => {
+  // eslint-disable-next-line no-restricted-syntax
+  for (const tier of removeTiers) {
     const { id } = tier;
-    return removeRewardTier(id);
-  });
+    const r = await removeRewardTier(id);
+    if (r.error) {
+      error = r.error;
+      break;
+    }
+  }
 
-  const removedTiers = await Promise.all(removeRewardTiersPromises);
-  const hasRemoveError = removedTiers.filter((el) => el.error);
-
-  if (hasRemoveError.length) {
+  if (error) {
     return {
       error: true,
-      errors: hasRemoveError,
+      errors: error,
     };
   }
 
-  const updateRewardTiersPromises = updateTiers.map(async (tier) => {
+  // eslint-disable-next-line no-restricted-syntax
+  for (const tier of updateTiers) {
     const { name, numberOfWinners, nftsPerWinner, minimumBid, nftSlots, id } = tier;
     const minBid = parseFloat(minimumBid);
     const requestTier = {
@@ -147,20 +151,22 @@ export const sendUpdateAuctionRequest = async ({ requestObject }) => {
       minimumBid: minBid,
       nftSlots,
     };
-    return editRewardTier(requestTier, id);
-  });
+    const r = await editRewardTier(requestTier, id);
+    if (r.error) {
+      error = r.error;
+      break;
+    }
+  }
 
-  const updatedTiers = await Promise.all(updateRewardTiersPromises);
-  const hasUpdateError = updatedTiers.filter((el) => el.error);
-
-  if (hasUpdateError.length) {
+  if (error) {
     return {
       error: true,
-      errors: hasUpdateError,
+      errors: error,
     };
   }
 
-  const addRewardTiersPromises = newTiers.map(async (tier) => {
+  // eslint-disable-next-line no-restricted-syntax
+  for (const tier of newTiers) {
     const { name, numberOfWinners, nftsPerWinner, minimumBid, nftSlots } = tier;
     const minBid = parseFloat(minimumBid);
     const requestTier = {
@@ -175,18 +181,18 @@ export const sendUpdateAuctionRequest = async ({ requestObject }) => {
       auctionId,
       rewardTier: requestTier,
     };
-    return addRewardTier(body);
-  });
-
-  const addedTiers = await Promise.all(addRewardTiersPromises);
-  const hasAddError = addedTiers.filter((el) => el.error);
-
-  if (hasAddError.length) {
-    return {
-      error: true,
-      errors: hasAddError,
-    };
+    const r = await addRewardTier(body);
+    if (r.error) {
+      error = r.error;
+      break;
+    }
   }
 
+  if (error) {
+    return {
+      error: true,
+      errors: error,
+    };
+  }
   return res;
 };
