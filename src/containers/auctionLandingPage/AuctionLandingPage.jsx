@@ -134,7 +134,7 @@ const AuctionLandingPage = () => {
         slotsInfo={slotsInfo}
         setShowLoading={setShowLoading}
       />
-      <UniverseAuctionDetails />
+      <UniverseAuctionDetails auction={auction} />
       <RewardTiers auction={auction} />
       <AuctionOwnerDetails artist={auction.artist} />
       <PlaceBid
