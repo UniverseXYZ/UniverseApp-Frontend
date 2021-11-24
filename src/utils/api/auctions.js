@@ -22,6 +22,8 @@ const GET_AVAILABLE_NFTS = (offset, limit, auctionId) =>
   }/api/nfts/my-nfts/availability?offset=${offset}&limit=${limit}${
     auctionId ? `&auctionId=${auctionId}` : ''
   }`;
+const GET_USER_AUCTIONS = (userId, type) =>
+  `${process.env.REACT_APP_API_BASE_URL}/api/pages/auctions/${type}?userId=${userId}`;
 const ADD_DEPLOY_INFO = `${process.env.REACT_APP_API_BASE_URL}/api/auctions/deploy`;
 const DEPOSIT_NFTS_TO_AUCTION = `${process.env.REACT_APP_API_BASE_URL}/api/auctions/depositNfts`;
 const WITHDRAW_NFTS_FROM_AUCTION = `${process.env.REACT_APP_API_BASE_URL}/api/auctions/withdrawNfts`;
@@ -203,6 +205,7 @@ export const getFutureAuctions = async () => {
   const request = await fetch(GET_FUTURE_AUCTIONS, requestOptions);
 
   const result = await request.text().then((data) => JSON.parse(data));
+  console.log(result);
 
   return result;
 };
@@ -277,6 +280,63 @@ export const getMyBids = async () => {
   };
 
   const request = await fetch(GET_MY_BIDS, requestOptions);
+
+  const result = await request.text().then((data) => JSON.parse(data));
+
+  return result;
+};
+
+export const getUserActiveAuctions = async (id) => {
+  if (!id) {
+    console.error('Missing id, please provide it !');
+    return false;
+  }
+  const requestOptions = {
+    method: 'GET',
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem('xyz_access_token')}`,
+    },
+  };
+
+  const request = await fetch(GET_USER_AUCTIONS(id, 'active'), requestOptions);
+
+  const result = await request.text().then((data) => JSON.parse(data));
+
+  return result;
+};
+
+export const getUserFutureAuctions = async (id) => {
+  if (!id) {
+    console.error('Missing id, please provide it !');
+    return false;
+  }
+  const requestOptions = {
+    method: 'GET',
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem('xyz_access_token')}`,
+    },
+  };
+
+  const request = await fetch(GET_USER_AUCTIONS(id, 'future'), requestOptions);
+
+  const result = await request.text().then((data) => JSON.parse(data));
+
+  return result;
+};
+
+export const getUserPastAuctions = async (id) => {
+  if (!id) {
+    console.error('Missing id, please provide it !');
+    return false;
+  }
+  const requestOptions = {
+    method: 'GET',
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem('xyz_access_token')}`,
+    },
+  };
+
+  const request = await fetch(GET_USER_AUCTIONS(id, 'past'), requestOptions);
 
   const result = await request.text().then((data) => JSON.parse(data));
 
@@ -392,6 +452,7 @@ export const getAuctionLandingPage = async (username, auctionName) => {
 
   const result = await request.text().then((data) => JSON.parse(data));
 
+  console.log(result);
   return result;
 };
 

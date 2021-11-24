@@ -68,8 +68,8 @@ const ActiveAuctionCard = ({ mainAuction, auction }) => {
         </div>
         <div className="carousel__auction__info">
           <h4 title={auction.headline}>
-            {auction.headline.length > 20
-              ? `${auction.headline.substring(0, 20)}...`
+            {auction.headline?.length > 20
+              ? `${auction.headline?.substring(0, 20)}...`
               : auction.headline}
           </h4>
           <p>{auctionEnded ? <span>Auction has ended</span> : parseCountdown()}</p>

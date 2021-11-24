@@ -1,25 +1,42 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import { PLACEHOLDER_AUCTIONS } from '../../../../utils/fixtures/AuctionsDummyData';
 import bubleIcon from '../../../../assets/images/text-bubble.png';
 import Exclamation from '../../../../assets/images/Exclamation.svg';
 import { useAuctionContext } from '../../../../contexts/AuctionContext';
 import { useAuthContext } from '../../../../contexts/AuthContext';
 import { isAfterNow, isBeforeNow } from '../../../../utils/dates';
 import ActiveAuctionsList from '../../../auctionsCard/activeAuction/ActiveAuctionsList';
+import AuctionsCardSkeleton from '../../../auctionsCard/skeleton/AuctionsCardSkeleton';
+import { getUserActiveAuctions } from '../../../../utils/api/auctions';
 
 const ActiveAuctionsTab = ({ onArtist, showCreatePrompt }) => {
   const { myAuctions, setAuction } = useAuctionContext();
   const { loggedInArtist } = useAuthContext();
+  const [artistActiveAuctions, setArtistActiveAuctions] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
   const history = useHistory();
 
-  const artistActiveAuctions =
-    loggedInArtist.id === onArtist?.id
-      ? myAuctions.filter((item) => isAfterNow(item.startDate) && isBeforeNow(item.endDate))
-      : PLACEHOLDER_AUCTIONS;
+  useEffect(async () => {
+    if (loggedInArtist.id === onArtist?.id) {
+      setArtistActiveAuctions(
+        myAuctions.filter((item) => isAfterNow(item.startDate) && isBeforeNow(item.endDate))
+      );
+      setIsLoading(false);
+    } else {
+      const { auctions } = await getUserActiveAuctions(loggedInArtist.id);
+      setArtistActiveAuctions(auctions);
+      setIsLoading(false);
+    }
+  }, []);
 
-  return artistActiveAuctions.length ? (
+  return isLoading ? (
+    <div className="active__auctions__list">
+      <AuctionsCardSkeleton />
+      <AuctionsCardSkeleton />
+      <AuctionsCardSkeleton />
+    </div>
+  ) : artistActiveAuctions.length ? (
     <ActiveAuctionsList data={artistActiveAuctions} />
   ) : showCreatePrompt ? (
     <div className="empty__auction">
