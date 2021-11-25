@@ -1,19 +1,10 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import SearchField from '../../../../input/SearchField';
 import SortBySelect from '../../../../input/SortBySelect.jsx';
 
-const ActiveAuctionsFilters = () => {
-  const options = [
-    'Sort by',
-    'Recently added',
-    'Highest winning bid',
-    'Lowest winning bid',
-    'Winners: Low to High',
-    'Winners: High to Low',
-    'NFTs per winner: High to Low',
-    'NFTs per winner: Low to High',
-    'Ending soon',
-  ];
+const ActiveAuctionsFilters = ({ sort, setSort }) => {
+  const options = ['Ending soon', 'Recently added', 'Highest winning bid', 'Lowest winning bid'];
 
   return (
     <div className="active__auctions__filters">
@@ -27,10 +18,15 @@ const ActiveAuctionsFilters = () => {
             enterKeyEvent={false}
           />
         </div>
-        <SortBySelect defaultValue="Sort by" sortData={options} hideFirstOption />
+        <SortBySelect sortData={options} sort={sort} setSort={setSort} />
       </div>
     </div>
   );
+};
+
+ActiveAuctionsFilters.propTypes = {
+  setSort: PropTypes.func.isRequired,
+  sort: PropTypes.string.isRequired,
 };
 
 export default ActiveAuctionsFilters;

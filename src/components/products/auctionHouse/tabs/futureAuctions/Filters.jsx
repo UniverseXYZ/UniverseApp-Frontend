@@ -1,17 +1,10 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import SearchField from '../../../../input/SearchField';
 import SortBySelect from '../../../../input/SortBySelect';
 
-const FutureAuctionsFilters = () => {
-  const options = [
-    'Sort by',
-    'Recently added',
-    'Winners: Low to High',
-    'Winners: High to Low',
-    'NFTs per winner: High to Low',
-    'NFTs per winner: Low to High',
-    'Starts soon',
-  ];
+const FutureAuctionsFilters = ({ sort, setSort }) => {
+  const options = ['Starts soon', 'Recently added'];
 
   return (
     <div className="future__auctions__filters">
@@ -25,10 +18,15 @@ const FutureAuctionsFilters = () => {
             enterKeyEvent={false}
           />
         </div>
-        <SortBySelect defaultValue="Sort by" sortData={options} hideFirstOption />
+        <SortBySelect sortData={options} sort={sort} setSort={setSort} />
       </div>
     </div>
   );
+};
+
+FutureAuctionsFilters.propTypes = {
+  setSort: PropTypes.func.isRequired,
+  sort: PropTypes.string.isRequired,
 };
 
 export default FutureAuctionsFilters;

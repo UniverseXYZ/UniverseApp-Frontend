@@ -17,11 +17,14 @@ const FutureAuctionsTab = ({
   pageCount,
   perPage,
   setPerPage,
+  sort,
+  setSort,
+  forcePage,
 }) => (
   <div className="future__auctions__tab">
     {auctions.length ? (
       <>
-        <FutureAuctionsFilters />
+        <FutureAuctionsFilters sort={sort} setSort={setSort} />
         <FutureAuctionsList data={auctions} loading={loading} />
         <div className="pagination__container">
           <ReactPaginate
@@ -36,6 +39,7 @@ const FutureAuctionsTab = ({
             containerClassName="pagination"
             subContainerClassName="pages pagination"
             activeClassName="active"
+            forcePage={forcePage}
           />
           <ItemsPerPageDropdown perPage={perPage} setPerPage={setPerPage} itemsPerPage={[12, 24]} />
         </div>
@@ -55,6 +59,9 @@ FutureAuctionsTab.propTypes = {
   pageCount: PropTypes.number.isRequired,
   perPage: PropTypes.number.isRequired,
   setPerPage: PropTypes.func.isRequired,
+  setSort: PropTypes.func.isRequired,
+  sort: PropTypes.string.isRequired,
+  forcePage: PropTypes.number.isRequired,
 };
 
 export default FutureAuctionsTab;
