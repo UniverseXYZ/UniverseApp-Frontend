@@ -446,6 +446,7 @@ const MyNFTs = () => {
               )}
               {myNFTsSelectedTabIndex !== 2 && (
                 <button
+                  disabled
                   type="button"
                   ref={ref2}
                   className={`create--nft--dropdown  ${

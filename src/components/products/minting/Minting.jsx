@@ -17,6 +17,7 @@ const MintingPage = () => {
 
   useEffect(() => {
     setDarkMode(false);
+    history.push('/');
   }, []);
 
   const singleBoxHandleClick = () => {
