@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import ReactPaginate from 'react-paginate';
-import ActiveAuctionsFilters from './Filters.jsx';
 import ActiveAuctionsList from '../../../../auctionsCard/activeAuction/ActiveAuctionsList.jsx';
 import ItemsPerPageDropdown from '../../../../pagination/ItemsPerPageDropdown.jsx';
 import leftArrow from '../../../../../assets/images/left-arrow.svg';
@@ -17,14 +16,11 @@ const ActiveAuctionsTab = ({
   pageCount,
   perPage,
   setPerPage,
-  sort,
-  setSort,
   forcePage,
 }) => (
   <div className="active__auctions__tab">
     {auctions.length ? (
       <>
-        <ActiveAuctionsFilters sort={sort} setSort={setSort} />
         <ActiveAuctionsList data={auctions} loading={loading} />
         <div className="pagination__container">
           <ReactPaginate
@@ -59,8 +55,6 @@ ActiveAuctionsTab.propTypes = {
   pageCount: PropTypes.number.isRequired,
   perPage: PropTypes.number.isRequired,
   setPerPage: PropTypes.func.isRequired,
-  setSort: PropTypes.func.isRequired,
-  sort: PropTypes.string.isRequired,
   forcePage: PropTypes.number.isRequired,
 };
 

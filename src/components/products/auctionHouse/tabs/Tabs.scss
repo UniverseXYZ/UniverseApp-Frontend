@@ -149,29 +149,14 @@
           color: rgba(0, 0, 0, 0.6);
         }
       }
-      .active__auctions__tab {
-        .active__auctions__filters {
-          margin-bottom: 40px;
-          &__fields {
-            display: grid;
-            grid-template-columns: 1fr 280px;
-            grid-gap: 15px;
-            @include md {
-              grid-template-columns: 1fr;
-            }
-          }
-        }
-      }
-      .future__auctions__tab {
-        .future__auctions__filters {
-          margin-bottom: 40px;
-          &__fields {
-            display: grid;
-            grid-template-columns: 1fr 280px;
-            grid-gap: 15px;
-            @include md {
-              grid-template-columns: 1fr;
-            }
+      .active__auctions__filters, .future__auctions__filters {
+        margin-bottom: 40px;
+        &__fields {
+          display: grid;
+          grid-template-columns: 1fr 280px;
+          grid-gap: 15px;
+          @include md {
+            grid-template-columns: 1fr;
           }
         }
       }
