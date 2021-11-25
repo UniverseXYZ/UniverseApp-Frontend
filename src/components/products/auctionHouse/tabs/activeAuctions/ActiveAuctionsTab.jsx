@@ -41,7 +41,7 @@ const ActiveAuctionsTab = ({
             activeClassName="active"
             forcePage={forcePage}
           />
-          <ItemsPerPageDropdown perPage={perPage} setPerPage={setPerPage} itemsPerPage={[4, 8]} />
+          <ItemsPerPageDropdown perPage={perPage} setPerPage={setPerPage} itemsPerPage={[12, 24]} />
         </div>
       </>
     ) : (
