@@ -82,7 +82,7 @@ export const CurrencyInput = ({ value, onChange, placeholder, ...props }: ICurre
           {selectedCoin.name}
           <Image src={arrow} ml={'10px'} />
         </MenuButton>
-        <MenuList minWidth={'100px'} p={'8px'}>
+        <MenuList minWidth={'100px'} p={'8px'} position={'relative'} zIndex={3}>
           {coins.map((coin, i) => (
             <MenuItem
               key={i}
