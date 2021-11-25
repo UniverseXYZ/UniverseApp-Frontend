@@ -60,12 +60,10 @@ const ActiveAuctionCard = ({ auction }) => {
           </div>
           <div>
             <label>Highest Winning Bid:</label>
-            {bids.highestBidInUsd ? (
-              <p>
-                <img src={tokenLogo} alt={tokenSymbol} />
-                {bids.highestBid} <span>{`~$${Math.round(bids.highestBidInUsd)}`}</span>
-              </p>
-            ) : null}
+            <p>
+              <img src={tokenLogo} alt={tokenSymbol} />
+              {bids.highestBid} <span>{`~$${Math.round(bids.highestBidInUsd)}`}</span>
+            </p>
           </div>
           <div>
             <label>NFTs Per Winner:</label>
@@ -73,12 +71,11 @@ const ActiveAuctionCard = ({ auction }) => {
           </div>
           <div>
             <label>Lowest Winning Bid:</label>
-            {bids.lowestBidInUsd ? (
-              <p>
-                <img src={tokenLogo} alt={tokenSymbol} />
-                {bids.lowestBid} <span>{`~$${Math.round(bids.lowestBidInUsd)}`}</span>
-              </p>
-            ) : null}
+
+            <p>
+              <img src={tokenLogo} alt={tokenSymbol} />
+              {bids.lowestBid} <span>{`~$${Math.round(bids.lowestBidInUsd)}`}</span>
+            </p>
           </div>
         </div>
       </div>
