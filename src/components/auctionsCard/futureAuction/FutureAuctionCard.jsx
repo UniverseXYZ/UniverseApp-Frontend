@@ -1,23 +1,23 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { useHistory } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import './FutureAuctionCard.scss';
 import AuctionsTabsCountdown from '../../auctions/AuctionsTabsCountdown';
 import { createNftsPerWinnerMarkup } from '../utils';
-import { useAuthContext } from '../../../contexts/AuthContext';
 
 const FutureAuctionCard = ({ auction }) => {
-  const history = useHistory();
-  const { loggedInArtist } = useAuthContext();
-
   const winnersCount = auction.rewardTiers.reduce(
     (winners, tier) => winners + tier.numberOfWinners,
     0
   );
   const nftsPerWinnerMarkup = createNftsPerWinnerMarkup(auction);
+  let auctionLink = '';
+  if (auction.link && auction.user?.universePageUrl) {
+    auctionLink = `/${auction.user.universePageUrl}/${auction.link}`;
+  }
 
   return (
-    <div className="future__auction__item">
+    <Link to={auctionLink} className="future__auction__item">
       <div className={`auction__img ${auction.promoImageUrl ? '' : 'show__avatar'}`}>
         {auction.promoImageUrl && (
           <img className="original" src={auction.promoImageUrl} alt={auction.name} />
@@ -29,20 +29,14 @@ const FutureAuctionCard = ({ auction }) => {
         </div>
       </div>
       <div className="title">
-        <h1>{auction.name}</h1>
+        <h1>{auction.user?.displayName}</h1>
         <div className="artist__details">
-          <img src={loggedInArtist.avatar} alt={loggedInArtist.name} />
+          <img
+            src={`https://universeapp-assets-dev.s3.amazonaws.com/${auction.user?.profileImageName}`}
+            alt={auction.user?.displayName}
+          />
           <span>by</span>
-          <button
-            type="button"
-            onClick={() =>
-              history.push(`/${loggedInArtist.name.split(' ')[0]}`, {
-                id: loggedInArtist.id,
-              })
-            }
-          >
-            {loggedInArtist.name}
-          </button>
+          {auction.user?.displayName}
         </div>
       </div>
       <div className="auction__details">
@@ -55,7 +49,7 @@ const FutureAuctionCard = ({ auction }) => {
           {nftsPerWinnerMarkup}
         </div>
       </div>
-    </div>
+    </Link>
   );
 };
 
