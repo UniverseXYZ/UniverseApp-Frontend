@@ -268,7 +268,8 @@ const SavedNFTs = () => {
             <h3>No saved NFTs found</h3>
             <p>Create NFTs or NFT collections with our platform by clicking the button below</p>
             <Button
-              className="light-button"
+              disabled
+              className="light-button disabled"
               onClick={() => history.push('/my-nfts/create', { tabIndex: 1, nftType: 'single' })}
             >
               Create NFT
