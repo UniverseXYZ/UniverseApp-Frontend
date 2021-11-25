@@ -12,11 +12,13 @@ const UniverseAuctionDetails = ({ auction }) => {
 
   useEffect(() => {
     const { endDate } = auction.auction;
-    const d = (new Date(endDate) - Date.now()) / 1000;
-    const remainingDays = Math.floor(d / 86400);
-    const remainingHours = Math.floor(d / 3600) % 24;
-    setDays(remainingDays);
-    setHours(remainingHours);
+    if (endDate) {
+      const d = (new Date(endDate) - Date.now()) / 1000;
+      const remainingDays = Math.floor(d / 86400);
+      const remainingHours = Math.floor(d / 3600) % 24;
+      setDays(remainingDays);
+      setHours(remainingHours);
+    }
   }, []);
 
   return (
