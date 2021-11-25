@@ -11,6 +11,7 @@ const MintingPage = () => {
 
   useEffect(() => {
     setDarkMode(false);
+    history.push('/');
   }, []);
 
   return (
