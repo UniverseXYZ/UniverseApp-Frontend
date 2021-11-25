@@ -392,6 +392,7 @@ const MyNFTs = () => {
                     Mint selected
                   </button>
                   <button
+                    disabled
                     type="button"
                     ref={ref2}
                     className={`create--nft--dropdown  ${
