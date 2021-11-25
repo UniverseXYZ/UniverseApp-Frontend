@@ -98,13 +98,13 @@ const Collection = () => {
         <Description selectedCollection={collectionData.collection} />
         {address === collectionData?.collection?.owner ? (
           <div className="collection__edit">
-            <Button
-              className="light-border-button"
+            {/* <Button
+              className="light-border-button disabled"
               onClick={() => handleEdit(collectionData.collection.id)}
             >
               <span>Edit</span>
               <img src={pencilIcon} alt="Edit Icon" />
-            </Button>
+            </Button> */}
           </div>
         ) : (
           <></>
