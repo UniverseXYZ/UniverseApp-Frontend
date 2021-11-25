@@ -218,7 +218,8 @@ const Create = () => {
 
   const compareSlotMinBidValueWithExistingTiers = (slotValue) => {
     const slotNumericValue = Number(slotValue);
-    const currentTierIndex = auction.rewardTiers.findIndex((t) => t.id === currentTierId);
+    const notRemovedTiers = auction.rewardTiers.filter((t) => !t.removed);
+    const currentTierIndex = notRemovedTiers.findIndex((t) => t.id === currentTierId);
     let prevTier = null;
 
     if (currentTierIndex === -1) {
