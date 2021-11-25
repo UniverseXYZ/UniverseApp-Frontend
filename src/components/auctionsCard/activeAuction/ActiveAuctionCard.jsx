@@ -1,18 +1,13 @@
-/* eslint-disable jsx-a11y/click-events-have-key-events */
-/* eslint-disable jsx-a11y/no-static-element-interactions */
 import React from 'react';
 import PropTypes from 'prop-types';
-import { useHistory } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import './ActiveAuctionCard.scss';
 import { getPromoImageProps, bidsInUsd, createNftsPerWinnerMarkup } from '../utils';
 import { useAuctionContext } from '../../../contexts/AuctionContext';
 import { getBidTypeByName } from '../../../utils/fixtures/BidOptions';
-import { useAuthContext } from '../../../contexts/AuthContext';
 import AuctionsTabsCountdown from '../../auctions/AuctionsTabsCountdown';
 
 const ActiveAuctionCard = ({ auction }) => {
-  const history = useHistory();
-  const { loggedInArtist } = useAuthContext();
   const { options } = useAuctionContext();
 
   const bids = bidsInUsd(auction);
@@ -24,15 +19,18 @@ const ActiveAuctionCard = ({ auction }) => {
 
   const { tokenSymbol } = auction;
   const tokenLogo = getBidTypeByName(tokenSymbol, options).img;
-  const promoImageProps = getPromoImageProps(auction.promoImageUrl, loggedInArtist.avatar);
+  const promoImageProps = getPromoImageProps(
+    auction.promoImageUrl,
+    `https://universeapp-assets-dev.s3.amazonaws.com/${auction.user?.profileImageName}`
+  );
+
+  let auctionLink = '';
+  if (auction.link && auction.user?.universePageUrl) {
+    auctionLink = `/${auction.user.universePageUrl}/${auction.link}`;
+  }
 
   return (
-    <div
-      className="active__auction__item"
-      onClick={() => {
-        history.push(`/${loggedInArtist.universePageAddress}/${auction.link}`);
-      }}
-    >
+    <Link to={auctionLink} className="active__auction__item">
       <div
         className={`active__auction__image timeLeft ${auction.promoImageUrl ? '' : 'show__avatar'}`}
       >
@@ -48,18 +46,12 @@ const ActiveAuctionCard = ({ auction }) => {
           <h2>{auction.name}</h2>
         </div>
         <div className="creator">
-          <img src={loggedInArtist.avatar} alt={loggedInArtist.name} />
+          <img
+            src={`https://universeapp-assets-dev.s3.amazonaws.com/${auction.user?.profileImageName}`}
+            alt={auction.user?.displayName}
+          />
           <span>by</span>
-          <a
-            aria-hidden="true"
-            onClick={() =>
-              history.push(`/${loggedInArtist.name.split(' ')[0]}`, {
-                id: loggedInArtist.id,
-              })
-            }
-          >
-            {loggedInArtist.name}
-          </a>
+          {auction.user?.displayName}
         </div>
         <div className="statistics">
           <div>
@@ -68,12 +60,10 @@ const ActiveAuctionCard = ({ auction }) => {
           </div>
           <div>
             <label>Highest Winning Bid:</label>
-            {bids.highestBidInUsd ? (
-              <p>
-                <img src={tokenLogo} alt={tokenSymbol} />
-                {bids.highestBid} <span>{`~$${Math.round(bids.highestBidInUsd)}`}</span>
-              </p>
-            ) : null}
+            <p>
+              <img src={tokenLogo} alt={tokenSymbol} />
+              {bids.highestBid} <span>{`~$${Math.round(bids.highestBidInUsd)}`}</span>
+            </p>
           </div>
           <div>
             <label>NFTs Per Winner:</label>
@@ -81,16 +71,15 @@ const ActiveAuctionCard = ({ auction }) => {
           </div>
           <div>
             <label>Lowest Winning Bid:</label>
-            {bids.lowestBidInUsd ? (
-              <p>
-                <img src={tokenLogo} alt={tokenSymbol} />
-                {bids.lowestBid} <span>{`~$${Math.round(bids.lowestBidInUsd)}`}</span>
-              </p>
-            ) : null}
+
+            <p>
+              <img src={tokenLogo} alt={tokenSymbol} />
+              {bids.lowestBid} <span>{`~$${Math.round(bids.lowestBidInUsd)}`}</span>
+            </p>
           </div>
         </div>
       </div>
-    </div>
+    </Link>
   );
 };
 

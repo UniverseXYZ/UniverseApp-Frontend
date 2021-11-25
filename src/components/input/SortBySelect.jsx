@@ -7,14 +7,14 @@ import './SortBySelect.scss';
 const SortBySelect = (props) => {
   const {
     className,
-    defaultValue,
     hideFirstOption,
     disableOptions,
     setSelectedTypeIndex,
     sortData,
+    sort,
     setSort,
   } = props;
-  const [sortValue, setSortValue] = useState(defaultValue);
+
   const [showDropdown, setShowDropdown] = useState(false);
   const ref = useRef(null);
 
@@ -45,7 +45,7 @@ const SortBySelect = (props) => {
         onClick={() => setShowDropdown(!showDropdown)}
         ref={ref}
       >
-        <span>{sortValue}</span>
+        <span>{sort}</span>
         <img src={arrowDown} alt="Arrow down" className={showDropdown ? 'rotate' : ''} />
         {showDropdown && (
           <div className="dropdown--items">
@@ -56,7 +56,6 @@ const SortBySelect = (props) => {
                 aria-hidden="true"
                 onClick={() => {
                   if (!disableOptions[index]) {
-                    setSortValue(item);
                     setSort(item);
                     setSelectedTypeIndex(index);
                   }
@@ -75,28 +74,17 @@ const SortBySelect = (props) => {
 };
 
 SortBySelect.propTypes = {
-  sortData: PropTypes.arrayOf(PropTypes.string),
+  sortData: PropTypes.arrayOf(PropTypes.string).isRequired,
   className: PropTypes.string,
-  defaultValue: PropTypes.string,
+  sort: PropTypes.string.isRequired,
   hideFirstOption: PropTypes.bool,
   disableOptions: PropTypes.oneOfType([PropTypes.array]),
   setSelectedTypeIndex: PropTypes.func,
-  setSort: PropTypes.func,
+  setSort: PropTypes.func.isRequired,
 };
 
 SortBySelect.defaultProps = {
-  sortData: [
-    'ending son',
-    'lowest price first',
-    'highest price first',
-    'recently listed',
-    'recently created',
-    'recently sold',
-    'most liked',
-  ],
   className: '',
-  defaultValue: 'Sort by',
-  setSort: () => {},
   hideFirstOption: false,
   disableOptions: [],
   setSelectedTypeIndex: () => {},

@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import ReactPaginate from 'react-paginate';
-import ActiveAuctionsFilters from './Filters.jsx';
 import ActiveAuctionsList from '../../../../auctionsCard/activeAuction/ActiveAuctionsList.jsx';
 import ItemsPerPageDropdown from '../../../../pagination/ItemsPerPageDropdown.jsx';
 import leftArrow from '../../../../../assets/images/left-arrow.svg';
@@ -17,44 +16,37 @@ const ActiveAuctionsTab = ({
   pageCount,
   perPage,
   setPerPage,
-}) => {
-  console.info();
-
-  return (
-    <div className="active__auctions__tab">
-      {auctions.length ? (
-        <>
-          <ActiveAuctionsFilters />
-          <ActiveAuctionsList data={auctions} loading={loading} />
-          <div className="pagination__container">
-            <ReactPaginate
-              previousLabel={<LeftArrow />}
-              nextLabel={<RightArrow />}
-              breakLabel="..."
-              breakClassName="break-me"
-              pageCount={pageCount}
-              marginPagesDisplayed={1}
-              pageRangeDisplayed={3}
-              onPageChange={handlePageClick}
-              containerClassName="pagination"
-              subContainerClassName="pages pagination"
-              activeClassName="active"
-            />
-            <ItemsPerPageDropdown
-              perPage={perPage}
-              setPerPage={setPerPage}
-              itemsPerPage={[12, 24]}
-            />
-          </div>
-        </>
-      ) : (
-        <div className="empty__nfts">
-          <h3>No active auctions found</h3>
+  forcePage,
+}) => (
+  <div className="active__auctions__tab">
+    {auctions.length ? (
+      <>
+        <ActiveAuctionsList data={auctions} loading={loading} />
+        <div className="pagination__container">
+          <ReactPaginate
+            previousLabel={<LeftArrow />}
+            nextLabel={<RightArrow />}
+            breakLabel="..."
+            breakClassName="break-me"
+            pageCount={pageCount}
+            marginPagesDisplayed={1}
+            pageRangeDisplayed={3}
+            onPageChange={handlePageClick}
+            containerClassName="pagination"
+            subContainerClassName="pages pagination"
+            activeClassName="active"
+            forcePage={forcePage}
+          />
+          <ItemsPerPageDropdown perPage={perPage} setPerPage={setPerPage} itemsPerPage={[12, 24]} />
         </div>
-      )}
-    </div>
-  );
-};
+      </>
+    ) : (
+      <div className="empty__nfts">
+        <h3>No active auctions found</h3>
+      </div>
+    )}
+  </div>
+);
 
 ActiveAuctionsTab.propTypes = {
   auctions: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
@@ -63,6 +55,7 @@ ActiveAuctionsTab.propTypes = {
   pageCount: PropTypes.number.isRequired,
   perPage: PropTypes.number.isRequired,
   setPerPage: PropTypes.func.isRequired,
+  forcePage: PropTypes.number.isRequired,
 };
 
 export default ActiveAuctionsTab;

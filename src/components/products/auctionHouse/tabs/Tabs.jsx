@@ -1,56 +1,89 @@
 import React, { useState, useEffect } from 'react';
 import { withRouter } from 'react-router-dom';
+import { useErrorContext } from '../../../../contexts/ErrorContext';
 import './Tabs.scss';
 import ActiveAuctionsTab from './activeAuctions/ActiveAuctionsTab.jsx';
 import FutureAuctionsTab from './futureAuctions/FutureAuctionsTab.jsx';
 import { getAllFutureAuctions, getAllActiveAuctions } from '../../../../utils/api/auctions';
+import ActiveAuctionsFilters from './activeAuctions/Filters';
+import FutureAuctionsFilters from './futureAuctions/Filters';
+
+const ENDING = { filter: 'ending', option: 'Ending soon' };
+const RECENT = { filter: 'recent', option: 'Recently added' };
+const HIGHEST_BID = { filter: 'highestBid', option: 'Highest winning bid' };
+const LOWEST_BID = { filter: 'lowestBid', option: 'Lowest winning bid' };
+const STARTING = { filter: 'starting', option: 'Starts soon' };
 
 const Tabs = () => {
+  const { setShowError, setErrorTitle, setErrorBody } = useErrorContext();
   const [auctions, setAuctions] = useState([]);
   const [selectedTabIndex, setSelectedTabIndex] = useState(0);
   const [loading, setLoading] = useState(false);
   const [perPage, setPerPage] = useState(12);
   const [pageCount, setPageCount] = useState(0);
+  const [sortActive, setSortActive] = useState(ENDING.option);
+  const [sortFuture, setSortFuture] = useState(STARTING.option);
+  const [currentPage, setCurrentPage] = useState(0);
+  const [searchValue, setSearchValue] = useState('');
 
-  const getAuctions = async (request, offset) => {
+  const getAuctions = async (request, _offset, filter) => {
+    // finally call the API
     setLoading(true);
     try {
-      const response = await request(offset, perPage);
-      if (response.auctions?.length) {
-        setAuctions(response.auctions);
-        setLoading(false);
+      const response = await request(_offset, perPage, filter, searchValue);
+      if (response.error) {
+        setErrorTitle('Unexpected error');
+        setErrorBody(response.message);
+        setShowError(true);
       }
-
+      if (response.auctions) {
+        setAuctions(response.auctions);
+      }
       if (response.pagination) {
         const { total } = response.pagination;
         const pages = Math.ceil(total / perPage);
         setPageCount(pages);
       }
+      setLoading(false);
     } catch (error) {
-      // TODO: handle errors
       console.error(error);
     }
   };
 
-  useEffect(async () => {
-    // window.scrollTo(0, 360);
+  const requestWithParams = (offset) => {
+    // determine the request and add parameters
     if (selectedTabIndex === 0) {
-      getAuctions(getAllActiveAuctions, 0, perPage);
+      if (sortActive === ENDING.option) {
+        getAuctions(getAllActiveAuctions, offset, ENDING.filter);
+      } else if (sortActive === RECENT.option) {
+        getAuctions(getAllActiveAuctions, offset, RECENT.filter);
+      } else if (sortActive === HIGHEST_BID.option) {
+        getAuctions(getAllActiveAuctions, offset, HIGHEST_BID.filter);
+      } else if (sortActive === LOWEST_BID.option) {
+        getAuctions(getAllActiveAuctions, offset, LOWEST_BID.filter);
+      }
     } else if (selectedTabIndex === 1) {
-      getAuctions(getAllFutureAuctions, 0, perPage);
-    }
-  }, [selectedTabIndex, perPage]);
-
-  const handlePageClick = (item) => {
-    // let the user see the tabs after changing page
-    window.scrollTo(0, 360);
-    const offset = Math.ceil(item.selected * perPage);
-    if (selectedTabIndex === 0) {
-      getAuctions(getAllActiveAuctions, offset);
-    } else if (selectedTabIndex === 1) {
-      getAuctions(getAllFutureAuctions, offset);
+      if (sortFuture === STARTING.option) {
+        getAuctions(getAllFutureAuctions, offset, STARTING.filter);
+      } else if (sortFuture === RECENT.option) {
+        getAuctions(getAllFutureAuctions, offset, RECENT.filter);
+      }
     }
   };
+
+  const handlePageClick = (item) => {
+    // let the user see the tabs after changing the page
+    window.scrollTo(0, 360);
+    setCurrentPage(item.selected);
+    const offset = Math.ceil(item.selected * perPage);
+    requestWithParams(offset);
+  };
+
+  useEffect(() => {
+    // when tab, items per page, filter or search value is changed  - set current page to 1 and make a request with 0 offset
+    setCurrentPage(0);
+    requestWithParams(0);
+  }, [selectedTabIndex, perPage, sortActive, sortFuture, searchValue]);
 
   return (
     <div className="auction__house__tabs__section">
@@ -86,23 +119,45 @@ const Tabs = () => {
         </div>
         <div className="tab__content">
           {selectedTabIndex === 0 ? (
-            <ActiveAuctionsTab
-              auctions={auctions}
-              loading={loading}
-              handlePageClick={handlePageClick}
-              pageCount={pageCount}
-              perPage={perPage}
-              setPerPage={setPerPage}
-            />
+            <>
+              <ActiveAuctionsFilters
+                sort={sortActive}
+                setSort={setSortActive}
+                searchValue={searchValue}
+                setSearchValue={setSearchValue}
+              />
+              <ActiveAuctionsTab
+                auctions={auctions}
+                loading={loading}
+                handlePageClick={handlePageClick}
+                pageCount={pageCount}
+                perPage={perPage}
+                setPerPage={setPerPage}
+                forcePage={currentPage}
+                searchValue={searchValue}
+                setSearchValue={setSearchValue}
+              />
+            </>
           ) : (
-            <FutureAuctionsTab
-              auctions={auctions}
-              loading={loading}
-              handlePageClick={handlePageClick}
-              pageCount={pageCount}
-              perPage={perPage}
-              setPerPage={setPerPage}
-            />
+            <>
+              <FutureAuctionsFilters
+                sort={sortFuture}
+                setSort={setSortFuture}
+                searchValue={searchValue}
+                setSearchValue={setSearchValue}
+              />
+              <FutureAuctionsTab
+                auctions={auctions}
+                loading={loading}
+                handlePageClick={handlePageClick}
+                pageCount={pageCount}
+                perPage={perPage}
+                setPerPage={setPerPage}
+                forcePage={currentPage}
+                searchValue={searchValue}
+                setSearchValue={setSearchValue}
+              />
+            </>
           )}
         </div>
       </div>

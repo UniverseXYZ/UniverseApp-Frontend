@@ -40,11 +40,8 @@ export const getPromoImageProps = (imageUrl, userImage) => {
 export const bidsInUsd = (auction) => {
   const { ethPrice } = useAuthContext();
   const ethInUsd = ethPrice.market_data?.current_price?.usd || null;
-  const highestBid = auction.bids?.highestBid || null;
-  const lowestBid = auction.bids?.lowestBid || null;
-
-  const canDisplayHighestWinningBid = ethInUsd && highestBid;
-  const canDisplayLowestWinningBid = ethInUsd && lowestBid;
+  const highestBid = auction.bids?.highestBid;
+  const lowestBid = auction.bids?.lowestBid;
 
   const bids = {
     highestBidInUsd: null,
@@ -53,12 +50,13 @@ export const bidsInUsd = (auction) => {
     lowestBid,
   };
 
-  if (canDisplayHighestWinningBid) {
+  if (highestBid || (highestBid === 0 && ethInUsd)) {
     bids.highestBidInUsd = highestBid * ethInUsd;
   }
-  if (canDisplayLowestWinningBid) {
+  if (lowestBid || (lowestBid === 0 && ethInUsd)) {
     bids.lowestBidInUsd = lowestBid * ethInUsd;
   }
+
   return bids;
 };
 
