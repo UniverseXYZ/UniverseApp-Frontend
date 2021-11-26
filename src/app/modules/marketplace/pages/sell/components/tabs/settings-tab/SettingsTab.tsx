@@ -196,7 +196,7 @@ const SettingsTabDutchAuction = () => {
                 {/*    onChange={sellData.form.handleChange}*/}
                 {/*  />*/}
                 {/*</InputShadow>*/}
-                <DateTimePicker />
+                <DateTimePicker modalName={'Expiration date'} />
               </Box>
             </Flex>
           </GreyBox>

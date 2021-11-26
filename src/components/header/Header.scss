@@ -1,7 +1,7 @@
 @import "../../assets/scss/variables";
 @import "../../assets/scss/_mixins";
 
-header {
+#root > header {
   position: fixed;
   // min-height: 88px;
   top: 0;
