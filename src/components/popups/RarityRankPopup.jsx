@@ -37,11 +37,11 @@ const RarityRankPopup = ({ onClose, item }) => {
               <a
                 target="_blank"
                 href={`https://${
-                  process.env.REACT_APP_NETWORK_CHAIN_ID === 1
+                  parseInt(process.env.REACT_APP_NETWORK_CHAIN_ID, 10) === 1
                     ? 'opensea.io'
                     : 'testnets.opensea.io'
                 }/assets/${
-                  process.env.REACT_APP_NETWORK_CHAIN_ID === 1
+                  parseInt(process.env.REACT_APP_NETWORK_CHAIN_ID, 10) === 1
                     ? ''
                     : `${process.env.REACT_APP_NETWORK_NAME.toLowerCase()}/`
                 }${process.env.REACT_APP_POLYMORPHS_CONTRACT_ADDRESS}/${item.tokenid}`}
