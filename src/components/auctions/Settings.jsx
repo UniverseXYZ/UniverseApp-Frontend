@@ -92,9 +92,8 @@ const AuctionSettings = () => {
     startDate: auction.startDate ? auction.startDate : '',
     endDate: auction.endDate ? auction.endDate : '',
   });
-  const [bidToken, setBidToken] = useState('eth');
+  const [bidToken, setBidToken] = useState(null);
   const [bidTypeLocal, setBidTypeLocal] = useState(bidtype);
-
   const setToken = (key) => {
     const token = options.find((element) => element.value === key);
     setBidTypeLocal(key);
