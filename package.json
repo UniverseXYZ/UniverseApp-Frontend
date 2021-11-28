@@ -23,6 +23,7 @@
     "babel-preset-es2015": "^6.24.1",
     "babel-preset-react": "^6.24.1",
     "babel-register": "^6.26.0",
+    "dayjs": "^1.10.7",
     "domino": "^2.1.6",
     "ethereum-address": "0.0.4",
     "ethers": "^5.3.1",
@@ -73,7 +74,8 @@
     "svg-inline-react": "^3.2.1",
     "use-constant": "^1.1.0",
     "use-double-tap": "^1.3.3",
-    "web-vitals": "^1.0.1"
+    "web-vitals": "^1.0.1",
+    "yup": "^0.32.11"
   },
   "scripts": {
     "start": "react-scripts start",

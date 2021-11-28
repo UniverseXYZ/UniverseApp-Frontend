@@ -38,7 +38,7 @@ export const MarketplaceSell = () => {
         value: 0,
         currency: '',
       },
-      expirationDate: '',
+      expirationDate: new Date(),
       withPrivacy: false,
       isScheduledForFutureTime: false,
       futureDate: '',

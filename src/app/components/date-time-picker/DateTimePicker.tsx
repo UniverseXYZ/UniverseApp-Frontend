@@ -1,20 +1,37 @@
 import {
   Box,
-  Button, Flex, Heading,
+  Button,
+  Flex,
+  Heading,
   Image,
-  Modal, ModalBody,
+  Modal,
+  ModalBody,
   ModalCloseButton,
-  ModalContent, ModalFooter,
+  ModalContent,
+  ModalFooter,
   ModalHeader,
   ModalOverlay,
   useDisclosure,
-  ButtonProps, Text, Input,
+  Text,
+  NumberInput,
+  NumberInputField,
 } from '@chakra-ui/react';
-import { useState } from 'react';
+import { useFormik } from 'formik';
+import { useCallback } from 'react';
 import DatePicker from 'react-datepicker';
+import { default as dayjs } from 'dayjs';
+import { default as UTC } from 'dayjs/plugin/utc';
+import { default as Timezone } from 'dayjs/plugin/timezone';
+import { default as AdvancedFormat } from 'dayjs/plugin/advancedFormat';
+import * as Yup from 'yup';
 
-import arrowIcon from '../../../assets/images/arrow.svg';
 import calendarIcon from '../../../assets/images/calendar-small.svg';
+import { HeaderArrowButton } from './components';
+import { months } from './constants';
+
+dayjs.extend(UTC);
+dayjs.extend(Timezone);
+dayjs.extend(AdvancedFormat);
 
 const styles = {
   button: {
@@ -66,74 +83,70 @@ const styles = {
   }
 };
 
-const months = [
-  'January',
-  'February',
-  'March',
-  'April',
-  'May',
-  'June',
-  'July',
-  'August',
-  'September',
-  'October',
-  'November',
-  'December',
-];
-
-const getMonth = (date: Date) => date.getMonth();
-
-interface IHeaderArrowButtonProps extends ButtonProps {
-  isReverse?: boolean;
-}
-
-const HeaderArrowButton = ({ isReverse = false, ...props }: IHeaderArrowButtonProps) => {
-  return (
-    <Button
-      sx={{
-        background: 'white',
-        _hover: {
-          background: 'white',
-        },
-        _focus: {
-          background: 'white',
-        },
-        _active: {
-          background: 'white',
-        }
-      }}
-      {...props}
-    >
-      {isReverse
-        ? <Image src={arrowIcon} />
-        : <Image src={arrowIcon} transform={'rotate(180deg)'} />
-      }
-    </Button>
-  );
-};
-
 interface IDateTimePickerProps {
   modalName: string;
+  value: Date | null,
+  onChange?: (val: Date) => void,
 }
 
-export const DateTimePicker = (props: IDateTimePickerProps) => {
+const TimeSchema = Yup.object().shape({
+  hours: Yup.number()
+    .required()
+    .min(0, '')
+    .max(23, ''),
+  minutes: Yup.number()
+    .required()
+    .min(0, '')
+    .max(59, ''),
+});
+
+export const DateTimePicker = ({ value, onChange,  ...props }: IDateTimePickerProps) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-  const [date, setDate] = useState(new Date());
-  const onChange = (date: any) => {
-    console.log('date', date);
-    setDate(date);
-  };
+  const formik = useFormik<{
+    date?: Date | null,
+    hours?: string | number;
+    minutes?: string | number;
+  }>({
+    initialValues: {
+      date: value,
+      hours: undefined,
+      minutes: undefined,
+    },
+    validationSchema: TimeSchema,
+    onSubmit: (values) => {
+      const result = new Date(values.date as Date);
+      result.setHours(values.hours as number);
+      result.setMinutes(values.minutes as number);
+
+      onChange && onChange(result);
+      onClose();
+    }
+  });
+
+  const handleOpen = useCallback(() => {
+    formik.setValues({
+      date: value,
+      hours: value ? value?.getHours().toString().padStart(2, '0') : undefined,
+      minutes: value ? value?.getMinutes().toString().padStart(2, '0') : undefined,
+    });
+    onOpen();
+  }, [value]);
 
   return (
     <>
       <Button
         rightIcon={<Image src={calendarIcon} width={'16px'} />}
         sx={styles.button}
-        onClick={onOpen}
+        onClick={handleOpen}
       >
         <Box as={'span'}>
-          <strong>Mar 14, 2021,</strong> 12:00 EST
+          {value
+            ? (
+              <><strong>{dayjs(value).format('MMM DD, YYYY,')}</strong> {dayjs(value).format('HH:mm z')}</>
+            )
+            : 'Select date...'
+          }
         </Box>
       </Button>
 
@@ -206,8 +219,8 @@ export const DateTimePicker = (props: IDateTimePickerProps) => {
             }}
           >
             <DatePicker
-              selected={date}
-              onChange={onChange}
+              selected={formik.values.date}
+              onChange={(date) => formik.setFieldValue('date', date)}
               inline
               calendarStartDay={1}
               useWeekdaysShort={false}
@@ -232,7 +245,7 @@ export const DateTimePicker = (props: IDateTimePickerProps) => {
                     fontWeight: 700,
                     flex: 1,
                     lineHeight: '40px',
-                  }}>{months[getMonth(date)]} {date?.getFullYear()}</Heading>
+                  }}>{months[date.getMonth()]} {date.getFullYear()}</Heading>
 
                   <HeaderArrowButton
                     disabled={nextMonthButtonDisabled}
@@ -255,7 +268,8 @@ export const DateTimePicker = (props: IDateTimePickerProps) => {
             <Flex
               sx={{
                 alignItems: 'center',
-                border: '1px solid rgba(0, 0, 0, 0.1)',
+                border: '1px solid',
+                borderColor: formik.isValid ? 'rgba(0, 0, 0, 0.1)' : 'red',
                 borderRadius: '10px',
                 fontFamily: 'Space Grotesk',
                 mx: '30px',
@@ -268,18 +282,36 @@ export const DateTimePicker = (props: IDateTimePickerProps) => {
                   fontWeight: 600,
                   textAlign: 'center',
                   width: '125px',
+                  _invalid: {
+                    border: 0,
+                    boxShadow: 'none',
+                  }
                 }
               }}
             >
-              <Input />
+              <NumberInput
+                min={0}
+                max={23}
+                name="hours"
+                value={formik.values.hours}
+              >
+                <NumberInputField onChange={formik.handleChange} />
+              </NumberInput>
               <Text fontSize={'16px'} fontWeight={700}>:</Text>
-              <Input />
+              <NumberInput
+                min={0}
+                max={59}
+                name="minutes"
+                value={formik.values.minutes}
+              >
+                <NumberInputField onChange={formik.handleChange} />
+              </NumberInput>
             </Flex>
           </ModalBody>
 
           <ModalFooter display={'flex'} padding={'14px 30px 30px 30px'}>
             <Button flex={1} mx={'5px'} ml={0} variant="outline" onClick={onClose}>Cancel</Button>
-            <Button flex={1} mx={'5px'} mr={0} boxShadow={'lg'} onClick={onClose}>Save</Button>
+            <Button flex={1} mx={'5px'} mr={0} boxShadow={'lg'} onClick={formik.submitForm}>Save</Button>
           </ModalFooter>
         </ModalContent>
       </Modal>

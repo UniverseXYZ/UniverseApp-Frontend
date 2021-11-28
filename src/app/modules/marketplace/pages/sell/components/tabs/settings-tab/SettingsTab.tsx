@@ -10,7 +10,11 @@ const styles = {
   mainContainer: {
     fontFamily: 'Space Grotesk',
     mb: '40px',
-    padding: '40px 50px',
+    padding: {
+      base: '20px',
+      md: '30px',
+      lg: '40px 50px',
+    },
     h5: {
       fontFamily: 'Space Grotesk',
       fontSize: '16px',
@@ -53,6 +57,9 @@ const styles = {
       }
     },
     '&[data-checkbox]': {
+      '> div:nth-of-type(1)': {
+        marginBottom: 0,
+      },
       '> div:nth-of-type(2)': {
         position: {
           base: 'absolute',
@@ -68,9 +75,6 @@ const styles = {
     _last: {
       borderBottom: 0,
       pb: 0,
-      '> div:nth-of-type(1)': {
-        marginBottom: 0,
-      },
     },
   },
   checkBoxContainer: {
@@ -164,7 +168,7 @@ const SettingsTabDutchAuction = () => {
         </Box>
         <Flex justifyContent={'flex-end'} />
         <Box pt={'20px'} w={'100%'}>
-          <GreyBox p={'30px'}>
+          <GreyBox p={{ base: '20px', md: '30px' }}>
             <Flex sx={styles.settingsItem}>
               <Box>
                 <Heading as={'h5'}>Ending price</Heading>
@@ -196,7 +200,11 @@ const SettingsTabDutchAuction = () => {
                 {/*    onChange={sellData.form.handleChange}*/}
                 {/*  />*/}
                 {/*</InputShadow>*/}
-                <DateTimePicker modalName={'Expiration date'} />
+                <DateTimePicker
+                  value={sellData.form.values.expirationDate}
+                  modalName={'Expiration date'}
+                  onChange={(val) => sellData.form.setFieldValue('expirationDate', val)}
+                />
               </Box>
             </Flex>
           </GreyBox>
