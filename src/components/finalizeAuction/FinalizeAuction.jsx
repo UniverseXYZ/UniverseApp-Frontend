@@ -29,6 +29,7 @@ import {
   subscribeToOnChainCreation,
   subscribeToWithdrawNfts,
 } from '../../utils/websockets/auctionEvents';
+import { useErrorContext } from '../../contexts/ErrorContext';
 
 const FinalizeAuction = () => {
   const defaultLoadingText =
