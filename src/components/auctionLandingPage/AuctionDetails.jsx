@@ -176,13 +176,14 @@ AuctionDetails.propTypes = {
   currentBid: PropTypes.oneOfType([PropTypes.object]),
   setCurrentBid: PropTypes.func.isRequired,
   isWinningBid: PropTypes.bool.isRequired,
-  winningSlot: PropTypes.number.isRequired,
-  slotsInfo: PropTypes.oneOfType([PropTypes.array]).isRequired,
+  winningSlot: PropTypes.oneOfType([PropTypes.object]),
+  slotsInfo: PropTypes.oneOfType([PropTypes.object]).isRequired,
   setShowLoading: PropTypes.func.isRequired,
 };
 
 AuctionDetails.defaultProps = {
   currentBid: null,
+  winningSlot: {},
 };
 
 export default AuctionDetails;

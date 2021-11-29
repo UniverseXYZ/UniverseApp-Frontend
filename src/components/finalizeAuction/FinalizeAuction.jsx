@@ -13,16 +13,30 @@ import emptyWhite from '../../assets/images/emptyWhite.svg';
 import { useAuctionContext } from '../../contexts/AuctionContext';
 import { useAuthContext } from '../../contexts/AuthContext';
 import ApproveCollection from './ApproveCollection';
-import { depositNfts, withdrawNfts, patchAuction } from '../../utils/api/auctions';
+import { withdrawNfts, patchAuction } from '../../utils/api/auctions';
 import LoadingPopup from '../popups/LoadingPopup';
 import { useMyNftsContext } from '../../contexts/MyNFTsContext';
 import { calculateTransactions } from '../../utils/helpers/depositNfts';
 import DepositNftsSection from './DepositNftsSection';
 import ERC721ABI from '../../contracts/ERC721.json';
 import GoBackPopup from './GoBackPopup';
-import { useErrorContext } from '../../contexts/ErrorContext.jsx';
+import {
+  disconnectAuctionSocket,
+  initiateAuctionSocket,
+  removeAllListeners,
+  subscribeToCancelation,
+  subscribeToDepositNfts,
+  subscribeToOnChainCreation,
+  subscribeToWithdrawNfts,
+} from '../../utils/websockets/auctionEvents';
+import { useErrorContext } from '../../contexts/ErrorContext';
 
 const FinalizeAuction = () => {
+  const defaultLoadingText =
+    'The transaction is in progress. Keep this window opened. Navigating away from the page will reset the curent progress.';
+  const verificationLoadingText =
+    'The transaction is being verified. This will take a few seconds.';
+
   const history = useHistory();
   const { auction, setAuction, bidExtendTime } = useAuctionContext();
   const { setActiveTxHashes } = useMyNftsContext();
@@ -32,12 +46,102 @@ const FinalizeAuction = () => {
   const [collections, setCollections] = useState([]);
   const [approvedCollections, setApprovedCollections] = useState([]);
 
-  const [showAuctionDeployLoading, setShowAuctionDeployLoading] = useState(false);
+  const [showLoading, setShowLoading] = useState(false);
   const [showSuccessPopup, setShowSuccessPopup] = useState(false);
   const [showGoBackPopup, setShowGoBackPopup] = useState(false);
   const [transactions, setTransactions] = useState(null);
   const [approvedTxCount, setApprovedTxCount] = useState(0);
   const [approvedTxs, setApprovedTxs] = useState([]);
+  const [loadingText, setLoadingText] = useState(defaultLoadingText);
+  const [depositVerifyingTxIndex, setDepositVerifyingTxIndex] = useState([]);
+  const [withdrawVerifyingTxIndex, setWithdrawVerifyingTxIndex] = useState([]);
+
+  useEffect(() => {
+    if (auction.id) {
+      initiateAuctionSocket();
+
+      subscribeToOnChainCreation(auction.id, (err, data) => {
+        if (err) return;
+        const { onChainId } = data;
+        setAuction((upToDateAuction) => ({ ...upToDateAuction, onChainId, canceled: false }));
+        setShowLoading(false);
+      });
+
+      subscribeToCancelation(auction.id, (err, data) => {
+        if (err) return;
+        setAuction((upToDateAuction) => ({ ...upToDateAuction, canceled: true }));
+        setShowLoading(false);
+      });
+
+      subscribeToDepositNfts(auction.id, (err, data) => {
+        if (err) return;
+        setApprovedTxCount((upToDateTxCount) => upToDateTxCount + 1);
+
+        let newTransaction = null;
+        let newAuction = null;
+        let newVerifyTxs = [];
+        let txIndex = 0;
+
+        setDepositVerifyingTxIndex((upToDate) => {
+          newVerifyTxs = [...upToDate];
+          txIndex = newVerifyTxs.pop();
+          return newVerifyTxs;
+        });
+
+        setApprovedTxs((upToDate) => [...upToDate, txIndex]);
+
+        setAuction((upToDate) => {
+          newAuction = { ...upToDate, depositNfts: true };
+          return newAuction;
+        });
+
+        setTransactions((upToDate) => {
+          newTransaction = upToDate;
+          return upToDate;
+        });
+
+        if (!newAuction.canceled && txIndex === newTransaction.finalSlotIndices.length - 1) {
+          setShowSuccessPopup(true);
+        }
+        setShowLoading(false);
+      });
+
+      subscribeToWithdrawNfts(auction.id, (err, { hasWithdrawnAll }) => {
+        if (err) return;
+
+        let newApprovedTxs = null;
+        let newVerifyTxs = null;
+
+        setApprovedTxs((upToDate) => {
+          newApprovedTxs = [...upToDate];
+          return upToDate;
+        });
+
+        setWithdrawVerifyingTxIndex((upToDate) => {
+          newVerifyTxs = [...upToDate];
+          const txIndex = newVerifyTxs.pop();
+          newApprovedTxs.splice(newApprovedTxs.indexOf(txIndex), 1);
+          return newVerifyTxs;
+        });
+
+        setApprovedTxs(newApprovedTxs);
+
+        setApprovedTxCount((upToDate) => upToDate - 1);
+
+        if (hasWithdrawnAll) {
+          // This implementation assumes that you will withdraw all nfts.
+          // TODO: Figure out a way if a user withdraws 1 out of 3 nfts for example
+          setAuction((upToDate) => ({ ...upToDate, depositedNfts: false }));
+          setShowLoading(false);
+        }
+      });
+    }
+
+    return () => {
+      removeAllListeners(auction.id);
+      disconnectAuctionSocket();
+    };
+  }, [auction.id]);
 
   const completedAuctionCreationStep = auction.onChainId && !auction.canceled;
 
@@ -98,8 +202,6 @@ const FinalizeAuction = () => {
       alert('Please withdraw your nfts before creating a new auction');
       return;
     }
-    setShowAuctionDeployLoading(true);
-
     try {
       let numberOfSlots = 0;
       let paymentSplits = [];
@@ -108,10 +210,11 @@ const FinalizeAuction = () => {
       auction.rewardTiers
         .sort((a, b) => a.tierPosition - b.tierPosition)
         .forEach((tier) => {
-          tier.slots.forEach((slot) => {
-            minimumReserveValues.push(utils.parseEther(slot.minimumBid.toString()));
-            numberOfSlots += 1;
-          });
+          const minimumBids = Array.from(Array(tier.numberOfWinners).keys()).map((slot) =>
+            utils.parseEther('0.1').toString()
+          );
+          minimumReserveValues.push(...minimumBids);
+          numberOfSlots += tier.numberOfWinners;
         });
 
       if (auction.royaltySplits) {
@@ -137,44 +240,22 @@ const FinalizeAuction = () => {
         paymentSplits,
       ]);
       // TODO: Show tx hash
+      setLoadingText(defaultLoadingText);
       setActiveTxHashes([tx.hash]);
+      setShowLoading(true);
       const txResult = await tx.wait();
 
       if (txResult.status === 1) {
-        const onChainId = txResult.events[0].args[0].toString();
-
-        // TODO: Call api to change auction
-        // This will be temporary while the scraper isn't ready
-        if (auction.canceled) {
-          await patchAuction(auction.id, {
-            canceled: false,
-            onChain: true,
-            onChainId: +onChainId,
-            txHash: tx.hash,
-          });
-        } else {
-          await patchAuction(auction.id, {
-            onChain: true,
-            onChainId: +onChainId,
-            txHash: tx.hash,
-          });
-        }
-
-        setAuction({
-          ...auction,
-          auctionId: +auction.id,
-          onChainId: +onChainId,
-          txHash: tx.hash,
-          canceled: false,
+        setLoadingText(verificationLoadingText);
+        await patchAuction(auction.id, {
+          createAuctionTxHash: tx.hash,
         });
       } else {
         setErrors();
       }
-      setShowAuctionDeployLoading(false);
-      setActiveTxHashes([]);
     } catch (err) {
       console.error(err);
-      setShowAuctionDeployLoading(false);
+      setShowLoading(false);
       setActiveTxHashes([]);
     }
   };
@@ -204,41 +285,24 @@ const FinalizeAuction = () => {
 
   const handleDepositTier = async (txIndex) => {
     try {
-      setShowAuctionDeployLoading(true);
-      // Deposit tier
       const tx = await universeAuctionHouseContract.batchDepositToAuction(
         auction.onChainId,
         transactions.finalSlotIndices[txIndex],
         transactions.finalNfts[txIndex]
       );
+      setLoadingText(defaultLoadingText);
       setActiveTxHashes([tx.hash]);
+      setShowLoading(true);
 
       const txReceipt = await tx.wait();
-      // If last tier show success modal
       if (txReceipt.status === 1) {
-        // TODO: Mark nfts as deployed on backend
-        const nftIds = transactions.displayNfts[txIndex].map((nft) => nft.id);
-        const result = await depositNfts({ auctionId: auction.id, nftIds });
-
-        if (!auction.depositedNfts) {
-          await patchAuction(auction.id, { depositedNfts: true });
-
-          setAuction({ ...auction, depositedNfts: true });
-        }
-        setApprovedTxCount(approvedTxCount + 1);
-        setApprovedTxs([...approvedTxs, txIndex]);
-
-        if (!auction.canceled && txIndex === transactions.finalSlotIndices.length - 1) {
-          setShowSuccessPopup(true);
-        }
+        setLoadingText(verificationLoadingText);
+        setDepositVerifyingTxIndex([...depositVerifyingTxIndex, txIndex]);
       } else {
         setErrors();
       }
-
-      setShowAuctionDeployLoading(false);
-      setActiveTxHashes([]);
     } catch (err) {
-      setShowAuctionDeployLoading(false);
+      setShowLoading(false);
       setActiveTxHashes([]);
 
       console.error(err);
@@ -247,7 +311,6 @@ const FinalizeAuction = () => {
 
   const handleWithdraw = async (txIndex) => {
     try {
-      setShowAuctionDeployLoading(true);
       // We need to withdraw each slot at a time
       // Calculate all count of deposited nfts at a slot
       const nftsCountMap = {};
@@ -266,57 +329,47 @@ const FinalizeAuction = () => {
           slot,
           nftsCountMap[slot]
         );
+        setLoadingText(defaultLoadingText);
+        setShowLoading(true);
         txHashes.push(tx.hash);
         setActiveTxHashes(txHashes);
 
         const txReceipt = await tx.wait();
         return txReceipt.status;
       });
-      setActiveTxHashes(txHashes);
-      const results = await Promise.all(txs);
-      setActiveTxHashes([]);
-      setShowAuctionDeployLoading(false);
-      // Withdraw from backend
-      const nftIds = transactions.displayNfts[txIndex].map((nft) => nft.id);
-      const withdrawBE = await withdrawNfts({ auctionId: auction.id, nftIds });
 
-      // Update nfts to withdraw
-      const newApprovedTxs = [...approvedTxs];
-      newApprovedTxs.splice(newApprovedTxs.indexOf(txIndex), 1);
-      if (newApprovedTxs.length === 0) {
-        await patchAuction(auction.id, { depositedNfts: false });
-        setAuction({ ...auction, depositedNfts: false });
+      setActiveTxHashes(txHashes);
+
+      const results = await Promise.all(txs);
+
+      if (!results.find((status) => status !== 1)) {
+        setLoadingText(verificationLoadingText);
+        setWithdrawVerifyingTxIndex([...withdrawVerifyingTxIndex, txIndex]);
+      } else {
+        console.log('error ocurred');
       }
-      setApprovedTxs(newApprovedTxs);
-      setApprovedTxCount(approvedTxCount - 1);
     } catch (err) {
       console.log(err);
-      setShowAuctionDeployLoading(false);
+      setShowLoading(false);
     }
   };
 
   const handleCancelAuction = async () => {
     try {
-      setShowAuctionDeployLoading(true);
+      setLoadingText(defaultLoadingText);
+      setShowLoading(true);
       const tx = await universeAuctionHouseContract.cancelAuction(auction.onChainId);
       setActiveTxHashes([tx.hash]);
       const txReceipt = await tx.wait();
       if (txReceipt.status === 1) {
-        await patchAuction(auction.id, { canceled: true, txHash: '' });
-        setAuction({
-          ...auction,
-          canceled: true,
-        });
+        setLoadingText(verificationLoadingText);
       } else {
         setErrors();
       }
-
-      setActiveTxHashes([]);
-      setShowAuctionDeployLoading(false);
     } catch (error) {
       // TODO: handle error here
       console.error(error);
-      setShowAuctionDeployLoading(false);
+      setShowLoading(false);
       setActiveTxHashes([]);
     }
   };
@@ -454,10 +507,10 @@ const FinalizeAuction = () => {
           />
         </div>
       </div>
-      <Popup open={showAuctionDeployLoading} closeOnDocumentClick={false}>
+      <Popup open={showLoading} closeOnDocumentClick={false}>
         <LoadingPopup
-          text="The transaction is in progress. Keep this window opened. Navigating away from the page will reset the curent progress."
-          onClose={() => setShowAuctionDeployLoading(false)}
+          text={loadingText}
+          onClose={() => setShowLoading(false)}
           contractInteraction
         />
       </Popup>

@@ -387,40 +387,6 @@ export const getAvailableNFTs = async (offset, limit, auctionId) => {
   return result;
 };
 
-export const addDeployInfoToAuction = async (body) => {
-  const requestOptions = {
-    method: 'post',
-    headers: {
-      'Content-type': 'application/json; charset=UTF-8',
-      Authorization: `Bearer ${localStorage.getItem('xyz_access_token')}`,
-    },
-    body: JSON.stringify(body),
-  };
-
-  const request = await fetch(ADD_DEPLOY_INFO, requestOptions);
-
-  const result = await request.text().then((data) => JSON.parse(data));
-
-  return result;
-};
-
-export const depositNfts = async (body) => {
-  const requestOptions = {
-    method: 'post',
-    headers: {
-      'Content-type': 'application/json; charset=UTF-8',
-      Authorization: `Bearer ${localStorage.getItem('xyz_access_token')}`,
-    },
-    body: JSON.stringify(body),
-  };
-
-  const request = await fetch(DEPOSIT_NFTS_TO_AUCTION, requestOptions);
-
-  const result = await request.text().then((data) => JSON.parse(data));
-
-  return result;
-};
-
 export const withdrawNfts = async (body) => {
   const requestOptions = {
     method: 'post',
@@ -537,21 +503,6 @@ export const claimAuctionFunds = async (body) => {
   };
 
   const request = await fetch(CLAIM_AUCTION_FUNDS, requestOptions);
-  const result = await request.text().then((data) => JSON.parse(data));
-  return result;
-};
-
-export const cancelAuction = async (id) => {
-  const requestOptions = {
-    method: 'POST',
-    headers: {
-      'Content-type': 'application/json; charset=UTF-8',
-      Authorization: `Bearer ${localStorage.getItem('xyz_access_token')}`,
-    },
-  };
-
-  const request = await fetch(CANCEL_AUCTION(id), requestOptions);
-
   const result = await request.text().then((data) => JSON.parse(data));
   return result;
 };

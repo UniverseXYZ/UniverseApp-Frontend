@@ -208,8 +208,12 @@ BidRankingsPopup.propTypes = {
   rewardTiers: PropTypes.oneOfType([PropTypes.array]).isRequired,
   getRewardTierSpanStyles: PropTypes.func.isRequired,
   ethPrice: PropTypes.number.isRequired,
-  currencyIcon: PropTypes.string.isRequired,
+  currencyIcon: PropTypes.string,
   collections: PropTypes.oneOfType([PropTypes.array]).isRequired,
+};
+
+BidRankingsPopup.defaultProps = {
+  currencyIcon: '',
 };
 
 export default BidRankingsPopup;

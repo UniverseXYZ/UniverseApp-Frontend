@@ -105,7 +105,7 @@ const TopBidders = ({
         <CancelBidPopup
           close={() => setShowCancelBidPopup(false)}
           setCurrentBid={setCurrentBid}
-          myBid={currentBid?.amount}
+          myBid={currentBid?.amount || ''}
           auction={auction}
           bidders={bidders}
           setBidders={setBidders}
@@ -128,10 +128,11 @@ TopBidders.propTypes = {
   canPlaceBids: PropTypes.bool.isRequired,
   ethPrice: PropTypes.number.isRequired,
   isWinningBid: PropTypes.bool.isRequired,
-  currencyIcon: PropTypes.string.isRequired,
+  currencyIcon: PropTypes.string,
   setBidders: PropTypes.func.isRequired,
 };
 TopBidders.defaultProps = {
   currentBid: null,
+  currencyIcon: '',
 };
 export default TopBidders;
