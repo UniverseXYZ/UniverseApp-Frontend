@@ -90,9 +90,11 @@ const ActiveAuctions = () => {
         <ActiveAndPastCardSkeleton />
       )}
       {notFound && <NoAuctionsFound title="No active auctions found" />}
-      <div className="pagination__container">
-        <Pagination data={activeAuctions} perPage={perPage} setOffset={setOffset} />
-      </div>
+      {activeAuctions?.length ? (
+        <div className="pagination__container">
+          <Pagination data={activeAuctions} perPage={perPage} setOffset={setOffset} />
+        </div>
+      ) : null}
     </div>
   );
 };
