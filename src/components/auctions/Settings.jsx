@@ -6,7 +6,6 @@ import { utils } from 'ethers';
 import Popup from 'reactjs-popup';
 import uuid from 'react-uuid';
 import './AuctionSettings.scss';
-import EthereumAddress from 'ethereum-address';
 import { formatISO } from 'date-fns';
 import callendarIcon from '../../assets/images/calendar.svg';
 import delateIcon from '../../assets/images/RemoveBtn.svg';
@@ -93,8 +92,17 @@ const AuctionSettings = () => {
     startDate: auction.startDate ? auction.startDate : '',
     endDate: auction.endDate ? auction.endDate : '',
   });
+  const [bidToken, setBidToken] = useState(null);
+  const [bidTypeLocal, setBidTypeLocal] = useState(bidtype);
+  const setToken = (key) => {
+    const token = options.find((element) => element.value === key);
+    setBidTypeLocal(key);
+    setBidToken(token);
+  };
 
-  const bid = options.find((element) => element.value === bidtype);
+  useEffect(() => {
+    setToken(bidtype);
+  }, []);
 
   const handleAddAuction = () => {
     setTimeout(() => {
@@ -148,6 +156,7 @@ const AuctionSettings = () => {
             : prevValue.rewardTiers,
           royaltySplits: royalities ? royaltyAddress : null,
         }));
+        setBidtype(bidTypeLocal);
       } else {
         setAuction((prevValue) => ({
           ...prevValue,
@@ -159,6 +168,7 @@ const AuctionSettings = () => {
             ? prevValue.rewardTiers.map((tier) => ({ ...tier, minBid: bidValues[tier.id] }))
             : prevValue.rewardTiers,
         }));
+        setBidtype(bidTypeLocal);
       }
       history.push({
         pathname: '/setup-auction/reward-tiers',
@@ -343,8 +353,10 @@ const AuctionSettings = () => {
                     trigger={
                       <button type="button" className={dropDown}>
                         <div className="left--section">
-                          {bid.img && <img src={bid.img} className="token-logo" alt="icon" />}
-                          <span className="button-name">{bid.name}</span>
+                          {bidToken?.img && (
+                            <img src={bidToken.img} className="token-logo" alt="icon" />
+                          )}
+                          <span className="button-name">{bidToken?.name}</span>
                         </div>
                         <div className="right--section">
                           <img src={arrowDown} alt="arrow" />
@@ -352,7 +364,9 @@ const AuctionSettings = () => {
                       </button>
                     }
                   >
-                    {(close) => <SelectToken onClose={close} />}
+                    {(close) => (
+                      <SelectToken options={options} setBidToken={setToken} onClose={close} />
+                    )}
                   </Popup>
                 </div>
               </div>

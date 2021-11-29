@@ -4,19 +4,17 @@ import AddToken from './AddTokenPopup.jsx';
 import './PopupStyle.scss';
 import closeIcon from '../../assets/images/cross.svg';
 import SearchField from '../input/SearchField';
-import { useAuctionContext } from '../../contexts/AuctionContext.jsx';
 import { useAuthContext } from '../../contexts/AuthContext';
 import SetTokenErrorPopup from './SetTokenErrorPopup';
 
-const SelectTokenPopup = ({ onClose }) => {
-  const { options, setBidtype } = useAuctionContext();
+const SelectTokenPopup = ({ setBidToken, onClose, options }) => {
   const { universeAuctionHouseContract } = useAuthContext();
   const [showAddTokenPopup, setShowAddTokenPopup] = useState(false);
   const [optionsClone, setOptionsClone] = useState([...options]);
   const [tokenError, setTokenError] = useState(false);
 
   const handleChange = (key) => {
-    setBidtype(key);
+    setBidToken(key);
     onClose();
   };
 
