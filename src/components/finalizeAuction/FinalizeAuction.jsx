@@ -13,16 +13,32 @@ import emptyWhite from '../../assets/images/emptyWhite.svg';
 import { useAuctionContext } from '../../contexts/AuctionContext';
 import { useAuthContext } from '../../contexts/AuthContext';
 import ApproveCollection from './ApproveCollection';
-import { depositNfts, withdrawNfts, patchAuction } from '../../utils/api/auctions';
+import {
+  addTxHashToAuction,
+  changeAuctionStatus,
+  depositNfts,
+  withdrawNfts,
+  cancelAuction,
+  patchAuction,
+} from '../../utils/api/auctions';
 import LoadingPopup from '../popups/LoadingPopup';
 import { useMyNftsContext } from '../../contexts/MyNFTsContext';
 import { calculateTransactions } from '../../utils/helpers/depositNfts';
 import DepositNftsSection from './DepositNftsSection';
 import ERC721ABI from '../../contracts/ERC721.json';
 import GoBackPopup from './GoBackPopup';
-import { useErrorContext } from '../../contexts/ErrorContext.jsx';
+import {
+  disconnectAuctionSocket,
+  initiateAuctionSocket,
+  subscribeToOnChainCreation,
+  subscribeToStatusChange,
+} from '../../utils/websockets/auctionEvents';
 
 const FinalizeAuction = () => {
+  const defaultLoadingText =
+    'The transaction is in progress. Keep this window opened. Navigating away from the page will reset the curent progress.';
+  const verificationLoadingText = 'The transaction is being verified. Please wait a few seconds.';
+
   const history = useHistory();
   const { auction, setAuction, bidExtendTime } = useAuctionContext();
   const { setActiveTxHashes } = useMyNftsContext();
@@ -32,12 +48,30 @@ const FinalizeAuction = () => {
   const [collections, setCollections] = useState([]);
   const [approvedCollections, setApprovedCollections] = useState([]);
 
-  const [showAuctionDeployLoading, setShowAuctionDeployLoading] = useState(false);
+  const [showLoading, setShowLoading] = useState(false);
   const [showSuccessPopup, setShowSuccessPopup] = useState(false);
   const [showGoBackPopup, setShowGoBackPopup] = useState(false);
   const [transactions, setTransactions] = useState(null);
   const [approvedTxCount, setApprovedTxCount] = useState(0);
   const [approvedTxs, setApprovedTxs] = useState([]);
+  const [loadingText, setLoadingText] = useState(defaultLoadingText);
+
+  useEffect(() => {
+    if (auction.id) {
+      initiateAuctionSocket();
+
+      subscribeToOnChainCreation(auction.id, (err, data) => {
+        if (err) return;
+        const { onChainId } = data;
+        setAuction({ ...auction, onChainId, canceled: false });
+        setShowLoading(false);
+      });
+    }
+
+    return () => {
+      disconnectAuctionSocket();
+    };
+  }, [auction.id]);
 
   const completedAuctionCreationStep = auction.onChainId && !auction.canceled;
 
@@ -98,7 +132,8 @@ const FinalizeAuction = () => {
       alert('Please withdraw your nfts before creating a new auction');
       return;
     }
-    setShowAuctionDeployLoading(true);
+    setLoadingText(defaultLoadingText);
+    setShowLoading(true);
 
     try {
       let numberOfSlots = 0;
@@ -170,11 +205,11 @@ const FinalizeAuction = () => {
       } else {
         setErrors();
       }
-      setShowAuctionDeployLoading(false);
-      setActiveTxHashes([]);
+      // setShowAuctionDeployLoading(false);
+      // setActiveTxHashes([]);
     } catch (err) {
       console.error(err);
-      setShowAuctionDeployLoading(false);
+      setShowLoading(false);
       setActiveTxHashes([]);
     }
   };
@@ -204,7 +239,8 @@ const FinalizeAuction = () => {
 
   const handleDepositTier = async (txIndex) => {
     try {
-      setShowAuctionDeployLoading(true);
+      setShowLoading(true);
+
       // Deposit tier
       const tx = await universeAuctionHouseContract.batchDepositToAuction(
         auction.onChainId,
@@ -235,10 +271,10 @@ const FinalizeAuction = () => {
         setErrors();
       }
 
-      setShowAuctionDeployLoading(false);
+      setShowLoading(false);
       setActiveTxHashes([]);
     } catch (err) {
-      setShowAuctionDeployLoading(false);
+      setShowLoading(false);
       setActiveTxHashes([]);
 
       console.error(err);
@@ -291,7 +327,7 @@ const FinalizeAuction = () => {
       setApprovedTxCount(approvedTxCount - 1);
     } catch (err) {
       console.log(err);
-      setShowAuctionDeployLoading(false);
+      setShowLoading(false);
     }
   };
 
@@ -454,10 +490,10 @@ const FinalizeAuction = () => {
           />
         </div>
       </div>
-      <Popup open={showAuctionDeployLoading} closeOnDocumentClick={false}>
+      <Popup open={showLoading} closeOnDocumentClick={false}>
         <LoadingPopup
-          text="The transaction is in progress. Keep this window opened. Navigating away from the page will reset the curent progress."
-          onClose={() => setShowAuctionDeployLoading(false)}
+          text={loadingText}
+          onClose={() => setShowLoading(false)}
           contractInteraction
         />
       </Popup>
