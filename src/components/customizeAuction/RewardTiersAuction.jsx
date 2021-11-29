@@ -16,7 +16,7 @@ const TIER_IMAGE_DIMENSIONS = {
 };
 
 const TIER_IMAGE_MAX_SIZE_MB = 3;
-const MB_IN_BYTES = 1;
+const MB_IN_BYTES = 1000000;
 const RewardTiersAuction = ({
   values,
   onChange,

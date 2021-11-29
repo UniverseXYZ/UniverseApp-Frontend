@@ -96,7 +96,7 @@ const AuctionLandingPage = () => {
     getEthPrice();
   }, [artistUsername, auctionName]);
   const getAuctionSlotsInfo = async () => {
-    if (universeAuctionHouseContract && auction) {
+    if (universeAuctionHouseContract && auction && auction.auction?.onChainId) {
       // TODO: query smart contract to check for captured slots
       const onChainAuction = await universeAuctionHouseContract.auctions(auction.auction.onChainId);
 
