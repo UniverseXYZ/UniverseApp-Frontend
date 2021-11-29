@@ -29,3 +29,19 @@ export const subscribeToOnChainCreation = (auctionId, cb) => {
     return cb(null, msg);
   });
 };
+
+export const subscribeToCancelation = (auctionId, cb) => {
+  if (!socket) return true;
+  socket.on(`auction_${auctionId}_canceled`, (msg) => {
+    console.log('Auction cancelation event received!');
+    return cb(null, msg);
+  });
+};
+
+export const subscribeToDepositNfts = (auctionId, cb) => {
+  if (!socket) return true;
+  socket.on(`auction_${auctionId}_depositedNfts`, (msg) => {
+    console.log('Auction deposit nfts event received!');
+    return cb(null, msg);
+  });
+};
