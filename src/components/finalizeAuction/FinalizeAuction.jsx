@@ -62,43 +62,75 @@ const FinalizeAuction = () => {
       subscribeToOnChainCreation(auction.id, (err, data) => {
         if (err) return;
         const { onChainId } = data;
-        setAuction({ ...auction, onChainId, canceled: false });
+        setAuction((upToDateAuction) => ({ ...upToDateAuction, onChainId, canceled: false }));
         setShowLoading(false);
       });
 
       subscribeToCancelation(auction.id, (err, data) => {
         if (err) return;
-        setAuction({ ...auction, canceled: true });
+        setAuction((upToDateAuction) => ({ ...upToDateAuction, canceled: true }));
         setShowLoading(false);
       });
 
       subscribeToDepositNfts(auction.id, (err, data) => {
         if (err) return;
-        setApprovedTxCount(approvedTxCount + 1);
-        const newVerifyTxs = [...depositVerifyingTxIndex];
-        const txIndex = newVerifyTxs.pop();
-        setApprovedTxs([...approvedTxs, txIndex]);
-        setAuction({ ...auction, depositNfts: true });
-        setDepositVerifyingTxIndex(newVerifyTxs);
-        setShowLoading(false);
-        if (!auction.canceled && txIndex === transactions.finalSlotIndices.length - 1) {
+        setApprovedTxCount((upToDateTxCount) => upToDateTxCount + 1);
+
+        let newTransaction = null;
+        let newAuction = null;
+        let newVerifyTxs = [];
+        let txIndex = 0;
+
+        setDepositVerifyingTxIndex((upToDate) => {
+          newVerifyTxs = [...upToDate];
+          txIndex = newVerifyTxs.pop();
+          return newVerifyTxs;
+        });
+
+        setApprovedTxs((upToDate) => [...upToDate, txIndex]);
+
+        setAuction((upToDate) => {
+          newAuction = { ...upToDate, depositNfts: true };
+          return newAuction;
+        });
+
+        setTransactions((upToDate) => {
+          newTransaction = upToDate;
+          return upToDate;
+        });
+
+        if (!newAuction.canceled && txIndex === newTransaction.finalSlotIndices.length - 1) {
           setShowSuccessPopup(true);
         }
+        setShowLoading(false);
       });
 
       subscribeToWithdrawNfts(auction.id, (err, { hasWithdrawnAll }) => {
         if (err) return;
 
-        const newApprovedTxs = [...approvedTxs];
-        const newVerifyTxs = [...withdrawVerifyingTxIndex];
-        const txIndex = newVerifyTxs.pop();
-        newApprovedTxs.splice(newApprovedTxs.indexOf(txIndex), 1);
+        let newApprovedTxs = null;
+        let newVerifyTxs = null;
+
+        setApprovedTxs((upToDate) => {
+          newApprovedTxs = [...upToDate];
+          return upToDate;
+        });
+
+        setWithdrawVerifyingTxIndex((upToDate) => {
+          newVerifyTxs = [...upToDate];
+          const txIndex = newVerifyTxs.pop();
+          newApprovedTxs.splice(newApprovedTxs.indexOf(txIndex), 1);
+          return newVerifyTxs;
+        });
+
         setApprovedTxs(newApprovedTxs);
-        setApprovedTxCount(approvedTxCount - 1);
-        setWithdrawVerifyingTxIndex(newVerifyTxs);
+
+        setApprovedTxCount((upToDate) => upToDate - 1);
+
         if (hasWithdrawnAll) {
-          setAuction({ ...auction, depositedNfts: false });
+          setAuction((upToDate) => ({ ...upToDate, depositedNfts: false }));
         }
+        setShowLoading(false);
       });
     }
 

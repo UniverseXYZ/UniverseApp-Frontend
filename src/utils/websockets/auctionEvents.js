@@ -11,9 +11,7 @@ const socketOptions = {
 };
 
 export const initiateAuctionSocket = () => {
-  socket = io(`${process.env.REACT_APP_WEB_SOCKET_URL}/auction`, socketOptions);
-
-  console.log(`Connecting to auctions socket...`);
+  socket = io(`${process.env.REACT_APP_API_BASE_URL}/auctions-socket`, socketOptions);
   socket.on('connect', () => {
     console.log('CONNECTED TO AUCTIONS WEB SOCKET');
   });
@@ -76,6 +74,7 @@ export const subscribeToBidSubmitted = (auctionId, cb) => {
 };
 
 export const removeAllListeners = (auctionId) => {
+  if (!socket) return true;
   console.log(`Removing all listeners for ${auctionId}`);
 
   socket.removeAllListeners(`auction_${auctionId}_status`);

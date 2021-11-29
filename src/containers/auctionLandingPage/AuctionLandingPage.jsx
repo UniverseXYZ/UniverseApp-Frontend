@@ -43,7 +43,6 @@ const AuctionLandingPage = () => {
   const [slotsInfo, setSlotsInfo] = useState({});
   const [loadingText, setLoadingText] = useState(defaultLoadingText);
   const [showSuccessfulBid, setShowSuccessfulBid] = useState(false);
-  const [auctionId, setAuctionId] = useState(0);
 
   useEffect(() => {
     if (bidders) {
@@ -151,7 +150,6 @@ const AuctionLandingPage = () => {
       setBidders(auctionInfo.bidders);
       setAuction(auctionInfo);
       setLoading(false);
-      setAuctionId(auctionInfo.auction.id);
       initiateAuctionSocket();
     } else {
       setLoading(false);
@@ -170,13 +168,7 @@ const AuctionLandingPage = () => {
 
   useEffect(
     () => () => {
-      removeAllListeners(auctionId);
-    },
-    [auctionId > 0]
-  );
-
-  useEffect(
-    () => () => {
+      // removeAllListeners(aId);
       disconnectAuctionSocket();
     },
     []
