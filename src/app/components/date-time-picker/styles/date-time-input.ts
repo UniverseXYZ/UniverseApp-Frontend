@@ -4,7 +4,6 @@ export const dateTimeInput = {
   borderRadius: '12px',
   color: 'black',
   fontWeight: '400',
-  justifyContent: 'space-between',
   height: 'auto',
   padding: 0,
   position: 'relative',
@@ -13,10 +12,12 @@ export const dateTimeInput = {
   'span': {
     _first: {
       p: '14px',
+      width: 'calc(100% - 50px)'
     },
     _last: {
       borderLeft: '1px solid #D4D4D4',
       padding: '16px',
+      width: '50px'
     }
   },
   _before: {
