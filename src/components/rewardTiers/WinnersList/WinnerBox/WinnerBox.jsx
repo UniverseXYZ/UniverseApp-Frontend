@@ -3,19 +3,11 @@ import PropTypes from 'prop-types';
 import './WinnerBox.scss';
 import WinnerIcon from '../../../../assets/images/winner-icon.svg';
 
-const WinnerBox = ({
-  selectedWinners,
-  winnerNumber,
-  tierId,
-  nftsCount,
-  setSelectedWinners,
-  activeClass,
-  index,
-}) => (
+const WinnerBox = ({ winnerNumber, tierId, nftsCount, setSelectedWinners, activeClass, index }) => (
   <div
     className={activeClass ? 'reward__winner-box selected' : 'reward__winner-box'}
     aria-hidden="true"
-    onClick={() => setSelectedWinners({ ...selectedWinners, [tierId]: index })}
+    onClick={() => setSelectedWinners({ [tierId]: index })}
   >
     <img src={WinnerIcon} alt="winner-icon" />
     <p>Winner #{winnerNumber}</p>
@@ -25,7 +17,6 @@ const WinnerBox = ({
 );
 
 WinnerBox.propTypes = {
-  selectedWinners: PropTypes.oneOfType([PropTypes.array]).isRequired,
   tierId: PropTypes.string.isRequired,
   setSelectedWinners: PropTypes.func.isRequired,
   winnerNumber: PropTypes.number.isRequired,
