@@ -4,11 +4,21 @@ import Slider from 'react-slick';
 import './WinnersList.scss';
 import WinnerBox from './WinnerBox/WinnerBox';
 
-const WinnersList = ({ selectedWinner, tier, setSelectedWinners }) => {
+const WinnersList = ({
+  selectedWinnerIndex,
+  selectedWinners,
+  tier,
+  setSelectedWinners,
+  currentSlide,
+  setCurrentSlide,
+}) => {
   const settings = {
     infinite: tier.winners > 7,
     slidesToShow: tier.winners < 8 ? tier.winners : 1,
-    // initialSlide: selectedWinner,
+    initialSlide: currentSlide,
+    afterChange(current) {
+      setCurrentSlide(current);
+    },
     variableWidth: true,
     responsive: [
       {
@@ -54,10 +64,11 @@ const WinnersList = ({ selectedWinner, tier, setSelectedWinners }) => {
       <Slider {...settings}>
         {tier.nftSlots.map((data, index) => (
           <WinnerBox
-            index={index}
-            selectedWinner={selectedWinner}
+            selectedWinnerIndex={selectedWinnerIndex}
+            selectedWinners={selectedWinners}
             data={data}
             tierId={tier.id}
+            index={index}
             setSelectedWinners={setSelectedWinners}
           />
         ))}
@@ -67,9 +78,12 @@ const WinnersList = ({ selectedWinner, tier, setSelectedWinners }) => {
 };
 
 WinnersList.propTypes = {
-  selectedWinner: PropTypes.number.isRequired,
+  selectedWinnerIndex: PropTypes.number.isRequired,
+  selectedWinners: PropTypes.oneOfType([PropTypes.object]).isRequired,
   tier: PropTypes.oneOfType([PropTypes.object]).isRequired,
   setSelectedWinners: PropTypes.func.isRequired,
+  currentSlide: PropTypes.number.isRequired,
+  setCurrentSlide: PropTypes.func.isRequired,
 };
 
 export default WinnersList;

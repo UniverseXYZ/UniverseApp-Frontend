@@ -4,13 +4,12 @@ import Slider from 'react-slick';
 import './NftsList.scss';
 import NftCard from './NftCard/NftCard';
 
-const NftsList = ({ selectedWinner, onlyUniqueNFTs }) => {
-  const winnerNftLength = Object.keys(onlyUniqueNFTs[selectedWinner]).length;
-  const settingsNfts = {
+const NftsList = ({ selectedWinnerIndex, onlyUniqueNFTs }) => {
+  const winnerNftLength = Object.keys(onlyUniqueNFTs[selectedWinnerIndex]).length;
+  const settings = {
     variableWidth: true,
     infinite: winnerNftLength > 5,
     slidesToShow: winnerNftLength < 6 ? winnerNftLength : 1,
-    initialSlide: 0,
     responsive: [
       {
         breakpoint: 993,
@@ -38,8 +37,8 @@ const NftsList = ({ selectedWinner, onlyUniqueNFTs }) => {
 
   return (
     <div className="rev-reward">
-      <Slider {...settingsNfts}>
-        {Object.keys(onlyUniqueNFTs[selectedWinner]).map((key) => {
+      <Slider {...settings}>
+        {Object.keys(onlyUniqueNFTs[selectedWinnerIndex]).map((key) => {
           const {
             artworkType,
             url,
@@ -49,7 +48,7 @@ const NftsList = ({ selectedWinner, onlyUniqueNFTs }) => {
             collectionAddress,
             collectionUrl,
             tokenIds,
-          } = onlyUniqueNFTs[selectedWinner][key];
+          } = onlyUniqueNFTs[selectedWinnerIndex][key];
           const nftIsImage =
             artworkType === 'png' ||
             artworkType === 'jpg' ||
@@ -87,7 +86,7 @@ const NftsList = ({ selectedWinner, onlyUniqueNFTs }) => {
 };
 
 NftsList.propTypes = {
-  selectedWinner: PropTypes.number.isRequired,
+  selectedWinnerIndex: PropTypes.number.isRequired,
   onlyUniqueNFTs: PropTypes.oneOfType([PropTypes.object]).isRequired,
 };
 
