@@ -121,6 +121,7 @@ const BidRankingsPopup = ({
                           artworkType === 'jpg' ||
                           artworkType === 'jpeg' ||
                           artworkType === 'mpeg' ||
+                          artworkType === 'gif' ||
                           artworkType === 'webp';
 
                         return (
