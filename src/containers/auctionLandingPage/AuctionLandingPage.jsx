@@ -146,7 +146,26 @@ const AuctionLandingPage = () => {
     const auctionInfo = await getAuctionLandingPage(artistUsername, auctionName);
     if (!auctionInfo.error) {
       console.log(auctionInfo);
-      calculateRewardTierSlots(auctionInfo.rewardTiers, auctionInfo.bidders);
+
+      const tierSlots = [];
+      let slotIndexCounter = 1;
+      auctionInfo.rewardTiers
+        .sort((a, b) => a.tierPosition - b.tierPosition)
+        .forEach((rewardTier) => {
+          for (let i = 0; i < rewardTier.numberOfWinners; i += 1) {
+            // eslint-disable-next-line no-loop-func
+            const nfts = rewardTier.nfts.filter((t) => t.slot === slotIndexCounter);
+            tierSlots.push({
+              ...rewardTier,
+              nfts,
+              winner: auctionInfo.bidders[i]?.user?.address,
+              slotIndex: slotIndexCounter,
+              // eslint-disable-next-line no-loop-func
+              minimumBid: rewardTier.slots?.find((s) => s.index === slotIndexCounter)?.minimumBid,
+            });
+            slotIndexCounter += 1;
+          }
+        });
       setBidders(auctionInfo.bidders);
       setAuction(auctionInfo);
       setLoading(false);
