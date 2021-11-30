@@ -34,8 +34,7 @@ const PreviewNFTsPopup = ({ onClose, tier, auction, startPlace, endPlace }) => {
     }));
 
     setFilteredNfts(uniqueFiltered);
-
-    const slot = tier.slots.find((s) => s.index === selectedBidderIndex);
+    const slot = tier.slots?.find((s) => s.index === selectedBidderIndex);
     setSelectedNFTIndex(0);
     setSlotReserveValue(slot?.minimumBid || 0);
   }, [selectedBidderIndex]);
@@ -122,7 +121,7 @@ const PreviewNFTsPopup = ({ onClose, tier, auction, startPlace, endPlace }) => {
         </div>
       </div>
       <div className="details">
-        <div className="tier__details">
+        <div className="tier__details__header">
           <div className="tier__title">
             <span
               style={{
@@ -131,26 +130,29 @@ const PreviewNFTsPopup = ({ onClose, tier, auction, startPlace, endPlace }) => {
             />
             <h2>{tier.name}</h2>
           </div>
-          <div className="tier__info__header">
-            <div className="tier__info" style={{ borderBottom: '1px solid rgba(0, 0, 0, 0.1)' }}>
-              <span>
-                {startPlace !== endPlace
-                  ? `Bidders #${startPlace}-${endPlace}`
-                  : `Bidder #${startPlace}`}
-              </span>
-              <span>NFTs: {tier.nfts.length}</span>
-            </div>
+
+          <div className="tier__info">
+            <span>
+              {startPlace !== endPlace
+                ? `Bidders #${startPlace}-${endPlace}`
+                : `Bidder #${startPlace}`}
+            </span>
+            <span>NFTs: {tier.nfts.length}</span>
+          </div>
+        </div>
+
+        <div className="tier__details__body">
+          <div className="tier__details__body__dropdown__block">
             <BiddersDropdown
               startPlace={startPlace}
               endPlace={endPlace}
               setSelectedBidderIndex={setSelectedBidderIndex}
             />
-          </div>
-          <div className="tier__info__header">
             <div className="tier__info">
-              <span style={{ marginBottom: '0' }}>{`Reserve value: ${slotReserveValue} ETH`}</span>
+              <span>{`Reserve value: ${slotReserveValue} ETH`}</span>
             </div>
           </div>
+
           <div className="tier__nfts">
             {filteredNfts.map((nft, index) => {
               if (nft.artworkType === 'mp4') {

@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Popup from 'reactjs-popup';
-import uuid from 'react-uuid';
 import PreviewNFTsPopup from '../popups/PreviewNFTsPopup.jsx';
 
 const RewardTiers = ({ auction }) => {
@@ -51,18 +50,8 @@ const RewardTiers = ({ auction }) => {
                         ? `Bidder #${startPlace}`
                         : `Bidders #${startPlace}-${endPlace}`}
                     </span>
-                    {tier.nftsPerWinner > 0 ? (
-                      <span>{`${tier.nftsPerWinner} NFT${
-                        tier.nftsPerWinner > 1 ? 's' : ''
-                      } per winner`}</span>
-                    ) : (
-                      <span className="custom--nfts">Different NFTs per winner</span>
-                    )}
-                    {tier.minBidValue ? (
-                      <span>{`Minimum bid: ${tier.minBidValue} ETH`}</span>
-                    ) : (
-                      <></>
-                    )}
+                    <span>NFTs: {tier.nfts.length}</span>
+                    <span>Reserve price: 0-2.3 ETH</span>
                   </div>
                   <div className="tier__description">{tier.description}</div>
                   <div className="preview__nfts">

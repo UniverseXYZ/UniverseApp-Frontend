@@ -17,7 +17,21 @@
       width: 100%;
     }
     .auctions-tier {
-      margin-top: 36px;
+      margin-top: 35px;
+
+      .line-winners-nfts {
+        width: 100%;
+        height: 1px;
+        background-color: #e5e5e5;
+        margin: 30px 0;
+      }
+
+      @include md {
+        margin-top: 24px;
+      }
+      @include sm {
+        margin-top: 34px;
+      }
     }
     .auctionIcon {
       margin-right: 20px;
@@ -252,202 +266,155 @@
       padding: 24px 30px;
     }
   }
-  .rev-reward {
-    display: grid;
-    grid-template-columns: repeat(6, 1fr);
-    grid-gap: 30px;
+}
 
-    .rev-reward__box {
-      background: $white;
-      border: 1px solid rgba(0, 0, 0, 0.1);
-      box-sizing: border-box;
+.tickeid-popup {
+  position: relative;
+  &:hover {
+    .tooltiptext {
+      visibility: visible;
+    }
+  }
+  > img {
+    border-radius: 12px;
+    cursor: pointer;
+    &:hover {
+      background: rgba(255, 73, 73, 0.05);
       border-radius: 12px;
-      padding: 12px;
-      position: relative;
+    }
+  }
+  .tooltiptext {
+    visibility: hidden;
+    font-family: $spaceGroteskFont;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 12px;
+    width: 136px;
+    background-color: $black;
+    color: $white;
+    text-align: center;
+    border-radius: 100px;
+    padding: 4px 12px;
+    position: absolute;
+    z-index: 1;
+    top: -40px;
+    left: 51%;
+    transform: translateX(-50%);
+    box-shadow: 0px 0px 2px 0px rgba(255, 255, 255, 0.4);
 
-      &__image {
-        position: relative;
-        margin-bottom: 12px;
-        width: 164px;
-        height: unset;
-        padding-bottom: 100%;
+    &::before {
+      content: "";
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      margin-top: 0.6px;
+      margin-left: -5px;
+      border-width: 5px;
+      border-style: solid;
+      border-color: rgba(255, 255, 255, 0.4) transparent transparent transparent;
+    }
+    &::after {
+      content: "";
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      margin-left: -5px;
+      border-width: 5px;
+      border-style: solid;
+      border-color: black transparent transparent transparent;
+    }
+  }
 
-        img.preview-image, video {
-          position: absolute;
-          left: 0;
-          width: 100%;
-          height: 100%;
-          object-fit: cover;
-          border-radius: 5px;
-        }
+  .nft-tokenid-block {
+    max-width: 109px;
+    top: initial;
+    bottom: 24px;
+    border-radius: 12px;
+    text-align: initial;
+    padding: 12px 8px 12px 12px;
 
-        .check__icon {
-          position: absolute;
-          top: 8px;
-          left: 8px;
-        }
-        .video__icon {
-          position: absolute;
-          top: 9px;
-          right: 7px;
-        }
-        @include lg {
-          width: 100%;
-          text-align: center;
-          margin: auto auto 12px;
-        }
-        @include sm {
-          width: 100%;
-        }
-      }
+    .nft-tokenid-title {
+      font-family: $spaceGroteskFont;
+      font-style: normal;
+      font-weight: bold;
+      font-size: 10px;
+      line-height: 150%;
+      color: $white;
+      opacity: 0.4;
+    }
 
-      &__name {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        margin-bottom: 10px;
+    .nft-tokenids {
+      font-family: $spaceGroteskFont;
+      font-style: normal;
+      font-weight: bold;
+      font-size: 12px;
+      line-height: 150%;
+      color: #ffffff;
+    }
+  }
+}
 
-        h3 {
-          font-family: $spaceGroteskFont;
-          font-style: normal;
-          font-weight: bold;
-          font-size: 14px;
-          color: $black;
-        }
-        .three__dots {
-          position: relative;
-          display: flex;
-          align-items: center;
-          gap: 3px;
-          span {
-            height: 4px;
-            width: 4px;
-            background-color: $black;
-            border-radius: 50%;
-          }
-        }
-      }
+.reward-tiers {
+  .slick-slide {
+    width: unset !important;
+  }
+  .slick-dots {
+    display: none !important;
+  }
+  .slick-track {
+    padding: 4px 0px;
+  }
+  .slick-arrow {
+    background: $white;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    height: 42px;
+    width: 42px;
+    box-sizing: border-box;
+    box-shadow: 0px 10px 36px rgba(136, 120, 172, 0.14);
+    border-radius: 50%;
+    top: 60px;
+    &:hover {
+      background: linear-gradient($white, $white) padding-box, linear-gradient(to right, #bceb00, #00eaea) border-box;
+      border: 1px solid transparent;
+    }
 
-      &__footer {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
+    &::before {
+      color: rgba(0, 0, 0, 1);
+      position: absolute;
+    }
 
-        .ed-count {
-          font-family: $spaceGroteskFont;
-          font-style: normal;
-          font-weight: bold;
-          font-size: 14px;
-          line-height: 21px;
-          text-align: right;
-          color: #000000;
-        }
-        .collection__details {
-          display: flex;
-          align-items: center;
-          .random__bg__color {
-            height: 20px;
-            width: 20px;
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-family: $sharpGroteskMediumFont;
-            font-style: normal;
-            font-weight: 500;
-            font-size: 12px;
-            text-transform: uppercase;
-            color: $black;
-          }
-          img {
-            height: 20px;
-            width: 20px;
-            object-fit: cover;
-            border-radius: 50%;
-          }
-          span {
-            font-family: $spaceGroteskFont;
-            font-style: normal;
-            font-weight: 300;
-            font-size: 12px;
-            color: $black;
-            margin-left: 6px;
-          }
-        }
-        div.collection__count {
-          position: relative;
-          font-family: $spaceGroteskFont;
-          font-style: normal;
-          font-weight: bold;
-          font-size: 14px;
-          color: $black;
-          cursor: default;
-
-          &:hover {
-            .generatedEditions {
-              display: grid;
-              grid-column-gap: 10px;
-              grid-row-gap: 5px;
-              z-index: 1;
-            }
-          }
-
-          .generatedEditions {
-            display: none;
-            position: absolute;
-            bottom: 25px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: $white;
-            box-shadow: 0px 10px 20px rgba(136, 120, 172, 0.2);
-            border-radius: 12px;
-            padding: 16px;
-
-            > div {
-              font-family: $spaceGroteskFont;
-              font-style: normal;
-              font-weight: normal;
-              font-size: 12px;
-              line-height: 150%;
-              color: $black;
-            }
-          }
-        }
-      }
-
-      &__highlight__one {
-        position: absolute;
-        bottom: -8px;
-        border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-        border-left: 1px solid rgba(0, 0, 0, 0.1);
-        border-right: 1px solid rgba(0, 0, 0, 0.1);
-        border-bottom-left-radius: 150px;
-        border-bottom-right-radius: 150px;
-        width: 95%;
-        height: 8px;
-        left: 8px;
-      }
-      &__highlight__two {
-        position: absolute;
-        bottom: -16px;
-        border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-        border-left: 1px solid rgba(0, 0, 0, 0.1);
-        border-right: 1px solid rgba(0, 0, 0, 0.1);
-        border-bottom-left-radius: 150px;
-        border-bottom-right-radius: 150px;
-        width: 90%;
-        height: 8px;
-        left: 16px;
+    &.slick-prev {
+      position: absolute;
+      left: -18px;
+      z-index: 1;
+      top: 47px;
+      bottom: 0;
+      margin: auto;
+      &::before {
+        content: url("../../assets/images/slider-btn.svg");
+        opacity: 1;
+        top: 7px;
+        right: 17px;
       }
     }
-    @include lg {
-      grid-template-columns: repeat(3, 1fr);
+    &.slick-next {
+      position: absolute;
+      right: -18px;
+      z-index: 1;
+      top: 47px;
+      bottom: 0;
+      margin: auto;
+      &::before {
+        content: url("../../assets/images/slider-btn.svg");
+        opacity: 1;
+        transform: rotate(180deg);
+        top: 14px;
+        right: 16px;
+      }
     }
-    @include md {
-      grid-template-columns: repeat(2, 1fr);
-    }
+
     @include sm {
-      grid-template-columns: 1fr;
+      display: none !important;
     }
   }
 }

@@ -345,7 +345,7 @@
         padding: 10px 20px;
         border-radius: 12px;
       }
-      
+
       .each--bid {
         padding: 5px 0;
         &:not(:last-child) {
@@ -434,7 +434,8 @@
             position: relative;
             max-height: 80px;
             cursor: pointer;
-            img, video {
+            img,
+            video {
               border-radius: 10px;
               width: 100%;
               height: 100%;
@@ -1536,9 +1537,11 @@
   .details {
     background-color: $white;
     overflow-y: auto;
-    .tier__details {
-      padding: 25px;
+
+    .tier__details__header {
+      padding: 30px;
       border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+
       .tier__title {
         display: flex;
         align-items: center;
@@ -1567,51 +1570,44 @@
             width: 16px;
           }
         }
-      }
-      .tier__info__header {
-        position: relative;
-        display: grid;
-        grid-template-columns: 1fr;
-        grid-row-gap: 8px;
-        .tier__info {
-          display: flex;
-          align-items: center;
-          flex-wrap: wrap;
-          span {
-            border-radius: 12px;
-            padding: 6px 16px;
-            font-family: $spaceGroteskFont;
-            font-style: normal;
-            font-weight: bold;
-            font-size: 14px;
-            line-height: 150%;
-            margin-right: 12px;
-            margin-bottom: 30px;
-            &:not(.custom--nfts) {
-              background: rgba(0, 0, 0, 0.05);
-              color: $black;
-            }
-            &.custom--nfts {
-              background: rgba(228, 182, 19, 0.05);
-              border: 1px solid #e4b613;
-              color: #e4b613;
-            }
-          }
-        }
         @include md {
-          grid-template-columns: 1fr 1fr;
-          align-items: center;
+          margin-bottom: 0;
         }
         @include sm {
-          grid-template-columns: 1fr;
-          grid-gap: 20px;
+          margin-bottom: 10px;
         }
       }
+      @include md {
+        display: flex;
+        justify-content: space-between;
+        padding: 40px 60px;
+      }
+      @include sm {
+        display: grid;
+        padding: 30px 20px;
+      }
+    }
+
+    .tier__details__body {
+      padding: 30px;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+
+      &__dropdown__block {
+        @include md {
+          display: flex;
+          justify-content: space-between;
+        }
+        @include sm {
+          display: flex;
+          flex-direction: column;
+        }
+      }
+
       .tier__nfts {
         display: flex;
         align-items: center;
         flex-wrap: wrap;
-        margin-top: 20px;
+        margin-top: 24px;
         .nft__image {
           width: 48px;
           height: 48px;
@@ -1624,7 +1620,8 @@
               linear-gradient(to right, #bceb00, #00eaea) border-box;
             border: 2px solid transparent;
           }
-          img, video {
+          img,
+          video {
             width: 100%;
             height: 100%;
             border-radius: 10px;
@@ -1635,9 +1632,49 @@
           display: none;
         }
       }
+
+      @include md {
+        padding: 30px 60px;
+      }
+      @include sm {
+        padding: 30px 20px;
+      }
     }
+
+    .tier__info {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 17px;
+      span {
+        border-radius: 100px;
+        padding: 6px 16px;
+        font-family: $spaceGroteskFont;
+        font-style: normal;
+        font-weight: bold;
+        font-size: 14px;
+        line-height: 150%;
+        &:not(.custom--nfts) {
+          background: rgba(0, 0, 0, 0.05);
+          color: $black;
+        }
+        &.custom--nfts {
+          background: rgba(228, 182, 19, 0.05);
+          border: 1px solid #e4b613;
+          color: #e4b613;
+        }
+      }
+
+      @include md {
+        gap: 7px;
+      }
+      @include sm {
+        gap: 12px;
+      }
+    }
+
     .nft__details {
-      padding: 25px;
+      padding: 30px;
       .nft__title {
         font-family: $sharpGroteskSemiBoldFont;
         font-style: normal;
@@ -1738,6 +1775,12 @@
           text-decoration: underline;
           font-weight: bold;
         }
+      }
+      @include md {
+        padding: 30px 60px;
+      }
+      @include sm {
+        padding: 30px 20px;
       }
     }
   }
@@ -4716,7 +4759,7 @@
     height: 100%;
   }
 }
-.editionsRemove{
+.editionsRemove {
   position: fixed;
   left: 50%;
   top: 50%;
@@ -4726,7 +4769,7 @@
   background: #ffffff;
   border-radius: 12px;
   padding: 20px;
-  .close{
+  .close {
     position: absolute;
     right: -13px;
     top: -13px;
@@ -4738,7 +4781,7 @@
     border-radius: 50%;
     cursor: pointer;
   }
-  h3{
+  h3 {
     font-family: $sharpGroteskSemiBoldFont;
     font-style: normal;
     font-weight: 600;
