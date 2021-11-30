@@ -43,7 +43,7 @@ jobs:
     - name: Build
       run: yarn build
       env:
-        REACT_APP_API_BASE_URL: "https://auctions.api.universe.xyz"
+        REACT_APP_API_BASE_URL: "https://dev.api.universe.xyz"
         REACT_APP_NETWORK_CHAIN_ID: 4
         REACT_APP_NETWORK_NAME: "Rinkeby"
         REACT_APP_BATCH_MINTING_CHUNK_SIZE: 40
