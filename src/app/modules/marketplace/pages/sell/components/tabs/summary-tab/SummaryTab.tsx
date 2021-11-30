@@ -117,7 +117,7 @@ export const SummaryTab = () => {
       </Flex>
       <Box textAlign={'right'} mb={'50px'}>
         <Button mr={'10px'} variant={'outline'} onClick={sellData.goBack}>Back</Button>
-        <Button boxShadow={'xl'} onClick={sellData.save}>Post your listing</Button>
+        <Button boxShadow={'xl'} onClick={sellData.form.submitForm}>Post your listing</Button>
       </Box>
     </>
   );

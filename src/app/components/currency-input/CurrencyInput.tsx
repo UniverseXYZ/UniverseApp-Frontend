@@ -10,25 +10,10 @@ import {
 import React, { useCallback, useMemo } from 'react';
 
 import { InputShadow } from '../input-shadow';
-import ether from '../../../assets/images/coins/eth.svg';
-import bond from '../../../assets/images/coins/bond.svg';
-import dai from '../../../assets/images/coins/dai.svg';
-import snx from '../../../assets/images/coins/snx.svg';
-import usdc from '../../../assets/images/coins/usdc.svg';
+import { ICurrencyInputProps } from './types';
+import { coins } from './consts';
+
 import arrow from '../../../assets/images/arrow-down.svg';
-
-interface ICurrencyInputProps extends NumberInputProps {
-  value: any;
-  onChange: (value: any) => void;
-}
-
-const coins = [
-  { name: 'ETH', icon: ether, },
-  { name: 'USDC', icon: usdc, },
-  { name: 'BOND', icon: bond, },
-  { name: 'SNX', icon: snx, },
-  { name: 'DAI', icon: dai, },
-];
 
 export const CurrencyInput = ({ value, onChange, placeholder, ...props }: ICurrencyInputProps) => {
   const selectedCoin = useMemo(() => {

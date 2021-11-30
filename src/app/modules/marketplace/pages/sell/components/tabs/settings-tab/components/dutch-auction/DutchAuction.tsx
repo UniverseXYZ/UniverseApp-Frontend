@@ -1,16 +1,22 @@
 import { Box, Flex, Heading, Input, Switch, Text } from '@chakra-ui/react';
 import React from 'react';
+import { FormikProps } from 'formik';
 
 import { useMarketplaceSellData } from '../../../../../hooks';
 import { SellMethod } from '../../../../../enums';
 import * as styles from '../../styles';
 import { CurrencyInput, DateTimePicker, InputShadow } from '../../../../../../../../../components';
 import { GreyBox } from '../../../../grey-box';
+import { IMarketplaceSellContextData, IDutchAuctionForm } from '../../../../../types';
+
+interface IMarketplaceSellContextDataOverride extends Omit<IMarketplaceSellContextData, 'form'> {
+  form: FormikProps<IDutchAuctionForm>;
+}
 
 export const SettingsTabDutchAuction = () => {
-  const sellData = useMarketplaceSellData();
+  const { form, sellMethod } = useMarketplaceSellData() as IMarketplaceSellContextDataOverride;
 
-  if (sellData.form.values.sellMethod !== SellMethod.DUTCH) {
+  if (sellMethod !== SellMethod.DUTCH) {
     return null;
   }
 
@@ -25,8 +31,8 @@ export const SettingsTabDutchAuction = () => {
           <CurrencyInput
             placeholder={'Amount'}
             name={'price'}
-            value={sellData.form.values.price}
-            onChange={(value) => sellData.form.setFieldValue('price', value)}
+            value={form.values.price}
+            onChange={(value) => form.setFieldValue('price', value)}
           />
         </Box>
       </Flex>
@@ -53,8 +59,8 @@ export const SettingsTabDutchAuction = () => {
                 <CurrencyInput
                   placeholder={'Amount'}
                   name={'endingPrice'}
-                  value={sellData.form.values.endingPrice}
-                  onChange={(value) => sellData.form.setFieldValue('endingPrice', value)}
+                  value={form.values.endingPrice}
+                  onChange={(value) => form.setFieldValue('endingPrice', value)}
                 />
               </Box>
             </Flex>
@@ -65,9 +71,9 @@ export const SettingsTabDutchAuction = () => {
               </Box>
               <Box>
                 <DateTimePicker
-                  value={sellData.form.values.expirationDate}
+                  value={form.values.expirationDate}
                   modalName={'Expiration date'}
-                  onChange={(val) => sellData.form.setFieldValue('expirationDate', val)}
+                  onChange={(val) => form.setFieldValue('expirationDate', val)}
                 />
               </Box>
             </Flex>
@@ -83,11 +89,11 @@ export const SettingsTabDutchAuction = () => {
           <Switch
             size="lg"
             name="isScheduledForFutureTime"
-            onChange={sellData.form.handleChange}
-            value={sellData.form.values.isScheduledForFutureTime}
+            isChecked={form.values.isScheduledForFutureTime}
+            onChange={form.handleChange}
           />
         </Flex>
-        {sellData.form.values.isScheduledForFutureTime && (
+        {form.values.isScheduledForFutureTime && (
           <Box pt={'20px'} w={'100%'}>
             <GreyBox p={'30px'}>
               <Flex sx={styles.settingsItem}>
@@ -97,9 +103,9 @@ export const SettingsTabDutchAuction = () => {
                 </Box>
                 <Box>
                   <DateTimePicker
-                    value={sellData.form.values.futureDate}
+                    value={form.values.futureDate}
                     modalName={'Future date'}
-                    onChange={(val) => sellData.form.setFieldValue('futureDate', val)}
+                    onChange={(val) => form.setFieldValue('futureDate', val)}
                   />
                 </Box>
               </Flex>
@@ -115,19 +121,19 @@ export const SettingsTabDutchAuction = () => {
         <Flex justifyContent={'flex-end'}>
           <Switch
             size="lg"
-            name="withPrivacy"
-            onChange={sellData.form.handleChange}
-            value={sellData.form.values.withPrivacy}
+            name="isPrivacy"
+            isChecked={form.values.isPrivacy}
+            onChange={form.handleChange}
           />
         </Flex>
-        {sellData.form.values.withPrivacy && (
+        {form.values.isPrivacy && (
           <Box pt={'20px'} w={'100%'}>
             <InputShadow>
               <Input
                 placeholder="Buyer address"
                 name="buyerAddress"
-                value={sellData.form.values.buyerAddress}
-                onChange={sellData.form.handleChange}
+                value={form.values.buyerAddress}
+                onChange={form.handleChange}
               />
             </InputShadow>
           </Box>

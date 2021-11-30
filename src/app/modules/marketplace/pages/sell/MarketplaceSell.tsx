@@ -1,64 +1,58 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { Box, Container, Heading, Image, Link, Tab, TabList, TabPanels, Tabs } from '@chakra-ui/react';
+import { useFormik } from 'formik';
 
 import bg from '../../../../../assets/images/marketplace/v2/bg.png';
 import arrow from '../../../../../assets/images/arrow.svg';
 
 import { useThemeContext } from '../../../../../contexts/ThemeContext';
-import { sellPageTabs, MarketplaceSellContext } from './constants';
+import {
+  defaultDutchAuctionForm, defaultEnglishAuctionForm,
+  defaultFixedListingForm,
+  MarketplaceSellContext,
+  sellPageTabs,
+  settingsAmountTypeTitleText,
+  settingsMethodsTitleText,
+} from './constants';
 import { SelectAmountTab, SelectMethodType, SettingsTab, SummaryTab, TabPanel } from './components';
-import { SellAmountType, SellPageTabs, SellMethod } from './enums';
-import { IMarketplaceSellContextData } from './types';
-import { useFormik } from 'formik';
-
-const settingsAmountTypeTitleText: Record<SellAmountType, string> = {
-  [SellAmountType.SINGLE]: 'Single item',
-  [SellAmountType.BUNDLE]: 'Bundle',
-};
-
-const settingsMethodsTitleText: Record<SellMethod, string> = {
-  [SellMethod.FIXED]: 'Fixed Listing',
-  [SellMethod.DUTCH]: 'Dutch auction',
-  [SellMethod.ENGLISH]: 'English auction',
-};
+import { SellAmountType, SellMethod, SellPageTabs } from './enums';
+import { IMarketplaceSellContextData, ISellForm } from './types';
 
 export const MarketplaceSell = () => {
   const { setDarkMode } = useThemeContext() as any;
   const [activeTab, setActiveTab] = useState<SellPageTabs>(SellPageTabs.SELL_AMOUNT);
+  const [amountType, setAmountType] = useState<SellAmountType>();
+  const [sellMethod, setSellMethod] = useState<SellMethod>();
 
-  const form = useFormik({
-    initialValues: {
-      amountType: '',
-      sellMethod: '',
-      price: {
-        value: 0,
-        currency: '',
-      },
-      endingPrice: {
-        value: 0,
-        currency: '',
-      },
-      expirationDate: new Date(),
-      withPrivacy: false,
-      isScheduledForFutureTime: false,
-      futureDate: '',
-      buyerAddress: '',
-      minimumBid: '',
-      reservePrice: '',
-    },
+  const form = useFormik<ISellForm>({
+    initialValues: {} as ISellForm,
     onSubmit: values => {
       alert(JSON.stringify(values, null, 2));
     },
   });
 
   const handleSelectAmount = useCallback((amountType: SellAmountType) => {
-    form.setFieldValue('amountType', amountType);
+    setAmountType(amountType);
+    setSellMethod(undefined);
     setActiveTab(SellPageTabs.SELL_METHOD);
   }, []);
 
   const handleSelectSellMethod = useCallback((sellMethod: SellMethod) => {
-    form.setFieldValue('sellMethod', sellMethod);
+    setSellMethod(sellMethod);
     setActiveTab(SellPageTabs.SETTINGS);
+
+    switch (sellMethod) {
+      case SellMethod.FIXED:
+        form.setValues({...defaultFixedListingForm});
+        break;
+      case SellMethod.DUTCH:
+        form.setValues({...defaultDutchAuctionForm});
+        break;
+      case SellMethod.ENGLISH:
+        form.setValues({...defaultEnglishAuctionForm});
+        break;
+    }
+
   }, []);
 
   const handleGoBack = useCallback(() => {
@@ -89,25 +83,21 @@ export const MarketplaceSell = () => {
     }
   }, [activeTab]);
 
-  const handleSave = useCallback(() => {
-    console.log('SAVE');
-  }, []);
-
   useEffect(() => setDarkMode(false), []);
 
   const contextValue: IMarketplaceSellContextData = {
+    amountType: amountType as SellAmountType,
+    sellMethod: sellMethod as SellMethod,
     form: form,
     selectAmount: handleSelectAmount,
     selectMethod: handleSelectSellMethod,
     goBack: handleGoBack,
     goContinue: handleContinue,
-    save: handleSave,
   };
 
-  const settingsTabName = `
-    ${settingsAmountTypeTitleText[form.values.amountType as SellAmountType]} -
-    ${settingsMethodsTitleText[form.values.sellMethod as SellMethod]}
-  ` ;
+  const settingsTabName = (amountType && sellMethod)
+    ? `${settingsAmountTypeTitleText[amountType]} - ${settingsMethodsTitleText[sellMethod]}`
+    : '';
 
   return (
     <MarketplaceSellContext.Provider value={contextValue}>
@@ -125,7 +115,7 @@ export const MarketplaceSell = () => {
               mb={'20px'}
               fontFamily={'Space Grotesk'}
               fontWeight={500}
-              sx={{ _hover: { textDecoration: 'none' } }}
+              _hover={{ textDecoration: 'none' }}
             >
               <Image src={arrow} display="inline" mr="10px" position="relative" top="-2px" />
               NFT name

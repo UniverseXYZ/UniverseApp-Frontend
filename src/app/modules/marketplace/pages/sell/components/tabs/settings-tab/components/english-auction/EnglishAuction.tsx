@@ -1,15 +1,21 @@
 import { Box, Flex, Heading, Text } from '@chakra-ui/react';
 import React from 'react';
+import { FormikProps } from 'formik';
 
 import { useMarketplaceSellData } from '../../../../../hooks';
 import { SellMethod } from '../../../../../enums';
 import * as styles from '../../styles';
 import { CurrencyInput, DateTimePicker, InfoTooltip } from '../../../../../../../../../components';
+import { IEnglishAuctionForm, IMarketplaceSellContextData } from '../../../../../types';
+
+interface IMarketplaceSellContextDataOverride extends Omit<IMarketplaceSellContextData, 'form'> {
+  form: FormikProps<IEnglishAuctionForm>;
+}
 
 export const SettingsTabEnglishAuction = () => {
-  const sellData = useMarketplaceSellData();
+  const { form, sellMethod } = useMarketplaceSellData() as IMarketplaceSellContextDataOverride;
 
-  if (sellData.form.values.sellMethod !== SellMethod.ENGLISH) {
+  if (sellMethod !== SellMethod.ENGLISH) {
     return null;
   }
 
@@ -32,8 +38,8 @@ export const SettingsTabEnglishAuction = () => {
           <CurrencyInput
             placeholder={'Minimum bid'}
             name={'minimumBid'}
-            value={sellData.form.values.minimumBid}
-            onChange={(value) => sellData.form.setFieldValue('minimumBid', value)}
+            value={form.values.minBit}
+            onChange={(value) => form.setFieldValue('minBit', value)}
           />
         </Box>
       </Flex>
@@ -54,8 +60,8 @@ export const SettingsTabEnglishAuction = () => {
           <CurrencyInput
             placeholder={'Reserve price'}
             name={'reservePrice'}
-            value={sellData.form.values.reservePrice}
-            onChange={(value) => sellData.form.setFieldValue('reservePrice', value)}
+            value={form.values.reservePrice}
+            onChange={(value) => form.setFieldValue('reservePrice', value)}
           />
         </Box>
       </Flex>
@@ -69,9 +75,9 @@ export const SettingsTabEnglishAuction = () => {
         </Box>
         <Box>
           <DateTimePicker
-            value={sellData.form.values.expirationDate}
+            value={form.values.expirationDate}
             modalName={'Expiration date'}
-            onChange={(val) => sellData.form.setFieldValue('expirationDate', val)}
+            onChange={(val) => form.setFieldValue('expirationDate', val)}
           />
         </Box>
       </Flex>
