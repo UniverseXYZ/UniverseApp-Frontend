@@ -2,8 +2,7 @@
 @import "../../../assets/scss/mixins";
 
 .bidders--dropdown {
-  margin-top: 20px;
-  margin-bottom: 15px;
+  margin-bottom: 16px;
   position: relative;
   display: flex;
   align-items: center;
@@ -83,6 +82,11 @@
     }
   }
   @include md {
-    margin-top: -12px;
+    margin-bottom: 0;
+    width: 344px;
+  }
+  @include sm {
+    margin-bottom: 16px;
+    width: 100%;
   }
 }
