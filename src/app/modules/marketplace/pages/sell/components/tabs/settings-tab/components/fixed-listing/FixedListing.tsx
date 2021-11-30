@@ -3,17 +3,18 @@ import React from 'react';
 import { FormikProps } from 'formik';
 
 import { useMarketplaceSellData } from '../../../../../hooks';
-import { SellMethod } from '../../../../../enums';
+import { SellAmountType, SellMethod } from '../../../../../enums';
 import * as styles from '../../styles';
 import { CurrencyInput, InputShadow } from '../../../../../../../../../components';
-import { IMarketplaceSellContextData, IFixedListingForm } from '../../../../../types';
+import { IFixedListingForm, IMarketplaceSellContextData } from '../../../../../types';
+import { BundleForm } from '../../../../bundle-form';
 
 interface IMarketplaceSellContextDataOverride extends Omit<IMarketplaceSellContextData, 'form'> {
   form: FormikProps<IFixedListingForm>;
 }
 
 export const SettingsTabFixedListing = () => {
-  const { form, sellMethod } = useMarketplaceSellData() as IMarketplaceSellContextDataOverride;
+  const { form, sellMethod, amountType } = useMarketplaceSellData() as IMarketplaceSellContextDataOverride;
 
   if (sellMethod !== SellMethod.FIXED) {
     return null;
@@ -21,6 +22,7 @@ export const SettingsTabFixedListing = () => {
 
   return (
     <>
+      { amountType === SellAmountType.BUNDLE && (<BundleForm />) }
       <Flex sx={styles.settingsItem}>
         <Box>
           <Heading as={'h5'}>Price</Heading>
