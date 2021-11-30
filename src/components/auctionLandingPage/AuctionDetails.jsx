@@ -130,6 +130,7 @@ const AuctionDetails = ({
                 isWinningBid={isWinningBid}
                 currencyIcon={currencyIcon}
                 setBidders={setBidders}
+                collections={onAuction.collections}
               />
             ) : (
               <AuctionEndedSection

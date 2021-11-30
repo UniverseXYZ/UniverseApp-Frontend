@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Popup from 'reactjs-popup';
+import videoIcon from '../../assets/images/video-icon.svg';
 import PreviewNFTsPopup from '../popups/PreviewNFTsPopup.jsx';
 
 const RewardTiers = ({ auction }) => {
@@ -21,18 +22,64 @@ const RewardTiers = ({ auction }) => {
             const startPlace = counter + 1;
             counter += tier.numberOfWinners;
             const endPlace = counter;
+            tier.nfts = tier.nfts.filter(
+              (value, index, nfts) =>
+                index === nfts.findIndex((nft) => nft.editionUUID === value.editionUUID)
+            );
             return (
               <div className="tier__box" key={tier.id}>
                 <div className="tier__nfts__container">
                   <div className="tier__nfts">
-                    {tier.nfts.map((nft, index) => (
-                      <div className="nft__image" key={nft.id}>
-                        <img src={nft.thumbnail_url} alt={nft.name} />
-                        {tier.nfts.length > 3 && (
-                          <span className="show__more">{`+${tier.nfts.length - 3} more`}</span>
-                        )}
+                    {tier.imageUrl ? (
+                      <div className="nft__image" key={tier.id}>
+                        <img src={tier.imageUrl} alt={tier.name} />
                       </div>
-                    ))}
+                    ) : (
+                      tier.nfts.map((nft, index) => {
+                        if (index < 3) {
+                          return (
+                            <div>
+                              <div className="nft__image" key={nft.id}>
+                                {nft.artworkType === 'mp4' ? (
+                                  <>
+                                    <video
+                                      aria-hidden
+                                      onClick={() => window.open(nft.url, '_blank')}
+                                      className="preview-video"
+                                      onMouseOver={(event) => event.target.play()}
+                                      onFocus={(event) => event.target.play()}
+                                      onMouseOut={(event) => event.target.pause()}
+                                      onBlur={(event) => event.target.pause()}
+                                    >
+                                      <source src={nft.thumbnail_url} type="video/mp4" />
+                                      <track kind="captions" />
+                                      Your browser does not support the video tag.
+                                    </video>
+                                    <img className="video-icon" src={videoIcon} alt="Video Icon" />
+                                  </>
+                                ) : (
+                                  <>
+                                    <img src={nft.thumbnail_url} alt={nft.name} />
+                                  </>
+                                )}
+                                {tier.nfts.length > 3 && index === 2 && (
+                                  <span className="show__more">{`+${
+                                    tier.nfts.length - 3
+                                  } more`}</span>
+                                )}
+                              </div>
+                              {nft?.numberOfEditions > 2 && (
+                                <div className="tier-image-second" key={nft.id} />
+                              )}
+                              {nft?.numberOfEditions > 1 && (
+                                <div className="tier-image-first" key={nft.id} />
+                              )}
+                            </div>
+                          );
+                        }
+                        return '';
+                      })
+                    )}
                   </div>
                 </div>
                 <div className="tier__details">
@@ -50,8 +97,32 @@ const RewardTiers = ({ auction }) => {
                         ? `Bidder #${startPlace}`
                         : `Bidders #${startPlace}-${endPlace}`}
                     </span>
-                    <span>NFTs: {tier.nfts.length}</span>
-                    <span>Reserve price: 0-2.3 ETH</span>
+                    {tier.nftsPerWinner > 0 ? (
+                      <span>{`${tier.nftsPerWinner} NFT${
+                        tier.nftsPerWinner > 1 ? 's' : ''
+                      } per winner`}</span>
+                    ) : (
+                      <span className="custom--nfts">Different NFTs per winner</span>
+                    )}
+                    {tier.minBidValue ? (
+                      <span>{`Minimum bid: ${tier.minBidValue} ETH`}</span>
+                    ) : (
+                      <></>
+                    )}
+                    <span>
+                      {tier.slots.length > 0 ? (
+                        <>
+                          Reserve price:
+                          {tier.slots[0].minimumBid > 0
+                            ? ` ${tier.slots[tier.slots.length - 1].minimumBid} - ${
+                                tier.slots[0].minimumBid
+                              } ETH`
+                            : ` ${tier.slots[0].minimumBid} ETH`}
+                        </>
+                      ) : (
+                        `Reserve price: ${tier.slots[0].minimumBid}`
+                      )}
+                    </span>
                   </div>
                   <div className="tier__description">{tier.description}</div>
                   <div className="preview__nfts">

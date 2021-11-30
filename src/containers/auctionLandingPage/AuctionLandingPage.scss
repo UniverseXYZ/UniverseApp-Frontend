@@ -609,29 +609,158 @@
                   }
                 }
               }
-              .bid {
-                display: grid;
-                grid-template-columns: repeat(3, auto);
-                grid-gap: 4px;
-                align-items: center;
-                font-family: $spaceGroteskFont;
-                font-style: normal;
-                font-weight: 500;
-                font-size: 14px;
-                line-height: 22px;
-                color: rgba(0, 0, 0, 0.6);
-                b {
-                  color: $black;
+              .bid-container {
+                display: flex;
+
+                .bid {
+                  display: grid;
+                  grid-template-columns: repeat(3, auto);
+                  grid-gap: 4px;
+                  align-items: center;
+                  font-family: $spaceGroteskFont;
+                  font-style: normal;
+                  font-weight: 500;
+                  font-size: 14px;
+                  line-height: 22px;
+                  color: rgba(0, 0, 0, 0.6);
+                  b {
+                    color: $black;
+                  }
+                  span {
+                    font-size: 10px;
+                    color: rgba(0, 0, 0, 0.2);
+                  }
                 }
-                span {
-                  font-size: 10px;
-                  color: rgba(0, 0, 0, 0.2);
+                .arrow {
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
+                  border: 1px solid rgba(0, 0, 0, 0.1);
+                  box-sizing: border-box;
+                  border-radius: 6px;
+                  margin-left: 10px;
+                  width: 22px;
+                  height: 22px;
+                  cursor: pointer;
+                  &.opened {
+                    img {
+                      transform: rotate(180deg);
+                      margin-bottom: 2px;
+                    }
+                  }
+                  img {
+                    margin-top: 2px;
+                  }
                 }
               }
             }
             @include sm {
               grid-template-columns: 1fr;
               padding: 24px;
+            }
+          }
+
+          .nfts {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            grid-gap: 13px;
+            margin-top: 20px;
+            margin-bottom: 20px;
+            .each--nft {
+              position: relative;
+              max-height: 80px;
+              cursor: pointer;
+              img, video {
+                border-radius: 10px;
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+              }
+              &:hover {
+                .tooltiptext {
+                  visibility: visible;
+                }
+              }
+              .video-icon {
+                position: absolute;
+                top: 9px;
+                right: 9px;
+                width: 14px;
+                height: 10px;
+              }
+  
+              .tooltiptext {
+                visibility: hidden;
+                background-color: $black;
+                border-radius: 12px;
+                padding: 20px;
+                position: absolute;
+                z-index: 1;
+                bottom: calc(100% + 8px);
+                left: 50%;
+                transform: translateX(-50%);
+                cursor: default;
+                min-width: 140px;
+                &::before {
+                  content: "";
+                  position: absolute;
+                  top: 100%;
+                  left: 50%;
+                  margin-top: 0.6px;
+                  margin-left: -5px;
+                  border-width: 5px;
+                  border-style: solid;
+                  border-color: rgba(255, 255, 255, 0.4) transparent transparent transparent;
+                }
+                &::after {
+                  content: "";
+                  position: absolute;
+                  top: 100%;
+                  left: 50%;
+                  margin-left: -5px;
+                  border-width: 5px;
+                  border-style: solid;
+                  border-color: black transparent transparent transparent;
+                }
+                > div {
+                  &:not(:last-child) {
+                    margin-bottom: 10px;
+                  }
+                  &:last-child {
+                    p {
+                      cursor: pointer;
+                    }
+                  }
+                  label {
+                    display: block;
+                    font-family: $spaceGroteskFont;
+                    font-style: normal;
+                    font-weight: bold;
+                    font-size: 10px;
+                    line-height: 150%;
+                    color: $white;
+                    opacity: 0.4;
+                    margin-bottom: 3px;
+                  }
+                  p {
+                    display: flex;
+                    align-items: center;
+                    font-family: $spaceGroteskFont;
+                    font-style: normal;
+                    font-weight: bold;
+                    font-size: 12px;
+                    line-height: 150%;
+                    color: $white;
+                    img {
+                      width: 16px;
+                      height: 16px;
+                      border-radius: 50%;
+                      object-fit: cover;
+                      margin-right: 4px;
+                    }
+                  }
+                }
+              }
             }
           }
           &__footer {
@@ -1088,7 +1217,7 @@
         grid-gap: 24px;
         .tier__box {
           display: grid;
-          grid-template-columns: 1fr 1fr;
+          grid-template-columns: 50% 50%;
           grid-gap: 80px;
           background: $white;
           box-shadow: 0px 10px 40px rgba(136, 120, 172, 0.2);
@@ -1104,26 +1233,74 @@
               align-items: center;
               justify-content: center;
               width: 100%;
-              .nft__image {
-                position: relative;
-                height: 220px;
-                width: 207px;
-                border-radius: 12px;
-                border: 6px solid $white;
-                box-shadow: 0px 10px 40px rgba(136, 120, 172, 0.2);
-                // overflow: hidden;
+
+              div {
                 &:nth-child(2) {
                   margin-left: -20%;
                 }
                 &:nth-child(3) {
                   margin-left: -20%;
                 }
-                img {
-                  width: 100%;
-                  height: 100%;
-                  object-fit: cover;
-                  border-radius: 12px;
+                @include sm {
+                  &:nth-child(2) {
+                    margin-left: 0;
+                  }
+                  &:nth-child(3) {
+                    margin-left: 0;
+                  }
                 }
+                .nft__image {
+                  position: relative;
+                  height: 220px;
+                  width: 207px;
+                  border-radius: 12px;
+                  border: 6px solid $white;
+                  outline: 1px solid rgba(0, 0, 0, 0.1) !important;
+                  box-shadow: 0px 10px 40px rgba(136, 120, 172, 0.2);
+
+                  img {
+                    width: 100%;
+                    height: 100%;
+                    object-fit: cover;
+                    border-radius: 12px;
+                  }
+
+                }
+              }
+              @include sm {
+                flex-direction: column;
+              }
+              .preview-video {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                border-radius: 5px;
+              }
+              .video-icon {
+                position: absolute;
+                top: 9px;
+                right: 9px;
+                width: 20px !important;
+                height: 14px !important;
+              }
+              .tier-image-first {
+                border: 2px solid #ffffff;
+                outline: 1px solid rgba(0, 0, 0, 0.1) !important;
+                box-shadow: 0px 10px 40px rgba(136, 120, 172, 0.2);
+                box-sizing: border-box;
+                border-radius: 12px;
+                width: 156px;
+                margin: 0 21px !important;
+              }
+              .tier-image-second {
+                border: 2.5px solid #ffffff;
+                outline: 1px solid rgba(0, 0, 0, 0.1) !important;
+                box-shadow: 0px 10px 40px rgba(136, 120, 172, 0.2);
+                box-sizing: border-box;
+                border-radius: 12px;
+                width: 178px;
+                margin: 0 11px!important;
+                margin-left: 22px;
               }
               .show__more {
                 position: absolute;
