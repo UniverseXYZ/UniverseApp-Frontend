@@ -4,6 +4,7 @@ import uuid from 'react-uuid';
 import './RewardTiers.scss';
 import '../auctions/Tiers.scss';
 import { Popup } from 'reactjs-popup';
+import Slider from 'react-slick';
 import union from '../../assets/images/Union.svg';
 import mp3Icon from '../../assets/images/mp3-icon.png';
 import videoIcon from '../../assets/images/video-icon.svg';
@@ -50,13 +51,36 @@ const RewardTiers = () => {
           auction.rewardTiers
             .filter((a) => !a.removed)
             .map((tier) => {
-              let allTierNFTs = null;
+              const settings = {
+                dots: true,
+                slidesToShow: 2,
+                variableWidth: true,
+                // nextArrow: <SampleArrow />,
+                // prevArrow: <SampleArrow />,
+              };
+              let allTierNFTs = [];
               if (tier.nftSlots) {
                 // If we have tier.nftSlots it means we have local data to work with, otherwise we are editing an existing future auction fetched from the server and the response will be different
-                allTierNFTs = tier.nftSlots.reduce((res, curr) => {
+                // allTierNFTs = tier.nftSlots.reduce((res, curr) => {
+                //   const nfts = [...curr.nftsData];
+                //   if (auction.collections) {
+                //     // We need to attach the collections data in order to be used in the screen
+                //     nfts.forEach((nft) => {
+                //       const collection = auction.collections.find((c) => c.id === nft.collectionId);
+                //       if (collection) {
+                //         nft.collectioName = collection.name;
+                //         nft.collectionAddress = collection.address;
+                //         nft.collectionUrl = collection.coverUrl;
+                //       }
+                //     });
+                //   }
+                //   res.push(...nfts);
+                //   return res;
+                // }, []);
+
+                tier.nftSlots.forEach((curr) => {
                   const nfts = [...curr.nftsData];
                   if (auction.collections) {
-                    // We need to attach the collections data in order to be used in the screen
                     nfts.forEach((nft) => {
                       const collection = auction.collections.find((c) => c.id === nft.collectionId);
                       if (collection) {
@@ -66,8 +90,7 @@ const RewardTiers = () => {
                       }
                     });
                   }
-                  res.push(...nfts);
-                  return res;
+                  allTierNFTs.push(nfts);
                 }, []);
               } else if (tier.nfts) {
                 // we are editing an existing future auction fetched from the server and the response will be different
@@ -100,26 +123,38 @@ const RewardTiers = () => {
                 }, []);
               }
 
-              const onlyUniqueNFTs = allTierNFTs.reduce((res, curr) => {
-                const { url, collectioName, collectionAddress, collectionUrl } = curr;
-                res[url] = res[url] || {
-                  url,
-                  count: 0,
-                  artworkType: '',
-                  nftName: '',
-                  collectioName: '',
-                  collectionAddress: '',
-                  collectionUrl: '',
-                };
+              const onlyUniqueNFTs = allTierNFTs.map((a) =>
+                a.reduce((res, curr) => {
+                  const { url, collectioName, collectionAddress, collectionUrl } = curr;
+                  res[url] = res[url] || {
+                    url,
+                    count: 0,
+                    artworkType: '',
+                    nftName: '',
+                    collectioName: '',
+                    collectionAddress: '',
+                    collectionUrl: '',
+                  };
 
-                res[url].count += 1;
-                res[url].artworkType = curr.artworkType;
-                res[url].collectioName = collectioName;
-                res[url].collectionAddress = collectionAddress;
-                res[url].collectionUrl = collectionUrl;
-                res[url].nftName = curr.nftName || curr.name;
-                return res;
-              }, {});
+                  res[url].count += 1;
+                  res[url].artworkType = curr.artworkType;
+                  res[url].collectioName = collectioName;
+                  res[url].collectionAddress = collectionAddress;
+                  res[url].collectionUrl = collectionUrl;
+                  res[url].nftName = curr.nftName || curr.name;
+                  return res;
+                }, {})
+              );
+              let countNfts = 0;
+              let countWinnersNft = 0;
+              allTierNFTs.forEach((a) => {
+                countNfts += a.length;
+              });
+              onlyUniqueNFTs.forEach((s) => {
+                countWinnersNft += Object.keys(s).length;
+              });
+              settings.infinite = countWinnersNft > 4;
+
               return (
                 <div className="view-tier" key={uuid()}>
                   <div className="auction-header">
@@ -132,6 +167,11 @@ const RewardTiers = () => {
                           <div className="tier-winners">
                             <h4>
                               Winners:&nbsp;<b>{tier.winners || tier.numberOfWinners}</b>
+                            </h4>
+                          </div>
+                          <div className="tier-winners">
+                            <h4>
+                              NFTs:&nbsp;<b>{countNfts}</b>
                             </h4>
                           </div>
                           <div className="tier-perwinners">
@@ -216,84 +256,109 @@ const RewardTiers = () => {
                   </div>
                   <div hidden={shownActionId !== tier.id} className="auctions-tier">
                     <div className="rev-reward">
-                      {Object.keys(onlyUniqueNFTs).map((key) => {
-                        const {
-                          artworkType,
-                          url,
-                          count,
-                          nftName,
-                          collectioName,
-                          collectionAddress,
-                          collectionUrl,
-                        } = onlyUniqueNFTs[key];
-                        const nftIsImage =
-                          artworkType === 'png' ||
-                          artworkType === 'jpg' ||
-                          artworkType === 'jpeg' ||
-                          artworkType === 'mpeg' ||
-                          artworkType === 'webp';
+                      <Slider {...settings}>
+                        {onlyUniqueNFTs.map((winner, index) => (
+                          <div className="rev-reward__block" key={uuid()}>
+                            <div className="rev-reward__block__title">Winner #{index + 1}</div>
+                            {Object.keys(winner).map((key) => {
+                              const {
+                                artworkType,
+                                url,
+                                count,
+                                nftName,
+                                collectioName,
+                                collectionAddress,
+                                collectionUrl,
+                              } = winner[key];
+                              const nftIsImage =
+                                artworkType === 'png' ||
+                                artworkType === 'jpg' ||
+                                artworkType === 'jpeg' ||
+                                artworkType === 'mpeg' ||
+                                artworkType === 'webp';
 
-                        return (
-                          <div className="rev-reward__box" key={uuid()}>
-                            <div className="rev-reward__box__image">
-                              {artworkType === 'mp4' && (
-                                <video
-                                  onMouseOver={(event) => event.target.play()}
-                                  onFocus={(event) => event.target.play()}
-                                  onMouseOut={(event) => event.target.pause()}
-                                  onBlur={(event) => event.target.pause()}
-                                >
-                                  <source src={url} type="video/mp4" />
-                                  <track kind="captions" />
-                                  Your browser does not support the video tag.
-                                </video>
-                              )}
-                              {artworkType === 'mpeg' && (
-                                <img className="preview-image" src={mp3Icon} alt={nftName} />
-                              )}
-                              {nftIsImage && (
-                                <img className="preview-image" src={url} alt={nftName} />
-                              )}
-                              {artworkType === 'mp4' && (
-                                <img className="video__icon" src={videoIcon} alt="Video Icon" />
-                              )}
-                            </div>
-                            <div className="rev-reward__box__name">
-                              <h3>{nftName}</h3>
-                            </div>
-                            <div className="rev-reward__box__footer">
-                              <div className="collection__details">
-                                {collectioName && (
-                                  <>
-                                    {typeof collectionUrl === 'string' &&
-                                    collectionUrl.startsWith('#') ? (
-                                      <div
-                                        className="random__bg__color"
-                                        style={{ backgroundColor: collectionUrl }}
+                              return (
+                                <div className="rev-reward__box">
+                                  <div className="rev-reward__box__image">
+                                    {artworkType === 'mp4' && (
+                                      <video
+                                        onMouseOver={(event) => event.target.play()}
+                                        onFocus={(event) => event.target.play()}
+                                        onMouseOut={(event) => event.target.pause()}
+                                        onBlur={(event) => event.target.pause()}
                                       >
-                                        {collectioName.charAt(0)}
-                                      </div>
-                                    ) : collectionAddress ===
-                                      process.env.REACT_APP_UNIVERSE_ERC_721_ADDRESS.toLowerCase() ? (
-                                      <img src={universeIcon} alt={collectioName} />
-                                    ) : (
-                                      <img src={collectionUrl} alt={collectioName} />
+                                        <source src={url} type="video/mp4" />
+                                        <track kind="captions" />
+                                        Your browser does not support the video tag.
+                                      </video>
                                     )}
-                                    <span>{collectioName}</span>
-                                  </>
-                                )}
-                              </div>
-                              <span className="ed-count">{`x${count || 1}`}</span>
-                            </div>
-                            {count > 1 && (
-                              <>
-                                <div className="rev-reward__box__highlight__one" />
-                                <div className="rev-reward__box__highlight__two" />
-                              </>
-                            )}
+                                    {artworkType === 'mpeg' && (
+                                      <img className="preview-image" src={mp3Icon} alt={nftName} />
+                                    )}
+                                    {nftIsImage && (
+                                      <img className="preview-image" src={url} alt={nftName} />
+                                    )}
+                                    {artworkType === 'mp4' && (
+                                      <img
+                                        className="video__icon"
+                                        src={videoIcon}
+                                        alt="Video Icon"
+                                      />
+                                    )}
+                                  </div>
+                                  <div className="rev-reward__box__name">
+                                    <h3>{nftName}</h3>
+                                  </div>
+                                  <div className="rev-reward__box__footer">
+                                    <div className="collection__details">
+                                      {collectioName && (
+                                        <>
+                                          {typeof collectionUrl === 'string' &&
+                                          collectionUrl.startsWith('#') ? (
+                                            <div
+                                              className="random__bg__color"
+                                              style={{ backgroundColor: collectionUrl }}
+                                            >
+                                              {collectioName.charAt(0)}
+                                            </div>
+                                          ) : collectionAddress ===
+                                            process.env.REACT_APP_UNIVERSE_ERC_721_ADDRESS.toLowerCase() ? (
+                                            <img src={universeIcon} alt={collectioName} />
+                                          ) : (
+                                            <img src={collectionUrl} alt={collectioName} />
+                                          )}
+                                          <span>{collectioName}</span>
+                                        </>
+                                      )}
+                                    </div>
+                                    <div>
+                                      {count > 1 ? (
+                                        <div className="tickeid-popup">
+                                          <span className="ed-count">{`x${count || 1}`}</span>
+                                          <div className="tooltiptext nft-tokenid-block">
+                                            <span className="nft-tokenid-title">Token IDs: </span>
+                                            <span className="nft-tokenids">
+                                              #01112, #01113, #01114
+                                            </span>
+                                          </div>
+                                        </div>
+                                      ) : (
+                                        <span className="ed-count">{`x${count || 1}`}</span>
+                                      )}
+                                    </div>
+                                  </div>
+                                  {count > 1 && (
+                                    <>
+                                      <div className="rev-reward__box__highlight__one" />
+                                      <div className="rev-reward__box__highlight__two" />
+                                    </>
+                                  )}
+                                </div>
+                              );
+                            })}
                           </div>
-                        );
-                      })}
+                        ))}
+                      </Slider>
                     </div>
                   </div>
                 </div>
