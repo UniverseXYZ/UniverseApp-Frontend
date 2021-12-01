@@ -51,6 +51,11 @@ export const CurrencyInput = ({ value, onChange, placeholder, ...props }: ICurre
             '> span': {
               display: 'contents',
             },
+            img: {
+              _last: {
+                transition: '200ms',
+              }
+            },
             _hover: {
               background: 'rgba(0, 0, 0, 0.03)',
               boxShadow: 'sm',
@@ -61,6 +66,11 @@ export const CurrencyInput = ({ value, onChange, placeholder, ...props }: ICurre
             },
             _active: {
               boxShadow: 0,
+              img: {
+                _last: {
+                  transform: 'rotate(180deg)',
+                }
+              }
             }
           }}
         >

@@ -44,7 +44,7 @@ export const Button = {
         boxShadow: 'inset 2px 1000px 1px white',
       }
     },
-    dropDown: {
+    dropdown: {
       borderRadius: '12px',
       padding: '11px 26px',
       position: 'relative',

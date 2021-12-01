@@ -1,33 +1,40 @@
 import {
   Box,
-  Button,
+  Button, Fade,
   Flex,
   Heading,
   Image,
   Input,
   InputGroup,
   InputLeftElement,
-  Link,
+  Link, Slide, SlideFade,
   Text,
   useDisclosure,
 } from '@chakra-ui/react';
-import React from 'react';
+import React, { useState } from 'react';
 
 import { GreyBox } from '../../grey-box';
 import { useMarketplaceSellData } from '../../../hooks';
 import * as styles from './styles';
 import { SettingsTabDutchAuction, SettingsTabEnglishAuction, SettingsTabFixedListing } from './components';
 import { SellAmountType } from '../../../enums';
-import { InputShadow } from '../../../../../../../components';
+import { Dropdown, InputShadow, Select } from '../../../../../../../components';
 
 import searchIcon from '../../../../../../../../assets/images/search-gray.svg';
 import filtersIcon from '../../../../../../../../assets/images/marketplace/filters2.svg';
-import arrowDownIcon from '../../../../../../../../assets/images/arrow-down.svg';
+import { SortNftsOptions } from '../../../../../constants';
+
+import saleTypeIcon from '../../../../../../../../assets/images/marketplace/sale-type.svg';
+import priceRangeIcon from '../../../../../../../../assets/images/marketplace/price-range.svg';
+import collectionsIcon from '../../../../../../../../assets/images/marketplace/collections.svg';
+import artistIcon from '../../../../../../../../assets/images/marketplace/artist.svg';
 
 export const SettingsTab = () => {
   const sellData = useMarketplaceSellData();
 
   const { isOpen: isFiltersOpen, onToggle: onToggleFilters } = useDisclosure();
+
+  const [sortBy, setSortBy] = useState();
 
   return (
     <>
@@ -57,28 +64,65 @@ export const SettingsTab = () => {
                 <Input placeholder={'Search items'} pl={'50px'} />
               </InputShadow>
             </InputGroup>
+            <Select
+              label={'Sort by'}
+              items={SortNftsOptions}
+              value={sortBy}
+              buttonProps={{
+                mr: '12px',
+                size: 'xl',
+                minWidth: '225px',
+                justifyContent: 'space-between',
+              }}
+              onSelect={(val) => setSortBy(val)}
+            />
             <Button
-              mr={'12px'}
-              rightIcon={<Image src={arrowDownIcon} width={'10px'} />}
+              variant={'dropdown'}
               size={'xl'}
-              variant={'dropDown'}
-              minWidth={'225px'}
-              justifyContent={'space-between'}
-              padding={'15px 16px'}
-            >Sort by</Button>
-            <Button
               leftIcon={<Image src={filtersIcon} />}
-              size={'xl'}
-              variant={'dropDown'}
+              isActive={isFiltersOpen}
               onClick={onToggleFilters}
             >Filters</Button>
           </Flex>
 
-          {isFiltersOpen && (
-            <Flex>
-              <p>Filters</p>
+          <Fade in={isFiltersOpen}>
+            <Flex
+              sx={{
+                '> button': {
+                  mr: '8px'
+                }
+              }}
+            >
+              <Dropdown
+                label={'Sale type'}
+                buttonProps={{
+                  leftIcon: <Image src={saleTypeIcon} />,
+                  minWidth: '200px',
+                }}
+              />
+              <Dropdown
+                label={'Price range'}
+                buttonProps={{
+                  leftIcon: <Image src={priceRangeIcon} />,
+                  minWidth: '200px',
+                }}
+              />
+              <Dropdown
+                label={'Collections'}
+                buttonProps={{
+                  leftIcon: <Image src={collectionsIcon} />,
+                  minWidth: '200px',
+                }}
+              />
+              <Dropdown
+                label={'Artists'}
+                buttonProps={{
+                  leftIcon: <Image src={artistIcon} />,
+                  minWidth: '200px',
+                }}
+              />
             </Flex>
-          )}
+          </Fade>
         </>
       )}
 
