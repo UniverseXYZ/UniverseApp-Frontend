@@ -244,6 +244,9 @@ const Create = () => {
   const handleContinue = (winnersSlots) => {
     const nftSlots = winnersSlots.map((slot) => {
       const slotCopy = { ...slot };
+      if (!showReservePrice) {
+        slotCopy.minimumBid = '0';
+      }
       slotCopy.nftIds = slot.nftsData.map((data) => {
         const id = typeof data === 'object' ? data.id : data;
         return id;

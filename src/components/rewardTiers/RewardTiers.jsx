@@ -160,8 +160,25 @@ const RewardTiers = () => {
                         </div>
                         <div className="tier-perwinners">
                           <h4>
-                            Reserve price:&nbsp;
-                            <b>0-2.3 ETH</b>
+                            {tier.nftSlots.length > 1 ? (
+                              <>
+                                Reserve price:&nbsp;
+                                <b>
+                                  {tier.nftSlots[0].minimumBid > 0
+                                    ? ` ${tier.nftSlots[tier.nftSlots.length - 1].minimumBid} - ${
+                                        tier.nftSlots[0].minimumBid
+                                      } ETH`
+                                    : '0 ETH'}
+                                </b>
+                              </>
+                            ) : (
+                              <>
+                                Reserve price:&nbsp;
+                                <b>{` ${
+                                  tier.nftSlots[0].minimumBid ? tier.nftSlots[0].minimumBid : 0
+                                } ETH`}</b>
+                              </>
+                            )}
                           </h4>
                         </div>
                       </div>
