@@ -206,11 +206,10 @@ const FinalizeAuction = () => {
       auction.rewardTiers
         .sort((a, b) => a.tierPosition - b.tierPosition)
         .forEach((tier) => {
-          const minimumBids = Array.from(Array(tier.numberOfWinners).keys()).map((slot) =>
-            utils.parseEther('0.1').toString()
-          );
-          minimumReserveValues.push(...minimumBids);
-          numberOfSlots += tier.numberOfWinners;
+          tier.slots.forEach((slot) => {
+            minimumReserveValues.push(utils.parseEther(slot.minimumBid.toString()));
+            numberOfSlots += 1;
+          });
         });
 
       if (auction.royaltySplits) {
