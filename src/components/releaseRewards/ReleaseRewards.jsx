@@ -65,9 +65,8 @@ const ReleaseRewards = () => {
   const setupPage = async () => {
     console.log('Slots info:');
     console.log(slotsInfo);
-    // TODO: We need to add bool if slot is captured in the algorithm
     let batchCaptureTxs = [];
-    if (auctionData.auction.finalised) {
+    if (auction.auction.finalised) {
       batchCaptureTxs = createBatchCaptureRevenueTxsFinalised(rewardTiersSlots, bids, slotsInfo);
     } else {
       batchCaptureTxs = createBatchCaptureRevenueTxsNotFinalised(rewardTiersSlots);
@@ -99,17 +98,12 @@ const ReleaseRewards = () => {
   }, [universeAuctionHouseContract]);
 
   const getAuctionSlotsInfo = async () => {
-    const onChainAuction = await universeAuctionHouseContract.auctions(
-      auctionData.auction.onChainId
-    );
+    const onChainAuction = await universeAuctionHouseContract.auctions(auction.auction.onChainId);
 
     const auctionSlotsInfo = {};
     for (let i = 1; i <= onChainAuction.numberOfSlots; i += 1) {
       // eslint-disable-next-line no-await-in-loop
-      const slotInfo = await universeAuctionHouseContract.getSlotInfo(
-        auctionData.auction.onChainId,
-        i
-      );
+      const slotInfo = await universeAuctionHouseContract.getSlotInfo(auction.auction.onChainId, i);
       console.log(slotInfo);
       auctionSlotsInfo[i] = slotInfo;
     }
@@ -118,16 +112,20 @@ const ReleaseRewards = () => {
 
   useEffect(() => {
     initiateAuctionSocket();
-    subscribeToSlotCaptured(auctionData.auction.id, (err, { tierId, slotIndex }) => {
+    subscribeToSlotCaptured(auction.auction.id, (err, { tierId, slotIndex }) => {
       if (err) return;
       // Update single capture txs
+      let updatedTxs = [];
       setSingleCaptureRevenueTxs((txs) => {
-        const updatedTxs = [...txs];
-        updatedTxs.map((tx) =>
-          tx.startSlot === slotIndex.toString()
-            ? { ...tx, slotInfo: { ...tx.slotInfo, revenueCaptured: true } }
-            : tx
-        );
+        updatedTxs = [...txs];
+        updatedTxs = updatedTxs.map((tx) => {
+          if (tx.startSlot.toString() === slotIndex.toString()) {
+            const newObj = { ...tx };
+            newObj.slotInfo = { ...tx.slotInfo, revenueCaptured: true };
+            return newObj;
+          }
+          return tx;
+        });
 
         return updatedTxs;
       });
@@ -140,34 +138,29 @@ const ReleaseRewards = () => {
         return updatedIndices;
       });
 
-      // Update batch capture txs
-      setBatchCaptureRevenueTxs((txs) => {
-        const newBatchTxs = [...txs];
-
-        newBatchTxs.forEach((tx) => {
-          // If (startSlot = 4, endSlot = 7) startToEndIndices will have => [4, 5, 6, 7]
-          const startToEndIndices = Array.from(
-            { length: +tx.endSlot },
-            (_, i) => i + +tx.startSlot
-          );
-
-          // We check if we have all elements of startToEndIndices in capturedSlotIndices
-          // capturedSlotIndices = [4,5] => true
-          // capturedSlotIndices = [7,8] => false
-          const isFullyCaptured = startToEndIndices.every((idx) => updatedIndices.includes(idx));
-          if (isFullyCaptured) {
-            tx.revenueCaptured = true;
-          }
-        });
-        return newBatchTxs;
+      let updatedBids = [];
+      setBids((upToDate) => {
+        updatedBids = upToDate;
+        return upToDate;
       });
+
+      const batchCaptureTxs = createBatchCaptureRevenueTxsFinalised(
+        rewardTiersSlots,
+        updatedBids,
+        updatedTxs.map((tx) => tx.slotInfo)
+      );
+
+      setBatchCaptureRevenueTxs(batchCaptureTxs);
+      setShowLoading(false);
     });
 
-    subscribeToBidMatched(auctionData.auction.id, (err, { bids: bidsData, finalised }) => {
+    subscribeToBidMatched(auction.auction.id, async (err, { bids: bidsData, finalised }) => {
       if (err) return;
       setBids(bidsData);
-      setAuction((upToDate) => ({ ...upToDate, auction: { ...upToDate, finalised } }));
-      const newSlotsInfo = getAuctionSlotsInfo();
+      if (finalised) {
+        setAuction((upToDate) => ({ ...upToDate, auction: { ...upToDate.auction, finalised } }));
+      }
+      const newSlotsInfo = await getAuctionSlotsInfo();
       const newBatchTxs = createBatchCaptureRevenueTxsFinalised(
         rewardTiersSlots,
         bidsData,
@@ -328,7 +321,7 @@ const ReleaseRewards = () => {
               </p>
               {view === 'Auctioneer' ? (
                 <AuctioneerView
-                  auctionData={auctionData}
+                  auctionData={auction}
                   showSlots={showSlots}
                   batchCaptureRevenueTxs={batchCaptureRevenueTxs}
                   singleCaptureRevenueTxs={singleCaptureRevenueTxs}
@@ -337,7 +330,7 @@ const ReleaseRewards = () => {
                 />
               ) : (
                 <BidderView
-                  auctionData={auctionData}
+                  auctionData={auction}
                   showSlots={showSlots}
                   singleCaptureRevenueTxs={singleCaptureRevenueTxs}
                   handleCaptureRevenue={handleCaptureRevenue}
