@@ -19,6 +19,7 @@ import {
   initiateAuctionSocket,
   removeAllListeners,
   subscribeToBidSubmitted,
+  subscribeToBidWithdrawn,
 } from '../../utils/websockets/auctionEvents';
 import SuccessBidPopup from '../../components/popups/SuccessBidPopup';
 
@@ -43,25 +44,20 @@ const AuctionLandingPage = () => {
   const [slotsInfo, setSlotsInfo] = useState({});
   const [loadingText, setLoadingText] = useState(defaultLoadingText);
   const [showSuccessfulBid, setShowSuccessfulBid] = useState(false);
+  const [showCancelBidPopup, setShowCancelBidPopup] = useState(false);
 
   useEffect(() => {
     if (bidders) {
       const currBidder = bidders.find((bidder) => bidder.user.address === address);
       if (currBidder) {
         setCurrentBid(currBidder);
-        console.log('Current bidder:');
-        console.log(currBidder);
 
         const currBidderIndex = bidders.map((bidder) => bidder.user.address).indexOf(address);
         if (currBidderIndex <= rewardTiersSlots.length - 1) {
           setIsWinningBid(true);
           setWinningSlot(currBidderIndex);
         }
-        console.log('is winning bid:');
-        console.log(currBidderIndex <= rewardTiersSlots.length - 1);
       }
-      console.log('Bidders:');
-      console.log(bidders);
     }
   }, [bidders, address, rewardTiersSlots]);
 
@@ -88,56 +84,97 @@ const AuctionLandingPage = () => {
     setRewardTiersSlots(tierSlots);
   };
 
-  const handleUpdateBids = (err, user, amount) => {
+  const handleBidSubmittedEvent = (err, user, amount) => {
     // We need to use the latest state using setState(upToDateState)
     // as we don't have access to the latest state when using a callback
 
     if (err) return;
+    const isYourEvent = user === address;
+
+    // Update the Bidders
     let newBidderScope = [];
     setBidders((upToDateBidders) => {
       const newBidders = [...upToDateBidders];
-      const existingBidderIndex = newBidders
-        .map((bidder) => bidder.user.address)
-        .indexOf(user.address);
+      const existingBidderIndex = newBidders.map((bidder) => bidder.user.address).indexOf(user);
 
       if (existingBidderIndex >= 0) {
-        // TODO: Maybe we have to convert based on currency decimal places?
-        newBidders[existingBidderIndex].amount = amount;
+        newBidders[existingBidderIndex].amount = parseFloat(amount);
       } else {
         newBidders.push({
-          amount,
-          user,
+          amount: parseFloat(amount),
+          user: {
+            address: user,
+          },
         });
       }
+
       newBidders.sort((a, b) => b.amount - a.amount);
       newBidderScope = newBidders;
       return newBidders;
     });
 
+    // Update user balance
     setYourBalance((upToDateBalance) => {
-      if (user.address === address && auction.auction.tokenSymbol.toLowerCase() === 'eth') {
-        return parseFloat(upToDateBalance) - amount;
+      if (isYourEvent && auction.auction.tokenSymbol.toLowerCase() === 'eth') {
+        return parseFloat(upToDateBalance) - parseFloat(amount);
       }
 
       return upToDateBalance;
     });
 
     calculateRewardTierSlots(auction.rewardTiers, newBidderScope);
-    // setBidders(newBidders);
 
-    setShowLoading(false);
-    setLoadingText(defaultLoadingText);
+    // Update isWinningBid
+    const currBidderIndex = newBidderScope.map((bidder) => bidder.user.address).indexOf(address);
+    const hasWin = currBidderIndex <= rewardTiersSlots.length - 1;
+    if (hasWin) {
+      setIsWinningBid(true);
+      setWinningSlot(currBidderIndex);
+    } else {
+      setIsWinningBid(false);
+      setWinningSlot(-1);
+    }
 
-    setShowBidPopup(false);
-    setShowSuccessfulBid(true);
+    if (isYourEvent) {
+      setShowLoading(false);
+      setLoadingText(defaultLoadingText);
+      setShowBidPopup(false);
+      setShowSuccessfulBid(true);
+    }
+  };
+
+  const handleBidWithdrawnEvent = (err, user, amount) => {
+    const isYourEvent = user === address;
+    const newBidders = [...bidders];
+    const existingBidderIndex = newBidders.map((bidder) => bidder.user.address).indexOf(user);
+    if (existingBidderIndex >= 0) {
+      newBidders.splice(existingBidderIndex, 1);
+      newBidders.sort((a, b) => b.amount - a.amount);
+      setBidders(newBidders);
+    }
+
+    const updateBalance = isYourEvent && auction.auction.tokenSymbol.toLowerCase() === 'eth';
+    if (updateBalance) {
+      const newBalance = parseFloat(yourBalance) + parseFloat(amount);
+      setYourBalance(newBalance);
+    }
+
+    setCurrentBid(null);
+    setShowCancelBidPopup(false);
   };
 
   useEffect(() => {
     // We need to update the callback function every time the state used inside it changes
     // Otherwise we will get old state in the callback
     if (auction) {
+      removeAllListeners(auction.auction.id);
+
       subscribeToBidSubmitted(auction.auction.id, (err, { user, amount }) => {
-        handleUpdateBids(err, user, amount);
+        handleBidSubmittedEvent(err, user, amount);
+      });
+
+      subscribeToBidWithdrawn(auction.auction.id, (err, { user, amount }) => {
+        handleBidWithdrawnEvent(err, user, amount);
       });
     }
   }, [auction, bidders, yourBalance]);
@@ -145,32 +182,17 @@ const AuctionLandingPage = () => {
   const getAuctionData = async () => {
     const auctionInfo = await getAuctionLandingPage(artistUsername, auctionName);
     if (!auctionInfo.error) {
-      console.log(auctionInfo);
+      calculateRewardTierSlots(auctionInfo.rewardTiers, auctionInfo.bidders);
 
-      const tierSlots = [];
-      let slotIndexCounter = 1;
-      auctionInfo.rewardTiers
-        .sort((a, b) => a.tierPosition - b.tierPosition)
-        .forEach((rewardTier) => {
-          for (let i = 0; i < rewardTier.numberOfWinners; i += 1) {
-            // eslint-disable-next-line no-loop-func
-            const nfts = rewardTier.nfts.filter((t) => t.slot === slotIndexCounter);
-            tierSlots.push({
-              ...rewardTier,
-              nfts,
-              winner: auctionInfo.bidders[i]?.user?.address,
-              slotIndex: slotIndexCounter,
-              // eslint-disable-next-line no-loop-func
-              minimumBid: rewardTier.slots?.find((s) => s.index === slotIndexCounter)?.minimumBid,
-            });
-            slotIndexCounter += 1;
-          }
-        });
-      setBidders(auctionInfo.bidders);
+      // Parse Bidders amount to float
+      const newBidders = auctionInfo?.bidders?.map((b) => {
+        const updated = { ...b };
+        updated.amount = parseFloat(updated.amount);
+        return updated;
+      });
+      setBidders(newBidders);
       setAuction(auctionInfo);
       setLoading(false);
-      initiateAuctionSocket();
-      setRewardTiersSlots(tierSlots);
     } else {
       setLoading(false);
     }
@@ -182,6 +204,8 @@ const AuctionLandingPage = () => {
   };
 
   useEffect(() => {
+    // We need socket initialization to happens first
+    initiateAuctionSocket();
     getAuctionData();
     getEthPrice();
   }, [artistUsername, auctionName]);
@@ -206,7 +230,6 @@ const AuctionLandingPage = () => {
           auction.auction.onChainId,
           i
         );
-        console.log(slotInfo);
         auctionSlotsInfo[i] = slotInfo;
       }
       setSlotsInfo(auctionSlotsInfo);
@@ -221,17 +244,17 @@ const AuctionLandingPage = () => {
       <AuctionDetails
         onAuction={auction}
         bidders={bidders}
-        setBidders={setBidders}
         setShowBidPopup={setShowBidPopup}
         rewardTiersSlots={rewardTiersSlots}
         ethPrice={ethPrice}
         currentBid={currentBid}
-        setCurrentBid={setCurrentBid}
         loading={loading}
         isWinningBid={isWinningBid}
         winningSlot={rewardTiersSlots[winningSlot]}
         slotsInfo={slotsInfo}
         setShowLoading={setShowLoading}
+        showCancelBidPopup={showCancelBidPopup}
+        setShowCancelBidPopup={setShowCancelBidPopup}
       />
       <UniverseAuctionDetails auction={auction} />
       <RewardTiers auction={auction} />

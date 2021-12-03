@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import Popup from 'reactjs-popup';
-import CancelBidPopup from '../popups/CancelBidPopup';
 import cancelIcon from '../../assets/images/activity-icons/cancel-bid.svg';
 import videoIcon from '../../assets/images/video-icon.svg';
 import universeIcon from '../../assets/images/universe-img.svg';
@@ -11,8 +9,6 @@ import { shortenEthereumAddress } from '../../utils/helpers/format.js';
 const TopBidders = ({
   bidders,
   currentBid,
-  setCurrentBid,
-  auction,
   selectedAuctionEnded,
   rewardTiersSlots,
   setShowBidPopup,
@@ -22,10 +18,9 @@ const TopBidders = ({
   ethPrice,
   isWinningBid,
   currencyIcon,
-  setBidders,
   collections,
+  setShowCancelBidPopup,
 }) => {
-  const [showCancelBidPopup, setShowCancelBidPopup] = useState(false);
   const [openSlots, setOpenSlots] = useState([]);
 
   const toggleOpenSlot = (slotIndex) => {
@@ -221,17 +216,6 @@ const TopBidders = ({
           )}
         </div>
       )}
-
-      <Popup open={showCancelBidPopup} closeOnDocumentClick={false}>
-        <CancelBidPopup
-          close={() => setShowCancelBidPopup(false)}
-          setCurrentBid={setCurrentBid}
-          myBid={currentBid?.amount || ''}
-          auction={auction}
-          bidders={bidders}
-          setBidders={setBidders}
-        />
-      </Popup>
     </div>
   );
 };
@@ -240,8 +224,6 @@ TopBidders.propTypes = {
   bidders: PropTypes.oneOfType([PropTypes.array]).isRequired,
   rewardTiersSlots: PropTypes.oneOfType([PropTypes.array]).isRequired,
   currentBid: PropTypes.oneOfType([PropTypes.object]),
-  auction: PropTypes.oneOfType([PropTypes.object]).isRequired,
-  setCurrentBid: PropTypes.func.isRequired,
   setShowBidPopup: PropTypes.func.isRequired,
   setShowBidRankings: PropTypes.func.isRequired,
   getRewardTierSpanStyles: PropTypes.func.isRequired,
@@ -250,8 +232,8 @@ TopBidders.propTypes = {
   ethPrice: PropTypes.number.isRequired,
   isWinningBid: PropTypes.bool.isRequired,
   currencyIcon: PropTypes.string,
-  setBidders: PropTypes.func.isRequired,
   collections: PropTypes.oneOfType([PropTypes.array]).isRequired,
+  setShowCancelBidPopup: PropTypes.func.isRequired,
 };
 TopBidders.defaultProps = {
   currentBid: null,

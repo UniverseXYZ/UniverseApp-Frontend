@@ -12,20 +12,21 @@ import AuctionHeader from './AuctionHeader.jsx';
 import { getBidTypeByName } from '../../utils/fixtures/BidOptions.js';
 import { useAuctionContext } from '../../contexts/AuctionContext.jsx';
 import { useAuthContext } from '../../contexts/AuthContext.jsx';
+import CancelBidPopup from '../popups/CancelBidPopup';
 
 const AuctionDetails = ({
   onAuction,
   bidders,
-  setBidders,
   setShowBidPopup,
   rewardTiersSlots,
   ethPrice,
   currentBid,
-  setCurrentBid,
   isWinningBid,
   winningSlot,
   slotsInfo,
   setShowLoading,
+  setShowCancelBidPopup,
+  showCancelBidPopup,
 }) => {
   const history = useHistory();
   const { options } = useAuctionContext();
@@ -76,14 +77,7 @@ const AuctionDetails = ({
       border: '1px solid #bcbcbc',
     };
   };
-  console.log('Current bid:');
-  console.log(currentBid);
-  console.log('reward tiers slots:');
-  console.log(rewardTiersSlots);
-  console.log(
-    !selectedAuctionEnded ||
-      (selectedAuctionEnded && !currentBid && address !== onAuction.artist.address)
-  );
+
   return (
     <div
       className={`auction__details__section ${
@@ -116,12 +110,10 @@ const AuctionDetails = ({
             {!selectedAuctionEnded ||
             (selectedAuctionEnded && !currentBid && address !== onAuction.artist.address) ? (
               <TopBidders
-                auction={onAuction.auction}
                 selectedAuctionEnded={selectedAuctionEnded}
                 rewardTiersSlots={rewardTiersSlots}
                 bidders={bidders}
                 currentBid={currentBid}
-                setCurrentBid={setCurrentBid}
                 setShowBidPopup={setShowBidPopup}
                 setShowBidRankings={setShowBidRankings}
                 canPlaceBids={hasAuctionStarted && onAuction.auction.depositedNfts}
@@ -129,8 +121,8 @@ const AuctionDetails = ({
                 ethPrice={ethPrice}
                 isWinningBid={isWinningBid}
                 currencyIcon={currencyIcon}
-                setBidders={setBidders}
                 collections={onAuction.collections}
+                setShowCancelBidPopup={setShowCancelBidPopup}
               />
             ) : (
               <AuctionEndedSection
@@ -163,6 +155,10 @@ const AuctionDetails = ({
           collections={onAuction.collections}
         />
       </Popup>
+
+      <Popup open={showCancelBidPopup} closeOnDocumentClick={false}>
+        <CancelBidPopup close={() => setShowCancelBidPopup(false)} auction={onAuction} />
+      </Popup>
     </div>
   );
 };
@@ -170,16 +166,16 @@ const AuctionDetails = ({
 AuctionDetails.propTypes = {
   onAuction: PropTypes.oneOfType([PropTypes.object]).isRequired,
   bidders: PropTypes.oneOfType([PropTypes.array]).isRequired,
-  setBidders: PropTypes.func.isRequired,
   setShowBidPopup: PropTypes.func.isRequired,
   rewardTiersSlots: PropTypes.oneOfType([PropTypes.array]).isRequired,
   ethPrice: PropTypes.number.isRequired,
   currentBid: PropTypes.oneOfType([PropTypes.object]),
-  setCurrentBid: PropTypes.func.isRequired,
   isWinningBid: PropTypes.bool.isRequired,
   winningSlot: PropTypes.oneOfType([PropTypes.object]),
   slotsInfo: PropTypes.oneOfType([PropTypes.object]).isRequired,
   setShowLoading: PropTypes.func.isRequired,
+  setShowCancelBidPopup: PropTypes.func.isRequired,
+  showCancelBidPopup: PropTypes.bool.isRequired,
 };
 
 AuctionDetails.defaultProps = {
