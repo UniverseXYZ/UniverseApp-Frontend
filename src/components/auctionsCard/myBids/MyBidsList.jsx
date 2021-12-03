@@ -54,6 +54,7 @@ const MyBidsList = () => {
             desc="Explore the auctions by clicking the button below"
             btnText="Auction house"
             btnAction="/products/auction-house"
+            checkUserDetails={false}
           />
         </div>
       )}

@@ -623,6 +623,12 @@
                 color: $white;
               }
             }
+            .preview-video {
+              width: 100%;
+              height: 100%;
+              object-fit: cover;
+              border-radius: 5px;
+            }
             img {
               z-index: 9999;
               min-width: 100%;
@@ -657,8 +663,12 @@
     }
     button {
       margin-top: 20px;
-      &.light-border-button {
-        box-shadow: 2px 1000px 1px #fafafa inset;
+      &.light-border-button.red {
+        border: 1px solid #ff4949;
+        color: #ff4949;
+      }
+      .del--icon {
+        margin-left: 10px;
       }
       @include sm {
         width: 100%;

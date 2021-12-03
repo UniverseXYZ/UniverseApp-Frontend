@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { useHistory } from 'react-router';
 import { format } from 'date-fns';
 import { utils, BigNumber } from 'ethers';
+import videoIcon from '../../assets/images/video-icon.svg';
 import Button from '../button/Button';
 import copyIcon from '../../assets/images/copy1.svg';
 import bidIcon from '../../assets/images/bid_icon.svg';
@@ -395,13 +396,33 @@ const PastAuctionsCard = ({ auction }) => {
                   const imageUrl = nft.thumbnail_url ? nft.thumbnail_url : '';
                   return (
                     <div className="tier-image" key={nft.id}>
-                      <div className="tier-image-second" />
-                      <div className="tier-image-first" />
+                      {nft?.numberOfEditions > 2 && <div className="tier-image-second" />}
+                      {nft?.numberOfEditions > 1 && <div className="tier-image-first" />}
                       <div className="tier-image-main">
                         <div className="amount-of-editions">
                           <p>{nft.numberOfEditions}</p>
                         </div>
-                        <img src={imageUrl} alt={nft.name} />
+                        {nft.artworkType === 'mp4' ? (
+                          <>
+                            <video
+                              aria-hidden
+                              className="preview-video"
+                              onMouseOver={(event) => event.target.play()}
+                              onFocus={(event) => event.target.play()}
+                              onMouseOut={(event) => event.target.pause()}
+                              onBlur={(event) => event.target.pause()}
+                            >
+                              <source src={nft.thumbnail_url} type="video/mp4" />
+                              <track kind="captions" />
+                              Your browser does not support the video tag.
+                            </video>
+                            <img className="video-icon" src={videoIcon} alt="Video Icon" />
+                          </>
+                        ) : (
+                          <>
+                            <img src={imageUrl} alt={nft.name} />
+                          </>
+                        )}
                       </div>
                     </div>
                   );
