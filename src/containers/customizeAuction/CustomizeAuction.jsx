@@ -137,7 +137,6 @@ const CustomizeAuction = () => {
           auction.rewardTiers[index].color !== tier.color;
 
         const canEditRewardTierImage = auction.rewardTiers[index].imageUrl !== tier.imageUrl;
-        const invalidImages = invalidTierImageIds.length;
 
         if (canEditRewardTier) {
           try {
@@ -148,7 +147,7 @@ const CustomizeAuction = () => {
           }
         }
         const updatedTier = { ...tier, newTierData };
-        if (canEditRewardTierImage && !invalidImages) {
+        if (canEditRewardTierImage) {
           try {
             newTierData = await editRewardTierImage(tier.imageUrl, tier.id);
             tierResponses.push(newTierData);
