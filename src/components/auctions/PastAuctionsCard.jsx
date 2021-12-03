@@ -12,12 +12,14 @@ import arrowUp from '../../assets/images/Arrow_Up.svg';
 import arrowDown from '../../assets/images/ArrowDown.svg';
 import infoIcon from '../../assets/images/icon.svg';
 import { useAuthContext } from '../../contexts/AuthContext';
+import { useMyNftsContext } from '../../contexts/MyNFTsContext';
 import PastAuctionActionSection from './PastAuctionActionSection';
 
-const PastAuctionsCard = ({ auction }) => {
+const PastAuctionsCard = ({ auction, setShowLoadingModal, setLoadingText }) => {
   const history = useHistory();
 
   const { loggedInArtist, ethPrice, universeAuctionHouseContract, address } = useAuthContext();
+  const { setActiveTxHashes } = useMyNftsContext();
 
   const [copiedUrl, setCopiedUrl] = useState(false);
   const [showMore, setShowMore] = useState(false);
@@ -36,6 +38,7 @@ const PastAuctionsCard = ({ auction }) => {
   const startDate = format(new Date(auction.startDate), 'MMMM dd, HH:mm');
   const endDate = format(new Date(auction.endDate), 'MMMM dd, HH:mm');
   const ethPriceUsd = ethPrice?.market_data?.current_price?.usd;
+  const verifyClaimLoadingText = 'Your Claim tx is being verified. This will take a few seconds.';
 
   const getAuctionSlotsInfo = async () => {
     if (
@@ -120,20 +123,16 @@ const PastAuctionsCard = ({ auction }) => {
 
   const handleClaimFunds = async () => {
     try {
+      setShowLoadingModal(true);
       const tx = await universeAuctionHouseContract.distributeCapturedAuctionRevenue(
         auction.onChainId
       );
-      setShowLoading(true);
       setActiveTxHashes([tx.hash]);
 
       const txReceipt = await tx.wait();
       if (txReceipt.status === 1) {
-        // const result = await claimAuctionFunds({
-        //   auctionId: onAuction.auction.id,
-        //   amount: claimableFunds,
-        // });
-        setShowLoading(false);
-        setActiveTxHashes([]);
+        // This modal will be closed upon recieving handleAuctionWithdrawnRevenueEvent
+        setLoadingText(verifyClaimLoadingText);
         setClaimableFunds(0);
       }
     } catch (err) {
@@ -143,7 +142,6 @@ const PastAuctionsCard = ({ auction }) => {
     }
   };
 
-  console.log(auction);
   return (
     <div className="auction past-auction" key={auction.id}>
       <div className="past-left-border-effect" />
@@ -439,5 +437,7 @@ const PastAuctionsCard = ({ auction }) => {
 };
 PastAuctionsCard.propTypes = {
   auction: PropTypes.oneOfType([PropTypes.object]).isRequired,
+  setShowLoadingModal: PropTypes.func.isRequired,
+  setLoadingText: PropTypes.func.isRequired,
 };
 export default PastAuctionsCard;

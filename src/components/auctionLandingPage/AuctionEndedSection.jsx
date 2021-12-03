@@ -145,12 +145,7 @@ const AuctionEndedSection = ({
 
       const txReceipt = await tx.wait();
       if (txReceipt.status === 1) {
-        // const result = await claimAuctionFunds({
-        //   auctionId: onAuction.auction.id,
-        //   amount: claimableFunds,
-        // });
-        setShowLoading(false);
-        setActiveTxHashes([]);
+        // This modal will be closed upon receiving Auction revenue claimed event handleAuctionWithdrawnRevenueEvent
         setClaimableFunds(0);
       }
     } catch (err) {
