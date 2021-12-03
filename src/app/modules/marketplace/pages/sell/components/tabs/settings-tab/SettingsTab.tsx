@@ -1,16 +1,16 @@
 import {
-  Avatar,
-  AvatarGroup,
   Box,
-  Button, Fade,
-  Flex, Grid,
+  Button,
+  Fade,
+  Flex,
+  Grid,
   Heading,
   Image,
   Input,
   InputGroup,
   InputLeftElement,
-  Link, Slide, SlideFade,
-  Text, Tooltip,
+  Link,
+  Text,
   useDisclosure,
 } from '@chakra-ui/react';
 import React, { useCallback, useState } from 'react';
@@ -44,6 +44,10 @@ export const SettingsTab = () => {
 
   const handleLoadMore = useCallback(() => {
     setNfts([...nfts, ...Nfts])
+  }, [nfts]);
+
+  const handleNFTAuctionTimeOut = useCallback((index) => {
+    setNfts(nfts.filter((nft, i) => i !== index));
   }, [nfts]);
 
   return (
@@ -136,9 +140,15 @@ export const SettingsTab = () => {
             </Flex>
           </Fade>
 
-          <Box mt={isFiltersOpen ? 0 : '-70px'} transition={'300ms'}>
+          <Box mt={isFiltersOpen ? 0 : '-60px'} transition={'300ms'}>
             <Grid templateColumns='repeat(4, 1fr)' gap={'30px'} mb={'40px'}>
-              {nfts.map((nft, i) => (<NftItem key={i} nft={nft as INft} />))}
+              {nfts.map((nft, i) => (
+                <NftItem
+                  key={nft.id}
+                  nft={nft as INft}
+                  onAuctionTimeOut={() => handleNFTAuctionTimeOut(i)}
+                />
+              ))}
             </Grid>
             <Button variant={'outline'} isFullWidth mb={'20px'} onClick={handleLoadMore}>Load More</Button>
           </Box>

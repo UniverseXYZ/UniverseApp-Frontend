@@ -1,3 +1,5 @@
 import { INftBackend } from './nft-backend';
 
-export interface INft extends INftBackend {}
+export interface INft extends Omit<INftBackend, 'auctionExpDate'> {
+  auctionExpDate: Date;
+}

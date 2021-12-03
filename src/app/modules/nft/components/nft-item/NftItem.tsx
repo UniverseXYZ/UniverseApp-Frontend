@@ -15,7 +15,10 @@ import {
   Text,
   Tooltip,
 } from '@chakra-ui/react';
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
+import { useInterval } from 'react-use';
+import { default as dayjs } from 'dayjs';
+
 import { INft } from '../../types';
 
 import heart from '../../../../../assets/images/marketplace/heart.svg';
@@ -23,6 +26,7 @@ import heartHover from '../../../../../assets/images/marketplace/heart-hover.svg
 import heartFilled from '../../../../../assets/images/marketplace/heart-filled.svg';
 import audioIcon from '../../../../../assets/images/marketplace/audio-icon.svg';
 import videoIcon from '../../../../../assets/images/marketplace/video-icon.svg';
+import greenClockIcon from '../../../../../assets/images/marketplace/green-clock.svg';
 
 interface IMediaIconProps extends FlexProps {
   icon: any;
@@ -59,7 +63,7 @@ const LikeButton = ({ isLiked, likes, onToggle, sx = {}, ...rest }: ILikeButtonP
             fontSize: '12px',
             _hover: {
               color: 'var(--hover-color)',
-              '.chakra-button__icon:first-child img': {
+              '.chakra-button__icon:first-of-type img': {
                 '&:nth-of-type(1)': { display: 'none', },
                 '&:nth-of-type(2)': { display: 'inline', }
               }
@@ -91,9 +95,15 @@ const LikeButton = ({ isLiked, likes, onToggle, sx = {}, ...rest }: ILikeButtonP
 
 interface INftItemProps {
   nft: INft;
+  onAuctionTimeOut?: () => void;
 }
 
-export const NftItem = ({ nft }: INftItemProps) => {
+export const NftItem = ({ nft, onAuctionTimeOut }: INftItemProps) => {
+  const { auctionExpDate } = nft;
+
+  const [isRunningAuctionTime, toggleIsRunningAuctionTime] = useState(!!auctionExpDate);
+  const [formattedAuctionExpTime, setFormattedAuctionExpTime] = useState<string>();
+
   const avatars = useMemo(() => {
     const avatars = [];
 
@@ -109,6 +119,32 @@ export const NftItem = ({ nft }: INftItemProps) => {
 
     return avatars;
   }, [nft]);
+
+  useInterval(() => {
+    const expDate = dayjs(auctionExpDate);
+    const today = dayjs(new Date());
+
+    if (expDate.diff(today) < 0) {
+      toggleIsRunningAuctionTime(false);
+      onAuctionTimeOut && onAuctionTimeOut();
+      return;
+    }
+
+    const days = expDate.diff(today, 'd');
+    const hours = expDate.diff(today, 'h') - days * 24;
+    const minutes = expDate.diff(today, 'm') - hours * 60;
+    const seconds = expDate.diff(today, 's') - expDate.diff(today, 'm') * 60;
+
+    const daysString = days ? `${days}d` : '';
+    const hoursString = hours || daysString ? `${hours.toString().padStart(2, '0')}h` : '';
+    const minutesString = minutes || hoursString ? `${minutes.toString().padStart(2, '0')}m` : '';
+    const secondsString = `${seconds.toString().padStart(2, '0')}s`;
+
+    const formattedAuctionExpTime = [daysString, hoursString, minutesString, secondsString].filter(v => !!v).join(' : ');
+
+    setFormattedAuctionExpTime(formattedAuctionExpTime);
+
+  }, isRunningAuctionTime ? 1000 : null);
 
   return (
     <Box
@@ -170,6 +206,32 @@ export const NftItem = ({ nft }: INftItemProps) => {
           {nft.isAudio && (<MediaIcon icon={audioIcon} ml={'4px'} />)}
           {nft.isVideo && (<MediaIcon icon={videoIcon} ml={'4px'} />)}
         </Flex>
+
+        {formattedAuctionExpTime && (
+          <Flex position={'absolute'} bottom={'10px'} justifyContent={'center'} w={'100%'}>
+            <Box sx={{
+              background: 'rgba(0, 0, 0, 0.6)',
+              backdropFilter: 'blur(4px)',
+              borderRadius: '12px',
+              color: 'white',
+              padding: '6px 16px',
+
+            }}>
+              <Text
+                fontSize={'12px'}
+                fontWeight={'700'}
+                sx={{
+                  background: '-webkit-linear-gradient(#BCEB00, #00EAEA)',
+                  WebkitBackgroundClip: 'text',
+                  WebkitTextFillColor: 'transparent',
+                }}
+              >
+                <Image src={greenClockIcon} display={'inline'} mr={'6px'} />
+                {formattedAuctionExpTime} left
+              </Text>
+            </Box>
+          </Flex>
+        )}
 
       </Box>
 
