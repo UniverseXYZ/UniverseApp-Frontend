@@ -23,8 +23,10 @@ import SortBySelect from '../input/SortBySelect';
 import SuccessPopup from '../popups/AuctionCanceledSuccessPopup.jsx';
 import FutureAuctionDateTooltip from './FutureAuctionDateTooltip.jsx';
 import FutureAuctionTierInfo from './FutureAuctionTierInfo.jsx';
+import { useErrorContext } from '../../contexts/ErrorContext.jsx';
 
-const FutureAuctions = ({ myAuctions, setMyAuctions, setAuction }) => {
+const FutureAuctions = ({ setAuction }) => {
+  const { setShowError, setErrorBody } = useErrorContext();
   const sortOptions = ['Newest', 'Oldest'];
   const [shownActionId, setshownActionId] = useState(null);
   const [offset, setOffset] = useState(0);
@@ -33,10 +35,10 @@ const FutureAuctions = ({ myAuctions, setMyAuctions, setAuction }) => {
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(0);
   const [futureAuctions, setFutureAuctions] = useState([]);
+  const [filteredAuctions, setFilteredAuctions] = useState([]);
   const [notFound, setNotFound] = useState(false);
   const [removedAuction, setRemovedAuction] = useState(false);
   const history = useHistory();
-  const [filteredAuctions, setFilteredAuctions] = useState([]);
   const [sortOption, setSortOption] = useState(sortOptions[0]);
 
   useEffect(async () => {
@@ -54,10 +56,6 @@ const FutureAuctions = ({ myAuctions, setMyAuctions, setAuction }) => {
       console.error(error);
     }
   }, []);
-
-  useEffect(() => {
-    setFutureAuctions(myAuctions);
-  }, [myAuctions]);
 
   useEffect(() => {
     const newFilteredAuctions = [...futureAuctions].filter((auction) =>
@@ -79,10 +77,22 @@ const FutureAuctions = ({ myAuctions, setMyAuctions, setAuction }) => {
     if (canDeleteAuction) {
       try {
         const response = await deleteFutureAuction(id);
-        if (response) {
-          setMyAuctions((auctions) => auctions.filter((item) => item.id !== id));
-          setFilteredAuctions((auctions) => auctions.filter((item) => item.id !== id));
+        if (response.canceled) {
+          const newAuctions = [...futureAuctions].filter((item) => item.id !== auctionToDelete.id);
+
+          setFilteredAuctions((auctions) =>
+            auctions.filter((item) => item.id !== auctionToDelete.id)
+          );
+
+          setFutureAuctions(newAuctions);
           setRemovedAuction(auctionToDelete);
+
+          if (!newAuctions.length) {
+            setNotFound(true);
+          }
+        } else {
+          setShowError(true);
+          setErrorBody('Failed to delete auction');
         }
       } catch (error) {
         // TODO: error handling
@@ -399,7 +409,7 @@ const FutureAuctions = ({ myAuctions, setMyAuctions, setAuction }) => {
       {filteredAuctions?.length ? (
         <div className="pagination__container">
           <Pagination
-            data={myAuctions}
+            data={filteredAuctions}
             perPage={perPage}
             setOffset={setOffset}
             page={page}
@@ -419,8 +429,6 @@ const FutureAuctions = ({ myAuctions, setMyAuctions, setAuction }) => {
 };
 
 FutureAuctions.propTypes = {
-  myAuctions: PropTypes.oneOfType([PropTypes.array]).isRequired,
-  setMyAuctions: PropTypes.func.isRequired,
   setAuction: PropTypes.func.isRequired,
 };
 

@@ -125,13 +125,7 @@ const MyAuction = () => {
 
         {selectedTabIndex === tabs.ActiveAuctions && <ActiveAuctions />}
 
-        {selectedTabIndex === tabs.FutureAuctions && (
-          <FutureAuctions
-            myAuctions={myAuctions}
-            setMyAuctions={setMyAuctions}
-            setAuction={setAuction}
-          />
-        )}
+        {selectedTabIndex === tabs.FutureAuctions && <FutureAuctions setAuction={setAuction} />}
 
         {selectedTabIndex === tabs.PastAuctions && <PastAuctions />}
       </div>
