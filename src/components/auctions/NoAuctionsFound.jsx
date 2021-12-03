@@ -40,7 +40,6 @@ const NoAuctionsFound = ({ title, desc, btnText, btnAction, checkUserDetails }) 
         disabled={checkUserDetails && (!loggedInArtist.name || !loggedInArtist.avatar)}
       >
         {btnText}
-        <img src={plusIcon} alt="icon" style={{ marginLeft: '12px' }} />
       </button>
     </div>
   );
