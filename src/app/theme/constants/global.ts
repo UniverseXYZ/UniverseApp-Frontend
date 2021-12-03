@@ -1,6 +1,7 @@
 export const global = {
   body: {
     paddingTop: '80px !important',
+    fontFamily: 'Space Grotesk',
   },
   'header + div': {
     paddingTop: '0 !important',
