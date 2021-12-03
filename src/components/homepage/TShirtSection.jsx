@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback, useRef } from 'react';
 import Popup from 'reactjs-popup';
 import axios from 'axios';
 import { AnimatedOnScroll } from 'react-animated-css-onscroll';
@@ -7,13 +7,18 @@ import circleImg from '../../assets/images/circle.svg';
 import tShirtImg from '../../assets/images/t-shirt.png';
 import tShirtPresentBoxImg from '../../assets/images/t-shirt-present-box.png';
 
+const EMAIL_REGEXP =
+  /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
 const TShirtSection = () => {
   const [email, setEmail] = useState('');
+  const [showSubscribePopup, setShowSubscribePopup] = useState(false);
+  const mainSectionRef = useRef(null);
+  const rightCircleRef = useRef(null);
+  const leftCircleRef = useRef(null);
 
-  const handleSubscribe = () => {
-    const re =
-      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    if (re.test(String(email).toLowerCase())) {
+  const handleSubscribe = useCallback(() => {
+    if (EMAIL_REGEXP.test(String(email).toLowerCase())) {
       const config = {
         headers: { 'Access-Control-Allow-Origin': '*' },
         params: {
@@ -25,7 +30,7 @@ const TShirtSection = () => {
         .then((response) => {
           if (response.status === 200) {
             setEmail('');
-            document.getElementById('sub-hidden-btn').click();
+            setShowSubscribePopup(true);
           } else {
             alert('OOPS! Something went wrong.');
           }
@@ -36,14 +41,14 @@ const TShirtSection = () => {
     } else {
       alert('Email address is invalid.');
     }
-  };
+  }, [email]);
 
   useEffect(() => {
-    const circleR = document.querySelector('#tShirt-circle-r');
-    const circleL = document.querySelector('#tShirt-circle-l');
+    const circleR = rightCircleRef.current;
+    const circleL = leftCircleRef.current;
 
     const scrollLoop = () => {
-      if (document.querySelector('.about__section')) {
+      if (mainSectionRef.current) {
         const yScrollPosition = window.scrollY;
 
         circleR.style.transform = `translate3d(${yScrollPosition * -0.01}px, ${
@@ -57,7 +62,7 @@ const TShirtSection = () => {
       }
     };
 
-    if (document.querySelector('.about__section')) {
+    if (mainSectionRef.current) {
       requestAnimationFrame(scrollLoop);
     }
 
@@ -65,9 +70,9 @@ const TShirtSection = () => {
   }, []);
 
   return (
-    <div className="tShirt__section">
-      <img id="tShirt-circle-r" className="circle-r" src={circleImg} alt="Circle" />
-      <img id="tShirt-circle-l" className="circle-l" src={circleImg} alt="Circle" />
+    <div ref={mainSectionRef} className="tShirt__section">
+      <img ref={rightCircleRef} className="circle-r" src={circleImg} alt="Circle" />
+      <img ref={leftCircleRef} className="circle-l" src={circleImg} alt="Circle" />
       <div className="tShirt__section__container">
         <div className="present__box">
           <img src={tShirtPresentBoxImg} alt="Present box" />
@@ -93,17 +98,8 @@ const TShirtSection = () => {
                   <button type="button" className="light-button" onClick={handleSubscribe}>
                     Subscribe
                   </button>
-                  <Popup
-                    trigger={
-                      <button
-                        type="button"
-                        id="sub-hidden-btn"
-                        aria-label="hidden"
-                        style={{ display: 'none' }}
-                      />
-                    }
-                  >
-                    {(close) => <SubscribePopup close={close} showCongrats />}
+                  <Popup closeOnDocumentClick={false} open={showSubscribePopup}>
+                    <SubscribePopup close={() => setShowSubscribePopup(false)} showCongrats />
                   </Popup>
                 </div>
               </div>

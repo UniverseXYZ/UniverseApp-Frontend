@@ -1,4 +1,5 @@
-import React from 'react';
+/* eslint-disable no-return-assign */
+import React, { useRef, useEffect } from 'react';
 import { AnimatedOnScroll } from 'react-animated-css-onscroll';
 import { useHistory } from 'react-router-dom';
 import Button from '../button/Button.jsx';
@@ -18,9 +19,55 @@ import arrowLeft from '../../assets/images/arrow-black.svg';
 
 const MintingAuctionsSection = () => {
   const history = useHistory();
+  const mainSectionRef = useRef(null);
+  const squareOneRef = useRef(null);
+  const squareTwoRef = useRef(null);
+  const squareThreeRef = useRef(null);
+  const squareFourRef = useRef(null);
+  const squareFiveRef = useRef(null);
+  const squareSixRef = useRef(null);
+  const squareSevenRef = useRef(null);
+
+  useEffect(() => {
+    const squareOneEl = squareOneRef.current;
+    const squareTwoEl = squareTwoRef.current;
+    const squareThreeEl = squareThreeRef.current;
+    const squareFourEl = squareFourRef.current;
+    const squareFiveEl = squareFiveRef.current;
+    const squareSixEl = squareSixRef.current;
+    const squareSevenEl = squareSevenRef.current;
+
+    const scrollLoop = () => {
+      if (mainSectionRef.current) {
+        const yScrollPosition = window.scrollY;
+        const aboutOffsetTop = mainSectionRef.current.offsetTop;
+        const translate3D = `translate3d(${(yScrollPosition - aboutOffsetTop) * 0.02}px, ${
+          (yScrollPosition - aboutOffsetTop) * 0.02
+        }px, 0)`;
+
+        [
+          squareOneEl,
+          squareTwoEl,
+          squareThreeEl,
+          squareFourEl,
+          squareFiveEl,
+          squareSixEl,
+          squareSevenEl,
+        ].forEach((el) => (el.style.transform = translate3D));
+
+        requestAnimationFrame(scrollLoop);
+      }
+    };
+
+    if (mainSectionRef.current) {
+      requestAnimationFrame(scrollLoop);
+    }
+
+    return () => cancelAnimationFrame(scrollLoop);
+  }, []);
 
   return (
-    <div className="about__section">
+    <div ref={mainSectionRef} className="about__section">
       <div className="about__section__container">
         <div className="blocks">
           <AnimatedOnScroll animationIn="fadeIn">
@@ -90,13 +137,13 @@ const MintingAuctionsSection = () => {
               <div className="squares__container">
                 <img id="gradient-bg" src={bgImage} alt="Block" />
                 <img id="hummer" src={hummerImage} alt="Hummer" />
-                <img id="squareOne" src={squareOne} alt="Square" />
-                <img id="squareTwo" src={squareTwo} alt="Square" />
-                <img id="squareThree" src={squareThree} alt="Square" />
-                <img id="squareFour" src={squareFour} alt="Square" />
-                <img id="squareFive" src={squareFive} alt="Square" />
-                <img id="squareSix" src={squareSix} alt="Square" />
-                <img id="squareSeven" src={squareSeven} alt="Square" />
+                <img ref={squareOneRef} id="squareOne" src={squareOne} alt="Square" />
+                <img ref={squareTwoRef} id="squareTwo" src={squareTwo} alt="Square" />
+                <img ref={squareThreeRef} id="squareThree" src={squareThree} alt="Square" />
+                <img ref={squareFourRef} id="squareFour" src={squareFour} alt="Square" />
+                <img ref={squareFiveRef} id="squareFive" src={squareFive} alt="Square" />
+                <img ref={squareSixRef} id="squareSix" src={squareSix} alt="Square" />
+                <img ref={squareSevenRef} id="squareSeven" src={squareSeven} alt="Square" />
               </div>
             </div>
           </AnimatedOnScroll>
