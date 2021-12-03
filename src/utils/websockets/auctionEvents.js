@@ -73,6 +73,71 @@ export const subscribeToBidSubmitted = (auctionId, cb) => {
   });
 };
 
+export const subscribeToBidWithdrawn = (auctionId, cb) => {
+  if (!socket) return true;
+  socket.on(`auction_${auctionId}_bidWithdrawn`, (msg) => {
+    console.log('Auction bid withdrawn event received!');
+    return cb(null, msg);
+  });
+  console.log('Subscribed for _bidWithdrawn event !');
+};
+
+export const subscribeToRevenueWithdraw = (auctionId, cb) => {
+  if (!socket) return true;
+  socket.on(`auction_${auctionId}_withdrawnRevenue`, (msg) => {
+    console.log('Auction revenue withdraw event received!');
+    return cb(null, msg);
+  });
+};
+
+export const subscribeToSlotCaptured = (auctionId, cb) => {
+  if (!socket) return true;
+  socket.on(`auction_${auctionId}_capturedSlot`, (msg) => {
+    console.log('Auction capture slot event received!');
+    return cb(null, msg);
+  });
+};
+
+export const subscribeToBidWithdraw = (auctionId, cb) => {
+  if (!socket) return true;
+  socket.on(`auction_${auctionId}_bidWithdrawn`, (msg) => {
+    console.log('Auction bid withdraw event received!');
+    return cb(null, msg);
+  });
+};
+
+export const subscribeToBidMatched = (auctionId, cb) => {
+  if (!socket) return true;
+  socket.on(`auction_${auctionId}_bidMatched`, (msg) => {
+    console.log('Auction bid matched event received!');
+    return cb(null, msg);
+  });
+};
+
+export const subscribeToAuctionExtended = (auctionId, cb) => {
+  if (!socket) return true;
+  socket.on(`auction_${auctionId}_extended`, (msg) => {
+    console.log('Auction revenue withdraw event received!');
+    return cb(null, msg);
+  });
+};
+
+export const subscribeToERC721Claimed = (auctionId, cb) => {
+  if (!socket) return true;
+  socket.on(`auction_${auctionId}_claimedNft`, (msg) => {
+    console.log('Auction ERC721 claimed event received!');
+    return cb(null, msg);
+  });
+};
+
+export const subscribeToAuctionWithdrawnRevenue = (auctionId, cb) => {
+  if (!socket) return true;
+  socket.on(`auction_${auctionId}_withdrawnRevenue`, (msg) => {
+    console.log('Auction Withdrawn Revenue event received!');
+    return cb(null, msg);
+  });
+};
+
 export const removeAllListeners = (auctionId) => {
   if (!socket) return true;
   console.log(`Removing all listeners for ${auctionId}`);
@@ -83,4 +148,7 @@ export const removeAllListeners = (auctionId) => {
   socket.removeAllListeners(`auction_${auctionId}_depositedNfts`);
   socket.removeAllListeners(`auction_${auctionId}_withdrawnNfts`);
   socket.removeAllListeners(`auction_${auctionId}_bidSubmitted`);
+  socket.removeAllListeners(`auction_${auctionId}_bidWithdrawn`);
+  socket.removeAllListeners(`auction_${auctionId}_claimedNft`);
+  socket.removeAllListeners(`auction_${auctionId}_withdrawnRevenue`);
 };

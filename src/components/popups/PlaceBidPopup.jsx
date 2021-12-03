@@ -30,7 +30,6 @@ const PlaceBidPopup = ({
   const { yourBalance, universeAuctionHouseContract, address, loggedInArtist, signer } =
     useAuthContext();
   const { setActiveTxHashes } = useMyNftsContext();
-  console.log(loggedInArtist);
   const [yourBid, setYourBid] = useState('');
   const [showServiceFeeInfo, setShowServiceFeeInfo] = useState(false);
   const [showTotalBidAmountInfo, setShowTotalBidAmountInfo] = useState(false);
@@ -56,12 +55,7 @@ const PlaceBidPopup = ({
       );
       const erc20Balance = await erc20Contract.balanceOf(address);
 
-      console.log('erc20Allowance:');
-      console.log(utils.formatEther(erc20Allowance));
       setAllowance(+utils.formatEther(erc20Allowance));
-
-      console.log('erc20Balance:');
-      console.log(utils.formatEther(erc20Balance));
       setBalance(+utils.formatEther(erc20Balance));
     } else {
       setBalance(yourBalance);
@@ -82,10 +76,7 @@ const PlaceBidPopup = ({
       const rankedBids = [...onBidders, { amount: +val }]
         .map((bid) => bid.amount)
         .sort((a, b) => b - a);
-      console.log(rankedBids);
       const myBidIdx = rankedBids.indexOf(+val);
-      console.log(myBidIdx);
-      console.log(rewardTiers);
 
       let rewardSlotCounter = 0;
       let hasFound = false;
@@ -161,7 +152,6 @@ const PlaceBidPopup = ({
     setError('');
 
     // TODO: Check if bid is winning any slot
-    console.log(utils.parseEther(yourBid));
     try {
       let bidTx = null;
       if (auction.tokenSymbol === 'ETH') {

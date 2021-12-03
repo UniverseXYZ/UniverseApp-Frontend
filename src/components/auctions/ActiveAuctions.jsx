@@ -72,7 +72,7 @@ const ActiveAuctions = () => {
         </div>
         <SortBySelect
           id="sort--select"
-          defaultValue={sortOptions[0]}
+          sort={sortOption}
           sortData={sortOptions}
           setSort={setSortOption}
         />

@@ -65,7 +65,7 @@ const AuctionCountdown = ({
         clearInterval(startInterval);
       }
     };
-  }, [hasAuctionStarted]);
+  }, [hasAuctionStarted, endDate, startDate]);
 
   return (
     <div className="auction__ends__in__label">

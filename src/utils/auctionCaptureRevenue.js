@@ -65,7 +65,7 @@ export const createBatchCaptureRevenueTxsFinalised = (rewardTiersSlots, bidders,
     // If we get to an already captured slot or exceed the maxNftsPerTxLimit
     // We push the current txs
     if (!tx.slotInfo) {
-      if (txs.length) {
+      if (txObject.totalNfts) {
         txs.push(txObject);
         txObject = {
           startSlot: 0,
@@ -85,7 +85,7 @@ export const createBatchCaptureRevenueTxsFinalised = (rewardTiersSlots, bidders,
         endSlot: 0,
         totalNfts: 0,
         tiers: [],
-        revenueCaptured: false,
+        revenueCaptured: tx.revenueCaptured,
       };
     }
 
@@ -107,7 +107,7 @@ export const createBatchCaptureRevenueTxsFinalised = (rewardTiersSlots, bidders,
   return txs;
 };
 
-export const createBatchCaptureRevenueTxsNotFinalised = (rewardTiersSlots, bidders, slotsInfo) => {
+export const createBatchCaptureRevenueTxsNotFinalised = (rewardTiersSlots) => {
   const txs = [];
 
   let txObject = {

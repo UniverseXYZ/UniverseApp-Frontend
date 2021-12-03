@@ -2,28 +2,35 @@ import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import uuid from 'react-uuid';
 import { Helmet } from 'react-helmet';
+import Popup from 'reactjs-popup';
 import tabArrow from '../../assets/images/tab-arrow.svg';
 import FutureAuctions from './FutureAuctions.jsx';
 import ActiveAuctions from './ActiveAuctions.jsx';
 import { handleTabLeftScrolling, handleTabRightScrolling } from '../../utils/scrollingHandlers';
 import { useAuctionContext } from '../../contexts/AuctionContext';
 import { useAuthContext } from '../../contexts/AuthContext';
+import { useMyNftsContext } from '../../contexts/MyNFTsContext';
 import { isAfterNow, isBeforeNow } from '../../utils/dates';
 import MyBidsList from '../auctionsCard/myBids/MyBidsList.jsx';
 import plusIcon from '../../assets/images/plus.svg';
 import PastAuctions from './PastAuctions';
 import circle from '../../assets/images/green-circle.svg';
+import LoadingPopup from '../popups/LoadingPopup';
 
 const MyAuction = () => {
   const { myAuctions, setMyAuctions, setAuction, selectedTabIndex, setSelectedTabIndex, auction } =
     useAuctionContext();
   const { loggedInArtist } = useAuthContext();
+  const defaultLoadingText =
+    'The transaction is in progress. Keep this window opened. Navigating away from the page will reset the curent progress.';
+  const [loadingText, setLoadingText] = useState(defaultLoadingText);
 
   const tabTitles = ['My bids', 'Active auctions', 'Draft auctions', 'Past auctions'];
   const tabs = { MyBids: 0, ActiveAuctions: 1, FutureAuctions: 2, PastAuctions: 3 };
 
   const [showButton, setShowButton] = useState(true);
   const [greenCircle, setgreenCircle] = useState(true);
+  const [showLoadingModal, setShowLoadingModal] = useState(false);
   const history = useHistory();
 
   useEffect(() => {
@@ -127,8 +134,18 @@ const MyAuction = () => {
 
         {selectedTabIndex === tabs.FutureAuctions && <FutureAuctions setAuction={setAuction} />}
 
-        {selectedTabIndex === tabs.PastAuctions && <PastAuctions />}
+        {selectedTabIndex === tabs.PastAuctions && (
+          <PastAuctions setShowLoadingModal={setShowLoadingModal} setLoadingText={setLoadingText} />
+        )}
       </div>
+
+      <Popup open={showLoadingModal} closeOnDocumentClick={false}>
+        <LoadingPopup
+          text={loadingText}
+          onClose={() => setShowLoadingModal(false)}
+          contractInteraction
+        />
+      </Popup>
     </div>
   );
 };

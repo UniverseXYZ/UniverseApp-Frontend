@@ -95,7 +95,8 @@ const FutureAuctions = ({ setAuction }) => {
           setErrorBody('Failed to delete auction');
         }
       } catch (error) {
-        // TODO: error handling
+        setShowError(true);
+        setErrorBody('Failed to delete auction');
         console.info(error);
       }
     }
@@ -187,9 +188,9 @@ const FutureAuctions = ({ setAuction }) => {
       return (
         <>
           <div className="circle">
-            {configreStepDone ? (
+            {landingStepDone ? (
               <img src={doneIcon} alt="Done" />
-            ) : landingStepDone ? (
+            ) : configreStepDone ? (
               <img src={emptyMark} alt="Empty mark" />
             ) : (
               <img src={emptyWhite} alt="Empty white" />
@@ -201,14 +202,14 @@ const FutureAuctions = ({ setAuction }) => {
     }
     return (
       <div className="circle">
-        {configreStepDone ? (
+        {landingStepDone ? (
           <>
             <img src={doneIcon} alt="Done" />
             <div className="hz-line1" />
           </>
         ) : (
           <>
-            {landingStepDone ? (
+            {configreStepDone ? (
               <img src={emptyMark} alt="Empty mark" />
             ) : (
               <img src={emptyWhite} alt="Empty white" />
@@ -284,7 +285,7 @@ const FutureAuctions = ({ setAuction }) => {
         </div>
         <SortBySelect
           id="sort--select"
-          defaultValue={sortOptions[0]}
+          sort={sortOption}
           sortData={sortOptions}
           setSort={setSortOption}
         />
@@ -388,10 +389,13 @@ const FutureAuctions = ({ setAuction }) => {
               </div>
 
               <div hidden={shownActionId !== futureAuction.id} className="auctions-tier">
-                {futureAuction.rewardTiers.length &&
+                {futureAuction.rewardTiers.length ? (
                   futureAuction.rewardTiers.map((tier) => (
                     <FutureAuctionTierInfo key={tier.id} tier={tier} />
-                  ))}
+                  ))
+                ) : (
+                  <></>
+                )}
                 <Button
                   className="light-border-button red"
                   onClick={() => handleRemove(futureAuction.id)}

@@ -76,9 +76,9 @@ const AuctionEndedSection = ({
       console.log('available funds to claim:');
       console.log(toClaim);
 
-      const unreleased = utils.formatEther(
-        totalBids.sub(revenueToClaim).sub(onAuction.auction.claimedFunds || 0)
-      );
+      const unreleased =
+        utils.formatEther(totalBids.sub(revenueToClaim)) - Number(onAuction.auction.revenueClaimed);
+
       setUnreleasedFunds(unreleased);
       console.log('unreleased funds:');
       console.log(unreleased);
@@ -115,11 +115,6 @@ const AuctionEndedSection = ({
   };
 
   const handleClaimNfts = async () => {
-    console.log(
-      !mySlot ||
-        !mySlot.revenueCaptured ||
-        mySlot.totalDepositedNfts.toNumber() === mySlot.totalWithdrawnNfts.toNumber()
-    );
     try {
       const tx = await universeAuctionHouseContract.claimERC721Rewards(
         onAuction.auction.onChainId,
@@ -131,15 +126,12 @@ const AuctionEndedSection = ({
 
       const txReceipt = await tx.wait();
       if (txReceipt.status === 1) {
-        setShowLoading(false);
-        setActiveTxHashes([]);
+        // This modal will be closed upon recieving notifyERC721Claimed event
         setMySlot({ ...mySlot, totalWithdrawnNfts: mySlot.totalDepositedNfts });
       }
     } catch (err) {
       setShowLoading(false);
       setActiveTxHashes([]);
-
-      console.log(err);
     }
   };
 
@@ -153,12 +145,7 @@ const AuctionEndedSection = ({
 
       const txReceipt = await tx.wait();
       if (txReceipt.status === 1) {
-        // const result = await claimAuctionFunds({
-        //   auctionId: onAuction.auction.id,
-        //   amount: claimableFunds,
-        // });
-        setShowLoading(false);
-        setActiveTxHashes([]);
+        // This modal will be closed upon receiving Auction revenue claimed event handleAuctionWithdrawnRevenueEvent
         setClaimableFunds(0);
       }
     } catch (err) {
@@ -235,37 +222,39 @@ const AuctionEndedSection = ({
           ))}
         </div>
       </div>
-      <div className="funds-and-balance">
-        <div className="unreleased-funds">
-          <div className="head">
-            <span>Unreleased funds</span>
-            <span
-              onMouseOver={() => setShowUnreleasedFundsTooltip(true)}
-              onFocus={() => setShowUnreleasedFundsTooltip(true)}
-              onMouseLeave={() => setShowUnreleasedFundsTooltip(false)}
-              onBlur={() => setShowUnreleasedFundsTooltip(false)}
-            >
-              <img src={infoIcon} alt="Info Icon" />
-            </span>
-            {showUnreleasedFundsTooltip && (
-              <div className="info-text1">
-                <p>
-                  For the auctioneer to be able to collect their winnings and for the users to be
-                  able to claim their NFTs the rewards need to be released first.
-                </p>
-              </div>
-            )}
-          </div>
-          <div className="balance-body">
-            <span className="value-section">
-              <img src={bidIcon} alt="unreleased funds" />
-              <span className="value">
-                {unreleasedFunds}
-                <span className="dollar-val">~${Math.round(unreleasedFunds * ethPrice)}</span>
+      <div className="footer">
+        <div className="funds-and-balance">
+          <div className="unreleased-funds" style={{ borderRight: '1px solid rgba(0,0,0,10%)' }}>
+            <div className="head">
+              <span>Unreleased funds</span>
+              <span
+                onMouseOver={() => setShowUnreleasedFundsTooltip(true)}
+                onFocus={() => setShowUnreleasedFundsTooltip(true)}
+                onMouseLeave={() => setShowUnreleasedFundsTooltip(false)}
+                onBlur={() => setShowUnreleasedFundsTooltip(false)}
+              >
+                <img src={infoIcon} alt="Info Icon" />
               </span>
-            </span>
-            {Object.values(slotsInfo).some((slot) => !slot.revenueCaptured) ? (
+              {showUnreleasedFundsTooltip && (
+                <div className="info-text1">
+                  <p>
+                    For the auctioneer to be able to collect their winnings and for the users to be
+                    able to claim their NFTs the rewards need to be released first.
+                  </p>
+                </div>
+              )}
+            </div>
+            <div className="balance-body">
+              <span className="value-section">
+                <img src={bidIcon} alt="unreleased funds" />
+                <span className="value">
+                  {unreleasedFunds}
+                  <span className="dollar-val">~${Math.round(unreleasedFunds * ethPrice)}</span>
+                </span>
+              </span>
               <Button
+                disabled={!Object.values(slotsInfo).some((slot) => !slot.revenueCaptured)}
+                style={{ width: 180 }}
                 className="light-button"
                 onClick={() =>
                   history.push('/release-rewards', {
@@ -284,14 +273,9 @@ const AuctionEndedSection = ({
               >
                 Release rewards
               </Button>
-            ) : (
-              <></>
-            )}
+            </div>
           </div>
-        </div>
-
-        {isAuctionner ? (
-          <div className="available-balance">
+          <div className="available-balance" style={{ marginLeft: 50 }}>
             <div className="head">
               <span>Available balance</span>
               <span
@@ -325,19 +309,7 @@ const AuctionEndedSection = ({
               </Button>
             </div>
           </div>
-        ) : (
-          <Button
-            className="light-button"
-            disabled={
-              !mySlot ||
-              !mySlot.revenueCaptured ||
-              mySlot.totalDepositedNfts.toNumber() === mySlot.totalWithdrawnNfts.toNumber()
-            }
-            onClick={handleClaimNfts}
-          >
-            Claim NFTs
-          </Button>
-        )}
+        </div>
       </div>
     </div>
   ) : !isWinningBid ? (
@@ -392,40 +364,43 @@ const AuctionEndedSection = ({
             <></>
           )}
         </div>
-        {Object.values(slotsInfo).some((slot) => !slot.revenueCaptured) ? (
+        <div className="footer">
+          {Object.values(slotsInfo).some((slot) => !slot.revenueCaptured) ? (
+            <Button
+              className="light-button"
+              onClick={() =>
+                history.push('/release-rewards', {
+                  auctionData: onAuction,
+                  myBid: currentBid,
+                  view: isAuctionner ? 'Auctioneer' : 'Bidder',
+                  bidders,
+                  rewardTiersSlots,
+                  winningSlot,
+                  slotsInfo,
+                  mySlot,
+                  mySlotIndex,
+                  backButtonText: onAuction.auction.headline,
+                })
+              }
+            >
+              Release rewards
+            </Button>
+          ) : (
+            <></>
+          )}
+
           <Button
             className="light-button"
-            onClick={() =>
-              history.push('/release-rewards', {
-                auctionData: onAuction,
-                myBid: currentBid,
-                view: isAuctionner ? 'Auctioneer' : 'Bidder',
-                bidders,
-                rewardTiersSlots,
-                winningSlot,
-                slotsInfo,
-                mySlot,
-                mySlotIndex,
-              })
+            disabled={
+              !mySlot ||
+              !mySlot.revenueCaptured ||
+              mySlot.totalDepositedNfts.toNumber() === mySlot.totalWithdrawnNfts.toNumber()
             }
+            onClick={handleClaimNfts}
           >
-            Release rewards
+            Claim NFTs
           </Button>
-        ) : (
-          <></>
-        )}
-
-        <Button
-          className="light-button"
-          disabled={
-            !mySlot ||
-            !mySlot.revenueCaptured ||
-            mySlot.totalDepositedNfts.toNumber() === mySlot.totalWithdrawnNfts.toNumber()
-          }
-          onClick={handleClaimNfts}
-        >
-          Claim NFTs
-        </Button>
+        </div>
       </div>
     </Animated>
   );
