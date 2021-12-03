@@ -7,12 +7,14 @@ import warningIcon from '../../assets/images/Exclamation.svg';
 import LoadingImage from '../general/LoadingImage';
 import SVGImageLoader from '../marketplaceNFT/InlineSVG';
 import videoIcon from '../../assets/images/video-icon.svg';
+import doneIcon from '../../assets/images/Completed.svg';
 
 const DepositNftsSection = ({
   transactions,
   handleDepositTier,
   completedCollectionsStep,
   completedAuctionCreationStep,
+  completedDepositStep,
   approvedTxCount,
   approvedTxs,
   handleWithdraw,
@@ -89,7 +91,9 @@ const DepositNftsSection = ({
     <div className="create__auction">
       <div className="step">
         <div className="circle">
-          {completedCollectionsStep ? (
+          {completedDepositStep ? (
+            <img alt="Completed" src={doneIcon} />
+          ) : completedCollectionsStep ? (
             <img alt="Empty mark" src={emptyMark} />
           ) : (
             <img alt="Empty white" src={emptyWhite} />
@@ -181,6 +185,7 @@ DepositNftsSection.propTypes = {
   handleWithdraw: PropTypes.func.isRequired,
   completedAuctionCreationStep: PropTypes.bool.isRequired,
   completedCollectionsStep: PropTypes.bool.isRequired,
+  completedDepositStep: PropTypes.bool.isRequired,
   isCanceledAuction: PropTypes.bool.isRequired,
   approvedTxCount: PropTypes.number.isRequired,
   approvedTxs: PropTypes.oneOfType([PropTypes.array]).isRequired,

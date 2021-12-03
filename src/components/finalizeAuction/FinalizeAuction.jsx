@@ -198,10 +198,6 @@ const FinalizeAuction = () => {
   };
 
   const handleCreateAuction = async () => {
-    if (approvedTxs.length) {
-      alert('Please withdraw your nfts before creating a new auction');
-      return;
-    }
     try {
       let numberOfSlots = 0;
       let paymentSplits = [];
@@ -434,7 +430,11 @@ const FinalizeAuction = () => {
                   Cancel
                 </Button>
               ) : (
-                <Button className="light-button" onClick={handleCreateAuction}>
+                <Button
+                  disabled={approvedTxs.length}
+                  className="light-button"
+                  onClick={handleCreateAuction}
+                >
                   Proceed
                 </Button>
               )}
@@ -447,7 +447,7 @@ const FinalizeAuction = () => {
                 {!completedCollectionsStep ? (
                   <img alt="Empty mark" src={emptyMark} />
                 ) : completedCollectionsStep ? (
-                  <img alt="Empty mark" src={doneIcon} />
+                  <img alt="Completed" src={doneIcon} />
                 ) : (
                   <img alt="Empty white" src={emptyWhite} />
                 )}
