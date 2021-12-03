@@ -126,7 +126,7 @@ const Create = () => {
           name,
           collectioName,
           collectionAddress,
-          collectionUrl,
+          collectionUrl: collectionUrl === 'null' ? JSON.parse('null') : collectionUrl,
           tokenId: parseInt(edition, 10),
         });
 

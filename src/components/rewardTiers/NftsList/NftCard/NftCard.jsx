@@ -19,7 +19,7 @@ const NftCard = ({
 }) => (
   <div className="rev-reward__box" key={uuid}>
     <div className="rev-reward__box__image">
-      {artworkType === 'mp4' && (
+      {artworkType === 'mp4' ? (
         <video
           onMouseOver={(event) => event.target.play()}
           onFocus={(event) => event.target.play()}
@@ -30,9 +30,11 @@ const NftCard = ({
           <track kind="captions" />
           Your browser does not support the video tag.
         </video>
+      ) : artworkType === 'mpeg' ? (
+        <img className="preview-image" src={mp3Icon} alt={nftName} />
+      ) : (
+        <img className="preview-image" src={url} alt={nftName} />
       )}
-      {artworkType === 'mpeg' && <img className="preview-image" src={mp3Icon} alt={nftName} />}
-      {nftIsImage && <img className="preview-image" src={url} alt={nftName} />}
       {artworkType === 'mp4' && <img className="video__icon" src={videoIcon} alt="Video Icon" />}
     </div>
     <div className="rev-reward__box__name">
@@ -42,7 +44,7 @@ const NftCard = ({
       <div className="collection__details">
         {collectioName && (
           <>
-            {typeof collectionUrl === 'string' && collectionUrl.startsWith('#') ? (
+            {!collectionUrl ? (
               <div className="random__bg__color" style={{ backgroundColor: collectionUrl }}>
                 {collectioName.charAt(0)}
               </div>
