@@ -95,7 +95,8 @@ const FutureAuctions = ({ setAuction }) => {
           setErrorBody('Failed to delete auction');
         }
       } catch (error) {
-        // TODO: error handling
+        setShowError(true);
+        setErrorBody('Failed to delete auction');
         console.info(error);
       }
     }
