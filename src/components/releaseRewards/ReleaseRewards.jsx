@@ -60,6 +60,7 @@ const ReleaseRewards = () => {
   const [showLoading, setShowLoading] = useState(false);
   const [bids, setBids] = useState(bidders);
   const [loadingText, setLoadingText] = useState(defaultLoadingText);
+  const [capturedSlotIndices, setCapturedSlotIndices] = useState([]);
 
   const setupPage = async () => {
     console.log('Slots info:');
@@ -69,7 +70,7 @@ const ReleaseRewards = () => {
     if (auctionData.auction.finalised) {
       batchCaptureTxs = createBatchCaptureRevenueTxsFinalised(rewardTiersSlots, bids, slotsInfo);
     } else {
-      batchCaptureTxs = createBatchCaptureRevenueTxsNotFinalised(rewardTiersSlots, bids, slotsInfo);
+      batchCaptureTxs = createBatchCaptureRevenueTxsNotFinalised(rewardTiersSlots);
     }
     const singleCaptureTxs = createSingleCaptureRevenueTxs(rewardTiersSlots, bids, slotsInfo);
     console.log(`batchCapture Txs:`);
@@ -80,6 +81,17 @@ const ReleaseRewards = () => {
     console.log(singleCaptureTxs);
 
     setSingleCaptureRevenueTxs(singleCaptureTxs);
+
+    // We need this to track and update UI correctly from captureSlotRevenueRange
+    // It handles multiple slots with separate emitted events
+    const capturedIdxs = [];
+    singleCaptureTxs.forEach((tx) => {
+      if (tx.revenueCaptured) {
+        capturedIdxs.push(+tx.startSlot);
+      }
+    });
+
+    setCapturedSlotIndices(capturedIdxs);
   };
 
   useEffect(() => {
@@ -106,10 +118,49 @@ const ReleaseRewards = () => {
 
   useEffect(() => {
     initiateAuctionSocket();
-    subscribeToSlotCaptured(auctionData.auction.id, (err, data) => {
+    subscribeToSlotCaptured(auctionData.auction.id, (err, { tierId, slotIndex }) => {
       if (err) return;
+      // Update single capture txs
+      setSingleCaptureRevenueTxs((txs) => {
+        const updatedTxs = [...txs];
+        updatedTxs.map((tx) =>
+          tx.startSlot === slotIndex.toString()
+            ? { ...tx, slotInfo: { ...tx.slotInfo, revenueCaptured: true } }
+            : tx
+        );
 
-      setBids(data);
+        return updatedTxs;
+      });
+
+      // Update captured slots indices
+      let updatedIndices = [];
+      setCapturedSlotIndices((indices) => {
+        updatedIndices = [...indices];
+        updatedIndices.push(slotIndex);
+        return updatedIndices;
+      });
+
+      // Update batch capture txs
+      setBatchCaptureRevenueTxs((txs) => {
+        const newBatchTxs = [...txs];
+
+        newBatchTxs.forEach((tx) => {
+          // If (startSlot = 4, endSlot = 7) startToEndIndices will have => [4, 5, 6, 7]
+          const startToEndIndices = Array.from(
+            { length: +tx.endSlot },
+            (_, i) => i + +tx.startSlot
+          );
+
+          // We check if we have all elements of startToEndIndices in capturedSlotIndices
+          // capturedSlotIndices = [4,5] => true
+          // capturedSlotIndices = [7,8] => false
+          const isFullyCaptured = startToEndIndices.every((idx) => updatedIndices.includes(idx));
+          if (isFullyCaptured) {
+            tx.revenueCaptured = true;
+          }
+        });
+        return newBatchTxs;
+      });
     });
 
     subscribeToBidMatched(auctionData.auction.id, (err, { bids: bidsData, finalised }) => {
@@ -149,39 +200,14 @@ const ReleaseRewards = () => {
           captureConfig.endSlot
         );
       }
+      setLoadingText(defaultLoadingText);
       setShowLoading(true);
       setActiveTxHashes([tx.hash]);
       const txReceipt = await tx.wait();
 
       if (txReceipt.status === 1) {
-        if (singleSlot) {
-          const updatedTxs = [...singleCaptureRevenueTxs];
-          updatedTxs[configIndex].slotInfo = {
-            ...updatedTxs[configIndex].slotInfo,
-            revenueCaptured: true,
-          };
-          setSingleCaptureRevenueTxs(updatedTxs);
-        } else {
-          const updatedBatchTxs = [...batchCaptureRevenueTxs];
-          const updatedSingleTxs = [...singleCaptureRevenueTxs];
-
-          updatedBatchTxs[configIndex].revenueCaptured = true;
-          for (
-            let slotIdx = +captureConfig.startSlot;
-            slotIdx <= +captureConfig.endSlot;
-            slotIdx += 1
-          ) {
-            updatedSingleTxs[slotIdx].slotInfo = {
-              ...updatedSingleTxs[slotIdx].slotInfo,
-              revenueCaptured: true,
-            };
-          }
-          setSingleCaptureRevenueTxs(updatedSingleTxs);
-          setBatchCaptureRevenueTxs(updatedBatchTxs);
-        }
+        setLoadingText(verificationLoadingText);
       }
-      setActiveTxHashes([]);
-      setShowLoading(false);
     } catch (err) {
       setActiveTxHashes([]);
       setShowLoading(false);
@@ -200,7 +226,6 @@ const ReleaseRewards = () => {
       setActiveTxHashes([tx.hash]);
       const txReceipt = await tx.wait();
       if (txReceipt.status === 1) {
-        // TODO: Set loading text
         setLoadingText(verificationLoadingText);
       }
     } catch (err) {
