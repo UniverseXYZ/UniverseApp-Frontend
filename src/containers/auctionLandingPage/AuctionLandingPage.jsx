@@ -20,6 +20,7 @@ import {
   removeAllListeners,
   subscribeToBidSubmitted,
   subscribeToBidWithdrawn,
+  subscribeToAuctionExtended,
 } from '../../utils/websockets/auctionEvents';
 import SuccessBidPopup from '../../components/popups/SuccessBidPopup';
 
@@ -175,6 +176,13 @@ const AuctionLandingPage = () => {
 
       subscribeToBidWithdrawn(auction.auction.id, (err, { user, amount }) => {
         handleBidWithdrawnEvent(err, user, amount);
+      });
+
+      subscribeToAuctionExtended(auction.auction.id, (err, { endDate }) => {
+        setAuction((upToDate) => ({
+          ...upToDate,
+          auction: { ...upToDate.auction, endDate },
+        }));
       });
     }
   }, [auction, bidders, yourBalance]);

@@ -82,6 +82,46 @@ export const subscribeToBidWithdrawn = (auctionId, cb) => {
   console.log('Subscribed for _bidWithdrawn event !');
 };
 
+export const subscribeToRevenueWithdraw = (auctionId, cb) => {
+  if (!socket) return true;
+  socket.on(`auction_${auctionId}_withdrawnRevenue`, (msg) => {
+    console.log('Auction revenue withdraw event received!');
+    return cb(null, msg);
+  });
+};
+
+export const subscribeToSlotCaptured = (auctionId, cb) => {
+  if (!socket) return true;
+  socket.on(`auction_${auctionId}_capturedSlot`, (msg) => {
+    console.log('Auction capture slot event received!');
+    return cb(null, msg);
+  });
+};
+
+export const subscribeToBidWithdraw = (auctionId, cb) => {
+  if (!socket) return true;
+  socket.on(`auction_${auctionId}_bidWithdrawn`, (msg) => {
+    console.log('Auction bid withdraw event received!');
+    return cb(null, msg);
+  });
+};
+
+export const subscribeToBidMatched = (auctionId, cb) => {
+  if (!socket) return true;
+  socket.on(`auction_${auctionId}_bidMatched`, (msg) => {
+    console.log('Auction bid matched event received!');
+    return cb(null, msg);
+  });
+};
+
+export const subscribeToAuctionExtended = (auctionId, cb) => {
+  if (!socket) return true;
+  socket.on(`auction_${auctionId}_extended`, (msg) => {
+    console.log('Auction revenue withdraw event received!');
+    return cb(null, msg);
+  });
+};
+
 export const removeAllListeners = (auctionId) => {
   if (!socket) return true;
   console.log(`Removing all listeners for ${auctionId}`);
