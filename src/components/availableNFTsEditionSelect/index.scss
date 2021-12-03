@@ -113,5 +113,16 @@
   div[id*="listbox"] {
     border-radius: 10px
   }
-  
+
+  .option {
+    i {
+      min-width: 16px;
+    }
+    label {
+      text-overflow: ellipsis;
+      max-width: 90%;
+      white-space: nowrap;
+      overflow: hidden;
+    }
+  }
 }
