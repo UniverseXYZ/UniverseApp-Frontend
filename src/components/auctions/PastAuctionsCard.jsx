@@ -107,7 +107,8 @@ const PastAuctionsCard = ({ auction, setShowLoadingModal, setLoadingText }) => {
       const toClaim = utils.formatEther(revenueToClaim);
       setClaimableFunds(toClaim);
 
-      const unreleased = utils.formatEther(totalBids.sub(revenueToClaim)) - +auction.revenueClaimed;
+      const unreleased =
+        utils.formatEther(totalBids.sub(revenueToClaim)) - Number(auction.revenueClaimed);
       setUnreleasedFunds(unreleased);
     }
   };
@@ -121,7 +122,8 @@ const PastAuctionsCard = ({ auction, setShowLoadingModal, setLoadingText }) => {
   }, [universeAuctionHouseContract, auction]);
 
   const areAllSlotsCaptured =
-    auction.finalised && auction.rewardTiers.map((r) => r.slots).filter((s) => s.revenueCaptured);
+    auction.finalised &&
+    auction.rewardTiers.map((r) => r.slots).filter((s) => s.revenueCaptured).length;
 
   const handleClaimFunds = async () => {
     try {

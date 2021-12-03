@@ -77,7 +77,7 @@ const AuctionEndedSection = ({
       console.log(toClaim);
 
       const unreleased =
-        utils.formatEther(totalBids.sub(revenueToClaim)) - +onAuction.auction.revenueClaimed;
+        utils.formatEther(totalBids.sub(revenueToClaim)) - Number(onAuction.auction.revenueClaimed);
 
       setUnreleasedFunds(unreleased);
       console.log('unreleased funds:');
