@@ -313,6 +313,9 @@
           img {
             pointer-events: all;
           }
+          @media (max-width: 600px) {
+            display: flex;
+          }
         }
         .tab__left__arrow {
           display: none;
