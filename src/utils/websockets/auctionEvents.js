@@ -122,6 +122,14 @@ export const subscribeToAuctionExtended = (auctionId, cb) => {
   });
 };
 
+export const subscribeToERC721Claimed = (auctionId, cb) => {
+  if (!socket) return true;
+  socket.on(`auction_${auctionId}_ERC721Claimed`, (msg) => {
+    console.log('Auction ERC721 claimed event received!');
+    return cb(null, msg);
+  });
+};
+
 export const removeAllListeners = (auctionId) => {
   if (!socket) return true;
   console.log(`Removing all listeners for ${auctionId}`);
@@ -133,4 +141,5 @@ export const removeAllListeners = (auctionId) => {
   socket.removeAllListeners(`auction_${auctionId}_withdrawnNfts`);
   socket.removeAllListeners(`auction_${auctionId}_bidSubmitted`);
   socket.removeAllListeners(`auction_${auctionId}_bidWithdrawn`);
+  socket.removeAllListeners(`auction_${auctionId}_ERC721Claimed`);
 };
