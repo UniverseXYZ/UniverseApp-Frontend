@@ -2,11 +2,13 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
 import Button from '../button/Button.jsx';
+import { useAuctionContext } from '../../contexts/AuctionContext';
 import closeIcon from '../../assets/images/cross.svg';
 import congratsicon from '../../assets/images/congrats.png';
 
 const CongratsAuctionPopup = ({ onClose }) => {
   const history = useHistory();
+  const { setSelectedTabIndex } = useAuctionContext();
 
   return (
     <div className="popup-div congrats-popup">
@@ -36,6 +38,8 @@ const CongratsAuctionPopup = ({ onClose }) => {
         <Button
           className="light-button"
           onClick={async () => {
+            const draftAuctionsTabIndex = 2; // 2 is the tab index of "Draft auctions"
+            setSelectedTabIndex(draftAuctionsTabIndex);
             await onClose();
             history.push('/my-auctions');
           }}
