@@ -1,5 +1,5 @@
-@import '../../assets/scss/variables';
-@import '../../assets/scss/mixins';
+@import "../../assets/scss/variables";
+@import "../../assets/scss/mixins";
 
 .homepage {
   .welcome__section {
@@ -136,7 +136,7 @@
 
     .universe__protocol__section {
       position: relative;
-      padding: 90px 60px 60px ;
+      padding: 90px 60px 60px;
 
       .circle-r {
         position: absolute;
@@ -543,7 +543,7 @@
           text-align: center;
         }
       }
-      button { 
+      button {
         img {
           margin-left: 10px;
         }
@@ -585,48 +585,6 @@
         background: linear-gradient($black, $black) padding-box,
           linear-gradient(to right, #2ad0ca, #e1f664, #feb0fe, #abb3fc, #5df7a4, #58c4f6) border-box;
       }
-      .subscribe__form {
-        span {
-          display: block;
-          font-family: $spaceGroteskFont;
-          font-style: normal;
-          font-weight: bold;
-          font-size: 14px;
-          line-height: 22px;
-          color: $black;
-        }
-        .form__group {
-          position: relative;
-          input {
-            width: 100%;
-            border: 1px solid rgba(0, 0, 0, 0.1);
-            box-sizing: border-box;
-            border-radius: 12px;
-            padding: 15px;
-            font-family: $spaceGroteskFont;
-            font-style: normal;
-            font-weight: normal;
-            font-size: 16px;
-            line-height: 20px;
-
-            &::placeholder {
-              color: rgba(0, 0, 0, 0.2);
-            }
-          }
-          button {
-            position: absolute;
-            right: 4px;
-            top: 4px;
-            @include sm {
-              position: relative;
-              margin-bottom: 85px;
-              right: 0;
-              top: 16px;
-              height: 52px;
-            }
-          }
-        }
-      }
       @include lg {
         align-items: flex-start;
       }
@@ -634,6 +592,147 @@
         grid-gap: 20px;
         grid-template-columns: 1fr;
         align-items: center;
+      }
+    }
+    .tShirt__section {
+      position: relative;
+      padding: 0px 60px 130px;
+
+      .circle-r {
+        max-width: 473px;
+        max-height: 473px;
+        position: absolute;
+        z-index: -1;
+        top: -20%;
+        right: -5%;
+        @include lg {
+          width: 384px;
+          height: 384px;
+          top: 0;
+          right: -15%;
+        }
+        @include sm {
+          width: 278px;
+          height: 278px;
+          bottom: -22%;
+          top: unset;
+          right: -20%;
+        }
+      }
+
+      .circle-l {
+        max-width: 473px;
+        max-height: 473px;
+        position: absolute;
+        z-index: -1;
+        bottom: -20%;
+        left: -5%;
+        @include lg {
+          width: 384px;
+          height: 384px;
+          bottom: -30%;
+          left: 0;
+        }
+        @include sm {
+          width: 278px;
+          height: 278px;
+          top: 5%;
+          left: -10%;
+        }
+      }
+      &__container {
+        position: relative;
+        max-width: 1110px;
+        margin: 0 auto;
+        .present__box {
+          position: absolute;
+          top: 50px;
+          right: -50px;
+        }
+        .universe__protocol {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          grid-gap: 40px;
+          align-items: center;
+          justify-items: center;
+          background: linear-gradient($white, $white) padding-box,
+            linear-gradient(to right, #2ad0ca, #e1f664, #feb0fe, #abb3fc, #5df7a4, #58c4f6) border-box;
+          border: 1px solid transparent;
+          backdrop-filter: blur(20px);
+          border-radius: 20px;
+          padding: 72px 95px;
+          opacity: 0.9;
+          @include lg {
+            padding: 50px 50px;
+          }
+          @include sm {
+            padding: 40px 25px;
+          }
+
+          h1.title {
+            font-family: $sharpGroteskSemiBoldFont;
+            font-style: normal;
+            font-weight: 600;
+            font-size: 26px;
+            line-height: 140%;
+            color: $black;
+            margin-bottom: 30px;
+            @include lg {
+              font-size: 20px;
+            }
+          }
+          .subscribe__form {
+            span {
+              display: block;
+              font-family: $spaceGroteskFont;
+              font-style: normal;
+              font-weight: bold;
+              font-size: 14px;
+              line-height: 22px;
+              color: $black;
+            }
+            .form__group {
+              position: relative;
+              input {
+                width: 100%;
+                border: 1px solid rgba(0, 0, 0, 0.1);
+                box-sizing: border-box;
+                border-radius: 12px;
+                padding: 15px;
+                font-family: $spaceGroteskFont;
+                font-style: normal;
+                font-weight: normal;
+                font-size: 16px;
+                line-height: 20px;
+
+                &::placeholder {
+                  color: rgba(0, 0, 0, 0.2);
+                }
+              }
+              button {
+                position: absolute;
+                right: 5px;
+                top: 5px;
+                @include sm {
+                  position: relative;
+                  right: 0;
+                  top: 16px;
+                  height: 52px;
+                  width: 100%;
+                }
+              }
+            }
+          }
+          @include md {
+            grid-template-columns: 1fr;
+          }
+          @include sm {
+            margin-bottom: 60px;
+          }
+        }
+      }
+      @include sm {
+        padding: 60px 20px 20px;
       }
     }
   }
@@ -770,7 +869,7 @@
   .buy__universe__nfts__section {
     position: relative;
     padding: 80px 60px;
-    background-image: url('../../assets/images/buy-universe-nft-bg-desktop.png');
+    background-image: url("../../assets/images/buy-universe-nft-bg-desktop.png");
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
@@ -844,13 +943,13 @@
       }
     }
     @include lg {
-      background-image: url('../../assets/images/buy-universe-nft-bg-tablet.png');
+      background-image: url("../../assets/images/buy-universe-nft-bg-tablet.png");
     }
     @include md {
       padding: 60px 20px;
     }
     @include sm {
-      background-image: url('../../assets/images/buy-universe-nft-bg-mobile.png');
+      background-image: url("../../assets/images/buy-universe-nft-bg-mobile.png");
     }
   }
 }
