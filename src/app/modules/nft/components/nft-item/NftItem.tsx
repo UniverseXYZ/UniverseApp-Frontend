@@ -9,15 +9,18 @@ import {
 import React, { useMemo, useState } from 'react';
 import { useInterval } from 'react-use';
 import { default as dayjs } from 'dayjs';
+import { Navigation, Pagination } from 'swiper';
+import { Swiper, SwiperSlide } from 'swiper/react/swiper-react';
 
-import { INft } from '../../types';
+import 'swiper/swiper-bundle.min.css';
+import 'swiper/swiper.min.css';
 
 import greenClockIcon from '../../../../../assets/images/marketplace/green-clock.svg';
+import arrowLeftIcon from '../../../../../assets/images/marketplace/bundles-left-arrow.svg';
+import arrowRightIcon from '../../../../../assets/images/marketplace/bundles-right-arrow.svg';
+
+import { INft } from '../../types';
 import { AudioLabel, VideoLabel, LikeButton, BundleLabel, StorybookLabel } from './components';
-
-// ######################################################################
-
-// ######################################################################
 
 interface INftItemProps {
   nft: INft;
@@ -127,16 +130,81 @@ export const NftItem = ({ nft, onAuctionTimeOut }: INftItemProps) => {
           <LikeButton likes={nft.likes} isLiked={nft.isLiked} />
         </Flex>
       </Flex>
+      <Box
+        position={'relative'}
+        my={'16px'}
+        borderRadius={'6px'}
+        overflow={'hidden'}
+        sx={{
+          '.swiper-button-prev': {
+            bg: 'white',
+            borderRadius: '50%',
+            opacity: 0.4,
+            height: '30px',
+            width: '30px',
+            mt: '-15px',
+            _after: {
+              bg: `url(${arrowLeftIcon}) no-repeat center`,
+              content: '""',
+              fontFamily: 'inherit',
+              h: 'inherit',
+              w: 'inherit',
+            }
+          },
+          '.swiper-button-next': {
+            bg: 'white',
+            borderRadius: '50%',
+            opacity: 0.4,
+            height: '30px',
+            width: '30px',
+            mt: '-15px',
+            _after: {
+              bg: `url(${arrowRightIcon}) no-repeat center`,
+              content: '""',
+              fontFamily: 'inherit',
+              h: 'inherit',
+              w: 'inherit',
+            }
+          },
+          '.swiper-pagination-bullet': {
+            opacity: 0.4,
+          },
+          '.swiper-pagination-bullet-active': {
+            bg: 'linear-gradient(135deg, #BCEB00 15.57%, #00EAEA 84.88%)',
+            opacity: 1,
+          },
+        }}
+      >
 
-      <Box position={'relative'}>
-        <Image
-          src={nft.thumbnail_url}
-          alt={nft.name}
-          borderRadius={'6px'}
-          boxSize={'231px'}
-          objectFit={'cover'}
-          my={'16px'}
-        />
+        {nft.assets ? (
+          <Swiper
+            modules={[Navigation, Pagination]}
+            navigation={true}
+            pagination={formattedAuctionExpTime ? false : {
+              dynamicBullets: true,
+              clickable: true,
+            }}
+            loop={true}
+          >
+            {[nft.thumbnail_url, ...nft.assets].map((asset, i) => (
+              <SwiperSlide key={i}>
+                <Image
+                  src={asset}
+                  alt={nft.name}
+                  boxSize={'231px'}
+                  objectFit={'cover'}
+                />
+              </SwiperSlide>
+            ))}
+          </Swiper>
+        ) : (
+          <Image
+            src={nft.thumbnail_url}
+            alt={nft.name}
+            boxSize={'231px'}
+            objectFit={'cover'}
+          />
+        )}
 
         <Flex position={'absolute'} top={'10px'} right={'10px'}>
           {nft.isAudio && (<AudioLabel />)}
@@ -144,7 +212,7 @@ export const NftItem = ({ nft, onAuctionTimeOut }: INftItemProps) => {
         </Flex>
 
         {formattedAuctionExpTime && (
-          <Flex position={'absolute'} bottom={'10px'} justifyContent={'center'} w={'100%'}>
+          <Flex position={'absolute'} bottom={'10px'} justifyContent={'center'} w={'100%'} zIndex={1}>
             <Box sx={{
               background: 'rgba(0, 0, 0, 0.6)',
               backdropFilter: 'blur(4px)',

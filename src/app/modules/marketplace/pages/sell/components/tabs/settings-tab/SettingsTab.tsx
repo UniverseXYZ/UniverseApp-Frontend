@@ -3,13 +3,13 @@ import {
   Button,
   Fade,
   Flex,
-  Grid,
   Heading,
   Image,
   Input,
   InputGroup,
   InputLeftElement,
   Link,
+  SimpleGrid,
   Text,
   useDisclosure,
 } from '@chakra-ui/react';
@@ -141,7 +141,7 @@ export const SettingsTab = () => {
           </Fade>
 
           <Box mt={isFiltersOpen ? 0 : '-60px'} transition={'300ms'}>
-            <Grid templateColumns='repeat(4, 1fr)' gap={'30px'} mb={'40px'}>
+            <SimpleGrid columns={4} spacing={'30px'}>
               {nfts.map((nft, i) => (
                 <NftItem
                   key={nft.id}
@@ -149,7 +149,7 @@ export const SettingsTab = () => {
                   onAuctionTimeOut={() => handleNFTAuctionTimeOut(i)}
                 />
               ))}
-            </Grid>
+            </SimpleGrid>
             <Button variant={'outline'} isFullWidth mb={'20px'} onClick={handleLoadMore}>Load More</Button>
           </Box>
         </>

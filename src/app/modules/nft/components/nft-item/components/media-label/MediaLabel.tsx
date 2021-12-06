@@ -16,6 +16,7 @@ const MediaLabel = ({ icon, ...rest }: IMediaIconProps) => (
     p={'5px'}
     h={'20px'}
     w={'20px'}
+    zIndex={1}
     {...rest}
   >
     <Image src={icon} />
