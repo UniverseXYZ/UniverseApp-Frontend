@@ -12,16 +12,21 @@ const MyBidCard = ({ bid }) => {
   const history = useHistory();
 
   const ethPriceUsd = ethPrice?.market_data?.current_price?.usd;
-
   return (
     <div className={`my--bids--item${isBeforeNow(bid.auction.endDate) ? ' past' : ''}`}>
       <div
+        aria-hidden
+        onClick={() => history.push(`./${bid.auction.creator.universePageUrl}/${bid.auction.link}`)}
         className={`my--bids--image timeLeft ${bid.auction.promoImageUrl ? '' : 'show--avatar'}`}
       >
         {bid.auction.promoImageUrl ? (
           <img className="original" src={bid.auction.promoImageUrl} alt={bid.auction.name} />
         ) : (
-          <img className="artist--image" src={loggedInArtist.avatar} alt={loggedInArtist.name} />
+          <img
+            className="artist--image"
+            src={bid.auction.creator.profileImageUrl}
+            alt={bid.auction.creator.displayName}
+          />
         )}
         <div className="date">
           <div className="date--border--div" />
@@ -35,19 +40,13 @@ const MyBidCard = ({ bid }) => {
         <div className="title">
           <h2>{bid.auction.name}</h2>
         </div>
-        <div className="creator">
-          <img src={loggedInArtist.avatar} alt={loggedInArtist.name} />
-          <span>by</span>
-          <a
-            aria-hidden="true"
-            onClick={() =>
-              history.push(`/${loggedInArtist.name.split(' ')[0]}`, {
-                id: loggedInArtist.id,
-              })
-            }
-          >
-            {loggedInArtist.name}
-          </a>
+        <div
+          className="creator"
+          aria-hidden="true"
+          onClick={() => history.push(`./${bid.auction.creator.universePageUrl}`)}
+        >
+          <img src={bid.auction.creator.profileImageUrl} alt={bid.auction.creator.displayName} />
+          <span>by {bid.auction.creator.displayName}</span>
         </div>
         <div className="my--bid--section">
           <div className="caption">My bid</div>
@@ -80,7 +79,11 @@ const MyBidCard = ({ bid }) => {
           </div>
           <div>
             <label>NFTs Per Winner:</label>
-            <p>{`${bid.maxNfts}-${bid.minNfts}`}</p>
+            {bid.maxNfts !== bid.minNfts ? (
+              <p>{`${bid.maxNfts}-${bid.minNfts}`}</p>
+            ) : (
+              <p>{bid.maxNfts}</p>
+            )}
           </div>
           <div>
             <label>Lowest Winning Bid:</label>
