@@ -125,7 +125,7 @@ const Tabs = ({ nfts }) => {
           {selectedTabIndex === 0 && <NFTsTab showMintPrompt={false} nftData={nfts} />}
           {selectedTabIndex === 1 && (
             <ActiveAuctionsTab
-              showMintPrompt={false}
+              showCreatePrompt={false}
               auctions={auctions}
               loading={loading}
               handlePageClick={handlePageClick}
@@ -136,7 +136,7 @@ const Tabs = ({ nfts }) => {
           )}
           {selectedTabIndex === 2 && (
             <FutureAuctionsTab
-              showMintPrompt={false}
+              showCreatePrompt={false}
               auctions={auctions}
               loading={loading}
               handlePageClick={handlePageClick}
@@ -147,7 +147,7 @@ const Tabs = ({ nfts }) => {
           )}
           {selectedTabIndex === 3 && (
             <PastAuctionsTab
-              showMintPrompt={false}
+              showCreatePrompt={false}
               auctions={auctions}
               loading={loading}
               handlePageClick={handlePageClick}
