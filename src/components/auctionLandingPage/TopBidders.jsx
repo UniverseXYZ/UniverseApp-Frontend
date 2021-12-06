@@ -51,8 +51,8 @@ const TopBidders = ({
             const isSlotOpened = openSlots.indexOf(index) >= 0;
 
             return (
-              <>
-                <div className="bidder" key={bidder.id}>
+              <React.Fragment key={bidder.id}>
+                <div className="bidder">
                   <div className="name">
                     <b>{`${index + 1}.`}</b>
                     {bidder.user.displayName
@@ -101,7 +101,7 @@ const TopBidders = ({
                         artworkType === 'webp';
 
                       return (
-                        <div className="each--nft">
+                        <div className="each--nft" key={nft.id}>
                           <div className="tooltiptext">
                             <div>
                               <label>Name:</label>
@@ -168,7 +168,7 @@ const TopBidders = ({
                 ) : (
                   <></>
                 )}
-              </>
+              </React.Fragment>
             );
           })}
         </div>

@@ -61,7 +61,9 @@ const BidRankingsPopup = ({
             {rewardTiers
               .sort((a, b) => a.tierPosition - b.tierPosition)
               .map((tier) => (
-                <span style={getRewardTierSpanStyles(tier)}>{tier.name}</span>
+                <span key={tier.id} style={getRewardTierSpanStyles(tier)}>
+                  {tier.name}
+                </span>
               ))}
           </div>
         </div>
@@ -71,7 +73,7 @@ const BidRankingsPopup = ({
             const isSlotOpened = openSlots.indexOf(index) >= 0;
             return (
               <div
-                style={{ border: `border: 1px solid ${tier.color ? tier.color : '#bcbcbc'};` }}
+                style={{ border: `border: 1px solid ${tier.color ? tier.color : '#bcbcbc'}` }}
                 className="bid__list"
                 key={tier.slotIndex}
               >
@@ -125,7 +127,7 @@ const BidRankingsPopup = ({
                           artworkType === 'webp';
 
                         return (
-                          <div className="each--nft">
+                          <div className="each--nft" key={nft.id}>
                             <div className="tooltiptext">
                               <div>
                                 <label>Name:</label>

@@ -93,7 +93,7 @@ const Artist = () => {
   ) : (
     <div className="artist__page">
       <ArtistDetails artistAddress={artistUsername} onArtist={artist} loading={loading} />
-      <ArtistPageTabs nfts={artistNFTs} />
+      <ArtistPageTabs artistId={artist.id || 0} nfts={artistNFTs} />
       {artist && artist.personalLogo ? (
         <div className="artist__personal__logo">
           <img src={artist.personalLogo} alt="Artist personal logo" />

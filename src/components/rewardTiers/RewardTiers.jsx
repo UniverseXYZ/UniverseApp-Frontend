@@ -140,7 +140,7 @@ const RewardTiers = () => {
             });
 
             return (
-              <div className="view-tier" key={uuid()}>
+              <div className="view-tier" key={tier.id}>
                 <div className="auction-header">
                   <div className="img_head">
                     <div className="img_head_title">
