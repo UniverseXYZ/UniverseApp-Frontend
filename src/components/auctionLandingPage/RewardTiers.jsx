@@ -31,15 +31,15 @@ const RewardTiers = ({ auction }) => {
                 <div className="tier__nfts__container">
                   <div className="tier__nfts">
                     {tier.imageUrl ? (
-                      <div className="single__nft__image" key={tier.id}>
+                      <div className="single__nft__image" key={`${tier.id}-tier-image`}>
                         <img src={tier.imageUrl} alt={tier.name} />
                       </div>
                     ) : (
                       tier.nfts.map((nft, index) => {
                         if (index < 3) {
                           return (
-                            <div>
-                              <div className="nft__image" key={nft.id}>
+                            <div key={`${nft.id}-nft-image`}>
+                              <div className="nft__image">
                                 {nft.artworkType === 'mp4' ? (
                                   <>
                                     <video
@@ -69,10 +69,10 @@ const RewardTiers = ({ auction }) => {
                                 )}
                               </div>
                               {nft?.numberOfEditions > 2 && (
-                                <div className="tier-image-second" key={nft.id} />
+                                <div className="tier-image-second" key={`${nft.id}-2`} />
                               )}
                               {nft?.numberOfEditions > 1 && (
-                                <div className="tier-image-first" key={nft.id} />
+                                <div className="tier-image-first" key={`${nft.id}-1`} />
                               )}
                             </div>
                           );
