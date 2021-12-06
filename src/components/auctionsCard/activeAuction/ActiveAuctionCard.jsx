@@ -19,10 +19,7 @@ const ActiveAuctionCard = ({ auction }) => {
 
   const { tokenSymbol } = auction;
   const tokenLogo = getBidTypeByName(tokenSymbol, options).img;
-  const promoImageProps = getPromoImageProps(
-    auction.promoImageUrl,
-    `https://universeapp-assets-dev.s3.amazonaws.com/${auction.user?.profileImageName}`
-  );
+  const promoImageProps = getPromoImageProps(auction.promoImageUrl, auction.user?.profileImageUrl);
 
   let auctionLink = '';
   if (auction.link && auction.user?.universePageUrl) {
@@ -46,10 +43,7 @@ const ActiveAuctionCard = ({ auction }) => {
           <h2>{auction.name}</h2>
         </div>
         <div className="creator">
-          <img
-            src={`https://universeapp-assets-dev.s3.amazonaws.com/${auction.user?.profileImageName}`}
-            alt={auction.user?.displayName}
-          />
+          <img src={auction.user?.profileImageUrl} alt={auction.user?.displayName} />
           <span>by</span>
           {auction.user?.displayName}
         </div>
