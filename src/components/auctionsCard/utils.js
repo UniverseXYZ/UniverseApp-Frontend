@@ -61,7 +61,9 @@ export const bidsInUsd = (auction) => {
 };
 
 export const createNftsPerWinnerMarkup = (auction) => {
-  const nftsPerWinnerCount = auction.rewardTiers.map((tier) => tier.nftsPerWinner);
+  const nftsPerWinnerCount = auction.rewardTiers
+    .map((tier) => tier.nftsPerWinner.split(' - '))
+    .flat();
   const minNftsPerWinner = Math.min(...nftsPerWinnerCount);
   const maxNftsPerWinner = Math.max(...nftsPerWinnerCount);
   let showBothValues = false;
