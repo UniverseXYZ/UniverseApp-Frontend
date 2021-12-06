@@ -60,7 +60,7 @@ LoadingImage.propTypes = {
   src: PropTypes.string.isRequired,
   alt: PropTypes.string.isRequired,
   className: PropTypes.string,
-  style: PropTypes.oneOfType(PropTypes.object),
+  style: PropTypes.oneOfType([PropTypes.object]),
   showSpinner: PropTypes.bool,
 };
 
