@@ -31,7 +31,7 @@ const RewardTiers = ({ auction }) => {
                 <div className="tier__nfts__container">
                   <div className="tier__nfts">
                     {tier.imageUrl ? (
-                      <div className="nft__image" key={tier.id}>
+                      <div className="single__nft__image" key={tier.id}>
                         <img src={tier.imageUrl} alt={tier.name} />
                       </div>
                     ) : (
