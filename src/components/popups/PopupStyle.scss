@@ -357,6 +357,7 @@
           grid-gap: 20px;
           align-items: center;
           .bidder {
+            word-break: break-all;
             font-family: $spaceGroteskFont;
             font-style: normal;
             font-weight: 600;
