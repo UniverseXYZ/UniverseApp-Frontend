@@ -13,7 +13,8 @@ import {
   Text,
   useDisclosure,
 } from '@chakra-ui/react';
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useMemo, useRef, useState } from 'react';
+import { useWindowScroll } from 'react-use';
 
 import { GreyBox } from '../../grey-box';
 import { useMarketplaceSellData } from '../../../hooks';
@@ -35,7 +36,20 @@ import { NftItem } from '../../../../../../nft/components';
 import { INft } from '../../../../../../nft/types';
 
 export const SettingsTab = () => {
+  const actionBarRef = useRef(null);
+
   const { isOpen: isFiltersOpen, onToggle: onToggleFilters } = useDisclosure();
+
+  const { y: windowScrollY } = useWindowScroll();
+
+  const footerEl = useMemo<any>(() => document.querySelector('footer'), []);
+
+  const isStickiedActionBar = useMemo<boolean>(() => {
+    if (!window || !footerEl) {
+      return false;
+    }
+    return !(windowScrollY + window.innerHeight >= footerEl.getBoundingClientRect().top + window.scrollY);
+  }, [windowScrollY, footerEl]);
 
   const sellData = useMarketplaceSellData();
 
@@ -141,7 +155,7 @@ export const SettingsTab = () => {
           </Fade>
 
           <Box mt={isFiltersOpen ? 0 : '-60px'} transition={'300ms'}>
-            <SimpleGrid columns={4} spacing={'30px'}>
+            <SimpleGrid columns={4} spacing={'30px'} mb={'30px'}>
               {nfts.map((nft, i) => (
                 <NftItem
                   key={nft.id}
@@ -155,10 +169,30 @@ export const SettingsTab = () => {
         </>
       )}
 
-      <Box textAlign={'right'} mb={'50px'}>
-        <Button mr={'10px'} variant={'outline'} onClick={sellData.goBack}>Back</Button>
-        <Button boxShadow={'xl'} onClick={sellData.goContinue}>Continue</Button>
-      </Box>
+      {sellData.amountType === SellAmountType.SINGLE ? (
+        <Box textAlign={'right'} mb={'50px'}>
+          <Button mr={'10px'} variant={'outline'} onClick={sellData.goBack}>Back</Button>
+          <Button boxShadow={'xl'} onClick={sellData.goContinue}>Continue</Button>
+        </Box>
+      ) : (
+        <Box mb={actionBarRef?.current ? (actionBarRef?.current as any).offsetHeight + 'px' : 0}>
+          <Box
+            ref={actionBarRef}
+            textAlign={'right'}
+            width={'100%'}
+            p={'20px 40px'}
+            bg={'linear-gradient(135deg, rgba(188, 235, 0, 0.03) 15.57%, rgba(0, 234, 234, 0.03) 84.88%), rgba(255, 255, 255, 0.8)'}
+            backdropFilter={'blur(10px)'}
+            borderTop={'1px solid rgba(0, 0, 0, 0.1)'}
+            position={isStickiedActionBar ? 'fixed' : 'absolute'}
+            bottom={isStickiedActionBar ? 0 : 'inherit'}
+            left={0}
+            zIndex={10}
+          >
+            <Button boxShadow={'xl'} onClick={sellData.goContinue}>Continue</Button>
+          </Box>
+        </Box>
+      )}
     </>
   );
 }
