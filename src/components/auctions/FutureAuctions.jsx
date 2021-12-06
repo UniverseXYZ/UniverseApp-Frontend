@@ -24,8 +24,10 @@ import SuccessPopup from '../popups/AuctionCanceledSuccessPopup.jsx';
 import FutureAuctionDateTooltip from './FutureAuctionDateTooltip.jsx';
 import FutureAuctionTierInfo from './FutureAuctionTierInfo.jsx';
 import { useErrorContext } from '../../contexts/ErrorContext.jsx';
+import { useAuctionContext } from '../../contexts/AuctionContext.jsx';
 
 const FutureAuctions = ({ setAuction }) => {
+  const { setMyAuctions } = useAuctionContext();
   const { setShowError, setErrorBody } = useErrorContext();
   const sortOptions = ['Newest', 'Oldest'];
   const [shownActionId, setshownActionId] = useState(null);
@@ -48,6 +50,7 @@ const FutureAuctions = ({ setAuction }) => {
         setNotFound(true);
         setLoading(false);
       } else {
+        setMyAuctions(response.auctions);
         setFutureAuctions(response.auctions);
         setFilteredAuctions(response.auctions);
         setLoading(false);
