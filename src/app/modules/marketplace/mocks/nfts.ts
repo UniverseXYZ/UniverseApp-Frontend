@@ -74,6 +74,7 @@ export const Nfts: Partial<INft>[] = [
     thumbnail_url: 'https://universeapp-assets-dev.s3.amazonaws.com/597109bab858d4fe3f5e2993dc5c775fd51a2b22e17ac698.jpeg',
     isVideo: true,
     isAudio: true,
+    price: 0.4,
     assets: [
       'https://universeapp-assets-dev.s3.amazonaws.com/d88c113b24a45ed6c6eab2e92ea18e8dc005681a86e7c9a4.jpg',
       'https://universeapp-assets-dev.s3.amazonaws.com/a899508d3f4231a46179ebca0be950b55cfc813dcfc41840.jpg',
@@ -123,6 +124,7 @@ export const Nfts: Partial<INft>[] = [
     id: 1003,
     name: 'Doge Gatsby',
     numberOfEditions: 1,
+    price: 0.5,
     likes: [
       'https://universeapp-assets-dev.s3.amazonaws.com/profiles/629b7a160d251169668d0ae03c6993bea63773e548c0998b.jpg',
       'https://universeapp-assets-dev.s3.amazonaws.com/26638d6c9b8f2ec06fc5ea11e6b037b989c4115add733b96.jpeg',
@@ -192,6 +194,7 @@ export const Nfts: Partial<INft>[] = [
       'https://universeapp-assets-dev.s3.amazonaws.com/26638d6c9b8f2ec06fc5ea11e6b037b989c4115add733b96.jpeg',
     ],
     isLiked: true,
+    price: 0.23,
     assets: [
       'https://universeapp-assets-dev.s3.amazonaws.com/d88c113b24a45ed6c6eab2e92ea18e8dc005681a86e7c9a4.jpg',
       'https://universeapp-assets-dev.s3.amazonaws.com/a899508d3f4231a46179ebca0be950b55cfc813dcfc41840.jpg',

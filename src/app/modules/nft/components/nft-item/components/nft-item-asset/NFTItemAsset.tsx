@@ -18,6 +18,25 @@ type IUseStyles = (width?: number | string) => {
 const useStyles: IUseStyles = (width: string | number = 231) => {
   const _width = typeof width === 'number' ? `${width}px` : width;
 
+  const _getSwiperArrowStyles = (icon: string) => ({
+    bg: 'white',
+    borderRadius: '50%',
+    opacity: 0.4,
+    height: '30px',
+    width: '30px',
+    mt: '-15px',
+    _after: {
+      bg: `url(${icon}) no-repeat center`,
+      content: '""',
+      fontFamily: 'inherit',
+      h: 'inherit',
+      w: 'inherit',
+    },
+    _hover: {
+      opacity: 0.6,
+    },
+  });
+
   const image: ImageProps = useMemo(() => {
     return {
       boxSize: _width,
@@ -26,37 +45,10 @@ const useStyles: IUseStyles = (width: string | number = 231) => {
   }, [_width]);
 
   const swiper: SystemStyleObject = useMemo(() => ({
-    '.swiper-button-prev': {
-      bg: 'white',
-      borderRadius: '50%',
-      opacity: 0.4,
-      height: '30px',
-      width: '30px',
-      mt: '-15px',
-      _after: {
-        bg: `url(${arrowLeftIcon}) no-repeat center`,
-        content: '""',
-        fontFamily: 'inherit',
-        h: 'inherit',
-        w: 'inherit',
-      }
-    },
-    '.swiper-button-next': {
-      bg: 'white',
-      borderRadius: '50%',
-      opacity: 0.4,
-      height: '30px',
-      width: '30px',
-      mt: '-15px',
-      _after: {
-        bg: `url(${arrowRightIcon}) no-repeat center`,
-        content: '""',
-        fontFamily: 'inherit',
-        h: 'inherit',
-        w: 'inherit',
-      }
-    },
+    '.swiper-button-prev': _getSwiperArrowStyles(arrowLeftIcon),
+    '.swiper-button-next': _getSwiperArrowStyles(arrowRightIcon),
     '.swiper-pagination-bullet': {
+      bg: 'white',
       opacity: 0.4,
     },
     '.swiper-pagination-bullet-active': {
