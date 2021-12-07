@@ -3,6 +3,9 @@ import React, { useMemo } from 'react';
 import { Navigation, Pagination } from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/react/swiper-react';
 
+import 'swiper/swiper-bundle.min.css';
+import 'swiper/swiper.min.css';
+
 import arrowLeftIcon from '../../../../../../../assets/images/marketplace/bundles-left-arrow.svg';
 import arrowRightIcon from '../../../../../../../assets/images/marketplace/bundles-right-arrow.svg';
 import { INft } from '../../../../types';
