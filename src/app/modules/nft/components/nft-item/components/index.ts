@@ -4,5 +4,7 @@ export * from './nft-item-auction-timer';
 export * from './nft-item-bindings';
 export * from './nft-item-footer';
 export * from './nft-item-header';
+export * from './nft-item-price';
+export * from './nft-item-price-info';
 export * from './nft-item-type-labels';
 export * from './nft-like';

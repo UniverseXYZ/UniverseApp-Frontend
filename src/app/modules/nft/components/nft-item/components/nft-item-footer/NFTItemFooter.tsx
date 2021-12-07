@@ -1,23 +1,24 @@
-import { Box, BoxProps, Image, Text } from '@chakra-ui/react';
+import { Box, BoxProps, Text } from '@chakra-ui/react';
 import React from 'react';
 
-import ethereumIcon from '../../../../../../../assets/images/marketplace/eth-icon.svg';
 import { INft } from '../../../../types';
+import { NFTItemPrice } from '../nft-item-price';
+import { NFTItemPriceInfo } from '../nft-item-price-info';
 
 interface IStyles {
-  nameLine: BoxProps;
-  additionLine: BoxProps;
+  nameRow: BoxProps;
+  additionsRow: BoxProps;
 }
 
 const styles: IStyles = {
-  nameLine: {
+  nameRow: {
     display: 'flex',
     fontSize: '14px',
     fontWeight: 700,
     justifyContent: 'space-between',
     mb: '10px',
   },
-  additionLine: {
+  additionsRow: {
     display: 'flex',
     fontSize: '10px',
     fontWeight: 600,
@@ -28,58 +29,43 @@ const styles: IStyles = {
 
 interface INFTItemFooterProps {
   nft: INft;
-  showNFTName?: boolean;
-  showNFTPrice?: boolean;
+  renderNFTName?: React.ReactNode | null;
+  renderNFTPrice?: React.ReactNode | null;
+  renderNFTAdditions?: React.ReactNode | null;
+  renderNFTPriceInfo?: React.ReactNode | null;
 }
 
 export const NFTItemFooter = (
   {
     nft,
-    showNFTName = true,
-    showNFTPrice = true,
+    renderNFTName,
+    renderNFTPrice,
+    renderNFTAdditions,
+    renderNFTPriceInfo,
   }: INFTItemFooterProps
 ) => {
   return (
     <>
-      <Box {...styles.nameLine}>
+      <Box {...styles.nameRow}>
         <Box flex={1}>
-          {showNFTName && (<Text>{nft.name}</Text>)}
+          {renderNFTName || renderNFTName === null ? renderNFTName : <Text>{nft.name}</Text>}
         </Box>
         <Box>
-          {showNFTPrice && nft.price && (
-            <Text>
-              <Image
-                src={ethereumIcon}
-                alt={'Ethereum icon'}
-                display={'inline'}
-                mx={'4px'}
-                position={'relative'}
-                top={'-2px'}
-                width={'9px'}
-              />
-              {nft.price}
-            </Text>
-          )}
+          {renderNFTPrice || renderNFTPrice === null ? renderNFTPrice : (nft.price && (
+            <NFTItemPrice price={nft.price} />
+          ))}
         </Box>
       </Box>
-      <Box {...styles.additionLine}>
+      <Box {...styles.additionsRow}>
         <Box flex={1}>
-          <Text>{nft.tokenIds?.length ?? 0}/{nft.numberOfEditions}</Text>
+          {renderNFTAdditions || renderNFTAdditions === null ? renderNFTAdditions : (
+            <Text>{nft.tokenIds?.length ?? 0}/{nft.numberOfEditions}</Text>
+          )}
         </Box>
         <Box>
-          <Text>
-            Offer for
-            <Image
-              src={ethereumIcon}
-              alt={'Ethereum icon'}
-              display={'inline'}
-              mx={'4px'}
-              position={'relative'}
-              top={'-1px'}
-              width={'6px'}
-            />
-            <Box as={'span'} color={'black'}>0.35</Box>
-          </Text>
+          {renderNFTPriceInfo || renderNFTPriceInfo === null ? renderNFTPriceInfo : (
+            <NFTItemPriceInfo offerPrice={nft.offerPrice} lastPrice={nft.lastPrice} />
+          )}
         </Box>
       </Box>
     </>

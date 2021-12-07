@@ -1,6 +1,5 @@
 import { Box, BoxProps } from '@chakra-ui/react';
-import React, { useCallback } from 'react';
-import { useBoolean } from 'react-use';
+import React, { useCallback, useEffect, useState } from 'react';
 
 import { INft } from '../../types';
 import {
@@ -40,14 +39,15 @@ interface INftItemProps {
   selectedLabel?: string;
   onAuctionTimeOut?: () => void;
 
-  showAuctionTimer?: boolean;
-  showNFTName?: boolean;
-  showNFTPrice?: boolean;
+  renderHeader?: React.ReactNode | null;
+  renderFooter?: React.ReactNode | null;
 
+  renderFooterNFTName?: React.ReactNode | null;
+  renderFooterNFTPrice?: React.ReactNode | null;
+
+  renderAuctionTime?: React.ReactNode | null;
   renderAssetLabel?: React.ReactNode;
   assetLabelContainerProps?: BoxProps;
-
-  renderFooter?: React.ReactNode;
 }
 
 export const NftItem = (
@@ -56,33 +56,41 @@ export const NftItem = (
     isSelected,
     selectedLabel,
     onAuctionTimeOut,
-    showAuctionTimer = true,
-    showNFTName,
-    showNFTPrice,
+
+    renderHeader,
+    renderFooter,
+
+    renderFooterNFTName,
+    renderFooterNFTPrice,
+
+    renderAuctionTime,
     renderAssetLabel,
     assetLabelContainerProps,
-    renderFooter,
   }: INftItemProps
 ) => {
-  const [existAuctionTimer, toggleExistAuctionTimer] = useBoolean(!!nft.auctionExpDate);
+  const [showAuctionTimer, setShowAuctionTimer] = useState(false);
 
   const handleAuctionTimeOut = useCallback(() => {
-    toggleExistAuctionTimer(false);
+    setShowAuctionTimer(false);
     onAuctionTimeOut && onAuctionTimeOut();
   }, [onAuctionTimeOut]);
+
+  useEffect(() => {
+    setShowAuctionTimer(nft.auctionExpDate && renderAuctionTime !== null);
+  }, [nft.auctionExpDate, renderAuctionTime]);
 
   return (
     <ItemWrapper isBundle={nft.tokenIds.length > 1} isSelected={isSelected} selectedLabel={selectedLabel}>
 
-      {/*TODO: add render header*/}
-      <NFTItemHeader nft={nft} />
+      {renderHeader || renderHeader === null ? renderHeader : (
+        <NFTItemHeader nft={nft} />
+      )}
 
       <Box {...styles.assetContainer}>
-
-        <NFTItemAsset nft={nft} showSwiperPagination={!showAuctionTimer || !existAuctionTimer} />
+        <NFTItemAsset nft={nft} showSwiperPagination={!showAuctionTimer} />
 
         <Box {...styles.assetLabelContainer} {...assetLabelContainerProps}>
-          {renderAssetLabel ? renderAssetLabel : (
+          {renderAssetLabel || renderAssetLabel === null ? renderAssetLabel : (
             <>
               {nft.isAudio && (<NFTItemAssetAudioLabel />)}
               {nft.isVideo && (<NFTItemAssetVideoLabel />)}
@@ -90,16 +98,18 @@ export const NftItem = (
           )}
         </Box>
 
-        {showAuctionTimer && existAuctionTimer && (
-          <NFTItemAuctionTimer expDate={nft.auctionExpDate} onAuctionTimeOut={handleAuctionTimeOut}  />
+        {showAuctionTimer && (
+          renderAuctionTime ? renderAuctionTime : (
+            <NFTItemAuctionTimer expDate={nft.auctionExpDate} onAuctionTimeOut={handleAuctionTimeOut}  />
+          )
         )}
       </Box>
 
-      {renderFooter ? renderFooter : (
+      {renderFooter || renderFooter === null ? renderFooter : (
         <NFTItemFooter
           nft={nft}
-          showNFTName={showNFTName}
-          showNFTPrice={showNFTPrice}
+          renderNFTName={renderFooterNFTName}
+          renderNFTPrice={renderFooterNFTPrice}
         />
       )}
     </ItemWrapper>

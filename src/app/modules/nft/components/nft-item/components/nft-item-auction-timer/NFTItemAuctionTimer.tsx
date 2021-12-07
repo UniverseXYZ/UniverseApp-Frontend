@@ -80,12 +80,14 @@ export const NFTItemAuctionTimer = ({ expDate: auctionExpDate, onAuctionTimeOut 
 
   return (
     <Flex {...styles.wrapper}>
-      <Box {...styles.container}>
-        <Text  {...styles.text}>
-          <Image src={greenClockIcon} {...styles.icon} />
-          {formattedAuctionExpTime} left
-        </Text>
-      </Box>
+      {formattedAuctionExpTime && (
+        <Box {...styles.container}>
+          <Text  {...styles.text}>
+            <Image src={greenClockIcon} {...styles.icon} />
+            {formattedAuctionExpTime} left
+          </Text>
+        </Box>
+      )}
     </Flex>
   );
 };

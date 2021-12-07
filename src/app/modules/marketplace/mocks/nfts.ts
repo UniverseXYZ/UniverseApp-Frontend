@@ -16,6 +16,7 @@ export const Nfts: Partial<INft>[] = [
       'https://universeapp-assets-dev.s3.amazonaws.com/26638d6c9b8f2ec06fc5ea11e6b037b989c4115add733b96.jpeg',
     ],
     isLiked: false,
+    offerPrice: 0.33,
     tokenIds: ['1'],
     thumbnail_url: 'https://universeapp-assets-local.s3.amazonaws.com/71e44d6677e369cd2b8d33f4839c64574ec81b726c44f24e.jpeg',
     creator: {
@@ -71,10 +72,11 @@ export const Nfts: Partial<INft>[] = [
     ],
     isLiked: true,
     tokenIds: ['1', '2', '3'],
-    thumbnail_url: 'https://universeapp-assets-dev.s3.amazonaws.com/597109bab858d4fe3f5e2993dc5c775fd51a2b22e17ac698.jpeg',
     isVideo: true,
     isAudio: true,
     price: 0.4,
+    lastPrice: 0.56,
+    thumbnail_url: 'https://universeapp-assets-dev.s3.amazonaws.com/597109bab858d4fe3f5e2993dc5c775fd51a2b22e17ac698.jpeg',
     assets: [
       'https://universeapp-assets-dev.s3.amazonaws.com/d88c113b24a45ed6c6eab2e92ea18e8dc005681a86e7c9a4.jpg',
       'https://universeapp-assets-dev.s3.amazonaws.com/a899508d3f4231a46179ebca0be950b55cfc813dcfc41840.jpg',
