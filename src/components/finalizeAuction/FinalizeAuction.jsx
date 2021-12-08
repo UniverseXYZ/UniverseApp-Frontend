@@ -1,3 +1,4 @@
+/* eslint-disable no-loop-func */
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import Popup from 'reactjs-popup';
@@ -39,6 +40,7 @@ const FinalizeAuction = () => {
 
   const history = useHistory();
   const { auction, setAuction, bidExtendTime } = useAuctionContext();
+  console.log(auction);
   const { setActiveTxHashes } = useMyNftsContext();
   const { signer, address, universeAuctionHouseContract } = useAuthContext();
   const { setShowError, setErrorTitle, setErrorBody } = useErrorContext();
@@ -54,7 +56,7 @@ const FinalizeAuction = () => {
   const [approvedTxs, setApprovedTxs] = useState([]);
   const [loadingText, setLoadingText] = useState(defaultLoadingText);
   const [depositVerifyingTxIndex, setDepositVerifyingTxIndex] = useState([]);
-  const [withdrawVerifyingTxIndex, setWithdrawVerifyingTxIndex] = useState([]);
+  const [withdrawVerifyingTokenIds, setWithdrawVerifyingTokenIds] = useState([]);
 
   useEffect(() => {
     if (auction.id) {
@@ -73,65 +75,121 @@ const FinalizeAuction = () => {
         setShowLoading(false);
       });
 
-      subscribeToDepositNfts(auction.id, (err, data) => {
+      subscribeToDepositNfts(auction.id, (err, { tokenId, collectionAddress }) => {
+        // const { tokenId, tokenAddress } = info;
         if (err) return;
-        setApprovedTxCount((upToDateTxCount) => upToDateTxCount + 1);
-
-        let newTransaction = null;
+        const newTransaction = null;
         let newAuction = null;
         let newVerifyTxs = [];
-        let txIndex = 0;
+        let txIndex = null;
 
         setDepositVerifyingTxIndex((upToDate) => {
           newVerifyTxs = [...upToDate];
-          txIndex = newVerifyTxs.pop();
-          return newVerifyTxs;
-        });
-
-        setApprovedTxs((upToDate) => [...upToDate, txIndex]);
-
-        setAuction((upToDate) => {
-          newAuction = { ...upToDate, depositNfts: true };
-          return newAuction;
-        });
-
-        setTransactions((upToDate) => {
-          newTransaction = upToDate;
           return upToDate;
         });
 
-        if (!newAuction.canceled && txIndex === newTransaction.finalSlotIndices.length - 1) {
-          setShowSuccessPopup(true);
+        txIndex = newVerifyTxs.pop();
+
+        if (txIndex !== null) {
+          setTransactions((txs) => {
+            const txsConfig = txs;
+            let foundNft = false;
+            const slotNfts = txsConfig.displayNfts[txIndex];
+            for (let i = 0; i < slotNfts.length; i += 1) {
+              const nft = slotNfts[i];
+              const collection = auction.collections.find(
+                (c) => c.address.toLowerCase() === collectionAddress.toLowerCase()
+              );
+              if (nft.tokenId === tokenId && collection) {
+                console.log('Marked 1 nft as deposited');
+                nft.deposited = true;
+                foundNft = true;
+
+                const areNftsDeposited = slotNfts.some((slotNft) => !slotNft.deposited);
+                if (!areNftsDeposited) {
+                  setApprovedTxs((upToDate) => {
+                    if (upToDate.indexOf(txIndex) >= 0) {
+                      return [...upToDate, txIndex];
+                    }
+                    return upToDate;
+                  });
+                  setApprovedTxCount((upToDateTxCount) => upToDateTxCount + 1);
+                  setDepositVerifyingTxIndex(newVerifyTxs);
+                  setAuction((auct) => {
+                    newAuction = { ...auct, depositNfts: true };
+                    return newAuction;
+                  });
+
+                  if (!newVerifyTxs.length) {
+                    setShowLoading(false);
+                    setShowSuccessPopup(true);
+                  }
+                }
+              }
+              if (foundNft) {
+                break;
+              }
+            }
+
+            return txsConfig;
+          });
         }
-        setShowLoading(false);
       });
 
-      subscribeToWithdrawNfts(auction.id, (err, { hasWithdrawnAll }) => {
+      subscribeToWithdrawNfts(auction.id, (err, { hasWithdrawnAll, tokenId }) => {
         if (err) return;
 
-        let newApprovedTxs = null;
-        let newVerifyTxs = null;
+        let apprTxss = null;
 
-        setApprovedTxs((upToDate) => {
-          newApprovedTxs = [...upToDate];
-          return upToDate;
+        setApprovedTxs((txs) => {
+          apprTxss = txs;
+          return txs;
         });
 
-        setWithdrawVerifyingTxIndex((upToDate) => {
-          newVerifyTxs = [...upToDate];
-          const txIndex = newVerifyTxs.pop();
-          newApprovedTxs.splice(newApprovedTxs.indexOf(txIndex), 1);
-          return newVerifyTxs;
+        let newVerifyTokenIds = null;
+        setWithdrawVerifyingTokenIds((upToDate) => {
+          newVerifyTokenIds = [...upToDate];
+          newVerifyTokenIds.splice(newVerifyTokenIds.indexOf(tokenId.toString()), 1);
+          return newVerifyTokenIds;
         });
 
-        setApprovedTxs(newApprovedTxs);
+        let txsConfig = [];
+        setTransactions((txs) => {
+          let foundNft = false;
+          txsConfig = txs;
+          for (let slotIndex = 0; slotIndex < txsConfig.displayNfts.length; slotIndex += 1) {
+            const slotNfts = txsConfig.displayNfts[slotIndex];
+            for (let i = 0; i < slotNfts.length; i += 1) {
+              const nft = slotNfts[i];
+              if (nft.tokenId === tokenId.toString()) {
+                console.log('Marked 1 nft as withdrawn');
+                nft.deposited = false;
+                foundNft = true;
 
-        setApprovedTxCount((upToDate) => upToDate - 1);
+                const areNftsDeposited = slotNfts.some((slotNft) => slotNft.deposited);
+                if (!areNftsDeposited) {
+                  apprTxss.splice(apprTxss.indexOf(slotIndex), 1);
+                  setApprovedTxs(apprTxss);
+                  setApprovedTxCount((count) => count - 1);
+                }
+              }
+              if (foundNft) {
+                break;
+              }
+            }
+            if (foundNft) {
+              break;
+            }
+          }
+
+          return txsConfig;
+        });
 
         if (hasWithdrawnAll) {
-          // This implementation assumes that you will withdraw all nfts.
-          // TODO: Figure out a way if a user withdraws 1 out of 3 nfts for example
           setAuction((upToDate) => ({ ...upToDate, depositedNfts: false }));
+        }
+
+        if (!newVerifyTokenIds.length) {
           setShowLoading(false);
         }
       });
@@ -156,8 +214,8 @@ const FinalizeAuction = () => {
     setTransactions(transactionsConfig);
 
     transactionsConfig.displayNfts.forEach((slotNfts, index) => {
-      const areNftsDeposited = slotNfts.some((nft) => !nft.deposited);
-      if (!areNftsDeposited) {
+      const areNftsDeposited = slotNfts.some((nft) => nft.deposited);
+      if (areNftsDeposited) {
         setApprovedTxs([...approvedTxs, index]);
         setApprovedTxCount(approvedTxCount + 1);
       }
@@ -305,19 +363,28 @@ const FinalizeAuction = () => {
   };
 
   const handleWithdraw = async (txIndex) => {
+    // TODO: Bug left is that loading screen gets closed if
+    // user accepts first tx and rejects second withdraw tx
     try {
       // We need to withdraw each slot at a time
       // Calculate all count of deposited nfts at a slot
       const nftsCountMap = {};
-      const nfts = transactions.finalNfts[txIndex];
+      const nftTokenidsMap = {};
+      // Take only nfts that are deposited
+      const nfts = transactions.displayNfts[txIndex].filter((nft) => !nft.deplosited);
       transactions.finalSlotIndices[txIndex].forEach((slot, index) => {
         if (!nftsCountMap[slot]) {
-          nftsCountMap[slot] = nfts[index].length;
+          const slotNfts = nfts.filter((nft) => nft.slot === Number(slot));
+          nftsCountMap[slot] = slotNfts.length;
+          nftTokenidsMap[slot] = slotNfts.map((nft) => nft.tokenId);
         } else {
-          nftsCountMap[slot] += nfts[index].length;
+          const slotNfts = nfts.filter((nft) => nft.slot === Number(slot));
+          nftsCountMap[slot] += slotNfts.length;
+          nftTokenidsMap.push(slotNfts.map((nft) => nft.tokenId));
         }
       });
       const txHashes = [];
+      const withdrawTokens = [];
       const txs = Object.keys(nftsCountMap).map(async (slot) => {
         const tx = await universeAuctionHouseContract.withdrawDepositedERC721(
           auction.onChainId,
@@ -326,9 +393,13 @@ const FinalizeAuction = () => {
         );
         setLoadingText(defaultLoadingText);
         setShowLoading(true);
+
         txHashes.push(tx.hash);
         setActiveTxHashes(txHashes);
 
+        withdrawTokens.push(...nftTokenidsMap[slot]);
+        console.log(withdrawTokens);
+        setWithdrawVerifyingTokenIds(withdrawTokens);
         const txReceipt = await tx.wait();
         return txReceipt.status;
       });
@@ -339,7 +410,6 @@ const FinalizeAuction = () => {
 
       if (!results.find((status) => status !== 1)) {
         setLoadingText(verificationLoadingText);
-        setWithdrawVerifyingTxIndex([...withdrawVerifyingTxIndex, txIndex]);
       } else {
         console.log('error ocurred');
       }
@@ -351,9 +421,9 @@ const FinalizeAuction = () => {
 
   const handleCancelAuction = async () => {
     try {
+      const tx = await universeAuctionHouseContract.cancelAuction(auction.onChainId);
       setLoadingText(defaultLoadingText);
       setShowLoading(true);
-      const tx = await universeAuctionHouseContract.cancelAuction(auction.onChainId);
       setActiveTxHashes([tx.hash]);
       const txReceipt = await tx.wait();
       if (txReceipt.status === 1) {
@@ -502,7 +572,6 @@ const FinalizeAuction = () => {
             approvedTxs={approvedTxs}
             isCanceledAuction={auction.canceled}
             completedAuctionCreationStep={completedAuctionCreationStep}
-            // withdrawTxs={withdrawTxs}
           />
         </div>
       </div>
