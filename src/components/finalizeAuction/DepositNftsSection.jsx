@@ -81,7 +81,11 @@ const DepositNftsSection = ({
         </Button>
       );
     }
-    return <></>;
+    return (
+      <Button disabled className="light-button">
+        Deposit
+      </Button>
+    );
   };
 
   // TODO: Show loading
@@ -141,8 +145,8 @@ const DepositNftsSection = ({
                     artworkType === 'webp';
 
                   return (
-                    <div>
-                      <div className="transaction__image" key={nft.id}>
+                    <div key={nft.id}>
+                      <div className="transaction__image">
                         {count > 1 ? <div className="first" /> : <></>}
                         {count > 2 ? <div className="second" /> : <></>}
 
@@ -180,7 +184,7 @@ const DepositNftsSection = ({
 };
 
 DepositNftsSection.propTypes = {
-  transactions: PropTypes.oneOfType([PropTypes.object]).isRequired,
+  transactions: PropTypes.oneOfType([PropTypes.object]),
   handleDepositTier: PropTypes.func.isRequired,
   handleWithdraw: PropTypes.func.isRequired,
   completedAuctionCreationStep: PropTypes.bool.isRequired,
@@ -191,4 +195,7 @@ DepositNftsSection.propTypes = {
   approvedTxs: PropTypes.oneOfType([PropTypes.array]).isRequired,
 };
 
+DepositNftsSection.defaultProps = {
+  transactions: null,
+};
 export default DepositNftsSection;
