@@ -1,8 +1,8 @@
-import { IDutchAuctionForm } from '../types/dutch-auction-form';
+import { IDutchAuctionForm } from '../types';
 
 export const defaultDutchAuctionForm: IDutchAuctionForm = {
   NFT: null,
-  NFTs: [],
+  selectedNFTsIds: {},
   bundleName: '',
   bundleDescription: '',
   price: {

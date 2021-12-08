@@ -36,25 +36,29 @@ import { NftItem } from '../../../../../../nft/components';
 import { INft } from '../../../../../../nft/types';
 import { SelectEditionsDropdown } from '../../select-editions-dropdown';
 
-export const SettingsTab = () => {
-  const actionBarRef = useRef(null);
-
-  const { isOpen: isFiltersOpen, onToggle: onToggleFilters } = useDisclosure();
-
+const useStickyToFooter = () => {
   const { y: windowScrollY } = useWindowScroll();
-
-  const [selectedNFTs, setSelectedNFTs] = useState<any>({});
 
   const footerEl = useMemo<any>(() => document.querySelector('footer'), []);
 
-  const isStickiedActionBar = useMemo<boolean>(() => {
+  const isStickied = useMemo<boolean>(() => {
     if (!window || !footerEl) {
       return false;
     }
     return !(windowScrollY + window.innerHeight >= footerEl.getBoundingClientRect().top + window.scrollY);
   }, [windowScrollY, footerEl]);
 
-  const sellData = useMarketplaceSellData();
+  return isStickied;
+};
+
+export const SettingsTab = () => {
+  const actionBarRef = useRef(null);
+
+  const { isOpen: isFiltersOpen, onToggle: onToggleFilters } = useDisclosure();
+
+  const { form, ...sellData } = useMarketplaceSellData();
+
+  const isStickiedActionBar = useStickyToFooter();
 
   const [sortBy, setSortBy] = useState();
   const [nfts, setNfts] = useState(Nfts);
@@ -67,12 +71,12 @@ export const SettingsTab = () => {
     setNfts(nfts.filter((nft, i) => i !== index));
   }, [nfts]);
 
-  const handleClickNFT = useCallback((nft) => {
-    setSelectedNFTs({
-      ...selectedNFTs,
-      [nft.id]: !selectedNFTs[nft.id],
+  const handleCheckNFT = useCallback((nft, selected: boolean | string[]) => {
+    form.setFieldValue('selectedNFTsIds', {
+      ...form.values.selectedNFTsIds,
+      [nft.id]: selected,
     });
-  }, [selectedNFTs]);
+  }, [form.values.selectedNFTsIds]);
 
   return (
     <>
@@ -82,7 +86,7 @@ export const SettingsTab = () => {
         <SettingsTabEnglishAuction />
       </GreyBox>
 
-      {sellData.amountType === SellAmountType.BUNDLE && (
+      {sellData.amountType === SellAmountType.BUNDLE && !!sellData.sellMethod && (
         <>
           <Heading as={'h2'} size={'md'} mb={'8px'}>Select NFTs</Heading>
           <Text fontSize={'14px'} color={'rgba(0, 0, 0, 0.6)'}>
@@ -162,33 +166,35 @@ export const SettingsTab = () => {
 
           <Box mt={isFiltersOpen ? 0 : '-60px'} transition={'300ms'}>
             <SimpleGrid columns={4} spacing={'30px'} mb={'30px'}>
-              {nfts.map((nft, i) => (
-                <NftItem
-                  key={nft.id}
-                  nft={nft as INft}
-                  isSelected={!!selectedNFTs[nft.id as number]}
-                  selectedLabel={(nft.tokenIds as any)?.length > 1 ? `${(selectedNFTs[nft.id as number] || []).length} / ${(nft.tokenIds as any)?.length}` : undefined}
-                  renderFooterNFTAdditions={(nft.tokenIds as any)?.length > 1
-                    ? (
-                      <Box display={'inline-block'} onClick={(e) => e.stopPropagation()}>
+              {nfts.map((nft, i) => {
+                const tokensNumber = (nft.tokenIds as any)?.length;
+                const isBundle = tokensNumber > 1;
+                const selectedNFTRef = form.values.selectedNFTsIds[nft.id as number];
+
+                return (
+                  <NftItem
+                    key={nft.id}
+                    nft={nft as INft}
+                    isSelected={!!selectedNFTRef}
+                    selectedLabel={isBundle ? `${(selectedNFTRef || []).length} / ${tokensNumber}` : undefined}
+                    renderFooterNFTAdditions={isBundle
+                      ? (
                         <SelectEditionsDropdown
                           nft={nft as INft}
-                          selectedEditions={selectedNFTs[nft.id as number] || []}
-                          onChange={(editions) => {
-                            setSelectedNFTs({
-                              ...selectedNFTs,
-                              [nft.id as number]: editions,
-                            });
-                          }}
+                          selectedEditions={selectedNFTRef as string[] || []}
+                          onChange={(editions) => handleCheckNFT(nft, editions.length ? editions : false)}
                         />
-                      </Box>
-                    )
-                    : <Text>#{(nft.tokenIds as any)[0]}</Text>
-                  }
-                  onClick={(nft.tokenIds as any)?.length > 1 ? undefined : handleClickNFT}
-                  onAuctionTimeOut={() => handleNFTAuctionTimeOut(i)}
-                />
-              ))}
+                      )
+                      : <Text>#{(nft.tokenIds as any)[0]}</Text>
+                    }
+                    onClick={isBundle
+                      ? undefined
+                      : () => handleCheckNFT(nft, !selectedNFTRef)
+                    }
+                    onAuctionTimeOut={() => handleNFTAuctionTimeOut(i)}
+                  />
+                );
+              })}
             </SimpleGrid>
             <Button variant={'outline'} isFullWidth mb={'20px'} onClick={handleLoadMore}>Load More</Button>
           </Box>
