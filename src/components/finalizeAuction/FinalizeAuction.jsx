@@ -75,34 +75,31 @@ const FinalizeAuction = () => {
 
       subscribeToDepositNfts(auction.id, (err, { tokenId, collectionAddress }) => {
         if (err) return;
-        const newTransaction = null;
         let newAuction = null;
         let newVerifyTxs = [];
-        let txIndex = null;
 
         setDepositVerifyingTxIndex((upToDate) => {
           newVerifyTxs = [...upToDate];
           return upToDate;
         });
 
-        txIndex = newVerifyTxs.pop();
+        const txIndex = newVerifyTxs.pop();
 
-        if (txIndex !== null) {
+        if (txIndex !== undefined) {
           setTransactions((txs) => {
             const txsConfig = txs;
-            let foundNft = false;
-            const slotNfts = txsConfig.displayNfts[txIndex];
+            const slotNfts = txsConfig.displayNfts[txIndex] || [];
+            const collectionMatch = auction.collections.find(
+              (c) => c.address.toLowerCase() === collectionAddress.toLowerCase()
+            );
             for (let i = 0; i < slotNfts.length; i += 1) {
               const nft = slotNfts[i];
-              const collection = auction.collections.find(
-                (c) => c.address.toLowerCase() === collectionAddress.toLowerCase()
-              );
-              if (nft.tokenId === tokenId && collection) {
+              const hasNftMatch = !!(nft.tokenId === tokenId && collectionMatch);
+              if (hasNftMatch) {
                 nft.deposited = true;
-                foundNft = true;
 
-                const areNftsDeposited = slotNfts.some((slotNft) => !slotNft.deposited);
-                if (!areNftsDeposited) {
+                const hasNotDepositedNfts = slotNfts.some((slotNft) => !slotNft.deposited);
+                if (!hasNotDepositedNfts) {
                   setApprovedTxs((upToDate) => {
                     if (upToDate.indexOf(txIndex) < 0) {
                       return [...upToDate, txIndex];
@@ -111,7 +108,7 @@ const FinalizeAuction = () => {
                   });
                   setDepositVerifyingTxIndex(newVerifyTxs);
                   setAuction((auct) => {
-                    newAuction = { ...auct, depositNfts: true };
+                    newAuction = { ...auct, depositedNfts: true };
                     return newAuction;
                   });
 
@@ -121,7 +118,7 @@ const FinalizeAuction = () => {
                   }
                 }
               }
-              if (foundNft) {
+              if (hasNftMatch) {
                 break;
               }
             }
@@ -153,15 +150,15 @@ const FinalizeAuction = () => {
           let foundNft = false;
           txsConfig = txs;
           for (let slotIndex = 0; slotIndex < txsConfig.displayNfts.length; slotIndex += 1) {
-            const slotNfts = txsConfig.displayNfts[slotIndex];
+            const slotNfts = txsConfig.displayNfts[slotIndex] || [];
             for (let i = 0; i < slotNfts.length; i += 1) {
               const nft = slotNfts[i];
               if (nft.tokenId === tokenId.toString()) {
                 nft.deposited = false;
                 foundNft = true;
 
-                const areNftsDeposited = slotNfts.some((slotNft) => slotNft.deposited);
-                if (!areNftsDeposited) {
+                const hasDepositedNfts = slotNfts.some((slotNft) => slotNft.deposited);
+                if (!hasDepositedNfts) {
                   apprTxss.splice(apprTxss.indexOf(slotIndex), 1);
                   setApprovedTxs(apprTxss);
                 }
@@ -370,15 +367,16 @@ const FinalizeAuction = () => {
       const nftsCountMap = {};
       const nftTokenidsMap = {};
       // Take only nfts that are deposited
-      const nfts = transactions.displayNfts[txIndex].filter((nft) => !nft.deplosited);
-      transactions.finalSlotIndices[txIndex].forEach((slot, index) => {
+      const nfts = transactions.displayNfts[txIndex].filter((nft) => nft.deposited);
+      transactions.finalSlotIndices[txIndex].forEach((slot) => {
         if (!nftsCountMap[slot]) {
           const slotNfts = nfts.filter((nft) => nft.slot === Number(slot));
-          nftsCountMap[slot] = slotNfts.length;
-          nftTokenidsMap[slot] = slotNfts.map((nft) => nft.tokenId);
+          if (slotNfts.length) {
+            nftsCountMap[slot] = slotNfts.length;
+            nftTokenidsMap[slot] = slotNfts.map((nft) => nft.tokenId);
+          }
         } else {
           const slotNfts = nfts.filter((nft) => nft.slot === Number(slot));
-          nftsCountMap[slot] += slotNfts.length;
           nftTokenidsMap.push(slotNfts.map((nft) => nft.tokenId));
         }
       });
