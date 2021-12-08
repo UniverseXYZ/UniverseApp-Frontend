@@ -4,18 +4,21 @@ import PropTypes from 'prop-types';
 import { isAfterNow } from '../../utils/dates';
 
 const AuctionsTabsCountdown = ({ activeAuction, showLabel }) => {
+  const [isStartDatePassed, setIsStartDatePassed] = useState(
+    new Date(activeAuction.startDate) < new Date()
+  );
   const [countdown, setCountdown] = useState(
     intervalToDuration({
-      start: new Date(activeAuction.endDate),
-      end: new Date(),
+      start: isStartDatePassed ? new Date(activeAuction.endDate) : new Date(),
+      end: isStartDatePassed ? new Date() : new Date(activeAuction.startDate),
     })
   );
 
   useEffect(() => {
     const interval = setInterval(() => {
       const { days, hours, minutes, seconds } = intervalToDuration({
-        start: new Date(activeAuction.endDate),
-        end: new Date(),
+        start: isStartDatePassed ? new Date(activeAuction.endDate) : new Date(),
+        end: isStartDatePassed ? new Date() : new Date(activeAuction.startDate),
       });
 
       setCountdown({
