@@ -98,10 +98,16 @@ const CustomizeAuction = () => {
       myAuctions.map((item) => (item.id === _editedAuction.id ? _editedAuction : item))
     );
     if (action === PREVIEW_ACTION) {
-      const editedAuctionClone = { ..._editedAuction, link: auction.link };
+      const editedAuctionClone = {
+        ..._editedAuction,
+        link: auction.link,
+        backgroundImageUrl:
+          _editedAuction.backgroundImage && URL.createObjectURL(_editedAuction.backgroundImage),
+      };
       const editedLoggedInArtistClone = {
         ..._loggedInArtistClone,
         displayName: _loggedInArtistClone.name,
+        profileImageUrl: _loggedInArtistClone.avatar,
       };
       history.push({
         pathname: `${loggedInArtist.universePageAddress}/${auction.link}`,
