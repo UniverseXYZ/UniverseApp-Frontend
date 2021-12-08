@@ -15,7 +15,6 @@ const DepositNftsSection = ({
   completedCollectionsStep,
   completedAuctionCreationStep,
   completedDepositStep,
-  approvedTxCount,
   approvedTxs,
   handleWithdraw,
   isCanceledAuction,
@@ -47,7 +46,7 @@ const DepositNftsSection = ({
       if (approvedTxs.indexOf(txIndex) < 0) {
         const isDisabled =
           txIndex === 0
-            ? !(completedCollectionsStep && approvedTxCount === 0)
+            ? !(completedCollectionsStep && approvedTxs.length === 0)
             : !(completedCollectionsStep && approvedTxs.indexOf(txIndex - 1) >= 0);
 
         return (
@@ -81,7 +80,11 @@ const DepositNftsSection = ({
         </Button>
       );
     }
-    return <></>;
+    return (
+      <Button disabled className="light-button">
+        Deposit
+      </Button>
+    );
   };
 
   // TODO: Show loading
@@ -141,8 +144,8 @@ const DepositNftsSection = ({
                     artworkType === 'webp';
 
                   return (
-                    <div>
-                      <div className="transaction__image" key={nft.id}>
+                    <div key={nft.id}>
+                      <div className="transaction__image">
                         {count > 1 ? <div className="first" /> : <></>}
                         {count > 2 ? <div className="second" /> : <></>}
 
@@ -180,15 +183,17 @@ const DepositNftsSection = ({
 };
 
 DepositNftsSection.propTypes = {
-  transactions: PropTypes.oneOfType([PropTypes.object]).isRequired,
+  transactions: PropTypes.oneOfType([PropTypes.object]),
   handleDepositTier: PropTypes.func.isRequired,
   handleWithdraw: PropTypes.func.isRequired,
   completedAuctionCreationStep: PropTypes.bool.isRequired,
   completedCollectionsStep: PropTypes.bool.isRequired,
   completedDepositStep: PropTypes.bool.isRequired,
   isCanceledAuction: PropTypes.bool.isRequired,
-  approvedTxCount: PropTypes.number.isRequired,
   approvedTxs: PropTypes.oneOfType([PropTypes.array]).isRequired,
 };
 
+DepositNftsSection.defaultProps = {
+  transactions: null,
+};
 export default DepositNftsSection;

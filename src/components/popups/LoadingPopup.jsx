@@ -58,7 +58,7 @@ const LoadingPopup = ({ onClose, text, contractInteraction }) => {
           </>
         ) : (
           activeTxHashes.map((tx, i) => (
-            <p className="popup-hash">
+            <p className="popup-hash" key={tx}>
               Transaction hash #{i + 1}:{' '}
               <a target="_blank" href={generateLink(tx)} rel="noreferrer">
                 {formatAddress(tx)}

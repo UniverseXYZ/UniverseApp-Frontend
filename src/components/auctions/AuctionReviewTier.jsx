@@ -33,7 +33,7 @@ const AuctionReviewTier = ({ tier, tierOptions, bidToken }) => {
     } catch (err) {
       console.log(err);
     }
-    return 'kur';
+    return 0;
   };
   return (
     <div key={tier.id} className="view-tier">

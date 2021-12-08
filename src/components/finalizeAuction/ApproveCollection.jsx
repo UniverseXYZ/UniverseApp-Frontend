@@ -67,7 +67,7 @@ ApproveCollection.propTypes = {
   collection: PropTypes.oneOfType([PropTypes.object]).isRequired,
   approveCollection: PropTypes.func.isRequired,
   isApproved: PropTypes.bool.isRequired,
-  auctionOnChainId: PropTypes.bool.isRequired,
+  auctionOnChainId: PropTypes.number.isRequired,
 };
 
 export default ApproveCollection;
