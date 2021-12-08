@@ -132,7 +132,6 @@ const AuthContextProvider = ({ children }) => {
     );
 
     setWeb3Provider(provider);
-    // setAddress(accounts[0] || '');
     setSigner(signerResult);
     setYourBalance(utils.formatEther(balance));
     setYourEnsDomain(ensDomain);
