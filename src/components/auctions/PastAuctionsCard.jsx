@@ -123,7 +123,7 @@ const PastAuctionsCard = ({ auction, setShowLoadingModal, setLoadingText }) => {
 
   const areAllSlotsCaptured =
     auction.finalised &&
-    auction.rewardTiers.map((r) => r.slots).filter((s) => s.revenueCaptured).length;
+    auction.rewardTiers.map((r) => r.slots).map((s) => s.capturedRevenue).length;
 
   const handleClaimFunds = async () => {
     try {
