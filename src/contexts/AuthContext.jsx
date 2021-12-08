@@ -132,7 +132,7 @@ const AuthContextProvider = ({ children }) => {
     );
 
     setWeb3Provider(provider);
-    setAddress(accounts[0] || '');
+    // setAddress(accounts[0] || '');
     setSigner(signerResult);
     setYourBalance(utils.formatEther(balance));
     setYourEnsDomain(ensDomain);
@@ -274,7 +274,8 @@ const AuthContextProvider = ({ children }) => {
   const signMessage = async () => {
     try {
       if (signer) {
-        const sameUser = address === localStorage.getItem('user_address');
+        const addressToSign = await signer.getAddress();
+        const sameUser = addressToSign === localStorage.getItem('user_address');
         const hasSigned = sameUser && localStorage.getItem('xyz_access_token');
 
         if (!hasSigned) {
@@ -282,7 +283,7 @@ const AuthContextProvider = ({ children }) => {
           const challengeResult = await setChallenge(chanllenge);
           const signedMessage = await signer?.signMessage(chanllenge);
           const authInfo = await userAuthenticate({
-            address,
+            address: addressToSign,
             signedMessage,
             uuid: challengeResult?.uuid,
           });
@@ -290,22 +291,27 @@ const AuthContextProvider = ({ children }) => {
           if (!authInfo.error) {
             // Save xyz_access_token into the local storage for later API requests usage
             localStorage.setItem('xyz_access_token', authInfo.token);
-            localStorage.setItem('user_address', address);
+            localStorage.setItem('user_address', addressToSign);
 
             setIsAuthenticated(true);
             setIsWalletConnected(true);
-
+            setAddress(addressToSign);
             setLoggedInArtist(mapUserData(authInfo.user));
           } else {
             setIsAuthenticated(false);
           }
         } else {
           // THE USER ALREADY HAS SIGNED
-          const userInfo = await getProfileInfo(address);
+          setIsAuthenticated(true);
+          setIsWalletConnected(true);
+          setAddress(addressToSign);
 
-          if (!userInfo.error) {
+          const userInfo = await getProfileInfo(addressToSign);
+
+          if (userInfo && !userInfo.error) {
             setIsAuthenticated(true);
             setIsWalletConnected(true);
+            setAddress(addressToSign);
 
             setLoggedInArtist({
               id: userInfo.id,
