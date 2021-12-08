@@ -2,9 +2,6 @@ import {
   Button,
   Image,
   Popover,
-  PopoverArrow,
-  PopoverBody,
-  PopoverCloseButton,
   PopoverContent,
   PopoverTrigger,
   ButtonProps, Box,
@@ -67,15 +64,14 @@ export const Dropdown = (
             isActive={isOpened}
             sx={{
               '--button-lg-padding-x': '16px',
-              '--button-lg-padding-y': '15px',
+              '--button-lg-padding-y': '16px',
               '--button-md-padding-x': '12px',
               '--button-md-padding-y': '11px',
             }}
-            justifyContent={'space-between'}
             minWidth={'fit-content'}
-            paddingX={`var(--button-${buttonProps?.size || 'md'}-padding-x) !important`}
-            paddingY={`var(--button-${buttonProps?.size || 'md'}-padding-y) !important`}
+            padding={`var(--button-${buttonProps?.size || 'md'}-padding-y) var(--button-${buttonProps?.size || 'md'}-padding-x)`}
             position={'relative'}
+            zIndex={1}
             rightIcon={
               <Image
                 src={arrowDownIcon}
@@ -86,24 +82,34 @@ export const Dropdown = (
             }
             {...buttonProps}
           >
-            <Box as={'span'} flex={1} textAlign={'left'}>
+            <Box
+              as={'span'}
+              flex={1}
+              textAlign={'left'}
+            >
               <Box
                 as={'span'}
-                bg={'white'}
-                sx={{'--padding': '4px'}}
+                sx={{
+                  '--padding': '4px',
+                  '--opened-label-font-size': '11px',
+                }}
+                bg={value ? 'white' : 'transparent'}
+                borderRadius={'4px'}
                 fontSize={value ? '11px' : 'inherit'}
-                left={`calc(var(--button-${buttonProps?.size || 'md'}-padding-x) - var(--padding) + ${!value && buttonProps?.leftIcon ? '22px' : '0px'})`}
-                padding={'var(--padding)'}
-                position={'absolute'}
-                top={value ? '-11px' : `calc(var(--button-${buttonProps?.size || 'md'}-padding-y) - var(--padding))`}
-                transition={'300ms'}
-                zIndex={-1}
+                padding={value ? 'var(--padding)' : ''}
+                position={value ? 'absolute' : 'relative'}
+                display={'inline-block'}
+                transform={value ? `translate(
+                  ${buttonProps?.leftIcon ? '-24px' : '0px'}, 
+                  calc((var(--button-${buttonProps?.size || 'md'}-padding-y) + var(--padding) + (var(--opened-label-font-size) / 2)) * -1)
+                )` : ''}
+                transition={'200ms'}
               >{label}</Box>
               {value || ''}
             </Box>
           </Button>
         </PopoverTrigger>
-        <PopoverContent>
+        <PopoverContent width={'fit-content'}>
           {children}
         </PopoverContent>
       </Popover>

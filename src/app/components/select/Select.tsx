@@ -33,7 +33,7 @@ export const Select = ({ items, value, label, onSelect, ...props }: ISelectProps
       onClose={handleClose}
       {...props}
     >
-      <Box p={'8px'}>
+      <Box p={'8px'} w={'225px'}>
         {items.map((item, i) => (
           <Box
             key={i}
