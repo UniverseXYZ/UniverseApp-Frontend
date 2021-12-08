@@ -1,5 +1,5 @@
-import React, { useEffect, useState, useContext, useRef } from 'react';
-import { useLocation, useParams } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { useLocation, useParams, useHistory } from 'react-router-dom';
 import './AuctionLandingPage.scss';
 import Popup from 'reactjs-popup';
 import AuctionDetails from '../../components/auctionLandingPage/AuctionDetails.jsx';
@@ -50,6 +50,7 @@ const AuctionLandingPage = () => {
   const [loadingText, setLoadingText] = useState(defaultLoadingText);
   const [showSuccessfulBid, setShowSuccessfulBid] = useState(false);
   const [showCancelBidPopup, setShowCancelBidPopup] = useState(false);
+  const history = useHistory();
 
   useEffect(() => {
     if (bidders.length) {
@@ -222,21 +223,36 @@ const AuctionLandingPage = () => {
   }, [auction, bidders, yourBalance]);
 
   const getAuctionData = async () => {
-    const auctionInfo = await getAuctionLandingPage(artistUsername, auctionName);
-    if (!auctionInfo.error) {
-      calculateRewardTierSlots(auctionInfo.rewardTiers, auctionInfo.bidders);
+    try {
+      const response = await getAuctionLandingPage(artistUsername, auctionName);
+      // handle errors
 
-      // Parse Bidders amount to float
-      const newBidders = auctionInfo?.bidders?.map((b) => {
-        const updated = { ...b };
-        updated.amount = parseFloat(updated.amount);
-        return updated;
-      });
-      setBidders(newBidders);
-      setAuction(auctionInfo);
-      setLoading(false);
-    } else {
-      setLoading(false);
+      if (!response.error) {
+        let auctionInfo = { ...response };
+        if (history.location.params && history.location.params === 'preview') {
+          const { _artist, _auction } = history.location.state;
+          auctionInfo = {
+            ...auctionInfo,
+            artist: _artist,
+            auction: _auction,
+          };
+        }
+        calculateRewardTierSlots(auctionInfo.rewardTiers, auctionInfo.bidders);
+
+        // Parse Bidders amount to float
+        const newBidders = auctionInfo?.bidders?.map((b) => {
+          const updated = { ...b };
+          updated.amount = parseFloat(updated.amount);
+          return updated;
+        });
+        setBidders(newBidders);
+        setAuction(auctionInfo);
+        setLoading(false);
+      } else {
+        setLoading(false);
+      }
+    } catch (error) {
+      console.error(error);
     }
   };
 

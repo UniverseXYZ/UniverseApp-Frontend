@@ -97,8 +97,20 @@ const CustomizeAuction = () => {
     setMyAuctions(
       myAuctions.map((item) => (item.id === _editedAuction.id ? _editedAuction : item))
     );
-    if (action === PREVIEW_ACTION || action === SAVE_PREVIEW_ACTION) {
-      history.push(`${loggedInArtist.universePageAddress}/${domainAndBranding.link}`);
+    if (action === PREVIEW_ACTION) {
+      const editedAuctionClone = { ..._editedAuction, link: auction.link };
+      const editedLoggedInArtistClone = {
+        ..._loggedInArtistClone,
+        displayName: _loggedInArtistClone.name,
+      };
+      history.push({
+        pathname: `${loggedInArtist.universePageAddress}/${auction.link}`,
+        state: {
+          _artist: editedLoggedInArtistClone,
+          _auction: editedAuctionClone,
+        },
+        params: 'preview',
+      });
     } else {
       setSuccessPopup(true);
     }
@@ -119,6 +131,7 @@ const CustomizeAuction = () => {
     } else {
       setContext(loggedInArtistClone, editedAuction, action);
     }
+    // save and preview here
   };
 
   // reward tiers API calls
@@ -271,7 +284,7 @@ const CustomizeAuction = () => {
       domainAndBranding.headline &&
       domainAndBranding.link &&
       domainAndBranding.status === 'filled' &&
-      accountImage &&
+      // accountImage &&
       accountName &&
       (accountPage !== 'universe.xyz/' || accountPage === 'universe.xyz/your-address') &&
       about
