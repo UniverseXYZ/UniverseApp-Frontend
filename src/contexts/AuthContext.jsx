@@ -1,4 +1,4 @@
-import React, { createContext, useState, useEffect, useContext } from 'react';
+import React, { createContext, useState, useEffect, useContext, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { Contract, providers, utils } from 'ethers';
 import uuid from 'react-uuid';
@@ -69,7 +69,28 @@ const AuthContextProvider = ({ children }) => {
   };
 
   // Authentication and Web3
-  const web3AuthenticationProccess = async (provider, network, accounts) => {
+  const web3AuthenticationProccess = async (
+    providerToUse = null,
+    networkToUse = null,
+    accounts
+    // eslint-disable-next-line consistent-return
+  ) => {
+    let provider = providerToUse;
+    if (!provider) {
+      // IF no explicit provider, use MetaMask
+      const { ethereum } = window;
+      provider = new providers.Web3Provider(ethereum);
+    }
+
+    let network = networkToUse;
+    if (!network) {
+      network = await provider.getNetwork();
+    }
+
+    if (network.chainId !== +process.env.REACT_APP_NETWORK_CHAIN_ID) {
+      return setShowWrongNetworkPopup(true);
+    }
+
     const balance = await provider.getBalance(accounts[0]);
     const ensDomain = await provider.lookupAddress(accounts[0]);
     const signerResult = provider.getSigner(accounts[0]).connectUnchecked();
@@ -111,7 +132,6 @@ const AuthContextProvider = ({ children }) => {
     );
 
     setWeb3Provider(provider);
-    setAddress(accounts[0] || '');
     setSigner(signerResult);
     setYourBalance(utils.formatEther(balance));
     setYourEnsDomain(ensDomain);
@@ -147,19 +167,23 @@ const AuthContextProvider = ({ children }) => {
     setLobsterContract(null);
   };
 
+  const handleAccountsChanged = useCallback(async ([account]) => {
+    // IF ACCOUNT CHANGES, CLEAR TOKEN AND ADDRESS FROM LOCAL STORAGE
+    clearStorageAuthData();
+    if (account) {
+      history.push('/');
+      await resetConnectionState();
+      web3AuthenticationProccess(null, null, [account]);
+    } else {
+      resetConnectionState();
+    }
+  }, []);
+
   const connectWithMetaMask = async () => {
     const { ethereum } = window;
 
-    // await ethereum.request({ method: 'eth_requestAccounts' });
-    const provider = new providers.Web3Provider(ethereum);
     const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
-    const network = await provider.getNetwork();
-
-    if (network.chainId !== +process.env.REACT_APP_NETWORK_CHAIN_ID) {
-      setShowWrongNetworkPopup(true);
-    } else {
-      await web3AuthenticationProccess(provider, network, accounts);
-    }
+    await web3AuthenticationProccess(null, null, accounts);
 
     setProviderName(() => {
       const name = CONNECTORS_NAMES.MetaMask;
@@ -167,17 +191,8 @@ const AuthContextProvider = ({ children }) => {
       return name;
     });
 
-    ethereum.on('accountsChanged', async ([account]) => {
-      // IF ACCOUNT CHANGES, CLEAR TOKEN AND ADDRESS FROM LOCAL STORAGE
-      clearStorageAuthData();
-      if (account) {
-        // await connectWithMetaMask();
-        history.push('/');
-        web3AuthenticationProccess(provider, network, [account]);
-      } else {
-        resetConnectionState();
-      }
-    });
+    ethereum.removeListener('accountsChanged', handleAccountsChanged);
+    ethereum.on('accountsChanged', handleAccountsChanged);
 
     ethereum.on('chainChanged', async (networkId) => {
       clearStorageAuthData();
@@ -258,7 +273,8 @@ const AuthContextProvider = ({ children }) => {
   const signMessage = async () => {
     try {
       if (signer) {
-        const sameUser = address === localStorage.getItem('user_address');
+        const addressToSign = await signer.getAddress();
+        const sameUser = addressToSign === localStorage.getItem('user_address');
         const hasSigned = sameUser && localStorage.getItem('xyz_access_token');
 
         if (!hasSigned) {
@@ -266,7 +282,7 @@ const AuthContextProvider = ({ children }) => {
           const challengeResult = await setChallenge(chanllenge);
           const signedMessage = await signer?.signMessage(chanllenge);
           const authInfo = await userAuthenticate({
-            address,
+            address: addressToSign,
             signedMessage,
             uuid: challengeResult?.uuid,
           });
@@ -274,20 +290,27 @@ const AuthContextProvider = ({ children }) => {
           if (!authInfo.error) {
             // Save xyz_access_token into the local storage for later API requests usage
             localStorage.setItem('xyz_access_token', authInfo.token);
-            localStorage.setItem('user_address', address);
+            localStorage.setItem('user_address', addressToSign);
 
             setIsAuthenticated(true);
+            setIsWalletConnected(true);
+            setAddress(addressToSign);
             setLoggedInArtist(mapUserData(authInfo.user));
           } else {
             setIsAuthenticated(false);
           }
         } else {
           // THE USER ALREADY HAS SIGNED
-          const userInfo = await getProfileInfo(address);
+          setIsAuthenticated(true);
+          setIsWalletConnected(true);
+          setAddress(addressToSign);
 
-          if (!userInfo.error) {
+          const userInfo = await getProfileInfo(addressToSign);
+
+          if (userInfo && !userInfo.error) {
             setIsAuthenticated(true);
             setIsWalletConnected(true);
+            setAddress(addressToSign);
 
             setLoggedInArtist({
               id: userInfo.id,

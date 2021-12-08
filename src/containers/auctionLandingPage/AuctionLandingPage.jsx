@@ -52,12 +52,16 @@ const AuctionLandingPage = () => {
   const [showCancelBidPopup, setShowCancelBidPopup] = useState(false);
 
   useEffect(() => {
-    if (bidders) {
-      const currBidder = bidders.find((bidder) => bidder.user.address === address);
+    if (bidders.length) {
+      const currBidder = bidders.find(
+        (bidder) => bidder.user.address.toLowerCase() === address.toLowerCase()
+      );
       if (currBidder) {
         setCurrentBid(currBidder);
 
-        const currBidderIndex = bidders.map((bidder) => bidder.user.address).indexOf(address);
+        const currBidderIndex = bidders
+          .map((bidder) => bidder.user.address.toLowerCase())
+          .indexOf(address.toLowerCase());
         if (currBidderIndex <= rewardTiersSlots.length - 1) {
           setIsWinningBid(true);
           setWinningSlot(currBidderIndex);
