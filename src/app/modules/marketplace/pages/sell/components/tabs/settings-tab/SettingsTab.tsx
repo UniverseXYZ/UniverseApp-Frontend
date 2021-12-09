@@ -14,7 +14,7 @@ import {
   useDisclosure,
 } from '@chakra-ui/react';
 import React, { useCallback, useMemo, useRef, useState } from 'react';
-import { useWindowScroll } from 'react-use';
+import { useWindowScroll, useWindowSize } from 'react-use';
 
 import { Navigation, FreeMode } from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/react/swiper-react';
@@ -45,20 +45,16 @@ import { Nfts } from '../../../../../mocks/nfts';
 import { NftItem } from '../../../../../../nft/components';
 import { INft } from '../../../../../../nft/types';
 import { SelectEditionsDropdown } from '../../select-editions-dropdown';
+import { useLayout } from '../../../../../../../providers';
 
 const useStickyToFooter = () => {
-  const { y: windowScrollY } = useWindowScroll();
+  const { y: scrollY } = useWindowScroll();
+  const { height } = useWindowSize(0, 0);
+  const { footerRef } = useLayout();
 
-  const footerEl = useMemo<any>(() => document.querySelector('footer'), []);
-
-  const isStickied = useMemo<boolean>(() => {
-    if (!window || !footerEl) {
-      return false;
-    }
-    return !(windowScrollY + window.innerHeight >= footerEl.getBoundingClientRect().top + window.scrollY);
-  }, [windowScrollY, footerEl]);
-
-  return isStickied;
+  return useMemo<boolean>(() => {
+    return !(scrollY + height >= footerRef.current?.offsetTop ?? 0);
+  }, [scrollY, height, footerRef.current]);
 };
 
 export const SettingsTab = () => {

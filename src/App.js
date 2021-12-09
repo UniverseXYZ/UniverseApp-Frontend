@@ -53,8 +53,8 @@ import ErrorPopup from './components/popups/ErrorPopup';
 import { useErrorContext } from './contexts/ErrorContext';
 import Minting from './components/products/minting/Minting';
 import { App as NewApp } from './app/App';
-import { MarketplaceBrowseNFTs } from './app/modules/marketplace/pages/browse-nfts/MarketplaceBrowseNFTs';
-import { MarketplaceSell } from './app/modules/marketplace/pages/sell/MarketplaceSell';
+import { MarketplaceSell, MarketplaceBrowseNFTs } from './app/modules/marketplace/pages';
+import { LayoutProvider } from './app/providers';
 
 class UniverseRoute {
   constructor(
@@ -133,34 +133,36 @@ const App = () => {
           <MyNFTsContextProvider>
             <AuctionContextProvider>
               <MarketplaceContextProvider>
-                <Header />
-                <Switch>
-                  {Object.keys(routes).map((key) => {
-                    const { Component, isPrivate, isRewritten, routeProps, componentProps } =
-                      routes[key];
+                <LayoutProvider>
+                  <Header />
+                  <Switch>
+                    {Object.keys(routes).map((key) => {
+                      const { Component, isPrivate, isRewritten, routeProps, componentProps } =
+                        routes[key];
 
-                    const RouteComponent = isPrivate ? AuthenticatedRoute : Route;
+                      const RouteComponent = isPrivate ? AuthenticatedRoute : Route;
 
-                    return (
-                      <RouteComponent key={uuid()} path={key} {...routeProps}>
-                        {!isRewritten ? (
-                          <Component {...componentProps} />
-                        ) : (
-                          <NewApp>
+                      return (
+                        <RouteComponent key={uuid()} path={key} {...routeProps}>
+                          {!isRewritten ? (
                             <Component {...componentProps} />
-                          </NewApp>
-                        )}
-                      </RouteComponent>
-                    );
-                  })}
-                </Switch>
-                <Footer />
-                <Popup closeOnDocumentClick={false} open={showWrongNetworkPopup}>
-                  <WrongNetworkPopup close={() => setShowWrongNetworkPopup(false)} />
-                </Popup>
-                <Popup closeOnDocumentClick={false} open={showError}>
-                  <ErrorPopup close={closeError} />
-                </Popup>
+                          ) : (
+                            <NewApp>
+                              <Component {...componentProps} />
+                            </NewApp>
+                          )}
+                        </RouteComponent>
+                      );
+                    })}
+                  </Switch>
+                  <Footer />
+                  <Popup closeOnDocumentClick={false} open={showWrongNetworkPopup}>
+                    <WrongNetworkPopup close={() => setShowWrongNetworkPopup(false)} />
+                  </Popup>
+                  <Popup closeOnDocumentClick={false} open={showError}>
+                    <ErrorPopup close={closeError} />
+                  </Popup>
+                </LayoutProvider>
               </MarketplaceContextProvider>
             </AuctionContextProvider>
           </MyNFTsContextProvider>
