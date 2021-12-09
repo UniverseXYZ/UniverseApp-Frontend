@@ -38,11 +38,7 @@ const Header = ({ location }) => {
   const { darkMode } = useThemeContext();
 
   const history = useHistory();
-  const [selectedWallet, setSelectedWallet] = useState('');
-  const [installed, setInstalled] = useState(true);
   const [showMenu, setShowMenu] = useState(false);
-  const [showSelectWallet, setShowSelectWallet] = useState(false);
-  const [showInstallWalletPopup, setShowInstallWalletPopup] = useState(false);
   const [searchValue, setSearchValue] = useState('');
   const [showSearch, setShowSearch] = useState(false);
   const [showMobileSearch, setShowMobileSearch] = useState(false);
@@ -63,26 +59,6 @@ const Header = ({ location }) => {
     history.push(`/search`, { query: searchValue });
     setSearchValue('');
     searchRef.current.blur();
-  };
-
-  const handleConnectWallet = async (wallet) => {
-    // Here need to check if selected wallet is installed in browser
-    setSelectedWallet(wallet);
-    if (installed) {
-      if (wallet === CONNECTORS_NAMES.MetaMask && typeof window.ethereum !== 'undefined') {
-        await connectWithMetaMask();
-        setIsWalletConnected(true);
-        setShowMenu(false);
-        setShowSelectWallet(false);
-      } else if (wallet === CONNECTORS_NAMES.WalletConnect) {
-        await connectWithWalletConnect();
-        setIsWalletConnected(true);
-        setShowMenu(false);
-        setShowSelectWallet(false);
-      }
-    } else {
-      setShowInstallWalletPopup(true);
-    }
   };
 
   const handleClickOutside = (event) => {
@@ -336,21 +312,11 @@ const Header = ({ location }) => {
         isWalletConnected={isWalletConnected}
         setIsWalletConnected={setIsWalletConnected}
         ethereumAddress={address || ''}
-        handleConnectWallet={handleConnectWallet}
-        showInstallWalletPopup={showInstallWalletPopup}
-        setShowInstallWalletPopup={setShowInstallWalletPopup}
-        selectedWallet={selectedWallet}
-        setSelectedWallet={setSelectedWallet}
       />
       <TabletView
         isWalletConnected={isWalletConnected}
         setIsWalletConnected={setIsWalletConnected}
         ethereumAddress={address || ''}
-        handleConnectWallet={handleConnectWallet}
-        showInstallWalletPopup={showInstallWalletPopup}
-        setShowInstallWalletPopup={setShowInstallWalletPopup}
-        selectedWallet={selectedWallet}
-        setSelectedWallet={setSelectedWallet}
         showMenu={showMenu}
         setShowMenu={setShowMenu}
         setShowSearch={setShowSearch}
@@ -360,15 +326,8 @@ const Header = ({ location }) => {
         isWalletConnected={isWalletConnected}
         setIsWalletConnected={setIsWalletConnected}
         ethereumAddress={address || ''}
-        handleConnectWallet={handleConnectWallet}
         setShowMenu={setShowMenu}
-        setShowSelectWallet={setShowSelectWallet}
         showMenu={showMenu}
-        showSelectWallet={showSelectWallet}
-        showInstallWalletPopup={showInstallWalletPopup}
-        setSelectedWallet={setSelectedWallet}
-        setShowInstallWalletPopup={setShowInstallWalletPopup}
-        selectedWallet={selectedWallet}
         setShowMobileSearch={setShowMobileSearch}
         showMobileSearch={showMobileSearch}
       />
