@@ -90,7 +90,6 @@ const AuthContextProvider = ({ children }) => {
     if (network.chainId !== +process.env.REACT_APP_NETWORK_CHAIN_ID) {
       return setShowWrongNetworkPopup(true);
     }
-
     const balance = await provider.getBalance(accounts[0]);
     const ensDomain = await provider.lookupAddress(accounts[0]);
     const signerResult = provider.getSigner(accounts[0]).connectUnchecked();
@@ -273,10 +272,9 @@ const AuthContextProvider = ({ children }) => {
   const signMessage = async () => {
     try {
       if (signer) {
-        const addressToSign = await signer.getAddress();
+        const addressToSign = (await signer.getAddress()).toLowerCase();
         const sameUser = addressToSign === localStorage.getItem('user_address');
         const hasSigned = sameUser && localStorage.getItem('xyz_access_token');
-
         if (!hasSigned) {
           const chanllenge = uuid();
           const challengeResult = await setChallenge(chanllenge);
