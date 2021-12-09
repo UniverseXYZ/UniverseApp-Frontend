@@ -55,7 +55,6 @@ const FinalizeAuction = () => {
   const [loadingText, setLoadingText] = useState(defaultLoadingText);
   const [depositVerifyingTxIndex, setDepositVerifyingTxIndex] = useState([]);
   const [withdrawVerifyingTokenIds, setWithdrawVerifyingTokenIds] = useState([]);
-  const [approvingCollections, setApprovingCollections] = useState([]);
 
   useEffect(() => {
     if (auction.id) {
@@ -311,28 +310,26 @@ const FinalizeAuction = () => {
     }
   };
 
-  const handleApproveCollection = async (collectionAddress) => {
+  const handleApproveCollection = async (collectionAddress, setIsApproving) => {
     try {
+      setIsApproving(true);
+
       const contract = new Contract(collectionAddress, ERC721ABI, signer);
 
       const tx = await contract.setApprovalForAll(
         process.env.REACT_APP_UNIVERSE_AUCTION_HOUSE_ADDRESS,
         true
       );
-      setApprovingCollections((colls) => [...colls, collectionAddress]);
       const txReceipt = await tx.wait();
       if (txReceipt.status === 1) {
-        setApprovedCollections((colls) => [...colls, collectionAddress]);
-        setApprovingCollections((colls) => {
-          const newApprovingCollections = [...colls];
-          newApprovingCollections.splice(newApprovingCollections.indexOf(collectionAddress), 1);
-          return newApprovingCollections;
-        });
+        setApprovedCollections([...approvedCollections, collectionAddress]);
       } else {
         setErrors();
       }
+      setIsApproving(false);
     } catch (err) {
       setErrors(err);
+      setIsApproving(false);
     }
   };
 
@@ -554,11 +551,6 @@ const FinalizeAuction = () => {
                       approveCollection={handleApproveCollection}
                       isApproved={
                         !!approvedCollections.find(
-                          (collAddress) => collAddress === collection.address
-                        )
-                      }
-                      isApproving={
-                        !!approvingCollections.find(
                           (collAddress) => collAddress === collection.address
                         )
                       }
