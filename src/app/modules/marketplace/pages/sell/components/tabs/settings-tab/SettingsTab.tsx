@@ -87,13 +87,11 @@ export const SettingsTab = () => {
   }, [form.values.selectedNFTsIds]);
 
   const selectedNFTsNumber = useMemo(() => {
-    if (!form.values.selectedNFTsIds) {
-      return 0;
-    }
     return Object
-      .keys(form.values.selectedNFTsIds)
-      .filter((key) => !!form.values.selectedNFTsIds[key])
-      .length;
+      .keys(form.values.selectedNFTsIds || {})
+      .reduce((acc, key) => form.values.selectedNFTsIds[key]?.length
+        ? acc + form.values.selectedNFTsIds[key]?.length
+        : acc + Number(form.values.selectedNFTsIds[key]), 0);
   }, [form.values.selectedNFTsIds]);
 
   return (
