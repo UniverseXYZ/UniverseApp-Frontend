@@ -47,6 +47,15 @@ const AuthContextProvider = ({ children }) => {
   const [contracts, setContracts] = useState(false);
   const [deployedCollections, setDeployedCollections] = useState([]);
   const [universeAuctionHouseContract, setUniverseAuctionHouseContract] = useState(null);
+
+  const [showWalletPopup, setshowWalletPopup] = useState(false);
+  const [selectedWallet, setSelectedWallet] = useState('');
+
+  // TODO: Add logic and component for checking if metamask is installed
+  // Currently the app assumes the user has metamask installed
+  const [showInstallWalletPopup, setShowInstallWalletPopup] = useState(false);
+  const [installed, setInstalled] = useState(true);
+
   const history = useHistory();
   // Getters
   const getEthPriceData = async (balance) => {
@@ -294,6 +303,7 @@ const AuthContextProvider = ({ children }) => {
             setIsWalletConnected(true);
             setAddress(addressToSign);
             setLoggedInArtist(mapUserData(authInfo.user));
+            setshowWalletPopup(false);
           } else {
             setIsAuthenticated(false);
           }
@@ -306,9 +316,7 @@ const AuthContextProvider = ({ children }) => {
           const userInfo = await getProfileInfo(addressToSign);
 
           if (userInfo && !userInfo.error) {
-            setIsAuthenticated(true);
-            setIsWalletConnected(true);
-            setAddress(addressToSign);
+            setshowWalletPopup(false);
 
             setLoggedInArtist({
               id: userInfo.id,
@@ -335,6 +343,20 @@ const AuthContextProvider = ({ children }) => {
       setIsWalletConnected(false);
       setIsAuthenticated(false);
       console.error(err);
+    }
+  };
+
+  const handleConnectWallet = async (wallet) => {
+    // Here need to check if selected wallet is installed in browser
+    setSelectedWallet(wallet);
+    if (installed) {
+      if (wallet === CONNECTORS_NAMES.MetaMask && typeof window.ethereum !== 'undefined') {
+        await connectWithMetaMask();
+      } else if (wallet === CONNECTORS_NAMES.WalletConnect) {
+        await connectWithWalletConnect();
+      }
+    } else {
+      setShowInstallWalletPopup(true);
     }
   };
 
@@ -390,6 +412,15 @@ const AuthContextProvider = ({ children }) => {
         connectWeb3,
         connectWithWalletConnect,
         universeAuctionHouseContract,
+        showInstallWalletPopup,
+        setShowInstallWalletPopup,
+        handleConnectWallet,
+        showWalletPopup,
+        setshowWalletPopup,
+        selectedWallet,
+        setSelectedWallet,
+        installed,
+        setInstalled,
       }}
     >
       {children}
