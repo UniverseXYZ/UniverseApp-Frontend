@@ -7,19 +7,32 @@ import placingBidsIcon from '../../assets/images/placing-bids.svg';
 import multipleNFTsIcon from '../../assets/images/multiple-nfts.svg';
 
 const UniverseAuctionDetails = ({ auction }) => {
-  const [days, setDays] = useState(0);
-  const [hours, setHours] = useState(0);
+  const { endDate, startDate } = auction.auction;
+
+  const [durationText, setDurationText] = useState('');
 
   useEffect(() => {
-    const { endDate } = auction.auction;
-    if (endDate) {
-      const d = (new Date(endDate) - Date.now()) / 1000;
-      const remainingDays = Math.floor(d / 86400);
-      const remainingHours = Math.floor(d / 3600) % 24;
-      setDays(remainingDays);
-      setHours(remainingHours);
+    if (endDate && startDate) {
+      // We don't need to calculate minutes as the auction duration will be at least 1 hour
+      const dateDifference = (new Date(endDate) - new Date(startDate)) / 1000;
+      const daysDuration = Math.floor(dateDifference / 86400);
+      const hoursDuration = Math.floor(dateDifference / 3600) % 24;
+
+      // Calculate days and hours
+      const days = daysDuration > 0 ? (daysDuration === 1 ? '1 day' : `${daysDuration} days`) : '';
+      const hours =
+        hoursDuration > 0 ? (hoursDuration === 1 ? `1 hour` : `${hoursDuration} hours`) : '';
+
+      // If we have both days and hours add 'and' between them
+      const duration = days && hours ? `${days} and ${hours}` : days || hours;
+
+      // Make sure if in some case the text will be empty (hours < 0)
+      if (duration) {
+        const finalText = `will last ${duration} and`;
+        setDurationText(finalText);
+      }
     }
-  }, []);
+  }, [endDate, startDate]);
 
   return (
     <div className="universe__auction__details__section">
@@ -38,9 +51,7 @@ const UniverseAuctionDetails = ({ auction }) => {
                 <h2 className="sub__title">Auction length</h2>
               </div>
               <p className="sub__desc">
-                {`This Auction will last ${days > 0 ? (days === 1 ? '1 day' : `${days} days`) : ''}
-                ${hours === 1 ? `1 hour` : `${hours} hours`}
-                and will be extended 3 minutes after every bid with 3 minutes left on the auction.
+                {`This auction ${durationText} will be extended 3 minutes after every bid with 3 minutes left on the auction.
                 This gives everyone ample time to place a bid and have a fair chance at the auction.`}
               </p>
             </div>
