@@ -1,3 +1,8 @@
+/**
+ *
+ * @param {*} values
+ * @returns
+ */
 export const validateData = (values) => {
   const { avatar, accountName, accountPage, about } = values;
   const errors = {};
