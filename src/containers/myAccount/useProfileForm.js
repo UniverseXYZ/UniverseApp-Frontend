@@ -85,8 +85,11 @@ const useProfileForm = (validate) => {
       loggedInArtist.about !== about ||
       loggedInArtist.twitterLink !== twitterLink ||
       loggedInArtist.instagramLink !== instagramLink;
-    const canSetProfileImage = typeof avatar === 'object';
-
+    const canSetProfileImage =
+      (avatar.type === 'image/webp' ||
+        avatar.type === 'image/jpeg' ||
+        avatar.type === 'image/png') &&
+      avatar.size / 1048576 < 30;
     if (canSetProfileInfo) {
       try {
         const response = await saveProfileInfo(artistData);
@@ -105,10 +108,11 @@ const useProfileForm = (validate) => {
       } catch (error) {
         console.error(error);
       }
+    } else {
+      setShowLoading(false);
     }
 
     if (canSetProfileImage) {
-      artistData.avatar = avatar;
       try {
         const response = await saveUserImage(avatar);
         if (response.error) {
@@ -118,7 +122,8 @@ const useProfileForm = (validate) => {
           setShowLoading(false);
           return;
         }
-        if (response.ok) {
+        if (response.profileImageUrl) {
+          artistData.avatar = response.profileImageUrl;
           setShowLoading(false);
           setShowCongrats(true);
           setLoggedInArtist(artistData);
@@ -126,6 +131,8 @@ const useProfileForm = (validate) => {
       } catch (error) {
         console.error(error);
       }
+    } else {
+      setShowLoading(false);
     }
   };
 
