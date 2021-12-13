@@ -2,96 +2,47 @@
 import React, { useRef, useState, useEffect, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import Social from './Social';
+import './profileForm.scss';
 import Button from '../button/Button.jsx';
 import Input from '../input/Input.jsx';
 import defaultImage from '../../assets/images/default-img.svg';
 import infoIcon from '../../assets/images/icon.svg';
 import warningIcon from '../../assets/images/Exclamation.svg';
 import errorIcon from '../../assets/images/red-msg.svg';
-import { useAuthContext } from '../../contexts/AuthContext';
 import { MAX_FIELD_CHARS_LENGTH } from '../../containers/myAccount/useProfileForm';
-import { useErrorContext } from '../../contexts/ErrorContext';
 import ErrorPopup from '../popups/ErrorPopup';
 
 const ProfileForm = ({
+  setShowCongrats,
+  setShowLoading,
   accountImage,
   setAccountImage,
-  editProfileButtonClick,
-  saveChanges,
-  cancelChanges,
-  values,
+  accountName,
+  accountPage,
+  about,
+  twitterLink,
+  instagramLink,
   handleChange,
   handleSubmit,
   errors,
-  setValues,
-  setShowCongrats,
-  setShowLoading,
+  cancelChanges,
+  editProfileButtonClick,
+  loggedInArtist,
+  showError,
+  setShowError,
+  setErrorTitle,
+  setErrorBody,
+  getProfileImage,
+  setLoggedInArtist,
+  buttonDisabled,
+  genericErrorMessage,
+  myAccountPage,
 }) => {
-  const { loggedInArtist, setLoggedInArtist } = useAuthContext();
   const [hideIcon, setHideIcon] = useState(false);
   const accountInput = useRef(null);
-  // const [accountNameExists, setAccountNameExist] = useState(false);
-  // const [accountPageExists, setAccountPageExist] = useState(false);
-  const { showError, setShowError, setErrorTitle, setErrorBody } = useErrorContext();
-
-  const { accountName, accountPage, about, twitterLink, instagramLink } = values;
-
-  useEffect(() => {
-    setValues({
-      avatar: loggedInArtist.avatar,
-      accountName: loggedInArtist.name,
-      accountPage: loggedInArtist.universePageAddress,
-      about: loggedInArtist.about,
-      instagramLink: loggedInArtist.instagramLink,
-      twitterLink: loggedInArtist.twitterLink,
-    });
-  }, []);
-
-  const getProfileImage = useMemo(() => {
-    const userUploadImageURL =
-      accountImage && typeof accountImage === 'object' && URL.createObjectURL(accountImage);
-    const alreadyUploadedImageURL = loggedInArtist && loggedInArtist.avatar;
-
-    let image;
-    if (userUploadImageURL) {
-      image = userUploadImageURL;
-    } else if (alreadyUploadedImageURL) {
-      image = alreadyUploadedImageURL;
-    } else {
-      image = defaultImage;
-    }
-    return image;
-  }, [accountImage]);
-
-  let genericErrorMessage = false;
-  if (Object.keys(errors).length) {
-    genericErrorMessage = true;
-  }
-
-  const buttonDisabled =
-    loggedInArtist.name === accountName &&
-    loggedInArtist.universePageAddress === accountPage &&
-    loggedInArtist.about === about &&
-    loggedInArtist.twitterLink === twitterLink &&
-    loggedInArtist.instagramLink === instagramLink &&
-    loggedInArtist.avatar === accountImage;
 
   return (
-    <form
-      onSubmit={(event) =>
-        handleSubmit(
-          event,
-          setErrorTitle,
-          setErrorBody,
-          setShowError,
-          loggedInArtist,
-          setShowLoading,
-          setShowCongrats,
-          setLoggedInArtist
-        )
-      }
-      className="account-grid-container container"
-    >
+    <div className="account-grid-container container">
       <div className="account-grid-name1">
         <div className="account-picture">
           <div
@@ -209,7 +160,6 @@ const ProfileForm = ({
             twitterLink={twitterLink}
             instagramLink={instagramLink}
             handleChange={handleChange}
-            saveChanges={saveChanges}
             cancelChanges={cancelChanges}
           />
           {genericErrorMessage && (
@@ -221,18 +171,35 @@ const ProfileForm = ({
               </p>
             </div>
           )}
-          <div className="account-display-buttons">
-            <Button disabled={buttonDisabled} type="submit" className="light-button">
-              Save changes
-            </Button>
-            <Button className="light-border-button" onClick={cancelChanges}>
-              Cancel
-            </Button>
-          </div>
+          {myAccountPage && (
+            <div className="account-display-buttons">
+              <Button
+                disabled={buttonDisabled}
+                type="submit"
+                className="light-button"
+                onClick={() =>
+                  handleSubmit(
+                    setErrorTitle,
+                    setErrorBody,
+                    setShowError,
+                    loggedInArtist,
+                    setShowLoading,
+                    setShowCongrats,
+                    setLoggedInArtist
+                  )
+                }
+              >
+                Save changes
+              </Button>
+              <Button className="light-border-button" onClick={cancelChanges}>
+                Cancel
+              </Button>
+            </div>
+          )}
         </div>
       </div>
       {showError && <ErrorPopup />}
-    </form>
+    </div>
   );
 };
 
@@ -243,9 +210,7 @@ ProfileForm.propTypes = {
   setAccountImage: PropTypes.func,
   editProfileButtonClick: PropTypes.bool,
   about: PropTypes.string,
-  twitterLink: PropTypes.string,
-  instagramLink: PropTypes.string,
-  saveChanges: PropTypes.func,
+
   cancelChanges: PropTypes.func,
 };
 
@@ -256,9 +221,6 @@ ProfileForm.defaultProps = {
   setAccountImage: () => {},
   about: '',
   editProfileButtonClick: false,
-  twitterLink: '',
-  instagramLink: '',
-  saveChanges: () => {},
   cancelChanges: () => {},
 };
 

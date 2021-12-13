@@ -75,7 +75,7 @@ const useProfileForm = (validate) => {
    * @returns
    */
   const handleSubmit = async (
-    e,
+    // e,
     setErrorTitle,
     setErrorBody,
     setShowError,
@@ -84,7 +84,7 @@ const useProfileForm = (validate) => {
     setShowCongrats,
     setLoggedInArtist
   ) => {
-    e.preventDefault();
+    // e.preventDefault();
     setErrors(validate(values));
     setShowLoading(true);
 
