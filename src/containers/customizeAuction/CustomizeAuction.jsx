@@ -105,19 +105,20 @@ const CustomizeAuction = () => {
     return image;
   }, [accountImage]);
 
-  const setContext = (_editedAuction, action) => {
+  const setContext = (_editedAuction, loggedInArtistClone, action) => {
     setFutureAuctions([...futureAuctions, _editedAuction]);
     setMyAuctions(
       myAuctions.map((item) => (item.id === _editedAuction.id ? _editedAuction : item))
     );
-    if (action === PREVIEW_ACTION || action === SAVE_PREVIEW_ACTION) {
+    setLoggedInArtist(loggedInArtistClone);
+    if (action === SAVE_PREVIEW_ACTION) {
       history.push(`${loggedInArtist.universePageAddress}/${domainAndBranding.link}`);
     } else {
       setSuccessPopup(true);
     }
   };
 
-  const handleStatus = (errors, editedAuction, action) => {
+  const handleStatus = (errors, editedAuction, loggedInArtistClone, action) => {
     setLoading(false);
     if (errors.length) {
       setErrorTitle('Unexpected error');
@@ -138,7 +139,7 @@ const CustomizeAuction = () => {
         twitterLink: loggedInArtist.twitterLink,
       });
     } else {
-      setContext(editedAuction, action);
+      setContext(editedAuction, loggedInArtistClone, action);
     }
   };
 
@@ -253,7 +254,7 @@ const CustomizeAuction = () => {
       errors.push(profileResponse);
     }
 
-    handleStatus(errors, newAuctionData, action);
+    handleStatus(errors, newAuctionData, loggedInArtistClone, action);
   };
 
   const handleSave = async (action) => {
@@ -273,8 +274,9 @@ const CustomizeAuction = () => {
     };
 
     if (action === SAVE_PREVIEW_ACTION) {
-      // saveOnServer(editedAuction, loggedInArtistClone, action);
+      saveOnServer(editedAuction, loggedInArtistClone, action);
     } else if (action === PREVIEW_ACTION) {
+      console.log('decide what to do here');
       // setContext(loggedInArtistClone, editedAuction, action);
     } else {
       saveOnServer(editedAuction, loggedInArtistClone, action);
