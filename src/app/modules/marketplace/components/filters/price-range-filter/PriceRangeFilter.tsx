@@ -98,7 +98,7 @@ export const PriceRangeFilter = ({ onChange }: IPriceRangeFilterProps) => {
               />
             </NumberInput>
             <FormLabel
-              for={'minPriceVal'}
+              htmlFor={'minPriceVal'}
               sx={{
                 color: 'rgba(0, 0, 0, 0.4)',
                 fontSize: '12px',
@@ -133,7 +133,7 @@ export const PriceRangeFilter = ({ onChange }: IPriceRangeFilterProps) => {
               />
             </NumberInput>
             <FormLabel
-              for={'maxPriceVal'}
+              htmlFor={'maxPriceVal'}
               sx={{
                 color: 'rgba(0, 0, 0, 0.4)',
                 fontSize: '12px',

@@ -166,7 +166,13 @@ export const SelectNFTs = ({}: ISelectNFTsProps) => {
   const [nfts, setNfts] = useState(Nfts);
 
   const handleLoadMore = useCallback(() => {
-    setNfts([...nfts, ...Nfts])
+    setNfts([
+      ...nfts,
+      ...Nfts.map((nft) => ({
+        ...nft,
+        id: (nft.id as number) * (nfts.length / Nfts.length + 1),
+      }))
+    ]);
   }, [nfts]);
 
   const handleNFTAuctionTimeOut = useCallback((index) => {

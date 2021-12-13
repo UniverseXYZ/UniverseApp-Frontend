@@ -3,7 +3,7 @@ export const global = {
     paddingTop: '80px !important',
     fontFamily: 'Space Grotesk',
   },
-  'header + div': {
+  '#root > header + div': {
     paddingTop: '0 !important',
   },
   h1: {
