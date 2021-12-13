@@ -136,7 +136,7 @@ const ReleaseRewards = () => {
       // Update slots in rewardTier
       setAuction((upToDate) => {
         const updatedAuction = { ...upToDate };
-        const newTiers = updatedAuction.auction.rewardTiers.map((r) => {
+        const newTiers = updatedAuction.rewardTiers.map((r) => {
           const slots = r.slots.map((slot) => {
             if (slot.index === slotIndex) {
               slot.capturedRevenue = true;
