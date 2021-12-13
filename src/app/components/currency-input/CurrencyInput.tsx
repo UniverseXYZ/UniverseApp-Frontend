@@ -5,7 +5,9 @@ import {
   Menu,
   MenuButton,
   MenuItem,
-  MenuList, NumberInput, NumberInputField, NumberInputProps,
+  MenuList,
+  NumberInput,
+  NumberInputField,
 } from '@chakra-ui/react';
 import React, { useCallback, useMemo } from 'react';
 

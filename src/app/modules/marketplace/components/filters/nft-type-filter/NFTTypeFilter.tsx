@@ -36,18 +36,6 @@ export const NFTTypeFilter = ({ onChange }: INFTTypeFilterProps) => {
     },
   });
 
-  const handleCancel = useCallback(() => {
-    form.setValues({
-      singleItem: false,
-      bundle: false,
-      composition: false,
-      stillImage: false,
-      gif: false,
-      audio: false,
-      video: false,
-    });
-  }, []);
-
   return (
     <Dropdown
       label={'NFT type'}
@@ -55,7 +43,7 @@ export const NFTTypeFilter = ({ onChange }: INFTTypeFilterProps) => {
     >
       <DropdownFilterContainer
         onSave={() => form.submitForm()}
-        onClear={handleCancel}
+        onClear={() => form.resetForm()}
       >
         <Text fontSize={'14px'} color={'rgba(0, 0, 0, 0.4)'} mb={'20px'}>NFT type</Text>
         <SimpleGrid columns={2} spacingY={'20px'} mb={'40px'}>

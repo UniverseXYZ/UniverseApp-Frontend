@@ -12,7 +12,7 @@ const styles: FlexProps = {
 };
 
 interface IMediaIconProps extends FlexProps {
-  icon: any;
+  icon: string;
 }
 
 export const NFTItemAssetTypeLabel = ({ icon, ...rest }: IMediaIconProps) => (

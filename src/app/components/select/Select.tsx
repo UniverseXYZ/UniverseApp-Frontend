@@ -2,10 +2,12 @@ import { Dropdown, IDropdownProps } from '../dropdown';
 import { Box } from '@chakra-ui/react';
 import React, { useCallback, useState } from 'react';
 
+type ISelectItem = any;
+
 interface ISelectProps extends Omit<IDropdownProps, 'isOpened'> {
-  items: any[];
-  value: any;
-  onSelect?: (value: any) => void;
+  items: ISelectItem[];
+  value: ISelectItem;
+  onSelect?: (value: ISelectItem) => void;
 }
 
 export const Select = ({ items, value, label, onSelect, ...props }: ISelectProps) => {

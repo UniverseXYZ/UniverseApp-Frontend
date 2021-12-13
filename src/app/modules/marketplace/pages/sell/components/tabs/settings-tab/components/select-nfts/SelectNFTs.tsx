@@ -1,6 +1,6 @@
 import {
   Box,
-  Button, Checkbox,
+  Button,
   Fade,
   Flex,
   Heading,
@@ -19,18 +19,13 @@ import { Swiper, SwiperSlide } from 'swiper/react/swiper-react';
 import { FreeMode, Navigation } from 'swiper';
 
 import searchIcon from '../../../../../../../../../../assets/images/search-gray.svg';
-import artistIcon from '../../../../../../../../../../assets/images/marketplace/artist.svg';
 import filtersIcon from '../../../../../../../../../../assets/images/marketplace/filters2.svg';
-import saleTypeIcon from '../../../../../../../../../../assets/images/marketplace/sale-type.svg';
-import nftTypeIcon from '../../../../../../../../../../assets/images/select-type-icon.svg';
-import priceRangeIcon from '../../../../../../../../../../assets/images/marketplace/price-range.svg';
-import collectionsIcon from '../../../../../../../../../../assets/images/marketplace/collections.svg';
 import arrowLeftIcon from '../../../../../../../../../../assets/images/marketplace/bundles-left-arrow.svg';
 import arrowRightIcon from '../../../../../../../../../../assets/images/marketplace/bundles-right-arrow.svg';
 import closeWhiteIcon from '../../../../../../../../../../assets/images/marketplace/v2/close-white.svg';
 
 import { SortNftsOptions } from '../../../../../../../constants';
-import { Dropdown, InputShadow, Select } from '../../../../../../../../../components';
+import { InputShadow, Select } from '../../../../../../../../../components';
 import { NftItem } from '../../../../../../../../nft/components';
 import { INft } from '../../../../../../../../nft/types';
 import { SelectEditionsDropdown } from '../../../../select-editions-dropdown';
@@ -38,7 +33,13 @@ import { useMarketplaceSellData } from '../../../../../hooks';
 import { useStickyFooter } from '../../../../../../../../../hooks';
 import { Nfts } from '../../../../../../../mocks/nfts';
 import { UncheckBundleEditionsModal } from './components';
-import { NFTTypeFilter, SaleTypeFilter } from '../../../../../../../components';
+import {
+  ArtistsFilter,
+  CollectionsFilter,
+  NFTTypeFilter,
+  PriceRangeFilter,
+  SaleTypeFilter,
+} from '../../../../../../../components';
 
 interface IActionBarNFTItemProps {
   nft: INft;
@@ -216,7 +217,6 @@ export const SelectNFTs = ({}: ISelectNFTsProps) => {
             size: 'lg',
             minWidth: '225px',
             justifyContent: 'space-between',
-            leftIcon: <Image src={artistIcon} />,
           }}
           onSelect={(val) => setSortBy(val)}
         />
@@ -240,25 +240,16 @@ export const SelectNFTs = ({}: ISelectNFTsProps) => {
         >
           <SaleTypeFilter onChange={(values) => console.log('values', values)} />
           <NFTTypeFilter onChange={(values) => console.log('values', values)} />
-          <Dropdown
-            label={'Price range'}
-            buttonProps={{ leftIcon: <Image src={priceRangeIcon} /> }}
-          />
-          <Dropdown
-            label={'Collections'}
-            buttonProps={{ leftIcon: <Image src={collectionsIcon} /> }}
-          />
-          <Dropdown
-            label={'Artists'}
-            buttonProps={{ leftIcon: <Image src={artistIcon} /> }}
-          />
+          <PriceRangeFilter onChange={(values) => console.log('values', values)} />
+          <CollectionsFilter />
+          <ArtistsFilter />
         </Flex>
       </Fade>
 
       <Box mt={isFiltersOpen ? 0 : '-60px'} transition={'300ms'}>
         <SimpleGrid columns={4} spacing={'30px'} mb={'30px'}>
           {nfts.map((nft, i) => {
-            const tokensNumber = (nft.tokenIds as any)?.length;
+            const tokensNumber = nft.tokenIds?.length ?? 0;
             const isBundle = tokensNumber > 1;
             const selectedNFTRef = form.values.selectedNFTsIds[nft.id as number];
 
@@ -276,7 +267,7 @@ export const SelectNFTs = ({}: ISelectNFTsProps) => {
                       onChange={(editions) => handleCheckNFT(nft, editions.length ? editions : false)}
                     />
                   )
-                  : <Text>#{(nft.tokenIds as any)[0]}</Text>
+                  : (nft.tokenIds && (<Text>#{nft.tokenIds[0]}</Text>))
                 }
                 onClick={isBundle
                   ? undefined

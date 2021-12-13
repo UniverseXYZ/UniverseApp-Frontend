@@ -15,4 +15,8 @@ const theme = extendTheme({
   },
 });
 
-export const Theme = (props: any) => <ChakraProvider theme={theme} {...props} />;
+interface IThemeProps {
+  children: React.ReactNode;
+}
+
+export const Theme = (props: IThemeProps) => <ChakraProvider theme={theme} {...props} />;

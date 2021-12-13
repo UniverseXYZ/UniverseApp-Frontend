@@ -1,5 +1,6 @@
 export * from './checkbox';
 export * from './currency-input';
+export * from './currency-select';
 export * from './date-time-picker';
 export * from './dropdown';
 export * from './info-tooltip';

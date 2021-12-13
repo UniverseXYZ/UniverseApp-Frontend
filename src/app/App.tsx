@@ -2,4 +2,8 @@ import React from 'react';
 
 import { Theme } from './theme';
 
-export const App = ({ children }: any) => <Theme>{children}</Theme>;
+interface IAppProps {
+  children: React.ReactNode;
+}
+
+export const App = ({ children }: IAppProps) => <Theme>{children}</Theme>;
