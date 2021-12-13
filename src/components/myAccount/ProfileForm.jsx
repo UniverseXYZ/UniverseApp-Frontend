@@ -41,7 +41,21 @@ const ProfileForm = ({
   const accountInput = useRef(null);
 
   return (
-    <div className="account-grid-container container">
+    <form
+      onSubmit={(e) =>
+        handleSubmit(
+          e,
+          setErrorTitle,
+          setErrorBody,
+          setShowError,
+          loggedInArtist,
+          setShowLoading,
+          setShowCongrats,
+          setLoggedInArtist
+        )
+      }
+      className="account-grid-container container"
+    >
       <div className="account-grid-name1">
         <div className="account-picture">
           <div className={`${errors?.avatar ? 'error-img' : ''} account-image`}>
@@ -174,22 +188,7 @@ const ProfileForm = ({
           )}
           {!customizeAuction && (
             <div className="account-display-buttons">
-              <Button
-                disabled={buttonDisabled}
-                type="submit"
-                className="light-button"
-                onClick={() =>
-                  handleSubmit(
-                    setErrorTitle,
-                    setErrorBody,
-                    setShowError,
-                    loggedInArtist,
-                    setShowLoading,
-                    setShowCongrats,
-                    setLoggedInArtist
-                  )
-                }
-              >
+              <Button disabled={buttonDisabled} type="submit" className="light-button">
                 Save changes
               </Button>
               <Button className="light-border-button" onClick={cancelChanges}>
@@ -200,7 +199,7 @@ const ProfileForm = ({
         </div>
       </div>
       {showError && <ErrorPopup />}
-    </div>
+    </form>
   );
 };
 
