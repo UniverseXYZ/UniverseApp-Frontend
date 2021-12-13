@@ -69,12 +69,16 @@ const ProfileForm = ({
   }
 
   const buttonDisabled =
-    loggedInArtist.name === accountName &&
-    loggedInArtist.universePageAddress === accountPage &&
-    loggedInArtist.about === about &&
-    loggedInArtist.twitterLink === twitterLink &&
-    loggedInArtist.instagramLink === instagramLink &&
-    loggedInArtist.avatar === accountImage;
+    !accountName ||
+    !accountPage ||
+    !about ||
+    !accountImage ||
+    (loggedInArtist.name === accountName &&
+      loggedInArtist.universePageAddress === accountPage &&
+      loggedInArtist.about === about &&
+      loggedInArtist.twitterLink === twitterLink &&
+      loggedInArtist.instagramLink === instagramLink &&
+      loggedInArtist.avatar === accountImage);
 
   return (
     <form
