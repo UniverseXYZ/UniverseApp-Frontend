@@ -7,7 +7,6 @@ import infoIcon from '../../assets/images/icon.svg';
 import cloudIcon from '../../assets/images/ion_cloud.svg';
 import defaultImage from '../../assets/images/default-img.svg';
 import backgroundDef from '../../assets/images/background.svg';
-import backgroundTransparent from '../../assets/images/background1.svg';
 import closeIcon from '../../assets/images/close-menu.svg';
 import { useAuthContext } from '../../contexts/AuthContext.jsx';
 import {
@@ -43,8 +42,6 @@ const MB_IN_BYTES = 1048576;
 const DomainAndBranding = ({
   values,
   onChange,
-  editButtonClick,
-  setEditButtonClick,
   invalidPromoImage,
   invalidBackgroundImage,
   setInvalidPromoImage,
@@ -218,16 +215,12 @@ const DomainAndBranding = ({
             <Input
               type="text"
               placeholder="Enter the auction headline"
-              className={
-                (editButtonClick || !validHeadline) && values.headline.length === 0
-                  ? 'inp error-inp'
-                  : 'inp'
-              }
+              className={!validHeadline && values.headline.length === 0 ? 'inp error-inp' : 'inp'}
               value={values.headline}
               onChange={handleHeadline}
               hoverBoxShadowGradient
             />
-            {(editButtonClick || !validHeadline) && !values.headline && (
+            {!validHeadline && !values.headline && (
               <p className="error__text">&quot;Auction headline&quot; is not allowed to be empty</p>
             )}
           </div>
@@ -235,7 +228,7 @@ const DomainAndBranding = ({
             <h5>Auction link</h5>
             <div
               className={
-                (editButtonClick || !validLink) &&
+                !validLink &&
                 (values.link ===
                   `universe.xyz/${loggedInArtist.universePageAddress
                     .split(' ')[0]
@@ -257,7 +250,7 @@ const DomainAndBranding = ({
                 onChange={(e) => handleLink(e)}
               />
             </div>
-            {(editButtonClick || !validLink) &&
+            {!validLink &&
               (values.link ===
                 `universe.xyz/${loggedInArtist.universePageAddress.split(' ')[0].toLowerCase()}/` ||
                 auctionLink.length === 0) && (
@@ -482,8 +475,6 @@ const DomainAndBranding = ({
 DomainAndBranding.propTypes = {
   values: PropTypes.oneOfType([PropTypes.object]),
   onChange: PropTypes.func.isRequired,
-  editButtonClick: PropTypes.bool,
-  setEditButtonClick: PropTypes.func,
   invalidPromoImage: PropTypes.bool.isRequired,
   invalidBackgroundImage: PropTypes.bool.isRequired,
   setInvalidPromoImage: PropTypes.func.isRequired,
@@ -497,7 +488,5 @@ DomainAndBranding.defaultProps = {
     backgroundImage: '',
     backgroundImageBlur: false,
   },
-  editButtonClick: false,
-  setEditButtonClick: () => {},
 };
 export default DomainAndBranding;

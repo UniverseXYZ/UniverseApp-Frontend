@@ -20,13 +20,13 @@ import {
   editAuction,
   editRewardTierImage,
 } from '../../utils/api/auctions';
-import ErrorPopup from '../../components/popups/ErrorPopup';
 import LoadingPopup from '../../components/popups/LoadingPopup';
 import { validateAuctionData, validateAuctionImages } from './validateData';
 import useProfileForm from '../myAccount/useProfileForm';
 import defaultImage from '../../assets/images/default-img.svg';
 import '../../components/myAccount/profileForm.scss';
 import { validateData } from '../myAccount/validate';
+import { saveProfileInfo } from '../../utils/api/profile';
 
 const SAVE_PREVIEW_ACTION = 'save-preview';
 const PREVIEW_ACTION = 'preview';
@@ -41,7 +41,6 @@ const CustomizeAuction = () => {
     futureAuctions,
     setFutureAuctions,
     editProfileButtonClick,
-    setEditProfileButtonClick,
   } = useAuctionContext();
   const { loggedInArtist, setLoggedInArtist } = useAuthContext();
   const [customizeAuctionState, setCustomizeAuctionState] = useState(false);
@@ -60,7 +59,6 @@ const CustomizeAuction = () => {
         : 'empty',
   });
   const [rewardTiersAuction, setRewardTiersAuction] = useState(auction.rewardTiers);
-  const [editButtonClick, setEditButtonClick] = useState(false);
 
   const [accountImage, setAccountImage] = useState(loggedInArtist.avatar);
   const [successPopup, setSuccessPopup] = useState(false);
@@ -70,11 +68,13 @@ const CustomizeAuction = () => {
   const [invalidTierImageIds, setInvalidTierImageIds] = useState([]);
 
   const { showError, setShowError, setErrorTitle, setErrorBody } = useErrorContext();
-  const { values, handleChange, handleSubmit, errors, setValues } = useProfileForm(validateData);
+  const { values, handleChange, handleSubmit, setValues } = useProfileForm(validateData);
   const { accountName, accountPage, about, twitterLink, instagramLink } = values;
-  console.log(values);
 
   useEffect(() => {
+    if (!auction.id) {
+      history.push('/');
+    }
     setValues({
       avatar: loggedInArtist.avatar,
       accountName: loggedInArtist.name,
@@ -84,6 +84,10 @@ const CustomizeAuction = () => {
       twitterLink: loggedInArtist.twitterLink,
     });
   }, []);
+
+  useEffect(() => {
+    setShowPrompt(true);
+  }, [location.pathname]);
 
   const getProfileImage = useMemo(() => {
     const userUploadImageURL =
@@ -101,32 +105,6 @@ const CustomizeAuction = () => {
     return image;
   }, [accountImage]);
 
-  let genericErrorMessage = false;
-  if (Object.keys(errors).length) {
-    genericErrorMessage = true;
-  }
-
-  const buttonDisabled =
-    loggedInArtist.name === accountName &&
-    loggedInArtist.universePageAddress === accountPage &&
-    loggedInArtist.about === about &&
-    loggedInArtist.twitterLink === twitterLink &&
-    loggedInArtist.instagramLink === instagramLink &&
-    loggedInArtist.avatar === accountImage;
-
-  const cancelChanges = () => history.goBack();
-
-  const disableSaveChanges = () =>
-    !domainAndBranding.headline ||
-    !domainAndBranding.link ||
-    domainAndBranding.status === 'empty' ||
-    !accountImage ||
-    !accountName ||
-    accountPage === 'universe.xyz/' ||
-    accountPage === 'universe.xyz/your-address' ||
-    !accountPage ||
-    !about;
-
   const setContext = (_editedAuction, action) => {
     setFutureAuctions([...futureAuctions, _editedAuction]);
     setMyAuctions(
@@ -139,11 +117,11 @@ const CustomizeAuction = () => {
     }
   };
 
-  const handleStatus = (_errors, editedAuction, action) => {
+  const handleStatus = (errors, editedAuction, action) => {
     setLoading(false);
-    if (_errors.length) {
+    if (errors.length) {
       setErrorTitle('Unexpected error');
-      const erorrMessagesMarkup = _errors.map((error) => {
+      const erorrMessagesMarkup = errors.map((error) => {
         if (error) {
           return <p>{error.message}</p>;
         }
@@ -151,6 +129,14 @@ const CustomizeAuction = () => {
       });
       setErrorBody(erorrMessagesMarkup);
       setShowError(true);
+      setValues({
+        avatar: loggedInArtist.avatar,
+        accountName: loggedInArtist.name,
+        accountPage: loggedInArtist.universePageAddress,
+        about: loggedInArtist.about,
+        instagramLink: loggedInArtist.instagramLink,
+        twitterLink: loggedInArtist.twitterLink,
+      });
     } else {
       setContext(editedAuction, action);
     }
@@ -243,34 +229,31 @@ const CustomizeAuction = () => {
     return updatedAuction;
   };
 
-  const saveOnServer = async (editedAuction, action) => {
+  const saveOnServer = async (editedAuction, loggedInArtistClone, action) => {
     setLoading(true);
-    handleSubmit(
-      setErrorTitle,
-      setErrorBody,
-      setShowError,
-      loggedInArtist,
-      setLoading,
-      setSuccessPopup,
-      setLoggedInArtist
-    );
-    console.log(errors);
+
+    const errors = [];
+
+    const profileResponse = await saveProfileInfo(loggedInArtistClone);
     const newAuctionData = await saveAuction(editedAuction);
     const rewardTierResponses = await saveRewardTiers();
 
-    // eslint-disable-next-line no-underscore-dangle
-    const _errors = [];
     if (rewardTierResponses.length) {
-      rewardTierResponses.forEach((res) => res.error && _errors.push(res));
-      if (!_errors.length) {
+      rewardTierResponses.forEach((res) => res.error && errors.push(res));
+      if (!errors.length) {
         newAuctionData.rewardTiers = rewardTierResponses;
       }
     }
 
     if (newAuctionData.error) {
-      _errors.push(newAuctionData);
+      errors.push(newAuctionData);
     }
-    handleStatus(_errors, newAuctionData, action);
+
+    if (profileResponse.error) {
+      errors.push(profileResponse);
+    }
+
+    handleStatus(errors, newAuctionData, action);
   };
 
   const handleSave = async (action) => {
@@ -279,12 +262,22 @@ const CustomizeAuction = () => {
       ...domainAndBranding,
     };
 
+    const loggedInArtistClone = {
+      ...loggedInArtist,
+      name: accountName,
+      universePageAddress: accountPage,
+      avatar: accountImage,
+      about,
+      instagramLink,
+      twitterLink,
+    };
+
     if (action === SAVE_PREVIEW_ACTION) {
       // saveOnServer(editedAuction, loggedInArtistClone, action);
     } else if (action === PREVIEW_ACTION) {
       // setContext(loggedInArtistClone, editedAuction, action);
     } else {
-      saveOnServer(editedAuction);
+      saveOnServer(editedAuction, loggedInArtistClone, action);
     }
   };
 
@@ -292,11 +285,24 @@ const CustomizeAuction = () => {
 
   const handlePreview = () => handleSave(PREVIEW_ACTION);
 
-  useEffect(() => {
-    setShowPrompt(true);
-  }, [location.pathname]);
+  const invalidAccountImage =
+    (typeof accountImage === 'object' &&
+      accountImage?.type !== 'image/webp' &&
+      accountImage?.type !== 'image/jpeg' &&
+      accountImage?.type !== 'image/png') ||
+    accountImage?.size / 1048576 > 30;
+  const invalidTierDescription =
+    rewardTiersAuction?.length && rewardTiersAuction.find((tier) => !tier.description);
 
-  const disableSave = disableSaveChanges();
+  const disableSave =
+    !domainAndBranding.headline ||
+    !domainAndBranding.link ||
+    invalidAccountImage ||
+    invalidTierDescription ||
+    !accountName ||
+    !accountPage ||
+    !about;
+
   const blurToggleButtonDisabled = !domainAndBranding.backgroundImage;
 
   return (
@@ -327,16 +333,12 @@ const CustomizeAuction = () => {
           setInvalidBackgroundImage={setInvalidBackgroundImage}
           values={domainAndBranding}
           onChange={setDomainAndBranding}
-          editButtonClick={editButtonClick}
-          setEditButtonClick={setEditButtonClick}
         />
         <RewardTiersAuction
           invalidImageIds={invalidTierImageIds}
           setInvalidImageIds={setInvalidTierImageIds}
           values={rewardTiersAuction}
           onChange={setRewardTiersAuction}
-          editButtonClick={editButtonClick}
-          setEditButtonClick={setEditButtonClick}
         />
         <ProfileForm
           setShowCongrats={setSuccessPopup}
@@ -345,8 +347,6 @@ const CustomizeAuction = () => {
           setAccountImage={setAccountImage}
           handleChange={handleChange}
           handleSubmit={handleSubmit}
-          errors={errors}
-          cancelChanges={cancelChanges}
           editProfileButtonClick={editProfileButtonClick}
           loggedInArtist={loggedInArtist}
           showError={showError}
@@ -355,12 +355,13 @@ const CustomizeAuction = () => {
           setErrorBody={setErrorBody}
           getProfileImage={getProfileImage}
           setLoggedInArtist={setLoggedInArtist}
-          buttonDisabled={buttonDisabled}
           accountName={accountName}
           accountPage={accountPage}
           about={about}
           twitterLink={twitterLink}
           instagramLink={instagramLink}
+          customizeAuction
+          invalidAccountImage={invalidAccountImage}
         />
         <div className="customize__auction__warning">
           <img src={warningIcon} alt="Warning" />
@@ -373,7 +374,7 @@ const CustomizeAuction = () => {
           <div className="customize__auction__error">
             <img alt="Error" src={errorIcon} />
             <p>
-              Something went wrong. Please fix the _errors in the field above and try again. The
+              Something went wrong. Please fix the errors in the field above and try again. The
               buttons will be enabled after information has been entered into the fields.
             </p>
           </div>
@@ -391,7 +392,6 @@ const CustomizeAuction = () => {
           </Button>
         </div>
       </div>
-      {/* {showError && <ErrorPopup />} */}
       <Popup open={successPopup} closeOnDocumentClick={false}>
         <CongratsLandingPagePopup onClose={() => setSuccessPopup(false)} />
       </Popup>

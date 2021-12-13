@@ -1,5 +1,4 @@
 /* eslint-disable react/prop-types */
-/* eslint-disable no-shadow */
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import Button from '../button/Button.jsx';
@@ -17,13 +16,7 @@ const TIER_IMAGE_DIMENSIONS = {
 
 const TIER_IMAGE_MAX_SIZE_MB = 3;
 const MB_IN_BYTES = 1000000;
-const RewardTiersAuction = ({
-  values,
-  onChange,
-  editButtonClick,
-  invalidImageIds,
-  setInvalidImageIds,
-}) => {
+const RewardTiersAuction = ({ values, onChange, invalidImageIds, setInvalidImageIds }) => {
   const { auction, bidtype } = useAuctionContext();
   const arrLength = auction.rewardTiers.length;
   const [elRefs, setElRefs] = useState([]);
@@ -166,15 +159,12 @@ const RewardTiersAuction = ({
                     </p>
                   </div>
                   <textarea
-                    className={editButtonClick && !description ? 'inp error-inp' : 'inp'}
+                    className={!description ? 'inp error-inp' : 'inp'}
                     placeholder="Enter the description"
-                    // eslint-disable-next-line react/prop-types
                     value={values[i].description}
                     onChange={(event) => handleDescriptionChange(event, tier.id)}
                   />
-                  {editButtonClick && !description && (
-                    <p className="error__text">Fill out the description</p>
-                  )}
+                  {!description && <p className="error__text">Fill out the description</p>}
                   {values[i].description?.length >= 600 && (
                     <p className="warning-text">You have reached the max amount of symbols</p>
                   )}
@@ -238,12 +228,10 @@ RewardTiersAuction.propTypes = {
     tierImg: PropTypes.oneOfType([PropTypes.any]),
   }),
   onChange: PropTypes.func.isRequired,
-  editButtonClick: PropTypes.bool,
 };
 
 RewardTiersAuction.defaultProps = {
   values: [],
-  editButtonClick: false,
 };
 
 export default RewardTiersAuction;
