@@ -1,9 +1,9 @@
 import React from 'react';
 import { Container } from '@chakra-ui/react';
 
-export interface IMarketplaceBrowseNFTsProps {}
+export interface IBrowseNFTsPageProps {}
 
-export const MarketplaceBrowseNFTs = (props: IMarketplaceBrowseNFTsProps) => (
+export const BrowseNFTsPage = (props: IBrowseNFTsPageProps) => (
   <>
     <Container>
       <h1>IMarketplaceBrowseNFTsProps</h1>

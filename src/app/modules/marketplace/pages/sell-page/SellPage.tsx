@@ -18,7 +18,7 @@ import { SelectAmountTab, SelectMethodType, SettingsTab, SummaryTab, TabPanel } 
 import { SellAmountType, SellMethod, SellPageTabs } from './enums';
 import { IMarketplaceSellContextData, ISellForm } from './types';
 
-export const MarketplaceSell = () => {
+export const SellPage = () => {
   const { setDarkMode } = useThemeContext() as any;
   const [activeTab, setActiveTab] = useState<SellPageTabs>(SellPageTabs.SELL_AMOUNT);
   const [amountType, setAmountType] = useState<SellAmountType>();
