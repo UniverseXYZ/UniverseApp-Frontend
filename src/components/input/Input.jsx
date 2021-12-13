@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import uuid from 'react-uuid';
 import './Inputs.scss';
 
-const Input = ({ label, error, className, hoverBoxShadowGradient, ...restProps }) => {
+const Input = ({ label, error, className, hoverBoxShadowGradient, name, ...restProps }) => {
   const [focusField, setFocusField] = useState('');
   return (
     <div className={`intup-l ${focusField}`}>
@@ -15,6 +15,7 @@ const Input = ({ label, error, className, hoverBoxShadowGradient, ...restProps }
       <div className={error && 'error-div-inp'}>
         <input
           id={uuid()}
+          name={name}
           className={`${className}
           ${error ? 'error-inp' : 'inp'}`}
           onFocus={hoverBoxShadowGradient ? () => setFocusField('input--focus--field') : undefined}
@@ -33,6 +34,7 @@ Input.propTypes = {
   error: PropTypes.oneOfType([PropTypes.any]),
   className: PropTypes.oneOfType([PropTypes.any]),
   hoverBoxShadowGradient: PropTypes.bool,
+  name: PropTypes.string,
 };
 
 Input.defaultProps = {
@@ -40,6 +42,7 @@ Input.defaultProps = {
   error: '',
   className: '',
   hoverBoxShadowGradient: false,
+  name: '',
 };
 
 export default Input;

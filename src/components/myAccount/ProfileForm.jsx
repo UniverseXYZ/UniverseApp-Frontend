@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import React, { useRef, useState, useEffect, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import Social from './Social';
@@ -8,92 +9,43 @@ import infoIcon from '../../assets/images/icon.svg';
 import warningIcon from '../../assets/images/Exclamation.svg';
 import errorIcon from '../../assets/images/red-msg.svg';
 import { useAuthContext } from '../../contexts/AuthContext';
-
-const MAX_FIELD_CHARS_LENGTH = {
-  name: 100,
-  pageAddress: 50,
-  bio: 400,
-  instagram: 100,
-  twitter: 100,
-};
+import { MAX_FIELD_CHARS_LENGTH } from '../../containers/myAccount/useProfileForm';
+import { useErrorContext } from '../../contexts/ErrorContext';
+import ErrorPopup from '../popups/ErrorPopup';
 
 const ProfileForm = ({
-  accountName,
-  setAccountName,
-  accountPage,
-  setAccountPage,
   accountImage,
   setAccountImage,
   editProfileButtonClick,
-  about,
-  setAbout,
-  twitterLink,
-  setTwitterLink,
-  instagramLink,
-  setInstagramLink,
   saveChanges,
   cancelChanges,
-  fetchedUserData,
+  values,
+  handleChange,
+  handleSubmit,
+  errors,
+  setValues,
+  setShowCongrats,
+  setShowLoading,
 }) => {
-  const disabled =
-    fetchedUserData.accountName === accountName &&
-    fetchedUserData.accountPage === accountPage &&
-    fetchedUserData.about === about &&
-    fetchedUserData.twitterLink === twitterLink &&
-    fetchedUserData.instagramLink === instagramLink &&
-    fetchedUserData.accountImage === accountImage;
-
-  const hasError = [accountName, accountPage, about].some((e) => !e);
-
-  const { loggedInArtist } = useAuthContext();
+  const { loggedInArtist, setLoggedInArtist } = useAuthContext();
   const [hideIcon, setHideIcon] = useState(false);
-  const [inputName, setInputName] = useState('inp empty');
   const accountInput = useRef(null);
-  const [errors, setErrors] = useState({
-    previewImage: '',
-  });
-  const [accountNameExists, setAccountNameExist] = useState(false);
-  const [accountPageExists, setAccountPageExist] = useState(false);
+  // const [accountNameExists, setAccountNameExist] = useState(false);
+  // const [accountPageExists, setAccountPageExist] = useState(false);
+  const { showError, setShowError, setErrorTitle, setErrorBody } = useErrorContext();
 
-  const validateFile = (file) => {
-    if (!file) {
-      setErrors({
-        previewImage: 'File format must be PNG, WEBP, JPEG (Max Size: 30mb)',
-      });
-    } else if (
-      (file.type === 'image/webp' || file.type === 'image/jpeg' || file.type === 'image/png') &&
-      file.size / 1048576 < 30
-    ) {
-      setAccountImage(file);
-      setErrors({ ...errors, previewImage: '' });
-    } else {
-      setErrors({
-        previewImage: 'File format must be PNG, WEBP, JPEG (Max Size: 30mb)',
-      });
-    }
-  };
-
-  const handleOnFocus = () => {
-    if (!loggedInArtist.universePageAddress && accountPage === 'universe.xyz/your-address') {
-      setAccountPage('universe.xyz/');
-      setInputName('inp');
-    }
-  };
-
-  const handleOnBlur = () => {
-    if (!loggedInArtist.universePageAddress && accountPage === 'universe.xyz/') {
-      setAccountPage('universe.xyz/your-address');
-      setInputName('inp empty');
-    }
-  };
+  const { accountName, accountPage, about, twitterLink, instagramLink } = values;
 
   useEffect(() => {
-    if (loggedInArtist.universePageAddress) {
-      setInputName('inp');
-    } else {
-      setInputName('inp empty');
-    }
-  }, [loggedInArtist]);
+    setValues({
+      avatar: loggedInArtist.avatar,
+      accountName: loggedInArtist.name,
+      accountPage: loggedInArtist.universePageAddress,
+      about: loggedInArtist.about,
+      instagramLink: loggedInArtist.instagramLink,
+      twitterLink: loggedInArtist.twitterLink,
+    });
+  }, []);
 
   const getProfileImage = useMemo(() => {
     const userUploadImageURL =
@@ -108,18 +60,44 @@ const ProfileForm = ({
     } else {
       image = defaultImage;
     }
-
     return image;
   }, [accountImage]);
 
+  let genericErrorMessage = false;
+  if (Object.keys(errors).length) {
+    genericErrorMessage = true;
+  }
+
+  const buttonDisabled =
+    loggedInArtist.name === accountName &&
+    loggedInArtist.universePageAddress === accountPage &&
+    loggedInArtist.about === about &&
+    loggedInArtist.twitterLink === twitterLink &&
+    loggedInArtist.instagramLink === instagramLink &&
+    loggedInArtist.avatar === accountImage;
+
   return (
-    <div className="account-grid-container container">
+    <form
+      onSubmit={(event) =>
+        handleSubmit(
+          event,
+          setErrorTitle,
+          setErrorBody,
+          setShowError,
+          loggedInArtist,
+          setShowLoading,
+          setShowCongrats,
+          setLoggedInArtist
+        )
+      }
+      className="account-grid-container container"
+    >
       <div className="account-grid-name1">
         <div className="account-picture">
           <div
-            className={
-              !accountImage && editProfileButtonClick ? 'account-image error-img' : 'account-image'
-            }
+            className={`${
+              !accountImage && editProfileButtonClick ? 'error-img' : ''
+            } account-image`}
           >
             <img
               className={getProfileImage === defaultImage ? 'default-img' : 'account-img'}
@@ -129,7 +107,7 @@ const ProfileForm = ({
           </div>
           <div className="account-picture-editing">
             <p>We recomend an image of at least 400x400.</p>
-            {errors.previewImage && <p style={{ color: '#ff4949' }}>{errors.previewImage}</p>}
+            {errors.avatar && <p className="error__text">{errors.avatar}</p>}
             <Button className="light-border-button" onClick={() => accountInput.current.click()}>
               Choose file
             </Button>
@@ -137,7 +115,8 @@ const ProfileForm = ({
               type="file"
               className="inp-disable"
               ref={accountInput}
-              onChange={(e) => validateFile(e.target.files[0])}
+              name="avatar"
+              onChange={(e) => handleChange(e, setAccountImage)}
             />
           </div>
         </div>
@@ -153,26 +132,19 @@ const ProfileForm = ({
           <h5>
             <span>Display name</span>
             <p className="input-max-chars">
-              {accountName.length}/{MAX_FIELD_CHARS_LENGTH.name}
+              {accountName?.length}/{MAX_FIELD_CHARS_LENGTH.name}
             </p>
           </h5>
           <Input
             placeholder="Enter your display name"
-            className={
-              (!accountName || accountNameExists) && editProfileButtonClick ? 'error-inp' : 'inp'
-            }
+            className="inp"
+            name="accountName"
             value={accountName}
-            hoverBoxShadowGradient={!(!accountName && editProfileButtonClick)}
-            onChange={(e) => {
-              if (e.target.value.length > MAX_FIELD_CHARS_LENGTH.name) return;
-              setAccountName(e.target.value);
-            }}
+            onChange={handleChange}
           />
 
-          {!accountName && editProfileButtonClick && (
-            <p className="error__text">&quot;Display name&quot; is not allowed to be empty</p>
-          )}
-          {accountNameExists && <p className="error__text">Sorry this user name is taken</p>}
+          {errors.accountName && <p className="error__text">{errors.accountName}</p>}
+          {/* {accountNameExists && <p className="error__text">Sorry this user name is taken</p>} */}
           <h5 onMouseEnter={() => setHideIcon(true)} onMouseLeave={() => setHideIcon(false)}>
             <span>
               Universe page address
@@ -189,68 +161,41 @@ const ProfileForm = ({
               </div>
             </span>
             <p className="input-max-chars">
-              {accountPage.length}/{MAX_FIELD_CHARS_LENGTH.pageAddress}
+              {accountPage?.length}/{MAX_FIELD_CHARS_LENGTH.pageAddress}
             </p>
           </h5>
           <div className="account-grid-address">
             <Input
-              placeholder="Enter your universe page address"
-              className={
-                (accountPage === 'universe.xyz/' ||
-                  accountPage === 'universe.xyz/your-address' ||
-                  accountPageExists) &&
-                editProfileButtonClick
-                  ? `${inputName} error-inp`
-                  : inputName
-              }
-              value={accountPage}
-              onChange={(e) => {
-                if (e.target.value.length > MAX_FIELD_CHARS_LENGTH.pageAddress) return;
-                if (e.target.value.startsWith('universe.xyz/')) {
-                  setAccountPage(e.target.value.replace(' ', '-'));
-                }
-              }}
-              onFocus={handleOnFocus}
-              onBlur={handleOnBlur}
-              hoverBoxShadowGradient={!(!accountName && editProfileButtonClick)}
+              placeholder="your-address"
+              className="inp"
+              pageLink
+              name="accountPage"
+              value={`${accountPage}`}
+              onChange={handleChange}
             />
-            {(accountPage === 'universe.xyz/' ||
-              accountPage === 'universe.xyz/your-address' ||
-              accountPageExists) &&
-              editProfileButtonClick && (
-                <p className="error__text">
-                  &quot;Universe page address&quot; is not allowed to be empty
-                </p>
-              )}
-            {accountPageExists && <p className="error__text">Sorry, this page address is taken</p>}
-            {(accountPage === 'universe.xyz/' || accountPage === 'universe.xyz/your-address') &&
-            editProfileButtonClick ? null : (
-              <div className="box--shadow--effect--block" />
-            )}
+            <span className="page-address-placeholder">universe.xyz/</span>
+            {errors.accountPage && <p className="error__text">{errors.accountPage}</p>}
+            {/* {accountPageExists && <p className="error__text">Sorry, this page address is taken</p>} */}
           </div>
 
           <div className="account-grid-about-editing">
             <h5>
               <span>Your bio</span>
               <p className="input-max-chars">
-                {about.length}/{MAX_FIELD_CHARS_LENGTH.bio}
+                {about?.length}/{MAX_FIELD_CHARS_LENGTH.bio}
               </p>
             </h5>
             <textarea
               placeholder="Please write a few lines about yourself"
-              className={!about && editProfileButtonClick ? 'error-inp' : 'inp'}
+              className="inp"
+              name="about"
               value={about}
-              onChange={(e) => {
-                if (e.target.value.length > MAX_FIELD_CHARS_LENGTH.bio) return;
-                setAbout(e.target.value);
-              }}
+              onChange={handleChange}
             />
             {!about && editProfileButtonClick ? null : (
               <div className="box--shadow--effect--block" />
             )}
-            {!about && editProfileButtonClick && (
-              <p className="error__text">&quot;Your bio&quot; is not allowed to be empty</p>
-            )}
+            {errors.about && <p className="error__text">{errors.about}</p>}
           </div>
 
           <div className="display-warning">
@@ -262,28 +207,22 @@ const ProfileForm = ({
           </div>
           <Social
             twitterLink={twitterLink}
-            setTwitterLink={setTwitterLink}
             instagramLink={instagramLink}
-            setInstagramLink={setInstagramLink}
+            handleChange={handleChange}
             saveChanges={saveChanges}
             cancelChanges={cancelChanges}
           />
-          {editProfileButtonClick &&
-            (!accountImage ||
-              !accountName ||
-              accountPage === 'universe.xyz/' ||
-              accountPage === 'universe.xyz/your-address' ||
-              !about) && (
-              <div className="display__error">
-                <img alt="Error" src={errorIcon} />
-                <p>
-                  Something went wrong. Please fix the errors in the field above and try again. The
-                  buttons will be enabled after information has been entered into the fields.
-                </p>
-              </div>
-            )}
+          {genericErrorMessage && (
+            <div className="display__error">
+              <img alt="Error" src={errorIcon} />
+              <p>
+                Something went wrong. Please fix the errors in the field above and try again. The
+                buttons will be enabled after information has been entered into the fields.
+              </p>
+            </div>
+          )}
           <div className="account-display-buttons">
-            <Button className="light-button" disabled={disabled || hasError} onClick={saveChanges}>
+            <Button disabled={buttonDisabled} type="submit" className="light-button">
               Save changes
             </Button>
             <Button className="light-border-button" onClick={cancelChanges}>
@@ -292,46 +231,35 @@ const ProfileForm = ({
           </div>
         </div>
       </div>
-    </div>
+      {showError && <ErrorPopup />}
+    </form>
   );
 };
 
 ProfileForm.propTypes = {
   accountName: PropTypes.string,
-  setAccountName: PropTypes.func,
   accountPage: PropTypes.string,
-  setAccountPage: PropTypes.func,
   accountImage: PropTypes.oneOfType([PropTypes.any]),
   setAccountImage: PropTypes.func,
   editProfileButtonClick: PropTypes.bool,
   about: PropTypes.string,
-  setAbout: PropTypes.func,
   twitterLink: PropTypes.string,
-  setTwitterLink: PropTypes.func,
   instagramLink: PropTypes.string,
-  setInstagramLink: PropTypes.func,
   saveChanges: PropTypes.func,
   cancelChanges: PropTypes.func,
-  fetchedUserData: PropTypes.oneOfType([PropTypes.object]),
 };
 
 ProfileForm.defaultProps = {
   accountName: '',
-  setAccountName: () => {},
   accountPage: '',
-  setAccountPage: () => {},
   accountImage: null,
   setAccountImage: () => {},
   about: '',
-  setAbout: () => {},
   editProfileButtonClick: false,
   twitterLink: '',
-  setTwitterLink: () => {},
   instagramLink: '',
-  setInstagramLink: () => {},
   saveChanges: () => {},
   cancelChanges: () => {},
-  fetchedUserData: {},
 };
 
 export default ProfileForm;

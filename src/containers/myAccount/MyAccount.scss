@@ -445,6 +445,9 @@
               opacity: 0.2;
             }
           }
+          .inp {
+            padding-left: 111px
+          } 
         }
         .account-grid-about-editing {
           position: relative;
@@ -551,6 +554,13 @@
           @include lg {
             max-width: 100%;
           }
+        }
+        .page-address-placeholder {
+          font-family: "Space Grotesk", sans-serif;
+          position: absolute;
+          z-index: 100;
+          left: 10px;
+          top: 15px;
         }
         @include lg {
           width: 100%;

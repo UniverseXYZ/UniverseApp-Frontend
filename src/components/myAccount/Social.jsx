@@ -3,22 +3,9 @@ import PropTypes from 'prop-types';
 import instagramLogo from '../../assets/images/instagram-outlined.svg';
 import twitterLogo from '../../assets/images/icons_twitter.svg';
 import Input from '../input/Input.jsx';
+import { MAX_FIELD_CHARS_LENGTH } from '../../containers/myAccount/useProfileForm';
 
-const MAX_FIELD_CHARS_LENGTH = {
-  instagram: 100,
-  twitter: 100,
-};
-
-const Social = ({
-  showSocial,
-  setShowSocial,
-  twitterLink,
-  setTwitterLink,
-  instagramLink,
-  setInstagramLink,
-  saveChanges,
-  cancelChanges,
-}) => (
+const Social = ({ twitterLink, instagramLink, handleChange }) => (
   <div className="account-grid-social">
     <div className="account-grid-social-editing">
       <h3>
@@ -36,11 +23,9 @@ const Social = ({
           placeholder="Instagram handle"
           className="inp"
           hoverBoxShadowGradient
+          name="instagramLink"
           value={instagramLink}
-          onChange={(e) => {
-            if (e.target.value.length > MAX_FIELD_CHARS_LENGTH.instagram) return;
-            setInstagramLink(e.target.value);
-          }}
+          onChange={handleChange}
         />
       </div>
       <div className="twitter">
@@ -54,12 +39,10 @@ const Social = ({
         <Input
           placeholder="Twitter handle"
           className="inp"
+          name="twitterLink"
           hoverBoxShadowGradient
           value={twitterLink}
-          onChange={(e) => {
-            if (e.target.value.length > MAX_FIELD_CHARS_LENGTH.twitter) return;
-            setTwitterLink(e.target.value);
-          }}
+          onChange={handleChange}
         />
       </div>
     </div>
@@ -68,24 +51,13 @@ const Social = ({
 
 Social.propTypes = {
   twitterLink: PropTypes.string,
-  setTwitterLink: PropTypes.func,
   instagramLink: PropTypes.string,
-  setInstagramLink: PropTypes.func,
-  showSocial: PropTypes.bool,
-  setShowSocial: PropTypes.func,
-  saveChanges: PropTypes.func,
-  cancelChanges: PropTypes.func,
+  handleChange: PropTypes.func.isRequired,
 };
 
 Social.defaultProps = {
   twitterLink: '',
-  setTwitterLink: () => {},
   instagramLink: '',
-  setInstagramLink: () => {},
-  showSocial: null,
-  setShowSocial: () => {},
-  saveChanges: () => {},
-  cancelChanges: () => {},
 };
 
 export default Social;
