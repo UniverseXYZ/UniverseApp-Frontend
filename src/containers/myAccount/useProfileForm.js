@@ -120,10 +120,10 @@ const useProfileForm = (validate) => {
 
     // send request to  /upload-profile-image only if image is in the correct format and size
     const canSetProfileImage =
-      (avatar.type === 'image/webp' ||
-        avatar.type === 'image/jpeg' ||
-        avatar.type === 'image/png') &&
-      avatar.size / 1048576 < 30;
+      (avatar?.type === 'image/webp' ||
+        avatar?.type === 'image/jpeg' ||
+        avatar?.type === 'image/png') &&
+      avatar?.size / 1048576 < 30;
 
     // set loading to false and stop further execution if any of the required values are not set
     if (!accountName || !accountPage || !about || !avatar) {
