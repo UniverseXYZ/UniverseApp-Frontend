@@ -15,7 +15,6 @@ import ErrorPopup from '../popups/ErrorPopup';
 const ProfileForm = ({
   setShowCongrats,
   setShowLoading,
-  accountImage,
   setAccountImage,
   accountName,
   accountPage,
@@ -26,7 +25,6 @@ const ProfileForm = ({
   handleSubmit,
   errors,
   cancelChanges,
-  editProfileButtonClick,
   loggedInArtist,
   showError,
   setShowError,
@@ -36,7 +34,8 @@ const ProfileForm = ({
   setLoggedInArtist,
   buttonDisabled,
   genericErrorMessage,
-  myAccountPage,
+  customizeAuction,
+  invalidAccountImage,
 }) => {
   const [hideIcon, setHideIcon] = useState(false);
   const accountInput = useRef(null);
@@ -45,11 +44,7 @@ const ProfileForm = ({
     <div className="account-grid-container container">
       <div className="account-grid-name1">
         <div className="account-picture">
-          <div
-            className={`${
-              !accountImage && editProfileButtonClick ? 'error-img' : ''
-            } account-image`}
-          >
+          <div className={`${errors?.avatar ? 'error-img' : ''} account-image`}>
             <img
               className={getProfileImage === defaultImage ? 'default-img' : 'account-img'}
               src={getProfileImage}
@@ -58,7 +53,10 @@ const ProfileForm = ({
           </div>
           <div className="account-picture-editing">
             <p>We recomend an image of at least 400x400.</p>
-            {errors.avatar && <p className="error__text">{errors.avatar}</p>}
+            {customizeAuction && invalidAccountImage && (
+              <p className="error__text">File format must be PNG, WEBP, JPEG (Max Size: 30mb)</p>
+            )}
+            {errors?.avatar && <p className="error__text">{errors.avatar}</p>}
             <Button className="light-border-button" onClick={() => accountInput.current.click()}>
               Choose file
             </Button>
@@ -93,9 +91,10 @@ const ProfileForm = ({
             value={accountName}
             onChange={handleChange}
           />
-
-          {errors.accountName && <p className="error__text">{errors.accountName}</p>}
-          {/* {accountNameExists && <p className="error__text">Sorry this user name is taken</p>} */}
+          {customizeAuction && !accountName && (
+            <p className="error__text">Display name is not allowed to be empty</p>
+          )}
+          {errors?.accountName && <p className="error__text">{errors.accountName}</p>}
           <h5 onMouseEnter={() => setHideIcon(true)} onMouseLeave={() => setHideIcon(false)}>
             <span>
               Universe page address
@@ -125,8 +124,10 @@ const ProfileForm = ({
               onChange={handleChange}
             />
             <span className="page-address-placeholder">universe.xyz/</span>
-            {errors.accountPage && <p className="error__text">{errors.accountPage}</p>}
-            {/* {accountPageExists && <p className="error__text">Sorry, this page address is taken</p>} */}
+            {customizeAuction && !accountPage && (
+              <p className="error__text">Universe page address is not allowed to be empty</p>
+            )}
+            {errors?.accountPage && <p className="error__text">{errors.accountPage}</p>}
           </div>
 
           <div className="account-grid-about-editing">
@@ -143,10 +144,10 @@ const ProfileForm = ({
               value={about}
               onChange={handleChange}
             />
-            {!about && editProfileButtonClick ? null : (
-              <div className="box--shadow--effect--block" />
+            {customizeAuction && !about && (
+              <p className="error__text">Your bio is not allowed to be empty</p>
             )}
-            {errors.about && <p className="error__text">{errors.about}</p>}
+            {errors?.about && <p className="error__text">{errors.about}</p>}
           </div>
 
           <div className="display-warning">
@@ -171,7 +172,7 @@ const ProfileForm = ({
               </p>
             </div>
           )}
-          {myAccountPage && (
+          {!customizeAuction && (
             <div className="account-display-buttons">
               <Button
                 disabled={buttonDisabled}
@@ -206,21 +207,16 @@ const ProfileForm = ({
 ProfileForm.propTypes = {
   accountName: PropTypes.string,
   accountPage: PropTypes.string,
-  accountImage: PropTypes.oneOfType([PropTypes.any]),
   setAccountImage: PropTypes.func,
-  editProfileButtonClick: PropTypes.bool,
   about: PropTypes.string,
-
   cancelChanges: PropTypes.func,
 };
 
 ProfileForm.defaultProps = {
   accountName: '',
   accountPage: '',
-  accountImage: null,
   setAccountImage: () => {},
   about: '',
-  editProfileButtonClick: false,
   cancelChanges: () => {},
 };
 

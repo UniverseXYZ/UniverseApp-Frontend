@@ -8,7 +8,6 @@ import CongratsProfilePopup from '../../components/popups/CongratsProfilePopup.j
 import LoadingPopup from '../../components/popups/LoadingPopup.jsx';
 import { useThemeContext } from '../../contexts/ThemeContext.jsx';
 import { useAuthContext } from '../../contexts/AuthContext.jsx';
-import { useAuctionContext } from '../../contexts/AuctionContext.jsx';
 import { useErrorContext } from '../../contexts/ErrorContext';
 import useProfileForm from './useProfileForm';
 import defaultImage from '../../assets/images/default-img.svg';
@@ -16,7 +15,6 @@ import { validateData } from './validate';
 
 const MyAccount = () => {
   const { isWalletConnected, loggedInArtist, setLoggedInArtist } = useAuthContext();
-  const { editProfileButtonClick } = useAuctionContext();
   const { setDarkMode } = useThemeContext();
 
   const history = useHistory();
@@ -39,7 +37,6 @@ const MyAccount = () => {
   const { showError, setShowError, setErrorTitle, setErrorBody } = useErrorContext();
 
   const { accountName, accountPage, about, twitterLink, instagramLink } = values;
-  console.log(values);
 
   useEffect(() => {
     setValues({
@@ -69,11 +66,6 @@ const MyAccount = () => {
     return image;
   }, [accountImage]);
 
-  let genericErrorMessage = false;
-  if (Object.keys(errors).length) {
-    genericErrorMessage = true;
-  }
-
   const buttonDisabled =
     loggedInArtist.name === accountName &&
     loggedInArtist.universePageAddress === accountPage &&
@@ -96,7 +88,6 @@ const MyAccount = () => {
         handleSubmit={handleSubmit}
         errors={errors}
         cancelChanges={cancelChanges}
-        editProfileButtonClick={editProfileButtonClick}
         loggedInArtist={loggedInArtist}
         showError={showError}
         setShowError={setShowError}
@@ -110,7 +101,6 @@ const MyAccount = () => {
         about={about}
         twitterLink={twitterLink}
         instagramLink={instagramLink}
-        myAccountPage
       />
       <Popup closeOnDocumentClick={false} open={showCongrats}>
         <CongratsProfilePopup onClose={() => setShowCongrats(false)} />

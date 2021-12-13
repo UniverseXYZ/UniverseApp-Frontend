@@ -64,7 +64,6 @@ const useProfileForm = (validate) => {
 
   /**
    *
-   * @param {*} e
    * @param {*} setErrorTitle
    * @param {*} setErrorBody
    * @param {*} setShowError
@@ -75,7 +74,6 @@ const useProfileForm = (validate) => {
    * @returns
    */
   const handleSubmit = async (
-    // e,
     setErrorTitle,
     setErrorBody,
     setShowError,
@@ -84,7 +82,6 @@ const useProfileForm = (validate) => {
     setShowCongrats,
     setLoggedInArtist
   ) => {
-    // e.preventDefault();
     setErrors(validate(values));
     setShowLoading(true);
 
@@ -144,7 +141,8 @@ const useProfileForm = (validate) => {
           setErrorBody(response.message);
           setShowError(true);
           setShowLoading(false);
-          return;
+          // eslint-disable-next-line consistent-return
+          return response;
         }
         if (response.ok) {
           setShowLoading(false);
@@ -164,7 +162,8 @@ const useProfileForm = (validate) => {
           setErrorBody(response.message);
           setShowError(true);
           setShowLoading(false);
-          return;
+          // eslint-disable-next-line consistent-return
+          return response;
         }
         if (response.profileImageUrl) {
           artistData.avatar = response.profileImageUrl;
