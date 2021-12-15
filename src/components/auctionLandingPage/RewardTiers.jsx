@@ -4,6 +4,8 @@ import Popup from 'reactjs-popup';
 import videoIcon from '../../assets/images/video-icon.svg';
 import PreviewNFTsPopup from '../popups/PreviewNFTsPopup.jsx';
 
+const numberOfCards = 3;
+
 const RewardTiers = ({ auction }) => {
   let counter = 0;
 
@@ -22,7 +24,7 @@ const RewardTiers = ({ auction }) => {
             const startPlace = counter + 1;
             counter += tier.numberOfWinners;
             const endPlace = counter;
-            tier.nfts = tier.nfts.filter(
+            const filteredNfts = tier.nfts.filter(
               (value, index, nfts) =>
                 index === nfts.findIndex((nft) => nft.editionUUID === value.editionUUID)
             );
@@ -35,8 +37,9 @@ const RewardTiers = ({ auction }) => {
                         <img src={tier.imageUrl} alt={tier.name} />
                       </div>
                     ) : (
-                      tier.nfts.map((nft, index) => {
-                        if (index < 3) {
+                      filteredNfts.map((nft, index) => {
+                        if (index < numberOfCards) {
+                          const nftsAreMoreThanNumOfCards = filteredNfts.length > numberOfCards;
                           return (
                             <div key={`${nft.id}-nft-image`}>
                               <div className="nft__image">
@@ -61,9 +64,9 @@ const RewardTiers = ({ auction }) => {
                                     <img src={nft.thumbnail_url} alt={nft.name} />
                                   </>
                                 )}
-                                {tier.nfts.length > 3 && index === 2 && (
+                                {nftsAreMoreThanNumOfCards && index === 2 && (
                                   <span className="show__more">{`+${
-                                    tier.nfts.length - 3
+                                    filteredNfts.length - numberOfCards
                                   } more`}</span>
                                 )}
                               </div>
