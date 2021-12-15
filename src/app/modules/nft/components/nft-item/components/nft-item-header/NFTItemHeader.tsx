@@ -1,27 +1,24 @@
-import { Box, BoxProps, Flex } from '@chakra-ui/react';
+import { Flex, FlexProps } from '@chakra-ui/react';
 import React from 'react';
 
-import { NFTItemBindings } from '../nft-item-bindings';
-import { NFTItemStorybookLabel, NFTItemBundleLabel } from '../nft-item-type-labels';
-import { NFTLike } from '../nft-like';
-
-import { INft } from '../../../../types';
-
-interface INFTItemHeaderProps {
-  nft: INft;
-  wrapperProps?: BoxProps;
+interface IStyles {
+  wrapper: FlexProps;
 }
 
-export const NFTItemHeader = ({ nft, wrapperProps }: INFTItemHeaderProps) => {
-  return (
-    <Box display={'flex'} alignItems={'center'} justifyContent={'space-between'} fontSize={'12px'} {...wrapperProps}>
-      <NFTItemBindings creator={nft.creator} collection={nft.collection} owner={nft.owner} />
+const styles: IStyles = {
+  wrapper: {
+    alignItems: 'center',
+    bg: 'radial-gradient(289.96% 2371.58% at 0% 50%, rgba(225, 246, 100, 0.1) 0%, rgba(254, 176, 254, 0.1) 49.34%, rgba(171, 179, 252, 0.1) 100%)',
+    fontSize: '12px',
+    justifyContent: 'space-between',
+    padding: '14px',
+  }
+};
 
-      <Flex>
-        {nft.tokenIds?.length > 1 && (<NFTItemBundleLabel count={nft.tokenIds.length ?? 0} />)}
-        {nft.assets?.length && (<NFTItemStorybookLabel count={nft.assets.length ?? 0} />)}
-        <NFTLike likes={nft.likes} isLiked={nft.isLiked} />
-      </Flex>
-    </Box>
+interface INFTItemHeaderProps extends FlexProps {}
+
+export const NFTItemHeader = (props: INFTItemHeaderProps) => {
+  return (
+    <Flex {...styles.wrapper} {...props} />
   );
 };

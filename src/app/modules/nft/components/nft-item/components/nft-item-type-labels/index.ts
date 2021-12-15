@@ -1,3 +1,3 @@
 export * from './NFTItemBundleLabel';
-export * from './NFTItemStorybookLabel';
+export * from './NFTItemCompositionLabel';
 export * from './NFTItemTypeLabel';

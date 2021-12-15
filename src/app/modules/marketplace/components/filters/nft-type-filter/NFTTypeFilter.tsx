@@ -1,6 +1,6 @@
 import { Box, Checkbox, Image, SimpleGrid, Text } from '@chakra-ui/react';
 import { useFormik } from 'formik';
-import React, { useCallback } from 'react';
+import React  from 'react';
 
 import { Dropdown, DropdownFilterContainer } from '../../../../../components';
 import nftTypeIcon from '../../../../../../assets/images/select-type-icon.svg';

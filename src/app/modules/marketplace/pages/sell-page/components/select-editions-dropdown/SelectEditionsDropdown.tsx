@@ -5,13 +5,29 @@ import { INft } from '../../../../../nft/types';
 import { Dropdown, Checkbox } from '../../../../../../components';
 
 interface IStyles {
-  checkbox: CheckboxProps;
   button: ButtonProps;
+  checkbox: CheckboxProps;
   container: BoxProps;
   title: TextProps;
 }
 
 const styles: IStyles = {
+  button: {
+    borderRadius: '8px',
+    color: 'black',
+    fontSize: '12px',
+    fontWeight: 500,
+    height: 'fit-content',
+    padding: '9px 10px',
+    mr: '6px',
+    sx: {
+      '.chakra-button__icon': {
+        _last: {
+          ml: '5px',
+        },
+      },
+    }
+  },
   checkbox: {
     borderTop: '1px solid rgba(0, 0, 0, 0.1)',
     fontSize: '12px',
@@ -21,20 +37,6 @@ const styles: IStyles = {
     _hover: {
       background: '#F6FAF3',
       cursor: 'pointer',
-    }
-  },
-  button: {
-    color: 'black',
-    fontSize: '12px',
-    fontWeight: 400,
-    height: 'fit-content',
-    padding: '4px 10px',
-    sx: {
-      '.chakra-button__icon': {
-        _last: {
-          ml: '5px',
-        },
-      },
     }
   },
   container: {

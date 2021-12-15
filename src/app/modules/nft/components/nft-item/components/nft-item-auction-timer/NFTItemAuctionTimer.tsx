@@ -23,7 +23,7 @@ const styles: IStyles = {
   container: {
     background: 'rgba(0, 0, 0, 0.6)',
     backdropFilter: 'blur(4px)',
-    borderRadius: '12px',
+    borderRadius: '24px',
     color: 'white',
     padding: '6px 16px',
   },
@@ -39,6 +39,7 @@ const styles: IStyles = {
   icon: {
     display: 'inline',
     mr: '6px',
+    mt: '-3px',
   },
 };
 
