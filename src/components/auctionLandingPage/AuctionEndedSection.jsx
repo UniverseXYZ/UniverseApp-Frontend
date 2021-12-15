@@ -10,7 +10,6 @@ import Button from '../button/Button';
 import { useMyNftsContext } from '../../contexts/MyNFTsContext';
 import infoIcon from '../../assets/images/icon.svg';
 import bidIcon from '../../assets/images/bid_icon.svg';
-import { claimAuctionFunds } from '../../utils/api/auctions';
 import { shortenEthereumAddress } from '../../utils/helpers/format';
 import { getRewardTierSpanStyles } from '../../utils/helpers';
 

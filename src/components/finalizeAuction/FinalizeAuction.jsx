@@ -14,7 +14,7 @@ import emptyWhite from '../../assets/images/emptyWhite.svg';
 import { useAuctionContext } from '../../contexts/AuctionContext';
 import { useAuthContext } from '../../contexts/AuthContext';
 import ApproveCollection from './ApproveCollection';
-import { withdrawNfts, patchAuction } from '../../utils/api/auctions';
+import { patchAuction } from '../../utils/api/auctions';
 import LoadingPopup from '../popups/LoadingPopup';
 import { useMyNftsContext } from '../../contexts/MyNFTsContext';
 import { calculateTransactions } from '../../utils/helpers/depositNfts';
