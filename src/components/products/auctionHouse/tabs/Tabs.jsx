@@ -85,6 +85,11 @@ const Tabs = () => {
     requestWithParams(0);
   }, [selectedTabIndex, perPage, sortActive, sortFuture, searchValue]);
 
+  const removeAuction = (auctionToRemoveId) => {
+    const updatedAuctions = auctions.filter((auction) => auction.id !== auctionToRemoveId);
+    setAuctions(updatedAuctions);
+  };
+
   return (
     <div className="auction__house__tabs__section">
       <div className="auction__house__tabs__section__container">
@@ -136,6 +141,7 @@ const Tabs = () => {
                 forcePage={currentPage}
                 searchValue={searchValue}
                 setSearchValue={setSearchValue}
+                removeAuction={removeAuction}
               />
             </>
           ) : (
@@ -156,6 +162,7 @@ const Tabs = () => {
                 forcePage={currentPage}
                 searchValue={searchValue}
                 setSearchValue={setSearchValue}
+                removeAuction={removeAuction}
               />
             </>
           )}

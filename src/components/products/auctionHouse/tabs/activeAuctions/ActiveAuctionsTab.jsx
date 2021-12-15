@@ -17,11 +17,12 @@ const ActiveAuctionsTab = ({
   perPage,
   setPerPage,
   forcePage,
+  removeAuction,
 }) => (
   <div className="active__auctions__tab">
     {auctions.length ? (
       <>
-        <ActiveAuctionsList data={auctions} loading={loading} />
+        <ActiveAuctionsList data={auctions} loading={loading} removeAuction={removeAuction} />
         <div className="pagination__container">
           <ReactPaginate
             previousLabel={<LeftArrow />}
@@ -56,6 +57,11 @@ ActiveAuctionsTab.propTypes = {
   perPage: PropTypes.number.isRequired,
   setPerPage: PropTypes.func.isRequired,
   forcePage: PropTypes.number.isRequired,
+  removeAuction: PropTypes.func,
+};
+
+ActiveAuctionsTab.defaultProps = {
+  removeAuction: () => {},
 };
 
 export default ActiveAuctionsTab;
