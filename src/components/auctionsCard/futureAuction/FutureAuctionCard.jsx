@@ -5,7 +5,7 @@ import './FutureAuctionCard.scss';
 import AuctionsTabsCountdown from '../../auctions/AuctionsTabsCountdown';
 import { createNftsPerWinnerMarkup } from '../utils';
 
-const FutureAuctionCard = ({ auction }) => {
+const FutureAuctionCard = ({ auction, removeAuction }) => {
   const winnersCount = auction.rewardTiers.reduce(
     (winners, tier) => winners + tier.numberOfWinners,
     0
@@ -33,7 +33,11 @@ const FutureAuctionCard = ({ auction }) => {
         )}
         <div className="start__date">
           <label>STARTS IN</label>
-          <AuctionsTabsCountdown activeAuction={auction} showLabel={false} />
+          <AuctionsTabsCountdown
+            activeAuction={auction}
+            showLabel={false}
+            removeAuction={removeAuction}
+          />
         </div>
       </Link>
       <Link to={`/${auction.user.universePageUrl}`} className="title">
@@ -60,6 +64,11 @@ const FutureAuctionCard = ({ auction }) => {
 
 FutureAuctionCard.propTypes = {
   auction: PropTypes.oneOfType([PropTypes.array]).isRequired,
+  removeAuction: PropTypes.func,
+};
+
+FutureAuctionCard.defaultProps = {
+  removeAuction: () => {},
 };
 
 export default FutureAuctionCard;

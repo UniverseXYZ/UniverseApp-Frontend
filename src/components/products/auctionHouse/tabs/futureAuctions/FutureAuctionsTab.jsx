@@ -17,11 +17,12 @@ const FutureAuctionsTab = ({
   perPage,
   setPerPage,
   forcePage,
+  removeAuction,
 }) => (
   <div className="future__auctions__tab">
     {auctions.length ? (
       <>
-        <FutureAuctionsList data={auctions} loading={loading} />
+        <FutureAuctionsList data={auctions} loading={loading} removeAuction={removeAuction} />
         <div className="pagination__container">
           <ReactPaginate
             previousLabel={<LeftArrow />}
@@ -56,6 +57,11 @@ FutureAuctionsTab.propTypes = {
   perPage: PropTypes.number.isRequired,
   setPerPage: PropTypes.func.isRequired,
   forcePage: PropTypes.number.isRequired,
+  removeAuction: PropTypes.func,
+};
+
+FutureAuctionsTab.defaultProps = {
+  removeAuction: () => {},
 };
 
 export default FutureAuctionsTab;
