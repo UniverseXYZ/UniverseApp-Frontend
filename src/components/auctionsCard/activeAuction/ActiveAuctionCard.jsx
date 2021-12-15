@@ -41,7 +41,7 @@ const ActiveAuctionCard = ({ auction }) => {
       </Link>
       <div className="active__auction__details">
         <div className="title">
-          <h2>{auction.name}</h2>
+          <h2>{auction.headline}</h2>
         </div>
         <Link to={`/${auction.user?.universePageUrl}`} className="creator">
           <img src={auction.user?.profileImageUrl} alt={auction.user?.displayName} />
