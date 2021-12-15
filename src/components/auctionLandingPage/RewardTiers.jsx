@@ -22,7 +22,7 @@ const RewardTiers = ({ auction }) => {
             const startPlace = counter + 1;
             counter += tier.numberOfWinners;
             const endPlace = counter;
-            tier.nfts = tier.nfts.filter(
+            const filteredNfts = tier.nfts.filter(
               (value, index, nfts) =>
                 index === nfts.findIndex((nft) => nft.editionUUID === value.editionUUID)
             );
@@ -35,7 +35,7 @@ const RewardTiers = ({ auction }) => {
                         <img src={tier.imageUrl} alt={tier.name} />
                       </div>
                     ) : (
-                      tier.nfts.map((nft, index) => {
+                      filteredNfts.map((nft, index) => {
                         if (index < 3) {
                           return (
                             <div key={`${nft.id}-nft-image`}>
@@ -61,9 +61,9 @@ const RewardTiers = ({ auction }) => {
                                     <img src={nft.thumbnail_url} alt={nft.name} />
                                   </>
                                 )}
-                                {tier.nfts.length > 3 && index === 2 && (
+                                {filteredNfts.length > 3 && index === 2 && (
                                   <span className="show__more">{`+${
-                                    tier.nfts.length - 3
+                                    filteredNfts.length - 3
                                   } more`}</span>
                                 )}
                               </div>
