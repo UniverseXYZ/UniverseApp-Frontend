@@ -9,8 +9,8 @@ export const useStickyFooter = (ref: React.RefObject<HTMLElement>) => {
   const { footerRef } = useLayout();
 
   useEffect(() => {
-    if (ref.current) {
-      const isFixed = !(scrollY + height >= footerRef.current?.offsetTop ?? 0);
+    if (ref.current && footerRef.current) {
+      const isFixed = !(scrollY + height >= footerRef.current.offsetTop ?? 0);
       ref.current.style.bottom = isFixed ? '0' : '';
       ref.current.style.position = isFixed ? 'fixed' : '';
     }

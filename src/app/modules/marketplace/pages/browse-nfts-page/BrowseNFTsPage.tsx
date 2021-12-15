@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 import { Box, Button, Container, Flex, Heading, SimpleGrid, Text } from '@chakra-ui/react';
 
 import { ArtistsFilter, CollectionsFilter, NFTTypeFilter, PriceRangeFilter, SaleTypeFilter } from '../../components';
@@ -9,11 +9,15 @@ import { INft } from '../../../nft/types';
 import { Nfts } from '../../mocks/nfts';
 
 import BrowseNFTsIntroImage from './../../../../../assets/images/marketplace/v2/browse_nfts_intro.png'
+import { useStickyHeader } from '../../../../hooks';
 
 export const BrowseNFTsPage = () => {
-
   const [sortBy, setSortBy] = useState();
   const [nfts, setNfts] = useState(Nfts);
+
+  const filtersRef = useRef(null);
+
+  useStickyHeader(filtersRef);
 
   const handleNFTAuctionTimeOut = useCallback((index) => {
     setNfts(nfts.filter((nft, i) => i !== index));
@@ -47,8 +51,8 @@ export const BrowseNFTsPage = () => {
           <Heading as={'h1'} fontSize={'36px'}>Marketplace</Heading>
         </Box>
       </Flex>
-      <Container maxW={'1360px'} pt={'0 !important'} position={'relative'}>
-        <Box py={'40px'}>
+      <Box ref={filtersRef} bg={'white'} w={'100%'} py={'40px !important'}>
+        <Container maxW={'1360px'} py={'0 !important'} position={'relative'}>
           <Flex justifyContent={'space-between'}>
             <Box sx={{
               '> button': {
@@ -71,7 +75,9 @@ export const BrowseNFTsPage = () => {
               onSelect={(val) => setSortBy(val)}
             />
           </Flex>
-        </Box>
+        </Container>
+      </Box>
+      <Container maxW={'1360px'} pt={'0 !important'} position={'relative'}>
         <SimpleGrid columns={{ base: 1, md: 2, lg: 4 }} spacingX={'20px'} spacingY={'30px'} mb={'40px'}>
           {nfts.map((nft, i) => {
             return (
