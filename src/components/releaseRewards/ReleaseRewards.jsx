@@ -14,7 +14,6 @@ import emptyWhite from '../../assets/images/emptyWhite.svg';
 import infoIcon from '../../assets/images/icon.svg';
 import CongratsReleaseRewardsPopup from '../popups/CongratsReleaseRewardsPopup';
 import { useAuthContext } from '../../contexts/AuthContext';
-import { changeAuctionStatus } from '../../utils/api/auctions';
 import {
   createBatchCaptureRevenueTxsFinalised,
   createBatchCaptureRevenueTxsNotFinalised,

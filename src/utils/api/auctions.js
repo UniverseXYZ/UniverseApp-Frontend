@@ -6,11 +6,9 @@ const GET_ALL_ACTIVE_AUCTIONS = (offset, limit, filter, search) =>
   `${process.env.REACT_APP_API_BASE_URL}/api/pages/auctions/active?offset=${offset}&limit=${limit}&filters=${filter}&search=${search}`;
 const GET_ALL_FUTURE_AUCTIONS = (offset, limit, filter, search) =>
   `${process.env.REACT_APP_API_BASE_URL}/api/pages/auctions/future?offset=${offset}&limit=${limit}&filters=${filter}&search=${search}`;
-const GET_AUCTION_DATA = (id) => `${process.env.REACT_APP_API_BASE_URL}/api/pages/auctions/${id}`;
 const GET_PAST_AUCTIONS = `${process.env.REACT_APP_API_BASE_URL}/api/pages/my-auctions/past`;
 const EDIT_AUCTION_URL = (id) => `${process.env.REACT_APP_API_BASE_URL}/api/auctions/${id}`;
 const DELETE_FUTURE_AUCTION = (id) => `${process.env.REACT_APP_API_BASE_URL}/api/auctions/${id}`;
-const CANCEL_AUCTION = (id) => `${process.env.REACT_APP_API_BASE_URL}/api/auctions/cancel/${id}`;
 const UPLAD_IMAGES_FOR_LANDING_PAGE_URL = (id) =>
   `${process.env.REACT_APP_API_BASE_URL}/api/auctions/${id}/landing-files`;
 const EDIT_REWARD_TIER_URL = (id) => `${process.env.REACT_APP_API_BASE_URL}/api/reward-tiers/${id}`;
@@ -24,20 +22,12 @@ const GET_AVAILABLE_NFTS = (offset, limit, auctionId) =>
   }`;
 const GET_USER_AUCTIONS = (userId, type, offset, limit) =>
   `${process.env.REACT_APP_API_BASE_URL}/api/pages/auctions/${type}?userId=${userId}&offset=${offset}&limit=${limit}`;
-const ADD_DEPLOY_INFO = `${process.env.REACT_APP_API_BASE_URL}/api/auctions/deploy`;
-const DEPOSIT_NFTS_TO_AUCTION = `${process.env.REACT_APP_API_BASE_URL}/api/auctions/depositNfts`;
-const WITHDRAW_NFTS_FROM_AUCTION = `${process.env.REACT_APP_API_BASE_URL}/api/auctions/withdrawNfts`;
 const GET_AUCTION_LANDING_PAGE = (username, auctionName) =>
   `${process.env.REACT_APP_API_BASE_URL}/api/pages/auctions/${username}/${auctionName}`;
-const PLACE_AUCTION_BID = `${process.env.REACT_APP_API_BASE_URL}/api/auction/placeBid`;
 const ADD_REWARD_TIER_TO_AUCTION = `${process.env.REACT_APP_API_BASE_URL}/api/add-reward-tier`;
 const GET_MY_BIDS = (address) =>
   `${process.env.REACT_APP_API_BASE_URL}/api/pages/my-bids/${address}`;
 const REMOVE_REWARD_TIER_FROM_AUCTION = `${process.env.REACT_APP_API_BASE_URL}/api/reward-tiers/`;
-const CANCEL_AUCTION_BID = (id) =>
-  `${process.env.REACT_APP_API_BASE_URL}/api/auction/${id}/cancelBid`;
-const CHANGE_AUCTION_STATUS = `${process.env.REACT_APP_API_BASE_URL}/api/auction/status`;
-const CLAIM_AUCTION_FUNDS = `${process.env.REACT_APP_API_BASE_URL}/api/auction/claimFunds`;
 
 export const createAuction = async ({
   name,
@@ -389,23 +379,6 @@ export const getAvailableNFTs = async (offset, limit, auctionId) => {
   return result;
 };
 
-export const withdrawNfts = async (body) => {
-  const requestOptions = {
-    method: 'post',
-    headers: {
-      'Content-type': 'application/json; charset=UTF-8',
-      Authorization: `Bearer ${localStorage.getItem('xyz_access_token')}`,
-    },
-    body: JSON.stringify(body),
-  };
-
-  const request = await fetch(WITHDRAW_NFTS_FROM_AUCTION, requestOptions);
-
-  const result = await request.text().then((data) => JSON.parse(data));
-
-  return result;
-};
-
 export const getAuctionLandingPage = async (username, auctionName) => {
   const requestOptions = {
     method: 'GET',
@@ -413,56 +386,6 @@ export const getAuctionLandingPage = async (username, auctionName) => {
 
   const url = GET_AUCTION_LANDING_PAGE(username, auctionName);
   const request = await fetch(url, requestOptions);
-
-  const result = await request.text().then((data) => JSON.parse(data));
-
-  return result;
-};
-
-export const placeAuctionBid = async (body) => {
-  const requestOptions = {
-    method: 'post',
-    headers: {
-      'Content-type': 'application/json; charset=UTF-8',
-      Authorization: `Bearer ${localStorage.getItem('xyz_access_token')}`,
-    },
-    body: JSON.stringify(body),
-  };
-
-  const request = await fetch(PLACE_AUCTION_BID, requestOptions);
-
-  const result = await request.text().then((data) => JSON.parse(data));
-
-  return result;
-};
-
-export const cancelAuctionBid = async (auctionId) => {
-  const requestOptions = {
-    method: 'DELETE',
-    headers: {
-      'Content-type': 'application/json; charset=UTF-8',
-      Authorization: `Bearer ${localStorage.getItem('xyz_access_token')}`,
-    },
-  };
-
-  const request = await fetch(CANCEL_AUCTION_BID(auctionId), requestOptions);
-
-  const result = await request.text().then((data) => JSON.parse(data));
-
-  return result;
-};
-
-export const changeAuctionStatus = async (body) => {
-  const requestOptions = {
-    method: 'PATCH',
-    headers: {
-      'Content-type': 'application/json; charset=UTF-8',
-      Authorization: `Bearer ${localStorage.getItem('xyz_access_token')}`,
-    },
-    body: JSON.stringify(body),
-  };
-
-  const request = await fetch(CHANGE_AUCTION_STATUS, requestOptions);
 
   const result = await request.text().then((data) => JSON.parse(data));
 
@@ -494,17 +417,6 @@ export const addRewardTier = async (body) => {
   };
 
   const request = await fetch(ADD_REWARD_TIER_TO_AUCTION, requestOptions);
-  const result = await request.text().then((data) => JSON.parse(data));
-  return result;
-};
-
-export const claimAuctionFunds = async (body) => {
-  const requestOptions = {
-    method: 'PATCH',
-    body: JSON.stringify(body),
-  };
-
-  const request = await fetch(CLAIM_AUCTION_FUNDS, requestOptions);
   const result = await request.text().then((data) => JSON.parse(data));
   return result;
 };
