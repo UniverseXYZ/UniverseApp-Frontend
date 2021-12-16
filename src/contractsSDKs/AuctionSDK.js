@@ -41,10 +41,14 @@ export default class AuctionSDK {
     }
   };
 
-  // TODO:: ADD JSDocs
-  // uint256 auctionId,
-  // uint256 slotIndex,
-  // uint256 amount
+  /**
+   *
+   * @param {Object} param
+   * @param {int} param.auctionChainId
+   * @param {int} param.slotIndex
+   * @param {int} param.amount
+   * @returns
+   */
   handleClaimNfts = async ({ auctionChainId = null, slotIndex = null, amount = null }) => {
     if (!this.contract) {
       console.error('AuctionSDK is not initialised !');
@@ -58,7 +62,7 @@ export default class AuctionSDK {
 
     try {
       const tx = await this.contract.claimERC721Rewards(auctionChainId, slotIndex, amount);
-      return tx.wait();
+      return tx;
     } catch (err) {
       console.error(e);
       return false;
