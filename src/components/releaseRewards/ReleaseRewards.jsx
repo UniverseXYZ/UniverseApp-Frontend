@@ -88,6 +88,8 @@ const ReleaseRewards = () => {
     setBatchCaptureRevenueTxs(newBatchTxs);
     setSingleCaptureRevenueTxs(newSingleTxs);
 
+    const bidderAddress = newSlotsInfo[slotIndex].winner || '';
+
     // Update slots in rewardTier
     setAuction((upToDate) => {
       const updatedAuction = { ...upToDate };
@@ -104,12 +106,16 @@ const ReleaseRewards = () => {
 
       return updatedAuction;
     });
-    const isYourEvent = sender.toLowerCase() === address.toLowerCase();
 
-    if (isYourEvent) {
+    const isYourEvent = bidderAddress.toLowerCase() === address.toLowerCase();
+    const isYourTransaction = sender.toLowerCase() === address.toLowerCase();
+
+    if (isYourTransaction) {
       // Hide Loading modal
       setShowLoading(false);
+    }
 
+    if (isYourEvent) {
       // Show Congrats modal
       setShowCongratsPopup(true);
     }
