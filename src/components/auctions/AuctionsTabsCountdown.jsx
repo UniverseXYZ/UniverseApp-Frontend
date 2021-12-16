@@ -34,11 +34,13 @@ const AuctionsTabsCountdown = ({ activeAuction, showLabel, removeAuction }) => {
     };
   });
 
-  const canRemoveAuction =
-    countdown && !countdown.days && !countdown.hours && !countdown.minutes && !countdown.seconds;
-  if (canRemoveAuction) {
-    removeAuction(activeAuction.id);
-  }
+  useEffect(() => {
+    const canRemoveAuction =
+      countdown && !countdown.days && !countdown.hours && !countdown.minutes && !countdown.seconds;
+    if (canRemoveAuction) {
+      removeAuction(activeAuction.id);
+    }
+  }, [countdown.days, countdown.hours, countdown.minutes, countdown.seconds]);
 
   return (
     <>
