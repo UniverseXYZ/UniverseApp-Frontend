@@ -66,7 +66,7 @@ const ReleaseRewards = () => {
     setSingleCaptureRevenueTxs(singleCaptureTxs);
   };
 
-  const handleSlotCapturedEvent = async (err, { tierId, slotIndex }) => {
+  const handleSlotCapturedEvent = async (err, { sender, slotIndex }) => {
     if (err) return;
 
     let updatedBids = [];
@@ -103,12 +103,15 @@ const ReleaseRewards = () => {
 
       return updatedAuction;
     });
+    const isYourEvent = sender.toLowerCase() === address.toLowerCase();
 
-    // Hide Loading modal
-    setShowLoading(false);
+    if (isYourEvent) {
+      // Hide Loading modal
+      setShowLoading(false);
 
-    // Show Congrats modal
-    setShowCongratsPopup(true);
+      // Show Congrats modal
+      setShowCongratsPopup(true);
+    }
   };
 
   const handleBidMatchedEvent = async (err, { bids: bidsData, finalised }) => {
