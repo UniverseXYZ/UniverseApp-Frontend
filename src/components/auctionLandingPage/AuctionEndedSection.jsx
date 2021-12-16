@@ -72,15 +72,11 @@ const AuctionEndedSection = ({
 
       const toClaim = utils.formatEther(revenueToClaim);
       setClaimableFunds(toClaim);
-      console.log('available funds to claim:');
-      console.log(toClaim);
 
       const unreleased =
         utils.formatEther(totalBids.sub(revenueToClaim)) - Number(onAuction.auction.revenueClaimed);
 
       setUnreleasedFunds(unreleased);
-      console.log('unreleased funds:');
-      console.log(unreleased);
     }
   };
 

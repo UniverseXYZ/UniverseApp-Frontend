@@ -22,7 +22,10 @@ export const initiateAuctionSocket = () => {
 
 export const disconnectAuctionSocket = () => {
   console.log('Disconnecting from auctions socket...');
-  if (socket) socket.disconnect();
+  if (socket) {
+    socket.removeAllListeners();
+    socket.disconnect();
+  }
 };
 
 export const subscribeToStatusChange = (auctionId, cb) => {
@@ -96,6 +99,7 @@ export const subscribeToSlotCaptured = (auctionId, cb) => {
     console.log('Auction capture slot event received!');
     return cb(null, msg);
   });
+  console.log('Subscirbed for subscribeToSlotCaptured');
 };
 
 export const subscribeToBidWithdraw = (auctionId, cb) => {
