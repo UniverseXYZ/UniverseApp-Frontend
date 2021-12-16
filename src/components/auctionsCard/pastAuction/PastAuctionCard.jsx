@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { Link, useHistory } from 'react-router-dom';
 import './PastAuctionCard.scss';
@@ -18,8 +18,13 @@ const PastAuctionCard = ({ auction }) => {
   const nftsPerWinnerMarkup = createNftsPerWinnerMarkup(auction);
 
   const { tokenSymbol } = auction;
-  const tokenLogo = getBidTypeByName(tokenSymbol, options);
-  const promoImageProps = getPromoImageProps(auction.promoImageUrl, auction.user.profileImageUrl);
+
+  const tokenLogo = useMemo(() => getBidTypeByName(tokenSymbol, options), [tokenSymbol, options]);
+
+  const promoImageProps = useMemo(
+    () => getPromoImageProps(auction.promoImageUrl, auction.user.profileImageUrl),
+    [auction.promoImageUrl, auction.user.profileImageUrl]
+  );
 
   return (
     <div className="past__auction__item">
