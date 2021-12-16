@@ -10,6 +10,7 @@ import { CONNECTORS_NAMES } from '../utils/dictionary';
 import { getProfileInfo, setChallenge, userAuthenticate } from '../utils/api/profile';
 import { mapUserData } from '../utils/helpers';
 import { useErrorContext } from './ErrorContext';
+import AuctionSDK from '../contractsSDKs/AuctionSDK';
 
 const AuthContext = createContext(null);
 
@@ -56,6 +57,7 @@ const AuthContextProvider = ({ children }) => {
   const [showInstallWalletPopup, setShowInstallWalletPopup] = useState(false);
   const [installed, setInstalled] = useState(true);
 
+  const [auctionSDK, setAuctionSDK] = useState(null);
   const history = useHistory();
   // Getters
   const getEthPriceData = async (balance) => {
@@ -123,6 +125,9 @@ const AuthContextProvider = ({ children }) => {
       contractsData.UniverseAuctionHouse.abi,
       signerResult
     );
+
+    const auctionAPI = new AuctionSDK(auctionHouseContract);
+    setAuctionSDK(auctionAPI);
 
     const polymContract = contractsData.PolymorphWithGeneChanger;
 
@@ -421,6 +426,7 @@ const AuthContextProvider = ({ children }) => {
         setSelectedWallet,
         installed,
         setInstalled,
+        auctionSDK,
       }}
     >
       {children}

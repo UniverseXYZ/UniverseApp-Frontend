@@ -5,8 +5,21 @@ import Button from '../button/Button';
 import closeIcon from '../../assets/images/cross.svg';
 import congratsIcon from '../../assets/images/congrats.png';
 
-const CongratsReleaseRewardsPopup = ({ onClose }) => {
+const CongratsReleaseRewardsPopup = ({ onClose, auctionName, isAuctioneer, handleClaimNfts }) => {
   const history = useHistory();
+
+  const modalText = isAuctioneer ? (
+    <p>
+      The rewards for the auction <span style={{ color: 'black' }}>{auctionName}</span> were
+      successfully released. Now the auctioneer is able to collect his winnings and the bidders are
+      able to claim their NFTs.
+    </p>
+  ) : (
+    <p>
+      The rewards for the auction <span style={{ color: 'black' }}>{auctionName}</span> were
+      successfully released. Now you are able to claim your NFTs.
+    </p>
+  );
 
   return (
     <div className="popup-div congrats-popup">
@@ -19,24 +32,35 @@ const CongratsReleaseRewardsPopup = ({ onClose }) => {
       <div className="popup-title">
         <h4>Success</h4>
       </div>
-      <div className="popup-text">
-        <p>
-          The rewards for the auction <span style={{ color: 'black' }}>Auction name</span> were
-          successfully released. Now the auctioneer is able to collect his winnings and the bidders
-          are able to claim their NFTs.
-        </p>
-      </div>
-      <div className="popup-btns">
-        <Button className="light-button" onClick={() => history.goBack()}>
-          Visit landing page
-        </Button>
-      </div>
+      <div className="popup-text">{modalText}</div>
+      {isAuctioneer ? (
+        <div className="popup-btns">
+          <Button className="light-button" onClick={() => history.goBack()}>
+            Visit landing page
+          </Button>
+          <Button className="light-border-button" onClick={onClose}>
+            Close
+          </Button>
+        </div>
+      ) : (
+        <div className="popup-btns">
+          <Button className="light-button" onClick={handleClaimNfts}>
+            Claim NFTs
+          </Button>
+          <Button className="light-border-button" onClick={() => history.goBack()}>
+            Go to auction
+          </Button>
+        </div>
+      )}
     </div>
   );
 };
 
 CongratsReleaseRewardsPopup.propTypes = {
   onClose: PropTypes.func.isRequired,
+  handleClaimNfts: PropTypes.func.isRequired,
+  auctionName: PropTypes.string.isRequired,
+  isAuctioneer: PropTypes.bool.isRequired,
 };
 
 export default CongratsReleaseRewardsPopup;

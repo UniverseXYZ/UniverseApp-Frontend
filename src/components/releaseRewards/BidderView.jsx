@@ -33,8 +33,6 @@ const BidderView = ({
     .map((tx) => tx.bidder?.user?.address)
     .indexOf(myBid.user.address);
   const myTx = singleCaptureRevenueTxs[myTxIndex];
-  console.log('My tx:');
-  console.log(myTx);
   return (
     <>
       {!showSlots && <h3>Your slot</h3>}
