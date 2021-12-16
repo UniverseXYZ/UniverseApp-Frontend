@@ -26,6 +26,7 @@ import { useMyNftsContext } from '../../contexts/MyNFTsContext';
 import {
   disconnectAuctionSocket,
   initiateAuctionSocket,
+  subscribeToAuctionFinalised,
   subscribeToBidMatched,
   subscribeToSlotCaptured,
 } from '../../utils/websockets/auctionEvents';
@@ -150,12 +151,9 @@ const ReleaseRewards = () => {
       });
     });
 
-    subscribeToBidMatched(auction.auction.id, async (err, { bids: bidsData, finalised }) => {
+    subscribeToBidMatched(auction.auction.id, async (err, { bids: bidsData }) => {
       if (err) return;
       setBids(bidsData);
-      if (finalised) {
-        setAuction((upToDate) => ({ ...upToDate, auction: { ...upToDate.auction, finalised } }));
-      }
       const newSlotsInfo = await getAuctionSlotsInfo();
       const newBatchTxs = createBatchCaptureRevenueTxsFinalised(
         rewardTiersSlots,
@@ -163,12 +161,17 @@ const ReleaseRewards = () => {
         newSlotsInfo
       );
       setBatchCaptureRevenueTxs(newBatchTxs);
-
-      if (finalised) {
-        setShowLoading(false);
-      }
+      setShowLoading(false);
     });
 
+    subscribeToAuctionFinalised(auction.auction.id, async (err) => {
+      if (err) return;
+      setAuction((upToDate) => ({
+        ...upToDate,
+        auction: { ...upToDate.auction, finalised: true },
+      }));
+    });
+    setShowLoading(false);
     return () => {
       disconnectAuctionSocket();
     };

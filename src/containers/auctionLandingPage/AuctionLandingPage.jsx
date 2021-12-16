@@ -93,7 +93,7 @@ const AuctionLandingPage = () => {
     setRewardTiersSlots(tierSlots);
   };
 
-  const handleBidSubmittedEvent = (err, user, amount) => {
+  const handleBidSubmittedEvent = (err, user, amount, userProfile) => {
     // We need to use the latest state using setState(upToDateState)
     // as we don't have access to the latest state when using a callback
 
@@ -112,6 +112,7 @@ const AuctionLandingPage = () => {
         newBidders.push({
           amount: parseFloat(amount),
           user: {
+            ...userProfile,
             address: user,
           },
         });
@@ -196,8 +197,8 @@ const AuctionLandingPage = () => {
     if (auction) {
       removeAllListeners(auction.auction.id);
 
-      subscribeToBidSubmitted(auction.auction.id, (err, { user, amount }) => {
-        handleBidSubmittedEvent(err, user, amount);
+      subscribeToBidSubmitted(auction.auction.id, (err, { user, amount, userProfile }) => {
+        handleBidSubmittedEvent(err, user, amount, userProfile);
       });
 
       subscribeToBidWithdrawn(auction.auction.id, (err, { user, amount }) => {
