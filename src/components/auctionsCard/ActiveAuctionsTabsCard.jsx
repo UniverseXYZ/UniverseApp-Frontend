@@ -1,20 +1,16 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
-import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { format } from 'date-fns';
-import { Draggable } from 'react-beautiful-dnd';
 import { useAuthContext } from '../../contexts/AuthContext';
 import arrowUp from '../../assets/images/Arrow_Up.svg';
 import arrowDown from '../../assets/images/ArrowDown.svg';
 import videoIcon from '../../assets/images/video-icon.svg';
-import icon from '../../assets/images/auction_icon.svg';
 import bidIcon from '../../assets/images/bid_icon.svg';
-import copyIcon from '../../assets/images/copy1.svg';
 import AuctionsTabsCountdown from '../auctions/AuctionsTabsCountdown';
 import Button from '../button/Button';
 
-const ActiveAuctionsTabsCard = ({ activeAuction, index }) => {
+const ActiveAuctionsTabsCard = ({ activeAuction, removeAuction }) => {
   const { ethPrice, loggedInArtist } = useAuthContext();
   const [shownActionId, setShownActionId] = useState(null);
   const [startDate, setStartDate] = useState(
@@ -22,11 +18,6 @@ const ActiveAuctionsTabsCard = ({ activeAuction, index }) => {
   );
   const [endDate, setEndDate] = useState(format(new Date(activeAuction.endDate), 'MMMM dd, HH:mm'));
   const history = useHistory();
-
-  const [copied, setCopied] = useState({
-    state: false,
-    index: null,
-  });
 
   const handleAuctionExpand = (name) => {
     const canExpandAuction = !name || name !== shownActionId;
@@ -99,7 +90,11 @@ const ActiveAuctionsTabsCard = ({ activeAuction, index }) => {
           </p>
         </div>
         <div className="total-dates">
-          <AuctionsTabsCountdown activeAuction={activeAuction} showLabel />
+          <AuctionsTabsCountdown
+            activeAuction={activeAuction}
+            removeAuction={removeAuction}
+            showLabel
+          />
         </div>
         <div className="total-dates">
           <p>
@@ -223,7 +218,11 @@ const ActiveAuctionsTabsCard = ({ activeAuction, index }) => {
 
 ActiveAuctionsTabsCard.propTypes = {
   activeAuction: PropTypes.oneOfType([PropTypes.object]).isRequired,
-  index: PropTypes.number.isRequired,
+  removeAuction: PropTypes.func,
+};
+
+ActiveAuctionsTabsCard.defaultProps = {
+  removeAuction: () => {},
 };
 
 export default ActiveAuctionsTabsCard;
