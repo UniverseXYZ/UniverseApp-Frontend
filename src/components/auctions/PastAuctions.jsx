@@ -66,7 +66,7 @@ const PastAuctions = ({ setShowLoadingModal, setLoadingText }) => {
 
     if (isYourEvent) {
       setFilteredAuctions((upToDate) => {
-        let newAuctions = { ...upToDate };
+        let newAuctions = [...upToDate];
 
         newAuctions = newAuctions.map((auction) => {
           if (auction.id === auctionId) {
