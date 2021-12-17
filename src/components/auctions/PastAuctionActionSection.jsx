@@ -21,6 +21,7 @@ const PastAuctionActionSection = ({
   const { loggedInArtist, universeAuctionHouseContract, address } = useAuthContext();
   const { setAuction } = useAuctionContext();
   const { activeTxHashes, setActiveTxHashes } = useMyNftsContext();
+  const [canWithdrawNfts, setCanWithdrawNfts] = useState(false);
 
   const getTitleText = () => {
     const winners = 0;
@@ -78,14 +79,25 @@ const PastAuctionActionSection = ({
     }
   };
 
-  const redirectToWithdrawPage = async () => {
-    if (auction.canceled) {
-      setAuction({ rewardTiers: [] });
-      history.push('/finalize-auction', auction.id);
+  useEffect(() => {
+    let canWithdraw = true;
+    if (!auction.finalised) {
+      canWithdraw = false;
     } else {
-      await handleWithdrawNfts();
+      // eslint-disable-next-line no-restricted-syntax
+      for (const [slotIndex, slotInfo] of Object.entries(slotsInfo)) {
+        // Check if slot has been captured
+        const slotsCantBeWithdrawn =
+          slotsToWithdraw.find((index) => index === slotIndex) && !slotInfo.revenueCaptured;
+        if (slotsCantBeWithdrawn) {
+          canWithdraw = false;
+        }
+      }
     }
-  };
+    // Check if the auctioneer can withdraw his nfts
+
+    setCanWithdrawNfts(canWithdraw);
+  }, [slotsInfo, slotsToWithdraw]);
 
   return (
     <div className="empty__auction">
@@ -105,25 +117,22 @@ const PastAuctionActionSection = ({
       ) : (
         <p className="desc">{getDescriptionText()}</p>
       )}
-      {auction.finalised && !slotsToWithdraw.length ? (
-        <></>
-      ) : (
-        <>
-          <div className="warning__div">
-            <img src={Exclamation} alt="Warning" />
-            <p>You’ll be able to withdraw your NFTs right after all the rewards are released.</p>
-          </div>
-
-          <button
-            disabled={!auction.finalised}
-            type="button"
-            className="light-button set_up"
-            onClick={redirectToWithdrawPage}
-          >
-            Withdraw NFTs
-            <img src={plusIcon} alt="icon" style={{ marginLeft: '12px' }} />
-          </button>
-        </>
+      {!canWithdrawNfts && slotsToWithdraw.length && (
+        <div className="warning__div">
+          <img src={Exclamation} alt="Warning" />
+          <p>You’ll be able to withdraw your NFTs right after all the rewards are released.</p>
+        </div>
+      )}
+      {!!slotsToWithdraw.length && (
+        <button
+          disabled={!canWithdrawNfts}
+          type="button"
+          className="light-button set_up"
+          onClick={handleWithdrawNfts}
+        >
+          Withdraw NFTs
+          <img src={plusIcon} alt="icon" style={{ marginLeft: '12px' }} />
+        </button>
       )}
     </div>
   );
