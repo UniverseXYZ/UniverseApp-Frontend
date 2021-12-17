@@ -26,6 +26,7 @@ import {
   subscribeToAuctionWithdrawnRevenue,
 } from '../../utils/websockets/auctionEvents';
 import SuccessBidPopup from '../../components/popups/SuccessBidPopup';
+import { createRewardsTiersSlots } from '../../utils/helpers';
 
 const AuctionLandingPage = () => {
   const defaultLoadingText =
@@ -132,7 +133,8 @@ const AuctionLandingPage = () => {
       return upToDateBalance;
     });
 
-    calculateRewardTierSlots(auction.rewardTiers, newBidderScope);
+    const tierSlots = createRewardsTiersSlots(auction.rewardTiers, newBidderScope);
+    setRewardTiersSlots(tierSlots);
 
     // Update isWinningBid
     const currBidderIndex = newBidderScope.map((bidder) => bidder.user.address).indexOf(address);
@@ -225,7 +227,8 @@ const AuctionLandingPage = () => {
   const getAuctionData = async () => {
     const auctionInfo = await getAuctionLandingPage(artistUsername, auctionName);
     if (!auctionInfo.error) {
-      calculateRewardTierSlots(auctionInfo.rewardTiers, auctionInfo.bidders);
+      const tierSlots = createRewardsTiersSlots(auctionInfo.rewardTiers, auctionInfo.bidders);
+      setRewardTiersSlots(tierSlots);
 
       // Parse Bidders amount to float
       const newBidders = auctionInfo?.bidders?.map((b) => {

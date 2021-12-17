@@ -15,7 +15,9 @@ import {
   disconnectAuctionSocket,
   initiateAuctionSocket,
   removeAllListeners,
+  subscribeToAuctionFinalised,
   subscribeToAuctionWithdrawnRevenue,
+  subscribeToBidMatched,
 } from '../../utils/websockets/auctionEvents';
 
 const PastAuctions = ({ setShowLoadingModal, setLoadingText }) => {
@@ -66,7 +68,7 @@ const PastAuctions = ({ setShowLoadingModal, setLoadingText }) => {
 
     if (isYourEvent) {
       setFilteredAuctions((upToDate) => {
-        let newAuctions = { ...upToDate };
+        let newAuctions = [...upToDate];
 
         newAuctions = newAuctions.map((auction) => {
           if (auction.id === auctionId) {
@@ -82,6 +84,32 @@ const PastAuctions = ({ setShowLoadingModal, setLoadingText }) => {
     }
   };
 
+  const handleAuctionFinalisedEvent = (auctionId) => {
+    const newAuctions = [...pastAuctions];
+    newAuctions.map((auction) => {
+      if (auction.id === auctionId) {
+        auction.finalised = true;
+        console.log(`marked auction ${auctionId} as finalised`);
+      }
+      return auction;
+    });
+
+    setPastAuctions(newAuctions);
+  };
+
+  const handleBidMatchedEvent = (auctionId, bidders) => {
+    const newAuctions = [...pastAuctions];
+    newAuctions.map((auction) => {
+      if (auction.id === auctionId) {
+        auction.bidders = bidders;
+        console.log(`updated auction ${auctionId} bidders`);
+      }
+      return auction;
+    });
+
+    setPastAuctions(newAuctions);
+  };
+
   useEffect(() => {
     if (filteredAuctions) {
       if (pastAuctions) {
@@ -92,7 +120,18 @@ const PastAuctions = ({ setShowLoadingModal, setLoadingText }) => {
       filteredAuctions.forEach((a) => {
         subscribeToAuctionWithdrawnRevenue(a.id, (err, { totalRevenue, recipient }) => {
           handleAuctionWithdrawnRevenueEvent(err, a.id, totalRevenue, recipient);
-          removeAllListeners(a.id);
+          // removeAllListeners(a.id);
+        });
+
+        subscribeToAuctionFinalised(a.id, (err, data) => {
+          if (err) return;
+          console.log(data);
+          handleAuctionFinalisedEvent(a.id);
+        });
+
+        subscribeToBidMatched(a.id, (err, { bids }) => {
+          if (err) return;
+          handleBidMatchedEvent(a.id, bids);
         });
       });
     }

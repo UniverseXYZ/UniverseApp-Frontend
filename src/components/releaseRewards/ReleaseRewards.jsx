@@ -90,23 +90,6 @@ const ReleaseRewards = () => {
 
     const bidderAddress = newSlotsInfo[slotIndex].winner || '';
 
-    // Update slots in rewardTier
-    setAuction((upToDate) => {
-      const updatedAuction = { ...upToDate };
-      const newTiers = updatedAuction.rewardTiers.map((r) => {
-        const slots = r.slots.map((slot) => {
-          if (slot.index === slotIndex) {
-            slot.capturedRevenue = true;
-          }
-          return slot;
-        });
-        return slots;
-      });
-      updatedAuction.auction.rewardTiers = newTiers;
-
-      return updatedAuction;
-    });
-
     const isYourEvent = bidderAddress.toLowerCase() === address.toLowerCase();
     const isYourTransaction = sender.toLowerCase() === address.toLowerCase();
 
@@ -134,10 +117,6 @@ const ReleaseRewards = () => {
       newSlotsInfo
     );
     setBatchCaptureRevenueTxs(newBatchTxs);
-
-    if (finalised) {
-      setShowLoading(false);
-    }
   };
 
   const handleERC721ClaimedEvent = (err, { claimer, slotIndex }) => {
@@ -202,6 +181,7 @@ const ReleaseRewards = () => {
   const handleClaimNfts = async () => {
     try {
       setShowCongratsPopup(false);
+      setLoadingText(defaultLoadingText);
       setShowLoading(true);
       const tx = await auctionSDK.handleClaimNfts({
         auctionChainId: auction.auction.onChainId,
@@ -211,6 +191,7 @@ const ReleaseRewards = () => {
       setActiveTxHashes([tx.hash]);
       const txReceipt = await tx.wait();
       if (txReceipt.status === 1) {
+        setLoadingText(verificationLoadingText);
         // This modal will be closed upon recieving notifyERC721Claimed event
         setMySlot({ ...mySlot, totalWithdrawnNfts: mySlot.totalDepositedNfts });
       }
@@ -244,6 +225,8 @@ const ReleaseRewards = () => {
           ...upToDate,
           auction: { ...upToDate.auction, finalised: true },
         }));
+
+        setShowLoading(false);
       });
     }
 

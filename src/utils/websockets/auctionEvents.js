@@ -165,3 +165,8 @@ export const removeAllListeners = (auctionId) => {
   socket.removeAllListeners(`auction_${auctionId}_withdrawnRevenue`);
   socket.removeAllListeners(`auction_${auctionId}_finalised`);
 };
+
+export const removeListener = (event) => {
+  if (!socket) return true;
+  socket.off(event);
+};
