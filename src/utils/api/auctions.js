@@ -17,7 +17,7 @@ const EDIT_REWARD_TIER_IMAGE = (id) =>
 const GET_AVAILABLE_NFTS = (offset, limit, auctionId) =>
   `${
     process.env.REACT_APP_API_BASE_URL
-  }/api/nfts/my-nfts/availability?offset=${offset}&limit=${limit}${
+  }/api/nfts/my-nfts/availability?start=${offset}&limit=${limit}${
     auctionId ? `&auctionId=${auctionId}` : ''
   }`;
 const GET_USER_AUCTIONS = (userId, type, offset, limit) =>
