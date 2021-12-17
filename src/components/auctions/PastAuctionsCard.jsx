@@ -90,7 +90,7 @@ const PastAuctionsCard = ({ auction, setShowLoadingModal, setLoadingText }) => {
           slotInfo.revenueCaptured &&
           slotInfo.totalWithdrawnNfts.toNumber() !== slotInfo.totalDepositedNfts.toNumber()
         ) {
-          setSlotsToWithdraw([...slotsToWithdraw, +slotIndex]);
+          setSlotsToWithdraw((slots) => [...slots, +slotIndex]);
         }
       }
     }
