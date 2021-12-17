@@ -94,9 +94,7 @@ export const createBatchCaptureRevenueTxsFinalised = (rewardTiersSlots, bidders,
     txObject.endSlot = tx.endSlot;
     txObject.totalNfts += tx.tier.nfts.length;
     // Avoid duplicate tiers
-    if (tx.tier.id !== txObject.tiers[txObject.tiers.length - 1]?.id || 0) {
-      txObject.tiers.push(tx.tier);
-    }
+    txObject.tiers = [...txObject.tiers, tx.tier];
   });
 
   // Push any remaining transactions
@@ -129,9 +127,7 @@ export const createBatchCaptureRevenueTxsNotFinalised = (rewardTiersSlots) => {
 
     txObject.totalNfts += tier.nfts.length;
     // Avoid duplicate tiers
-    if (tier.id !== txObject.tiers[txObject.tiers.length - 1]?.id || 0) {
-      txObject.tiers.push(tier);
-    }
+    txObject.tiers = [...txObject.tiers, tier];
   });
 
   // Push any remaining transactions
