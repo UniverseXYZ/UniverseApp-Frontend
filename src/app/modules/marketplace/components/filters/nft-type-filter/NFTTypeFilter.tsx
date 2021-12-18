@@ -3,6 +3,7 @@ import { useFormik } from 'formik';
 import React  from 'react';
 
 import { Dropdown, DropdownFilterContainer } from '../../../../../components';
+
 import nftTypeIcon from '../../../../../../assets/images/select-type-icon.svg';
 
 interface IFormValues {
@@ -14,7 +15,6 @@ interface IFormValues {
   audio: boolean;
   video: boolean;
 }
-
 
 interface INFTTypeFilterProps {
   onChange: (values: IFormValues) => void;

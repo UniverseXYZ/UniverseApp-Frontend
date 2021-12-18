@@ -41,6 +41,7 @@ import {
   SaleTypeFilter,
 } from '../../../../../../../components';
 import { NFTItemEditionsLabel } from '../../../../../../../../nft/components/nft-item/components';
+import { FilterCollectionsItems } from '../../../../../../../mocks/filter-collections';
 
 interface IActionBarNFTItemProps {
   nft: INft;
@@ -80,6 +81,7 @@ const ActionBarNFTItem = (
       <Tooltip
         hasArrow
         variant={'black'}
+        placement={'top'}
         label={isNFTBundle ? 'Select editions to remove' : 'Remove'}
         fontWeight={700}
       >
@@ -248,7 +250,11 @@ export const SelectNFTs = ({}: ISelectNFTsProps) => {
           <SaleTypeFilter onChange={(values) => console.log('values', values)} />
           <NFTTypeFilter onChange={(values) => console.log('values', values)} />
           <PriceRangeFilter onChange={(values) => console.log('values', values)} />
-          <CollectionsFilter />
+          <CollectionsFilter
+            items={FilterCollectionsItems}
+            onChange={(values) => console.log('values', values)}
+            onClear={() => {}}
+          />
           <ArtistsFilter />
         </Flex>
       </Fade>
