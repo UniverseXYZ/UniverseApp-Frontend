@@ -27,7 +27,11 @@ export const SearchInput = (props: ISearchInputProps) => (
       <InputLeftElement pointerEvents="none">
         <Image src={searchIcon} {...props.iconProps} />
       </InputLeftElement>
-      <Input placeholder={'Search'} pl={'50px'} {...props.inputProps} />
+      <Input
+        pl={'50px'}
+        {...props.inputProps}
+        placeholder={props.inputProps?.placeholder ?? 'Search'}
+      />
     </InputShadow>
   </InputGroup>
 );

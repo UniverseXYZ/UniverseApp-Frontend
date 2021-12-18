@@ -42,6 +42,7 @@ import {
 } from '../../../../../../../components';
 import { NFTItemEditionsLabel } from '../../../../../../../../nft/components/nft-item/components';
 import { FilterCollectionsItems } from '../../../../../../../mocks/filter-collections';
+import { FilterArtistsItems } from '../../../../../../../mocks/filter-artists';
 
 interface IActionBarNFTItemProps {
   nft: INft;
@@ -255,7 +256,11 @@ export const SelectNFTs = ({}: ISelectNFTsProps) => {
             onChange={(values) => console.log('values', values)}
             onClear={() => {}}
           />
-          <ArtistsFilter />
+          <ArtistsFilter
+            items={FilterArtistsItems}
+            onChange={(values) => console.log('values', values)}
+            onClear={() => {}}
+          />
         </Flex>
       </Fade>
 

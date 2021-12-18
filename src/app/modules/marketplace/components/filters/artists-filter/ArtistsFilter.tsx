@@ -1,14 +1,27 @@
-import { Image } from '@chakra-ui/react';
 import React from 'react';
 
-import artistIcon from '../../../../../../assets/images/marketplace/artist.svg';
-import { Dropdown } from '../../../../../components';
+import { MultiSelect } from '../../../../../components';
 
-export const ArtistsFilter = () => {
+import artistIcon from '../../../../../../assets/images/marketplace/artist.svg';
+
+type IFormValues = any[];
+
+interface IArtistsFilterProps {
+  items: any[];
+  onChange: (values: IFormValues) => void;
+  onClear: () => void;
+}
+
+export const ArtistsFilter = ({ items, onChange, onClear }: IArtistsFilterProps) => {
   return (
-    <Dropdown
+    <MultiSelect
+      items={items}
       label={'Artists'}
-      buttonProps={{ leftIcon: <Image src={artistIcon} /> }}
+      icon={artistIcon}
+      searchPlaceholder={'Search artists'}
+      isRoundedImage={true}
+      onChange={onChange}
+      onClear={onClear}
     />
   );
 };
