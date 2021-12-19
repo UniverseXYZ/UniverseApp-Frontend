@@ -119,13 +119,20 @@ export const BrowseNFTsPage = () => {
                 onChange={(values) => console.log('values', values)}
                 onClear={() => {}}
               />
-              <Link onClick={handleClear} sx={{
-                fontWeight: 500,
-                textDecoration: 'underline',
-                _hover: {
-                  textDecoration: 'none',
-                }
-              }}>Clear all</Link>
+              {
+                (
+                  saleTypeFilterForm.dirty ||
+                  nftTypeFilterForm.dirty
+                ) && (
+                  <Link onClick={handleClear} sx={{
+                    fontWeight: 500,
+                    textDecoration: 'underline',
+                    _hover: {
+                      textDecoration: 'none',
+                    }
+                  }}>Clear all</Link>
+                )
+              }
             </Box>
             <Select
               label={'Sort by'}
