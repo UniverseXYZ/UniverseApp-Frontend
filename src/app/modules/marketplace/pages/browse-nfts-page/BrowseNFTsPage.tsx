@@ -20,6 +20,7 @@ import { useStickyHeader } from '../../../../hooks';
 import { FilterCollectionsItems } from '../../mocks/filter-collections';
 import { FilterArtistsItems } from '../../mocks/filter-artists';
 import { useFormik } from 'formik';
+import { INftTypeFilterValue } from '../../components/filters/nft-type-filter/types';
 
 export const BrowseNFTsPage = () => {
   const saleTypeFilterForm = useFormik<ISaleTypeFilterValue>({
@@ -28,6 +29,19 @@ export const BrowseNFTsPage = () => {
       onAuction: false,
       new: false,
       hasOffers: false,
+    },
+    onSubmit: (values) => {},
+  });
+
+  const nftTypeFilterForm = useFormik<INftTypeFilterValue>({
+    initialValues: {
+      singleItem: false,
+      bundle: false,
+      composition: false,
+      stillImage: false,
+      gif: false,
+      audio: false,
+      video: false,
     },
     onSubmit: (values) => {},
   });
@@ -55,6 +69,7 @@ export const BrowseNFTsPage = () => {
 
   const handleClear = useCallback(() => {
     saleTypeFilterForm.resetForm();
+    nftTypeFilterForm.resetForm();
   }, []);
 
   return (
@@ -88,7 +103,11 @@ export const BrowseNFTsPage = () => {
                 onChange={(values) => saleTypeFilterForm.setValues(values)}
                 onClear={() => saleTypeFilterForm.resetForm()}
               />
-              <NFTTypeFilter onChange={(values) => console.log('values', values)} />
+              <NFTTypeFilter
+                value={nftTypeFilterForm.values}
+                onChange={(values) => nftTypeFilterForm.setValues(values)}
+                onClear={() => nftTypeFilterForm.resetForm()}
+              />
               <PriceRangeFilter onChange={(values) => console.log('values', values)} />
               <CollectionsFilter
                 items={FilterCollectionsItems}

@@ -1,7 +1,7 @@
-import { Box, Checkbox, Image, SimpleGrid, Text } from '@chakra-ui/react';
+import { Box, Image, SimpleGrid, Text } from '@chakra-ui/react';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
-import { Dropdown, DropdownFilterContainer } from '../../../../../components';
+import { Checkbox, Dropdown, DropdownFilterContainer } from '../../../../../components';
 import { SaleTypeFilterOptions } from './constants';
 import { ISaleTypeFilterProps, ISaleTypeFilterValue } from './types';
 
@@ -62,8 +62,13 @@ export const SaleTypeFilter = ({ value: _value, onChange, onClear }: ISaleTypeFi
           {SaleTypeFilterOptions.map(({ key, label, description }) => (
             <Box key={key}>
               <Checkbox size={'lg'} isChecked={value[key]} onChange={(e) => handleChangeOption(key, e.target.checked)}>
-                <Text fontSize={'14px'} fontWeight={500}>{label}</Text>
-                <Text color={'#00000066'} fontSize={'12px'} fontWeight={400}>{description}</Text>
+                {label}
+                <Text as={'span'} sx={{
+                  color: '#00000066',
+                  display: 'block',
+                  fontSize: '12px',
+                  fontWeight: 400,
+                }}>{description}</Text>
               </Checkbox>
             </Box>
           ))}

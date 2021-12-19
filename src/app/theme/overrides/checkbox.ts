@@ -17,4 +17,12 @@ export const Checkbox = {
       },
     }
   },
+  sizes: {
+    lg: {
+      label: {
+        fontSize: '14px',
+        fontWeight: 500,
+      },
+    }
+  }
 };
