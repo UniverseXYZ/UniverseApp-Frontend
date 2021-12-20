@@ -103,13 +103,13 @@ const Collection = (props) => {
         <Description selectedCollection={collectionData.collection} />
         {address === collectionData?.collection?.owner ? (
           <div className="collection__edit">
-            <Button
-              className="light-border-button"
+            {/* <Button
+              className="light-border-button disabled"
               onClick={() => handleEdit(collectionData.collection.id)}
             >
               <span>Edit</span>
               <img src={pencilIcon} alt="Edit Icon" />
-            </Button>
+            </Button> */}
           </div>
         ) : (
           <></>
@@ -176,6 +176,7 @@ const Collection = (props) => {
                 <h3>No NFTs found</h3>
                 <p>Create NFTs or NFT collections with our platform by clicking the button below</p>
                 <Button
+                  disabled
                   ref={ref}
                   className={`create--nft--dropdown  ${
                     isDropdownOpened ? 'opened' : ''

@@ -90,7 +90,13 @@ const Footer = () => {
               <div>
                 <ul>
                   <li>Products</li>
-                  <li aria-hidden="true" onClick={() => history.push('/minting')}>
+                  <li
+                    className="disable"
+                    aria-hidden="true"
+                    onClick={() => {
+                      // history.push('/minting')
+                    }}
+                  >
                     Minting
                   </li>
                   <li

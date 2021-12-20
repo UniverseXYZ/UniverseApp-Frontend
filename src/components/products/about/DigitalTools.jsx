@@ -25,14 +25,17 @@ const DigitalTools = () => {
               time can be extremely difficult, however our step by step set up and review process
               allows you to prevent mistakes and launch a beautiful and consistent collection.
             </p>
-            <Button
+            {/* <Button
               className="light-button"
               onClick={() =>
                 history.push('/my-nfts/create', { tabIndex: 1, nftType: 'collection' })
               }
             >
               Create NFT collection
-            </Button>
+            </Button> */}
+            <button type="button" className="light-border-button" disabled>
+              Coming soon
+            </button>
           </AnimatedOnScroll>
 
           {/* Block 2 */}
@@ -44,12 +47,15 @@ const DigitalTools = () => {
               <br /> We offer step by step instructions for the entire process, so you wont get
               stuck or confused.
             </p>
-            <Button
+            {/* <Button
               className="light-button"
               onClick={() => history.push('/my-nfts/create', { tabIndex: 1, nftType: 'single' })}
             >
               Create NFT
-            </Button>
+            </Button> */}
+            <button type="button" className="light-border-button" disabled>
+              Coming soon
+            </button>
           </AnimatedOnScroll>
           <AnimatedOnScroll animationIn="fadeIn">
             <img src={blockTwo} alt="Block" />

@@ -36,7 +36,15 @@ const RarityRankPopup = ({ onClose, item }) => {
               <h1>{`Rarity Rank #${item.rank}`}</h1>
               <a
                 target="_blank"
-                href={`${process.env.REACT_APP_ETHERSCAN_URL}/assets/${process.env.REACT_APP_POLYMORPHS_CONTRACT_ADDRESS}/${item.tokenid}`}
+                href={`https://${
+                  parseInt(process.env.REACT_APP_NETWORK_CHAIN_ID, 10) === 1
+                    ? 'opensea.io'
+                    : 'testnets.opensea.io'
+                }/assets/${
+                  parseInt(process.env.REACT_APP_NETWORK_CHAIN_ID, 10) === 1
+                    ? ''
+                    : `${process.env.REACT_APP_NETWORK_NAME.toLowerCase()}/`
+                }${process.env.REACT_APP_POLYMORPHS_CONTRACT_ADDRESS}/${item.tokenid}`}
                 rel="noreferrer"
               >
                 View on Opensea <img src={linkIcon} alt="Link Icon" />

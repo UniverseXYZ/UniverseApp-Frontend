@@ -10,7 +10,10 @@ const MintingPage = () => {
   const history = useRouter();
   const { setDarkMode } = useThemeContext();
 
-  useEffect(() => setDarkMode(false), []);
+  useEffect(() => {
+    setDarkMode(false);
+    history.push('/');
+  }, []);
 
   return (
     <div className="minting-page">

@@ -146,9 +146,9 @@ const App = () => {
                 <AuthenticatedRoute exact path="/my-nfts">
                   <MyNFTs />
                 </AuthenticatedRoute>
-                <AuthenticatedRoute exact path="/my-nfts/create">
+                {/* <AuthenticatedRoute exact path="/my-nfts/create">
                   <CreateNFT />
-                </AuthenticatedRoute>
+                </AuthenticatedRoute> */}
                 <AuthenticatedRoute exact path="/my-account">
                   <MyAccount />
                 </AuthenticatedRoute>
