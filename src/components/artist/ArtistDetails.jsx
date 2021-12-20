@@ -14,7 +14,6 @@ import { useAuctionContext } from '../../contexts/AuctionContext';
 import { useAuthContext } from '../../contexts/AuthContext';
 import { shortenEthereumAddress } from '../../utils/helpers/format';
 import { useWindowSize } from 'react-use';
-// import { useWindowSize } from '../../utils/hooks/useWindowSize';
 
 const ArtistDetails = ({ artistAddress, onArtist, loading }) => {
   const blockieSizes = {
