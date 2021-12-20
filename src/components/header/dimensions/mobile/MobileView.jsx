@@ -562,11 +562,11 @@ const MobileView = (props) => {
       {showMenu && (
         <>
           <div className="overlay" />
-          <ul className="nav__menu">
+          <div className="nav__menu">
             <>
               {!showSelectWallet ? (
                 <>
-                  <li>
+                  <div>
                     <div className="grid__menu">
                       <div>
                         <div
@@ -847,9 +847,9 @@ const MobileView = (props) => {
                         )}
                       </div>
                     </div>
-                  </li>
+                  </div>
                   {!isWalletConnected && (
-                    <li className="sign__in">
+                    <div className="sign__in">
                       <button
                         type="button"
                         onClick={() => {
@@ -858,7 +858,7 @@ const MobileView = (props) => {
                       >
                         Sign in
                       </button>
-                    </li>
+                    </div>
                   )}
                 </>
               ) : (
@@ -926,7 +926,7 @@ const MobileView = (props) => {
                 </div>
               )}
             </>
-          </ul>
+          </div>
         </>
       )}
     </div>
