@@ -102,14 +102,6 @@ const SingleNFTForm = () => {
     edition: '',
     previewImage: '',
   });
-  // TODO: fix
-  // const location = useLocation();
-  const location = {
-    state: {
-      collection: ''
-    }
-  };
-
 
   const [saveForLateClick, setSaveForLateClick] = useState(false);
   const [mintNowClick, setMintNowClick] = useState(false);
@@ -142,7 +134,9 @@ const SingleNFTForm = () => {
   const [royaltyValidAddress, setRoyaltyValidAddress] = useState(true);
   const [propertiesIndexes, setPropertiesMapIndexes] = useState({});
   const [selectedCollection, setSelectedCollection] = useState(
-    location.state?.collection || universeCollection
+    router.query?.collection
+      ? (myMintableCollections || []).find(collection => collection.address === router.query.collection)
+      : universeCollection
   );
   const [showCongratsPopup, setShowCongratsPopup] = useState(false);
   const [showCongratsMintedSavedForLater, setShowCongratsMintedSavedForLater] = useState(false);
@@ -154,7 +148,11 @@ const SingleNFTForm = () => {
   const [loadingText, setLoadingText] = useState(MINTING_LOADING_TEXT);
 
   useEffect(() => {
-    setSelectedCollection(location.state?.collection || universeCollection);
+    setSelectedCollection(
+      router.query?.collection
+        ? (myMintableCollections || []).find(collection => collection.address === router.query.collection)
+        : universeCollection
+    );
   }, [universeCollection]);
 
   const hasAddressError = (royalty, index) => {

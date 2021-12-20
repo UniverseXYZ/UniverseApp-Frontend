@@ -181,8 +181,7 @@ const Collection = (props) => {
                   className={`create--nft--dropdown  ${
                     isDropdownOpened ? 'opened' : ''
                   } light-button`}
-                  /*TODO: pass collection: collectionData.collection*/
-                  onClick={() => router.push('/my-nfts/create?tabIndex=1&nftType=single')}
+                  onClick={() => router.push(`/my-nfts/create?tabIndex=1&nftType=single&collection=${collectionData?.collection?.address}`)}
                   aria-hidden="true"
                 >
                   Create NFT
