@@ -1,5 +1,5 @@
 import { Box, BoxProps, CheckboxProps, Flex, Image, ImageProps } from '@chakra-ui/react';
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Checkbox } from '../checkbox';
 import { Dropdown, DropdownFilterContainer } from '../dropdown';
@@ -95,36 +95,40 @@ type IFormValues = any[];
 
 interface IMultiSelectProps {
   items: any[];
+  value: any[];
   label?: string;
   icon?: string;
+  inline?: boolean;
   searchPlaceholder?: string;
   isRoundedImage?: boolean;
+  onSave?: () => void;
   onChange: (values: IFormValues) => void;
-  onClear: () => void;
+  onClear?: () => void;
 }
 
-export const MultiSelect = (
+interface IMultiSelectWrapperProps extends IMultiSelectProps {
+  children: React.ReactNode;
+}
+
+const MultiSelectWrapper = ((
   {
-    items,
+    inline = false,
     label,
     icon,
-    searchPlaceholder,
-    isRoundedImage = false,
-    onChange,
-    onClear
-  }: IMultiSelectProps
+    onSave,
+    onClear,
+    children,
+  }: IMultiSelectWrapperProps
 ) => {
-  const [selected, setSelected] = useState<any>({});
-
-  const handleToggleItem = useCallback((item, isSelected) => {
-    setSelected({...selected, [item.id]: isSelected})
-  }, [selected]);
-
   const handleSave = useCallback(() => {
-    onChange([]);
-  }, [onChange]);
+    onSave && onSave();
+  }, [onSave]);
 
-  return (
+  const handleClear = useCallback(() => {
+    onClear && onClear();
+  }, [onClear]);
+
+  return inline ? <>{children}</> : (
     <Dropdown
       label={label}
       buttonProps={{ leftIcon: icon ? <Image src={icon} /> : undefined }}
@@ -132,73 +136,101 @@ export const MultiSelect = (
       <DropdownFilterContainer
         padding={0}
         onSave={handleSave}
-        onClear={onClear}
-      >
-        <Box px={'30px'} pt={'30px'} pb={'18px'}>
-          <Flex {...styles.selectedItemsContainer}>
-            {items.map((item, i) => !selected[item.id] ? null : (
-              <Box key={i} {...styles.selectedItem}>
-                <Image
-                  src={item.image}
-                  {...styles.selectedItemImage(isRoundedImage)}
-                  borderRadius={isRoundedImage ? '50%' : '5px'}
-                />
-                {item.name}
-                <Image
-                  src={closeIcon}
-                  {...styles.selectedItemRemove}
-                  onClick={() => handleToggleItem(item, false)}
-                />
-              </Box>
-            ))}
-          </Flex>
-          <SearchInput
-            shadowProps={{
-              display: 'contents',
-            }}
-            inputGroupProps={{
-              sx: {
-                '.chakra-input__left-element': {
-                  height: '42px',
-                  width: '42px',
-                }
-              }
-            }}
-            inputProps={{
-              height: '42px',
-              pl: '42px',
-              placeholder: searchPlaceholder,
-            }}
-          />
-        </Box>
-        <Box {...styles.itemsContainer}>
-          {items.map((item, i) => (
-            <Box
-              key={i}
-              {...styles.item}
-              onClick={() => handleToggleItem(item, !selected[item.id])}
-            >
-              {selected[item.id]
-                ? (
-                  <Checkbox
-                    isChecked={true}
-                    size={'lg'}
-                    {...styles.itemCheckbox(isRoundedImage)}
-                    borderRadius={isRoundedImage ? '50%' : '5px'}
-                  />
-                )
-                : (
-                  <Image
-                    src={item.image}
-                    {...styles.itemImage(isRoundedImage)}
-                    borderRadius={isRoundedImage ? '50%' : '5px'}
-                  />)
-              }
+        onClear={handleClear}
+      >{children}</DropdownFilterContainer>
+    </Dropdown>
+  );
+});
+
+export const MultiSelect = (props: IMultiSelectProps) => {
+  const {
+    items,
+    value: _value,
+    inline = false,
+    searchPlaceholder,
+    isRoundedImage = false,
+    onChange,
+  } = props;
+
+  const [value, setValue] = useState<any[]>([]);
+
+  const handleToggleItem = useCallback((item) => {
+    const newValue = value.includes(item)
+      ? value.filter(_item => _item !== item)
+      : [...value, item];
+
+    setValue(newValue);
+
+    // TODO
+    if (inline) {
+      onChange(newValue);
+    }
+  }, [value, inline, onChange]);
+
+  useEffect(() => setValue(_value), [_value]);
+
+  return (
+    <MultiSelectWrapper {...props}>
+      <Box px={'30px'} pt={'30px'} pb={'18px'}>
+        <Flex {...styles.selectedItemsContainer}>
+          {items.map((item, i) => !value.includes(item) ? null : (
+            <Box key={i} {...styles.selectedItem}>
+              <Image
+                src={item.image}
+                {...styles.selectedItemImage(isRoundedImage)}
+                borderRadius={isRoundedImage ? '50%' : '5px'}
+              />
               {item.name}
+              <Image
+                src={closeIcon}
+                {...styles.selectedItemRemove}
+                onClick={() => handleToggleItem(item)}
+              />
             </Box>
           ))}
-        </Box>
-      </DropdownFilterContainer>
-    </Dropdown>
+        </Flex>
+        <SearchInput
+          shadowProps={{
+            display: 'contents',
+          }}
+          inputGroupProps={{
+            sx: {
+              '.chakra-input__left-element': {
+                height: '42px',
+                width: '42px',
+              }
+            }
+          }}
+          inputProps={{
+            height: '42px',
+            pl: '42px',
+            placeholder: searchPlaceholder,
+          }}
+        />
+      </Box>
+      <Box {...styles.itemsContainer}>
+        {items.map((item, i) => (
+          <Box key={i} {...styles.item} onClick={() => handleToggleItem(item)}>
+            {value.includes(item)
+              ? (
+                <Checkbox
+                  isChecked={true}
+                  size={'lg'}
+                  {...styles.itemCheckbox(isRoundedImage)}
+                  borderRadius={isRoundedImage ? '50%' : '5px'}
+                />
+              )
+              : (
+                <Image
+                  src={item.image}
+                  {...styles.itemImage(isRoundedImage)}
+                  borderRadius={isRoundedImage ? '50%' : '5px'}
+                />)
+            }
+            {item.name}
+          </Box>
+        ))}
+      </Box>
+    </MultiSelectWrapper>
   );
 };

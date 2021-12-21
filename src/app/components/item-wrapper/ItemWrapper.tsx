@@ -11,6 +11,19 @@ const useStyles: (isBundle: boolean) => Record<
     cursor: 'pointer',
     position: 'relative',
 
+    // shadow
+    _before: {
+      borderRadius: 'inherit',
+      content: '""',
+      h: '100%',
+      left: 0,
+      position: 'absolute',
+      top: 0,
+      w: '100%',
+      zIndex: 2,
+    },
+
+    // border
     _after: {
       background: 'rgba(0, 0, 0, 0.1)',
       backgroundOrigin: 'border-box',
@@ -23,7 +36,7 @@ const useStyles: (isBundle: boolean) => Record<
       position: 'absolute',
       top: 0,
       w: '100%',
-      zIndex: -1,
+      zIndex: 2,
     },
 
     _selected: {
@@ -32,15 +45,15 @@ const useStyles: (isBundle: boolean) => Record<
       },
     },
 
-    sx: {
-      '&:hover, &:hover [data-layer]': {
+    _hover: {
+      '&:before, [data-layer]:before': {
         boxShadow: `0px 0px 30px rgba(0, 0, 0, ${isBundle ? 0.1 : 0.2})`,
-        _after: {
-          background: 'transparent',
-          border: 0,
-        }
       },
-    }
+      '&:after, [data-layer]:after': {
+        background: 'transparent',
+        border: 0,
+      },
+    },
   }), [isBundle]);
 
   const subLayerStyles = useMemo<BoxProps>(() => ({
@@ -49,6 +62,7 @@ const useStyles: (isBundle: boolean) => Record<
     borderRadius: 'inherit',
     position: 'absolute',
     height: '100%',
+    _before: itemWrapperStyles._before,
     _after: itemWrapperStyles._after,
     _selected: {
       _after: {
@@ -72,7 +86,7 @@ const useStyles: (isBundle: boolean) => Record<
     position: 'absolute',
     right: '-10px',
     top: '-10px',
-    zIndex: 2,
+    zIndex: 3,
   }), []);
 
   const selectedBorder = useMemo<BoxProps>(() => ({
@@ -85,7 +99,7 @@ const useStyles: (isBundle: boolean) => Record<
     position: 'absolute',
     top: `-2px`,
     width: `calc(100% + 4px)`,
-    zIndex: -1,
+    zIndex: 2,
     _selected: {
       display: 'block',
     }
@@ -117,8 +131,10 @@ export const ItemWrapper = (
       <Box data-selected={isSelected || null} {...styles.selectedBorder} />
       {isBundle && (
         <>
-          <Box data-layer data-selected={isSelected || null} {...styles.subLayerStyles} top={`5px`} left={`2%`} width={`96%`} zIndex={-2} />
-          <Box data-layer data-selected={isSelected || null} {...styles.subLayerStyles} top={`10px`} left={`4%`} width={`92%`} zIndex={-3} />
+          {/*<Box data-layer data-selected={isSelected || null} {...styles.subLayerStyles} top={`5px`} left={`2%`} width={`96%`} zIndex={-2} />*/}
+          {/*<Box data-layer data-selected={isSelected || null} {...styles.subLayerStyles} top={`10px`} left={`4%`} width={`92%`} zIndex={-3} />*/}
+          <Box data-layer data-selected={isSelected || null} {...styles.subLayerStyles} top={`5px`} left={`2%`} width={`96%`} zIndex={1} />
+          <Box data-layer data-selected={isSelected || null} {...styles.subLayerStyles} top={`10px`} left={`4%`} width={`92%`} zIndex={0} />
         </>
       )}
       {isSelected && (

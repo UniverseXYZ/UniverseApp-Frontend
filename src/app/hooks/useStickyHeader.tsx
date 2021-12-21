@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useWindowScroll, useWindowSize } from 'react-use';
 
 import { useLayout } from '../providers';
@@ -12,12 +12,12 @@ export const useStickyHeader = (ref: React.RefObject<HTMLElement>) => {
 
   useEffect(() => {
     if (ref.current) {
-      if (ref.current.parentElement) {
-        ref.current.parentElement.style.height = 'auto';
+      const root = document.getElementById('root');
+      if (root) {
+        root.style.height = 'auto';
       }
       ref.current.style.position = 'sticky';
       ref.current.style.top = '0';
-      ref.current.style.zIndex = '30';
 
       setOriginalRefY(ref.current.getBoundingClientRect().top + scrollY);
     }
@@ -29,10 +29,17 @@ export const useStickyHeader = (ref: React.RefObject<HTMLElement>) => {
       if (scrollY + headerHeight > originalRefY) {
         headerRef.current.style.position = 'absolute';
         headerRef.current.style.top = `${originalRefY - headerHeight}px`;
+        ref.current.style.zIndex = '30';
       } else {
         headerRef.current.style.position = 'fixed';
         headerRef.current.style.top = `0`;
       }
+
+      if (scrollY < originalRefY) {
+        ref.current.style.zIndex = '';
+      }
     }
   }, [originalRefY, scrollY, headerRef.current, ref.current]);
+
+  return scrollY > originalRefY;
 };

@@ -35,7 +35,7 @@ import { Nfts } from '../../../../../../../mocks/nfts';
 import { UncheckBundleEditionsModal } from './components';
 import {
   ArtistsFilter,
-  CollectionsFilter,
+  CollectionsFilter, ICollectionsFilterValue, INftTypeFilterValue, IPriceRangeFilterValue, ISaleTypeFilterValue,
   NFTTypeFilter,
   PriceRangeFilter,
   SaleTypeFilter,
@@ -249,19 +249,32 @@ export const SelectNFTs = ({}: ISelectNFTsProps) => {
           }}
         >
         {/*  TODO: uncomment*/}
-        {/*  <SaleTypeFilter onChange={(values) => console.log('values', values)} />*/}
-        {/*  <NFTTypeFilter onChange={(values) => console.log('values', values)} />*/}
-        {/*  <PriceRangeFilter onChange={(values) => console.log('values', values)} />*/}
-        {/*  <CollectionsFilter*/}
-        {/*    items={FilterCollectionsItems}*/}
-        {/*    onChange={(values) => console.log('values', values)}*/}
-        {/*    onClear={() => {}}*/}
-        {/*  />*/}
-        {/*  <ArtistsFilter*/}
-        {/*    items={FilterArtistsItems}*/}
-        {/*    onChange={(values) => console.log('values', values)}*/}
-        {/*    onClear={() => {}}*/}
-        {/*  />*/}
+          <SaleTypeFilter
+            value={{} as ISaleTypeFilterValue}
+            onChange={(values) => console.log('values', values)}
+            onClear={() => true}
+          />
+          <NFTTypeFilter
+            value={{} as INftTypeFilterValue}
+            onChange={(values) => console.log('values', values)}
+            onClear={() => true}
+          />
+          <PriceRangeFilter
+            value={{} as IPriceRangeFilterValue}
+            onChange={(values) => console.log('values', values)}
+            onClear={() => true}
+            isDirty={false}
+          />
+          <CollectionsFilter
+            value={[] as ICollectionsFilterValue}
+            onChange={(values) => console.log('values', values)}
+            onClear={() => true}
+          />
+          <ArtistsFilter
+            value={[] as ICollectionsFilterValue}
+            onChange={(values) => console.log('values', values)}
+            onClear={() => true}
+          />
         </Flex>
       </Fade>
 

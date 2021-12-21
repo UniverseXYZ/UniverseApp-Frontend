@@ -10,7 +10,7 @@ import {
   PriceRangeFilter,
   SaleTypeFilter,
   INftTypeFilterValue,
-  IPriceRangeFilterValue,
+  IPriceRangeFilterValue, ICollectionsFilterValue,
 } from '../../components';
 import { SortNftsOptions } from '../../constants';
 import { BackToTopButton, Select } from '../../../../components';
@@ -18,8 +18,6 @@ import { NftItem } from '../../../nft/components';
 import { INft } from '../../../nft/types';
 import { Nfts } from '../../mocks/nfts';
 import { useStickyHeader } from '../../../../hooks';
-import { FilterCollectionsItems } from '../../mocks/filter-collections';
-import { FilterArtistsItems } from '../../mocks/filter-artists';
 import { coins } from '../../../../mocks';
 
 import BrowseNFTsIntroImage from './../../../../../assets/images/marketplace/v2/browse_nfts_intro.png'
@@ -56,12 +54,23 @@ export const BrowseNFTsPage = () => {
     onSubmit: () => {},
   });
 
+  const collectionsFilterForm = useFormik<ICollectionsFilterValue>({
+    initialValues: [],
+    onSubmit: () => {},
+  });
+
+  // TODO
+  const artistsFilterForm = useFormik<ICollectionsFilterValue>({
+    initialValues: [],
+    onSubmit: () => {},
+  });
+
   const [sortBy, setSortBy] = useState();
   const [nfts, setNfts] = useState(Nfts);
 
   const filtersRef = useRef(null);
 
-  useStickyHeader(filtersRef);
+  const isStickiedFilters = useStickyHeader(filtersRef);
 
   const handleNFTAuctionTimeOut = useCallback((index) => {
     setNfts(nfts.filter((nft, i) => i !== index));
@@ -81,18 +90,20 @@ export const BrowseNFTsPage = () => {
     saleTypeFilterForm.resetForm();
     nftTypeFilterForm.resetForm();
     priceRangeFilterForm.resetForm();
+    collectionsFilterForm.resetForm();
+    artistsFilterForm.resetForm();
   }, []);
 
   return (
     <>
       <Flex
         sx={{
-          bg: `url(${BrowseNFTsIntroImage}) center / cover, black`,
-          minH: '250px',
-          h: '250px',
-          justifyContent: 'center',
           alignItems: 'center',
+          bg: `url(${BrowseNFTsIntroImage}) center / cover, black`,
           color: 'white',
+          justifyContent: 'center',
+          h: '250px',
+          minH: '250px',
           textAlign: 'center',
         }}
       >
@@ -101,7 +112,20 @@ export const BrowseNFTsPage = () => {
           <Heading as={'h1'} fontSize={'36px'}>Marketplace</Heading>
         </Box>
       </Flex>
-      <Box ref={filtersRef} bg={'white'} w={'100%'} py={'40px !important'}>
+      <Box
+        ref={filtersRef}
+        sx={{
+          bg: isStickiedFilters ? 'white' : 'transparent',
+          display: {
+            base: 'none',
+            md: 'block',
+          },
+          my: '20px',
+          p: '20px !important',
+          w: '100%',
+          zIndex: 30,
+        }}
+      >
         <Container maxW={'1360px'} py={'0 !important'} position={'relative'}>
           <Flex justifyContent={'space-between'}>
             <Box sx={{
@@ -126,20 +150,22 @@ export const BrowseNFTsPage = () => {
                 onClear={() => priceRangeFilterForm.resetForm()}
               />
               <CollectionsFilter
-                items={FilterCollectionsItems}
-                onChange={(values) => console.log('values', values)}
-                onClear={() => {}}
+                value={collectionsFilterForm.values}
+                onChange={(values) => collectionsFilterForm.setValues(values)}
+                onClear={() => collectionsFilterForm.resetForm()}
               />
               <ArtistsFilter
-                items={FilterArtistsItems}
-                onChange={(values) => console.log('values', values)}
-                onClear={() => {}}
+                value={artistsFilterForm.values}
+                onChange={(values) => artistsFilterForm.setValues(values)}
+                onClear={() => artistsFilterForm.resetForm()}
               />
               {
                 (
                   saleTypeFilterForm.dirty
                   || nftTypeFilterForm.dirty
                   || priceRangeFilterForm.dirty
+                  || collectionsFilterForm.dirty
+                  || artistsFilterForm.dirty
                 ) && (
                   <Link onClick={handleClear} sx={{
                     fontWeight: 500,
@@ -163,21 +189,23 @@ export const BrowseNFTsPage = () => {
           </Flex>
         </Container>
       </Box>
-      <Container maxW={'1360px'} pt={'0 !important'} position={'relative'}>
-        <SimpleGrid columns={{ base: 1, md: 2, lg: 4 }} spacingX={'20px'} spacingY={'30px'} mb={'40px'}>
-          {nfts.map((nft, i) => {
-            return (
-              <NftItem
-                key={nft.id}
-                nft={nft as INft}
-                onAuctionTimeOut={() => handleNFTAuctionTimeOut(i)}
-              />
-            );
-          })}
-        </SimpleGrid>
-        <Button variant={'outline'} isFullWidth mb={'20px'} onClick={handleLoadMore}>Load More</Button>
-        <BackToTopButton />
-      </Container>
+      <Box px={'20px'} pt={{ base: '20px', md: 0, }}>
+        <Container maxW={'1360px'} pt={'0 !important'} position={'relative'}>
+          <SimpleGrid columns={{ base: 1, md: 2, lg: 4 }} spacingX={'20px'} spacingY={'30px'} mb={'40px'}>
+            {nfts.map((nft, i) => {
+              return (
+                <NftItem
+                  key={nft.id}
+                  nft={nft as INft}
+                  onAuctionTimeOut={() => handleNFTAuctionTimeOut(i)}
+                />
+              );
+            })}
+          </SimpleGrid>
+          <Button variant={'outline'} isFullWidth mb={'20px'} onClick={handleLoadMore}>Load More</Button>
+          <BackToTopButton />
+        </Container>
+      </Box>
     </>
   );
 };
