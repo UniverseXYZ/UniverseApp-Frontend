@@ -52,6 +52,33 @@ const AuctionLandingPage = () => {
   const [showSuccessfulBid, setShowSuccessfulBid] = useState(false);
   const [showCancelBidPopup, setShowCancelBidPopup] = useState(false);
 
+  // useRef is used to access latest state inside socket event callbacks
+  // More info why this is used here (https://github.com/facebook/react/issues/16975)
+  // Start of useRef section
+
+  const addressRef = useRef(address);
+  const biddersRef = useRef(bidders);
+  const auctionRef = useRef(auction);
+  const yourBalanceRef = useRef(yourBalance);
+
+  useEffect(() => {
+    addressRef.current = address;
+  }, [address]);
+
+  useEffect(() => {
+    biddersRef.current = bidders;
+  }, [bidders]);
+
+  useEffect(() => {
+    auctionRef.current = auction;
+  }, [auction]);
+
+  useEffect(() => {
+    yourBalanceRef.current = yourBalance;
+  }, [yourBalance]);
+
+  // End of useRef section
+
   useEffect(() => {
     if (bidders.length) {
       const currBidder = bidders.find(
@@ -71,73 +98,49 @@ const AuctionLandingPage = () => {
     }
   }, [bidders, address, rewardTiersSlots]);
 
-  const calculateRewardTierSlots = (rewardTiers, biddersInfo) => {
-    const tierSlots = [];
-    let slotIndexCounter = 1;
-    rewardTiers
-      .sort((a, b) => a.tierPosition - b.tierPosition)
-      .forEach((rewardTier) => {
-        for (let i = 0; i < rewardTier.numberOfWinners; i += 1) {
-          // eslint-disable-next-line no-loop-func
-          const nfts = rewardTier.nfts.filter((t) => t.slot === slotIndexCounter);
-          tierSlots.push({
-            ...rewardTier,
-            nfts,
-            winner: biddersInfo[i]?.user?.address,
-            slotIndex: slotIndexCounter,
-            // eslint-disable-next-line no-loop-func
-            minimumBid: rewardTier.slots.find((s) => s.index === slotIndexCounter)?.minimumBid,
-          });
-          slotIndexCounter += 1;
-        }
-      });
-    setRewardTiersSlots(tierSlots);
-  };
-
-  const handleBidSubmittedEvent = (err, user, amount, userProfile) => {
-    // We need to use the latest state using setState(upToDateState)
-    // as we don't have access to the latest state when using a callback
-
+  const handleBidSubmittedEvent = (err, user, amount, userProfile, bids) => {
     if (err) return;
-    const isYourEvent = user.toLowerCase() === address.toLowerCase();
+    const isYourEvent = user.toLowerCase() === addressRef.current.toLowerCase();
 
-    // Update the Bidders
-    let newBidderScope = [];
-    setBidders((upToDateBidders) => {
-      const newBidders = [...upToDateBidders];
-      const existingBidderIndex = newBidders.map((bidder) => bidder.user.address).indexOf(user);
+    // 1. Update bidders
+    const newBidders = [...biddersRef.current];
+    const existingBidderIndex = newBidders
+      .map((bidder) => bidder.user.address.toLowerCase())
+      .indexOf(user.toLowerCase());
 
-      if (existingBidderIndex >= 0) {
-        newBidders[existingBidderIndex].amount = parseFloat(amount);
-      } else {
-        newBidders.push({
-          amount: parseFloat(amount),
-          user: {
-            ...userProfile,
-            address: user,
-          },
-        });
-      }
+    if (existingBidderIndex >= 0) {
+      newBidders[existingBidderIndex].amount = parseFloat(amount);
+    } else {
+      newBidders.push({
+        amount: parseFloat(amount),
+        user: {
+          ...userProfile,
+          address: user,
+        },
+      });
+    }
 
-      newBidders.sort((a, b) => b.amount - a.amount);
-      newBidderScope = newBidders;
-      return newBidders;
-    });
+    newBidders.sort((a, b) => b.amount - a.amount);
+    setBidders(newBidders);
 
-    // Update user balance
-    setYourBalance((upToDateBalance) => {
-      if (isYourEvent && auction.auction.tokenSymbol.toLowerCase() === 'eth') {
-        return parseFloat(upToDateBalance) - parseFloat(amount);
-      }
+    // 2. Update user's balance
+    const shouldUpdateBalance =
+      isYourEvent && auctionRef.current.auction.tokenSymbol.toLowerCase() === 'eth';
 
-      return upToDateBalance;
-    });
+    if (shouldUpdateBalance) {
+      const newBalance = parseFloat(yourBalanceRef.current) - parseFloat(amount);
+      setYourBalance(newBalance);
+    }
 
-    const tierSlots = createRewardsTiersSlots(auction.rewardTiers, newBidderScope);
+    // 3. Update reward tier slots
+    const tierSlots = createRewardsTiersSlots(auctionRef.current.rewardTiers, newBidders);
     setRewardTiersSlots(tierSlots);
 
-    // Update isWinningBid
-    const currBidderIndex = newBidderScope.map((bidder) => bidder.user.address).indexOf(address);
+    // 4. Update isWinningBid
+    const currBidderIndex = newBidders
+      .map((bidder) => bidder.user.address)
+      .indexOf(addressRef.current);
+
     const hasWin = currBidderIndex <= rewardTiersSlots.length - 1;
     if (hasWin) {
       setIsWinningBid(true);
@@ -147,6 +150,7 @@ const AuctionLandingPage = () => {
       setWinningSlot(-1);
     }
 
+    // 5. Close loading and show success modal
     if (isYourEvent) {
       setShowLoading(false);
       setLoadingText(defaultLoadingText);
@@ -155,9 +159,11 @@ const AuctionLandingPage = () => {
     }
   };
 
-  const handleBidWithdrawnEvent = (err, user, amount) => {
-    const isYourEvent = user.toLowerCase() === address.toLowerCase();
-    const newBidders = [...bidders];
+  const handleBidWithdrawnEvent = (err, user, amount, userProfile, bids) => {
+    const isYourEvent = user.toLowerCase() === addressRef.current.toLowerCase();
+
+    // 1. Update bidders
+    const newBidders = [...biddersRef.current];
     const existingBidderIndex = newBidders.map((bidder) => bidder.user.address).indexOf(user);
     if (existingBidderIndex >= 0) {
       newBidders.splice(existingBidderIndex, 1);
@@ -165,18 +171,23 @@ const AuctionLandingPage = () => {
       setBidders(newBidders);
     }
 
-    const updateBalance = isYourEvent && auction.auction.tokenSymbol.toLowerCase() === 'eth';
-    if (updateBalance) {
+    // 2. Update balance
+    const shouldUpdateBalance =
+      isYourEvent && auctionRef.current.auction.tokenSymbol.toLowerCase() === 'eth';
+    if (shouldUpdateBalance) {
       const newBalance = parseFloat(yourBalance) + parseFloat(amount);
       setYourBalance(newBalance);
     }
 
-    setCurrentBid(null);
-    setShowCancelBidPopup(false);
+    // 3. Update current bid
+    if (isYourEvent) {
+      setCurrentBid(null);
+      setShowCancelBidPopup(false);
+    }
   };
 
   const handleERC721ClaimedEvent = (err, claimer, slotIndex) => {
-    const isYourEvent = claimer.toLowerCase() === address.toLowerCase();
+    const isYourEvent = claimer.toLowerCase() === addressRef.current.toLowerCase();
 
     if (isYourEvent) {
       setShowLoading(false);
@@ -185,12 +196,21 @@ const AuctionLandingPage = () => {
   };
 
   const handleAuctionWithdrawnRevenueEvent = (err, totalRevenue, recipient) => {
-    const isYourEvent = recipient.toLowerCase() === address.toLowerCase();
+    const isYourEvent = recipient.toLowerCase() === addressRef.current.toLowerCase();
 
     if (isYourEvent) {
       setShowLoading(false);
       setActiveTxHashes([]);
     }
+  };
+
+  const handeAuctionExtendedEvent = (err, endDate) => {
+    if (err) return;
+
+    setAuction((upToDate) => ({
+      ...upToDate,
+      auction: { ...upToDate.auction, endDate },
+    }));
   };
 
   useEffect(() => {
@@ -199,12 +219,12 @@ const AuctionLandingPage = () => {
     if (auction) {
       removeAllListeners(auction.auction.id);
 
-      subscribeToBidSubmitted(auction.auction.id, (err, { user, amount, userProfile }) => {
-        handleBidSubmittedEvent(err, user, amount, userProfile);
+      subscribeToBidSubmitted(auction.auction.id, (err, { user, amount, userProfile, bids }) => {
+        handleBidSubmittedEvent(err, user, amount, userProfile, bids);
       });
 
-      subscribeToBidWithdrawn(auction.auction.id, (err, { user, amount }) => {
-        handleBidWithdrawnEvent(err, user, amount);
+      subscribeToBidWithdrawn(auction.auction.id, (err, { user, amount, userProfile, bids }) => {
+        handleBidWithdrawnEvent(err, user, amount, userProfile, bids);
       });
 
       subscribeToERC721Claimed(auction.auction.id, (err, { claimer, slotIndex }) => {
@@ -216,10 +236,7 @@ const AuctionLandingPage = () => {
       });
 
       subscribeToAuctionExtended(auction.auction.id, (err, { endDate }) => {
-        setAuction((upToDate) => ({
-          ...upToDate,
-          auction: { ...upToDate.auction, endDate },
-        }));
+        handeAuctionExtendedEvent(err, endDate);
       });
     }
   }, [auction, bidders, yourBalance]);
