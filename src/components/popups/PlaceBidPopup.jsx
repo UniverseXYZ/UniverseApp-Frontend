@@ -1,13 +1,11 @@
-/* eslint-disable no-unreachable */
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Animated } from 'react-animated-css';
-import uuid from 'react-uuid';
 import { BigNumber, utils } from 'ethers';
+import { BigNumber as bigNumber } from 'bignumber.js';
 import closeIcon from '../../assets/images/close-menu.svg';
 import currencyIcon from '../../assets/images/currency-eth.svg';
 import infoIcon from '../../assets/images/icon.svg';
-import bidSubmittedIcon from '../../assets/images/bid-submitted.png';
 import Button from '../button/Button.jsx';
 import Input from '../input/Input.jsx';
 import { useAuthContext } from '../../contexts/AuthContext';
@@ -65,17 +63,33 @@ const PlaceBidPopup = ({
     setERC20Info();
   }, [signer, universeAuctionHouseContract, address]);
 
+  /**
+   *
+   * @param {*} val -> string
+   * @returns void
+   */
   const handleInputChange = (val) => {
+    const safeVal = bigNumber(val).toFixed();
+    const maxCharsLength = 20;
+    // return if value is less than 1 wei as on opensea
+    // val is used here instead of safeVal in order to check the length
+    if (val.length > maxCharsLength) return;
+    // val is set here in order to avoid NaN value in the UI
     setYourBid(val);
-    if (val && !val.match(floatNumberRegex)) {
+    if (safeVal && !safeVal.match(floatNumberRegex)) {
       setError('Invalid bid');
     } else {
       setError('');
       // TODO: Compute eligible reward tier based on other bids
-      const rankedBids = [...onBidders, { amount: +val }]
-        .map((bid) => bid.amount)
-        .sort((a, b) => b - a);
-      const myBidIdx = rankedBids.indexOf(+val);
+      const rankedBids = [...onBidders, { amount: safeVal }]
+        .map((bid) => bid.amount.toString())
+        .sort((a, b) => {
+          const safeA = bigNumber(a);
+          const safeB = bigNumber(b);
+          return safeB.minus(safeA);
+        });
+
+      const myBidIdx = rankedBids.indexOf(safeVal);
 
       let rewardSlotCounter = 0;
       let hasFound = false;
@@ -170,6 +184,15 @@ const PlaceBidPopup = ({
       setError(err.error?.message);
     }
   };
+
+  const calculateTotalBid = () => {
+    const yourBidSafe = bigNumber(yourBid || '0');
+    const currentBidAmmountSafe = bigNumber(currentBid?.amount || '0');
+    const total = yourBidSafe.plus(currentBidAmmountSafe).toFixed();
+    return total;
+  };
+
+  const totalBid = calculateTotalBid();
 
   return (
     <div className="place__bid__popup">
@@ -286,12 +309,8 @@ const PlaceBidPopup = ({
             <div className="value">{`${yourBid || 0} ${auction.tokenSymbol}`}</div>
           </div>
           <div className="total_row">
-            <div className="label">
-              <span>Total bid</span>
-            </div>
-            <div className="value">{`${+yourBid + (+currentBid?.amount || 0)} ${
-              auction.tokenSymbol
-            }`}</div>
+            <div className="label">Total bid</div>
+            <div className="value">{`${totalBid} ${auction.tokenSymbol}`}</div>
           </div>
         </div>
         <div className="place__bid__btn">
