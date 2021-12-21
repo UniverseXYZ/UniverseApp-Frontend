@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import './ActiveAuctionCard.scss';
@@ -6,11 +6,45 @@ import { getPromoImageProps, bidsInUsd, createNftsPerWinnerMarkup } from '../uti
 import { useAuctionContext } from '../../../contexts/AuctionContext';
 import { getBidTypeByName } from '../../../utils/fixtures/BidOptions';
 import AuctionsTabsCountdown from '../../auctions/AuctionsTabsCountdown';
+import {
+  subscribeToBidSubmitted,
+  subscribeToBidWithdrawn,
+  removeAllListeners,
+} from '../../../utils/websockets/auctionEvents';
 
 const ActiveAuctionCard = ({ auction, removeAuction }) => {
   const { options } = useAuctionContext();
+  const [auctionUpdated, setAuctionUpdated] = useState(auction);
 
-  const bids = bidsInUsd(auction);
+  const updateBidValues = (bids) => {
+    const updatedAuction = {
+      ...auction,
+    };
+    if (bids) {
+      updatedAuction.bids = bids;
+    }
+    return updatedAuction;
+  };
+
+  const handleUpdateAuction = (err, bids) => {
+    if (err) {
+      console.error(err);
+      return;
+    }
+    setAuctionUpdated(updateBidValues(bids));
+  };
+
+  useEffect(() => {
+    removeAllListeners(auction.id);
+    subscribeToBidSubmitted(auction.id, (err, { bids }) => {
+      handleUpdateAuction(err, bids);
+    });
+    subscribeToBidWithdrawn(auction.id, (err, { bids }) => {
+      handleUpdateAuction(err, bids);
+    });
+  }, [auction]);
+
+  const bids = bidsInUsd(auctionUpdated);
   const winnersCount = auction.rewardTiers.reduce(
     (winners, tier) => winners + tier.numberOfWinners,
     0
