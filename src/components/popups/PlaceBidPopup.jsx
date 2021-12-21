@@ -69,11 +69,13 @@ const PlaceBidPopup = ({
    * @returns void
    */
   const handleInputChange = (val) => {
-    // return if value is less than 1 wei as on opensea
     const safeVal = bigNumber(val).toFixed();
     const maxCharsLength = 20;
-    if (safeVal.length > maxCharsLength) return;
-    setYourBid(safeVal);
+    // return if value is less than 1 wei as on opensea
+    // val is used here instead of safeVal in order to check the length
+    if (val.length > maxCharsLength) return;
+    // val is set here in order to avoid NaN value in the UI
+    setYourBid(val);
     if (safeVal && !safeVal.match(floatNumberRegex)) {
       setError('Invalid bid');
     } else {
@@ -183,9 +185,14 @@ const PlaceBidPopup = ({
     }
   };
 
-  const yourBidSafe = bigNumber(yourBid || '0');
-  const currentBidAmmountSafe = bigNumber(currentBid?.amount || '0');
-  const totalBid = yourBidSafe.plus(currentBidAmmountSafe);
+  const calculateTotalBid = () => {
+    const yourBidSafe = bigNumber(yourBid || '0');
+    const currentBidAmmountSafe = bigNumber(currentBid?.amount || '0');
+    const total = yourBidSafe.plus(currentBidAmmountSafe).toFixed();
+    return total;
+  };
+
+  const totalBid = calculateTotalBid();
 
   return (
     <div className="place__bid__popup">
