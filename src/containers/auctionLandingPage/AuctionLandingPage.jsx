@@ -55,7 +55,7 @@ const AuctionLandingPage = () => {
   useEffect(() => {
     if (bidders.length) {
       const currBidder = bidders.find(
-        (bidder) => bidder.user.address.toLowerCase() === address.toLowerCase()
+        (bidder) => bidder?.user?.address?.toLowerCase() === address.toLowerCase()
       );
       if (currBidder) {
         setCurrentBid(currBidder);

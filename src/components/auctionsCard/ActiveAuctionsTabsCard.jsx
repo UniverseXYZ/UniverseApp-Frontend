@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
 import { format } from 'date-fns';
@@ -9,8 +9,15 @@ import videoIcon from '../../assets/images/video-icon.svg';
 import bidIcon from '../../assets/images/bid_icon.svg';
 import AuctionsTabsCountdown from '../auctions/AuctionsTabsCountdown';
 import Button from '../button/Button';
+import {
+  disconnectAuctionSocket,
+  initiateAuctionSocket,
+  removeAllListeners,
+  subscribeToBidSubmitted,
+  subscribeToBidWithdrawn,
+} from '../../utils/websockets/auctionEvents';
 
-const ActiveAuctionsTabsCard = ({ activeAuction, removeAuction }) => {
+const ActiveAuctionsTabsCard = ({ activeAuction, setActiveAuctions, removeAuction }) => {
   const { ethPrice, loggedInArtist } = useAuthContext();
   const [shownActionId, setShownActionId] = useState(null);
   const [startDate, setStartDate] = useState(
@@ -35,6 +42,38 @@ const ActiveAuctionsTabsCard = ({ activeAuction, removeAuction }) => {
     });
     return nftsCount;
   };
+
+  const handleBidSubmittedEvent = (err, { user, amount, userProfile, bids }) => {
+    setActiveAuctions((upToDateAuctions) => {
+      const newAuctions = [...upToDateAuctions];
+      const updatedAuctions = newAuctions.map((auction) => {
+        const updatedAuction = { ...auction };
+        if (updatedAuction.id === activeAuction.id) {
+          updatedAuction.bids = bids;
+        }
+        return updatedAuction;
+      });
+      return updatedAuctions;
+    });
+  };
+
+  const handleBidWithdrawn = (err, { user, amount, userProfile, bids }) => {
+    // TODO:: hande this event when the BE is ready.
+  };
+
+  useEffect(() => {
+    if (activeAuction.id) {
+      initiateAuctionSocket();
+      removeAllListeners(activeAuction.id);
+
+      subscribeToBidSubmitted(activeAuction.id, handleBidSubmittedEvent);
+      subscribeToBidWithdrawn(activeAuction.id, handleBidWithdrawn);
+    }
+
+    return () => {
+      disconnectAuctionSocket();
+    };
+  }, [activeAuction.id]);
 
   return (
     <div className="auction active-auction">
@@ -218,6 +257,7 @@ const ActiveAuctionsTabsCard = ({ activeAuction, removeAuction }) => {
 
 ActiveAuctionsTabsCard.propTypes = {
   activeAuction: PropTypes.oneOfType([PropTypes.object]).isRequired,
+  setActiveAuctions: PropTypes.oneOfType([PropTypes.object]).isRequired,
   removeAuction: PropTypes.func,
 };
 
