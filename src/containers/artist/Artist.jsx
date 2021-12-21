@@ -10,6 +10,10 @@ import { useThemeContext } from '../../contexts/ThemeContext';
 import { getProfilePage } from '../../utils/api/profile';
 import { mapUserData } from '../../utils/helpers';
 import { getUserNfts } from '../../utils/api/mintNFT';
+import {
+  initiateAuctionSocket,
+  disconnectAuctionSocket,
+} from '../../utils/websockets/auctionEvents';
 
 const Artist = () => {
   const { setDarkMode } = useThemeContext();
@@ -28,6 +32,8 @@ const Artist = () => {
   }, [artist]);
 
   useEffect(() => {
+    initiateAuctionSocket();
+
     const getInfo = async () => {
       try {
         if (!utils.isAddress(artistUsername)) {
@@ -58,6 +64,7 @@ const Artist = () => {
       setLoading(false);
     };
     getInfo();
+    return () => disconnectAuctionSocket();
   }, []);
 
   return loading ? (
