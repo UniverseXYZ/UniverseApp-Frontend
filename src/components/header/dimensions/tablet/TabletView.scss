@@ -391,6 +391,9 @@
         }
       }
     }
+    @media (max-height: 650px) {
+      max-height: calc(100vh - 80px);
+    }
   }
   .wallet__connected__tablet {
     position: relative;
@@ -425,6 +428,7 @@
       border-radius: 10px;
       width: 280px;
       z-index: 2;
+      overflow-y: auto;
       filter: drop-shadow(0px 10px 20px rgba(136, 120, 172, 0.2));
 
       &__header {
@@ -562,11 +566,17 @@
           }
         }
       }
+      @media (max-height: 650px) {
+        max-height: calc(100vh - 80px);
+      }
     }
   }
   @include xl {
     display: flex;
     justify-content: flex-end;
+  }
+  @media (max-height: 650px) {
+    display: none;
   }
   @include sm {
     display: none;
