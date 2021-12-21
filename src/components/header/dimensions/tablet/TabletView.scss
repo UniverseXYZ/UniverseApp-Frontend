@@ -391,6 +391,9 @@
         }
       }
     }
+    @media (max-height: 610px) {
+      max-height: calc(100vh - 80px);
+    }
   }
   .wallet__connected__tablet {
     position: relative;
