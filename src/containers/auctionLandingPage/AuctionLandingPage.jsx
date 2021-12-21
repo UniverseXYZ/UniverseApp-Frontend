@@ -104,7 +104,9 @@ const AuctionLandingPage = () => {
 
     // 1. Update bidders
     const newBidders = [...biddersRef.current];
-    const existingBidderIndex = newBidders.map((bidder) => bidder.user.address).indexOf(user);
+    const existingBidderIndex = newBidders
+      .map((bidder) => bidder.user.address.toLowerCase())
+      .indexOf(user.toLowerCase());
 
     if (existingBidderIndex >= 0) {
       newBidders[existingBidderIndex].amount = parseFloat(amount);
