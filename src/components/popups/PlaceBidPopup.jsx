@@ -71,9 +71,9 @@ const PlaceBidPopup = ({
   const handleInputChange = (val) => {
     // return if value is less than 1 wei as on opensea
     const safeVal = bigNumber(val).toFixed();
-
-    if (safeVal.length > 20) return;
-    setYourBid(val);
+    const maxCharsLength = 20;
+    if (safeVal.length > maxCharsLength) return;
+    setYourBid(safeVal);
     if (safeVal && !safeVal.match(floatNumberRegex)) {
       setError('Invalid bid');
     } else {
