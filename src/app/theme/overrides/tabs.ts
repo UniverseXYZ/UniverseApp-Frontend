@@ -1,5 +1,40 @@
 export const Tabs = {
   variants: {
+    line: {
+      tablist: {
+        borderBottom: {
+          base: 0,
+          lg: '1px solid rgba(0, 0, 0, 0.1)',
+        },
+      },
+      tab: {
+        color: 'rgba(0, 0, 0, 0.4)',
+        fontWeight: 500,
+        mb: 0,
+        px: 0,
+        mx: '20px',
+
+        _first: {
+          ml: 0,
+        },
+        _last: {
+          mr: 0,
+        },
+
+        _selected: {
+          color: 'black',
+        },
+        _hover: {
+          color: 'black',
+        },
+        _focus: {
+          boxShadow: 'none',
+        },
+        _active: {
+          bg: 'transition',
+        },
+      },
+    },
     arrow: {
       tablist: {
         border: 0,
