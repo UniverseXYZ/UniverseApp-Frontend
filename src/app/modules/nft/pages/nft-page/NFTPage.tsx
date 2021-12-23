@@ -45,6 +45,7 @@ const MenuItemStyles: MenuItemProps = {
   },
 };
 
+// TODO: hide metadata tab for not Polymorph NFT type
 export const NFTPage = () => {
   const { setDarkMode } = useThemeContext() as any;
 
