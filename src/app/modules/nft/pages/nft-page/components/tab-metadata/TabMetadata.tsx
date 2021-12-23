@@ -1,7 +1,7 @@
 import { Box, BoxProps, Flex, Image, Text, TextProps } from '@chakra-ui/react';
 import React from 'react';
 
-import { Metadata } from '../../mocks/metadata';
+import { Metadata } from '../../mocks';
 
 import EthIcon from './../../../../../../../assets/images/eth-icon-new.svg';
 
