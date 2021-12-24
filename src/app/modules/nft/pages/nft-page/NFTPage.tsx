@@ -52,7 +52,7 @@ export const NFTPage = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const { setDarkMode } = useThemeContext() as any;
 
-  const [NFT] = useState<INft>(Nfts[0] as INft);
+  const [NFT] = useState<INft>(Nfts[1] as INft);
 
   const [moreNFTs] = useState<INft[]>(Nfts.slice(0, 4) as INft[]);
 
@@ -101,7 +101,7 @@ export const NFTPage = () => {
       <Box>
         <Flex>
           <Flex sx={{
-            alignItems: 'center',
+            // alignItems: 'center',
             flex: 1,
             justifyContent: 'center',
             py: '60px',
