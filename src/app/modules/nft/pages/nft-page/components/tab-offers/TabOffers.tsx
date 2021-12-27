@@ -7,10 +7,20 @@ import { NFTTabItemWrapper } from '../nft-tab-item-wrapper';
 import { Offers } from '../../mocks';
 import * as styles from './styles';
 
-export const TabOffers = () => {
-  const [offers] = useState([...Offers]);
+import TextBubbleImage from './../../../../../../../assets/images/text-bubble.png';
 
-  return (
+const TabOffersEmpty = () => (
+  <Flex align={'center'} color={'rgba(0, 0, 0, 0.4)'} flexDir={'column'}>
+    <Image src={TextBubbleImage} mt={'20px'} mb={'30px'} h={'70px'} w={'100px'} />
+    <Text fontSize={'18px'} fontWeight={500} mb={'6px'}>No active offers yet.</Text>
+    <Text fontSize={'14px'}>Be the first to make a bid!</Text>
+  </Flex>
+);
+
+export const TabOffers = () => {
+  const [offers] = useState<typeof Offers>([...Offers]);
+
+  return !offers.length ? <TabOffersEmpty /> : (
     <Box>
       {offers.map((offer, i) => {
         const neverExpired = !offer.expiredAt;
