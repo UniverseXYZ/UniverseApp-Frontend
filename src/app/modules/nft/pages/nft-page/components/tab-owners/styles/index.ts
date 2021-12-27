@@ -1,3 +1,3 @@
 export * from './description.styles';
-export * from './owner-image.styles';
-export * from './owner-name.styles';
+export * from './image.styles';
+export * from './name.styles';

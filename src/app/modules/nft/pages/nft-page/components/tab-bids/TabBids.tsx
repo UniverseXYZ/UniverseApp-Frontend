@@ -33,24 +33,24 @@ export const TabBids = () => {
         <FormLabel htmlFor={'onlyActive'} mb={0} fontWeight={700}>Display active only</FormLabel>
       </FormControl>
       {bids.map((bid, i) => {
-        const expiredIn = dayjs(bid.expiredAt).diff(new Date(), 'hours');
-        const isExpired = !(expiredIn > 0);
+        const isExpired = !(dayjs(bid.expiredAt).diff(new Date(), 'hours') > 0);
+        const addedDiff = dayjs().diff(bid.addedAt, 'hours');
         return (
           <NFTTabItemWrapper key={i} label={i === 0 ? 'Highest bid' :  undefined}>
             <Flex>
-              <Image src={bid.user.photo} {...styles.BidImageStyles} />
+              <Image src={bid.user.photo} {...styles.ImageStyles} />
               <Box>
-                <Text {...styles.BidNameStyles}><Box as={'span'} color={'rgba(0, 0, 0, 0.4)'}>by </Box>{bid.user.name}</Text>
+                <Text {...styles.NameStyles}><Box as={'span'} color={'rgba(0, 0, 0, 0.4)'}>by </Box>{bid.user.name}</Text>
                 {isExpired
                   ? (<Text {...styles.ExpiredStyles}>Expired</Text>)
-                  : (<Text {...styles.ExpiredInStyles}>{expiredIn} hours ago</Text>)
+                  : (<Text {...styles.ExpiredInStyles}>{addedDiff} hours ago</Text>)
                 }
               </Box>
             </Flex>
 
             <Flex>
               <Box textAlign={'right'}>
-                <Text {...styles.BidNameStyles}>{bid.price} WETH</Text>
+                <Text {...styles.NameStyles}>{bid.price} WETH</Text>
                 <Text {...styles.ExpiredInStyles}>${(bid.price * ETH_USD_RATE).toFixed(2)}</Text>
               </Box>
               {i == 1 && (<Button variant={'simpleOutline'} {...styles.CancelButtonStyles}>Cancel</Button>)}

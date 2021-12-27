@@ -1,6 +1,6 @@
 import { ImageProps } from '@chakra-ui/react';
 
-export const BidImageStyles: ImageProps = {
+export const ImageStyles: ImageProps = {
   borderRadius: '50%',
   h: '42px',
   mr: '16px',
