@@ -1,3 +1,4 @@
+export * from './bids';
 export * from './bindings';
 export * from './metadata';
 export * from './owners';

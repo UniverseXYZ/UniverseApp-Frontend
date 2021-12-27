@@ -5,13 +5,12 @@ import { Owners } from '../../mocks';
 import { useNFTPageData } from '../../NFTPage.context';
 import { NFTTabItemWrapper } from '../nft-tab-item-wrapper';
 import * as styles from './styles';
+import { sortOwners } from './helpers';
 
 export const TabOwners = () => {
   const { NFT } = useNFTPageData();
 
-  const [owners] = useState([...Owners].sort((a, b) => {
-    return (a.price || Infinity) > (b.price || Infinity) ? 1 : -1;
-  }));
+  const [owners] = useState(sortOwners([...Owners]));
 
   return (
     <Box>
