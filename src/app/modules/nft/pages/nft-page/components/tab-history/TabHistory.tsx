@@ -38,7 +38,7 @@ export const TabHistory = () => {
                 <Text {...styles.PriceUSDStyle}>${(history.price * ETH_USD_RATE).toFixed(2)}</Text>
               </Box>
               <Link href={getEtherScanAddress(history.transactionId)} target={'_blank'} ml={'16px'}>
-                <Tooltip {...styles.EtherscanTooltipStyle}>
+                <Tooltip hasArrow variant={'black'} {...styles.EtherscanTooltipStyle}>
                   <Image src={EtherScanIcon} {...styles.EtherscanIconStyle} />
                 </Tooltip>
               </Link>
