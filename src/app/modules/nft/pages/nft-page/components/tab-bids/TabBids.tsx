@@ -35,25 +35,26 @@ export const TabBids = () => {
       {bids.map((bid, i) => {
         const isExpired = !(dayjs(bid.expiredAt).diff(new Date(), 'hours') > 0);
         const addedDiff = dayjs().diff(bid.addedAt, 'hours');
+
         return (
           <NFTTabItemWrapper key={i} label={i === 0 ? 'Highest bid' :  undefined}>
             <Flex>
-              <Image src={bid.user.photo} {...styles.ImageStyles} />
+              <Image src={bid.user.photo} {...styles.ImageStyle} />
               <Box>
-                <Text {...styles.NameStyles}><Box as={'span'} color={'rgba(0, 0, 0, 0.4)'}>by </Box>{bid.user.name}</Text>
+                <Text {...styles.NameStyle}><Box {...styles.NameLabelStyle}>by </Box>{bid.user.name}</Text>
                 {isExpired
-                  ? (<Text {...styles.ExpiredStyles}>Expired</Text>)
-                  : (<Text {...styles.ExpiredInStyles}>{addedDiff} hours ago</Text>)
+                  ? (<Text {...styles.ExpiredStyle} color={'#FF4949'}>Expired</Text>)
+                  : (<Text {...styles.ExpiredStyle}>{addedDiff} hours ago</Text>)
                 }
               </Box>
             </Flex>
 
             <Flex>
               <Box textAlign={'right'}>
-                <Text {...styles.NameStyles}>{bid.price} WETH</Text>
-                <Text {...styles.ExpiredInStyles}>${(bid.price * ETH_USD_RATE).toFixed(2)}</Text>
+                <Text {...styles.PriceStyle}>{bid.price} WETH</Text>
+                <Text {...styles.PriceUSDStyle}>${(bid.price * ETH_USD_RATE).toFixed(2)}</Text>
               </Box>
-              {i == 1 && (<Button variant={'simpleOutline'} {...styles.CancelButtonStyles}>Cancel</Button>)}
+              {i == 1 && (<Button variant={'simpleOutline'} {...styles.CancelButtonStyle}>Cancel</Button>)}
             </Flex>
           </NFTTabItemWrapper>
         );

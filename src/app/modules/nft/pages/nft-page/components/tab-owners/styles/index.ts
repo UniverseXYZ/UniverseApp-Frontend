@@ -1,3 +1,4 @@
-export * from './description.styles';
-export * from './image.styles';
-export * from './name.styles';
+export * from './description.style';
+export * from './image.style';
+export * from './name.style';
+export * from './price.style';

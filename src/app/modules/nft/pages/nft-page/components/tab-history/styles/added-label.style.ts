@@ -1,6 +1,6 @@
 import { TextProps } from '@chakra-ui/react';
 
-export const DescriptionStyles: TextProps = {
+export const AddedLabelStyle: TextProps = {
   color: 'rgba(0, 0, 0, 0.4)',
   fontSize: '12px',
   fontWeight: 500,

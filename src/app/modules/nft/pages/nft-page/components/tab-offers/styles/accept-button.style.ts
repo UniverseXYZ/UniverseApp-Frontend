@@ -1,6 +1,6 @@
 import { ButtonProps } from '@chakra-ui/react';
 
-export const AcceptButtonStyles: ButtonProps = {
+export const AcceptButtonStyle: ButtonProps = {
   boxShadow: 'lg',
   fontSize: '14px',
   ml: '18px',
