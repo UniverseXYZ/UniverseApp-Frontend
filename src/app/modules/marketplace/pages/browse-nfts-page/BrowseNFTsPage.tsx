@@ -17,7 +17,7 @@ import { BackToTopButton, Select } from '../../../../components';
 import { NftItem } from '../../../nft/components';
 import { INft } from '../../../nft/types';
 import { Nfts } from '../../mocks/nfts';
-import { useStickyHeader } from '../../../../hooks';
+import { useStickyHeader, useStickyHeader2 } from '../../../../hooks';
 import { coins } from '../../../../mocks';
 
 import BrowseNFTsIntroImage from './../../../../../assets/images/marketplace/v2/browse_nfts_intro.png'
@@ -70,7 +70,7 @@ export const BrowseNFTsPage = () => {
 
   const filtersRef = useRef(null);
 
-  const isStickiedFilters = useStickyHeader(filtersRef);
+  const isStickiedFilters = useStickyHeader2(filtersRef);
 
   const handleNFTAuctionTimeOut = useCallback((index) => {
     setNfts(nfts.filter((nft, i) => i !== index));
@@ -95,7 +95,7 @@ export const BrowseNFTsPage = () => {
   }, []);
 
   return (
-    <>
+    <Box>
       <Flex
         sx={{
           alignItems: 'center',
@@ -206,6 +206,6 @@ export const BrowseNFTsPage = () => {
           <BackToTopButton />
         </Container>
       </Box>
-    </>
+    </Box>
   );
 };
