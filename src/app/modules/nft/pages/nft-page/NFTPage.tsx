@@ -16,26 +16,22 @@ import {
   TabPanel,
   TabPanels,
   Tabs,
-  Text, Tooltip,
+  Text,
 } from '@chakra-ui/react';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 
-import { NftItem } from '../../components';
+import { NftItem, NFTLikesPopup } from '../../components';
 import { INft } from '../../types';
 import { Nfts } from '../../../marketplace/mocks/nfts';
 import { NFTLike } from '../../components/nft-item/components';
 import { useThemeContext } from '../../../../../contexts/ThemeContext';
 import { NFTMenu, Tabs as NFTTabs } from './constants';
-import { Bindings, useBuyNFTSection } from './mocks';
+import { Bindings } from './mocks';
 import { LineTabList } from '../../../../components';
 import { NFTPageContext } from './NFTPage.context';
-import { useDateCountDown } from '../../../../hooks';
 import * as styles from './styles';
 
 import DotsIcon from './../../../../../assets/images/marketplace/3-dots.svg';
-import EthIcon from './../../../../../assets/images/eth-icon-new.svg';
-import UserImage from './../../../../../assets/images/collection_img3.svg';
-import ClockIcon from './../../../../../assets/images/clock.svg';
 import { NFTAssetAudio, NFTAssetImage, NFTBuySection } from './components';
 
 const MenuItemStyles: MenuItemProps = {
@@ -60,6 +56,8 @@ export const NFTPage = () => {
   const [moreNFTs] = useState<INft[]>(Nfts.slice(0, 4) as INft[]);
 
   const [isPolymorph] = useState(true);
+
+  const [isLikesOpened, setIsLikesOpened] = useState(false);
 
   useEffect(() => setDarkMode(false), []);
 
@@ -89,6 +87,7 @@ export const NFTPage = () => {
                     borderRadius: '12px',
                     mr: '7px',
                   }}
+                  onOpen={() => setIsLikesOpened(true)}
                 />
 
                 <Menu>
@@ -197,6 +196,7 @@ export const NFTPage = () => {
         </Container>
         <Button {...styles.MoreNFTsButtonStyle}>View collection</Button>
       </Box>
+      <NFTLikesPopup isOpen={isLikesOpened} onClose={() => setIsLikesOpened(false)} />
     </NFTPageContext.Provider>
   );
 };

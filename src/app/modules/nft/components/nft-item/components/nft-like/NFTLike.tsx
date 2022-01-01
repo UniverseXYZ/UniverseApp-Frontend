@@ -1,6 +1,6 @@
 import {
   Avatar,
-  AvatarGroup,
+  AvatarGroup, Box,
   Button,
   ButtonProps,
   Image,
@@ -19,9 +19,10 @@ import heartHover from '../../../../../../../assets/images/marketplace/heart-hov
 
 interface INFTLikeProps extends ButtonProps, Pick<INft, 'likes' | 'isLiked'> {
   onToggle?: (isLiked: boolean) => void;
+  onOpen?: () => void;
 }
 
-export const NFTLike = ({ isLiked, likes, onToggle, sx = {}, ...rest }: INFTLikeProps) => {
+export const NFTLike = ({ isLiked, likes, onToggle, onOpen, sx = {}, ...rest }: INFTLikeProps) => {
   return (
     <Popover trigger={'hover'} placement={'top'} variant={'tooltip'}>
       <PopoverTrigger>
@@ -56,12 +57,14 @@ export const NFTLike = ({ isLiked, likes, onToggle, sx = {}, ...rest }: INFTLike
       <PopoverContent width={'fit-content'}>
         <PopoverArrow />
         <PopoverBody>
-          <Text fontWeight={700} mb={'6px'}>{likes.length} people liked this</Text>
-          <AvatarGroup size='md' spacing={'-6px'}>
-            {likes.slice(0, 6).map((avatar, i) => (
-              <Avatar key={i} src={avatar} w={'26px'} h={'26px'} />
-            ))}
-          </AvatarGroup>
+          <Box sx={{ cursor: 'pointer' }} onClick={() => onOpen && onOpen()}>
+            <Text fontWeight={700} mb={'6px'}>{likes.length} people liked this</Text>
+            <AvatarGroup size='md' spacing={'-6px'}>
+              {likes.slice(0, 6).map((avatar, i) => (
+                <Avatar key={i} src={avatar} w={'26px'} h={'26px'} />
+              ))}
+            </AvatarGroup>
+          </Box>
         </PopoverBody>
       </PopoverContent>
     </Popover>
