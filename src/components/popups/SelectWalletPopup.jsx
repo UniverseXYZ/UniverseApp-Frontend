@@ -19,15 +19,13 @@ const SelectWalletPopup = (props) => {
     setSelectedWallet,
   } = props;
   let installWalletUrl = '';
+  // eslint-disable-next-line default-case
   switch (setSelectedWallet) {
     case 'Metamask':
       installWalletUrl = 'https://metamask.io/';
       break;
     // handle all ceses here
-    default:
-      installWalletUrl = 'https://metamask.io/';
   }
-
   const handleInstall = () => {
     window.open(installWalletUrl, '_blank');
     window.location.reload();
