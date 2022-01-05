@@ -18,14 +18,14 @@ import {
   Tabs,
   Text,
 } from '@chakra-ui/react';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
-import { NftItem, NFTLikesPopup, NFTReportPopup } from '../../components';
+import { NftItem, NFTLikesPopup, NFTMenu } from '../../components';
 import { INft } from '../../types';
 import { Nfts } from '../../../marketplace/mocks/nfts';
 import { NFTLike } from '../../components/nft-item/components';
 import { useThemeContext } from '../../../../../contexts/ThemeContext';
-import { NFTMenu, Tabs as NFTTabs } from './constants';
+import { Tabs as NFTTabs } from './constants';
 import { Bindings } from './mocks';
 import { LineTabList } from '../../../../components';
 import { NFTPageContext } from './NFTPage.context';
@@ -33,19 +33,6 @@ import * as styles from './styles';
 
 import DotsIcon from './../../../../../assets/images/marketplace/3-dots.svg';
 import { NFTAssetAudio, NFTAssetImage, NFTBuySection } from './components';
-
-const MenuItemStyles: MenuItemProps = {
-  borderRadius: '6px',
-  fontSize: '14px',
-  fontWeight: 500,
-  padding: '15px',
-  _hover: {
-    bg: 'rgba(0, 0, 0, 0.05)',
-  },
-  _focus: {
-    bg: 'transparent',
-  },
-};
 
 // TODO: hide metadata tab for not Polymorph NFT type
 export const NFTPage = () => {
@@ -57,8 +44,8 @@ export const NFTPage = () => {
 
   const [isPolymorph] = useState(true);
 
-  const [isLikesOpened, setIsLikesOpened] = useState(false);
-  const [isReportOpened, setIsReportOpened] = useState(false);
+  const [isLikesPopupOpened, setIsLikesPopupOpened] = useState(false);
+  const [isReportPopupOpened, setIsReportPopupOpened] = useState(false);
 
   useEffect(() => setDarkMode(false), []);
 
@@ -88,41 +75,10 @@ export const NFTPage = () => {
                     borderRadius: '12px',
                     mr: '7px',
                   }}
-                  onOpen={() => setIsLikesOpened(true)}
+                  onOpen={() => setIsLikesPopupOpened(true)}
                 />
 
-                <Menu>
-                  <MenuButton
-                    as={Button}
-                    variant={'simpleOutline'}
-                    sx={{
-                      borderRadius: '12px',
-                      height: '42px',
-                      padding: '10px',
-                    }}
-                  >
-                    <Image src={DotsIcon} />
-                  </MenuButton>
-                  <MenuList
-                    sx={{
-                      borderRadius: '12px',
-                      boxShadow: '0px 10px 36px rgba(136, 120, 172, 0.14)',
-                      padding: '8px',
-                    }}
-                  >
-                    {NFTMenu.map((menuItem, i) => (
-                      <MenuItem
-                        key={i}
-                        {...MenuItemStyles}
-                        color={menuItem.red ? '#FF4949' : ''}
-                        onClick={() => setIsReportOpened(true)}
-                      >
-                        {menuItem.icon && <Image src={menuItem.icon} mr={'6px'} />}
-                        {menuItem.name}
-                      </MenuItem>
-                    ))}
-                  </MenuList>
-                </Menu>
+                <NFTMenu />
               </Box>
             </Flex>
 
@@ -199,8 +155,7 @@ export const NFTPage = () => {
         <Button {...styles.MoreNFTsButtonStyle}>View collection</Button>
       </Box>
       {/*TODO: move to nft-like component*/}
-      <NFTLikesPopup isOpen={isLikesOpened} onClose={() => setIsLikesOpened(false)} />
-      <NFTReportPopup isOpen={isReportOpened} onClose={() => setIsReportOpened(false)} />
+      <NFTLikesPopup isOpen={isLikesPopupOpened} onClose={() => setIsLikesPopupOpened(false)} />
     </NFTPageContext.Provider>
   );
 };

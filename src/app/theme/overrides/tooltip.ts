@@ -23,7 +23,7 @@ export const Tooltip = {
       color: 'white',
       fontFamily: 'Space Grotesk',
       fontSize: '12px',
-      fontWeight: 400,
+      fontWeight: 700,
       padding: '5px 12px',
     }
   }
