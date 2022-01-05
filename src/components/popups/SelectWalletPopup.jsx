@@ -18,6 +18,20 @@ const SelectWalletPopup = (props) => {
     selectedWallet,
     setSelectedWallet,
   } = props;
+  let installWalletUrl = '';
+  switch (setSelectedWallet) {
+    case 'Metamask':
+      installWalletUrl = 'https://metamask.io/';
+      break;
+    // handle all ceses here
+    default:
+      installWalletUrl = 'https://metamask.io/';
+  }
+
+  const handleInstall = () => {
+    window.open(installWalletUrl, '_blank');
+    window.location.reload();
+  };
 
   return (
     <div className="select_wallet__popup">
@@ -64,7 +78,9 @@ const SelectWalletPopup = (props) => {
             refresh the page
           </p>
           <div className="links">
-            <Button className="light-button">Install {selectedWallet}</Button>
+            <Button onClick={handleInstall} className="light-button">
+              Install {selectedWallet}
+            </Button>
             <Button
               className="light-border-button"
               onClick={() => {
