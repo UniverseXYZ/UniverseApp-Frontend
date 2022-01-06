@@ -37,6 +37,11 @@ const AuctionDetails = ({
   const [hasAuctionStarted, setHasAuctionStarted] = useState(
     new Date() > new Date(onAuction.auction.startDate)
   );
+  const [backgroundImage, setBackgroundImage] = useState(onAuction.auction.backgroundImage);
+  const [backgroundImageUrl, setBackgroundImageUrl] = useState(
+    onAuction.auction.backgroundImageUrl
+  );
+
   useEffect(() => {
     // Prev Icon
     const prev = document.querySelector('.slick-prev');
@@ -81,49 +86,37 @@ const AuctionDetails = ({
   return (
     <div
       className={`auction__details__section ${
-        (
-          onAuction.auction.backgroundImageUrl
-            ? onAuction.auction.backgroundImageUrl
-            : onAuction.auction.backgroundImage
-            ? typeof onAuction.auction.backgroundImage !== 'string' &&
-              URL.createObjectURL(onAuction.auction.backgroundImage)
-            : onAuction.auction.backgroundImage
-        )
+        backgroundImageUrl ||
+        (backgroundImage && typeof backgroundImage !== 'string'
+          ? URL.createObjectURL(backgroundImage)
+          : backgroundImage)
           ? 'has--background'
           : ''
       }`}
     >
       <div className="bg">
-        {(onAuction.auction.backgroundImageUrl
-          ? onAuction.auction.backgroundImageUrl
-          : onAuction.auction.backgroundImage
-          ? typeof onAuction.auction.backgroundImage !== 'string' &&
-            URL.createObjectURL(onAuction.auction.backgroundImage)
-          : onAuction.auction.backgroundImage) && (
-          <img
-            src={
-              onAuction.auction.backgroundImageUrl
-                ? onAuction.auction.backgroundImageUrl
-                : onAuction.auction.backgroundImage
-                ? typeof onAuction.auction.backgroundImage !== 'string' &&
-                  URL.createObjectURL(onAuction.auction.backgroundImage)
-                : onAuction.auction.backgroundImage
-            }
-            alt={onAuction.auction.headline}
-            style={{
-              filter: onAuction.auction.backgroundImageBlur ? 'blur(10px)' : 'blur(0px)',
-            }}
-          />
-        )}
+        {backgroundImageUrl ||
+          ((backgroundImage && typeof backgroundImage !== 'string'
+            ? URL.createObjectURL(backgroundImage)
+            : backgroundImage) && (
+            <img
+              src={
+                backgroundImageUrl ||
+                (backgroundImage && typeof backgroundImage !== 'string'
+                  ? URL.createObjectURL(backgroundImage)
+                  : backgroundImage)
+              }
+              alt={onAuction.auction.headline}
+              style={{
+                filter: onAuction.auction.backgroundImageBlur ? 'blur(10px)' : 'blur(0px)',
+              }}
+            />
+          ))}
       </div>
-      {(
-        onAuction.auction.backgroundImageUrl
-          ? onAuction.auction.backgroundImageUrl
-          : onAuction.auction.backgroundImage
-          ? typeof onAuction.auction.backgroundImage !== 'string' &&
-            URL.createObjectURL(onAuction.auction.backgroundImage)
-          : onAuction.auction.backgroundImage
-      ) ? (
+      {backgroundImageUrl ||
+      (backgroundImage && typeof backgroundImage !== 'string'
+        ? URL.createObjectURL(backgroundImage)
+        : backgroundImage) ? (
         <div className="overlay" />
       ) : (
         <></>
