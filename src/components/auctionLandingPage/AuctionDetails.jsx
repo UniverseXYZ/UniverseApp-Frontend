@@ -95,23 +95,23 @@ const AuctionDetails = ({
       }`}
     >
       <div className="bg">
-        {backgroundImageUrl ||
-          ((backgroundImage && typeof backgroundImage !== 'string'
+        {(backgroundImageUrl ||
+          (backgroundImage && typeof backgroundImage !== 'string'
             ? URL.createObjectURL(backgroundImage)
-            : backgroundImage) && (
-            <img
-              src={
-                backgroundImageUrl ||
-                (backgroundImage && typeof backgroundImage !== 'string'
-                  ? URL.createObjectURL(backgroundImage)
-                  : backgroundImage)
-              }
-              alt={onAuction.auction.headline}
-              style={{
-                filter: onAuction.auction.backgroundImageBlur ? 'blur(10px)' : 'blur(0px)',
-              }}
-            />
-          ))}
+            : backgroundImage)) && (
+          <img
+            src={
+              backgroundImageUrl ||
+              (backgroundImage && typeof backgroundImage !== 'string'
+                ? URL.createObjectURL(backgroundImage)
+                : backgroundImage)
+            }
+            alt={onAuction.auction.headline}
+            style={{
+              filter: onAuction.auction.backgroundImageBlur ? 'blur(10px)' : 'blur(0px)',
+            }}
+          />
+        )}
       </div>
       {backgroundImageUrl ||
       (backgroundImage && typeof backgroundImage !== 'string'

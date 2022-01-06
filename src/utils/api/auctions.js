@@ -28,7 +28,8 @@ const ADD_REWARD_TIER_TO_AUCTION = `${process.env.REACT_APP_API_BASE_URL}/api/ad
 const GET_MY_BIDS = (address) =>
   `${process.env.REACT_APP_API_BASE_URL}/api/pages/my-bids/${address}`;
 const REMOVE_REWARD_TIER_FROM_AUCTION = `${process.env.REACT_APP_API_BASE_URL}/api/reward-tiers/`;
-const GET_AUCTION_BY_LINK = (link) => `${process.env.REACT_APP_API_BASE_URL}/api/auction/${link}`;
+const GET_AUCTION_BY_LINK = (link) =>
+  `${process.env.REACT_APP_API_BASE_URL}/api/auction/validate/${link}`;
 
 export const createAuction = async ({
   name,
