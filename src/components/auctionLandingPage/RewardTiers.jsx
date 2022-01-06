@@ -34,7 +34,14 @@ const RewardTiers = ({ auction }) => {
                   <div className="tier__nfts">
                     {tier.imageUrl ? (
                       <div className="single__nft__image" key={`${tier.id}-tier-image`}>
-                        <img src={tier.imageUrl} alt={tier.name} />
+                        <img
+                          src={
+                            typeof tier.imageUrl !== 'string'
+                              ? URL.createObjectURL(tier.imageUrl)
+                              : tier.imageUrl
+                          }
+                          alt={tier.name}
+                        />
                       </div>
                     ) : (
                       filteredNfts.map((nft, index) => {
