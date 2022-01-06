@@ -38,7 +38,7 @@ const AuctionLandingPage = () => {
   const { universeAuctionHouseContract, yourBalance, setYourBalance } = useAuthContext();
   // TODO: Disable bidding buttons until the auction is started or is canceled
   const { artistUsername, auctionName } = useParams();
-  const { loggedInArtist, address } = useAuthContext();
+  const { loggedInArtist, setLoggedInArtist, address } = useAuthContext();
   const [auction, setAuction] = useState(null);
   const [bidders, setBidders] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -245,9 +245,13 @@ const AuctionLandingPage = () => {
 
   const mockAuctionPreviewData = (auctionData) => {
     const { name, avatar, universePageAddress } = loggedInArtist;
-    loggedInArtist.displayName = name;
-    loggedInArtist.profileImageUrl = avatar;
-    loggedInArtist.universePageUrl = universePageAddress;
+
+    setLoggedInArtist({
+      ...loggedInArtist,
+      displayName: name,
+      profileImageUrl: avatar,
+      universePageUrl: universePageAddress,
+    });
     auctionData.bidders = [];
 
     const auctionMockedData = {
