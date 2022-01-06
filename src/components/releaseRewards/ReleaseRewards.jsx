@@ -20,15 +20,7 @@ import AuctioneerView from './AuctioneerView';
 import BidderView from './BidderView';
 import LoadingPopup from '../popups/LoadingPopup';
 import { useMyNftsContext } from '../../contexts/MyNFTsContext';
-import {
-  disconnectAuctionSocket,
-  initiateAuctionSocket,
-  subscribeToAuctionFinalised,
-  subscribeToBidMatched,
-  subscribeToSlotCaptured,
-  subscribeToERC721Claimed,
-  removeAllListeners,
-} from '../../utils/websockets/auctionEvents';
+import { useSocketContext } from '../../contexts/SocketContext';
 
 const ReleaseRewards = () => {
   const defaultLoadingText = 'The transaction is being processed.';
@@ -40,6 +32,7 @@ const ReleaseRewards = () => {
 
   const history = useHistory();
   const { setActiveTxHashes } = useMyNftsContext();
+  const { auctionEvents, subscribeTo, unsubscribeFrom } = useSocketContext();
 
   const [hideInfo, setHideInfo] = useState(false);
   const [showSlots, setShowSlots] = useState(false);
@@ -128,6 +121,16 @@ const ReleaseRewards = () => {
     }
   };
 
+  const handleAuctionFinalisedEvent = (err) => {
+    if (err) return;
+    setAuction((upToDate) => ({
+      ...upToDate,
+      auction: { ...upToDate.auction, finalised: true },
+    }));
+
+    setShowLoading(false);
+  };
+
   const handleCaptureRevenue = async (captureConfig, configIndex, singleSlot) => {
     try {
       let tx = null;
@@ -201,40 +204,48 @@ const ReleaseRewards = () => {
     }
   };
 
-  /**
-   * Initialise and Attach Socket events
-   */
-  useEffect(async () => {
-    initiateAuctionSocket();
-  }, []);
-
   useEffect(async () => {
     if (auctionSDK && auction?.auction?.onChainId) {
       const info = await auctionSDK.getAuctionSlotsInfo(auction?.auction?.onChainId);
       setSlotsInfo(info);
       setupPage(info);
 
-      removeAllListeners(auction.auction.id);
-      subscribeToSlotCaptured(auction.auction.id, handleSlotCapturedEvent);
-      subscribeToBidMatched(auction.auction.id, handleBidMatchedEvent);
-      subscribeToERC721Claimed(auction.auction.id, handleERC721ClaimedEvent);
+      subscribeTo({
+        auctionId: auction.auction.id,
+        eventName: auctionEvents.SLOT_CAPTURED,
+        cb: handleSlotCapturedEvent,
+      });
 
-      subscribeToAuctionFinalised(auction.auction.id, async (err) => {
-        if (err) return;
-        setAuction((upToDate) => ({
-          ...upToDate,
-          auction: { ...upToDate.auction, finalised: true },
-        }));
+      subscribeTo({
+        auctionId: auction.auction.id,
+        eventName: auctionEvents.BID_MATCHED,
+        cb: handleBidMatchedEvent,
+      });
 
-        setShowLoading(false);
+      subscribeTo({
+        auctionId: auction.auction.id,
+        eventName: auctionEvents.CLAIMED_NFT,
+        cb: handleERC721ClaimedEvent,
+      });
+
+      subscribeTo({
+        auctionId: auction.auction.id,
+        eventName: auctionEvents.FINALISED,
+        cb: handleAuctionFinalisedEvent,
       });
     }
-
-    return () => {
-      removeAllListeners(auction.auction.id);
-      disconnectAuctionSocket();
-    };
   }, [auctionSDK, auction?.auction?.onChainId]);
+
+  // eslint-disable-next-line consistent-return
+  useEffect(() => {
+    if (auction?.auction?.id) {
+      return () => {
+        unsubscribeFrom({
+          auctionId: auction.auction.id,
+        });
+      };
+    }
+  }, [auction?.auction?.id]);
 
   useEffect(async () => {
     // eslint-disable-next-line no-restricted-syntax

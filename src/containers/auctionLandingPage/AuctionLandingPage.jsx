@@ -17,16 +17,6 @@ import { useAuthContext } from '../../contexts/AuthContext';
 import { useSocketContext } from '../../contexts/SocketContext';
 import { useMyNftsContext } from '../../contexts/MyNFTsContext';
 import { LandingPageLoader } from '../../components/auctionLandingPage/LandingPageLoader';
-import {
-  disconnectAuctionSocket,
-  initiateAuctionSocket,
-  removeAllListeners,
-  subscribeToBidSubmitted,
-  subscribeToBidWithdrawn,
-  subscribeToAuctionExtended,
-  subscribeToERC721Claimed,
-  subscribeToAuctionWithdrawnRevenue,
-} from '../../utils/websockets/auctionEvents';
 import SuccessBidPopup from '../../components/popups/SuccessBidPopup';
 import { createRewardsTiersSlots } from '../../utils/helpers';
 
@@ -36,7 +26,7 @@ const AuctionLandingPage = () => {
   const locationState = useLocation().state;
   const { setActiveTxHashes, activeTxHashes } = useMyNftsContext();
   const { myAuctions } = useAuctionContext();
-  const { socket } = useSocketContext();
+  const { auctionEvents, subscribeTo, unsubscribeFrom } = useSocketContext();
   const { universeAuctionHouseContract, yourBalance, setYourBalance } = useAuthContext();
   // TODO: Disable bidding buttons until the auction is started or is canceled
   const { artistUsername, auctionName } = useParams();
@@ -55,8 +45,6 @@ const AuctionLandingPage = () => {
   const [loadingText, setLoadingText] = useState(defaultLoadingText);
   const [showSuccessfulBid, setShowSuccessfulBid] = useState(false);
   const [showCancelBidPopup, setShowCancelBidPopup] = useState(false);
-
-  console.log(socket, 'Socket !');
 
   // useRef is used to access latest state inside socket event callbacks
   // More info why this is used here (https://github.com/facebook/react/issues/16975)
@@ -104,7 +92,7 @@ const AuctionLandingPage = () => {
     }
   }, [bidders, address, rewardTiersSlots]);
 
-  const handleBidSubmittedEvent = (err, user, amount, userProfile, bids) => {
+  const handleBidSubmittedEvent = (err, { user, amount, userProfile, bids }) => {
     if (err) return;
     const isYourEvent = user.toLowerCase() === addressRef.current.toLowerCase();
 
@@ -165,7 +153,7 @@ const AuctionLandingPage = () => {
     }
   };
 
-  const handleBidWithdrawnEvent = (err, user, amount, userProfile, bids) => {
+  const handleBidWithdrawnEvent = (err, { user, amount, userProfile, bids }) => {
     const isYourEvent = user.toLowerCase() === addressRef.current.toLowerCase();
 
     // 1. Update bidders
@@ -192,7 +180,7 @@ const AuctionLandingPage = () => {
     }
   };
 
-  const handleERC721ClaimedEvent = (err, claimer, slotIndex) => {
+  const handleERC721ClaimedEvent = (err, { claimer, slotIndex }) => {
     const isYourEvent = claimer.toLowerCase() === addressRef.current.toLowerCase();
 
     if (isYourEvent) {
@@ -201,7 +189,7 @@ const AuctionLandingPage = () => {
     }
   };
 
-  const handleAuctionWithdrawnRevenueEvent = (err, totalRevenue, recipient) => {
+  const handleAuctionWithdrawnRevenueEvent = (err, { totalRevenue, recipient }) => {
     const isYourEvent = recipient.toLowerCase() === addressRef.current.toLowerCase();
 
     if (isYourEvent) {
@@ -210,7 +198,7 @@ const AuctionLandingPage = () => {
     }
   };
 
-  const handeAuctionExtendedEvent = (err, endDate) => {
+  const handeAuctionExtendedEvent = (err, { endDate }) => {
     if (err) return;
 
     setAuction((upToDate) => ({
@@ -220,32 +208,42 @@ const AuctionLandingPage = () => {
   };
 
   useEffect(() => {
-    // We need to update the callback function every time the state used inside it changes
-    // Otherwise we will get old state in the callback
     if (auction) {
-      removeAllListeners(auction.auction.id);
-
-      subscribeToBidSubmitted(auction.auction.id, (err, { user, amount, userProfile, bids }) => {
-        handleBidSubmittedEvent(err, user, amount, userProfile, bids);
+      // Ready & Tested
+      subscribeTo({
+        auctionId: auction.auction.id,
+        eventName: auctionEvents.BID_SUBMITTED,
+        cb: handleBidSubmittedEvent,
       });
 
-      subscribeToBidWithdrawn(auction.auction.id, (err, { user, amount, userProfile, bids }) => {
-        handleBidWithdrawnEvent(err, user, amount, userProfile, bids);
+      // Ready & Tested
+      subscribeTo({
+        auctionId: auction.auction.id,
+        eventName: auctionEvents.BID_WITHDRAWN,
+        cb: handleBidWithdrawnEvent,
       });
 
-      subscribeToERC721Claimed(auction.auction.id, (err, { claimer, slotIndex }) => {
-        handleERC721ClaimedEvent(err, claimer, slotIndex);
+      // Ready & Tested
+      subscribeTo({
+        auctionId: auction.auction.id,
+        eventName: auctionEvents.CLAIMED_NFT,
+        cb: handleERC721ClaimedEvent,
       });
 
-      subscribeToAuctionWithdrawnRevenue(auction.auction.id, (err, { totalRevenue, recipient }) => {
-        handleAuctionWithdrawnRevenueEvent(err, totalRevenue, recipient);
+      // Ready & Tested
+      subscribeTo({
+        auctionId: auction.auction.id,
+        eventName: auctionEvents.WITHDRAWN_REVENUE,
+        cb: handleAuctionWithdrawnRevenueEvent,
       });
 
-      subscribeToAuctionExtended(auction.auction.id, (err, { endDate }) => {
-        handeAuctionExtendedEvent(err, endDate);
+      subscribeTo({
+        auctionId: auction.auction.id,
+        eventName: auctionEvents.EXTENDED,
+        cb: handeAuctionExtendedEvent,
       });
     }
-  }, [auction, bidders, yourBalance]);
+  }, [auction]);
 
   const mockAuctionPreviewData = (auctionData) => {
     const { name, avatar, universePageAddress } = loggedInArtist;
@@ -301,18 +299,20 @@ const AuctionLandingPage = () => {
 
   useEffect(() => {
     // We need socket initialization to happens first
-    initiateAuctionSocket();
     getAuctionData();
     getEthPrice();
   }, [artistUsername, auctionName]);
 
-  useEffect(
-    () => () => {
-      // removeAllListeners(aId);
-      disconnectAuctionSocket();
-    },
-    []
-  );
+  // eslint-disable-next-line consistent-return
+  useEffect(() => {
+    if (auction?.auction?.id) {
+      return () => {
+        unsubscribeFrom({
+          auctionId: auction.auction.id,
+        });
+      };
+    }
+  }, [auction?.auction?.id]);
 
   const getAuctionSlotsInfo = async () => {
     if (universeAuctionHouseContract && auction && auction.auction?.onChainId) {
