@@ -14,6 +14,7 @@ import LoadingPopup from '../../components/popups/LoadingPopup';
 import { getEthPriceCoingecko } from '../../utils/api/etherscan';
 import { useAuctionContext } from '../../contexts/AuctionContext';
 import { useAuthContext } from '../../contexts/AuthContext';
+import { useSocketContext } from '../../contexts/SocketContext';
 import { useMyNftsContext } from '../../contexts/MyNFTsContext';
 import { LandingPageLoader } from '../../components/auctionLandingPage/LandingPageLoader';
 import {
@@ -35,6 +36,7 @@ const AuctionLandingPage = () => {
   const locationState = useLocation().state;
   const { setActiveTxHashes, activeTxHashes } = useMyNftsContext();
   const { myAuctions } = useAuctionContext();
+  const { socket } = useSocketContext();
   const { universeAuctionHouseContract, yourBalance, setYourBalance } = useAuthContext();
   // TODO: Disable bidding buttons until the auction is started or is canceled
   const { artistUsername, auctionName } = useParams();
@@ -53,6 +55,8 @@ const AuctionLandingPage = () => {
   const [loadingText, setLoadingText] = useState(defaultLoadingText);
   const [showSuccessfulBid, setShowSuccessfulBid] = useState(false);
   const [showCancelBidPopup, setShowCancelBidPopup] = useState(false);
+
+  console.log(socket, 'Socket !');
 
   // useRef is used to access latest state inside socket event callbacks
   // More info why this is used here (https://github.com/facebook/react/issues/16975)
