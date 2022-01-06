@@ -28,7 +28,7 @@ import { useAuctionContext } from '../../contexts/AuctionContext.jsx';
 
 const FutureAuctions = ({ setAuction }) => {
   const { setMyAuctions } = useAuctionContext();
-  const { setShowError, setErrorBody } = useErrorContext();
+  const { setShowError, setErrorBody, setErrorTitle } = useErrorContext();
   const sortOptions = ['Newest', 'Oldest'];
   const [shownActionId, setshownActionId] = useState(null);
   const [offset, setOffset] = useState(0);
@@ -46,6 +46,11 @@ const FutureAuctions = ({ setAuction }) => {
   useEffect(async () => {
     try {
       const response = await getFutureAuctions();
+      if (response.error) {
+        setErrorTitle('Unexpected error');
+        setErrorBody(response.message);
+        setShowError(true);
+      }
       if (!response.auctions?.length) {
         setNotFound(true);
         setLoading(false);
