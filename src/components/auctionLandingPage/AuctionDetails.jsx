@@ -81,13 +81,34 @@ const AuctionDetails = ({
   return (
     <div
       className={`auction__details__section ${
-        onAuction.auction.backgroundImageUrl ? 'has--background' : ''
+        (
+          onAuction.auction.backgroundImageUrl
+            ? onAuction.auction.backgroundImageUrl
+            : onAuction.auction.backgroundImage
+            ? typeof onAuction.auction.backgroundImage !== 'string' &&
+              URL.createObjectURL(onAuction.auction.backgroundImage)
+            : onAuction.auction.backgroundImage
+        )
+          ? 'has--background'
+          : ''
       }`}
     >
       <div className="bg">
-        {onAuction.auction.backgroundImageUrl && (
+        {(onAuction.auction.backgroundImageUrl
+          ? onAuction.auction.backgroundImageUrl
+          : onAuction.auction.backgroundImage
+          ? typeof onAuction.auction.backgroundImage !== 'string' &&
+            URL.createObjectURL(onAuction.auction.backgroundImage)
+          : onAuction.auction.backgroundImage) && (
           <img
-            src={onAuction.auction.backgroundImageUrl}
+            src={
+              onAuction.auction.backgroundImageUrl
+                ? onAuction.auction.backgroundImageUrl
+                : onAuction.auction.backgroundImage
+                ? typeof onAuction.auction.backgroundImage !== 'string' &&
+                  URL.createObjectURL(onAuction.auction.backgroundImage)
+                : onAuction.auction.backgroundImage
+            }
             alt={onAuction.auction.headline}
             style={{
               filter: onAuction.auction.backgroundImageBlur ? 'blur(10px)' : 'blur(0px)',
@@ -95,7 +116,18 @@ const AuctionDetails = ({
           />
         )}
       </div>
-      {onAuction.auction.backgroundImageUrl ? <div className="overlay" /> : <></>}
+      {(
+        onAuction.auction.backgroundImageUrl
+          ? onAuction.auction.backgroundImageUrl
+          : onAuction.auction.backgroundImage
+          ? typeof onAuction.auction.backgroundImage !== 'string' &&
+            URL.createObjectURL(onAuction.auction.backgroundImage)
+          : onAuction.auction.backgroundImage
+      ) ? (
+        <div className="overlay" />
+      ) : (
+        <></>
+      )}
       <div className="auction__details__section__container">
         <ActiveAuctions mainAuction={onAuction} />
         <Animated animationIn="zoomIn" key={onAuction.auction.id}>

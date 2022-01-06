@@ -28,6 +28,7 @@ const ADD_REWARD_TIER_TO_AUCTION = `${process.env.REACT_APP_API_BASE_URL}/api/ad
 const GET_MY_BIDS = (address) =>
   `${process.env.REACT_APP_API_BASE_URL}/api/pages/my-bids/${address}`;
 const REMOVE_REWARD_TIER_FROM_AUCTION = `${process.env.REACT_APP_API_BASE_URL}/api/reward-tiers/`;
+const GET_AUCTION_BY_LINK = (link) => `${process.env.REACT_APP_API_BASE_URL}/api/auction/${link}`;
 
 export const createAuction = async ({
   name,
@@ -240,6 +241,21 @@ export const getAuctionData = async (id) => {
   };
 
   const request = await fetch(GET_ACTIVE_AUCTIONS, requestOptions);
+
+  const result = await request.text().then((data) => JSON.parse(data));
+
+  return result;
+};
+
+export const getAuctionByLink = async (link) => {
+  const requestOptions = {
+    method: 'GET',
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem('xyz_access_token')}`,
+    },
+  };
+
+  const request = await fetch(GET_AUCTION_BY_LINK(link), requestOptions);
 
   const result = await request.text().then((data) => JSON.parse(data));
 
