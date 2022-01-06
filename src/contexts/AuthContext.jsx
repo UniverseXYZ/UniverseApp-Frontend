@@ -52,10 +52,8 @@ const AuthContextProvider = ({ children }) => {
   const [showWalletPopup, setshowWalletPopup] = useState(false);
   const [selectedWallet, setSelectedWallet] = useState('');
 
-  // TODO: Add logic and component for checking if metamask is installed
-  // Currently the app assumes the user has metamask installed
   const [showInstallWalletPopup, setShowInstallWalletPopup] = useState(false);
-  const [installed, setInstalled] = useState(true);
+  const [installed, setInstalled] = useState(false);
 
   const [auctionSDK, setAuctionSDK] = useState(null);
   const history = useHistory();
@@ -275,6 +273,9 @@ const AuthContextProvider = ({ children }) => {
   };
 
   useEffect(() => {
+    if (window.ethereum) {
+      setInstalled(true);
+    }
     if (
       !(providerName === CONNECTORS_NAMES.WalletConnect && !localStorage.getItem('walletconnect'))
     ) {
