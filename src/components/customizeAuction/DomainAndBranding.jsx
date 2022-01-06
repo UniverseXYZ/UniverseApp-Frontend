@@ -7,14 +7,16 @@ import infoIcon from '../../assets/images/icon.svg';
 import cloudIcon from '../../assets/images/ion_cloud.svg';
 import defaultImage from '../../assets/images/default-img.svg';
 import backgroundDef from '../../assets/images/background.svg';
-import backgroundTransparent from '../../assets/images/background1.svg';
+import ErrorPopup from '../popups/ErrorPopup';
 import closeIcon from '../../assets/images/close-menu.svg';
 import { useAuthContext } from '../../contexts/AuthContext.jsx';
+import { useErrorContext } from '../../contexts/ErrorContext.jsx';
 import {
   auctionPageBackgroundImageErrorMessage,
   auctionPagePromoImageErrorMessage,
 } from '../../utils/helpers.js';
 import { getImageDimensions } from '../../utils/helpers/pureFunctions/auctions';
+import { getAuctionByLink } from '../../utils/api/auctions';
 
 const PROMO_IMAGE = 'promo-image';
 const BACKGROUND_IMAGE = 'background-image';
@@ -45,6 +47,8 @@ const DomainAndBranding = ({
   onChange,
   editButtonClick,
   setEditButtonClick,
+  auctionLinkError,
+  setAuctionLinkError,
   invalidPromoImage,
   invalidBackgroundImage,
   setInvalidPromoImage,
@@ -52,6 +56,7 @@ const DomainAndBranding = ({
   blurToggleButtonDisabled,
 }) => {
   const { loggedInArtist } = useAuthContext();
+  const { showError, setShowError } = useErrorContext();
   const [promoInfo, setPromoInfo] = useState(false);
   const [blurInfo, setBlurInfo] = useState(false);
   const [auctionLink, setAuctionLink] = useState(values.link);
@@ -77,17 +82,34 @@ const DomainAndBranding = ({
     }
   }, [values?.backgroundImage]);
 
-  const handleLink = (e) => {
+  const handleLink = async (e) => {
     const validValueRegEx = /^$|^([a-zA-Z0-9-]+)$/;
     const validChars = validValueRegEx.test(e.target.value);
     if (validChars) {
-      setAuctionLink(e.target.value.replace(' ', '-'));
+      const link = e.target.value.replace(' ', '-');
+      setAuctionLink(link);
       onChange((prevValues) => ({
         ...prevValues,
-        link: e.target.value,
+        link,
         status: e.target.value.length > 0 ? 'filled' : 'empty',
       }));
       setValidLink(e.target.value.trim().length !== 0);
+
+      if (link) {
+        try {
+          const isAuctionLinkAvailable = await getAuctionByLink(link);
+
+          if (isAuctionLinkAvailable) {
+            setAuctionLinkError(false);
+            return;
+          }
+          setAuctionLinkError(true);
+          return;
+        } catch (error) {
+          setShowError(true);
+        }
+      }
+      setAuctionLinkError(false);
     }
   };
 
@@ -235,12 +257,7 @@ const DomainAndBranding = ({
             <h5>Auction link</h5>
             <div
               className={
-                (editButtonClick || !validLink) &&
-                (values.link ===
-                  `universe.xyz/${loggedInArtist.universePageAddress
-                    .split(' ')[0]
-                    .toLowerCase()}/` ||
-                  auctionLink.length === 0)
+                ((editButtonClick || !validLink) && auctionLink.length === 0) || auctionLinkError
                   ? 'auction--link--div error-inp'
                   : `auction--link--div ${inputStyle}`
               }
@@ -257,14 +274,12 @@ const DomainAndBranding = ({
                 onChange={(e) => handleLink(e)}
               />
             </div>
-            {(editButtonClick || !validLink) &&
-              (values.link ===
-                `universe.xyz/${loggedInArtist.universePageAddress.split(' ')[0].toLowerCase()}/` ||
-                auctionLink.length === 0) && (
-                <p className="error__text">
-                  &quot;Auction website link&quot; is not allowed to be empty
-                </p>
-              )}
+            {(editButtonClick || !validLink) && auctionLink.length === 0 && (
+              <p className="error__text">
+                &quot;Auction website link&quot; is not allowed to be empty
+              </p>
+            )}
+            {auctionLinkError && <p className="error__text">Auction link already exists</p>}
           </div>
         </div>
 
@@ -475,6 +490,7 @@ const DomainAndBranding = ({
           </div>
         </div>
       </div>
+      {showError && <ErrorPopup />}
     </div>
   );
 };
@@ -482,6 +498,8 @@ const DomainAndBranding = ({
 DomainAndBranding.propTypes = {
   values: PropTypes.oneOfType([PropTypes.object]),
   onChange: PropTypes.func.isRequired,
+  auctionLinkError: PropTypes.bool.isRequired,
+  setAuctionLinkError: PropTypes.func.isRequired,
   editButtonClick: PropTypes.bool,
   setEditButtonClick: PropTypes.func,
   invalidPromoImage: PropTypes.bool.isRequired,

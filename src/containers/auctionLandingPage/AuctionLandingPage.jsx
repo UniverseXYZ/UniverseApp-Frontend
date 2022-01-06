@@ -12,6 +12,7 @@ import { getAuctionLandingPage } from '../../utils/api/auctions';
 import PlaceBidPopup from '../../components/popups/PlaceBidPopup';
 import LoadingPopup from '../../components/popups/LoadingPopup';
 import { getEthPriceCoingecko } from '../../utils/api/etherscan';
+import { useAuctionContext } from '../../contexts/AuctionContext';
 import { useAuthContext } from '../../contexts/AuthContext';
 import { useMyNftsContext } from '../../contexts/MyNFTsContext';
 import { LandingPageLoader } from '../../components/auctionLandingPage/LandingPageLoader';
@@ -33,10 +34,11 @@ const AuctionLandingPage = () => {
     'The transaction is in progress. Keep this window opened. Navigating away from the page will reset the curent progress.';
   const locationState = useLocation().state;
   const { setActiveTxHashes, activeTxHashes } = useMyNftsContext();
+  const { myAuctions } = useAuctionContext();
   const { universeAuctionHouseContract, yourBalance, setYourBalance } = useAuthContext();
   // TODO: Disable bidding buttons until the auction is started or is canceled
   const { artistUsername, auctionName } = useParams();
-  const { address } = useAuthContext();
+  const { loggedInArtist, setLoggedInArtist, address } = useAuthContext();
   const [auction, setAuction] = useState(null);
   const [bidders, setBidders] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -241,8 +243,35 @@ const AuctionLandingPage = () => {
     }
   }, [auction, bidders, yourBalance]);
 
+  const mockAuctionPreviewData = (auctionData) => {
+    const { name, avatar, universePageAddress } = loggedInArtist;
+    const updatedLoggedInArtist = {
+      ...loggedInArtist,
+      displayName: name,
+      profileImageUrl: avatar,
+      universePageUrl: universePageAddress,
+    };
+    setLoggedInArtist(updatedLoggedInArtist);
+    auctionData.bidders = [];
+
+    const auctionMockedData = {
+      auction: auctionData,
+      rewardTiers: auctionData.rewardTiers,
+      collections: auctionData.collections,
+      artist: updatedLoggedInArtist,
+      bidders: [],
+    };
+
+    return auctionMockedData;
+  };
+
   const getAuctionData = async () => {
-    const auctionInfo = await getAuctionLandingPage(artistUsername, auctionName);
+    const auctionPreview = myAuctions.filter((auc) => auc.link === auctionName)[0];
+
+    const auctionInfo = auctionPreview
+      ? mockAuctionPreviewData(auctionPreview)
+      : await getAuctionLandingPage(artistUsername, auctionName);
+
     if (!auctionInfo.error) {
       const tierSlots = createRewardsTiersSlots(auctionInfo.rewardTiers, auctionInfo.bidders);
       setRewardTiersSlots(tierSlots);

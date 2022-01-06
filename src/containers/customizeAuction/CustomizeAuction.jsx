@@ -38,6 +38,7 @@ const CustomizeAuction = () => {
   const location = useLocation();
   const {
     auction,
+    setAuction,
     myAuctions,
     setMyAuctions,
     futureAuctions,
@@ -51,8 +52,22 @@ const CustomizeAuction = () => {
   const [domainAndBranding, setDomainAndBranding] = useState({
     headline: auction.headline || '',
     link: auction.link,
-    promoImage: auction.promoImageUrl || null,
-    backgroundImage: auction.backgroundImageUrl || null,
+    promoImageFile:
+      auction.promoImage && typeof auction.promoImage !== 'string' ? auction.promoImage : null,
+    backgroundImageFile:
+      auction.backgroundImage && typeof auction.backgroundImage !== 'string'
+        ? auction.backgroundImage
+        : null,
+    promoImage: auction.promoImageUrl
+      ? auction.promoImageUrl
+      : auction.promoImage && typeof auction.promoImage !== 'string'
+      ? URL.createObjectURL(auction.promoImage)
+      : auction.promoImage,
+    backgroundImage: auction.backgroundImageUrl
+      ? auction.backgroundImageUrl
+      : auction.backgroundImage && typeof auction.backgroundImage !== 'string'
+      ? URL.createObjectURL(auction.backgroundImage)
+      : auction.backgroundImage,
     backgroundImageBlur: auction.backgroundImageBlur || false,
     status:
       auction.link &&
@@ -79,6 +94,7 @@ const CustomizeAuction = () => {
   const [invalidPromoImage, setInvalidPromoImage] = useState(null);
   const [invalidBackgroundImage, setInvalidBackgroundImage] = useState(null);
   const [invalidTierImageIds, setInvalidTierImageIds] = useState([]);
+  const [auctionLinkError, setAuctionLinkError] = useState(false);
 
   const disableSaveChanges = () =>
     !domainAndBranding.headline ||
@@ -89,6 +105,7 @@ const CustomizeAuction = () => {
     accountPage === 'universe.xyz/' ||
     accountPage === 'universe.xyz/your-address' ||
     !accountPage ||
+    auctionLinkError ||
     !about;
 
   const setContext = (_loggedInArtistClone, _editedAuction, action) => {
@@ -128,15 +145,19 @@ const CustomizeAuction = () => {
     try {
       const tiers = rewardTiersAuctionClone.map(async (tier, index) => {
         let newTierData = null;
+        const { state } = location;
         const tierResponses = [];
         tier.nftIds = tier.nfts.map((nft) => nft.id);
         tier.minimumBid = parseFloat(tier.minimumBid, 10);
         // Check if data is edited
         const canEditRewardTier =
-          auction.rewardTiers[index].description !== tier.description ||
-          auction.rewardTiers[index].color !== tier.color;
+          state && state === 'edit'
+            ? auction.rewardTiers[index].description !== tier.description ||
+              auction.rewardTiers[index].color !== tier.color
+            : true;
 
-        const canEditRewardTierImage = auction.rewardTiers[index].imageUrl !== tier.imageUrl;
+        const canEditRewardTierImage =
+          state && state === 'edit' ? auction.rewardTiers[index].imageUrl !== tier.imageUrl : true;
 
         if (canEditRewardTier) {
           try {
@@ -164,10 +185,11 @@ const CustomizeAuction = () => {
   };
 
   // auction API calls
-  const saveAuction = async (editedAuction) => {
+  const saveAuction = async (editedAuction, state) => {
     let newAuctionData = null;
 
-    const canEditAuction = validateAuctionData(auction, domainAndBranding);
+    const canEditAuction =
+      state && state === 'edit' ? validateAuctionData(auction, domainAndBranding) : true;
 
     const canEditAuctionImages = validateAuctionImages(
       editedAuction,
@@ -232,9 +254,9 @@ const CustomizeAuction = () => {
     }
   };
 
-  const saveOnServer = async (editedAuction, loggedInArtistClone, action) => {
+  const saveOnServer = async (editedAuction, loggedInArtistClone, action, state) => {
     setLoading(true);
-    const newAuctionData = await saveAuction(editedAuction);
+    const newAuctionData = await saveAuction(editedAuction, state);
     const profileResponses = await saveProfile(loggedInArtistClone);
     const rewardTierResponses = await saveRewardTiers();
 
@@ -279,6 +301,7 @@ const CustomizeAuction = () => {
       const editedAuction = {
         ...auction,
         ...domainAndBranding,
+        rewardTiers: rewardTiersAuction,
       };
 
       const page = accountPage.substring(13);
@@ -292,12 +315,19 @@ const CustomizeAuction = () => {
         instagramLink,
         twitterLink,
       };
+      if (typeof editedAuction.promoImage === 'string') {
+        editedAuction.promoImage = editedAuction.promoImageFile;
+      }
+      if (typeof editedAuction.backgroundImage === 'string') {
+        editedAuction.backgroundImage = editedAuction.backgroundImageFile;
+      }
       if (action === SAVE_PREVIEW_ACTION) {
         saveOnServer(editedAuction, loggedInArtistClone, action);
       } else if (action === PREVIEW_ACTION) {
         setContext(loggedInArtistClone, editedAuction, action);
+        setAuction(editedAuction);
       } else {
-        saveOnServer(editedAuction, loggedInArtistClone, action);
+        saveOnServer(editedAuction, loggedInArtistClone, action, location.state);
       }
     }
   };
@@ -329,11 +359,13 @@ const CustomizeAuction = () => {
         </div>
         <div className="customize__auction_title">
           <h2>Customize auction landing page</h2>
-          <Button className="light-button" onClick={handlePreview}>
+          <Button className="light-button" onClick={handlePreview} disabled={disableSave}>
             Preview
           </Button>
         </div>
         <DomainAndBranding
+          auctionLinkError={auctionLinkError}
+          setAuctionLinkError={setAuctionLinkError}
           blurToggleButtonDisabled={blurToggleButtonDisabled}
           invalidPromoImage={invalidPromoImage}
           setInvalidPromoImage={setInvalidPromoImage}
