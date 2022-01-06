@@ -98,7 +98,7 @@ export const getRewardTierSpanStyles = (rewardTier) => {
   };
 };
 
-export const createRewardsTiersSlots = (rewardTiers, biddersInfo) => {
+export const createRewardsTiersSlots = (rewardTiers, biddersInfo = []) => {
   const tierSlots = [];
   let slotIndexCounter = 1;
   rewardTiers
