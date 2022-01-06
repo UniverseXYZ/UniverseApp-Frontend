@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import NFTsTab from './nfts/NFTsTab.jsx';
+import { useErrorContext } from '../../../contexts/ErrorContext';
 import tabArrow from '../../../assets/images/tab-arrow.svg';
 import ActiveAuctionsTab from './activeAuctions/ActiveAuctionsTab.jsx';
 import FutureAuctionsTab from './futureAuctions/FutureAuctionsTab.jsx';
 import PastAuctionsTab from './pastAuctions/PastAuctionsTab.jsx';
 import { handleTabLeftScrolling, handleTabRightScrolling } from '../../../utils/scrollingHandlers';
-import { useAuthContext } from '../../../contexts/AuthContext';
 import {
   getUserActiveAuctions,
   getUserFutureAuctions,
@@ -14,6 +14,7 @@ import {
 } from '../../../utils/api/auctions';
 
 const Tabs = ({ nfts, artistId }) => {
+  const { setShowError, setErrorTitle, setErrorBody } = useErrorContext();
   const [selectedTabIndex, setSelectedTabIndex] = useState(0);
   const [futureAuctions, setFutureAuctions] = useState([]);
   const [pastAuctions, setPastAuctions] = useState([]);
@@ -30,6 +31,11 @@ const Tabs = ({ nfts, artistId }) => {
     setLoading(true);
     try {
       const response = await request(artistId, offset, perPage);
+      if (response.error) {
+        setErrorTitle('Unexpected error');
+        setErrorBody(response.message);
+        setShowError(true);
+      }
 
       if (response.auctions?.length) {
         setAuctionState(response.auctions);
@@ -45,7 +51,6 @@ const Tabs = ({ nfts, artistId }) => {
       }
       setLoading(false);
     } catch (error) {
-      // TODO: handle errors
       console.error(error);
     }
   };
