@@ -66,7 +66,7 @@ const PastAuctionsCard = ({ auction, setShowLoadingModal, setLoadingText }) => {
       auction.onChainId &&
       auction.onChain
     ) {
-      const tierSlots = createRewardsTiersSlots(auction.rewardTiers, auction.bidders);
+      const tierSlots = createRewardsTiersSlots(auction.rewardTiers, auction?.bidders);
       setRewardTiersSlots(tierSlots);
 
       const onChainAuction = await universeAuctionHouseContract.auctions(auction.onChainId);

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
+import { BigNumber } from 'bignumber.js';
 import cancelIcon from '../../assets/images/activity-icons/cancel-bid.svg';
 import videoIcon from '../../assets/images/video-icon.svg';
 import universeIcon from '../../assets/images/universe-img.svg';
@@ -50,7 +51,8 @@ const TopBidders = ({
         <div className="five__bidders">
           {bidders.slice(0, 5).map((bidder, index) => {
             const isSlotOpened = openSlots.indexOf(index) >= 0;
-
+            const bigNumberAmount = new BigNumber(bidder.amount);
+            const usdAmount = bigNumberAmount.multipliedBy(ethPrice).toFixed(2);
             return (
               <React.Fragment key={bidder.id}>
                 <div className="bidder">
@@ -71,8 +73,8 @@ const TopBidders = ({
                   <div className="bid-container">
                     <div className="bid">
                       <img src={currencyIcon} alt="Currency" />
-                      <b>{bidder.amount}</b>
-                      <span>~${Math.round(bidder.amount * ethPrice)}</span>
+                      <b>{bigNumberAmount.toFixed()}</b>
+                      <span>~${usdAmount}</span>
                     </div>
                     {rewardTiersSlots[index] ? (
                       <div
@@ -184,7 +186,7 @@ const TopBidders = ({
                 <b>
                   Your bid:
                   <img src={currencyIcon} alt="Currency" />
-                  {currentBid.amount}
+                  {new BigNumber(currentBid.amount).toFixed()}
                 </b>
                 {`(#${bidders.findIndex((x) => x.userId === currentBid.userId) + 1} in the list)`}
               </span>

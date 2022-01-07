@@ -6,19 +6,12 @@ import '../pagination/Pagination.scss';
 import Pagination from '../pagination/SimplePaginations';
 import { useAuthContext } from '../../contexts/AuthContext';
 import { useMyNftsContext } from '../../contexts/MyNFTsContext';
+import { useSocketContext } from '../../contexts/SocketContext';
 import { getPastAuctions } from '../../utils/api/auctions';
 import NoAuctionsFound from './NoAuctionsFound';
 import ActiveAndPastCardSkeleton from './skeleton/ActiveAndPastCardSkeleton';
 import SortBySelect from '../input/SortBySelect';
 import PastAuctionsCard from './PastAuctionsCard';
-import {
-  disconnectAuctionSocket,
-  initiateAuctionSocket,
-  removeAllListeners,
-  subscribeToAuctionFinalised,
-  subscribeToAuctionWithdrawnRevenue,
-  subscribeToBidMatched,
-} from '../../utils/websockets/auctionEvents';
 import { useErrorContext } from '../../contexts/ErrorContext';
 
 const PastAuctions = ({ setShowLoadingModal, setLoadingText }) => {
@@ -35,10 +28,10 @@ const PastAuctions = ({ setShowLoadingModal, setLoadingText }) => {
   const { address } = useAuthContext();
   const { setActiveTxHashes } = useMyNftsContext();
   const { setShowError, setErrorTitle, setErrorBody } = useErrorContext();
+  const { auctionEvents, subscribeTo, unsubscribeFrom } = useSocketContext();
 
   useEffect(async () => {
     try {
-      initiateAuctionSocket();
       const response = await getPastAuctions();
       if (response.error) {
         setErrorTitle('Unexpected error');
@@ -55,22 +48,14 @@ const PastAuctions = ({ setShowLoadingModal, setLoadingText }) => {
       }
     } catch (error) {
       console.error(error);
-      disconnectAuctionSocket();
     }
   }, []);
-
-  useEffect(
-    () => () => {
-      disconnectAuctionSocket();
-    },
-    []
-  );
 
   const handleSearch = (value) => {
     setSearchByName(value);
   };
 
-  const handleAuctionWithdrawnRevenueEvent = (err, auctionId, totalRevenue, recipient) => {
+  const handleAuctionWithdrawnRevenueEvent = (err, auctionId, { totalRevenue, recipient }) => {
     const isYourEvent = recipient.toLowerCase() === address.toLowerCase();
 
     if (isYourEvent) {
@@ -104,11 +89,11 @@ const PastAuctions = ({ setShowLoadingModal, setLoadingText }) => {
     setPastAuctions(newAuctions);
   };
 
-  const handleBidMatchedEvent = (auctionId, bidders) => {
+  const handleBidMatchedEvent = (auctionId, { bids }) => {
     const newAuctions = [...pastAuctions];
     newAuctions.map((auction) => {
       if (auction.id === auctionId) {
-        auction.bidders = bidders;
+        auction.bidders = bids;
         console.log(`updated auction ${auctionId} bidders`);
       }
       return auction;
@@ -120,29 +105,48 @@ const PastAuctions = ({ setShowLoadingModal, setLoadingText }) => {
   useEffect(() => {
     if (filteredAuctions) {
       if (pastAuctions) {
-        pastAuctions.forEach((a) => removeAllListeners(a.id));
+        pastAuctions.forEach((a) => {
+          unsubscribeFrom({
+            auctionId: a.id,
+          });
+        });
       }
 
       // Attach events to all visible Auctions in the tab
       filteredAuctions.forEach((a) => {
-        subscribeToAuctionWithdrawnRevenue(a.id, (err, { totalRevenue, recipient }) => {
-          handleAuctionWithdrawnRevenueEvent(err, a.id, totalRevenue, recipient);
-          // removeAllListeners(a.id);
+        subscribeTo({
+          auctionId: a.id,
+          eventName: auctionEvents.WITHDRAWN_REVENUE,
+          cb: (err, msg) => handleAuctionWithdrawnRevenueEvent(err, a.id, msg),
         });
 
-        subscribeToAuctionFinalised(a.id, (err, data) => {
-          if (err) return;
-          console.log(data);
-          handleAuctionFinalisedEvent(a.id);
+        subscribeTo({
+          auctionId: a.id,
+          eventName: auctionEvents.FINALISED,
+          cb: () => handleAuctionFinalisedEvent(a.id),
         });
 
-        subscribeToBidMatched(a.id, (err, { bids }) => {
-          if (err) return;
-          handleBidMatchedEvent(a.id, bids);
+        subscribeTo({
+          auctionId: a.id,
+          eventName: auctionEvents.BID_MATCHED,
+          cb: (err, msg) => handleBidMatchedEvent(a.id, msg),
         });
       });
     }
   }, [filteredAuctions]);
+
+  // eslint-disable-next-line consistent-return
+  useEffect(() => {
+    if (pastAuctions.length) {
+      return () => {
+        pastAuctions.forEach((a) => {
+          unsubscribeFrom({
+            auctionId: a.id,
+          });
+        });
+      };
+    }
+  }, [pastAuctions.length]);
 
   useEffect(() => {
     const newFilteredAuctions = [...pastAuctions].filter((auction) =>
