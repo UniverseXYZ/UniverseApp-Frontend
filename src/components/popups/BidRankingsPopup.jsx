@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
+import BigNumber from 'bignumber.js';
 import closeIcon from '../../assets/images/close-menu.svg';
 import arrowDownIcon from '../../assets/images/arrow-down.svg';
 import nftImage from '../../assets/images/marketplace/nfts/nft1.png';
@@ -71,6 +72,9 @@ const BidRankingsPopup = ({
           {rewardTiersSlots.map((tier, index) => {
             const bidder = onBidders[index];
             const isSlotOpened = openSlots.indexOf(index) >= 0;
+            const bigNumberAmount = new BigNumber(bidder.amount);
+            const usdAmount = bigNumberAmount.multipliedBy(ethPrice).toFixed(2);
+
             return (
               <div
                 style={{ border: `border: 1px solid ${tier.color ? tier.color : '#bcbcbc'}` }}
@@ -93,8 +97,8 @@ const BidRankingsPopup = ({
                       {bidder && bidder.amount ? (
                         <>
                           <img src={currencyIcon} alt="Currency" />
-                          <b>{bidder.amount}</b>
-                          <span>~${Math.round(bidder.amount * ethPrice)}</span>
+                          <b>{bigNumberAmount.toFixed()}</b>
+                          <span>~${usdAmount}</span>
                         </>
                       ) : (
                         <></>

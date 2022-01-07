@@ -110,7 +110,7 @@ export const createRewardsTiersSlots = (rewardTiers, biddersInfo = []) => {
         tierSlots.push({
           ...rewardTier,
           nfts,
-          winner: biddersInfo[i]?.user?.address,
+          winner: biddersInfo[i]?.user?.address || null,
           slotIndex: slotIndexCounter,
           // eslint-disable-next-line no-loop-func
           minimumBid: rewardTier.slots.find((s) => s.index === slotIndexCounter)?.minimumBid,
