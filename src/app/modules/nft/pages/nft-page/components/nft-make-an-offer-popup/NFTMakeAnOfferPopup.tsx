@@ -25,14 +25,14 @@ import {
 import React, { useState } from 'react';
 
 import * as styles from './styles';
-import { Checkbox } from '../../../../../../components';
+import { Checkbox, DateTimePicker } from '../../../../../../components';
 import { ETH_USD_RATE } from '../../../../../../mocks';
 import { coins } from '../../../../../../components/currency-input/consts';
 
 import arrow from '../../../../../../../assets/images/arrow-down.svg';
 import ether from '../../../../../../../assets/images/coins/eth.svg';
 
-interface INFTPlaceABidPopupProps {
+interface INFTMakeAnOfferPopupProps {
   isOpen: boolean;
   onClose: () => void;
 }
@@ -101,7 +101,7 @@ const CurrencyItemStyle: MenuItemProps = {
   }
 };
 
-export const NFTPlaceABidPopup = ({ isOpen, onClose, }: INFTPlaceABidPopupProps) => {
+export const NFTMakeAnOfferPopup = ({ isOpen, onClose, }: INFTMakeAnOfferPopupProps) => {
   const [agree, setAgree] = useState(false);
 
   const [amount, setAmount] = useState<string>();
@@ -112,9 +112,9 @@ export const NFTPlaceABidPopup = ({ isOpen, onClose, }: INFTPlaceABidPopupProps)
       <ModalContent maxW={'480px'}>
         <ModalCloseButton />
         <ModalBody pt={'40px !important'}>
-          <Heading {...styles.TitleStyle}>Place a bid</Heading>
+          <Heading {...styles.TitleStyle}>Make an offer</Heading>
 
-          <FormControl mb={'40px'}>
+          <FormControl mb={'30px'}>
             <FormLabel>Price</FormLabel>
             {/*TODO: improve currency select & currency input components */}
             <InputGroup>
@@ -146,6 +146,11 @@ export const NFTPlaceABidPopup = ({ isOpen, onClose, }: INFTPlaceABidPopupProps)
             </InputGroup>
           </FormControl>
 
+          <FormControl mb={'40px'}>
+            <FormLabel>Offer Expiration</FormLabel>
+            <DateTimePicker value={new Date()} modalName={'Offer Expiration'} />
+          </FormControl>
+
           <Checkbox size={'lg'} isChecked={agree} onChange={(e) => setAgree(e.target.checked)}>
             <Text fontSize={'12px'} fontWeight={400}>
               By checking this box, I agree to Universe’s <Link textDecor={'underline'} target={'_blank'} href={'https://github.com/UniverseXYZ/UniverseXYZ-Whitepaper'}>Terms of Service</Link>
@@ -153,7 +158,7 @@ export const NFTPlaceABidPopup = ({ isOpen, onClose, }: INFTPlaceABidPopupProps)
           </Checkbox>
 
           <Box {...styles.ButtonsContainerStyle}>
-            <Button boxShadow={'lg'} disabled={!agree}>Place Bid</Button>
+            <Button boxShadow={'lg'} disabled={!agree}>Make an Offer</Button>
             <Button variant={'outline'}>Convert ETH</Button>
           </Box>
         </ModalBody>
