@@ -9,13 +9,7 @@ import videoIcon from '../../assets/images/video-icon.svg';
 import bidIcon from '../../assets/images/bid_icon.svg';
 import AuctionsTabsCountdown from '../auctions/AuctionsTabsCountdown';
 import Button from '../button/Button';
-import {
-  disconnectAuctionSocket,
-  initiateAuctionSocket,
-  removeAllListeners,
-  subscribeToBidSubmitted,
-  subscribeToBidWithdrawn,
-} from '../../utils/websockets/auctionEvents';
+import { useSocketContext } from '../../contexts/SocketContext';
 
 const ActiveAuctionsTabsCard = ({ activeAuction, setActiveAuctions, removeAuction }) => {
   const { ethPrice, loggedInArtist } = useAuthContext();
@@ -25,6 +19,7 @@ const ActiveAuctionsTabsCard = ({ activeAuction, setActiveAuctions, removeAuctio
   );
   const [endDate, setEndDate] = useState(format(new Date(activeAuction.endDate), 'MMMM dd, HH:mm'));
   const history = useHistory();
+  const { auctionEvents, subscribeTo, unsubscribeFrom } = useSocketContext();
 
   const handleAuctionExpand = (name) => {
     const canExpandAuction = !name || name !== shownActionId;
@@ -75,15 +70,23 @@ const ActiveAuctionsTabsCard = ({ activeAuction, setActiveAuctions, removeAuctio
 
   useEffect(() => {
     if (activeAuction.id) {
-      initiateAuctionSocket();
-      removeAllListeners(activeAuction.id);
-
-      subscribeToBidSubmitted(activeAuction.id, handleBidSubmittedEvent);
-      subscribeToBidWithdrawn(activeAuction.id, handleBidWithdrawnEvent);
+      subscribeTo({
+        auctionId: activeAuction.id,
+        eventName: auctionEvents.BID_SUBMITTED,
+        cb: handleBidSubmittedEvent,
+      });
+      subscribeTo({
+        auctionId: activeAuction.id,
+        eventName: auctionEvents.BID_WITHDRAWN,
+        cb: handleBidWithdrawnEvent,
+      });
     }
 
     return () => {
-      disconnectAuctionSocket();
+      unsubscribeFrom({
+        auctionId: activeAuction.id,
+        eventNames: [auctionEvents.BID_SUBMITTED, auctionEvents.BID_WITHDRAWN],
+      });
     };
   }, [activeAuction.id]);
 
