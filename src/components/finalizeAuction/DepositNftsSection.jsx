@@ -42,16 +42,18 @@ const DepositNftsSection = ({
     slotArray.filter((item, i, ar) => ar.indexOf(item) === i).length;
 
   const showActionButton = (txIndex) => {
+    // 1. Aution hasn't been canceled
     if (!isCanceledAuction) {
       if (approvedTxs.indexOf(txIndex) < 0) {
-        const isDisabled =
+        // Only one button must be enabled at a time starting from tx index 0
+        const depositButtonDisabled =
           txIndex === 0
             ? !(completedCollectionsStep && approvedTxs.length === 0)
             : !(completedCollectionsStep && approvedTxs.indexOf(txIndex - 1) >= 0);
 
         return (
           <Button
-            disabled={isDisabled}
+            disabled={depositButtonDisabled}
             className="light-button"
             onClick={() => handleDepositTier(txIndex)}
           >
@@ -59,27 +61,31 @@ const DepositNftsSection = ({
           </Button>
         );
       }
+
+      // Withdraw button must be disabled if auction isn't canceled
       return (
-        <Button
-          className="light-border-button"
-          disabled={!isCanceledAuction}
-          onClick={() => handleWithdraw(txIndex)}
-        >
+        <Button className="light-border-button" disabled onClick={() => handleWithdraw(txIndex)}>
           Withdraw
         </Button>
       );
     }
+
+    // 2. Auction is canceled && we some deposited txs
     if (approvedTxs.indexOf(txIndex) >= 0) {
+      // We need to withdraw starting from the beginning because the SC function always withdraw the first nfts deposited
+      const withdrawButtonDisabled = approvedTxs.length && approvedTxs[0] !== txIndex;
       return (
         <Button
           className="light-border-button"
-          disabled={!isCanceledAuction}
+          disabled={withdrawButtonDisabled}
           onClick={() => handleWithdraw(txIndex)}
         >
           Withdraw
         </Button>
       );
     }
+
+    // 3. Auction is canceled && we don't have any deposited txs
     return (
       <Button disabled className="light-button">
         Deposit
