@@ -25,8 +25,10 @@ const Tabs = ({ nfts, artistId }) => {
   const [perPage, setPerPage] = useState(12);
   const [pageCount, setPageCount] = useState(0);
   const [currentPage, setCurrentPage] = useState(0);
+  const [loading, setLoading] = useState(false);
 
   const getAuctions = async (request, offset, setAuctionState, setAuctionCount) => {
+    setLoading(true);
     try {
       const response = await request(artistId, offset, perPage);
       if (response.error) {
@@ -51,6 +53,13 @@ const Tabs = ({ nfts, artistId }) => {
       console.error(error);
     }
   };
+
+  useEffect(() => {
+    // in order to subscribe for the web socket events only once
+    if (activeAuctions.length && loading) {
+      setLoading(false);
+    }
+  }, [activeAuctions]);
 
   useEffect(() => {
     getAuctions(getUserActiveAuctions, 0, setActiveAuctions, setTotalActiveCount);
@@ -146,6 +155,7 @@ const Tabs = ({ nfts, artistId }) => {
               auctions={activeAuctions}
               handlePageClick={handlePageClick}
               pageCount={pageCount}
+              loading={loading}
               perPage={perPage}
               setPerPage={setPerPage}
               currentPage={currentPage}
@@ -157,6 +167,7 @@ const Tabs = ({ nfts, artistId }) => {
               auctions={futureAuctions}
               handlePageClick={handlePageClick}
               pageCount={pageCount}
+              // loading={loading}
               perPage={perPage}
               setPerPage={setPerPage}
               currentPage={currentPage}
@@ -166,6 +177,7 @@ const Tabs = ({ nfts, artistId }) => {
             <PastAuctionsTab
               showCreatePrompt={false}
               auctions={pastAuctions}
+              // loading={loading}
               handlePageClick={handlePageClick}
               pageCount={pageCount}
               perPage={perPage}
