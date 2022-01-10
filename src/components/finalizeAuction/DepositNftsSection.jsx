@@ -186,14 +186,17 @@ DepositNftsSection.propTypes = {
   transactions: PropTypes.oneOfType([PropTypes.object]),
   handleDepositTier: PropTypes.func.isRequired,
   handleWithdraw: PropTypes.func.isRequired,
-  completedAuctionCreationStep: PropTypes.bool.isRequired,
-  completedCollectionsStep: PropTypes.bool.isRequired,
-  completedDepositStep: PropTypes.bool.isRequired,
+  completedAuctionCreationStep: PropTypes.bool,
+  completedCollectionsStep: PropTypes.bool,
+  completedDepositStep: PropTypes.bool,
   isCanceledAuction: PropTypes.bool.isRequired,
   approvedTxs: PropTypes.oneOfType([PropTypes.array]).isRequired,
 };
 
 DepositNftsSection.defaultProps = {
   transactions: null,
+  completedAuctionCreationStep: null,
+  completedCollectionsStep: null,
+  completedDepositStep: null,
 };
 export default DepositNftsSection;
