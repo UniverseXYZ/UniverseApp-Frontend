@@ -59,9 +59,13 @@ const AuthContextProvider = ({ children }) => {
   const history = useHistory();
   // Getters
   const getEthPriceData = async (balance) => {
-    const ethUsdPice = await getEthPriceCoingecko();
-    setUsdEthBalance(ethUsdPice?.market_data?.current_price?.usd * balance);
-    setEthPrice(ethUsdPice);
+    try {
+      const ethUsdPice = await getEthPriceCoingecko();
+      setUsdEthBalance((ethUsdPice?.market_data?.current_price?.usd || 0) * balance);
+      setEthPrice(ethUsdPice);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   useEffect(() => {

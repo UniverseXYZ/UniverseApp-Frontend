@@ -270,10 +270,16 @@ const AuctionLandingPage = () => {
 
   const getAuctionData = async () => {
     const auctionPreview = myAuctions.filter((auc) => auc.link === auctionName)[0];
-
-    const auctionInfo = auctionPreview
-      ? mockAuctionPreviewData(auctionPreview)
-      : await getAuctionLandingPage(artistUsername, auctionName);
+    let auctionInfo = null;
+    if (auctionPreview) {
+      auctionInfo = mockAuctionPreviewData(auctionPreview);
+    } else {
+      try {
+        auctionInfo = await getAuctionLandingPage(artistUsername, auctionName);
+      } catch (error) {
+        console.error(error);
+      }
+    }
 
     if (!auctionInfo.error) {
       const tierSlots = createRewardsTiersSlots(auctionInfo.rewardTiers, auctionInfo.bidders);
@@ -294,8 +300,12 @@ const AuctionLandingPage = () => {
   };
 
   const getEthPrice = async () => {
-    const price = await getEthPriceCoingecko();
-    setEthPrice(price?.market_data?.current_price?.usd);
+    try {
+      const price = await getEthPriceCoingecko();
+      setEthPrice(price?.market_data?.current_price?.usd || 0);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   useEffect(() => {
