@@ -345,6 +345,7 @@ const AuctionLandingPage = () => {
         rewardTiersSlots={rewardTiersSlots}
         ethPrice={ethPrice}
         currentBid={currentBid}
+        setCurrentBid={setCurrentBid}
         loading={loading}
         isWinningBid={isWinningBid}
         winningSlot={rewardTiersSlots[winningSlot]}

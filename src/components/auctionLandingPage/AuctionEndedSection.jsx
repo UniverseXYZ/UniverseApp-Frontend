@@ -15,6 +15,7 @@ import { getRewardTierSpanStyles } from '../../utils/helpers';
 
 const AuctionEndedSection = ({
   currentBid,
+  setCurrentBid,
   bidders,
   numberOfWinners,
   rewardTiersSlots,
@@ -402,6 +403,7 @@ const AuctionEndedSection = ({
 };
 AuctionEndedSection.propTypes = {
   currentBid: PropTypes.oneOfType([PropTypes.object]).isRequired,
+  setCurrentBid: PropTypes.func.isRequired,
   numberOfWinners: PropTypes.number.isRequired,
   setShowBidRankings: PropTypes.func.isRequired,
   onAuction: PropTypes.oneOfType([PropTypes.object]).isRequired,

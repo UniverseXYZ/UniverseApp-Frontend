@@ -22,13 +22,11 @@ const Tabs = ({ nfts, artistId }) => {
   const [totalActiveCount, setTotalActiveCount] = useState(0);
   const [totalFutureCount, setTotalFutureCount] = useState(0);
   const [totalPastCount, setTotalPastCount] = useState(0);
-  const [loading, setLoading] = useState(false);
   const [perPage, setPerPage] = useState(12);
   const [pageCount, setPageCount] = useState(0);
   const [currentPage, setCurrentPage] = useState(0);
 
   const getAuctions = async (request, offset, setAuctionState, setAuctionCount) => {
-    setLoading(true);
     try {
       const response = await request(artistId, offset, perPage);
       if (response.error) {
@@ -49,7 +47,6 @@ const Tabs = ({ nfts, artistId }) => {
         setPageCount(pages);
         setAuctionCount(total);
       }
-      setLoading(false);
     } catch (error) {
       console.error(error);
     }
@@ -147,7 +144,6 @@ const Tabs = ({ nfts, artistId }) => {
             <ActiveAuctionsTab
               showCreatePrompt={false}
               auctions={activeAuctions}
-              loading={loading}
               handlePageClick={handlePageClick}
               pageCount={pageCount}
               perPage={perPage}
@@ -159,7 +155,6 @@ const Tabs = ({ nfts, artistId }) => {
             <FutureAuctionsTab
               showCreatePrompt={false}
               auctions={futureAuctions}
-              loading={loading}
               handlePageClick={handlePageClick}
               pageCount={pageCount}
               perPage={perPage}
@@ -171,7 +166,6 @@ const Tabs = ({ nfts, artistId }) => {
             <PastAuctionsTab
               showCreatePrompt={false}
               auctions={pastAuctions}
-              loading={loading}
               handlePageClick={handlePageClick}
               pageCount={pageCount}
               perPage={perPage}

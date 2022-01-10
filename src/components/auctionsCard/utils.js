@@ -40,8 +40,8 @@ export const getPromoImageProps = (imageUrl, userImage) => {
 export const bidsInUsd = (auction) => {
   const { ethPrice } = useAuthContext();
   const ethInUsd = ethPrice.market_data?.current_price?.usd || null;
-  const highestBid = auction.bids?.highestBid;
-  const lowestBid = auction.bids?.lowestBid;
+  const highestBid = auction?.bids?.highestBid;
+  const lowestBid = auction?.bids?.lowestBid;
 
   const bids = {
     highestBidInUsd: null,

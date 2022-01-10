@@ -6,14 +6,11 @@ import { getPromoImageProps, bidsInUsd, createNftsPerWinnerMarkup } from '../uti
 import { useAuctionContext } from '../../../contexts/AuctionContext';
 import { getBidTypeByName } from '../../../utils/fixtures/BidOptions';
 import AuctionsTabsCountdown from '../../auctions/AuctionsTabsCountdown';
-import {
-  subscribeToBidSubmitted,
-  subscribeToBidWithdrawn,
-  removeAllListeners,
-} from '../../../utils/websockets/auctionEvents';
+import { useSocketContext } from '../../../contexts/SocketContext';
 
 const ActiveAuctionCard = ({ auction, removeAuction }) => {
   const { options } = useAuctionContext();
+  const { auctionEvents, subscribeTo, unsubscribeFrom } = useSocketContext();
   const [auctionUpdated, setAuctionUpdated] = useState(auction);
 
   const updateBidValues = (bids) => {
@@ -26,23 +23,35 @@ const ActiveAuctionCard = ({ auction, removeAuction }) => {
     return updatedAuction;
   };
 
-  const handleUpdateAuction = (err, bids) => {
+  const handleUpdateAuction = (err, msg) => {
     if (err) {
       console.error(err);
       return;
     }
-    setAuctionUpdated(updateBidValues(bids));
+    setAuctionUpdated(updateBidValues(msg.bids));
   };
 
   useEffect(() => {
-    removeAllListeners(auction.id);
-    subscribeToBidSubmitted(auction.id, (err, { bids }) => {
-      handleUpdateAuction(err, bids);
-    });
-    subscribeToBidWithdrawn(auction.id, (err, { bids }) => {
-      handleUpdateAuction(err, bids);
-    });
-  }, [auction]);
+    if (auction) {
+      subscribeTo({
+        auctionId: auction.id,
+        eventName: auctionEvents.BID_SUBMITTED,
+        cb: (err, msg) => handleUpdateAuction(err, msg),
+      });
+
+      subscribeTo({
+        auctionId: auction.id,
+        eventName: auctionEvents.BID_WITHDRAWN,
+        cb: (err, msg) => handleUpdateAuction(err, msg),
+      });
+    }
+    return () => {
+      unsubscribeFrom({
+        auctionId: auction.id,
+        eventNames: [auctionEvents.BID_SUBMITTED, auctionEvents.BID_WITHDRAWN],
+      });
+    };
+  }, []);
 
   const bids = bidsInUsd(auctionUpdated);
   const winnersCount = auction.rewardTiers.reduce(
