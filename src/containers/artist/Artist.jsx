@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import './Artist.scss';
 import { utils } from 'ethers';
 import Skeleton from 'react-loading-skeleton';
+import { Helmet } from 'react-helmet';
 import ArtistDetails from '../../components/artist/ArtistDetails.jsx';
 import ArtistPageTabs from '../../components/artist/tabs/Tabs.jsx';
 import NotFound from '../../components/notFound/NotFound.jsx';
@@ -10,10 +11,6 @@ import { useThemeContext } from '../../contexts/ThemeContext';
 import { getProfilePage } from '../../utils/api/profile';
 import { mapUserData } from '../../utils/helpers';
 import { getUserNfts } from '../../utils/api/mintNFT';
-import {
-  initiateAuctionSocket,
-  disconnectAuctionSocket,
-} from '../../utils/websockets/auctionEvents';
 
 const Artist = () => {
   const { setDarkMode } = useThemeContext();
@@ -25,15 +22,9 @@ const Artist = () => {
 
   useEffect(() => {
     setDarkMode(false);
-    document.title = `Universe Minting - Artist - ${artist?.name}`;
-    return () => {
-      document.title = 'Universe Minting';
-    };
   }, [artist]);
 
   useEffect(() => {
-    initiateAuctionSocket();
-
     const getInfo = async () => {
       try {
         if (!utils.isAddress(artistUsername)) {
@@ -54,7 +45,6 @@ const Artist = () => {
         const artistNftsInfo = await getUserNfts(artistUsername);
         if (!artistNftsInfo.error) {
           setArtistNFTs(artistNftsInfo.nfts);
-          console.log(artistNftsInfo.nfts);
         }
       } catch (err) {
         console.log(err);
@@ -97,17 +87,22 @@ const Artist = () => {
   ) : notFound ? (
     <NotFound />
   ) : (
-    <div className="artist__page">
-      <ArtistDetails artistAddress={artistUsername} onArtist={artist} loading={loading} />
-      <ArtistPageTabs artistId={artist.id || 0} nfts={artistNFTs} />
-      {artist && artist.personalLogo ? (
-        <div className="artist__personal__logo">
-          <img src={artist.personalLogo} alt="Artist personal logo" />
-        </div>
-      ) : (
-        <></>
-      )}
-    </div>
+    <>
+      <Helmet>
+        <title>Universe Artist {artist?.name}</title>
+      </Helmet>
+      <div className="artist__page">
+        <ArtistDetails artistAddress={artistUsername} onArtist={artist} loading={loading} />
+        <ArtistPageTabs artistId={artist.id || 0} nfts={artistNFTs} />
+        {artist && artist.personalLogo ? (
+          <div className="artist__personal__logo">
+            <img src={artist.personalLogo} alt="Artist personal logo" />
+          </div>
+        ) : (
+          <></>
+        )}
+      </div>
+    </>
   );
 };
 
