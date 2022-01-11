@@ -72,7 +72,7 @@ const BidRankingsPopup = ({
           {rewardTiersSlots.map((tier, index) => {
             const bidder = onBidders[index];
             const isSlotOpened = openSlots.indexOf(index) >= 0;
-            const bigNumberAmount = new BigNumber(bidder.amount);
+            const bigNumberAmount = new BigNumber(bidder?.amount);
             const usdAmount = bigNumberAmount.multipliedBy(ethPrice).toFixed(2);
 
             return (
