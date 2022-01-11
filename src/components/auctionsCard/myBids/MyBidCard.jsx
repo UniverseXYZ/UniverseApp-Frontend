@@ -10,13 +10,13 @@ import AuctionsTabsCountdown from '../../auctions/AuctionsTabsCountdown';
 const MyBidCard = ({ bid }) => {
   const { ethPrice, loggedInArtist } = useAuthContext();
   const history = useHistory();
-
   const ethPriceUsd = ethPrice?.market_data?.current_price?.usd;
+  const auctionPagelink = `./${bid.auction.creator.universePageUrl}/${bid.auction.link}`;
   return (
     <div className={`my--bids--item${isBeforeNow(bid.auction.endDate) ? ' past' : ''}`}>
       <div
         aria-hidden
-        onClick={() => history.push(`./${bid.auction.creator.universePageUrl}/${bid.auction.link}`)}
+        onClick={() => history.push(auctionPagelink)}
         className={`my--bids--image timeLeft ${bid.auction.promoImageUrl ? '' : 'show--avatar'}`}
       >
         {bid.auction.promoImageUrl ? (
@@ -38,7 +38,9 @@ const MyBidCard = ({ bid }) => {
       </div>
       <div className="my--bids--details">
         <div className="title">
-          <h2>{bid.auction.name}</h2>
+          <h2 aria-hidden onClick={() => history.push(auctionPagelink)}>
+            {bid.auction.name}
+          </h2>
         </div>
         <div
           className="creator"
