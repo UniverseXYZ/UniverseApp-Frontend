@@ -41,7 +41,7 @@ const FutureAuctionCard = ({ auction, removeAuction }) => {
         </div>
       </Link>
       <Link to={`/${auction.user.universePageUrl}`} className="title">
-        <h1>{auction.user?.displayName}</h1>
+        <h1>{auction.name}</h1>
         <div className="artist__details">
           <img src={auction.user?.profileImageUrl} alt={auction.user?.displayName} />
           <span>by</span>
