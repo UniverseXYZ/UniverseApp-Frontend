@@ -243,7 +243,7 @@ const DesktopView = ({ isWalletConnected, setIsWalletConnected, ethereumAddress 
                   window.open('https://universe.freshdesk.com/support/home');
                 }}
               >
-                <img src={supportIcon} alt="Support" />
+                <img src={supportIcon} alt="Support" width={20} height={20} />
                 <span>Support</span>
               </button>
             </div>
