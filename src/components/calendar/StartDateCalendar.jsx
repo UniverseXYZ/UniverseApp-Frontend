@@ -240,19 +240,6 @@ const StartDateCalendar = React.forwardRef(
       createDaysArray();
     }, [selectedDate]);
 
-    const handleClickOutside = (event) => {
-      if (ref.current && !ref.current.contains(event.target)) {
-        onClose();
-      }
-    };
-
-    useEffect(() => {
-      document.addEventListener('click', handleClickOutside, true);
-      return () => {
-        document.removeEventListener('click', handleClickOutside, true);
-      };
-    });
-
     useEffect(() => {
       document.body.classList.add('no__scroll');
 
