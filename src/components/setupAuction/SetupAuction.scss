@@ -14,6 +14,9 @@
   .container {
     padding: 0;
   }
+  .disabled-click-outside {
+    pointer-events: none;
+  }
   .setup--auction--content {
     position: relative;
     width: 100%;
