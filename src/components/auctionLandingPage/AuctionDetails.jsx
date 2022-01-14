@@ -26,13 +26,23 @@ const AuctionDetails = ({
   winningSlot,
   slotsInfo,
   setShowLoading,
+  setLoadingText,
   setShowCancelBidPopup,
   showCancelBidPopup,
+  selectedAuctionEnded,
+  setSelectedAuctionEnded,
+  mySlot,
+  setMySlot,
+  mySlotIndex,
+  setMySlotIndex,
+  slotsToWithdraw,
+  setSlotsToWithdraw,
+  claimableFunds,
+  unreleasedFunds,
 }) => {
   const history = useHistory();
   const { options } = useAuctionContext();
   const { address } = useAuthContext();
-  const [selectedAuctionEnded, setSelectedAuctionEnded] = useState(false);
   const [showBidRankings, setShowBidRankings] = useState(false);
   const [currencyIcon, setCurrencyIcon] = useState(null);
   const [hasAuctionStarted, setHasAuctionStarted] = useState(
@@ -162,9 +172,18 @@ const AuctionDetails = ({
                 winningSlot={winningSlot}
                 slotsInfo={slotsInfo}
                 setShowLoading={setShowLoading}
+                setLoadingText={setLoadingText}
                 ethPrice={ethPrice}
                 currencyIcon={currencyIcon}
                 isWinningBid={isWinningBid}
+                mySlot={mySlot}
+                setMySlot={setMySlot}
+                mySlotIndex={mySlotIndex}
+                setMySlotIndex={setMySlotIndex}
+                slotsToWithdraw={slotsToWithdraw}
+                setSlotsToWithdraw={setSlotsToWithdraw}
+                claimableFunds={claimableFunds}
+                unreleasedFunds={unreleasedFunds}
               />
             )}
           </div>
@@ -204,6 +223,17 @@ AuctionDetails.propTypes = {
   setShowLoading: PropTypes.func.isRequired,
   setShowCancelBidPopup: PropTypes.func.isRequired,
   showCancelBidPopup: PropTypes.bool.isRequired,
+  selectedAuctionEnded: PropTypes.func.isRequired,
+  setSelectedAuctionEnded: PropTypes.bool.isRequired,
+  setLoadingText: PropTypes.func.isRequired,
+  mySlot: PropTypes.oneOfType([PropTypes.object]).isRequired,
+  setMySlot: PropTypes.func.isRequired,
+  mySlotIndex: PropTypes.number.isRequired,
+  setMySlotIndex: PropTypes.func.isRequired,
+  slotsToWithdraw: PropTypes.oneOfType([PropTypes.array]).isRequired,
+  setSlotsToWithdraw: PropTypes.func.isRequired,
+  claimableFunds: PropTypes.func.isRequired,
+  unreleasedFunds: PropTypes.func.isRequired,
 };
 
 AuctionDetails.defaultProps = {

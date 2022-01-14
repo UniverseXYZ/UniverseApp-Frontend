@@ -24,91 +24,30 @@ const AuctionEndedSection = ({
   winningSlot,
   slotsInfo,
   setShowLoading,
+  setLoadingText,
   ethPrice,
   currencyIcon,
   isWinningBid,
+  mySlot,
+  setMySlot,
+  mySlotIndex,
+  setMySlotIndex,
+  slotsToWithdraw,
+  setSlotsToWithdraw,
+  claimableFunds,
+  unreleasedFunds,
 }) => {
+  const verifyLoadingText = 'Your tx is being verified';
+
   const history = useHistory();
 
   const { address, universeAuctionHouseContract, yourBalance, setYourBalance } = useAuthContext();
   const { setActiveTxHashes, activeTxHashes } = useMyNftsContext();
 
-  const [mySlot, setMySlot] = useState(null);
-  const [mySlotIndex, setMySlotIndex] = useState(-1);
   const [isAuctionner, setIsAuctioneer] = useState(address === onAuction.artist.address);
 
-  const [claimableFunds, setClaimableFunds] = useState(0);
-  const [unreleasedFunds, setUnreleasedFunds] = useState(0);
   const [showUnreleasedFundsTooltip, setShowUnreleasedFundsTooltip] = useState(false);
   const [showClaimableFundsTooltip, setShowClaimableFundsTooltip] = useState(false);
-  const [slotsToWithdraw, setSlotsToWithdraw] = useState([]);
-
-  useEffect(async () => {
-    // eslint-disable-next-line no-restricted-syntax
-    for (const [slotIndex, slotInfo] of Object.entries(slotsInfo)) {
-      if (slotInfo.winner === utils.getAddress(address)) {
-        setMySlot(slotInfo);
-        setMySlotIndex(slotIndex);
-        break;
-      } else if (
-        slotInfo.winner === '0x0000000000000000000000000000000000000000' &&
-        slotInfo.revenueCaptured &&
-        slotInfo.totalWithdrawnNfts.toNumber() !== slotInfo.totalDepositedNfts.toNumber()
-      ) {
-        setSlotsToWithdraw([...slotsToWithdraw, +slotIndex]);
-      }
-    }
-  }, [slotsInfo]);
-
-  const getAuctionRevenue = async () => {
-    if (universeAuctionHouseContract && Object.values(slotsInfo).length) {
-      const revenueToClaim = await universeAuctionHouseContract.auctionsRevenue(
-        onAuction.auction.onChainId
-      );
-
-      const totalBids = Object.values(slotsInfo).reduce(
-        (acc, slot) => acc.add(slot.winningBidAmount),
-        BigNumber.from('0')
-      );
-
-      const toClaim = utils.formatEther(revenueToClaim);
-      setClaimableFunds(toClaim);
-
-      const unreleased =
-        utils.formatEther(totalBids.sub(revenueToClaim)) - Number(onAuction.auction.revenueClaimed);
-
-      setUnreleasedFunds(unreleased);
-    }
-  };
-
-  useEffect(() => {
-    getAuctionRevenue();
-  }, [universeAuctionHouseContract, slotsInfo]);
-
-  const withdrawBid = async () => {
-    try {
-      let tx = null;
-      if (onAuction.auction.tokenSymbol === 'ETH') {
-        tx = await universeAuctionHouseContract.withdrawEthBid(onAuction.auction.onChainId);
-      } else {
-        tx = await universeAuctionHouseContract.withdrawERC20Bid(onAuction.auction.onChainId);
-      }
-      setShowLoading(true);
-      setActiveTxHashes([tx.hash]);
-      const txReceipt = await tx.wait();
-      if (txReceipt.status === 1) {
-        // This is temp until the scraper handles bids
-        setShowLoading(false);
-        setActiveTxHashes([]);
-        setYourBalance(parseFloat(yourBalance) + parseFloat(currentBid.amount));
-        setCurrentBid(null);
-      }
-    } catch (err) {
-      setShowLoading(false);
-      setActiveTxHashes([]);
-      console.log(err);
-    }
-  };
 
   const handleClaimNfts = async () => {
     try {
@@ -123,7 +62,7 @@ const AuctionEndedSection = ({
       const txReceipt = await tx.wait();
       if (txReceipt.status === 1) {
         // This modal will be closed upon recieving notifyERC721Claimed event
-        setMySlot({ ...mySlot, totalWithdrawnNfts: mySlot.totalDepositedNfts });
+        setLoadingText(verifyLoadingText);
       }
     } catch (err) {
       setShowLoading(false);
@@ -142,7 +81,7 @@ const AuctionEndedSection = ({
       const txReceipt = await tx.wait();
       if (txReceipt.status === 1) {
         // This modal will be closed upon receiving Auction revenue claimed event handleAuctionWithdrawnRevenueEvent
-        setClaimableFunds(0);
+        setLoadingText(verifyLoadingText);
       }
     } catch (err) {
       setShowLoading(false);
@@ -152,6 +91,7 @@ const AuctionEndedSection = ({
     }
   };
 
+  // This can be used if the auctionner has a button to withdraw nfts that were not won from this component
   const handleWithdrawNfts = async () => {
     try {
       const txs = [...slotsToWithdraw];
@@ -180,6 +120,27 @@ const AuctionEndedSection = ({
       console.log(err);
       setActiveTxHashes([]);
       setShowLoading(false);
+    }
+  };
+
+  const withdrawBid = async () => {
+    try {
+      let tx = null;
+      if (onAuction.auction.tokenSymbol === 'ETH') {
+        tx = await universeAuctionHouseContract.withdrawEthBid(onAuction.auction.onChainId);
+      } else {
+        tx = await universeAuctionHouseContract.withdrawERC20Bid(onAuction.auction.onChainId);
+      }
+      setShowLoading(true);
+      setActiveTxHashes([tx.hash]);
+      const txReceipt = await tx.wait();
+      if (txReceipt.status === 1) {
+        setLoadingText(verifyLoadingText);
+      }
+    } catch (err) {
+      setShowLoading(false);
+      setActiveTxHashes([]);
+      console.log(err);
     }
   };
 
@@ -314,8 +275,9 @@ const AuctionEndedSection = ({
         <div className="content">
           <h2 className="title">Unfortunately, your bid didn’t win</h2>
           <p className="desc">
-            You are able to withdraw your funds by clicking the Withdraw button below. You can still
-            buy individual NFTs from other sellers on NFT marketplaces.
+            {currentBid.withdrawn
+              ? 'You have withdrawn your bid.'
+              : 'You are able to withdraw your funds by clicking the Withdraw button below. You can still buy individual NFTs from other sellers on NFT marketplaces.'}
           </p>
           <div className="view__rankings">
             <button type="button" onClick={() => setShowBidRankings(true)}>
@@ -324,7 +286,11 @@ const AuctionEndedSection = ({
           </div>
         </div>
         <div className="footer">
-          <Button disabled={!currentBid} onClick={withdrawBid} className="light-button">
+          <Button
+            disabled={!currentBid || currentBid.withdrawn}
+            onClick={withdrawBid}
+            className="light-button"
+          >
             Withdraw
           </Button>
         </div>
@@ -415,6 +381,15 @@ AuctionEndedSection.propTypes = {
   ethPrice: PropTypes.number.isRequired,
   currencyIcon: PropTypes.string,
   isWinningBid: PropTypes.bool.isRequired,
+  setLoadingText: PropTypes.func.isRequired,
+  mySlot: PropTypes.oneOfType([PropTypes.object]).isRequired,
+  setMySlot: PropTypes.func.isRequired,
+  mySlotIndex: PropTypes.number.isRequired,
+  setMySlotIndex: PropTypes.func.isRequired,
+  slotsToWithdraw: PropTypes.oneOfType([PropTypes.array]).isRequired,
+  setSlotsToWithdraw: PropTypes.func.isRequired,
+  claimableFunds: PropTypes.func.isRequired,
+  unreleasedFunds: PropTypes.func.isRequired,
 };
 
 AuctionEndedSection.defaultProps = {
