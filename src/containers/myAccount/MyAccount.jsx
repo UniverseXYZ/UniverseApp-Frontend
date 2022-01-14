@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import Popup from 'reactjs-popup';
 import { useHistory } from 'react-router-dom';
+import AwesomeDebouncePromise from 'awesome-debounce-promise';
+import useConstant from 'use-constant';
 import ProfileForm from '../../components/myAccount/ProfileForm.jsx';
 import './MyAccount.scss';
 import Head from '../../components/myAccount/Head.jsx';
@@ -30,7 +32,9 @@ const MyAccount = () => {
   const [about, setAbout] = useState(loggedInArtist.about);
   const [twitterLink, setTwitterLink] = useState(loggedInArtist.twitterLink);
   const [instagramLink, setInstagramLink] = useState(loggedInArtist.instagramLink);
-
+  const debouncedValidateAccountLink = useConstant(() =>
+    AwesomeDebouncePromise(validateAccountLink, 1000)
+  );
   const placeholderText = 'your-address';
   const [accountName, setAccountName] = useState(loggedInArtist.name);
   const [accountPage, setAccountPage] = useState(
@@ -76,7 +80,8 @@ const MyAccount = () => {
 
   const handleAccountLink = async (link) => {
     setAccountPage(link);
-    const isLinkAvailable = await validateAccountLink(link.substring(13));
+
+    const isLinkAvailable = await debouncedValidateAccountLink(link.substring(13));
 
     if (isLinkAvailable) {
       setAccountPageExists(false);
