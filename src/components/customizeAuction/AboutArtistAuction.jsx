@@ -16,34 +16,35 @@ const AboutArtistAuction = ({
   setTwitterLink,
   instagramLink,
   setInstagramLink,
-}) => {
-  const { editProfileButtonClick } = useAuctionContext();
-
-  return (
-    <div className="about__artist">
-      <div className="about__artist__header">
-        <h3>About Artist</h3>
-      </div>
-      <div className="my-account">
-        <ProfileForm
-          accountName={accountName}
-          setAccountName={setAccountName}
-          accountPage={accountPage}
-          setAccountPage={setAccountPage}
-          accountImage={accountImage}
-          setAccountImage={setAccountImage}
-          about={about}
-          setAbout={setAbout}
-          twitterLink={twitterLink}
-          setTwitterLink={setTwitterLink}
-          instagramLink={instagramLink}
-          setInstagramLink={setInstagramLink}
-          editProfileButtonClick={editProfileButtonClick}
-        />
-      </div>
+  editProfileButtonClick,
+  accountNameExists,
+  accountPageExists,
+}) => (
+  <div className="about__artist">
+    <div className="about__artist__header">
+      <h3>About Artist</h3>
     </div>
-  );
-};
+    <div className="my-account">
+      <ProfileForm
+        accountName={accountName}
+        setAccountName={setAccountName}
+        accountPage={accountPage}
+        setAccountPage={setAccountPage}
+        accountImage={accountImage}
+        setAccountImage={setAccountImage}
+        about={about}
+        setAbout={setAbout}
+        twitterLink={twitterLink}
+        setTwitterLink={setTwitterLink}
+        instagramLink={instagramLink}
+        setInstagramLink={setInstagramLink}
+        editProfileButtonClick={editProfileButtonClick}
+        accountNameExists={accountNameExists}
+        accountPageExists={accountPageExists}
+      />
+    </div>
+  </div>
+);
 
 AboutArtistAuction.propTypes = {
   accountName: PropTypes.string,
@@ -58,6 +59,9 @@ AboutArtistAuction.propTypes = {
   setTwitterLink: PropTypes.func,
   instagramLink: PropTypes.string,
   setInstagramLink: PropTypes.func,
+  editProfileButtonClick: PropTypes.bool.isRequired,
+  accountNameExists: PropTypes.oneOfType([PropTypes.bool]).isRequired,
+  accountPageExists: PropTypes.oneOfType([PropTypes.bool]).isRequired,
 };
 AboutArtistAuction.defaultProps = {
   accountName: '',

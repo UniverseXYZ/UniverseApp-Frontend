@@ -221,6 +221,7 @@ const ProfileForm = ({
                 if (e.target.value.length > MAX_FIELD_CHARS_LENGTH.pageAddress) return;
                 if (e.target.value.startsWith('universe.xyz/')) {
                   setAccountPage(e.target.value.replace(' ', '-'));
+                  setTouchedLinkInput(true);
                 }
               }}
               onFocus={handleOnFocus}

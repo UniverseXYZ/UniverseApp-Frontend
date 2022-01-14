@@ -21,12 +21,12 @@ import { useAuctionContext } from '../../contexts/AuctionContext.jsx';
 
 const MyAccount = () => {
   const { isWalletConnected, loggedInArtist, setLoggedInArtist } = useAuthContext();
-  const { editProfileButtonClick, setEditProfileButtonClick } = useAuctionContext();
   const { setShowError, setErrorTitle, setErrorBody } = useErrorContext();
   const { setDarkMode } = useThemeContext();
   const location = useLocation();
 
   const history = useHistory();
+  const [editProfileButtonClick, setEditProfileButtonClick] = useState(false);
   const [showLoading, setShowLoading] = useState(false);
   const [accountNameExists, setAccountNameExists] = useState(false);
   const [accountPageExists, setAccountPageExists] = useState(false);
