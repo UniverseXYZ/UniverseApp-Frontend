@@ -22,6 +22,7 @@ const AuctionContextProvider = ({ children }) => {
   const [selectedTokenIndex, setSelectedTokenIndex] = useState(0);
   const [selectedTabIndex, setSelectedTabIndex] = useState(0);
   const [availableNFTs, setAvailableNFTs] = useState([]);
+  const [previewMode, setPreviewMode] = useState(false);
 
   return (
     <AuctionContext.Provider
@@ -52,6 +53,8 @@ const AuctionContextProvider = ({ children }) => {
         setAvailableNFTs,
         getAvailableNFTs,
         bidExtendTime,
+        previewMode,
+        setPreviewMode,
       }}
     >
       {children}

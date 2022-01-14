@@ -30,6 +30,7 @@ const GET_MY_BIDS = (address) =>
 const REMOVE_REWARD_TIER_FROM_AUCTION = `${process.env.REACT_APP_API_BASE_URL}/api/reward-tiers/`;
 const GET_AUCTION_BY_LINK = (link) =>
   `${process.env.REACT_APP_API_BASE_URL}/api/auction/validate/${link}`;
+const DELETE_IMAGE = `${process.env.REACT_APP_API_BASE_URL}/api/auction/images`;
 
 export const createAuction = async ({
   name,
@@ -450,6 +451,21 @@ export const patchAuction = async (id, requestBody) => {
 
   const request = await fetch(EDIT_AUCTION_URL(id), requestOptions);
 
+  const result = await request.text().then((data) => JSON.parse(data));
+  return result;
+};
+
+export const removeImage = async (requestBody) => {
+  const requestOptions = {
+    method: 'DELETE',
+    headers: {
+      'Content-type': 'application/json; charset=UTF-8',
+      Authorization: `Bearer ${localStorage.getItem('xyz_access_token')}`,
+    },
+    body: JSON.stringify(requestBody),
+  };
+
+  const request = await fetch(DELETE_IMAGE, requestOptions);
   const result = await request.text().then((data) => JSON.parse(data));
   return result;
 };

@@ -787,6 +787,7 @@
                 border-radius: 10px;
                 width: 217px;
                 height: 217px;
+                position: relative;
 
                 .preview__image {
                   width: 100%;
@@ -816,6 +817,18 @@
                 width: 100%;
                 margin-top: 20px;
               }
+            }
+
+            .close {
+              position: absolute;
+              background: $white;
+              border-radius: 50%;
+              width: 26px;
+              height: 26px;
+              top: -13px;
+              right: -13px;
+              padding: 5px;
+              cursor: pointer;
             }
             @include sm {
               display: block;

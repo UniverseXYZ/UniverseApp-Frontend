@@ -1,5 +1,6 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { Animated } from 'react-animated-css';
+import { DebounceInput } from 'react-debounce-input';
 import PropTypes from 'prop-types';
 import Button from '../button/Button.jsx';
 import Input from '../input/Input.jsx';
@@ -169,35 +170,36 @@ const DomainAndBranding = ({
 
     handleImageError(imageType, fileValid, file);
 
-    if (fileValid) {
-      // Read the contents of Image File.
-      reader.readAsDataURL(file);
-      reader.onload = function onload(e) {
-        const image = new Image();
-        image.src = e.target.result;
-        image.onload = function onloade() {
-          const { height, width } = this;
-          if (imageType === PROMO_IMAGE) {
-            if (height < MIN_PROMO_IMAGE_SIZE.height || width < MIN_PROMO_IMAGE_SIZE.width) {
-              setPromoImageError(true);
-            } else {
-              setPromoImageError(false);
-              uploadFile(file, imageType);
-            }
-          } else if (imageType === BACKGROUND_IMAGE) {
-            if (
-              height < MIN_BACKGROUND_IMAGE_SIZE.height ||
-              width < MIN_BACKGROUND_IMAGE_SIZE.width
-            ) {
-              setBackgroundImageError(true);
-            } else {
-              setBackgroundImageError(false);
-              uploadFile(file, imageType);
-            }
+    // upload the image even if it is incorrect,so the user can remove it and upload a proper one or not upload an image at all
+    // Read the contents of Image File.
+    reader.readAsDataURL(file);
+    reader.onload = function onload(e) {
+      const image = new Image();
+      image.src = e.target.result;
+      image.onload = function onloade() {
+        const { height, width } = this;
+        if (imageType === PROMO_IMAGE) {
+          if (height < MIN_PROMO_IMAGE_SIZE.height || width < MIN_PROMO_IMAGE_SIZE.width) {
+            uploadFile(file, imageType);
+            setPromoImageError(true);
+          } else {
+            setPromoImageError(false);
+            uploadFile(file, imageType);
           }
-        };
+        } else if (imageType === BACKGROUND_IMAGE) {
+          if (
+            height < MIN_BACKGROUND_IMAGE_SIZE.height ||
+            width < MIN_BACKGROUND_IMAGE_SIZE.width
+          ) {
+            uploadFile(file, imageType);
+            setBackgroundImageError(true);
+          } else {
+            setBackgroundImageError(false);
+            uploadFile(file, imageType);
+          }
+        }
       };
-    }
+    };
   };
 
   const onDrop = (e, imageType, maxSize) => {
@@ -265,7 +267,8 @@ const DomainAndBranding = ({
               <span>
                 universe.xyz/{loggedInArtist.universePageAddress.split(' ')[0].toLowerCase()}/
               </span>
-              <input
+              <DebounceInput
+                debounceTimeout={1000}
                 type="text"
                 placeholder="auctionname"
                 value={auctionLink}
@@ -345,7 +348,12 @@ const DomainAndBranding = ({
                           alt="Close"
                           aria-hidden="true"
                           onClick={() => {
-                            onChange((prevValues) => ({ ...prevValues, promoImage: null }));
+                            onChange((prevValues) => ({
+                              ...prevValues,
+                              promoImage: null,
+                              promoImageFile: null,
+                              promoImageUrl: null,
+                            }));
                             setPromoImageError(false);
                           }}
                         />
@@ -465,8 +473,11 @@ const DomainAndBranding = ({
                             onChange((prevValues) => ({
                               ...prevValues,
                               backgroundImage: null,
+                              backgroundImageFile: null,
+                              backgroundImageUrl: null,
                               backgroundImageBlur: false,
                             }));
+                            setBackgroundImageError(false);
                           }}
                         />
                       </>
