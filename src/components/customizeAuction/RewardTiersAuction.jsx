@@ -33,7 +33,7 @@ const RewardTiersAuction = ({
     onChange((prevValues) =>
       prevValues.map((tier) => {
         if (tier.id === tierId && event.target.value.length <= 600) {
-          return { ...tier, description: event.target.value };
+          return { ...tier, description: event.target.value, touched: true };
         }
         return tier;
       })
@@ -113,7 +113,8 @@ const RewardTiersAuction = ({
             image = URL.createObjectURL(tier.imageUrl);
           }
           const description = tier.description || '';
-
+          const isDescriptionValid =
+            (description && tier.touched !== undefined) || tier.touched === undefined;
           const imageErrorId = invalidImageIds.find((id) => id === tier.id);
           let uploadImageContainerClasses = 'upload__image';
           let errorMessage = false;
@@ -170,7 +171,7 @@ const RewardTiersAuction = ({
                     </p>
                   </div>
                   <textarea
-                    className={!description ? 'inp error-inp' : 'inp'}
+                    className={!isDescriptionValid ? 'inp error-inp' : 'inp'}
                     placeholder="Enter the description"
                     // eslint-disable-next-line react/prop-types
                     value={values[i].description}
