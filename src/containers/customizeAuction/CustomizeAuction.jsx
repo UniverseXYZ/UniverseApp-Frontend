@@ -157,14 +157,12 @@ const CustomizeAuction = () => {
         // Check if data is edited
         const canEditRewardTier =
           state && state === 'edit'
-            ? editedAuction.rewardTiers[index].description !== tier.description ||
-              editedAuction.rewardTiers[index].color !== tier.color
+            ? auction.rewardTiers[index].description !== tier.description ||
+              auction.rewardTiers[index].color !== tier.color
             : true;
 
         const canEditRewardTierImage =
-          state && state === 'edit'
-            ? tier.imageUrl && editedAuction.rewardTiers[index].imageUrl !== tier.imageUrl
-            : true;
+          state && state === 'edit' ? auction.rewardTiers[index].imageUrl !== tier.imageUrl : true;
 
         if (canEditRewardTier) {
           try {
@@ -370,7 +368,6 @@ const CustomizeAuction = () => {
       }
       if (action === SAVE_PREVIEW_ACTION) {
         saveOnServer(editedAuction, loggedInArtistClone, action, location.state);
-        setAuction(editedAuction);
       } else if (action === PREVIEW_ACTION) {
         setContext(loggedInArtistClone, editedAuction, action);
         setAuction(editedAuction);
