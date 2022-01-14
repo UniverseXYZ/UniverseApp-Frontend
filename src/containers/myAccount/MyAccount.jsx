@@ -1,12 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import Popup from 'reactjs-popup';
 import { useHistory } from 'react-router-dom';
+import AwesomeDebouncePromise from 'awesome-debounce-promise';
+import useConstant from 'use-constant';
 import ProfileForm from '../../components/myAccount/ProfileForm.jsx';
 import './MyAccount.scss';
 import Head from '../../components/myAccount/Head.jsx';
 import CongratsProfilePopup from '../../components/popups/CongratsProfilePopup.jsx';
 import LoadingPopup from '../../components/popups/LoadingPopup.jsx';
-import { saveProfileInfo, saveUserImage } from '../../utils/api/profile.js';
+import {
+  saveProfileInfo,
+  saveUserImage,
+  validateAccountName,
+  validateAccountLink,
+} from '../../utils/api/profile.js';
 import { useThemeContext } from '../../contexts/ThemeContext.jsx';
 import { useAuthContext } from '../../contexts/AuthContext.jsx';
 import { useErrorContext } from '../../contexts/ErrorContext';
@@ -20,10 +27,14 @@ const MyAccount = () => {
 
   const history = useHistory();
   const [showLoading, setShowLoading] = useState(false);
+  const [accountNameExists, setAccountNameExists] = useState(false);
+  const [accountPageExists, setAccountPageExists] = useState(false);
   const [about, setAbout] = useState(loggedInArtist.about);
   const [twitterLink, setTwitterLink] = useState(loggedInArtist.twitterLink);
   const [instagramLink, setInstagramLink] = useState(loggedInArtist.instagramLink);
-
+  const debouncedValidateAccountLink = useConstant(() =>
+    AwesomeDebouncePromise(validateAccountLink, 1000)
+  );
   const placeholderText = 'your-address';
   const [accountName, setAccountName] = useState(loggedInArtist.name);
   const [accountPage, setAccountPage] = useState(
@@ -54,6 +65,33 @@ const MyAccount = () => {
     }
   }, [isWalletConnected]);
 
+  const handleAccountName = async (username) => {
+    setAccountName(username);
+    const isUsernameAvailable = await validateAccountName(username);
+
+    if (isUsernameAvailable) {
+      setAccountNameExists(false);
+      return;
+    }
+
+    setShowLoading(false);
+    setAccountNameExists(true);
+  };
+
+  const handleAccountLink = async (link) => {
+    setAccountPage(link);
+
+    const isLinkAvailable = await debouncedValidateAccountLink(link.substring(13));
+
+    if (isLinkAvailable) {
+      setAccountPageExists(false);
+      return;
+    }
+
+    setShowLoading(false);
+    setAccountPageExists(true);
+  };
+
   const saveChanges = async () => {
     try {
       setShowLoading(true);
@@ -65,6 +103,7 @@ const MyAccount = () => {
         accountPage === 'universe.xyz/your-address' ||
         !about
       ) {
+        setShowLoading(false);
         return;
       }
       let page = accountPage.substring(13);
@@ -157,9 +196,9 @@ const MyAccount = () => {
       <Head />
       <ProfileForm
         accountName={accountName}
-        setAccountName={setAccountName}
+        setAccountName={handleAccountName}
         accountPage={accountPage}
-        setAccountPage={setAccountPage}
+        setAccountPage={handleAccountLink}
         accountImage={accountImage}
         setAccountImage={setAccountImage}
         about={about}
@@ -172,6 +211,8 @@ const MyAccount = () => {
         cancelChanges={cancelChanges}
         editProfileButtonClick={editProfileButtonClick}
         fetchedUserData={fetchedUserData}
+        accountNameExists={accountNameExists}
+        accountPageExists={accountPageExists}
       />
       <Popup closeOnDocumentClick={false} open={showCongrats}>
         <CongratsProfilePopup onClose={() => setShowCongrats(false)} />

@@ -5,6 +5,8 @@ const GET_PROFILE_INFO_URL = `${process.env.REACT_APP_API_BASE_URL}/api/user/get
 const CHALLENGE_RUL = `${process.env.REACT_APP_API_BASE_URL}/api/auth/setChallenge`;
 const LOGIN_URL = `${process.env.REACT_APP_API_BASE_URL}/api/auth/login`;
 const PROFILE_PAGE_URL = `${process.env.REACT_APP_API_BASE_URL}/api/pages/user-profile`;
+const VALIDATE_ACCOUNT_NAME_URL = `${process.env.REACT_APP_API_BASE_URL}/api/user/validate/name`;
+const VALIDATE_USER_PAGE_URL = `${process.env.REACT_APP_API_BASE_URL}/api/user/validate/url`;
 
 /**
  * @param {Object} loggedInArtist
@@ -168,5 +170,35 @@ export const getProfilePage = async (username) => {
 
   const result = await request.text().then((data) => JSON.parse(data));
 
+  return result;
+};
+
+export const validateAccountName = async (accountName) => {
+  const requestOptions = {
+    method: 'GET',
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem('xyz_access_token')}`,
+    },
+  };
+
+  const request = await fetch(`${VALIDATE_ACCOUNT_NAME_URL}/${accountName}`, requestOptions);
+
+  const result = await request.text().then((data) => JSON.parse(data));
+  return result;
+};
+
+export const validateAccountLink = async (url) => {
+  console.log(`${VALIDATE_USER_PAGE_URL}/${url}`);
+  const requestOptions = {
+    method: 'GET',
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem('xyz_access_token')}`,
+    },
+  };
+
+  const request = await fetch(`${VALIDATE_USER_PAGE_URL}/${url}`, requestOptions);
+
+  const result = await request.text().then((data) => JSON.parse(data));
+  console.log(result);
   return result;
 };

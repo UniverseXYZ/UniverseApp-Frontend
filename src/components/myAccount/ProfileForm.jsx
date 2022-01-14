@@ -1,4 +1,5 @@
 import React, { useRef, useState, useEffect, useMemo } from 'react';
+import { DebounceInput } from 'react-debounce-input';
 import PropTypes from 'prop-types';
 import Social from './Social';
 import Button from '../button/Button.jsx';
@@ -34,6 +35,8 @@ const ProfileForm = ({
   saveChanges,
   cancelChanges,
   fetchedUserData,
+  accountNameExists,
+  accountPageExists,
 }) => {
   const disabled =
     (fetchedUserData.accountName === accountName &&
@@ -54,8 +57,6 @@ const ProfileForm = ({
   const [errors, setErrors] = useState({
     previewImage: '',
   });
-  const [accountNameExists, setAccountNameExist] = useState(false);
-  const [accountPageExists, setAccountPageExist] = useState(false);
 
   const validateFile = (file) => {
     if (!file) {
@@ -158,23 +159,24 @@ const ProfileForm = ({
               {accountName.length}/{MAX_FIELD_CHARS_LENGTH.name}
             </p>
           </h5>
-          <Input
+          <DebounceInput
+            debounceTimeout={1000}
             placeholder="Enter your display name"
-            className={
-              (!accountName || accountNameExists) && editProfileButtonClick ? 'error-inp' : 'inp'
-            }
+            className={!accountName || accountNameExists ? 'error-inp' : 'inp'}
             value={accountName}
-            hoverBoxShadowGradient={!(!accountName && editProfileButtonClick)}
+            hoverBoxShadowGradient={!!accountName}
             onChange={(e) => {
               if (e.target.value.length > MAX_FIELD_CHARS_LENGTH.name) return;
               setAccountName(e.target.value);
             }}
           />
 
-          {!accountName && editProfileButtonClick && (
+          {!accountName && (
             <p className="error__text">&quot;Display name&quot; is not allowed to be empty</p>
           )}
-          {accountNameExists && <p className="error__text">Sorry this user name is taken</p>}
+          {accountName && accountNameExists && (
+            <p className="error__text">Sorry this user name is taken</p>
+          )}
           <h5 onMouseEnter={() => setHideIcon(true)} onMouseLeave={() => setHideIcon(false)}>
             <span>
               Universe page address
@@ -198,10 +200,9 @@ const ProfileForm = ({
             <Input
               placeholder="Enter your universe page address"
               className={
-                (accountPage === 'universe.xyz/' ||
-                  accountPage === 'universe.xyz/your-address' ||
-                  accountPageExists) &&
-                editProfileButtonClick
+                accountPage === 'universe.xyz/' ||
+                accountPage === 'universe.xyz/your-address' ||
+                accountPageExists
                   ? `${inputName} error-inp`
                   : inputName
               }
@@ -214,19 +215,18 @@ const ProfileForm = ({
               }}
               onFocus={handleOnFocus}
               onBlur={handleOnBlur}
-              hoverBoxShadowGradient={!(!accountName && editProfileButtonClick)}
+              hoverBoxShadowGradient={!!accountName}
             />
-            {(accountPage === 'universe.xyz/' ||
-              accountPage === 'universe.xyz/your-address' ||
-              accountPageExists) &&
-              editProfileButtonClick && (
-                <p className="error__text">
-                  &quot;Universe page address&quot; is not allowed to be empty
-                </p>
-              )}
-            {accountPageExists && <p className="error__text">Sorry, this page address is taken</p>}
-            {(accountPage === 'universe.xyz/' || accountPage === 'universe.xyz/your-address') &&
-            editProfileButtonClick ? null : (
+            {(accountPage === 'universe.xyz/' || accountPage === 'universe.xyz/your-address') && (
+              <p className="error__text">
+                &quot;Universe page address&quot; is not allowed to be empty
+              </p>
+            )}
+            {accountPage !== 'universe.xyz/' && accountPageExists && (
+              <p className="error__text">Sorry, this page address is taken</p>
+            )}
+            {accountPage === 'universe.xyz/' ||
+            accountPage === 'universe.xyz/your-address' ? null : (
               <div className="box--shadow--effect--block" />
             )}
           </div>
@@ -285,7 +285,18 @@ const ProfileForm = ({
               </div>
             )}
           <div className="account-display-buttons">
-            <Button className="light-button" disabled={disabled || hasError} onClick={saveChanges}>
+            <Button
+              className="light-button"
+              disabled={
+                disabled ||
+                hasError ||
+                accountNameExists ||
+                accountPageExists ||
+                accountPage === 'universe.xyz/' ||
+                !accountName
+              }
+              onClick={saveChanges}
+            >
               Save changes
             </Button>
             <Button className="light-border-button" onClick={cancelChanges}>
@@ -315,6 +326,8 @@ ProfileForm.propTypes = {
   saveChanges: PropTypes.func,
   cancelChanges: PropTypes.func,
   fetchedUserData: PropTypes.oneOfType([PropTypes.object]),
+  accountNameExists: PropTypes.oneOfType([PropTypes.bool]),
+  accountPageExists: PropTypes.oneOfType([PropTypes.bool]),
 };
 
 ProfileForm.defaultProps = {
@@ -334,6 +347,8 @@ ProfileForm.defaultProps = {
   saveChanges: () => {},
   cancelChanges: () => {},
   fetchedUserData: {},
+  accountNameExists: false,
+  accountPageExists: false,
 };
 
 export default ProfileForm;
