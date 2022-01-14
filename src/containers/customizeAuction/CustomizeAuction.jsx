@@ -19,6 +19,7 @@ import {
   editRewardTier,
   editAuction,
   editRewardTierImage,
+  removeImage,
 } from '../../utils/api/auctions';
 import { saveProfileInfo, saveUserImage } from '../../utils/api/profile';
 import ErrorPopup from '../../components/popups/ErrorPopup';
@@ -109,6 +110,7 @@ const CustomizeAuction = () => {
     invalidBackgroundImage ||
     invalidPromoImage ||
     invalidTierImageIds.length ||
+    rewardTiersAuction.find((tier) => !tier.description) ||
     !about;
 
   const setContext = (_loggedInArtistClone, _editedAuction, action) => {
@@ -160,7 +162,9 @@ const CustomizeAuction = () => {
             : true;
 
         const canEditRewardTierImage =
-          state && state === 'edit' ? auction.rewardTiers[index].imageUrl !== tier.imageUrl : true;
+          state && state === 'edit'
+            ? tier.imageUrl && auction.rewardTiers[index].imageUrl !== tier.imageUrl
+            : true;
 
         if (canEditRewardTier) {
           try {
@@ -257,21 +261,63 @@ const CustomizeAuction = () => {
     }
   };
 
-  const saveOnServer = async (editedAuction, loggedInArtistClone, action, state) => {
+  // delete image api calls
+  const deleteImages = async () => {
+    const { promoImage, backgroundImage } = domainAndBranding;
+    const responses = [];
+
+    if (!promoImage && promoImage !== auction.promoImageUrl) {
+      try {
+        const response = await removeImage({ id: auction.id, type: 'auctionPromo' });
+        responses.push(response);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+
+    if (!backgroundImage && backgroundImage !== auction.backgroundImageUrl) {
+      try {
+        const response = await removeImage({ id: auction.id, type: 'auctionBackground' });
+        responses.push(response);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+    const deleteTierImageReponses = await Promise.all(
+      // eslint-disable-next-line consistent-return
+      rewardTiersAuction.map(async (tier, index) => {
+        if (!tier.imageUrl && tier.imageUrl !== auction.rewardTiers[index].imageUrl) {
+          try {
+            const response = await removeImage({ id: tier.id, type: 'tier' });
+            return response;
+          } catch (error) {
+            console.error(error);
+          }
+        }
+      })
+    );
+    responses.push(...deleteTierImageReponses);
+    return Promise.all(responses);
+  };
+
+  const saveOnServer = async (editedAuction, loggedInArtistClone, action) => {
     setLoading(true);
     const newAuctionData = await saveAuction(editedAuction, state);
     const profileResponses = await saveProfile(loggedInArtistClone);
     const rewardTierResponses = await saveRewardTiers();
+    const removeImagesResponses = await deleteImages();
 
     const errors = [];
 
+    if (removeImagesResponses.length) {
+      removeImagesResponses.forEach((res) => res?.error && errors.push(res));
+    }
     if (rewardTierResponses.length) {
       rewardTierResponses.forEach((res) => res.error && errors.push(res));
       if (!errors.length) {
         newAuctionData.rewardTiers = rewardTierResponses;
       }
     }
-
     if (profileResponses?.length) {
       profileResponses.forEach((res) => {
         if (res) {
@@ -281,11 +327,9 @@ const CustomizeAuction = () => {
         }
       });
     }
-
     if (newAuctionData.error) {
       errors.push(newAuctionData);
     }
-
     handleStatus(errors, loggedInArtistClone, newAuctionData, action);
   };
 
