@@ -169,35 +169,36 @@ const DomainAndBranding = ({
 
     handleImageError(imageType, fileValid, file);
 
-    if (fileValid) {
-      // Read the contents of Image File.
-      reader.readAsDataURL(file);
-      reader.onload = function onload(e) {
-        const image = new Image();
-        image.src = e.target.result;
-        image.onload = function onloade() {
-          const { height, width } = this;
-          if (imageType === PROMO_IMAGE) {
-            if (height < MIN_PROMO_IMAGE_SIZE.height || width < MIN_PROMO_IMAGE_SIZE.width) {
-              setPromoImageError(true);
-            } else {
-              setPromoImageError(false);
-              uploadFile(file, imageType);
-            }
-          } else if (imageType === BACKGROUND_IMAGE) {
-            if (
-              height < MIN_BACKGROUND_IMAGE_SIZE.height ||
-              width < MIN_BACKGROUND_IMAGE_SIZE.width
-            ) {
-              setBackgroundImageError(true);
-            } else {
-              setBackgroundImageError(false);
-              uploadFile(file, imageType);
-            }
+    // upload the image even if it is incorrect,so the user can remove it and upload a proper one or not upload an image at all
+    // Read the contents of Image File.
+    reader.readAsDataURL(file);
+    reader.onload = function onload(e) {
+      const image = new Image();
+      image.src = e.target.result;
+      image.onload = function onloade() {
+        const { height, width } = this;
+        if (imageType === PROMO_IMAGE) {
+          if (height < MIN_PROMO_IMAGE_SIZE.height || width < MIN_PROMO_IMAGE_SIZE.width) {
+            uploadFile(file, imageType);
+            setPromoImageError(true);
+          } else {
+            setPromoImageError(false);
+            uploadFile(file, imageType);
           }
-        };
+        } else if (imageType === BACKGROUND_IMAGE) {
+          if (
+            height < MIN_BACKGROUND_IMAGE_SIZE.height ||
+            width < MIN_BACKGROUND_IMAGE_SIZE.width
+          ) {
+            uploadFile(file, imageType);
+            setBackgroundImageError(true);
+          } else {
+            setBackgroundImageError(false);
+            uploadFile(file, imageType);
+          }
+        }
       };
-    }
+    };
   };
 
   const onDrop = (e, imageType, maxSize) => {
@@ -467,6 +468,7 @@ const DomainAndBranding = ({
                               backgroundImage: null,
                               backgroundImageBlur: false,
                             }));
+                            setBackgroundImageError(false);
                           }}
                         />
                       </>
