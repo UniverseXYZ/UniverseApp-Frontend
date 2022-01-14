@@ -473,8 +473,8 @@ const DomainAndBranding = ({
                             onChange((prevValues) => ({
                               ...prevValues,
                               backgroundImage: null,
-                              promoImageFile: null,
-                              promoImageUrl: null,
+                              backgroundImageFile: null,
+                              backgroundImageUrl: null,
                               backgroundImageBlur: false,
                             }));
                             setBackgroundImageError(false);
