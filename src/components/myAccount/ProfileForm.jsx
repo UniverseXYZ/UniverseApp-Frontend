@@ -58,6 +58,9 @@ const ProfileForm = ({
     previewImage: '',
   });
 
+  const [touchedDisplayNameInput, setTouchedDisplayNameInput] = useState(false);
+  const [touchedLinkInput, setTouchedLinkInput] = useState(false);
+
   const validateFile = (file) => {
     if (!file) {
       setErrors({
@@ -162,20 +165,26 @@ const ProfileForm = ({
           <DebounceInput
             debounceTimeout={1000}
             placeholder="Enter your display name"
-            className={!accountName || accountNameExists ? 'error-inp' : 'inp'}
+            className={
+              (!accountName || accountNameExists) && touchedDisplayNameInput ? 'error-inp' : 'inp'
+            }
             value={accountName}
-            hoverBoxShadowGradient={!!accountName}
+            hoverBoxShadowGradient={
+              !(!accountName && touchedDisplayNameInput) ||
+              !(accountNameExists && touchedDisplayNameInput)
+            }
             onChange={(e) => {
               if (e.target.value.length > MAX_FIELD_CHARS_LENGTH.name) return;
               setAccountName(e.target.value);
+              setTouchedDisplayNameInput(true);
             }}
           />
 
-          {!accountName && (
+          {!accountName && touchedDisplayNameInput && (
             <p className="error__text">&quot;Display name&quot; is not allowed to be empty</p>
           )}
-          {accountName && accountNameExists && (
-            <p className="error__text">Sorry this user name is taken</p>
+          {accountNameExists && touchedDisplayNameInput && (
+            <p className="error__text">This display name is already taken</p>
           )}
           <h5 onMouseEnter={() => setHideIcon(true)} onMouseLeave={() => setHideIcon(false)}>
             <span>
@@ -200,9 +209,10 @@ const ProfileForm = ({
             <Input
               placeholder="Enter your universe page address"
               className={
-                accountPage === 'universe.xyz/' ||
-                accountPage === 'universe.xyz/your-address' ||
-                accountPageExists
+                (accountPage === 'universe.xyz/' ||
+                  accountPage === 'universe.xyz/your-address' ||
+                  accountPageExists) &&
+                touchedLinkInput
                   ? `${inputName} error-inp`
                   : inputName
               }
@@ -211,22 +221,28 @@ const ProfileForm = ({
                 if (e.target.value.length > MAX_FIELD_CHARS_LENGTH.pageAddress) return;
                 if (e.target.value.startsWith('universe.xyz/')) {
                   setAccountPage(e.target.value.replace(' ', '-'));
+                  setTouchedLinkInput(true);
                 }
               }}
               onFocus={handleOnFocus}
               onBlur={handleOnBlur}
-              hoverBoxShadowGradient={!!accountName}
+              hoverBoxShadowGradient={!(!accountName && touchedLinkInput)}
             />
-            {(accountPage === 'universe.xyz/' || accountPage === 'universe.xyz/your-address') && (
-              <p className="error__text">
-                &quot;Universe page address&quot; is not allowed to be empty
-              </p>
+            {(accountPage === 'universe.xyz/' ||
+              accountPage === 'universe.xyz/your-address' ||
+              accountPageExists) &&
+              touchedLinkInput && (
+                <p className="error__text">
+                  &quot;Universe page address&quot; is not allowed to be empty
+                </p>
+              )}
+
+            {accountPageExists && (
+              <p className="error__text">Sorry, this page address is already taken</p>
             )}
-            {accountPage !== 'universe.xyz/' && accountPageExists && (
-              <p className="error__text">Sorry, this page address is taken</p>
-            )}
-            {accountPage === 'universe.xyz/' ||
-            accountPage === 'universe.xyz/your-address' ? null : (
+
+            {(accountPage === 'universe.xyz/' || accountPage === 'universe.xyz/your-address') &&
+            touchedLinkInput ? null : (
               <div className="box--shadow--effect--block" />
             )}
           </div>

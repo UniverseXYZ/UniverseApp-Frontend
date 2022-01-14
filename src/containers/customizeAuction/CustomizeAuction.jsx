@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import './CustomizeAuction.scss';
 import { useHistory, useLocation } from 'react-router-dom';
 import Popup from 'reactjs-popup';
+import AwesomeDebouncePromise from 'awesome-debounce-promise';
+import useConstant from 'use-constant';
 import arrow from '../../assets/images/arrow.svg';
 import Button from '../../components/button/Button.jsx';
 import DomainAndBranding from '../../components/customizeAuction/DomainAndBranding.jsx';
@@ -21,7 +23,12 @@ import {
   editRewardTierImage,
   removeImage,
 } from '../../utils/api/auctions';
-import { saveProfileInfo, saveUserImage } from '../../utils/api/profile';
+import {
+  saveProfileInfo,
+  saveUserImage,
+  validateAccountLink,
+  validateAccountName,
+} from '../../utils/api/profile';
 import ErrorPopup from '../../components/popups/ErrorPopup';
 import LoadingPopup from '../../components/popups/LoadingPopup';
 import {
@@ -44,10 +51,10 @@ const CustomizeAuction = () => {
     setMyAuctions,
     futureAuctions,
     setFutureAuctions,
-    setEditProfileButtonClick,
     previewMode,
     setPreviewMode,
   } = useAuctionContext();
+  const [editProfileButtonClick, setEditProfileButtonClick] = useState(false);
   const { loggedInArtist, setLoggedInArtist } = useAuthContext();
   const { showError, setShowError, setErrorTitle, setErrorBody } = useErrorContext();
   const [customizeAuctionState, setCustomizeAuctionState] = useState(false);
@@ -98,6 +105,8 @@ const CustomizeAuction = () => {
   const [invalidBackgroundImage, setInvalidBackgroundImage] = useState(null);
   const [invalidTierImageIds, setInvalidTierImageIds] = useState([]);
   const [auctionLinkError, setAuctionLinkError] = useState(false);
+  const [accountNameExists, setAccountNameExists] = useState(false);
+  const [accountPageExists, setAccountPageExists] = useState(false);
 
   const disableSaveChanges = () =>
     !domainAndBranding.headline ||
@@ -113,7 +122,9 @@ const CustomizeAuction = () => {
     invalidPromoImage ||
     invalidTierImageIds.length ||
     rewardTiersAuction.find((tier) => !tier.description) ||
-    !about;
+    !about ||
+    accountNameExists ||
+    accountPageExists;
 
   const setContext = (_loggedInArtistClone, _editedAuction, action) => {
     setLoggedInArtist(_loggedInArtistClone);
@@ -388,6 +399,35 @@ const CustomizeAuction = () => {
   const disableSave = disableSaveChanges();
   const blurToggleButtonDisabled = !domainAndBranding.backgroundImage;
 
+  const debouncedValidateAccountLink = useConstant(() =>
+    AwesomeDebouncePromise(validateAccountLink, 1000)
+  );
+
+  const handleAccountName = async (username) => {
+    setAccountName(username);
+    const isUsernameAvailable = await validateAccountName(username);
+
+    if (isUsernameAvailable) {
+      setAccountNameExists(false);
+      return;
+    }
+
+    setAccountNameExists(true);
+  };
+
+  const handleAccountLink = async (link) => {
+    setAccountPage(link);
+
+    const isLinkAvailable = await debouncedValidateAccountLink(link.substring(13));
+
+    if (isLinkAvailable) {
+      setAccountPageExists(false);
+      return;
+    }
+
+    setAccountPageExists(true);
+  };
+
   return (
     <div className="customize__auction">
       <RouterPrompt when={showPrompt} onOK={() => true} editing={customizeAuctionState} />
@@ -431,9 +471,9 @@ const CustomizeAuction = () => {
         />
         <AboutArtistAuction
           accountName={accountName}
-          setAccountName={setAccountName}
+          setAccountName={handleAccountName}
           accountPage={accountPage}
-          setAccountPage={setAccountPage}
+          setAccountPage={handleAccountLink}
           accountImage={accountImage}
           setAccountImage={setAccountImage}
           about={about}
@@ -442,6 +482,9 @@ const CustomizeAuction = () => {
           setTwitterLink={setTwitterLink}
           instagramLink={instagramLink}
           setInstagramLink={setInstagramLink}
+          editProfileButtonClick={editProfileButtonClick}
+          accountNameExists={accountNameExists}
+          accountPageExists={accountPageExists}
         />
         <div className="customize__auction__warning">
           <img src={warningIcon} alt="Warning" />

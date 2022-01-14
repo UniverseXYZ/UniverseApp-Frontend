@@ -146,7 +146,7 @@ const App = () => {
                 <AuthenticatedRoute exact path="/my-profile">
                   <MyProfile />
                 </AuthenticatedRoute>
-                <AuthenticatedRoute path="/setup-auction">
+                <AuthenticatedRoute requireProfile path="/setup-auction">
                   <SetupAuction />
                 </AuthenticatedRoute>
                 <Route exact path="/products/auction-house">

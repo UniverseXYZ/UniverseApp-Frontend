@@ -65,7 +65,10 @@ const PastAuctionsTab = ({
           <img src={Exclamation} alt="Warning" />
           <p>
             Please, fill out the profile details before you set up an auction.{' '}
-            <button type="button" onClick={() => history.push('/my-account')}>
+            <button
+              type="button"
+              onClick={() => history.push('/my-account', { redirect: 'setup-auction' })}
+            >
               Go to my profile
             </button>
             .

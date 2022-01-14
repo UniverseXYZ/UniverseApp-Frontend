@@ -9,7 +9,7 @@ import { useAuthContext } from '../../../../contexts/AuthContext';
 const CreateYourAuction = () => {
   const history = useHistory();
   const { setAuction } = useAuctionContext();
-  const { address, setshowWalletPopup } = useAuthContext();
+  const { address, setshowWalletPopup, loggedInArtist } = useAuthContext();
 
   return (
     <div className="create__your__auction__section">
@@ -27,6 +27,17 @@ const CreateYourAuction = () => {
               }}
             >
               Sign in
+            </Button>
+          ) : !loggedInArtist.universePageAddress ? (
+            <Button
+              className="light-button"
+              onClick={() => {
+                history.push('/my-account', {
+                  redirect: 'setup-auction',
+                });
+              }}
+            >
+              Set up profile
             </Button>
           ) : (
             <Button
