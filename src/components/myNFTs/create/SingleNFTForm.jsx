@@ -1119,7 +1119,6 @@ const SingleNFTForm = () => {
                         <h5>Percent amount</h5>
                         <Input
                           className="percent-inp"
-                          type="number"
                           placeholder="5"
                           value={elm.amount}
                           onChange={(e) => propertyChangesAmount(i, e.target.value, e.target)}
