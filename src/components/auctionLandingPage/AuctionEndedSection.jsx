@@ -170,10 +170,12 @@ const AuctionEndedSection = ({
                   <></>
                 )}
               </div>
-              <div className="bid">
-                <img src={currencyIcon} alt="Currency" />
-                <b>{bidder.amount}</b>
-                <span>~${Math.round(bidder.amount * ethPrice)}</span>
+              <div className="bid-container">
+                <div className="bid">
+                  <img src={currencyIcon} alt="Currency" />
+                  <b>{bidder.amount}</b>
+                  <span>~${Math.round(bidder.amount * ethPrice)}</span>
+                </div>
               </div>
             </div>
           ))}
