@@ -123,7 +123,6 @@ const Wallet = React.memo(() => {
             </h3>
             <p>Create NFTs or NFT collections with our platform by clicking the button below</p>
             <button
-              disabled
               type="button"
               ref={ref2}
               className={`create--nft--dropdown  ${isDropdownOpened ? 'opened' : ''} light-button`}

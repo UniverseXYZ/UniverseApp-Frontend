@@ -77,13 +77,7 @@ const DesktopView = ({
           </button>
           <div className="dropdown minting-drop">
             <div className="dropdown__body">
-              <button
-                className="disable"
-                type="button"
-                onClick={() => {
-                  // history.push('/minting')
-                }}
-              >
+              <button type="button" onClick={() => history.push('/minting')}>
                 <img src={mintingIcon} alt="Minting" />
                 <span>Minting</span>
               </button>
