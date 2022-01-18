@@ -43,6 +43,7 @@ import {
 import { NFTItemEditionsLabel } from '../../../../../../../../nft/components/nft-item/components';
 import { FilterCollectionsItems } from '../../../../../../../mocks/filter-collections';
 import { FilterArtistsItems } from '../../../../../../../mocks/filter-artists';
+import { useMyNftsContext } from '../../../../../../../../../../contexts/MyNFTsContext';
 
 interface IActionBarNFTItemProps {
   nft: INft;
@@ -153,9 +154,14 @@ const ActionBarNFTItem = (
 interface ISelectNFTsProps {
 
 }
+const NFTsPerPage = 8;
 
 export const SelectNFTs = ({}: ISelectNFTsProps) => {
   const actionBarRef = useRef<HTMLDivElement>(null);
+
+  const { myNFTs } = useMyNftsContext() as any;
+
+  console.log('myNFTs', myNFTs);
 
   const prevRef = useRef(null);
   const nextRef = useRef(null);

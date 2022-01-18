@@ -1,7 +1,6 @@
 import { IDutchAuctionForm } from '../types';
 
 export const defaultDutchAuctionForm: IDutchAuctionForm = {
-  NFT: null,
   selectedNFTsIds: {},
   bundleName: '',
   bundleDescription: '',

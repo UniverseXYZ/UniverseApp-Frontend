@@ -4,6 +4,8 @@ import { SellAmountType, SellMethod } from '../enums';
 import { ISellForm } from './sell-form';
 
 export interface IMarketplaceSellContextData {
+  nft: any; // TODO
+  isPosted: boolean;
   amountType: SellAmountType;
   sellMethod: SellMethod;
   form: FormikProps<ISellForm>;

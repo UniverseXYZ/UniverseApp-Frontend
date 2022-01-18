@@ -1,6 +1,10 @@
-import React, { useCallback, useEffect, useState } from 'react';
 import { Box, Container, Heading, Image, Link, Tab, TabList, TabPanels, Tabs } from '@chakra-ui/react';
+import axios from 'axios';
+import { utils } from 'ethers';
 import { useFormik } from 'formik';
+import React, { useCallback, useEffect, useState } from 'react';
+import { useHistory } from 'react-router-dom';
+import { useMutation, useQuery } from 'react-query';
 
 import bg from '../../../../../assets/images/marketplace/v2/bg.png';
 import arrow from '../../../../../assets/images/arrow.svg';
@@ -17,17 +21,82 @@ import {
 import { SelectAmountTab, SelectMethodType, SettingsTab, SummaryTab, TabPanel } from './components';
 import { SellAmountType, SellMethod, SellPageTabs } from './enums';
 import { IMarketplaceSellContextData, ISellForm } from './types';
+import { getLocationSearchObj, sign } from '../../../../helpers';
+import { getNftData } from '../../../../../utils/api/mintNFT';
+import { useAuthContext } from '../../../../../contexts/AuthContext';
 
 export const SellPage = () => {
+  const history = useHistory();
+  const { signer, web3Provider } = useAuthContext() as any;
+
+  const encodeDataMutation = useMutation((data: any) => {
+    return axios.post(`${process.env.REACT_APP_MARKETPLACE_BACKEND}/v1/orders/encoder/order`, data);
+  });
+
+  const createOrderMutation = useMutation((data: any) => {
+    return axios.post(`${process.env.REACT_APP_MARKETPLACE_BACKEND}/v1/orders/order`, data);
+  });
+
+  const [locationState] = useState(getLocationSearchObj(history.location.search) as { nft: string; tokenId: string; });
+
+  const { data: nft } = useQuery('nft', () => getNftData(locationState.nft, locationState.tokenId));
+
   const { setDarkMode } = useThemeContext() as any;
   const [activeTab, setActiveTab] = useState<SellPageTabs>(SellPageTabs.SELL_AMOUNT);
   const [amountType, setAmountType] = useState<SellAmountType>();
   const [sellMethod, setSellMethod] = useState<SellMethod>();
+  const [isPosted, setIsPosted] = useState<boolean>(false);
 
   const form = useFormik<ISellForm>({
     initialValues: {} as ISellForm,
-    onSubmit: values => {
-      alert(JSON.stringify(values, null, 2));
+    onSubmit: async (values: any) => {
+      const address = await signer.getAddress();
+      const network = await web3Provider.getNetwork();
+
+      const data = {
+        type: 'UNIVERSE_V1',
+        maker: address,
+        taker: values.buyerAddress || '0x0000000000000000000000000000000000000000',
+        make: {
+          assetType: {
+            assetClass: nft.nft.standard,
+            contract: nft.collection.address,
+            tokenId: locationState.tokenId,
+          },
+          value: '1'
+        },
+        take: {
+          assetType: {
+            assetClass: 'ETH'
+          },
+          value: utils.parseEther(`${values.price.value}`).toString()
+        },
+        salt: 1,
+        start: 0,
+        end: 0,
+        data: {
+          dataType: 'ORDER_DATA',
+          revenueSplits: nft.nft.royalties.map((royalty: any) => ({
+            account: royalty.address,
+            value: royalty.amount * 100,
+          }))
+        },
+      };
+
+      const response = (await encodeDataMutation.mutateAsync(data)).data;
+
+      const signature = await sign(
+        web3Provider.provider,
+        response,
+        address,
+        `${network.chainId}`,
+        '0x6Fc96E8C1DE8CC166dD5CDD647Fcc384a89AA4CE' // TODO: move to .env
+      );
+
+      const createOrderResponse = (await createOrderMutation.mutateAsync({ ...data, signature })).data;
+
+      console.log('createOrderResponse', createOrderResponse);
+      setIsPosted(true);
     },
   });
 
@@ -86,6 +155,8 @@ export const SellPage = () => {
   useEffect(() => setDarkMode(false), []);
 
   const contextValue: IMarketplaceSellContextData = {
+    nft,
+    isPosted,
     amountType: amountType as SellAmountType,
     sellMethod: sellMethod as SellMethod,
     form: form,

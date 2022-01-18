@@ -1,12 +1,12 @@
 import { Box, Button, Center, Flex, Heading, Image, Text } from '@chakra-ui/react';
 import { SystemStyleObject } from '@chakra-ui/styled-system';
-import React from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
-import nft from '../../../../../mocks/assets/nft.png';
-import ethereumIcon from '../../../../../../../../assets/images/eth-icon-new.svg';
-import { fees } from '../../../../../mocks/fees';
+import { Status, Status as PostingPopupStatus } from './compoents/posting-popup/enums';
 import { useMarketplaceSellData } from '../../../hooks';
 import { GreyBox } from '../../grey-box';
+import { EtherIcon, Fee, PostingPopup } from './compoents';
+import { fees, totalFee } from './constants';
 
 const styles: Record<string, SystemStyleObject> = {
   mainContainer: {
@@ -67,25 +67,42 @@ const styles: Record<string, SystemStyleObject> = {
 };
 
 export const SummaryTab = () => {
-  const sellData = useMarketplaceSellData();
+  const { nft, isPosted, form, goBack } = useMarketplaceSellData();
+
+  const [postingPopupStatus, setPostingPopupStatus] = useState<PostingPopupStatus>(PostingPopupStatus.HIDDEN);
+
+  const handleSave = useCallback(() => {
+    setPostingPopupStatus(PostingPopupStatus.PROCESSING)
+    form.submitForm();
+  }, [nft]);
+
+  const price = useMemo(() => {
+    return (form.values as any)?.price?.value;
+  }, [form.values]);
+
+  const totalPrice = useMemo(() => {
+    return parseFloat((price - (price * totalFee / 100)).toFixed(5));
+  }, [form.values, price]);
+
+  useEffect(() => {
+    if (isPosted) {
+      setPostingPopupStatus(Status.SUCCESS);
+    }
+  }, [isPosted]);
 
   return (
     <>
       <Flex sx={styles.mainContainer}>
         <Box sx={styles.imageContainer}>
-          <Image src={nft} h={'var(--image-size)'} w={'var(--image-size)'} />
+          <Image src={nft?.nft?.thumbnail_url} borderRadius={'12px'} h={'var(--image-size)'} w={'var(--image-size)'} />
         </Box>
         <Flex sx={styles.textContainer}>
           <Center flexDir={'column'} alignItems={'flex-start'} w={'100%'}>
             <Heading as={'h4'}>Listing</Heading>
             <Text mb={'30px'}>
               Your bundle will be listed for
-              <Image
-                src={ethereumIcon}
-                alt='Ethereum icon'
-                w={'11px'}
-              />
-              <strong>0.8</strong>
+              <EtherIcon w={'11px'} />
+              <strong>{price}</strong>
             </Text>
 
             <Heading as={'h4'}>Fees</Heading>
@@ -94,31 +111,27 @@ export const SummaryTab = () => {
             </Text>
 
             <GreyBox sx={styles.greyBox}>
-              {fees.map((fee, i) => (
-                <Flex py={'5px'} key={i}>
-                  <Box>{fee.name}</Box>
-                  <Flex flex={1} borderBottom={'2px dotted rgba(0, 0, 0, 0.1)'} m={'5px'} />
-                  <Box>{fee.value}%</Box>
-                </Flex>
-              ))}
+              <Fee name={'To Universe'} amount={fees.universe} />
+              <Fee name={'To creator'} amount={fees.creator} />
+              <Fee name={'Total'} amount={totalFee} />
             </GreyBox>
 
             <Heading as={'h4'} mb={'0 !important'}>
               You will receive:
-              <Image
-                src={ethereumIcon}
-                alt='Ethereum icon'
-                width={'14px'}
-              />
-              0.7
+              <EtherIcon width={'14px'} />
+              {totalPrice}
             </Heading>
           </Center>
         </Flex>
       </Flex>
       <Box textAlign={'right'} mb={'50px'}>
-        <Button mr={'10px'} variant={'outline'} onClick={sellData.goBack}>Back</Button>
-        <Button boxShadow={'xl'} onClick={sellData.form.submitForm}>Post your listing</Button>
+        <Button mr={'10px'} variant={'outline'} onClick={goBack}>Back</Button>
+        <Button boxShadow={'xl'} onClick={handleSave}>Post your listing</Button>
       </Box>
+      <PostingPopup
+        status={postingPopupStatus}
+        onClose={() => setPostingPopupStatus(PostingPopupStatus.HIDDEN)}
+      />
     </>
   );
 };
