@@ -41,7 +41,8 @@ import TransferNFTPopup from '../popups/transferNFT/TransferNFTPopup';
 
 const MarketplaceNFTDetails = ({ data, onNFT }) => {
   const { myNFTs, setMyNFTs } = useMyNftsContext();
-  const { loggedInArtist, deployedCollections, universeERC721CoreContract } = useAuthContext();
+  const { loggedInArtist, address, deployedCollections, universeERC721CoreContract } =
+    useAuthContext();
   const history = useHistory();
   const ref = useRef(null);
   const sharePopupRef = useRef(null);
@@ -309,31 +310,35 @@ const MarketplaceNFTDetails = ({ data, onNFT }) => {
         <div className="Marketplace--settings">
           <div className="Marketplace--name">
             <h1>{selectedNFT.name}</h1>
-            <div className="nft--sorting">
-              <div
-                className={`dropdown ${showDropdown ? 'open' : ''}`}
-                aria-hidden="true"
-                onClick={() => setShowDropdown(!showDropdown)}
-                ref={ref}
-              >
-                <img src={dots} alt="dot" />
-                {showDropdown ? (
-                  <div className="dropdown--items">
-                    <div className="transfer--section">
-                      <button type="button" onClick={() => setShowTransferNFTPopup(true)}>
-                        <img src={transferIcon} alt="transfer" />
-                        Transfer
-                      </button>
+            {selectedNFT.owner === address ? (
+              <div className="nft--sorting">
+                <div
+                  className={`dropdown ${showDropdown ? 'open' : ''}`}
+                  aria-hidden="true"
+                  onClick={() => setShowDropdown(!showDropdown)}
+                  ref={ref}
+                >
+                  <img src={dots} alt="dot" />
+                  {showDropdown ? (
+                    <div className="dropdown--items">
+                      <div className="transfer--section">
+                        <button type="button" onClick={() => setShowTransferNFTPopup(true)}>
+                          <img src={transferIcon} alt="transfer" />
+                          Transfer
+                        </button>
+                      </div>
                     </div>
-                  </div>
-                ) : (
-                  <></>
-                )}
-                <Popup closeOnDocumentClick={false} open={showTransferNFTPopup}>
-                  <TransferNFTPopup close={() => setShowTransferNFTPopup(false)} nft={onNFT} />
-                </Popup>
+                  ) : (
+                    <></>
+                  )}
+                  <Popup closeOnDocumentClick={false} open={showTransferNFTPopup}>
+                    <TransferNFTPopup close={() => setShowTransferNFTPopup(false)} nft={onNFT} />
+                  </Popup>
+                </div>
               </div>
-            </div>
+            ) : (
+              <></>
+            )}
           </div>
           <div className="Marketplace--number">
             <p>
