@@ -144,6 +144,8 @@ const AuctionEndedSection = ({
     }
   };
 
+  const { depositedNfts } = onAuction.auction;
+
   return isAuctionner ? (
     <div className="auction__details__box__top__bidders">
       <div className="auction__details__box__top__bidders__header">
@@ -212,7 +214,9 @@ const AuctionEndedSection = ({
                 </span>
               </span>
               <Button
-                disabled={!Object.values(slotsInfo).some((slot) => !slot.revenueCaptured)}
+                disabled={
+                  !Object.values(slotsInfo).some((slot) => !slot.revenueCaptured) || !depositedNfts
+                }
                 style={{ width: 180 }}
                 className="light-button"
                 onClick={() =>
@@ -331,6 +335,7 @@ const AuctionEndedSection = ({
         <div className="footer">
           {Object.values(slotsInfo).some((slot) => !slot.revenueCaptured) ? (
             <Button
+              disabled={!depositedNfts}
               className="light-button"
               onClick={() =>
                 history.push('/release-rewards', {

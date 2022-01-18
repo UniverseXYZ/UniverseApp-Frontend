@@ -7,15 +7,20 @@ import FutureAuctionCard from './FutureAuctionCard.jsx';
 
 const FutureAuctionsList = ({ data, loading, removeAuction }) => (
   <div className="future__auctions__list">
-    {data.map((auction) => (
-      <Animated animationIn="fadeIn" key={auction.id}>
-        {loading ? (
-          <AuctionsCardSkeleton variant="future" />
-        ) : (
-          <FutureAuctionCard auction={auction} removeAuction={removeAuction} />
-        )}
-      </Animated>
-    ))}
+    {data.map((auction) => {
+      if (!auction.depositedNfts) {
+        return null;
+      }
+      return (
+        <Animated animationIn="fadeIn" key={auction.id}>
+          {loading ? (
+            <AuctionsCardSkeleton variant="future" />
+          ) : (
+            <FutureAuctionCard auction={auction} removeAuction={removeAuction} />
+          )}
+        </Animated>
+      );
+    })}
   </div>
 );
 
