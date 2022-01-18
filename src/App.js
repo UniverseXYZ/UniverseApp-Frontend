@@ -3,6 +3,7 @@ import { Route, Switch, useLocation } from 'react-router-dom';
 import Popup from 'reactjs-popup';
 import uuid from 'react-uuid';
 import { QueryClient, QueryClientProvider } from 'react-query';
+import { ReactQueryDevtools } from 'react-query/devtools';
 import './assets/scss/normalize.scss';
 import Header from './components/header/Header.jsx';
 import Footer from './components/footer/Footer.jsx';
@@ -170,6 +171,7 @@ const App = () => {
           </MyNFTsContextProvider>
         </LobsterContextProvider>
       </PolymorphContextProvider>
+      <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>
   );
 };

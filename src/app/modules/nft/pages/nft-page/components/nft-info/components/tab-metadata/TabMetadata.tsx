@@ -1,10 +1,10 @@
 import { Box, Flex, Image, Text } from '@chakra-ui/react';
 import React from 'react';
 
-import { Metadata } from '../../mocks';
+import { Metadata } from '../../../../mocks';
 import * as styles from './styles';
 
-import EthIcon from './../../../../../../../assets/images/eth-icon-new.svg';
+import EthIcon from './../../../../../../../../../assets/images/eth-icon-new.svg';
 import { CoinIconStyle } from './styles';
 
 interface IMetadataItemProps {

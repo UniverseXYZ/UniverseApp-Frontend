@@ -50,6 +50,34 @@ export interface INftBackend {
     twitterUser: string;
     universePageUrl: string;
   };
+  nft: {
+    "id": number;
+    "collectionId": number;
+    "txHash": string;
+    "creator": string;
+    "owner": string;
+    "name": string;
+    "description": string;
+    "tokenId": string;
+    "artworkType": string;
+    "url": string;
+    "optimized_url": string;
+    "thumbnail_url": string;
+    "original_url": string;
+    "tokenUri": string;
+    "properties": any,
+    "royalties": [
+      {
+        "amount": number;
+        "address": string;
+      }
+    ],
+    "numberOfEditions": number;
+    "createdAt": string;
+    "updatedAt": string;
+    "amount": number;
+    "standard": string;
+  };
   properties: any[];
   royalties: Array<{
     address: string;

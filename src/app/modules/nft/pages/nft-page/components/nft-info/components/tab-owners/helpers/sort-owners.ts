@@ -1,4 +1,4 @@
-import { Owners } from '../../../mocks';
+import { Owners } from '../../../../../mocks';
 
 export const sortOwners = (owners: typeof Owners) => {
   return owners.sort((a, b) => {

@@ -2,9 +2,9 @@ import { Box, Button, Flex, FormControl, FormLabel, Image, Switch, Text } from '
 import { useEffect, useState } from 'react';
 import { default as dayjs } from 'dayjs';
 
-import { ETH_USD_RATE } from '../../../../../../mocks';
-import { NFTTabItemWrapper } from '../nft-tab-item-wrapper';
-import { Bids } from '../../mocks';
+import { ETH_USD_RATE } from '../../../../../../../../mocks';
+import { NFTTabItemWrapper } from '..';
+import { Bids } from '../../../../mocks';
 import * as styles from './styles';
 import { sortBids } from './helpers';
 

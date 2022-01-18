@@ -1,6 +1,6 @@
 import { default as dayjs } from 'dayjs';
 
-import { Bids } from '../../../mocks';
+import { Bids } from '../../../../../mocks';
 
 export const sortBids = (bids: typeof Bids) => {
   return bids.sort((a, b) => {
