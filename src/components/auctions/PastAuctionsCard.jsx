@@ -141,6 +141,8 @@ const PastAuctionsCard = ({ auction, setShowLoadingModal, setLoadingText }) => {
       .flat()
       .some((s) => !s.capturedRevenue);
 
+  const releaseRewardsDisabled = areAllSlotsCaptured || !auction.depositedNfts;
+
   return (
     <div className="auction past-auction" key={auction.id}>
       <div className="past-left-border-effect" />
@@ -297,7 +299,7 @@ const PastAuctionsCard = ({ auction, setShowLoadingModal, setLoadingText }) => {
               </span>
               <Button
                 className="light-button"
-                disabled={areAllSlotsCaptured}
+                disabled={releaseRewardsDisabled}
                 onClick={() =>
                   history.push('/release-rewards', {
                     auctionData: { auction },

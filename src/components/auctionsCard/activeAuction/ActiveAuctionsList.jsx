@@ -7,15 +7,20 @@ import ActiveAuctionCard from './ActiveAuctionCard.jsx';
 
 const ActiveAuctionsList = ({ data, loading, removeAuction }) => (
   <div className="active__auctions__list">
-    {data.map((auction) => (
-      <Animated animationIn="fadeIn" key={auction.id}>
-        {loading ? (
-          <AuctionsCardSkeleton variant="active" />
-        ) : (
-          <ActiveAuctionCard auction={auction} removeAuction={removeAuction} />
-        )}
-      </Animated>
-    ))}
+    {data.map((auction) => {
+      if (!auction.depositedNfts) {
+        return <></>;
+      }
+      return (
+        <Animated animationIn="fadeIn" key={auction.id}>
+          {loading ? (
+            <AuctionsCardSkeleton variant="active" />
+          ) : (
+            <ActiveAuctionCard auction={auction} removeAuction={removeAuction} />
+          )}
+        </Animated>
+      );
+    })}
   </div>
 );
 
