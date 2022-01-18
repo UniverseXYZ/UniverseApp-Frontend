@@ -14,6 +14,7 @@ const CreateNFT = () => {
   const { deployedCollections } = useAuthContext();
   const [selectedTabIndex, setSelectedTabIndex] = useState(0);
   const [selectedNFTType, setSelectedNFTType] = useState('');
+  const [backPath, setBackPath] = useState('');
   const [showCollectible, setShowCollectible] = useState(false);
 
   const goToCollectionPage = () => {
@@ -32,6 +33,7 @@ const CreateNFT = () => {
     if (location.state) {
       setSelectedTabIndex(location.state.tabIndex);
       setSelectedNFTType(location.state.nftType);
+      setBackPath(location.state.backPath);
     }
   }, []);
 
@@ -48,6 +50,8 @@ const CreateNFT = () => {
                   history.push(
                     location.pathname === '/create-tiers/my-nfts/create'
                       ? '/create-tiers'
+                      : backPath === 'minting'
+                      ? '/minting'
                       : '/my-nfts'
                   )
                 }
@@ -57,6 +61,8 @@ const CreateNFT = () => {
                 <span>
                   {location.pathname === '/create-tiers/my-nfts/create'
                     ? 'Create reward tier'
+                    : backPath === 'minting'
+                    ? 'Minting'
                     : 'My NFTs'}
                 </span>
               </div>
