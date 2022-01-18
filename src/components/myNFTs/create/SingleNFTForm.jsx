@@ -741,6 +741,7 @@ const SingleNFTForm = () => {
               royaltyAddress[1]
             )
           }
+          handleSaveForLater={handleSaveForLater}
         />
         <Popup open={showLoadingPopup} closeOnDocumentClick={false}>
           <LoadingPopup
