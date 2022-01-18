@@ -311,6 +311,7 @@
       .tiers {
         display: flex;
         align-items: center;
+        flex-wrap: wrap;
         span {
           font-family: $spaceGroteskFont;
           font-style: normal;
