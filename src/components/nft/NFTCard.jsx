@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState } from 'react';
 import './NFTCard.scss';
 import { Link, useHistory, useLocation } from 'react-router-dom';
 import PropTypes from 'prop-types';
@@ -23,13 +23,10 @@ const NFTCard = React.memo(
     const { loggedInArtist } = useAuthContext();
     const history = useHistory();
     const location = useLocation();
-    const [showDropdown, setShowDropdown] = useState(false);
     const [searchValue, setSearchValue] = useState('');
 
     const { creator } = nft;
     const owner = location.pathname === '/my-nfts' ? loggedInArtist : nft.owner;
-
-    const ref = useRef();
 
     const sliderSettings = {
       dots: true,
@@ -49,19 +46,6 @@ const NFTCard = React.memo(
         setSelectedNFTsIds([...selectedNFTsIds, id]);
       }
     };
-
-    const handleClickOutside = (event) => {
-      if (ref.current && !ref.current.contains(event.target)) {
-        setShowDropdown(false);
-      }
-    };
-
-    useEffect(() => {
-      document.addEventListener('click', handleClickOutside, true);
-      return () => {
-        document.removeEventListener('click', handleClickOutside, true);
-      };
-    });
 
     const showNftImage = () => {
       if (!nft.thumbnail_url.endsWith('.svg')) {

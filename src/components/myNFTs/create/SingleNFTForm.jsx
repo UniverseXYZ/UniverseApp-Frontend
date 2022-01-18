@@ -113,7 +113,11 @@ const SingleNFTForm = () => {
   const [hideIcon, setHideIcon] = useState(false);
   const [hideIcon1, setHideIcon1] = useState(false);
   const [hideRoyalitiesInfo, setHideRoyalitiesInfo] = useState(false);
+  const [hideMintToOtherWallet, setHideMintToOtherWallet] = useState(false);
   const [royalities, setRoyalities] = useState(true);
+  const [mintToOtherWallet, setMintToOtherWallet] = useState(false);
+  const [otherWalletValue, setOtherWalletValue] = useState('');
+  const [otherWalletError, setOtherWalletError] = useState(false);
   const [propertyCheck, setPropertyCheck] = useState(false);
   const inputFile = useRef(null);
   const [properties, setProperties] = useState([
@@ -201,6 +205,18 @@ const SingleNFTForm = () => {
     const temp = { address: '', amount: '' };
     newProperties.push(temp);
     setRoyaltyAddress(newProperties);
+  };
+
+  const changeOtherMintAddress = async (val) => {
+    try {
+      const ens = await web3Provider.resolveName(val);
+      const ensToAddress = utils.isAddress(ens);
+      setOtherWalletValue(ensToAddress ? ens.toLowerCase() : val);
+      setOtherWalletError(!ensToAddress ? INVALID_ADDRESS_TEXT : '');
+    } catch (e) {
+      setOtherWalletValue(val.toLowerCase());
+      setOtherWalletError(!utils.isAddress(val) ? INVALID_ADDRESS_TEXT : '');
+    }
   };
 
   const propertyChangesAddress = async (index, val) => {
@@ -741,6 +757,7 @@ const SingleNFTForm = () => {
               royaltyAddress[1]
             )
           }
+          handleSaveForLater={handleSaveForLater}
         />
         <Popup open={showLoadingPopup} closeOnDocumentClick={false}>
           <LoadingPopup
@@ -1166,8 +1183,52 @@ const SingleNFTForm = () => {
                 >
                   <h5>
                     <img src={addIcon} alt="Add" />
-                    Add address
+                    Add wallet
                   </h5>
+                </div>
+              )}
+            </div>
+            <div className="hr-div" />
+            <div className="royalities">
+              <div className="title">
+                <h4
+                  onMouseOver={() => setHideMintToOtherWallet(true)}
+                  onFocus={() => setHideMintToOtherWallet(true)}
+                  onMouseLeave={() => setHideMintToOtherWallet(false)}
+                  onBlur={() => setHideMintToOtherWallet(false)}
+                >
+                  Mint to other wallet <img src={infoIcon} alt="Info Icon" />
+                </h4>
+                {hideMintToOtherWallet && (
+                  <div className="royalities-info-text other-wallet">
+                    <p>
+                      You can mint the NFT to other wallet. Just specify a receiver wallet address.
+                    </p>
+                  </div>
+                )}
+                <label className="switch">
+                  <input
+                    type="checkbox"
+                    checked={mintToOtherWallet}
+                    onChange={(e) => setMintToOtherWallet(e.target.checked)}
+                  />
+                  <span className="slider round" />
+                </label>
+              </div>
+              {mintToOtherWallet && (
+                <div className="royalty properties">
+                  <div className="property-address other-wallet">
+                    <h5>Wallet address</h5>
+                    <DebounceInput
+                      debounceTimeout={150}
+                      className={`${otherWalletError ? 'error-inp inp' : 'inp'}`}
+                      placeholder="0x89205A3A3b2A69De6Dbf7f01ED13B2108B2c43e7"
+                      value={otherWalletValue}
+                      onChange={(e) => changeOtherMintAddress(e.target.value)}
+                      hoverBoxShadowGradient
+                    />
+                    {otherWalletError ? <p className="error-message">{otherWalletError}</p> : <></>}
+                  </div>
                 </div>
               )}
             </div>
@@ -1218,7 +1279,8 @@ const SingleNFTForm = () => {
                         (royalty) => royalty.address === '' || royalty.amount === ''
                       )) ||
                     (propertyCheck && !properties.length) ||
-                    (royalities && !royaltyAddress.length)
+                    (royalities && !royaltyAddress.length) ||
+                    (mintToOtherWallet && (!otherWalletValue || otherWalletError))
                   }
                 >
                   Mint now

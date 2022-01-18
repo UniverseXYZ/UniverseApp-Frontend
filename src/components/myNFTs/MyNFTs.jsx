@@ -408,7 +408,11 @@ const MyNFTs = () => {
                           <li
                             aria-hidden="true"
                             onClick={() =>
-                              history.push('/my-nfts/create', { tabIndex: 1, nftType: 'single' })
+                              history.push('/my-nfts/create', {
+                                tabIndex: 1,
+                                nftType: 'single',
+                                backPath: 'myNFTs',
+                              })
                             }
                           >
                             NFT
@@ -419,6 +423,7 @@ const MyNFTs = () => {
                               history.push('/my-nfts/create', {
                                 tabIndex: 1,
                                 nftType: 'collection',
+                                backPath: 'myNFTs',
                               })
                             }
                           >
