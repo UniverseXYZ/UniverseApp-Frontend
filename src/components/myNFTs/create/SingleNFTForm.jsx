@@ -1083,7 +1083,8 @@ const SingleNFTForm = () => {
                   <div className="royalities-info-text">
                     <p>
                       Add addresses you want resale royalties to go to. Each address receives the
-                      percent you choose. Suggested percent amount: 2.5%.
+                      percent you choose up to {MAX_ROYALTY_PERCENT}% total. Suggested percent
+                      amount: 2.5%.
                     </p>
                   </div>
                 )}
