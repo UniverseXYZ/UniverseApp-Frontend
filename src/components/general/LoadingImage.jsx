@@ -2,42 +2,33 @@ import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import loadingBg from '../../assets/images/loading-white-background.png';
 import './LoadingImage.scss';
+import { useImageLoaded } from '../../utils/hooks/useImageLoaded';
+import BrokenNFT from '../marketplaceNFT/BrokenNFT';
 
 const LoadingImage = React.memo(({ placeholderImage, src, alt, className, showSpinner, style }) => {
-  const [loading, setLoading] = useState(true);
-  const [hasError, setHasError] = useState(false);
-  const setLoadingFalse = () => {
-    setLoading(false);
-  };
-
-  const setErrorFlag = () => {
-    setHasError(true);
-    setLoading(false);
-  };
+  const [ref, loaded, onLoad, errored, onError, setLoaded] = useImageLoaded();
 
   useEffect(
     () => () => {
-      setLoading(true);
+      setLoaded(false);
     },
     []
   );
 
-  return hasError ? (
-    <div className="error-text">
-      <p>Image couldn&apos;t be loaded.</p>
-      <p>We&apos;ll do our best to fix that soon.</p>
-    </div>
+  return errored ? (
+    <BrokenNFT />
   ) : (
     <>
       <img
+        ref={ref}
         alt={alt}
         className={className}
         style={style}
-        src={loading ? placeholderImage || loadingBg : src}
-        onLoad={setLoadingFalse}
-        onError={setErrorFlag}
+        src={loaded ? src : placeholderImage || loadingBg}
+        onLoad={onLoad}
+        onError={onError}
       />
-      {loading && showSpinner ? (
+      {!loaded && showSpinner && (
         <div className="card-lds-roller">
           <div />
           <div />
@@ -48,8 +39,6 @@ const LoadingImage = React.memo(({ placeholderImage, src, alt, className, showSp
           <div />
           <div />
         </div>
-      ) : (
-        <></>
       )}
     </>
   );
@@ -60,7 +49,7 @@ LoadingImage.propTypes = {
   src: PropTypes.string.isRequired,
   alt: PropTypes.string.isRequired,
   className: PropTypes.string,
-  style: PropTypes.oneOfType(PropTypes.object),
+  style: PropTypes.oneOfType([PropTypes.object]),
   showSpinner: PropTypes.bool,
 };
 

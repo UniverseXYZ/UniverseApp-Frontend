@@ -103,12 +103,9 @@ const MintingTab = () => {
       </div>
 
       <div className="launch__app__btn">
-        {/* <Button className="light-button" onClick={() => history.push('/minting')}>
+        <Button className="light-button" onClick={() => history.push('/minting')}>
           Go to Minting
-        </Button> */}
-        <button type="button" className="light-border-button" disabled>
-          Coming soon
-        </button>
+        </Button>
       </div>
     </div>
   );

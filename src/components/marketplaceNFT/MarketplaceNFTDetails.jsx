@@ -1,5 +1,5 @@
 /* eslint-disable no-inner-declarations */
-import React, { useState, useRef, useEffect, useContext } from 'react';
+import React, { useState, useRef, useEffect, useContext, useCallback } from 'react';
 import '../marketplace/browseNFT/NFTsList.scss';
 import uuid from 'react-uuid';
 import Popup from 'reactjs-popup';
@@ -217,7 +217,7 @@ const MarketplaceNFTDetails = ({ data, onNFT }) => {
   const generateImage = () => {
     if (selectedNFT.original_url) {
       if (selectedNFT.original_url.startsWith('ipfs://')) {
-        return selectedNFT.original_url.replace('ipfs://', 'https://ipfs.io/');
+        return selectedNFT.original_url.replace('ipfs://', 'https://ipfs.io/ipfs/');
       }
       return selectedNFT.original_url;
     }
@@ -232,6 +232,13 @@ const MarketplaceNFTDetails = ({ data, onNFT }) => {
 
     return <InlineSVG svgUrl={selectedNFT.optimized_url || selectedNFT.thumbnail_url} />;
   };
+
+  const getVideoUrl = () =>
+    !selectedNFT.original_url
+      ? selectedNFT.optimized_url
+      : selectedNFT.original_url.startsWith('ipfs://')
+      ? selectedNFT.original_url.replace('ipfs://', 'https://ipfs.io/ipfs')
+      : selectedNFT.original_url;
 
   return (
     <>
@@ -261,14 +268,7 @@ const MarketplaceNFTDetails = ({ data, onNFT }) => {
 
                 {selectedNFT.artworkType && selectedNFT.artworkType.endsWith('mp4') && (
                   <video muted playsInline autoPlay controls>
-                    <source
-                      src={
-                        selectedNFT.original_url.startsWith('ipfs://')
-                          ? selectedNFT.original_url.replace('ipfs://', 'https://ipfs.io/')
-                          : selectedNFT.original_url
-                      }
-                      type="video/mp4"
-                    />
+                    <source src={getVideoUrl()} type="video/mp4" />
                     <track kind="captions" />
                     Your browser does not support the video tag.
                   </video>

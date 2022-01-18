@@ -51,8 +51,8 @@ jobs:
         REACT_APP_LOBSTERS_GRAPH_URL: "https://api.thegraph.com/subgraphs/name/vikinatora/lobster-rarity"
         REACT_APP_POLYMORPHS_CONTRACT_ADDRESS: "0xF3641531e55DB83A39a6d505DfDecA614812F7a0"
         REACT_APP_LOBSTERS_CONTRACT_ADDRESS: "0x06CBD34025776BA264Ae14D5e0dDa91369F24fB8"
-        REACT_APP_RARITY_METADATA_URL: "https://us-central1-polymorphmetadata.cloudfunctions.net/rarity-ropsten"
-        REACT_APP_POLYMORPHS_IMAGES_URL: "https://us-central1-polymorphmetadata.cloudfunctions.net/images-function-ropsten?id="
+        REACT_APP_RARITY_METADATA_URL: "https://us-central1-polymorphmetadata.cloudfunctions.net/rarity-rinkeby"
+        REACT_APP_POLYMORPHS_IMAGES_URL: "https://us-central1-polymorphmetadata.cloudfunctions.net/images-function-rinkeby?id="
         REACT_APP_LOBSTER_IMAGES_URL: "https://us-central1-polymorphmetadata.cloudfunctions.net/lobster-images-function-ropsten?id="
         REACT_APP_ETHERSCAN_URL: "https://rinkeby.etherscan.io"
         REACT_APP_UNIVERSE_ERC_721_ADDRESS: "0xD3CCbB9F3E5B9678c5F4fef91055704Df81a104c"
@@ -97,7 +97,7 @@ jobs:
         SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
       uses: voxmedia/github-action-slack-notify-build@v1
       with:
-        channel: infra-ci-kek
+        channel: infra-ci-kekdao
         status: DEPLOYMENT STARTED
         color: warning
 
@@ -136,7 +136,7 @@ jobs:
       uses: voxmedia/github-action-slack-notify-build@v1
       with:
         message_id: ${{ steps.slack.outputs.message_id }}
-        channel: infra-ci-kek
+        channel: infra-ci-kekdao
         status: DEPLOYMENT SUCCESSFUL
         color: good
 

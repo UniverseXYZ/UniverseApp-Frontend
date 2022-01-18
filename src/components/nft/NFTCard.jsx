@@ -2,7 +2,7 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 import React, { useState, useEffect, useRef } from 'react';
 import './NFTCard.scss';
-import { useHistory, useLocation } from 'react-router-dom';
+import { Link, useHistory, useLocation } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import uuid from 'react-uuid';
 import videoIcon from '../../assets/images/marketplace/video-icon.svg';
@@ -65,7 +65,9 @@ const NFTCard = React.memo(
 
     const showNftImage = () => {
       if (!nft.thumbnail_url.endsWith('.svg')) {
-        return <LoadingImage className="nft--image" alt={nft.name} src={nft.thumbnail_url} />;
+        return (
+          <LoadingImage className="nft--image" alt={nft.name} src={nft.thumbnail_url} showSpinner />
+        );
       }
 
       return <SVGImageLoader svgUrl={nft.thumbnail_url} />;
@@ -80,18 +82,12 @@ const NFTCard = React.memo(
         <NFTCardHeader nft={nft} owner={owner} creator={creator} collection={nft.collection} />
         <div className="nft--card--body" aria-hidden="true">
           {nft.artworkType !== 'bundles' ? (
-            <div
-              onClick={() =>
-                !canSelect
-                  ? history.push(
-                      `/nft/${nft.collection?.address || collectionAddress}/${nft.tokenId}`,
-                      {
-                        nft,
-                      }
-                    )
-                  : handleSelectNFT(nft.id)
-              }
-              aria-hidden="true"
+            <Link
+              href={`/nft/${nft.collection?.address || collectionAddress}/${nft.tokenId}`}
+              to={`/nft/${nft.collection?.address || collectionAddress}/${nft.tokenId}`}
+              // onClick={() =>
+              //   history.push(`/nft/${nft.collection?.address || collectionAddress}/${nft.tokenId}`)
+              // }
             >
               {nft.artworkType !== 'audio/mpeg' && nft.artworkType !== 'mp4' && showNftImage()}
               {nft.artworkType === 'mp4' && (
@@ -127,7 +123,7 @@ const NFTCard = React.memo(
                   </p>
                 </div>
               )}
-            </div>
+            </Link>
           ) : (
             <>
               {/* TODO:: comment out the slider, its going to be needed for the Marketplace only */}
