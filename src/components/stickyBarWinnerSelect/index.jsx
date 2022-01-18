@@ -148,9 +148,35 @@ const styles = {
 const SelectComponent = (props) => {
   const { options, onChange, selectedWinner } = props;
   const ref = useRef(null);
+  const [isOpen, toggleIsOpen] = useState(false);
+
+  const handleToggle = (e) => {
+    toggleIsOpen(!isOpen);
+  };
+
+  useEffect(() => {
+    document.addEventListener(
+      'click',
+      (e) => handleClickOutside(e, 'react-select-wrapper', ref, toggleIsOpen),
+      true
+    );
+    return () => {
+      document.removeEventListener(
+        'click',
+        (e) => handleClickOutside(e, 'react-select-wrapper', ref, toggleIsOpen),
+        true
+      );
+    };
+  });
 
   return (
-    <div className="react-select-wrapper" ref={ref} aria-hidden role="button">
+    <div
+      className="react-select-wrapper"
+      ref={ref}
+      aria-hidden
+      role="button"
+      onClick={handleToggle}
+    >
       <Select
         options={options}
         isOptionDisabled={(option) => option.isDisabled}
@@ -168,6 +194,7 @@ const SelectComponent = (props) => {
         hideSelectedOptions
         isClearable={false}
         getOptionValue={(option) => option}
+        menuIsOpen={isOpen}
       />
       <div className="box--shadow--effect--block" />
     </div>
