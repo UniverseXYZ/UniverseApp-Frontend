@@ -1,3 +1,4 @@
+/* eslint-disable no-await-in-loop */
 /* eslint-disable no-loop-func */
 import React, { useEffect, useState, useRef } from 'react';
 import { useHistory } from 'react-router-dom';
@@ -240,7 +241,42 @@ const FinalizeAuction = () => {
   const completedDepositStep =
     completedCollectionsStep && approvedTxs.length === transactions?.finalSlotIndices.length;
 
+  const validateNftOwnership = async () => {
+    const invalidNfts = [];
+    for (let q = 0; q < auction.rewardTiers.length; q += 1) {
+      const tier = auction.rewardTiers[q];
+      for (let i = 0; i < tier.nfts.length; i += 1) {
+        const nft = tier.nfts[i];
+        const collection = auction.collections.find((c) => c.id === nft.collectionId);
+        if (collection) {
+          const nftContract = new Contract(collection.address, ERC721ABI, signer);
+          const nftOwnerAddress = await nftContract.ownerOf(nft.tokenId);
+          if (nftOwnerAddress.toLowerCase() !== address.toLowerCase()) {
+            invalidNfts.push({
+              tokenId: nft.tokenId,
+              owner: nftOwnerAddress,
+              collection: collection.address,
+            });
+          }
+        }
+      }
+    }
+
+    if (invalidNfts.length) {
+      setShowError(true);
+      setErrorTitle('Invalid NFTs');
+      const map = invalidNfts.map((nft) => `${nft.tokenId}`);
+      const tokenString = map.join(', ');
+      setErrorBody(
+        `You don't have owner permissions over some of the nfts in order to deposit them to the auction. You might have staked or locked them in other protocols. Token Ids: ${tokenString}`
+      );
+    }
+  };
+
   const setupPage = async () => {
+    if (!auction.depositedNfts) {
+      validateNftOwnership();
+    }
     const transactionsConfig = calculateTransactions(auction);
     setTransactions(transactionsConfig);
 
@@ -259,7 +295,6 @@ const FinalizeAuction = () => {
       for (let i = 0; i < auction.collections.length; i += 1) {
         const collection = auction.collections[i];
         const contract = new Contract(collection.address, ERC721ABI, signer);
-        // eslint-disable-next-line no-await-in-loop
         const isApproved = await contract.isApprovedForAll(
           address,
           universeAuctionHouseContract?.address
