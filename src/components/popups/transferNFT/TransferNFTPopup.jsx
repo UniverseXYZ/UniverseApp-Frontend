@@ -4,6 +4,7 @@ import { Contract } from 'ethers';
 import closeIcon from '../../../assets/images/close-menu.svg';
 import './TransferNFTPopup.scss';
 import { Step1, Step2, Step3 } from './components';
+import { Steps } from './constants';
 import Contracts from '../../../contracts/contracts.json';
 import { useAuthContext } from '../../../contexts/AuthContext';
 
@@ -11,7 +12,7 @@ const { contracts: contractsData } = Contracts[process.env.REACT_APP_NETWORK_CHA
 
 const TransferNFTPopup = ({ close, nft }) => {
   const [receiverAddress, setReceiverAddress] = useState('');
-  const [step, setStep] = useState(1);
+  const [step, setStep] = useState(Steps.Form);
 
   const { signer } = useAuthContext();
 
@@ -21,21 +22,26 @@ const TransferNFTPopup = ({ close, nft }) => {
   );
 
   const handleSubmit = useCallback(async () => {
-    const gasLimit = await contract.estimateGas.transferFrom(
+    const gasLimit = await contract.estimateGas['safeTransferFrom(address,address,uint256)'](
       nft.owner,
       receiverAddress,
       nft.tokenId
     );
     try {
-      setStep(2);
-      const res = await contract.transferFrom(nft.owner, receiverAddress, nft.tokenId, {
-        gasLimit,
-      });
+      setStep(Steps.Loading);
+      const res = await contract['safeTransferFrom(address,address,uint256)'](
+        nft.owner,
+        receiverAddress,
+        nft.tokenId,
+        {
+          gasLimit,
+        }
+      );
       await res.wait();
     } catch (e) {
       console.error(e);
     }
-    setStep(3);
+    setStep(Steps.Success);
   }, [receiverAddress, contract]);
 
   return (
