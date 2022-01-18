@@ -21,6 +21,7 @@ import { useMyNftsContext } from '../../contexts/MyNFTsContext';
 import { LandingPageLoader } from '../../components/auctionLandingPage/LandingPageLoader';
 import SuccessBidPopup from '../../components/popups/SuccessBidPopup';
 import { createRewardsTiersSlots } from '../../utils/helpers';
+import { isBeforeNow } from '../../utils/dates';
 
 const AuctionLandingPage = () => {
   const defaultLoadingText =
@@ -408,6 +409,8 @@ const AuctionLandingPage = () => {
     getAuctionSlotsInfo();
   }, [universeAuctionHouseContract, auction]);
 
+  const bidsHidden = isBeforeNow(auction?.auction?.endDate);
+
   return auction ? (
     <div className="auction__landing__page">
       <AuctionDetails
@@ -440,12 +443,14 @@ const AuctionLandingPage = () => {
       <UniverseAuctionDetails auction={auction} />
       <RewardTiers auction={auction} />
       <AuctionOwnerDetails artist={auction.artist} />
-      <PlaceBid
-        auction={auction}
-        bidders={bidders}
-        setBidders={setBidders}
-        setShowBidPopup={setShowBidPopup}
-      />
+      {!bidsHidden && (
+        <PlaceBid
+          auction={auction}
+          bidders={bidders}
+          setBidders={setBidders}
+          setShowBidPopup={setShowBidPopup}
+        />
+      )}
       {auction.artist && auction.artist.personalLogo ? (
         <div className="artist__personal__logo">
           <div>
