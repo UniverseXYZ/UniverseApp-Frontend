@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
 import uuid from 'react-uuid';
 import PropTypes from 'prop-types';
-import arrowDown from '../../../assets/images/browse-nft-arrow-down.svg';
+import arrowDown from '../../../../assets/images/browse-nft-arrow-down.svg';
 
-const ChooseTokenIdDropdown = ({ nft }) => {
+export const ChooseTokenIdDropdown = ({ nft }) => {
   const ref = useRef(null);
   const [showDropdown, setShowDropdown] = useState(false);
   const [selectedTokenId, setSelectedTokenId] = useState(nft.tokenIds[0]);
@@ -58,5 +58,3 @@ const ChooseTokenIdDropdown = ({ nft }) => {
 ChooseTokenIdDropdown.propTypes = {
   nft: PropTypes.oneOfType([PropTypes.object]).isRequired,
 };
-
-export default ChooseTokenIdDropdown;

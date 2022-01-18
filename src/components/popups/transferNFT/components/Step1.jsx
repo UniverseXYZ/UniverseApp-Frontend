@@ -1,37 +1,34 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import PropTypes from 'prop-types';
 import EthereumAddress from 'ethereum-address';
-import Input from '../../input/Input.jsx';
-import Button from '../../button/Button.jsx';
-import ChooseTokenIdDropdown from './ChooseTokenIdDropdown.jsx';
+import Input from '../../../input/Input.jsx';
+import Button from '../../../button/Button.jsx';
+import { ChooseTokenIdDropdown } from './ChooseTokenIdDropdown.jsx';
 
-const Step1 = ({ close, nft, receiverAddress, setReceiverAddress, setStep }) => {
+export const Step1 = ({ close, nft, receiverAddress, setReceiverAddress, onSubmit }) => {
   const [receiverAddressError, setReceiverAddressError] = useState('');
 
-  const handleReceiverAddressChange = (e) => {
-    setReceiverAddress(e.target.value);
-    if (e.target.value) {
-      setReceiverAddressError('');
-      if (!EthereumAddress.isAddress(e.target.value)) {
-        setReceiverAddressError('Wallet address is not valid');
+  const handleReceiverAddressChange = useCallback(
+    (e) => {
+      setReceiverAddress(e.target.value);
+      if (e.target.value) {
+        setReceiverAddressError(
+          !EthereumAddress.isAddress(e.target.value) ? 'Wallet address is not valid' : ''
+        );
       } else {
-        setReceiverAddressError('');
+        setReceiverAddressError('This field can’t be empty');
       }
-    } else {
-      setReceiverAddressError('This field can’t be empty');
-    }
-  };
+    },
+    [setReceiverAddress]
+  );
 
-  const handleContinueClick = () => {
+  const handleContinueClick = useCallback(() => {
     if (!receiverAddress) {
       setReceiverAddressError('This field can’t be empty');
     } else {
-      setStep(2);
-      setTimeout(() => {
-        setStep(3);
-      }, 3000);
+      onSubmit();
     }
-  };
+  }, [setReceiverAddressError, receiverAddress, onSubmit]);
 
   return (
     <div className="step1">
@@ -77,7 +74,5 @@ Step1.propTypes = {
   nft: PropTypes.oneOfType([PropTypes.object]).isRequired,
   receiverAddress: PropTypes.string.isRequired,
   setReceiverAddress: PropTypes.func.isRequired,
-  setStep: PropTypes.func.isRequired,
+  onSubmit: PropTypes.func.isRequired,
 };
-
-export default Step1;
