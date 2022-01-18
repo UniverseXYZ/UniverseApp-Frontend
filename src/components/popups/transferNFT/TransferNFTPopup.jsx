@@ -1,6 +1,9 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Contract } from 'ethers';
+import { useFormik } from 'formik';
+import * as Yup from 'yup';
+import EthereumAddress from 'ethereum-address';
 import closeIcon from '../../../assets/images/close-menu.svg';
 import './TransferNFTPopup.scss';
 import { Step1, Step2, Step3 } from './components';
@@ -8,27 +11,52 @@ import { Steps } from './constants';
 import Contracts from '../../../contracts/contracts.json';
 import { useAuthContext } from '../../../contexts/AuthContext';
 
+const getTransferSchema = (nft) =>
+  Yup.object().shape({
+    receiverAddress: Yup.string()
+      .required('This field can’t be empty')
+      .test('receiverAddress', 'Wallet address is not valid', (value) =>
+        EthereumAddress.isAddress(value)
+      ),
+    tokenId: Yup.string().required('This field can’t be empty'),
+    amount: Yup.number()
+      .required('This field can’t be empty')
+      .min(1)
+      .max(nft?.amount || 1),
+  });
+
 const { contracts: contractsData } = Contracts[process.env.REACT_APP_NETWORK_CHAIN_ID];
 
+const Standards = {
+  ERC721: 'ERC721',
+  ERC1155: 'ERC1155',
+};
+
 const TransferNFTPopup = ({ close, nft }) => {
-  const [receiverAddress, setReceiverAddress] = useState('');
+  const formik = useFormik({
+    initialValues: {
+      receiverAddress: '',
+      tokenId: nft.tokenId,
+      amount: nft.amount,
+    },
+    validateOnMount: true,
+    validationSchema: getTransferSchema(nft),
+  });
+
   const [step, setStep] = useState(Steps.Form);
 
   const { signer } = useAuthContext();
 
-  const contract = useMemo(
-    () => new Contract(nft.collection.address, contractsData[nft.standard].abi, signer),
-    [nft, signer]
-  );
-
-  const handleSubmit = useCallback(async () => {
+  const handleSubmit = useCallback(async (values) => {
+    const contract = new Contract(nft.collection.address, contractsData[nft.standard].abi, signer);
     const address = await signer.getAddress();
-    let methodName = 'safeTransferFrom(address,address,uint256)';
-    let params = [address, receiverAddress, nft.tokenId];
 
-    if (nft.standard === 'ERC1155') {
+    let methodName = 'safeTransferFrom(address,address,uint256)';
+    let params = [address, values.receiverAddress, values.tokenId];
+
+    if (nft?.standard === Standards.ERC1155) {
       methodName = 'safeTransferFrom';
-      params = [address, receiverAddress, nft.tokenId, nft.amount, 0x0];
+      params = [address, values.receiverAddress, values.tokenId, +values.amount, 0x0];
     }
 
     const gasLimit = await contract.estimateGas[methodName](...params);
@@ -40,7 +68,7 @@ const TransferNFTPopup = ({ close, nft }) => {
       console.error(e);
     }
     setStep(Steps.Success);
-  }, [receiverAddress, contract]);
+  }, []);
 
   return (
     <div className="transfer--nft--popup">
@@ -51,17 +79,19 @@ const TransferNFTPopup = ({ close, nft }) => {
         alt="Close"
         aria-hidden="true"
       />
-      {step === 1 && (
+      {step === Steps.Form && (
         <Step1
           close={close}
           nft={nft}
-          receiverAddress={receiverAddress}
-          setReceiverAddress={setReceiverAddress}
+          formik={formik}
+          showAmount={nft?.standard === Standards.ERC1155}
           onSubmit={handleSubmit}
         />
       )}
-      {step === 2 && <Step2 close={close} />}
-      {step === 3 && <Step3 close={close} receiverAddress={receiverAddress} />}
+      {step === Steps.Loading && <Step2 close={close} />}
+      {step === Steps.Success && (
+        <Step3 close={close} receiverAddress={formik.values.receiverAddress} />
+      )}
     </div>
   );
 };
