@@ -8,6 +8,7 @@ import mp3Icon from '../../assets/images/mp3-icon.png';
 import Select from '../availableNFTsEditionSelect';
 import universeIcon from '../../assets/images/universe-img.svg';
 import { getCollectionBackgroundColor } from '../../utils/helpers';
+import { TIER_SETTINGS_LIMITATION } from '../../utils/config';
 
 const NFTCard = React.memo(
   ({ data, onEditionClick, canSelect, winnersData, selectedWinner, auction, currentTierId }) => {
@@ -82,12 +83,15 @@ const NFTCard = React.memo(
     const selectAllValues = updateOptionsWithAllTiersData.filter(
       (option) => !option.isDisabled && !option.isSelected
     );
+    const winnersCopy = [...winnersData];
     const deselectAllValues = updateOptionsWithAllTiersData.filter((option) => option.isSelected);
     const hasSelectedEditions = updatedOptionsForCurrentTier.find((item) => item.isSelected);
+    const winnerNFTsCount = winnersCopy[selectedWinner].nftIds.length;
+    const leftNTFsCount = TIER_SETTINGS_LIMITATION.MAX_WINNER_NFT_COUNT - winnerNFTsCount;
 
     updateOptionsWithAllTiersData.unshift({
       label: 'Select all',
-      isSelected: !selectAllValues.length && hasSelectedEditions,
+      isSelected: leftNTFsCount === 0 || (!selectAllValues.length && hasSelectedEditions),
       isDisabled: !selectAllValues.length && !hasSelectedEditions,
       value: { selectValues: selectAllValues, deselectValues: deselectAllValues },
     });
