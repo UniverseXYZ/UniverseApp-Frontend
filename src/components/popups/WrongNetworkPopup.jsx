@@ -33,7 +33,6 @@ const WrongNetworkPopup = ({ close }) => {
         <p className="desc">
           Please switch your wallet network to <span>{process.env.REACT_APP_NETWORK_NAME}</span> to
           use the app. <br />
-          {/* <br /> If you don’t know how to do it, <a>check the tutorial</a>. <br /> */}
           <br />
           If you still encounter problems, you may want to switch to a different wallet
         </p>
