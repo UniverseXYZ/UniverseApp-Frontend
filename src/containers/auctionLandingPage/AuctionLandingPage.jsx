@@ -100,6 +100,11 @@ const AuctionLandingPage = () => {
           setWinningSlot(currBidderIndex);
         }
       }
+    } else {
+      // We need to reset the currentBid, upon updating the bidders even though there might not be any
+      setCurrentBid(null);
+      setIsWinningBid(false);
+      setWinningSlot(-1);
     }
   }, [bidders, address, rewardTiersSlots]);
 
