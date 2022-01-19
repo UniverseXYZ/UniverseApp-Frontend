@@ -126,22 +126,44 @@ const AuctionLandingPage = () => {
   }, [slotsInfo]);
 
   const getAuctionRevenue = async () => {
+    // 1. Claimable funds
     const revenueToClaim = await universeAuctionHouseContract.auctionsRevenue(
       auction.auction.onChainId
-    );
-
-    const totalBids = Object.values(slotsInfo).reduce(
-      (acc, slot) => acc.add(slot.winningBidAmount),
-      EBigNumber.from('0')
     );
 
     const toClaim = utils.formatEther(revenueToClaim);
     setClaimableFunds(toClaim);
 
-    const unreleased =
-      utils.formatEther(totalBids.sub(revenueToClaim)) - Number(auction.auction.revenueClaimed);
+    // 2. Unreleased funds
+    const areAllSlotsCaptured =
+      auction.auction.finalised &&
+      !auction.rewardTiers
+        .map((r) => r.slots)
+        .flat()
+        .some((s) => !s.capturedRevenue);
 
-    setUnreleasedFunds(unreleased);
+    if (!auction.auction.finalised) {
+      // If auction isn't finalised We need to calcuate the total amount of winning bids from the bids
+
+      // We take the first N bids and sum them, N = number of slots from contract
+      const totalBids = auction.bidders
+        .slice(0, Object.values(slotsInfo).length)
+        .reduce((acc, bid) => acc.plus(bid.amount), new BigNumber('0'));
+
+      setUnreleasedFunds(totalBids.toFixed());
+    } else if (!areAllSlotsCaptured) {
+      // If auction is finalised we can use the data from the contract
+      const totalBids = Object.values(slotsInfo).reduce(
+        (acc, slot) => acc.add(slot.winningBidAmount),
+        EBigNumber.from('0')
+      );
+
+      const unreleased =
+        utils.formatEther(totalBids.sub(revenueToClaim)) - Number(auction.auction.revenueClaimed);
+
+      setUnreleasedFunds(unreleased);
+    }
+    // If all slots are captured we unreleased funds are 0
   };
 
   useEffect(() => {
