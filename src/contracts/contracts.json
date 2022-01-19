@@ -5016,7 +5016,7 @@
         ]
       },
       "UniverseERC721Core": {
-        "address": "0xfd7d165344a04241ab3cd07d021eec17f03adc51",
+        "address": "0x244488c70aca5b82B80E5F4aab732B8D7f6dc66C",
         "abi": [
           {
             "inputs": [
@@ -10818,7 +10818,7 @@
         ]
       },
       "UniverseERC721Factory": {
-        "address": "0x26e84797880b6435861e8730171b75e6257bcba0",
+        "address": "0x626B85eDC35c8ca0a5F94e86a800879Cf0bC1ABF",
         "abi": [
           {
             "inputs": [],
