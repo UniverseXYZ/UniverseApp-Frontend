@@ -176,6 +176,9 @@
             image-rendering: pixelated;
           }
         }
+        .single-nft-video {
+          border: unset;
+        }
         &:hover {
           border: 3px dashed $white !important;
           background: linear-gradient($white, $white) padding-box, linear-gradient(175deg, #bceb00, #00eaea) border-box !important;
@@ -283,7 +286,7 @@
         white-space: break-spaces;
 
         img {
-          margin-left: 4px;
+          margin-left: 6px;
         }
 
         .info-text {
@@ -481,6 +484,8 @@
           letter-spacing: 0.2px;
           color: $black;
           margin-bottom: 10px;
+          display: flex;
+          align-items: center;
           img {
             margin-left: 3px;
           }
@@ -741,6 +746,8 @@
             line-height: 130%;
             letter-spacing: 0.2px;
             color: $black;
+            display: flex;
+            align-items: center;
           }
           .royalities-info-text {
             position: absolute;
@@ -761,7 +768,7 @@
             }
           }
           img {
-            margin-left: 3px;
+            margin-left: 6px;
           }
           .switch {
             position: absolute;
