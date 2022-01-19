@@ -138,18 +138,16 @@ const PastAuctionsCard = ({ auction, setShowLoadingModal, setLoadingText }) => {
 
   const handleClaimFunds = async () => {
     try {
-      setLoadingText(defaultLoadingText);
-      setShowLoadingModal(true);
       const tx = await universeAuctionHouseContract.distributeCapturedAuctionRevenue(
         auction.onChainId
       );
+      setLoadingText(defaultLoadingText);
+      setShowLoadingModal(true);
       setActiveTxHashes([tx.hash]);
       const txReceipt = await tx.wait();
       if (txReceipt.status === 1) {
         // This modal will be closed upon recieving handleAuctionWithdrawnRevenueEvent
         setLoadingText(verifyClaimLoadingText);
-        // TODO: This should be moved in the event handler somehow
-        setClaimableFunds(0);
       }
     } catch (err) {
       setShowLoadingModal(false);
