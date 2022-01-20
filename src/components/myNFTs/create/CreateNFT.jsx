@@ -5,24 +5,25 @@ import arrow from '../../../assets/images/arrow.svg';
 import SingleNFTForm from './SingleNFTForm';
 import NFTCollectionForm from './NFTCollectionForm';
 import { useMyNftsContext } from '../../../contexts/MyNFTsContext';
-import { useAuthContext } from '../../../contexts/AuthContext';
 
 const CreateNFT = () => {
   const history = useHistory();
   const location = useLocation();
-  const { savedNFTsID, savedCollectionID } = useMyNftsContext();
-  const { deployedCollections } = useAuthContext();
+  const { savedNFTsID, savedCollectionID, myMintableCollections } = useMyNftsContext();
   const [selectedTabIndex, setSelectedTabIndex] = useState(0);
   const [selectedNFTType, setSelectedNFTType] = useState('');
   const [backPath, setBackPath] = useState('');
   const [showCollectible, setShowCollectible] = useState(false);
 
+  const collection = myMintableCollections.find((item) => item.id === savedCollectionID);
+
   const goToCollectionPage = () => {
-    const findCollection = deployedCollections.filter((item) => item.id === savedCollectionID);
-    history.push(`/collection/${findCollection[0].address}`, {
-      collection: deployedCollections.filter((item) => item.id === savedCollectionID)[0],
-      saved: false,
-    });
+    if (collection) {
+      history.push(`/collection/${collection.address}`, {
+        collection,
+        saved: false,
+      });
+    }
   };
 
   useEffect(() => {
@@ -81,9 +82,7 @@ const CreateNFT = () => {
         {savedCollectionID && (
           <div className="back-btn" onClick={goToCollectionPage} aria-hidden="true">
             <img src={arrow} alt="back" />
-            <span>
-              {deployedCollections.filter((item) => item.id === savedCollectionID)[0].name}
-            </span>
+            <span>{collection?.name}</span>
           </div>
         )}
         {!savedCollectionID && !savedNFTsID && (

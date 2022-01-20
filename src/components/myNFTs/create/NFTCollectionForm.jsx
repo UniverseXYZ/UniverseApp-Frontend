@@ -47,6 +47,7 @@ const NFTCollectionForm = ({ showCollectible, setShowCollectible }) => {
     mintingCollectionsCount,
     setMintingCollectionsCount,
     setMyNFTsSelectedTabIndex,
+    myMintableCollections,
   } = useMyNftsContext();
   const { deployedCollections, setDeployedCollections, universeERC721FactoryContract } =
     useAuthContext();
@@ -312,7 +313,7 @@ const NFTCollectionForm = ({ showCollectible, setShowCollectible }) => {
   useEffect(() => {
     // It means we have opened a collection for EDIT
     if (savedCollectionID) {
-      const res = deployedCollections.filter((item) => item.id === savedCollectionID)[0];
+      const res = myMintableCollections.filter((item) => item.id === savedCollectionID)[0];
       setCollectionName(res.name);
       // An already deployed collection should have a coverUrl
       setCoverImage(res.coverUrl);
