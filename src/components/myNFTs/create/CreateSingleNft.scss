@@ -1,5 +1,5 @@
-@import "../../../assets/scss/variables";
-@import "../../../assets/scss/_mixins";
+@import '../../../assets/scss/variables';
+@import '../../../assets/scss/_mixins';
 
 .single__nft {
   .mintNftCollection-div {
@@ -485,9 +485,10 @@
           letter-spacing: 0.2px;
           color: $black;
           margin-bottom: 10px;
-          img {
-            margin-left: 3px;
-          }
+        }
+        img {
+          margin-left: 7px;
+          margin-top: -7px;
         }
 
         .properties-info-text {
@@ -537,7 +538,7 @@
 
         .slider:before {
           position: absolute;
-          content: "";
+          content: '';
           height: 16px;
           width: 16px;
           left: 4px;
@@ -732,7 +733,8 @@
           }
         }
       }
-      .royalities {
+      .royalities,
+      .other-wallet {
         margin-top: 40px;
         .title {
           display: flex;
@@ -750,7 +752,8 @@
             letter-spacing: 0.2px;
             color: $black;
           }
-          .royalities-info-text {
+          .royalities-info-text,
+          .other-wallet-info-text {
             position: absolute;
             background: $white;
             padding: 16px 16px 18px 16px;
@@ -773,7 +776,8 @@
             }
           }
           img {
-            margin-left: 3px;
+            margin-left: 7px;
+            margin-top: 3px;
           }
           .switch {
             position: absolute;
@@ -803,7 +807,7 @@
 
           .slider:before {
             position: absolute;
-            content: "";
+            content: '';
             height: 16px;
             width: 16px;
             left: 4px;
@@ -882,6 +886,33 @@
             line-height: 150%;
             color: rgba(0, 0, 0, 0.6);
           }
+        }
+      }
+      .single-nft-properties-header {
+        .properties-info-text {
+          display: none;
+        }
+        img:hover + .properties-info-text{
+          display: block;
+        }
+      }
+      .royalities {
+        .royalities-info-text {
+          display: none;
+        }
+        img:hover + .royalities-info-text {
+          display: block;
+        }
+      }
+      .other-wallet {
+        .other-wallet-info-text {
+          display: none;
+        }
+        img:hover + .other-wallet-info-text{
+          display: block;
+        }
+        .property-address {
+         width: 100%;
         }
       }
     }
