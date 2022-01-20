@@ -435,7 +435,6 @@ const SingleNFTForm = () => {
         editions,
         propertiesParsed: propertyCheck ? parseProperties(properties) : [],
         royaltiesParsed: royalities ? parseRoyalties(royaltyAddress) : [],
-        otherWalletAddress,
         collectionId: selectedCollection?.id,
       };
 
@@ -483,7 +482,8 @@ const SingleNFTForm = () => {
       const txHashes = [];
       const mintPromises = tokensChunks.map(async (chunk, i) => {
         const mintTransaction = await collectionContract.batchMintWithDifferentFees(
-          address,
+          // if otherWalletAddress is set send it to the contract
+          otherWalletAddress || address,
           chunk,
           royaltiesChunks[i]
         );
@@ -557,7 +557,6 @@ const SingleNFTForm = () => {
       propertiesParsed,
       royaltiesParsed,
       collectionId: selectedCollection?.id,
-      otherWalletAddress,
     };
 
     const result = await saveNftForLater(nftData);
@@ -612,7 +611,6 @@ const SingleNFTForm = () => {
       royaltiesParsed,
       id: savedNFTsID,
       collectionId: selectedCollection?.id,
-      otherWalletAddress,
     };
 
     let result = await updateSavedForLaterNft(nftData);
