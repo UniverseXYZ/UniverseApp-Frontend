@@ -313,6 +313,10 @@
         align-items: center;
         flex-wrap: wrap;
         span {
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          max-width: 100px;
           font-family: $spaceGroteskFont;
           font-style: normal;
           font-weight: bold;
@@ -358,6 +362,7 @@
           grid-gap: 20px;
           align-items: center;
           .bidder {
+            display: flex;
             word-break: break-all;
             font-family: $spaceGroteskFont;
             font-style: normal;
@@ -369,6 +374,10 @@
               color: $black;
             }
             .tier {
+              white-space: nowrap;
+              overflow: hidden;
+              text-overflow: ellipsis;
+              max-width: 100px;
               border: 1px solid;
               padding: 2px 5px;
               border-radius: 12px;
@@ -981,6 +990,14 @@
     font-size: 14px;
     line-height: 160%;
     color: rgba(0, 0, 0, 0.6);
+    
+    .tier__name {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 100px;
+    }
+
     .bid__eligible {
       position: relative;
 
@@ -1549,6 +1566,7 @@
         align-items: center;
         margin-bottom: 30px;
         h2 {
+          word-break: break-word;
           font-family: $sharpGroteskSemiBoldFont;
           font-style: normal;
           font-weight: 600;
