@@ -14,6 +14,8 @@ interface INFTItemBindingsProps {
   owner?: {
     displayName: string;
     profileImageUrl: string;
+    name?: string;
+    avatar?: string;
   },
   wrapperProps?: BoxProps;
   tooltipProps?: TooltipProps;
@@ -27,21 +29,21 @@ export const NFTItemBindings = ({ creator, collection, owner, wrapperProps, tool
       avatars.push({
         name: 'Creator',
         value: creator.displayName,
-        img: creator.profileImageUrl
+        img: creator.profileImageUrl,
       });
     }
     if (collection) {
       avatars.push({
         name: 'Collection',
         value: collection.name,
-        img: collection.coverUrl
+        img: collection.coverUrl,
       });
     }
     if (owner) {
       avatars.push({
         name: 'Owner',
-        value: owner.displayName,
-        img: owner.profileImageUrl
+        value: owner.name || owner.displayName,
+        img: owner.avatar || owner.profileImageUrl,
       });
     }
 
@@ -64,7 +66,7 @@ export const NFTItemBindings = ({ creator, collection, owner, wrapperProps, tool
             w={'26px'}
             h={'26px'}
             src={avatar.img}
-            name={`${avatar.name}: ${avatar.value}`}
+            name={`${avatar.value?.charAt(0)}`}
             border={'2px solid white'}
             _notFirst={{
               marginLeft: '-7px',

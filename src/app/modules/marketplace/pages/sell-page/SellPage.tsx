@@ -11,7 +11,8 @@ import arrow from '../../../../../assets/images/arrow.svg';
 
 import { useThemeContext } from '../../../../../contexts/ThemeContext';
 import {
-  defaultDutchAuctionForm, defaultEnglishAuctionForm,
+  defaultDutchAuctionForm,
+  defaultEnglishAuctionForm,
   defaultFixedListingForm,
   MarketplaceSellContext,
   sellPageTabs,
@@ -53,18 +54,94 @@ export const SellPage = () => {
       const address = await signer.getAddress();
       const network = await web3Provider.getNetwork();
 
+      const make: any = {
+        assetType: {
+          assetClass: nft.nft.standard,
+          contract: nft.collection.address,
+          tokenId: locationState.tokenId,
+        },
+        value: '1',
+      };
+
+      // TODO: v1
+      // if (amountType === SellAmountType.BUNDLE) {
+      //   const [contracts, tokenIds] = values.bundleSelectedNFTs.reduce((acc: [string[], string[]], key: string) => {
+      //     const [NFTId, NFTHash, NFTTokenId] = key.split(':');
+      //     acc[0].push(NFTHash);
+      //     acc[1].push(NFTTokenId);
+      //     return acc;
+      //   }, [[], []]);
+      //
+      //   make.assetType = {
+      //     assetClass: 'ERC721_BUNDLE',
+      //     // contracts: [nft.collection.address, ...contracts],
+      //     // @ts-ignore
+      //     contracts: [...(new Set([nft.collection.address, ...contracts]))],
+      //     tokenIds: [[locationState.tokenId, ...tokenIds]],
+      //   };
+      //
+      //   make.value = `${make.assetType.contracts.length}`;
+      // }
+
+      // TODO: v2
+      // if (amountType === SellAmountType.BUNDLE) {
+      //   const bundleSelectedNFTs = [...values.bundleSelectedNFTs];
+      //   // add original NFT
+      //   bundleSelectedNFTs.push([nft.id, nft.collection.address, locationState.tokenId].join(':'));
+      //
+      //   const bundleNFTs = bundleSelectedNFTs.reduce((acc: Record<string, string[]>, key: string) => {
+      //     const [NFTId, NFTHash, NFTTokenId] = key.split(':');
+      //
+      //     if (!acc[NFTHash]) {
+      //       acc[NFTHash] = [];
+      //     }
+      //
+      //     acc[NFTHash].push(NFTTokenId);
+      //     return acc;
+      //   }, {});
+      //
+      //   const [contracts, tokenIds] = Object.keys(bundleNFTs).reduce((acc: [string[], string[]], key: string) => {
+      //     acc[0].push(key);
+      //     acc[1].push(bundleNFTs[key]);
+      //     return acc;
+      //   }, [[], []])
+      //
+      //   make.assetType = {
+      //     assetClass: 'ERC721_BUNDLE',
+      //     contracts: contracts,
+      //     tokenIds: tokenIds,
+      //   };
+      // }
+
+      // TODO: v3
+      if (amountType === SellAmountType.BUNDLE) {
+        const [contracts, tokenIds] = (values.bundleSelectedNFTs as string[]).reduce<[string[], [string[]]]>((acc, key: string) => {
+          const [NFTId, NFTHash, NFTTokenId] = key.split(':');
+
+          let i = acc[0].indexOf(NFTHash);
+
+          if (i === -1) {
+            acc[0].push(NFTHash);
+            acc[1].push([]);
+            i = acc[0].length - 1;
+          }
+
+          acc[1][i].push(NFTTokenId);
+          return acc;
+        }, [[nft.collection.address], [[locationState.tokenId]]]);
+
+        make.assetType = {
+          assetClass: 'ERC721_BUNDLE',
+          contracts: contracts,
+          tokenIds: tokenIds,
+        };
+      }
+
       const data = {
         type: 'UNIVERSE_V1',
         maker: address,
         taker: values.buyerAddress || '0x0000000000000000000000000000000000000000',
-        make: {
-          assetType: {
-            assetClass: nft.nft.standard,
-            contract: nft.collection.address,
-            tokenId: locationState.tokenId,
-          },
-          value: '1'
-        },
+        make,
         take: {
           assetType: {
             assetClass: 'ETH'

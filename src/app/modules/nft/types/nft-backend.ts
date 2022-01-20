@@ -49,6 +49,8 @@ export interface INftBackend {
     profileImageUrl: string;
     twitterUser: string;
     universePageUrl: string;
+    name?: string;
+    avatar?: string;
   };
   properties: any[];
   royalties: Array<{
