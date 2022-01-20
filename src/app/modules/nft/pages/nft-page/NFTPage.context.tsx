@@ -23,6 +23,8 @@ const NFTPageProvider: FC = ({ children }) => {
   // @ts-ignore
   const { isLoading, data, error } = useQuery('getNftData', () => getNftData(collectionAddress, tokenId))
 
+  console.log('data', data)
+
   const value: INFTPageContext = {
     NFT: data,
     isLoading,
