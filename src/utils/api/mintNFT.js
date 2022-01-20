@@ -259,6 +259,7 @@ export const getTokenURI = async ({
   propertiesParsed,
   royaltiesParsed,
   collectionId,
+  otherWalletAddress,
 }) => {
   const formData = new FormData();
   const noProperties = propertiesParsed?.length;
@@ -271,6 +272,7 @@ export const getTokenURI = async ({
   if (description) formData.append('description', description);
   if (noProperties) formData.append('properties', JSON.stringify(propertiesParsed));
   if (noRoyalties) formData.append('royalties', JSON.stringify(royaltiesParsed));
+  if (otherWalletAddress) formData.append('otherWalletAddress', otherWalletAddress);
 
   const request = await fetch(GENERATE_TOKEN_URI_URL, {
     method: 'post',
