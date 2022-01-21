@@ -54,6 +54,7 @@ const FinalizeAuction = () => {
   const [loadingText, setLoadingText] = useState(defaultLoadingText);
   const [depositVerifyingTxIndex, setDepositVerifyingTxIndex] = useState(null);
   const [withdrawVerifyingTokenIds, setWithdrawVerifyingTokenIds] = useState(null);
+  const [withdrawCount, setWithdrawCount] = useState(0);
   const [approvingCollections, setApprovingCollections] = useState([]);
 
   // useRef is used to access latest state inside socket event callbacks
@@ -64,6 +65,7 @@ const FinalizeAuction = () => {
   const approvedTxsRef = useRef(approvedTxs);
   const depositVerifyingTxIndexRef = useRef(depositVerifyingTxIndex);
   const withdrawVerifyingTokenIdsRef = useRef(withdrawVerifyingTokenIds);
+  const withdrawCountRef = useRef(withdrawCount);
 
   useEffect(() => {
     transactionsRef.current = transactions;
@@ -80,6 +82,12 @@ const FinalizeAuction = () => {
   useEffect(() => {
     withdrawVerifyingTokenIdsRef.current = withdrawVerifyingTokenIds;
   }, [withdrawVerifyingTokenIds]);
+
+  useEffect(() => {
+    withdrawCountRef.current = withdrawCount;
+
+    console.log(`withdrawCount: ${withdrawCount}`);
+  }, [withdrawCount]);
 
   // End of useRef section
 
@@ -102,7 +110,7 @@ const FinalizeAuction = () => {
     const txIndex = depositVerifyingTxIndexRef.current;
     if (txIndex !== null) {
       // 2. Get nfts from the transactions config
-      const slotNfts = transactionsRef.current.displayNfts[txIndex] || [];
+      const slotNfts = transactionsRef.current.stateNfts[txIndex] || [];
       const collectionMatch = auction.collections.find(
         (c) => c.address.toLowerCase() === collectionAddress.toLowerCase()
       );
@@ -155,7 +163,7 @@ const FinalizeAuction = () => {
 
     if (txIndex !== null) {
       // 2. Get nfts from the transactions config
-      const slotNfts = transactionsRef.current.displayNfts[txIndex] || [];
+      const slotNfts = transactionsRef.current.stateNfts[txIndex] || [];
 
       // 3. Iterate over each nft
       for (let i = 0; i < slotNfts.length; i += 1) {
@@ -165,6 +173,14 @@ const FinalizeAuction = () => {
         if (nft.tokenId === tokenId.toString()) {
           nft.deposited = false;
           foundNft = true;
+
+          // If we've processed all withdrawn nfts --> hide loading
+          if (withdrawCountRef.current - 1 === 0) {
+            setShowLoading(false);
+          }
+
+          // Decrement the count of nfts waiting for event processing
+          setWithdrawCount(withdrawCountRef.current - 1);
 
           // 5. If all nfts have been withdraw, pop the approved tx index
           const hasDepositedNfts = slotNfts.some((slotNft) => slotNft.deposited);
@@ -281,7 +297,7 @@ const FinalizeAuction = () => {
     setTransactions(transactionsConfig);
 
     const apprTxs = [];
-    transactionsConfig.displayNfts.forEach((slotNfts, index) => {
+    transactionsConfig.stateNfts.forEach((slotNfts, index) => {
       const areNftsDeposited = slotNfts.some((nft) => nft.deposited);
       if (areNftsDeposited) {
         apprTxs.push(index);
@@ -445,19 +461,21 @@ const FinalizeAuction = () => {
       // We need to withdraw each slot at a time
       // Calculate all count of deposited nfts at a slot
       const nftsCountMap = {};
-      const nftTokenidsMap = {};
+
       // Take only nfts that are deposited
-      const nfts = transactions.displayNfts[txIndex].filter((nft) => nft.deposited);
-      transactions.finalSlotIndices[txIndex].forEach((slot) => {
+      const nfts = transactions.stateNfts[txIndex].filter((nft) => nft.deposited);
+
+      // We distinct because of the filter below. We get wrong count of nfts if there are repeating indices
+      const uniqueIndices = [...new Set(transactions.finalSlotIndices[txIndex])];
+
+      uniqueIndices.forEach((slot) => {
+        const slotNfts = nfts.filter((nft) => nft.slot === Number(slot));
         if (!nftsCountMap[slot]) {
-          const slotNfts = nfts.filter((nft) => nft.slot === Number(slot));
           if (slotNfts.length) {
             nftsCountMap[slot] = slotNfts.length;
-            nftTokenidsMap[slot] = slotNfts.map((nft) => nft.tokenId);
           }
         } else {
-          const slotNfts = nfts.filter((nft) => nft.slot === Number(slot));
-          nftTokenidsMap.push(slotNfts.map((nft) => nft.tokenId));
+          nftsCountMap[slot] += slotNfts.length;
         }
       });
       const txHashes = [];
@@ -470,6 +488,7 @@ const FinalizeAuction = () => {
             slot,
             nftsCountMap[slot]
           );
+          setWithdrawCount(withdrawCountRef.current + nftsCountMap[slot]);
           txs.push(tx);
           setLoadingText(defaultLoadingText);
           setShowLoading(true);
