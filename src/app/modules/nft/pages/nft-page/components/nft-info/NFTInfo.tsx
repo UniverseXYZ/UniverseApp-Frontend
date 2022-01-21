@@ -24,14 +24,33 @@ import {
 } from "../../../../../../../containers/collection/CollectionPageLoader";
 import {useNFTPageData} from "../../NFTPage.context";
 import NotFound from "../../../../../../../components/notFound/NotFound";
-import React from "react";
+import React, { useMemo } from 'react';
 
+enum NFTAssetType {
+  IMAGE,
+  AUDIO,
+  VIDEO,
+  BUNDLE,
+  STORY_BOOK,
+}
 
 // TODO: hide metadata tab for not Polymorph NFT type
 export const NFTInfo = () => {
   const { NFT, isLoading } = useNFTPageData();
 
-  console.log('NFT', NFT)
+  console.log('NFT', NFT);
+
+  const assetType = useMemo<NFTAssetType | null>(() => {
+    // TODO: Find out the audio format
+    const { nft } = NFT;
+
+    switch (true) {
+      case NFT.nft.artworkType.endsWith('png'): return NFTAssetType.IMAGE;
+      case NFT.nft.artworkType.endsWith('audio/mpeg'): return NFTAssetType.AUDIO;
+    }
+
+    return null;
+  }, [NFT]);
 
   return (
     <>
@@ -44,14 +63,9 @@ export const NFTInfo = () => {
       : NFT ? (
           <Box>
             <Box {...styles.NFTAssetContainerStyle}>
-              {NFT.nft.artworkType.endsWith('png') && (
-                <NFTAssetImage src={NFT.nft.original_url} />
-              )}
-              {/*TODO: Find out the audio format  */}
-              {NFT.nft.artworkType.endsWith('audio/mpeg') && (
-                <NFTAssetAudio />
-              )}
               {/*TODO: ✅ image / ✅ audio / ☑️ video / ☑️ bundle / ☑️ storybook */}
+              {assetType === NFTAssetType.IMAGE && (<NFTAssetImage src={NFT.nft.original_url} />)}
+              {assetType === NFTAssetType.AUDIO && (<NFTAssetAudio />)}
             </Box>
             <Box {...styles.NFTDetailsContainerStyle}>
               <Box sx={{ p: '60px 40px', }}>

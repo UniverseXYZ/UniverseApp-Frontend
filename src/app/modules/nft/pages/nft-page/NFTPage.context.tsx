@@ -20,6 +20,7 @@ export function useNFTPageData(): INFTPageContext {
 const NFTPageProvider: FC = ({ children }) => {
   // @ts-ignore
   const { collectionAddress, tokenId } = useParams();
+  // TODO: change cache key getNftData --> nft / id
   // @ts-ignore
   const { isLoading, data, error } = useQuery('getNftData', () => getNftData(collectionAddress, tokenId))
 
