@@ -5,8 +5,12 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Status, Status as PostingPopupStatus } from './compoents/posting-popup/enums';
 import { useMarketplaceSellData } from '../../../hooks';
 import { GreyBox } from '../../grey-box';
-import { EtherIcon, Fee, PostingPopup } from './compoents';
+import { Fee, PostingPopup } from './compoents';
 import { fees, totalFee } from './constants';
+import { SellMethod } from '../../../enums';
+import { IFixedListingForm } from '../../../types';
+import { Tokens } from '../../../../../../../enums';
+import { TokenIcon } from '../../../../../../../components/token-icon';
 
 const styles: Record<string, SystemStyleObject> = {
   mainContainer: {
@@ -67,7 +71,7 @@ const styles: Record<string, SystemStyleObject> = {
 };
 
 export const SummaryTab = () => {
-  const { nft, isPosted, form, goBack } = useMarketplaceSellData();
+  const { nft, isPosted, form, sellMethod, goBack } = useMarketplaceSellData();
 
   const [postingPopupStatus, setPostingPopupStatus] = useState<PostingPopupStatus>(PostingPopupStatus.HIDDEN);
 
@@ -76,8 +80,14 @@ export const SummaryTab = () => {
     form.submitForm();
   }, [nft]);
 
-  const price = useMemo(() => {
-    return (form.values as any)?.price?.value;
+  const [price, ticker] = useMemo<[number, Tokens]>(() => {
+    switch (sellMethod) {
+      case SellMethod.FIXED: return [
+        +(form.values as IFixedListingForm).price,
+        (form.values as IFixedListingForm).priceCurrency as Tokens, // TODO: remove as
+      ];
+    }
+    return [0, Tokens.ETH];
   }, [form.values]);
 
   const totalPrice = useMemo(() => {
@@ -94,14 +104,22 @@ export const SummaryTab = () => {
     <>
       <Flex sx={styles.mainContainer}>
         <Box sx={styles.imageContainer}>
-          <Image src={nft?.nft?.thumbnail_url} borderRadius={'12px'} h={'var(--image-size)'} w={'var(--image-size)'} />
+          <Image
+            src={nft?.nft?.thumbnail_url}
+            sx={{
+              objectFit: 'cover',
+              borderRadius: '12px',
+              h: 'var(--image-size)',
+              w: 'var(--image-size)',
+            }}
+          />
         </Box>
         <Flex sx={styles.textContainer}>
           <Center flexDir={'column'} alignItems={'flex-start'} w={'100%'}>
             <Heading as={'h4'}>Listing</Heading>
             <Text mb={'30px'}>
               Your bundle will be listed for
-              <EtherIcon w={'11px'} />
+              <TokenIcon ticker={ticker} size={20} />
               <strong>{price}</strong>
             </Text>
 
@@ -118,7 +136,7 @@ export const SummaryTab = () => {
 
             <Heading as={'h4'} mb={'0 !important'}>
               You will receive:
-              <EtherIcon width={'14px'} />
+              <TokenIcon ticker={ticker} size={24} />
               {totalPrice}
             </Heading>
           </Center>

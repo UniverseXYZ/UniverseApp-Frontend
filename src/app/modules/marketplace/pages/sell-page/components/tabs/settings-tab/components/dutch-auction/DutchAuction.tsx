@@ -30,12 +30,13 @@ export const SettingsTabDutchAuction = () => {
           <Text>Set an initial price</Text>
         </Box>
         <Box>
-          <CurrencyInput
-            placeholder={'Amount'}
-            name={'price'}
-            value={form.values.price}
-            onChange={(value) => form.setFieldValue('price', value)}
-          />
+          {/*TODO*/}
+          {/*<CurrencyInput*/}
+          {/*  placeholder={'Amount'}*/}
+          {/*  name={'price'}*/}
+          {/*  value={form.values.price}*/}
+          {/*  onChange={(value) => form.setFieldValue('price', value)}*/}
+          {/*/>*/}
         </Box>
       </Flex>
       <Flex sx={styles.settingsItem}>
@@ -58,12 +59,13 @@ export const SettingsTabDutchAuction = () => {
                 </Text>
               </Box>
               <Box>
-                <CurrencyInput
-                  placeholder={'Amount'}
-                  name={'endingPrice'}
-                  value={form.values.endingPrice}
-                  onChange={(value) => form.setFieldValue('endingPrice', value)}
-                />
+                {/*TODO*/}
+                {/*<CurrencyInput*/}
+                {/*  placeholder={'Amount'}*/}
+                {/*  name={'endingPrice'}*/}
+                {/*  value={form.values.endingPrice}*/}
+                {/*  onChange={(value) => form.setFieldValue('endingPrice', value)}*/}
+                {/*/>*/}
               </Box>
             </Flex>
             <Flex sx={styles.settingsItem}>

@@ -12,9 +12,7 @@ import {
   Link,
   Menu,
   MenuButton,
-  MenuButtonProps,
   MenuItem,
-  MenuItemProps,
   MenuList,
   Modal,
   ModalBody,
@@ -25,81 +23,16 @@ import {
 import React, { useState } from 'react';
 
 import * as styles from './styles';
+import { TOKENS, TOKENS_MAP } from '../../../../../../constants';
 import { Checkbox } from '../../../../../../components';
 import { ETH_USD_RATE } from '../../../../../../mocks';
-import { coins } from '../../../../../../components/currency-input/consts';
 
-import arrow from '../../../../../../../assets/images/arrow-down.svg';
-import ether from '../../../../../../../assets/images/coins/eth.svg';
+import ArrowIcon from '../../../../../../../assets/images/arrow-down.svg';
 
 interface INFTPlaceABidPopupProps {
   isOpen: boolean;
   onClose: () => void;
 }
-
-const CurrencyMenuButtonStyle: MenuButtonProps = {
-  background: 'rgba(0, 0, 0, 0.02)',
-  border: '1px solid rgba(0, 0, 0, 0.1)',
-  borderRadius: '6px',
-  height: '34px',
-  ml: '8px',
-  padding: '0 10px',
-
-  sx: {
-    '> span': {
-      display: 'contents',
-    },
-    img: {
-      _first: {
-        mr: '10px',
-      },
-      _last: {
-        ml: '10px',
-        transition: '200ms',
-      },
-    },
-  },
-
-  _hover: {
-    background: 'rgba(0, 0, 0, 0.03)',
-    boxShadow: 'sm',
-  },
-
-  _focus: {
-    background: 'rgba(0, 0, 0, 0.03)',
-    boxShadow: 'sm',
-  },
-
-  _active: {
-    boxShadow: 0,
-    img: {
-      _last: {
-        transform: 'rotate(180deg)',
-      }
-    }
-  },
-}
-
-const CurrencyItemStyle: MenuItemProps = {
-  borderRadius: '5px',
-  fontFamily: 'Space Grotesk',
-  fontWeight: 500,
-  padding: '10px',
-  paddingRight: '20px',
-
-  sx: {
-    img: {
-      mr: '10px',
-    },
-  },
-
-  _hover: {
-    bg: 'rgba(0, 0, 0, 0.05)',
-  },
-  _focus: {
-    bg: 'rgba(0, 0, 0, 0.05)',
-  }
-};
 
 export const NFTPlaceABidPopup = ({ isOpen, onClose, }: INFTPlaceABidPopupProps) => {
   const [agree, setAgree] = useState(false);
@@ -120,16 +53,16 @@ export const NFTPlaceABidPopup = ({ isOpen, onClose, }: INFTPlaceABidPopupProps)
             <InputGroup>
               <InputLeftElement w={'fit-content'}>
                 <Menu>
-                  <MenuButton as={Button} size={'sm'} {...CurrencyMenuButtonStyle}>
-                    <Image src={ether} />
-                    ETH
-                    <Image src={arrow} />
+                  <MenuButton as={Button} size={'sm'} {...styles.CurrencyMenuButtonStyle}>
+                    <Image src={TOKENS_MAP.ETH.icons[0]} />
+                    {TOKENS_MAP.ETH.ticker}
+                    <Image src={ArrowIcon} />
                   </MenuButton>
                   <MenuList minWidth={'100px'} p={'8px'} position={'relative'} zIndex={3}>
-                    {coins.map((coin, i) => (
-                      <MenuItem key={i} {...CurrencyItemStyle} onClick={() => {}}>
-                        <Image src={coin.icon} />
-                        {coin.name}
+                    {TOKENS.map((TOKEN) => (
+                      <MenuItem key={TOKEN.ticker} {...styles.CurrencyItemStyle} onClick={() => {}}>
+                        <Image src={TOKEN.icons[0]} />
+                        {TOKEN.ticker}
                       </MenuItem>
                     ))}
                   </MenuList>
