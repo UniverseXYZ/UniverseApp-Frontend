@@ -42,47 +42,15 @@ const CreateNFT = () => {
     <div className="create--nft--page">
       <div className="create--nft--background" />
       <div className="create--nft--page--container">
-        {!savedCollectionID && (
-          <>
-            {!showCollectible ? (
-              <div
-                className="back-btn"
-                onClick={() =>
-                  history.push(
-                    location.pathname === '/create-tiers/my-nfts/create'
-                      ? '/create-tiers'
-                      : backPath === 'minting'
-                      ? '/minting'
-                      : '/my-nfts'
-                  )
-                }
-                aria-hidden="true"
-              >
-                <img src={arrow} alt="back" />
-                <span>
-                  {location.pathname === '/create-tiers/my-nfts/create'
-                    ? 'Create reward tier'
-                    : backPath === 'minting'
-                    ? 'Minting'
-                    : 'My NFTs'}
-                </span>
-              </div>
-            ) : (
-              <div
-                className="back-btn"
-                onClick={() => setShowCollectible(false)}
-                aria-hidden="true"
-              >
-                <img src={arrow} alt="back" />
-                <span>NFT collection settings</span>
-              </div>
-            )}
-          </>
-        )}
-        {savedCollectionID && (
+        {savedCollectionID ? (
           <div className="back-btn" onClick={goToCollectionPage} aria-hidden="true">
             <img src={arrow} alt="back" />
             <span>{collection?.name}</span>
+          </div>
+        ) : (
+          <div className="back-btn" onClick={() => history.goBack()} aria-hidden="true">
+            <img src={arrow} alt="back" />
+            <span>Go Back</span>
           </div>
         )}
         {!savedCollectionID && !savedNFTsID && (
