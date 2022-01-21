@@ -218,6 +218,13 @@
             }
           }
         }
+        .single-nft-video {
+          border: unset;
+        }
+        &:hover {
+          border: 3px dashed $white !important;
+          background: linear-gradient($white, $white) padding-box, linear-gradient(175deg, #bceb00, #00eaea) border-box !important;
+        }
         @include lg {
           padding: 30px 50px;
         }
@@ -321,7 +328,7 @@
         white-space: break-spaces;
 
         img {
-          margin-left: 4px;
+          margin-left: 6px;
         }
 
         .info-text {
@@ -412,10 +419,6 @@
           .collection-name {
             max-width: 115px;
             overflow-wrap: break-word;
-            text-overflow: ellipsis;
-            overflow: hidden;
-            white-space: nowrap;
-            display: inline-block;
           }
         }
 
@@ -530,10 +533,13 @@
           letter-spacing: 0.2px;
           color: rgba(0, 0, 0, 0.7);
           margin-bottom: 10px;
+          display: flex;
+          align-items: center;
           img {
             margin-left: 3px;
           }
           svg {
+            margin-left: 6px;
             path {
               transition: 0.1s ease-in-out;
             }
@@ -687,10 +693,6 @@
         .property-address {
           width: 69%;
           padding-right: 16px;
-          &.other-wallet {
-            width: 100%;
-            padding-right: 0px;
-          }
 
           @include sm {
             width: 100%;
@@ -807,6 +809,7 @@
             letter-spacing: 0.2px;
             color: rgba(0, 0, 0, 0.7);
             svg {
+              margin-left: 6px;
               path {
                 transition: 0.1s ease-in-out;
               }
@@ -818,6 +821,9 @@
                 }
               }
             }
+            color: $black;
+            display: flex;
+            align-items: center;
           }
           .royalities-info-text {
             position: absolute;
@@ -829,10 +835,6 @@
             bottom: 20px;
             left: 165px;
             transform: translateX(-50%);
-            &.other-wallet {
-              width: 185px;
-              left: 220px;
-            }
 
             p {
               font-family: $spaceGroteskFont;
@@ -842,7 +844,7 @@
             }
           }
           img {
-            margin-left: 3px;
+            margin-left: 6px;
           }
           .switch {
             position: absolute;

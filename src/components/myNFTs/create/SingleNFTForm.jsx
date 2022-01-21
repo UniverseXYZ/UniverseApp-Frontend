@@ -814,7 +814,11 @@ const SingleNFTForm = () => {
                     }}
                     aria-hidden="true"
                   />
-                  <div className="single-nft-picture">
+                  <div
+                    className={`single-nft-picture ${
+                      previewImage.type === 'video/mp4' ? 'single-nft-video' : ''
+                    }`}
+                  >
                     <div className="preview__image">
                       {previewImage.type === 'video/mp4' && (
                         <video
