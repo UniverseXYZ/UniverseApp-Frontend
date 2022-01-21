@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useState, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { Contract } from 'ethers';
 import { useFormik } from 'formik';
@@ -42,6 +42,20 @@ const TransferNFTPopup = ({ close, nft }) => {
     validateOnMount: true,
     validationSchema: getTransferSchema(nft),
   });
+  const ref = useRef(null);
+
+  const handleClickOutside = (event) => {
+    if (ref.current && !ref.current.contains(event.target)) {
+      close();
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener('click', handleClickOutside, true);
+    return () => {
+      document.removeEventListener('click', handleClickOutside, true);
+    };
+  });
 
   const [step, setStep] = useState(Steps.Form);
 
@@ -71,7 +85,7 @@ const TransferNFTPopup = ({ close, nft }) => {
   }, []);
 
   return (
-    <div className="transfer--nft--popup">
+    <div className="transfer--nft--popup" ref={ref}>
       <img
         className="close--popup"
         onClick={close}
