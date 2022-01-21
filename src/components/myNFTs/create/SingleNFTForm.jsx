@@ -1189,7 +1189,8 @@ const SingleNFTForm = () => {
                 </div>
               )}
             </div>
-            <div className="hr-div" />
+            {/* Hide Mint to other wallet section for the current release */}
+            {/* <div className="hr-div" />
             <div className="royalities">
               <div className="title">
                 <h4
@@ -1232,7 +1233,7 @@ const SingleNFTForm = () => {
                   </div>
                 </div>
               )}
-            </div>
+            </div> */}
           </div>
           {errors.name || errors.edition || errors.previewImage ? (
             <div className="single__final__error">
