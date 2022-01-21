@@ -25,13 +25,20 @@ const chunkifySlots = (nftsBySlots) => {
 };
 
 const splitSlots = (chunkedSlots, collections) => {
-  // console.log(chunkedSlots);
+  // Used for SC transactions
   const finalNfts = [];
   let nfts = [];
+  // Used for SC transactions
   const finalSlotIndices = [];
   let slotIndices = [];
+  // Used for displaying the NFTs
   const displayNfts = [];
   let tempDisplayNfts = [];
+
+  // Used for tracking state changes to the nfts
+  const stateNfts = [];
+  let tempStateNfts = [];
+
   const keys = Object.keys(chunkedSlots);
 
   // We make sure the indexes start from 0
@@ -54,6 +61,7 @@ const splitSlots = (chunkedSlots, collections) => {
             count: tempDisplayNfts[pushedNftIndx].count + 1,
           };
         }
+        tempStateNfts.push({ ...nft });
         const collAddress = collections.find((coll) => coll.id === nft.collectionId)?.address;
         nftsChunke.push([nft.tokenId, utils.getAddress(collAddress)]);
       });
@@ -66,6 +74,8 @@ const splitSlots = (chunkedSlots, collections) => {
         nfts = [];
         displayNfts.push(tempDisplayNfts);
         tempDisplayNfts = [];
+        stateNfts.push(tempStateNfts);
+        tempStateNfts = [];
       }
     });
   });
@@ -75,9 +85,10 @@ const splitSlots = (chunkedSlots, collections) => {
     finalSlotIndices.push(slotIndices);
     finalNfts.push(nfts);
     displayNfts.push(tempDisplayNfts);
+    stateNfts.push(tempStateNfts);
   }
 
-  return { finalSlotIndices, displayNfts, finalNfts };
+  return { finalSlotIndices, displayNfts, finalNfts, stateNfts };
 };
 
 export const getNftsForSlots = (chunkedSlots, slotArrays) => {
