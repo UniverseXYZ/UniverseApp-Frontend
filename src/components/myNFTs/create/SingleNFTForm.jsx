@@ -10,11 +10,11 @@ import Button from '../../button/Button.jsx';
 import Input from '../../input/Input.jsx';
 import LoadingPopup from '../../popups/LoadingPopup.jsx';
 import CongratsPopup from '../../popups/CongratsPopup.jsx';
-import infoIcon from '../../../assets/images/icon.svg';
+import { ReactComponent as InfoIcon } from '../../../assets/images/info-icon.svg';
 import deleteIcon from '../../../assets/images/delred-icon.svg';
 import mp3Icon from '../../../assets/images/mp3-icon.png';
 import addIcon from '../../../assets/images/Add.svg';
-import cloudIcon from '../../../assets/images/gray_cloud.svg';
+import { ReactComponent as CloudIcon } from '../../../assets/images/gray_cloud.svg';
 import closeIcon from '../../../assets/images/cross-sidebar.svg';
 import redIcon from '../../../assets/images/red-msg.svg';
 import {
@@ -862,17 +862,18 @@ const SingleNFTForm = () => {
                       ? 'single-nft-upload-file error'
                       : `single-nft-upload-file ${border ? 'single-nft-upload-file-border' : ''}`
                   }
+                  aria-hidden="true"
+                  onClick={() => inputFile.current.click()}
                 >
                   <div className="single-nft-drop-file">
-                    <img src={cloudIcon} alt="Cloud" />
+                    {/* <img src={cloudIcon} alt="Cloud" /> */}
+                    <CloudIcon />
                     <h5>Drop your file here</h5>
                     <p>
                       <span>( min 800x800px, PNG/JPEG/GIF/WEBP/MP4,</span>
                       <span>max 30mb)</span>
                     </p>
-                    <Button className="light-button" onClick={() => inputFile.current.click()}>
-                      Choose file
-                    </Button>
+                    <Button className="light-button">Choose file</Button>
                     <input
                       type="file"
                       className="inp-disable"
@@ -932,7 +933,7 @@ const SingleNFTForm = () => {
           <div className="single-nft-editions">
             <div className="single-nft-edition-header">
               <h5 onMouseEnter={() => setHideIcon(true)} onMouseLeave={() => setHideIcon(false)}>
-                Number of editions <img src={infoIcon} alt="Info Icon" />
+                Number of editions <InfoIcon />
               </h5>
               {hideIcon && (
                 <div className="info-text">
@@ -978,7 +979,7 @@ const SingleNFTForm = () => {
                 onMouseLeave={() => setHideIcon1(false)}
                 onBlur={() => setHideIcon1(false)}
               >
-                Properties <img src={infoIcon} alt="Info Icon" />
+                Properties <InfoIcon />
               </h4>
               {hideIcon1 && (
                 <div className="properties-info-text">
@@ -1094,7 +1095,7 @@ const SingleNFTForm = () => {
                   onMouseLeave={() => setHideRoyalitiesInfo(false)}
                   onBlur={() => setHideRoyalitiesInfo(false)}
                 >
-                  Revenue splits <img src={infoIcon} alt="Info Icon" />
+                  Revenue splits <InfoIcon />
                 </h4>
                 {hideRoyalitiesInfo && (
                   <div className="royalities-info-text">
@@ -1188,7 +1189,8 @@ const SingleNFTForm = () => {
                 </div>
               )}
             </div>
-            <div className="hr-div" />
+            {/* Hide Mint to other wallet section for the current release */}
+            {/* <div className="hr-div" />
             <div className="royalities">
               <div className="title">
                 <h4
@@ -1197,7 +1199,7 @@ const SingleNFTForm = () => {
                   onMouseLeave={() => setHideMintToOtherWallet(false)}
                   onBlur={() => setHideMintToOtherWallet(false)}
                 >
-                  Mint to other wallet <img src={infoIcon} alt="Info Icon" />
+                  Mint to other wallet <InfoIcon />
                 </h4>
                 {hideMintToOtherWallet && (
                   <div className="royalities-info-text other-wallet">
@@ -1231,7 +1233,7 @@ const SingleNFTForm = () => {
                   </div>
                 </div>
               )}
-            </div>
+            </div> */}
           </div>
           {errors.name || errors.edition || errors.previewImage ? (
             <div className="single__final__error">
