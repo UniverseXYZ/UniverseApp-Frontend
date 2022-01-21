@@ -1,7 +1,7 @@
 import { Box, BoxProps, Text } from '@chakra-ui/react';
 import React, { useCallback, useEffect, useState } from 'react';
 
-import { INft } from '../../types';
+import {IMoreNftBackend, INft} from '../../types';
 import {
   NFTItemAssetAudioLabel,
   NFTItemAssetVideoLabel,
@@ -54,9 +54,10 @@ const styles: IStyles = {
     alignItems: 'center',
   }
 };
-
+//TODO make Layout for IMoreNftBackend
 interface INftItemProps {
   nft: INft;
+  // nft: IMoreNftBackend;
   isSelected?: boolean;
   selectedLabel?: string;
 

@@ -10,6 +10,8 @@ import {
   Tabs,
   Text,
 } from '@chakra-ui/react';
+// @ts-ignore
+import ReactReadMoreReadLess from 'react-read-more-read-less';
 
 import { Tabs as NFTTabs } from './constants';
 import { Bindings } from '../../mocks';
@@ -22,6 +24,7 @@ import {
 } from "../../../../../../../containers/collection/CollectionPageLoader";
 import {useNFTPageData} from "../../NFTPage.context";
 import NotFound from "../../../../../../../components/notFound/NotFound";
+import React from "react";
 
 
 // TODO: hide metadata tab for not Polymorph NFT type
@@ -95,21 +98,18 @@ export const NFTInfo = () => {
 
                 <Flex mb={'24px'}>
                   {Bindings.map((binding, i) => (
-                    <Flex key={i} sx={{
-                      alignItems: 'center',
-                      flex: 1,
-                    }}>
-                      <Image src={binding.getImage(null)} sx={{
-                        borderRadius: '50%',
-                        objectFit: 'cover',
-                        h: '30px',
-                        w: '30px',
-                      }} />
-                      <Box fontSize={'12px'} ml={'10px'}>
-                        <Text color={'rgba(0, 0, 0, 0.4)'} fontWeight={500}>{binding.name}</Text>
-                        <Text fontWeight={700}>{binding.getValue(null)}</Text>
-                      </Box>
-                    </Flex>
+                    <Link to={binding.getLink(NFT)}>
+                      <Flex key={i} sx={{
+                        alignItems: 'center',
+                        flex: 1,
+                      }}>
+                        {binding.getImage(NFT)}
+                        <Box fontSize={'12px'} ml={'10px'} w={'110px'}>
+                          <Text color={'rgba(0, 0, 0, 0.4)'} fontWeight={500}>{binding.name}</Text>
+                          <Text isTruncated fontWeight={700}>{binding.getValue(NFT)}</Text>
+                        </Box>
+                      </Flex>
+                    </Link>
                   ))}
                 </Flex>
 
@@ -124,10 +124,13 @@ export const NFTInfo = () => {
                     ml: '6px',
                   },
                 }}>
-                  Cras vel eget vitae quis scelerisque arcu ut.
-                  Tristique velit nec sed sit massa. Odio molestie velit purus at blandit.
-                  Lacus, fusce quam dolor imperdiet velit augue neque tincidunt lorem et diam...
-                  <Link>Read more</Link>
+                  <ReactReadMoreReadLess
+                    charLimit={150}
+                    readMoreText="Read more"
+                    readLessText="Read less"
+                  >
+                    {NFT.nft.description || ''}
+                  </ReactReadMoreReadLess>
                 </Text>
 
                 <Tabs>
@@ -136,10 +139,10 @@ export const NFTInfo = () => {
                   </LineTabList>
 
                   <TabPanels>
-                    {NFTTabs.map(({ component: TabContentComponent }, i) => {
+                    {NFTTabs.map(({ component: TabContentComponent, name }, i) => {
                       return (
                         <TabPanel key={i} px={0} pt={'30px'} pb={0}>
-                          <TabContentComponent />
+                          <TabContentComponent {...(name === 'Properties' ? { properties: NFT.nft.properties } : {})} />
                         </TabPanel>
                       )
                     })}

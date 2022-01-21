@@ -1,5 +1,5 @@
 import { Box, BoxProps, Text, TextProps } from '@chakra-ui/react';
-import React from 'react';
+import properties from "../../../../../../../../../components/marketplaceTabComponents/Properties";
 
 const PropertyContainerStyles: BoxProps = {
   bg: 'rgba(0, 0, 0, 0.02)',
@@ -28,19 +28,19 @@ const PropertyDescriptionStyles: TextProps = {
 };
 
 export interface INFTProperty {
-  name: string;
-  value: string;
-  description?: string;
+  entity: { [key: string]: string};
+  name?: string;
+  value?: string;
 }
 
 export interface INFTPropertyProps extends BoxProps, INFTProperty {}
 
-export const NFTProperty = ({ name, value, description, ...props }: INFTPropertyProps) => {
+export const NFTProperty = ({ entity, ...props }: INFTPropertyProps) => {
   return (
     <Box {...PropertyContainerStyles} {...props}>
-      <Text {...PropertyNameStyles}>{name}</Text>
-      <Text {...PropertyValueStyles}>{value}</Text>
-      {description && (<Text {...PropertyDescriptionStyles}>{description}</Text>)}
+      <Text {...PropertyNameStyles}>{Object.keys(entity)[0]}</Text>
+      <Text {...PropertyValueStyles}>{entity[Object.keys(entity)[0]]}</Text>
+      {/*{description && (<Text {...PropertyDescriptionStyles}>{description}</Text>)}*/}
     </Box>
   );
 };
