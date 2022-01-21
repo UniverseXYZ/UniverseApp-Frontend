@@ -103,13 +103,9 @@ const SingleNFTForm = () => {
   const [editions, setEditions] = useState(1);
   const [previewImage, setPreviewImage] = useState('');
   const [hideIcon, setHideIcon] = useState(false);
-  const [hideRoyalitiesInfo, setHideRoyalitiesInfo] = useState(false);
-  const [hideMintToOtherWallet, setHideMintToOtherWallet] = useState(false);
-  const [mintToOtherWallet, setMintToOtherWallet] = useState(false);
-  const [otherWalletValue, setOtherWalletValue] = useState('');
-  const [otherWalletError, setOtherWalletError] = useState(false);
   const [royalities, setRoyalities] = useState(true);
   const [otherWalletAddress, setOtherWalletAddress] = useState('');
+  const [mintToOtherWallet, setMintToOtherWallet] = useState(false);
   const [otherWalletValid, setOtherWalletValid] = useState(true);
   const [propertyCheck, setPropertyCheck] = useState(false);
   const inputFile = useRef(null);
@@ -198,18 +194,6 @@ const SingleNFTForm = () => {
     const temp = { address: '', amount: '' };
     newProperties.push(temp);
     setRoyaltyAddress(newProperties);
-  };
-
-  const changeOtherMintAddress = async (val) => {
-    try {
-      const ens = await web3Provider.resolveName(val);
-      const ensToAddress = utils.isAddress(ens);
-      setOtherWalletValue(ensToAddress ? ens.toLowerCase() : val);
-      setOtherWalletError(!ensToAddress ? INVALID_ADDRESS_TEXT : '');
-    } catch (e) {
-      setOtherWalletValue(val.toLowerCase());
-      setOtherWalletError(!utils.isAddress(val) ? INVALID_ADDRESS_TEXT : '');
-    }
   };
 
   const propertyChangesAddress = async (index, val) => {
@@ -1128,7 +1112,6 @@ const SingleNFTForm = () => {
                         <h5>Percent amount</h5>
                         <Input
                           className="percent-inp"
-                          type="number"
                           placeholder="5"
                           value={elm.amount}
                           onChange={(e) => propertyChangesAmount(i, e.target.value, e.target)}
@@ -1174,7 +1157,7 @@ const SingleNFTForm = () => {
                 >
                   <h5>
                     <img src={addIcon} alt="Add" />
-                    Add wallet
+                    Add address
                   </h5>
                 </div>
               )}
@@ -1261,8 +1244,7 @@ const SingleNFTForm = () => {
                         (royalty) => royalty.address === '' || royalty.amount === ''
                       )) ||
                     (propertyCheck && !properties.length) ||
-                    (royalities && !royaltyAddress.length) ||
-                    (mintToOtherWallet && (!otherWalletValue || otherWalletError))
+                    (royalities && !royaltyAddress.length)
                   }
                 >
                   Mint now
