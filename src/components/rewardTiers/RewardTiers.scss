@@ -42,22 +42,25 @@
       display: flex;
       align-items: center;
 
+      @media (min-width: 992px) {
+        width: 70%;
+      }
+
       .img_head_title {
         display: flex;
         h3 {
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          max-width: 250px;
           width: 100%;
           font-family: $sharpGroteskSemiBoldFont;
           font-style: normal;
           font-weight: 600;
           font-size: 16px;
           line-height: 21px;
-          display: flex;
-          align-items: center;
           letter-spacing: 0.2px;
           color: #000000;
-          flex: none;
-          order: 0;
-          flex-grow: 0;
           margin-right: 12px;
         }
         @include lg {
@@ -65,6 +68,9 @@
         }
         @include md {
           padding-top: unset;
+        }
+        @include sm {
+          max-width: 200px;
         }
       }
       .winners__edit__btn {

@@ -231,6 +231,7 @@ const PlaceBidPopup = ({
           >
             Your bid is eligible to win slot {myBidSlotIndex} of{' '}
             <span
+              className="tier__name"
               style={{
                 color: rewardTier.color ? rewardTier.color : '#80CCDF',
               }}
