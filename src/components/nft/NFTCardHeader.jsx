@@ -23,6 +23,7 @@ const NFTCardHeader = ({ nft, creator, owner, collection }) => {
   const history = useHistory();
   const { myNFTs, setMyNFTs } = useMyNftsContext();
   const { address } = useAuthContext();
+  const transferNftPopupRef = useRef(null);
   const [showDropdown, setShowDropdown] = useState(false);
   const [dropdownID, setDropdownID] = useState(0);
   const ref = useRef();
@@ -266,7 +267,11 @@ const NFTCardHeader = ({ nft, creator, owner, collection }) => {
         )}
       </div>
       <Popup closeOnDocumentClick={false} open={showTransferNFTPopup}>
-        <TransferNFTPopup close={() => setShowTransferNFTPopup(false)} nft={nft} />
+        <TransferNFTPopup
+          close={() => setShowTransferNFTPopup(false)}
+          nft={nft}
+          ref={transferNftPopupRef}
+        />
       </Popup>
     </div>
   );

@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Contract } from 'ethers';
 import { useFormik } from 'formik';
@@ -32,7 +32,7 @@ const Standards = {
   ERC1155: 'ERC1155',
 };
 
-const TransferNFTPopup = ({ close, nft }) => {
+const TransferNFTPopup = React.forwardRef(({ close, nft }, ref) => {
   const formik = useFormik({
     initialValues: {
       receiverAddress: '',
@@ -41,6 +41,19 @@ const TransferNFTPopup = ({ close, nft }) => {
     },
     validateOnMount: true,
     validationSchema: getTransferSchema(nft),
+  });
+
+  const handleClickOutside = (event) => {
+    if (ref.current && !ref.current.contains(event.target)) {
+      close();
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener('click', handleClickOutside, true);
+    return () => {
+      document.removeEventListener('click', handleClickOutside, true);
+    };
   });
 
   const [step, setStep] = useState(Steps.Form);
@@ -71,7 +84,7 @@ const TransferNFTPopup = ({ close, nft }) => {
   }, []);
 
   return (
-    <div className="transfer--nft--popup">
+    <div className="transfer--nft--popup" ref={ref}>
       <img
         className="close--popup"
         onClick={close}
@@ -94,7 +107,7 @@ const TransferNFTPopup = ({ close, nft }) => {
       )}
     </div>
   );
-};
+});
 
 TransferNFTPopup.propTypes = {
   close: PropTypes.func.isRequired,

@@ -6,6 +6,7 @@ import { ChooseTokenIdDropdown } from './ChooseTokenIdDropdown.jsx';
 
 export const Step1 = ({ close, nft, formik, showAmount, onSubmit }) => {
   const handleReceiverAddressChange = useCallback((e) => {
+    formik.setFieldTouched('receiverAddress', true);
     formik.setFieldValue('receiverAddress', e.target.value);
   }, []);
 
@@ -36,7 +37,6 @@ export const Step1 = ({ close, nft, formik, showAmount, onSubmit }) => {
             value={formik.values.receiverAddress}
             error={formik.touched?.receiverAddress && formik.errors?.receiverAddress}
             onChange={handleReceiverAddressChange}
-            onBlur={() => formik.setFieldTouched('receiverAddress', true)}
             hoverBoxShadowGradient
           />
         </div>
