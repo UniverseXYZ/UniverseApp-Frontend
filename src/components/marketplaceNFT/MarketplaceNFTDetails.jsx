@@ -310,7 +310,7 @@ const MarketplaceNFTDetails = ({ data, onNFT }) => {
         <div className="Marketplace--settings">
           <div className="Marketplace--name">
             <h1>{selectedNFT.name}</h1>
-            {selectedNFT.owner === address ? (
+            {/* {selectedNFT.owner === address ? (
               <div className="nft--sorting">
                 <div
                   className={`dropdown ${showDropdown ? 'open' : ''}`}
@@ -338,7 +338,7 @@ const MarketplaceNFTDetails = ({ data, onNFT }) => {
               </div>
             ) : (
               <></>
-            )}
+            )} */}
           </div>
           <div className="Marketplace--number">
             <p>
