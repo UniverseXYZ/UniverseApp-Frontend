@@ -424,39 +424,6 @@ const MarketplaceNFTDetails = ({ data, onNFT }) => {
               </div>
             )}
 
-            {collection && collection.coverUrl && (
-              <div
-                className="Marketplace--creators"
-                onClick={() => history.push(`/collection/${collection.address}`)}
-                aria-hidden
-              >
-                {!collection.coverUrl ? (
-                  <div
-                    className="random--bg--color"
-                    style={{ backgroundColor: getCollectionBackgroundColor(collection) }}
-                  >
-                    {collection.name.charAt(0)}
-                  </div>
-                ) : (
-                  <img src={collection.coverUrl} alt={collection.name} />
-                )}
-                <div className="creator--name">
-                  <p>Collection</p>
-                  <h6
-                    style={{
-                      maxWidth: '100px',
-                      textOverflow: 'ellipsis',
-                      overflow: 'hidden',
-                      whiteSpace: 'nowrap',
-                    }}
-                  >
-                    {collection.name}
-                  </h6>
-                  <span className="tooltiptext tooltiptext--center">{collection.name}</span>
-                </div>
-              </div>
-            )}
-
             {collection && (
               <div
                 className="Marketplace--creators"
@@ -479,6 +446,7 @@ const MarketplaceNFTDetails = ({ data, onNFT }) => {
                 <div className="creator--name">
                   <p>Collection</p>
                   <h6>{collection.name}</h6>
+                  <span className="tooltiptext tooltiptext--center">{collection.name}</span>
                 </div>
               </div>
             )}
@@ -506,17 +474,7 @@ const MarketplaceNFTDetails = ({ data, onNFT }) => {
                 <Blockies className="blockie--details" seed={owner.address} size={9} scale={4} />
                 <div className="creator--name">
                   <p>Owner</p>
-                  <h6
-                    // TODO: Vik to fix this or someone else
-                    style={{
-                      maxWidth: '100px',
-                      textOverflow: 'ellipsis',
-                      overflow: 'hidden',
-                      whiteSpace: 'nowrap',
-                    }}
-                  >
-                    {owner.address}
-                  </h6>
+                  <h6>{owner.address}</h6>
                   <span className="tooltiptext tooltiptext--right">{owner.address}</span>
                 </div>
               </div>
