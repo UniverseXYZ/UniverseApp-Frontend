@@ -211,7 +211,7 @@ const NFTCardHeader = ({ nft, creator, owner, collection }) => {
           </>
         )}
         {/* {!canSelect ? ( */}
-        {address === nft.owner ? (
+        {/* {address === nft.owner ? (
           <div
             className="nft--card--header--right--dropdown"
             aria-hidden="true"
@@ -226,44 +226,42 @@ const NFTCardHeader = ({ nft, creator, owner, collection }) => {
             <span />
             {dropdownID === nft.id && showDropdown && (
               <ul className="nft--card--header--right--dropdown--items">
-                {/* <li
-            aria-hidden="true"
-            onClick={() =>
-              history.push('/nft-marketplace/select-items', { name: nft.name })
-            }
-          >
-            <img src={sellNFTIcon} alt="Sell" />
-            <p>Sell</p>
-          </li> */}
+                <li
+                  aria-hidden="true"
+                  onClick={() => history.push('/nft-marketplace/select-items', { name: nft.name })}
+                >
+                  <img src={sellNFTIcon} alt="Sell" />
+                  <p>Sell</p>
+                </li>
                 <li aria-hidden="true" onClick={() => setShowTransferNFTPopup(true)}>
                   <img src={transferNFTIcon} alt="Transfer" />
                   <p>Transfer</p>
                 </li>
-                {/* <li aria-hidden="true">
-            <img src={shareNFTIcon} alt="Share" />
-            <p>Share</p>
-          </li>
-          {nft.hidden ? (
-            <li aria-hidden="true" onClick={() => unhideNFT(nft.id)}>
-              <img src={unhideNFTIcon} alt="Hide" />
-              <p>Unhide</p>
-            </li>
-          ) : (
-            <li aria-hidden="true" onClick={() => hideNFT(nft.id)}>
-              <img src={hideNFTIcon} alt="Hide" />
-              <p>Hide</p>
-            </li>
-          )}
-          <li className="burn" aria-hidden="true">
-            <img src={burnNFTIcon} alt="Burn" />
-            <p>Burn</p>
-          </li> */}
+                <li aria-hidden="true">
+                  <img src={shareNFTIcon} alt="Share" />
+                  <p>Share</p>
+                </li>
+                {nft.hidden ? (
+                  <li aria-hidden="true" onClick={() => unhideNFT(nft.id)}>
+                    <img src={unhideNFTIcon} alt="Hide" />
+                    <p>Unhide</p>
+                  </li>
+                ) : (
+                  <li aria-hidden="true" onClick={() => hideNFT(nft.id)}>
+                    <img src={hideNFTIcon} alt="Hide" />
+                    <p>Hide</p>
+                  </li>
+                )}
+                <li className="burn" aria-hidden="true">
+                  <img src={burnNFTIcon} alt="Burn" />
+                  <p>Burn</p>
+                </li>
               </ul>
             )}
           </div>
         ) : (
           <></>
-        )}
+        )} */}
       </div>
       <Popup closeOnDocumentClick={false} open={showTransferNFTPopup}>
         <TransferNFTPopup close={() => setShowTransferNFTPopup(false)} nft={nft} />
