@@ -719,11 +719,14 @@
             bottom: 36.3%;
             left: 77%;
             @include lg {
-              right: 23%;
+              left: 74%;
             }
             @include sm {
-              bottom: 32%;
-              right: 2%;
+              bottom: 36%;
+              left: 94%;
+            }
+            @media (max-width: 375px) {
+              left: 90%;
             }
           }
           h5 {
