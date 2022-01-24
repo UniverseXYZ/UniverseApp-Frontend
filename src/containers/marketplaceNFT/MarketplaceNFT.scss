@@ -733,6 +733,10 @@
             letter-spacing: 0em;
             text-align: left;
             color: $black;
+            max-width: 100px;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            white-space: nowrap;
           }
         }
         .tooltiptext {
