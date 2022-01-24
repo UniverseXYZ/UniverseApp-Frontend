@@ -735,6 +735,26 @@ const SingleNFTForm = () => {
     if (!showLoadingPopup) setActiveTxHashes([]);
   }, [showLoadingPopup]);
 
+  useEffect(() => {
+    // reset state in order to hide the errors if the toggle is not checked
+    if (!propertyCheck) {
+      setProperties([{ name: '', value: '', errors: { name: '', value: '' } }]);
+    }
+
+    if (!royalities) {
+      setRoyaltyAddress([{ address, amount: '10' }]);
+      setRoyaltiesMapIndexes(
+        Object.defineProperty({}, `${address}`, {
+          value: [0],
+          writable: true,
+          configurable: true,
+          enumerable: true,
+        })
+      );
+      setRoyaltyValidAddress(true);
+    }
+  }, [propertyCheck, royalities]);
+
   const emptyForm = !name && !previewImage && !description;
 
   return (
