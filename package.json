@@ -78,8 +78,7 @@
     "glob-parent": ">=5.1.2",
     "node-fetch": ">=2.6.7",
     "url-parse": ">=1.5.2",
-    "tmpl": ">=1.0.5",
-    "postcss": ">=8.2.13"
+    "tmpl": ">=1.0.5"
   },
   "scripts": {
     "start": "react-scripts start",
