@@ -151,6 +151,9 @@ const PlaceBidPopup = ({
       if (txReceipt.status === 1) {
         setLoadingText(verifyBidLoadingText);
         setBalance(parseFloat(balance) - parseFloat(yourBid));
+      } else {
+        setShowLoading(false);
+        setError('Error encountered during contract execution');
       }
     } catch (err) {
       setShowLoading(false);
