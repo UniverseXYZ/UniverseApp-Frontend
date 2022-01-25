@@ -417,8 +417,11 @@
           }
 
           .collection-name {
-            max-width: 115px;
-            overflow-wrap: break-word;
+            max-width: 130px;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            overflow: hidden;
+            display: inline-block;
           }
         }
 
