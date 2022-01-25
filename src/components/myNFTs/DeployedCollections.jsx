@@ -106,8 +106,8 @@ const DeployedCollections = () => {
                     />
                   )}
                   <h3 title={collection.name} className="collection__name">
-                    {collection.name.length > 13
-                      ? `${collection.name.substring(0, 13)}...`
+                    {collection.name.length > 32
+                      ? `${collection.name.substring(0, 32)}...`
                       : collection.name}
                   </h3>
                 </div>
