@@ -1,5 +1,5 @@
-@import '../../assets/scss/variables';
-@import '../../assets/scss/mixins';
+@import "../../assets/scss/variables";
+@import "../../assets/scss/mixins";
 
 .auction__landing__page {
   .artist__personal__logo {
@@ -42,7 +42,7 @@
         .carousel__auction__container {
           &.selected {
             .carousel__auction {
-              background-image: url('../../assets/images/auction-slider-gradient-border.svg');
+              background-image: url("../../assets/images/auction-slider-gradient-border.svg");
               background-position: center;
               background-repeat: no-repeat;
               background-size: cover;
@@ -233,7 +233,7 @@
             margin-right: 16px;
             border-radius: 4px;
             &.show__avatar {
-              background-image: url('../../assets/images/artist_card_bg.png');
+              background-image: url("../../assets/images/artist_card_bg.png");
               background-position: center;
               background-size: cover;
               background-repeat: no-repeat;
@@ -291,7 +291,7 @@
           align-items: center;
           justify-content: center;
           &.show__avatar {
-            background-image: url('../../assets/images/artist_card_bg.png');
+            background-image: url("../../assets/images/artist_card_bg.png");
             background-position: center;
             background-size: cover;
             background-repeat: no-repeat;
@@ -575,6 +575,8 @@
                 border-bottom: none;
               }
               .name {
+                display: flex;
+                align-items: center;
                 flex: 1;
                 word-break: break-all;
                 font-family: $spaceGroteskFont;
@@ -587,27 +589,38 @@
                   font-size: 11px;
                   margin-right: 3px;
                 }
-                span {
-                  margin-left: 5px;
-                  font-family: $spaceGroteskFont;
-                  font-style: normal;
-                  font-weight: 600;
-                  font-size: 10px;
-                  line-height: 120%;
-                  padding: 2px 5px;
-                  border-radius: 20px;
+                div {
+                  display: flex;
+                  align-items: center;
+                  span {
+                    margin-left: 5px;
+                    font-family: $spaceGroteskFont;
+                    font-style: normal;
+                    font-weight: 600;
+                    font-size: 10px;
+                    line-height: 120%;
+                    padding: 2px 5px;
+                    border-radius: 20px;
 
-                  &.platinum {
-                    color: #80ccdf;
-                    border: 1px solid #80ccdf;
+                    &.platinum {
+                      color: #80ccdf;
+                      border: 1px solid #80ccdf;
+                    }
+                    &.gold {
+                      color: #ddbc45;
+                      border: 1px solid #ddbc45;
+                    }
+                    &.silver {
+                      color: #bcbcbc;
+                      border: 1px solid #bcbcbc;
+                    }
+                    @include sm {
+                      margin-left: 0;
+                    }
                   }
-                  &.gold {
-                    color: #ddbc45;
-                    border: 1px solid #ddbc45;
-                  }
-                  &.silver {
-                    color: #bcbcbc;
-                    border: 1px solid #bcbcbc;
+                  @include sm {
+                    display: grid;
+                    margin-left: 8px;
                   }
                 }
               }
@@ -672,7 +685,8 @@
               position: relative;
               max-height: 80px;
               cursor: pointer;
-              img, video {
+              img,
+              video {
                 border-radius: 10px;
                 width: 100%;
                 height: 100%;
@@ -690,7 +704,7 @@
                 width: 14px;
                 height: 10px;
               }
-  
+
               .tooltiptext {
                 visibility: hidden;
                 background-color: $black;
@@ -846,7 +860,7 @@
                     left: 50%;
                     transform: translateX(-50%);
                     &::after {
-                      content: '';
+                      content: "";
                       position: absolute;
                       top: 100%;
                       left: 50%;
@@ -1237,7 +1251,6 @@
               width: 100%;
 
               .single__nft__image {
-
                 img {
                   border-radius: 12px;
                   width: 208px;
@@ -1246,7 +1259,6 @@
               }
 
               div {
-
                 @media (min-width: $screen-md-max) {
                   &:nth-child(2) {
                     margin-left: -20%;
@@ -1282,7 +1294,6 @@
                     object-fit: cover;
                     border-radius: 12px;
                   }
-
                 }
               }
               .preview-video {
@@ -1318,7 +1329,7 @@
                 box-sizing: border-box;
                 border-radius: 12px;
                 width: 178px;
-                margin: 0 11px!important;
+                margin: 0 11px !important;
                 margin-left: 22px;
 
                 @include sm {
@@ -1544,7 +1555,7 @@
   .place__bid__section {
     position: relative;
     padding: 65px 60px;
-    background-image: url('../../assets/images/place-bid-bg-desktop.png');
+    background-image: url("../../assets/images/place-bid-bg-desktop.png");
     background-repeat: no-repeat;
     background-position: center;
     background-size: cover;
@@ -1620,11 +1631,11 @@
     }
     @include lg {
       padding: 65px 20px;
-      background-image: url('../../assets/images/place-bid-bg-tablet.png');
+      background-image: url("../../assets/images/place-bid-bg-tablet.png");
     }
     @include sm {
       padding: 65px 20px;
-      background-image: url('../../assets/images/place-bid-bg-mobile.png');
+      background-image: url("../../assets/images/place-bid-bg-mobile.png");
     }
   }
 }

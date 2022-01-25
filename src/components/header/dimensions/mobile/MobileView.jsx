@@ -730,13 +730,13 @@ const MobileView = (props) => {
                                 }}
                               >
                                 <img src={aboutIcon} alt="About" />
-                                About
+                                <span>About</span>
                               </button>
                             </div>
                             <div>
                               <button type="button" onClick={() => window.open(whitepaperUrl)}>
                                 <img src={whitepaperIcon} alt="Whitepaper" />
-                                Whitepaper
+                                <span>Whitepaper</span>
                               </button>
                             </div>
                             <div>
@@ -749,7 +749,7 @@ const MobileView = (props) => {
                                 }}
                               >
                                 <img src={teamIcon} alt="Team" />
-                                Team
+                                <span>Team</span>
                               </button>
                             </div>
                             <div>
