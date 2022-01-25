@@ -12,6 +12,7 @@ import LoadingPopup from '../../popups/LoadingPopup.jsx';
 import CongratsPopup from '../../popups/CongratsPopup.jsx';
 import { ReactComponent as InfoIcon } from '../../../assets/images/info-icon.svg';
 import deleteIcon from '../../../assets/images/delred-icon.svg';
+import smallDeleteIcon from '../../../assets/images/del-icon.svg';
 import mp3Icon from '../../../assets/images/mp3-icon.png';
 import addIcon from '../../../assets/images/Add.svg';
 import { ReactComponent as CloudIcon } from '../../../assets/images/gray_cloud.svg';
@@ -1081,7 +1082,7 @@ const SingleNFTForm = () => {
                           onClick={() => removeProperty(i)}
                         >
                           <img
-                            src={deleteIcon}
+                            src={smallDeleteIcon}
                             className="del-icon"
                             alt="Delete"
                             aria-hidden="true"
@@ -1185,7 +1186,7 @@ const SingleNFTForm = () => {
                             onClick={() => removeRoyaltyAddress(i)}
                           >
                             <img
-                              src={deleteIcon}
+                              src={smallDeleteIcon}
                               className="del-icon"
                               alt="Delete"
                               aria-hidden="true"
