@@ -188,7 +188,7 @@ const TopBidders = ({
                   <img src={currencyIcon} alt="Currency" />
                   {new BigNumber(currentBid.amount).toFixed()}
                 </b>
-                {`(#${bidders.findIndex((x) => x.userId === currentBid.userId) + 1} in the list)`}
+                {`(#${bidders.findIndex((x) => x.id === currentBid.id) + 1} in the list)`}
               </span>
             ) : (
               <span className="no__bids">You haven&apos;t placed any bids</span>
