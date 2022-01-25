@@ -511,7 +511,7 @@ const AuctionLandingPage = () => {
       <Popup open={showSuccessfulBid} closeOnDocumentClick={false}>
         <SuccessBidPopup
           onClose={() => setShowSuccessfulBid(false)}
-          auctionHeadline={auction.headline || ''}
+          auctionHeadline={auction.auction?.headline || ''}
           artistName={auction.artist?.displayName}
         />
       </Popup>
