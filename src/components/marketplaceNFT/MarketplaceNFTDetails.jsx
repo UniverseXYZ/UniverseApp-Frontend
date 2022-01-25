@@ -1,32 +1,18 @@
 /* eslint-disable no-inner-declarations */
-import React, { useState, useRef, useEffect, useContext, useCallback } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import '../marketplace/browseNFT/NFTsList.scss';
 import uuid from 'react-uuid';
-import Popup from 'reactjs-popup';
 import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
 import ReactReadMoreReadLess from 'react-read-more-read-less';
-import Slider from 'react-slick';
-import Draggable from 'react-draggable';
-import { useDoubleTap } from 'use-double-tap';
 import Blockies from 'react-blockies';
 import Properties from '../marketplaceTabComponents/Properties.jsx';
 import Owners from '../marketplaceTabComponents/Owners.jsx';
 import Bids from '../marketplaceTabComponents/Bids.jsx';
 import TradingHistory from '../marketplaceTabComponents/TradingHistory.jsx';
-import SharePopup from '../popups/SharePopup.jsx';
-import ReportPopup from '../popups/ReportPopup.jsx';
-import LikesPopup from '../popups/LikesPopup.jsx';
 import Offers from '../marketplaceTabComponents/Offers.jsx';
-import BuyNFTSection from '../BuyNFTSection/BuyNFTSection.jsx';
 import NFTs from '../marketplaceTabComponents/NFTs.jsx';
-import Button from '../button/Button.jsx';
 import NFTCard from '../nft/NFTCard.jsx';
-import mp3Icon from '../../assets/images/mp3-icon.png';
-import bundlesIcon from '../../assets/images/marketplace/bundles.svg';
-import leftArrow from '../../assets/images/marketplace/bundles-left-arrow.svg';
-import rightArrow from '../../assets/images/marketplace/bundles-right-arrow.svg';
-import likerTestImage from '../../assets/images/marketplace/users/user1.png';
 import universeIcon from '../../assets/images/universe-img.svg';
 import checkIcon from '../../assets/images/check.svg';
 import { useMyNftsContext } from '../../contexts/MyNFTsContext';
@@ -40,97 +26,22 @@ import transferIcon from '../../assets/images/transfericon.svg';
 import TransferNFTPopup from '../popups/transferNFT/TransferNFTPopup';
 
 const MarketplaceNFTDetails = ({ data, onNFT }) => {
-  const { myNFTs, setMyNFTs } = useMyNftsContext();
-  const { loggedInArtist, address, deployedCollections, universeERC721CoreContract } =
-    useAuthContext();
   const history = useHistory();
   const ref = useRef(null);
   const sharePopupRef = useRef(null);
   const reportPopupRef = useRef(null);
-  const customPlayerRef = useRef(null);
 
   const [selectedNFT, setSelectedNFT] = useState(onNFT.nft);
   const { moreFromCollection, collection, owner, creator, tokenIds } = onNFT;
   const tabs = selectedNFT?.properties ? ['Properties'] : [''];
   const [selectedTabIndex, setSelectedTabIndex] = useState(0);
   const [searchValue, setSearchValue] = useState('');
+
   const [showTransferNFTPopup, setShowTransferNFTPopup] = useState(false);
 
-  const [isDropdownOpened, setIsDropdownOpened] = useState(false);
-  const [selectedNFTIndex, setSelectedNFTIndex] = useState(
-    selectedNFT?.type === 'bundles' ? 0 : null
-  );
-  const [tablet, setTablet] = useState(false);
-  const [count, setCount] = useState(4);
-  const mediaRef = useRef(null);
   const [showDropdown, setShowDropdown] = useState(false);
-  function SampleNextArrow(props) {
-    // eslint-disable-next-line react/prop-types
-    const { className, style, onClick } = props;
-    const handleClick = () => {
-      onClick();
-      if (selectedNFTIndex < selectedNFT?.tokenIds?.length - 1) {
-        setSelectedNFTIndex(selectedNFTIndex + 1);
-      } else {
-        setSelectedNFTIndex(0);
-      }
-    };
-    return (
-      <button
-        type="button"
-        className={className}
-        style={{ ...style }}
-        onClick={handleClick}
-        aria-hidden="true"
-      >
-        <img src={rightArrow} alt="arrow right" />
-      </button>
-    );
-  }
-
-  function SamplePrevArrow(props) {
-    // eslint-disable-next-line react/prop-types
-    const { className, style, onClick } = props;
-    const handleClick = () => {
-      onClick();
-      if (selectedNFTIndex > 0) {
-        setSelectedNFTIndex(selectedNFTIndex - 1);
-      } else {
-        setSelectedNFTIndex(selectedNFT.tokenIds?.length - 1);
-      }
-    };
-    return (
-      <button
-        type="button"
-        className={className}
-        style={{ ...style }}
-        onClick={handleClick}
-        aria-hidden="true"
-      >
-        <img src={leftArrow} alt="arrow left" />
-      </button>
-    );
-  }
-
-  const sliderSettings = {
-    dots: false,
-    infinite: selectedNFT.tokenIds?.length > 6,
-    speed: 500,
-    slidesToShow: 6,
-    slidesToScroll: 1,
-    nextArrow: <SampleNextArrow />,
-    prevArrow: <SamplePrevArrow />,
-  };
 
   const handleClickOutside = (event) => {
-    if (
-      ref.current &&
-      !ref.current.contains(event.target) &&
-      !sharePopupRef.current &&
-      !reportPopupRef.current
-    ) {
-      setIsDropdownOpened(false);
-    }
     if (ref.current && !ref.current.contains(event.target)) {
       setShowDropdown(false);
     }
@@ -144,83 +55,10 @@ const MarketplaceNFTDetails = ({ data, onNFT }) => {
   });
 
   useEffect(() => {
-    if (Number(window.innerWidth) <= 1230) {
-      setTablet(true);
-      setCount(3);
-    } else {
-      setTablet(false);
-      setCount(4);
-    }
-  }, []);
-
-  useEffect(() => {
     if (onNFT.id !== selectedNFT.id) {
       setSelectedNFT(onNFT.nft);
     }
   }, [onNFT]);
-
-  const handleSelectedNFTLikeClick = (id) => {
-    const newNFTs = [...myNFTs];
-    newNFTs.forEach((item) => {
-      if (item.id === id) {
-        if (!item.likers?.length) {
-          item.likers.push({
-            id: loggedInArtist.id,
-            name: loggedInArtist.name || 'John Doe',
-            avatar: loggedInArtist.avatar || likerTestImage,
-          });
-        } else {
-          const alreadyLiked = item.likers.some((i) => i.id === loggedInArtist.id);
-          if (!alreadyLiked) {
-            item.likers.push({
-              id: loggedInArtist.id,
-              name: loggedInArtist.name || 'John Doe',
-              avatar: loggedInArtist.avatar || likerTestImage,
-            });
-          } else {
-            item.likers = item.likers.filter((i) => i.id !== loggedInArtist.id);
-          }
-        }
-      }
-    });
-    setMyNFTs(newNFTs);
-    // setSelectedNFT({
-    //   ...selectedNFT,
-    //   likesCount: selectedNFT.liked ? selectedNFT.likesCount - 1 : selectedNFT.likesCount + 1,
-    //   liked: !selectedNFT.liked,
-    // });
-    // setNFTs((prevState) =>
-    //   prevState.map((el) =>
-    //     el.id === id
-    //       ? {
-    //           ...el,
-    //           likesCount: el.liked ? el.likesCount - 1 : el.likesCount + 1,
-    //           liked: !el.liked,
-    //         }
-    //       : el
-    //   )
-    // );
-  };
-
-  const handleLikeClick = (id) => {
-    setNFTs((prevState) =>
-      prevState.map((el) =>
-        el.id === id
-          ? {
-              ...el,
-              likesCount: el.liked ? el.likesCount - 1 : el.likesCount + 1,
-              liked: !el.liked,
-            }
-          : el
-      )
-    );
-  };
-
-  const handleLikeDivClick = (e) => {
-    if (e.target.nodeName !== 'svg' && e.target.nodeName !== 'path') {
-      document.getElementById('likes-hidden-btn').click();
-    }
-  };
 
   const generateImage = () => {
     if (selectedNFT.original_url) {
@@ -251,60 +89,24 @@ const MarketplaceNFTDetails = ({ data, onNFT }) => {
   return (
     <>
       <div className="marketplace--nft--page">
-        <Popup
-          trigger={
-            <button
-              type="button"
-              id="likes-hidden-btn"
-              aria-label="hidden"
-              style={{ display: 'none' }}
-            />
-          }
-        >
-          {(close) => <LikesPopup onClose={close} />}
-        </Popup>
         <div className="Marketplace--img">
           <div
             className={`image--wrapper ${selectedNFT.type === 'bundles' ? 'with--bundles' : ''}`}
             aria-hidden="true"
           >
-            {selectedNFT.type !== 'bundles' ? (
-              <>
-                {!selectedNFT.artworkType.endsWith('mpeg') &&
-                  !selectedNFT.artworkType.endsWith('mp4') &&
-                  showNftImage()}
+            <>
+              {!selectedNFT.artworkType.endsWith('mpeg') &&
+                !selectedNFT.artworkType.endsWith('mp4') &&
+                showNftImage()}
 
-                {selectedNFT.artworkType && selectedNFT.artworkType.endsWith('mp4') && (
-                  <video muted playsInline autoPlay controls>
-                    <source src={getVideoUrl()} type="video/mp4" />
-                    <track kind="captions" />
-                    Your browser does not support the video tag.
-                  </video>
-                )}
-              </>
-            ) : (
-              <>
-                {/* // TODO:: there is no such format in the current BE */}
-                {selectedNFT.tokenIds[selectedNFTIndex].type !== 'audio/mpeg' &&
-                  selectedNFT.tokenIds[selectedNFTIndex].type !== 'video/mp4' && (
-                    <img
-                      src={selectedNFT.tokenIds[selectedNFTIndex].original_url}
-                      alt={selectedNFT.name}
-                    />
-                  )}
-                {selectedNFT.tokenIds[selectedNFTIndex].type === 'video/mp4' && (
-                  <video ref={mediaRef} muted playsInline autoPlay controls>
-                    <source src={selectedNFT.tokenIds[selectedNFTIndex].url} type="video/mp4" />
-                    <track kind="captions" />
-                    Your browser does not support the video tag.
-                  </video>
-                )}
-                <div className="nft--count">
-                  <img src={bundlesIcon} alt="Bundles" />
-                  <span>{`${selectedNFTIndex + 1} of ${selectedNFT.tokenIds?.length}`}</span>
-                </div>
-              </>
-            )}
+              {selectedNFT.artworkType && selectedNFT.artworkType.endsWith('mp4') && (
+                <video muted playsInline autoPlay controls>
+                  <source src={getVideoUrl()} type="video/mp4" />
+                  <track kind="captions" />
+                  Your browser does not support the video tag.
+                </video>
+              )}
+            </>
           </div>
         </div>
         <div className="Marketplace--settings">
@@ -527,39 +329,6 @@ const MarketplaceNFTDetails = ({ data, onNFT }) => {
               </>
             )}
           </div>
-          {/* {selectedNFT.view === 'user' ? (
-            <BuyNFTSection
-              highestBid={highestBid}
-              firstButtonText="Place a bid"
-              secondButtonText="Make offer"
-              auctionLeftTime="1d : 4h : 20m : 30s"
-              infotext="(10% of sales will go to creator)"
-            />
-          ) : selectedNFT.viewAction === 'Change price' ? (
-            <BuyNFTSection
-              highestBid={highestBid}
-              firstButtonText="Change price"
-              secondButtonText="Cancel listing"
-              auctionLeftTime="1d : 4h : 20m : 30s"
-              infotext="(This NFT is on your wallet)"
-            />
-          ) : selectedNFT.viewAction === 'Lower price' ? (
-            <BuyNFTSection
-              highestBid={highestBid}
-              firstButtonText="Lower price"
-              secondButtonText="Cancel listing"
-              auctionLeftTime="1d : 4h : 20m : 30s"
-              infotext="(This NFT is on your wallet)"
-            />
-          ) : (
-            <div className="theunveiling" style={{ paddingBottom: '0px' }}>
-              <img className="border--gradient" src={bordergradient} alt="border" />
-              <div className="saler__content">
-                <Button className="light-button">Put on sale</Button>
-                <p>This NFT is on your wallet</p>
-              </div>
-            </div>
-          )} */}
         </div>
       </div>
       {collection && moreFromCollection?.length ? (

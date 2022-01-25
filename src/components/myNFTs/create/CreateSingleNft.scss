@@ -417,8 +417,20 @@
           }
 
           .collection-name {
-            max-width: 115px;
-            overflow-wrap: break-word;
+            display: inline-block;
+            max-width: 130px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+
+            @supports (-webkit-line-clamp: 2) {
+              overflow: hidden;
+              text-overflow: ellipsis;
+              white-space: initial;
+              display: -webkit-box;
+              -webkit-line-clamp: 2;
+              -webkit-box-orient: vertical;
+            }
           }
         }
 
