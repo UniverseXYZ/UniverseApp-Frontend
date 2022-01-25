@@ -41,14 +41,15 @@ export const NFTInfo = () => {
   console.log('NFT', NFT);
 
   const assetType = useMemo<NFTAssetType | null>(() => {
-    // TODO: Find out the audio format
-    const { nft } = NFT;
+    if(NFT) {
+      // TODO: Find out the audio format
+      const { nft } = NFT;
 
-    switch (true) {
-      case NFT.nft.artworkType.endsWith('png'): return NFTAssetType.IMAGE;
-      case NFT.nft.artworkType.endsWith('audio/mpeg'): return NFTAssetType.AUDIO;
+      switch (true) {
+        case NFT.nft.artworkType.endsWith('png'): return NFTAssetType.IMAGE;
+        case NFT.nft.artworkType.endsWith('audio/mpeg'): return NFTAssetType.AUDIO;
+      }
     }
-
     return null;
   }, [NFT]);
 
