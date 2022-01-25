@@ -75,3 +75,5 @@ export const mapUserData = (userInfo) => {
   };
   return map;
 };
+
+export const sanitizeUrlString = (url) => url.toLowerCase().replace(/[^.a-z0-9]+/, '-');
