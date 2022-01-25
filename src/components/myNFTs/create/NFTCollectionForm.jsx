@@ -48,9 +48,9 @@ const NFTCollectionForm = ({ showCollectible, setShowCollectible }) => {
     setMintingCollectionsCount,
     setMyNFTsSelectedTabIndex,
     myMintableCollections,
+    setMyMintableCollections,
   } = useMyNftsContext();
-  const { deployedCollections, setDeployedCollections, universeERC721FactoryContract } =
-    useAuthContext();
+  const { setDeployedCollections, universeERC721FactoryContract } = useAuthContext();
   const { setShowError, setErrorTitle, setErrorBody } = useErrorContext();
   const [showPrompt, setShowPrompt] = useState(false);
   const location = useLocation();
@@ -138,8 +138,8 @@ const NFTCollectionForm = ({ showCollectible, setShowCollectible }) => {
         setInputClass('inp');
       }
     } else {
-      const collectionNameExists = deployedCollections.length
-        ? deployedCollections.filter(
+      const collectionNameExists = myMintableCollections.length
+        ? myMintableCollections.filter(
             (collection) => collection.name.toLowerCase() === collectionName.toLowerCase()
           )
         : [];
@@ -194,13 +194,13 @@ const NFTCollectionForm = ({ showCollectible, setShowCollectible }) => {
           }
 
           /* eslint-disable no-param-reassign */
-          const deployedCollectionsCopy = deployedCollections.map((col) => {
+          const updatedCollections = myMintableCollections.map((col) => {
             if (col.id === savedCollectionID) {
-              col = { ...res };
+              return res;
             }
             return col;
           });
-          setDeployedCollections(deployedCollectionsCopy);
+          setMyMintableCollections(updatedCollections);
         }
       } else {
         // Create the collection

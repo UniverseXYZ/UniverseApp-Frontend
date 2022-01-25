@@ -6,11 +6,7 @@ const Title = ({ selectedCollection, nftsCount, ownersCount }) => {
   return (
     <div className="collection__info">
       <div className="collection__name__desc">
-        <h1 title={selectedCollection.name}>
-          {selectedCollection.name.length > 15
-            ? `${selectedCollection.name.substring(0, 15)}...`
-            : selectedCollection.name}
-        </h1>
+        <h1 title={selectedCollection.name}>{selectedCollection.name}</h1>
       </div>
       <h2 className="token">{selectedCollection.address}</h2>
       <div className="item_info">

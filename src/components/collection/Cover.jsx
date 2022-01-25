@@ -4,9 +4,11 @@ import uploadIcon from '../../assets/images/upload.svg';
 import { editCollectionBanner } from '../../utils/api/mintNFT';
 import { useAuthContext } from '../../contexts/AuthContext';
 import { getCollectionBackgroundColor } from '../../utils/helpers';
+import { useMyNftsContext } from '../../contexts/MyNFTsContext';
 
 const Cover = ({ selectedCollection }) => {
-  const { deployedCollections, setDeployedCollections, address } = useAuthContext();
+  const { deployedCollections, address } = useAuthContext();
+  const { setMyMintableCollections, myMintableCollections } = useMyNftsContext();
   const ref = useRef(null);
   const [bgImage, setBgImage] = useState(selectedCollection.bgImage);
   const [imageUploadError, setError] = useState('');
@@ -18,15 +20,16 @@ const Cover = ({ selectedCollection }) => {
       if (!res.message) {
         setError('');
         setBgImage(e.target.files[0]);
-        setDeployedCollections(
-          deployedCollections.map((item) =>
+        const updatedCollections =
+          myMintableCollections.map((item) =>
             item.id === selectedCollection.id
               ? {
                   ...res,
                 }
               : item
-          ) || []
-        );
+          ) || [];
+
+        setMyMintableCollections(updatedCollections);
       } else {
         setError(res.message);
       }
