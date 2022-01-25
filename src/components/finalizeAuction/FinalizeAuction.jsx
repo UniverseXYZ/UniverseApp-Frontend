@@ -24,6 +24,7 @@ import ERC721ABI from '../../contracts/ERC721.json';
 import GoBackPopup from './GoBackPopup';
 import { useErrorContext } from '../../contexts/ErrorContext';
 import { useSocketContext } from '../../contexts/SocketContext';
+import { TX_STATUSES } from '../../utils/helpers/constants';
 
 const FinalizeAuction = () => {
   const defaultLoadingText = 'The transaction is in progress...';
@@ -85,8 +86,6 @@ const FinalizeAuction = () => {
 
   useEffect(() => {
     withdrawCountRef.current = withdrawCount;
-
-    console.log(`withdrawCount: ${withdrawCount}`);
   }, [withdrawCount]);
 
   // End of useRef section
@@ -185,15 +184,12 @@ const FinalizeAuction = () => {
           // 5. If all nfts have been withdraw, pop the approved tx index
           const hasDepositedNfts = slotNfts.some((slotNft) => slotNft.deposited);
           if (!hasDepositedNfts) {
-            approvedTxsRef.current.splice(approvedTxsRef.current.indexOf(txIndex), 1);
+            const newTxs = [...approvedTxsRef.current];
+            newTxs.splice(approvedTxsRef.current.indexOf(txIndex), 1);
 
-            setApprovedTxs(approvedTxsRef.current);
+            setApprovedTxs(newTxs);
             setShowLoading(false);
           }
-        }
-        // 6. If nft has been found there is no need to loop further
-        if (foundNft) {
-          break;
         }
       }
     }
@@ -389,7 +385,7 @@ const FinalizeAuction = () => {
       setShowLoading(true);
       const txResult = await tx.wait();
 
-      if (txResult.status === 1) {
+      if (txResult.status === TX_STATUSES.SUCCESS) {
         setLoadingText(verificationLoadingText);
         await patchAuction(auction.id, {
           createAuctionTxHash: tx.hash,
@@ -414,7 +410,7 @@ const FinalizeAuction = () => {
       );
       setApprovingCollections((colls) => [...colls, collectionAddress]);
       const txReceipt = await tx.wait();
-      if (txReceipt.status === 1) {
+      if (txReceipt.status === TX_STATUSES.SUCCESS) {
         setApprovedCollections((colls) => [...colls, collectionAddress]);
         setApprovingCollections((colls) => {
           const newApprovingCollections = [...colls];
@@ -441,7 +437,7 @@ const FinalizeAuction = () => {
       setShowLoading(true);
 
       const txReceipt = await tx.wait();
-      if (txReceipt.status === 1) {
+      if (txReceipt.status === TX_STATUSES.SUCCESS) {
         setLoadingText(verificationLoadingText);
         setDepositVerifyingTxIndex(txIndex);
       } else {
@@ -458,6 +454,7 @@ const FinalizeAuction = () => {
 
   const handleWithdraw = async (txIndex) => {
     try {
+      setWithdrawCount(0);
       // We need to withdraw each slot at a time
       // Calculate all count of deposited nfts at a slot
       const nftsCountMap = {};
@@ -479,39 +476,55 @@ const FinalizeAuction = () => {
         }
       });
       const txHashes = [];
-      const txs = [];
-      Object.keys(nftsCountMap).forEach(async (slot) => {
+      const withdrawPromises = Object.keys(nftsCountMap).map(async (slot) => {
         // Wrapped in try catch to handle the case where user doesn't accept all txs
+        setLoadingText(defaultLoadingText);
+        setActiveTxHashes([]);
+        setShowLoading(true);
+
         try {
           const tx = await universeAuctionHouseContract.withdrawDepositedERC721(
             auction.onChainId,
             slot,
             nftsCountMap[slot]
           );
+
           setWithdrawCount(withdrawCountRef.current + nftsCountMap[slot]);
-          txs.push(tx);
-          setLoadingText(defaultLoadingText);
-          setShowLoading(true);
+          setWithdrawVerifyingTokenIds(txIndex);
 
           txHashes.push(tx.hash);
-          setActiveTxHashes(txHashes);
+          setActiveTxHashes([...txHashes]);
 
-          setWithdrawVerifyingTokenIds(txIndex);
           const txReceipt = await tx.wait();
           return txReceipt.status;
         } catch (err) {
-          return null;
+          // This means user rejected the transaction
+          if (err?.code === 4001) {
+            // This status is used below to show error
+            return TX_STATUSES.USER_REJECTED;
+          }
+          // This status means the tx failed
+          return TX_STATUSES.FAILED;
         }
       });
+      const txResults = await Promise.all(withdrawPromises);
 
-      setActiveTxHashes(txHashes);
+      if (!txResults.some((status) => status !== TX_STATUSES.USER_REJECTED)) {
+        setShowLoading(false);
+        return;
+      }
 
-      const results = await Promise.all(txs);
-
-      if (!results.find((status) => status !== 1)) {
-        setLoadingText(verificationLoadingText);
-      } else {
-        console.log('error ocurred');
+      // Failed transactions are not successful or not rejected by the users
+      const failedTxs = txResults.filter(
+        (status) => status !== TX_STATUSES.SUCCESS && status !== TX_STATUSES.USER_REJECTED
+      );
+      setLoadingText(verificationLoadingText);
+      if (failedTxs.length) {
+        setShowError(true);
+        setErrorBody(
+          `${failedTxs.length} withdraw transactions failed. After the successfull ones are processed, you can retry the failed ones by pressing the withdraw button`
+        );
+        setWithdrawCount((count) => count - failedTxs.length);
       }
     } catch (err) {
       setShowLoading(false);
@@ -526,7 +539,7 @@ const FinalizeAuction = () => {
       setShowLoading(true);
       setActiveTxHashes([tx.hash]);
       const txReceipt = await tx.wait();
-      if (txReceipt.status === 1) {
+      if (txReceipt.status === TX_STATUSES.SUCCESS) {
         setLoadingText(verificationLoadingText);
       } else {
         setErrors();
