@@ -194,6 +194,22 @@ const PlaceBidPopup = ({
 
   const totalBid = calculateTotalBid();
 
+  useEffect(
+    () => () => {
+      setYourBid('');
+      setShowServiceFeeInfo(false);
+      setShowTotalBidAmountInfo(false);
+      setShowBidEligibleInfo(false);
+      setRewardTier(null);
+      setMinBid(0);
+      setMyBidSlotIndex(-1);
+      setError('');
+      setAllowance(0);
+      setBalance(0);
+    },
+    []
+  );
+
   return (
     <div className="place__bid__popup">
       <img
@@ -316,25 +332,34 @@ const PlaceBidPopup = ({
         </div>
         <div className="place__bid__btn">
           {auction.tokenSymbol.toLowerCase() !== 'eth' ? (
-            <Button
-              style={{ marginBottom: 20 }}
-              className="light-button w-100"
-              onClick={handleIncreaseAllowance}
-              disabled={+yourBid <= allowance}
-            >
-              Approve {auction.tokenSymbol}
-            </Button>
-          ) : (
-            <></>
-          )}
+            <>
+              <Button
+                style={{ marginBottom: 20 }}
+                className="light-button w-100"
+                onClick={handleIncreaseAllowance}
+                disabled={+yourBid <= allowance}
+              >
+                Approve {auction.tokenSymbol}
+              </Button>
 
-          <Button
-            className="light-button w-100"
-            onClick={handlePlaceBid}
-            disabled={+yourBid > allowance || !+yourBid || !!error}
-          >
-            Place a bid
-          </Button>
+              <Button
+                className="light-button w-100"
+                onClick={handlePlaceBid}
+                disabled={+yourBid > allowance || !+yourBid || !!error}
+              >
+                Place a bid
+              </Button>
+            </>
+          ) : (
+            // The disabled requirement is different if you bid in ETH
+            <Button
+              className="light-button w-100"
+              onClick={handlePlaceBid}
+              disabled={!+yourBid || !!error}
+            >
+              Place a bid
+            </Button>
+          )}
         </div>
         {error ? (
           <Animated animationIn="fadeInUp">

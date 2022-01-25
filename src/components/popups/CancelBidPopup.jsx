@@ -13,6 +13,10 @@ const CancelBidPopup = ({ auction, close }) => {
   const { setActiveTxHashes } = useMyNftsContext();
   const { universeAuctionHouseContract } = useAuthContext();
 
+  /**
+   * This method will trigger Smart Contract interaction event which will be catched by the BE and
+   * emmited to the FE trough sockets. The socket event will trigger AuctionLandingPage.handleBidWithdrawnEvent() method
+   */
   const handleCancelBidClick = async () => {
     try {
       let bidTx = null;
