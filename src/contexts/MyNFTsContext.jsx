@@ -247,6 +247,7 @@ const MyNFTsContextProvider = ({ children }) => {
         universeCollection,
         myNftsLoading,
         myMintableCollections,
+        setMyMintableCollections,
       }}
     >
       {children}
