@@ -417,11 +417,20 @@
           }
 
           .collection-name {
+            display: inline-block;
             max-width: 130px;
+            overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
-            overflow: hidden;
-            display: inline-block;
+
+            @supports (-webkit-line-clamp: 2) {
+              overflow: hidden;
+              text-overflow: ellipsis;
+              white-space: initial;
+              display: -webkit-box;
+              -webkit-line-clamp: 2;
+              -webkit-box-orient: vertical;
+            }
           }
         }
 
