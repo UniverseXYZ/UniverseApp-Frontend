@@ -62,8 +62,11 @@ const MarketplaceNFTDetails = ({ data, onNFT }) => {
 
   const generateImage = () => {
     if (selectedNFT.original_url) {
+      if (selectedNFT.original_url.startsWith('ipfs://ipfs/')) {
+        return selectedNFT.original_url.replace('ipfs://ipfs/', 'https://ipfs.io/ipfs/');
+      }
       if (selectedNFT.original_url.startsWith('ipfs://')) {
-        return selectedNFT.original_url.replace('ipfs://', 'https://ipfs.io/');
+        return selectedNFT.original_url.replace('ipfs://', 'https://ipfs.io/ipfs/');
       }
       return selectedNFT.original_url;
     }
