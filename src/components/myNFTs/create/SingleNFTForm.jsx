@@ -57,6 +57,8 @@ const MIN_IMAGE_SIZE = {
   height: 800,
 };
 
+const CORE_COLLECTION_ADDRESS = process.env.REACT_APP_UNIVERSE_ERC_721_ADDRESS;
+
 const MAX_ROYALTY_PERCENT = 20;
 
 const COLLECTIONS_PER_ROW = 4;
@@ -693,6 +695,14 @@ const SingleNFTForm = () => {
     setBorder(false);
   };
 
+  const coreCollectionFirst = (a, b) => {
+    if (a.address === CORE_COLLECTION_ADDRESS) {
+      return -1;
+    }
+
+    return 1;
+  };
+
   useEffect(async () => {
     if (saveForLateClick) {
       if (!errors.name && !errors.edition && !errors.previewImage) {
@@ -1001,7 +1011,7 @@ const SingleNFTForm = () => {
           >
             <h4>Choose collection</h4>
             <div className="choose__collection">
-              {myMintableCollections.map((col) => (
+              {myMintableCollections.sort(coreCollectionFirst).map((col) => (
                 <CollectionChoice
                   key={col.id}
                   selectedCollection={selectedCollection}
