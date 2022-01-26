@@ -14,7 +14,6 @@ import { getCollectionData } from '../../utils/api/mintNFT';
 import { useThemeContext } from '../../contexts/ThemeContext.jsx';
 import { useMyNftsContext } from '../../contexts/MyNFTsContext.jsx';
 import { useAuthContext } from '../../contexts/AuthContext.jsx';
-import ItemsPerPageDropdown from '../../components/pagination/ItemsPerPageDropdown.jsx';
 import '../../components/pagination/Pagination.scss';
 import ApiPagination from '../../components/pagination/ApiPagination.jsx';
 import ApiCollectionSearchFilters from '../../components/nft/ApiCollectionSearchFilters.jsx';
@@ -22,6 +21,7 @@ import { useSearchCollection } from '../../utils/hooks/useCollectionPageDebounce
 import RarityChartsLoader from '../rarityCharts/RarityChartsLoader.jsx';
 import { renderLoaders } from '../rarityCharts/renderLoaders.js';
 import { CollectionPageLoader } from './CollectionPageLoader.jsx';
+import ApiItemsPerPageDropdown from '../../components/pagination/ApiItemsPerPageDropdown.jsx';
 
 const Collection = () => {
   const { setSavedCollectionID } = useMyNftsContext();
@@ -175,7 +175,7 @@ const Collection = () => {
                   setLoadedPages={setLoadedPages}
                   pagination={collectionData.pagination}
                 />
-                <ItemsPerPageDropdown
+                <ApiItemsPerPageDropdown
                   perPage={perPage}
                   itemsPerPage={[8, 16, 32]}
                   offset={offset}
