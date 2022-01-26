@@ -163,7 +163,7 @@
       .single-nft-preview {
         position: relative;
         padding: 30px 160px;
-        background: rgba(0, 0, 0, 0.02);
+        background: rgba(0, 0, 0, 0.05);
         border: 3px dashed rgba(0, 0, 0, 0.1);
         box-sizing: border-box;
         border-radius: 12px;
@@ -222,8 +222,9 @@
           border: unset;
         }
         &:hover {
-          border: 3px dashed $white !important;
-          background: linear-gradient($white, $white) padding-box, linear-gradient(175deg, #bceb00, #00eaea) border-box !important;
+          border: 2px dashed rgba(0, 0, 0, 0.2);
+          background: rgba(0, 0, 0, 0.1);
+          cursor: pointer;
         }
         @include lg {
           padding: 30px 50px;
