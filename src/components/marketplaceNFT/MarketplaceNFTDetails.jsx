@@ -62,6 +62,9 @@ const MarketplaceNFTDetails = ({ data, onNFT }) => {
 
   const generateImage = () => {
     if (selectedNFT.original_url) {
+      if (selectedNFT.original_url.startsWith('ipfs://ipfs/')) {
+        return selectedNFT.original_url.replace('ipfs://ipfs/', 'https://ipfs.io/ipfs/');
+      }
       if (selectedNFT.original_url.startsWith('ipfs://')) {
         return selectedNFT.original_url.replace('ipfs://', 'https://ipfs.io/ipfs/');
       }
@@ -82,6 +85,8 @@ const MarketplaceNFTDetails = ({ data, onNFT }) => {
   const getVideoUrl = () =>
     !selectedNFT.original_url
       ? selectedNFT.optimized_url
+      : selectedNFT.original_url.startsWith('ipfs://ipfs/')
+      ? selectedNFT.original_url.replace('ipfs://ipfs/', 'https://ipfs.io/ipfs/')
       : selectedNFT.original_url.startsWith('ipfs://')
       ? selectedNFT.original_url.replace('ipfs://', 'https://ipfs.io/ipfs')
       : selectedNFT.original_url;
