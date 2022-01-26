@@ -13,6 +13,7 @@ const buildCollectionPageUrl = (address, offset, perPage, text) => {
 
 export const useSearchCollection = (address) => {
   const debounceInterval = 500;
+  // Must be > 32 because we need at least 2 pages in order for the continuous load to work
   const perPage = 33;
   const [inputText, setInputText] = useState('');
   const [apiPage, setApiPage] = useState(0);

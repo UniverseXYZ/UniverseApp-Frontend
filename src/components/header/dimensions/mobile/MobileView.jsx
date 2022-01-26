@@ -567,13 +567,7 @@ const MobileView = (props) => {
                       {showProducts ? (
                         <>
                           <div>
-                            <button
-                              className="disable"
-                              type="button"
-                              onClick={() => {
-                                // history.push('/minting')
-                              }}
-                            >
+                            <button type="button" onClick={() => history.push('/minting')}>
                               <img src={mintingIcon} alt="Minting" />
                               <span>Minting</span>
                             </button>
@@ -774,7 +768,7 @@ const MobileView = (props) => {
                                 window.open('https://universe.freshdesk.com/support/home')
                               }
                             >
-                              <img src={supportIcon} alt="Support" />
+                              <img src={supportIcon} alt="Support" width="20px" height="15px" />
                               <span>Support</span>
                             </button>
                           </div>

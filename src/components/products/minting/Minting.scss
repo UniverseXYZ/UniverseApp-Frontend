@@ -2,12 +2,15 @@
 @import "../../../assets/scss/variables";
 .minting-page {
   padding-bottom: 100px;
+  background-image: url("../../../assets/images/minting_page_bg.jpg");
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
   .select--title {
     background-image: url("../../../assets/images/mintingGradient.png");
     background-position: center;
     background-size: cover;
     background-repeat: no-repeat;
-    box-shadow: inset 0 -34px 50px 0px #ffffff;
     .container {
       margin: 0px auto !important;
       padding: 60px 0;
@@ -20,9 +23,13 @@
         font-style: normal;
         font-weight: 600;
         line-height: 45px;
+        color: transparent;
+        background: black;
+        -webkit-background-clip: text;
+        text-shadow: 2px 2px 5px rgba(255, 255, 255, 0.3);
       }
       > p {
-        color: #00000099;
+        color: rgba(0, 0, 0, 0.6);
         font-family: $spaceGroteskFont;
         font-size: 18px;
         font-style: normal;
@@ -34,6 +41,10 @@
   }
   .container {
     margin: 2px auto !important;
+    width: 730px;
+    @include md {
+      width: 100%;
+    }
   }
   .selecttype--section {
     display: grid;
@@ -45,35 +56,50 @@
     .nft-section {
       position: relative;
       z-index: 100;
-      &:hover {
-        .singlebox-shadow {
-          opacity: 1;
-        }
-      }
       .single-box {
-        border-radius: 12px;
-        border: 1px solid #0000001a;
+        background: rgba(255, 255, 255, 0.4);
+        box-shadow: 0px 8px 30px rgba(0, 0, 0, 0.1), inset 0px -1px 1px rgba(0, 0, 0, 0.2),
+          inset 0px 1px 0px rgba(255, 255, 255, 0.4);
+        border-radius: 10px;
         padding: 49px 0 53px 0;
         text-align: center;
-        background-color: $white;
-        cursor: pointer;
         min-height: 100%;
-        @include sm {
-          display: grid;
-          grid-template-columns: 72px 1fr;
-          grid-gap: 20px;
-          align-items: center;
-          justify-content: center;
-          padding: 30px;
-        }
+        transition: 0.3s ease-in-out;
+        cursor: pointer;
         &:hover {
-          background: linear-gradient(#ffffff, #ffffff) padding-box,
-            linear-gradient(135deg, #bceb00 15.57%, #00eaea 84.88%) border-box;
+          background: rgba(255, 255, 255, 0.6);
+          box-shadow: 0px 8px 30px rgba(0, 0, 0, 0.2), inset 0px -1px 1px rgba(0, 0, 0, 0.2),
+            inset 0px 1px 0px rgba(255, 255, 255, 0.4);
+
+          .image-section {
+            img.hide--on--hover {
+              opacity: 0;
+            }
+            img.show--on--hover {
+              opacity: 1;
+            }
+          }
         }
         .image-section {
+          position: relative;
+          width: 60px;
+          height: 60px;
+          margin: 0 auto;
+          img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            transition: opacity 0.3s ease-in;
+          }
+          img.hide--on--hover {
+            opacity: 1;
+          }
+          img.show--on--hover {
+            opacity: 0;
+          }
         }
         .text-section {
-          max-width: 230px;
+          max-width: 234px;
           margin: 28px auto 0px;
           @include sm {
             margin: 0;
@@ -94,25 +120,21 @@
             font-style: normal;
             font-weight: 400;
             line-height: 22px;
-            color: #00000066;
             margin-top: 15px;
+            color: rgba(0, 0, 0, 0.6);
             @include sm {
               margin-top: 8px;
             }
           }
         }
-      }
-      .singlebox-shadow {
-        width: 100%;
-        height: 100%;
-        background: linear-gradient(135deg, #bceb00 15.57%, #00eaea 84.88%) border-box;
-        border-radius: 12px;
-        position: absolute;
-        top: 0;
-        right: 0;
-        filter: blur(3px);
-        opacity: 0;
-        z-index: -1;
+        @include sm {
+          display: grid;
+          grid-template-columns: 72px 1fr;
+          grid-gap: 20px;
+          align-items: center;
+          justify-content: center;
+          padding: 30px;
+        }
       }
     }
   }

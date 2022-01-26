@@ -1,18 +1,25 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { getEtherscanContractUrl } from '../../utils/helpers';
 
 const Title = ({ selectedCollection, nftsCount, ownersCount }) => {
   const NFTSCount = nftsCount >= 1000 ? `${nftsCount / 1000}K` : nftsCount;
+
   return (
     <div className="collection__info">
       <div className="collection__name__desc">
-        <h1 title={selectedCollection.name}>
-          {selectedCollection.name.length > 15
-            ? `${selectedCollection.name.substring(0, 15)}...`
-            : selectedCollection.name}
-        </h1>
+        <h1 title={selectedCollection.name}>{selectedCollection.name}</h1>
       </div>
-      <h2 className="token">{selectedCollection.address}</h2>
+      <h2
+        className="token"
+        onClick={() => {
+          const url = getEtherscanContractUrl(selectedCollection.address);
+          window.open(url, '_blank').focus();
+        }}
+        aria-hidden
+      >
+        {selectedCollection.address}
+      </h2>
       <div className="item_info">
         <div className="bordered">
           <h1>{NFTSCount}</h1>

@@ -77,13 +77,7 @@ const DesktopView = ({
           </button>
           <div className="dropdown minting-drop">
             <div className="dropdown__body">
-              <button
-                className="disable"
-                type="button"
-                onClick={() => {
-                  // history.push('/minting')
-                }}
-              >
+              <button type="button" onClick={() => history.push('/minting')}>
                 <img src={mintingIcon} alt="Minting" />
                 <span>Minting</span>
               </button>
@@ -257,7 +251,7 @@ const DesktopView = ({
                   window.open('https://universe.freshdesk.com/support/home');
                 }}
               >
-                <img src={supportIcon} alt="Support" />
+                <img src={supportIcon} alt="Support" width="20px" height="15px" />
                 <span>Support</span>
               </button>
             </div>

@@ -83,14 +83,14 @@ const MyAccount = () => {
 
       const result = await saveProfileInfo(artistData);
       if (typeof accountImage === 'object') {
-        const saveImageRequest = await saveUserImage(accountImage);
-        if (!saveImageRequest.ok) {
+        const { profileImageUrl } = await saveUserImage(accountImage);
+        if (!profileImageUrl) {
           setShowLoading(false);
           setShowError(true);
           return;
         }
-        if (saveImageRequest.profileImageUrl) {
-          artistData.avatar = saveImageRequest.profileImageUrl;
+        if (profileImageUrl) {
+          artistData.avatar = profileImageUrl;
         }
       }
 

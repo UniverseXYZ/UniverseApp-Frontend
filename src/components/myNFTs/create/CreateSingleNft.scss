@@ -36,29 +36,48 @@
         line-height: 13px;
         color: rgba(0, 0, 0, 0.4);
       }
+      svg {
+        path {
+          transition: 0.1s ease-in-out;
+        }
+      }
+      &:hover {
+        svg {
+          path {
+            fill-opacity: 1;
+          }
+        }
+      }
     }
 
     .single-nft-upload {
       width: 100%;
 
-      .single-nft-upload-file-border {
-        border: 3px dotted $white !important;
-        background: linear-gradient($white, $white) padding-box, linear-gradient(175deg, #bceb00, #00eaea) border-box !important;
-      }
-
       .single-nft-upload-file {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        background: rgba(0, 0, 0, 0.02);
-        border: 3px dashed rgba(0, 0, 0, 0.1);
+        background: rgba(0, 0, 0, 0.05);
+        border: 2px dashed rgba(0, 0, 0, 0.15);
         box-sizing: border-box;
         border-radius: 12px;
         padding: 40px 16px 40px 16px;
+        transition: 0.3s ease-in-out;
+
+        &-border {
+          background: rgba(0, 0, 0, 0.1);
+          border: 2px dashed rgba(0, 0, 0, 0.2);
+        }
 
         .single-nft-drop-file {
           width: 100%;
           text-align: center;
+
+          svg {
+            g {
+              transition: 0.3s ease-in-out;
+            }
+          }
 
           h5 {
             display: block;
@@ -69,6 +88,7 @@
             line-height: 180%;
             text-align: center;
             color: rgba(0, 0, 0, 0.4);
+            transition: 0.3s ease-in-out;
           }
 
           img {
@@ -88,6 +108,7 @@
             line-height: 180%;
             text-align: center;
             color: rgba(0, 0, 0, 0.4);
+            transition: 0.3s ease-in-out;
 
             @include lg {
               display: grid;
@@ -101,6 +122,7 @@
           }
 
           button {
+            transition: 0.3s ease-in-out;
             &.light-border-button {
               @include sm {
                 font-size: 10px;
@@ -114,8 +136,25 @@
           }
         }
         &:hover {
-          border: 3px dashed $white !important;
-          background: linear-gradient($white, $white) padding-box, linear-gradient(175deg, #bceb00, #00eaea) border-box !important;
+          cursor: pointer;
+          background: rgba(0, 0, 0, 0.1);
+          border: 2px dashed rgba(0, 0, 0, 0.2);
+          .single-nft-drop-file {
+            svg {
+              g {
+                opacity: 1;
+              }
+            }
+            h5 {
+              color: $black;
+            }
+            p {
+              color: $black;
+            }
+            button {
+              box-shadow: 0px 10px 20px rgba(136, 120, 172, 0.2);
+            }
+          }
         }
       }
       .single-nft-upload-file.error {
@@ -124,7 +163,7 @@
       .single-nft-preview {
         position: relative;
         padding: 30px 160px;
-        background: rgba(0, 0, 0, 0.02);
+        background: rgba(0, 0, 0, 0.05);
         border: 3px dashed rgba(0, 0, 0, 0.1);
         box-sizing: border-box;
         border-radius: 12px;
@@ -170,15 +209,22 @@
 
           .preview-image {
             width: inherit;
-            max-height: 405px;
+            height: 405px;
             border-radius: 12px;
             object-fit: cover;
             image-rendering: pixelated;
+            @include sm {
+              height: 300px;
+            }
           }
         }
+        .single-nft-video {
+          border: unset;
+        }
         &:hover {
-          border: 3px dashed $white !important;
-          background: linear-gradient($white, $white) padding-box, linear-gradient(175deg, #bceb00, #00eaea) border-box !important;
+          border: 2px dashed rgba(0, 0, 0, 0.2);
+          background: rgba(0, 0, 0, 0.1);
+          cursor: pointer;
         }
         @include lg {
           padding: 30px 50px;
@@ -283,7 +329,7 @@
         white-space: break-spaces;
 
         img {
-          margin-left: 4px;
+          margin-left: 6px;
         }
 
         .info-text {
@@ -349,16 +395,17 @@
 
       .choose__collection {
         display: grid;
-        grid-template-columns: repeat(auto-fill, 140px);
+        grid-template-columns: repeat(4, 1fr);
         grid-gap: 20px;
-        // display: flex;
-        // flex-wrap: wrap;
-        @include sm {
-          grid-gap: 10px;
-        }
 
         .collection-box {
           position: relative;
+          .check__icon {
+            position: absolute;
+            right: -8px;
+            top: -8px;
+            z-index: 11;
+          }
           &:hover {
             .box--shadow--effect--block {
               opacity: 0.2;
@@ -366,8 +413,21 @@
           }
 
           .collection-name {
-            max-width: 115px;
-            overflow-wrap: break-word;
+            display: inline-block;
+            max-width: 130px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            overflow-wrap: anywhere;
+
+            @supports (-webkit-line-clamp: 2) {
+              overflow: hidden;
+              text-overflow: ellipsis;
+              white-space: initial;
+              display: -webkit-box;
+              -webkit-line-clamp: 2;
+              -webkit-box-orient: vertical;
+            }
           }
         }
 
@@ -392,15 +452,16 @@
           flex-direction: column;
           justify-content: center;
           align-items: center;
-          width: 140px;
-          height: 140px;
-          background: $white;
-          border: 1px solid rgba(0, 0, 0, 0.1);
+          height: 100%;
           box-sizing: border-box;
-          border-radius: 12px;
-          padding: 10px;
+          background: rgba(255, 255, 255, 0.6);
+          box-shadow: 0px 8px 30px rgba(0, 0, 0, 0.1), inset 0px -1px 1px rgba(0, 0, 0, 0.2),
+            inset 0px 1px 0px rgba(255, 255, 255, 0.4);
+          border-radius: 10px;
+          padding: 24px 10px;
           cursor: pointer;
           z-index: 10;
+          border: 1px solid transparent;
           &:hover {
             background: linear-gradient($white, $white) padding-box,
               linear-gradient(135deg, #bceb00 15.57%, #00eaea 84.88%) border-box;
@@ -429,10 +490,11 @@
           h5 {
             font-family: $spaceGroteskFont;
             font-weight: 500;
-            font-size: 16px;
+            font-size: 14px;
             line-height: 20px;
             color: $black;
-            margin-top: 12px;
+            margin-top: 14px;
+            margin-bottom: 6px;
             text-align: center;
           }
           p {
@@ -446,12 +508,15 @@
           &.selected {
             background: linear-gradient($white, $white) padding-box,
               linear-gradient(135deg, #bceb00, #00eaea) border-box;
-            border: 1px solid transparent;
+            border: 2px solid transparent;
           }
         }
         .create > img {
           border-radius: 50%;
           background: linear-gradient(135deg, #bceb00 15.57%, #00eaea 84.88%);
+        }
+        @include sm {
+          grid-template-columns: repeat(2, 1fr);
         }
       }
       .create:hover {
@@ -479,10 +544,25 @@
           font-size: 16px;
           line-height: 130%;
           letter-spacing: 0.2px;
-          color: $black;
+          color: rgba(0, 0, 0, 0.7);
           margin-bottom: 10px;
+          display: flex;
+          align-items: center;
           img {
             margin-left: 3px;
+          }
+          svg {
+            margin-left: 6px;
+            path {
+              transition: 0.1s ease-in-out;
+            }
+          }
+          &:hover {
+            svg {
+              path {
+                fill-opacity: 1;
+              }
+            }
           }
         }
 
@@ -567,8 +647,9 @@
         display: flex;
         width: 100%;
         padding: 20px 30px 30px 30px;
-        background: #ffffff;
-        box-shadow: 0px 10px 36px rgba(136, 120, 172, 0.14);
+        background: rgba(255, 255, 255, 0.6);
+        box-shadow: 0px 8px 30px rgba(0, 0, 0, 0.1), inset 0px -1px 1px rgba(0, 0, 0, 0.2),
+          inset 0px 1px 0px rgba(255, 255, 255, 0.4);
         border-radius: 10px;
         margin-bottom: 30px;
 
@@ -652,11 +733,14 @@
             bottom: 36.3%;
             left: 77%;
             @include lg {
-              right: 23%;
+              left: 74%;
             }
             @include sm {
-              bottom: 32%;
-              right: 2%;
+              bottom: 36%;
+              left: 94%;
+            }
+            @media (max-width: 375px) {
+              left: 90%;
             }
           }
           h5 {
@@ -740,7 +824,22 @@
             font-size: 16px;
             line-height: 130%;
             letter-spacing: 0.2px;
-            color: $black;
+            color: rgba(0, 0, 0, 0.7);
+            svg {
+              margin-left: 6px;
+              path {
+                transition: 0.1s ease-in-out;
+              }
+            }
+            &:hover {
+              svg {
+                path {
+                  fill-opacity: 1;
+                }
+              }
+            }
+            display: flex;
+            align-items: center;
           }
           .royalities-info-text {
             position: absolute;
@@ -761,7 +860,7 @@
             }
           }
           img {
-            margin-left: 3px;
+            margin-left: 6px;
           }
           .switch {
             position: absolute;
@@ -910,6 +1009,15 @@
       button {
         &.light-border-button {
           margin-right: 12px;
+          box-shadow: 2px 1000px 1px #f0f6f4 inset;
+          &:disabled {
+            background: transparent;
+            box-shadow: none;
+            &:hover {
+              box-shadow: none !important;
+              background: transparent !important;
+            }
+          }
           @include sm {
             margin-right: 0;
             margin-top: 20px;
@@ -927,7 +1035,7 @@
   }
 
   .scroll-box {
-    max-height: 300px;
+    max-height: 360px;
     overflow: scroll;
   }
 }

@@ -8,6 +8,7 @@ import infoIcon from '../../assets/images/icon.svg';
 import warningIcon from '../../assets/images/Exclamation.svg';
 import errorIcon from '../../assets/images/red-msg.svg';
 import { useAuthContext } from '../../contexts/AuthContext';
+import { sanitizeUrlString } from '../../utils/helpers';
 
 const MAX_FIELD_CHARS_LENGTH = {
   name: 100,
@@ -207,7 +208,15 @@ const ProfileForm = ({
               onChange={(e) => {
                 if (e.target.value.length > MAX_FIELD_CHARS_LENGTH.pageAddress) return;
                 if (e.target.value.startsWith('universe.xyz/')) {
-                  setAccountPage(e.target.value.replace(' ', '-'));
+                  const splitUrl = e.target.value.split('universe.xyz/');
+                  if (splitUrl.length === 2) {
+                    const sanitizedUrl = sanitizeUrlString(splitUrl[1]);
+                    splitUrl[0] = 'universe.xyz/';
+                    splitUrl[1] = sanitizedUrl;
+                    setAccountPage(splitUrl.join(''));
+                  } else {
+                    setAccountPage(e.target.value);
+                  }
                 }
               }}
               onFocus={handleOnFocus}

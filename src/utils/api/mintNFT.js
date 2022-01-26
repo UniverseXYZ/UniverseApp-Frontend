@@ -537,7 +537,7 @@ export const getNftData = async (collectionAddress, tokenId) => {
   return result;
 };
 
-export const createMintingNFT = async (txHash, nftId) => {
+export const createMintingNFT = async (txHash, nftId, actualMintedCount) => {
   const URL = `${CREATE_MINTING_NFT}/${nftId}`;
 
   const request = await fetch(URL, {
@@ -548,6 +548,7 @@ export const createMintingNFT = async (txHash, nftId) => {
     },
     body: JSON.stringify({
       txHash,
+      numberOfEditions: actualMintedCount,
     }),
   });
 

@@ -75,3 +75,12 @@ export const mapUserData = (userInfo) => {
   };
   return map;
 };
+
+export const sanitizeUrlString = (url) => url.toLowerCase().replace(/[^._a-z0-9]+/g, '-');
+
+export const getEtherscanContractUrl = (address) =>
+  `https://${
+    process.env.REACT_APP_NETWORK_NAME.toLowerCase() === 'mainnet'
+      ? ''
+      : `${process.env.REACT_APP_NETWORK_NAME.toLowerCase()}.`
+  }etherscan.io/address/${address}`;

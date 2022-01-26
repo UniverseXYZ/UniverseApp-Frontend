@@ -47,9 +47,10 @@ const NFTCollectionForm = ({ showCollectible, setShowCollectible }) => {
     mintingCollectionsCount,
     setMintingCollectionsCount,
     setMyNFTsSelectedTabIndex,
+    myMintableCollections,
+    setMyMintableCollections,
   } = useMyNftsContext();
-  const { deployedCollections, setDeployedCollections, universeERC721FactoryContract } =
-    useAuthContext();
+  const { setDeployedCollections, universeERC721FactoryContract } = useAuthContext();
   const { setShowError, setErrorTitle, setErrorBody } = useErrorContext();
   const [showPrompt, setShowPrompt] = useState(false);
   const location = useLocation();
@@ -137,8 +138,8 @@ const NFTCollectionForm = ({ showCollectible, setShowCollectible }) => {
         setInputClass('inp');
       }
     } else {
-      const collectionNameExists = deployedCollections.length
-        ? deployedCollections.filter(
+      const collectionNameExists = myMintableCollections.length
+        ? myMintableCollections.filter(
             (collection) => collection.name.toLowerCase() === collectionName.toLowerCase()
           )
         : [];
@@ -193,13 +194,13 @@ const NFTCollectionForm = ({ showCollectible, setShowCollectible }) => {
           }
 
           /* eslint-disable no-param-reassign */
-          const deployedCollectionsCopy = deployedCollections.map((col) => {
+          const updatedCollections = myMintableCollections.map((col) => {
             if (col.id === savedCollectionID) {
-              col = { ...res };
+              return res;
             }
             return col;
           });
-          setDeployedCollections(deployedCollectionsCopy);
+          setMyMintableCollections(updatedCollections);
         }
       } else {
         // Create the collection
@@ -312,7 +313,7 @@ const NFTCollectionForm = ({ showCollectible, setShowCollectible }) => {
   useEffect(() => {
     // It means we have opened a collection for EDIT
     if (savedCollectionID) {
-      const res = deployedCollections.filter((item) => item.id === savedCollectionID)[0];
+      const res = myMintableCollections.filter((item) => item.id === savedCollectionID)[0];
       setCollectionName(res.name);
       // An already deployed collection should have a coverUrl
       setCoverImage(res.coverUrl);

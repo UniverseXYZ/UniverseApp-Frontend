@@ -2,9 +2,15 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { getCollectionBackgroundColor } from '../../../utils/helpers';
 import universeIcon from '../../../assets/images/universe-img.svg';
+import checkIcon from '../../../assets/images/Completed.svg';
 
 const CollectionChoice = ({ col, selectedCollection, setSelectedCollection }) => (
   <div className="collection-box">
+    {selectedCollection && selectedCollection.id === col.id ? (
+      <img className="check__icon" src={checkIcon} alt="selected" />
+    ) : (
+      <></>
+    )}
     <div
       className={`universe${
         selectedCollection && selectedCollection.id === col.id ? ' selected' : ''

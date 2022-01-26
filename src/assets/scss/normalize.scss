@@ -1,7 +1,7 @@
-@import '_fonts.scss';
-@import '_variables.scss';
-@import '_animations.scss';
-@import '_mixins.scss';
+@import "_fonts.scss";
+@import "_variables.scss";
+@import "_animations.scss";
+@import "_mixins.scss";
 
 html,
 body,
@@ -117,6 +117,10 @@ table {
   border-spacing: 0;
 }
 
+iframe {
+  display: none;
+}
+
 *,
 *:focus {
   outline: none !important;
@@ -185,7 +189,7 @@ select {
   border: 0;
 }
 
-input[type='text'] {
+input[type="text"] {
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
@@ -262,7 +266,7 @@ html {
   transform-origin: 40px 40px;
 }
 .lds-roller div:after {
-  content: ' ';
+  content: " ";
   display: block;
   position: absolute;
   width: 7px;

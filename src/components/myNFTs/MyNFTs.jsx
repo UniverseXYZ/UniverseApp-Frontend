@@ -392,7 +392,6 @@ const MyNFTs = () => {
                     Mint selected
                   </button>
                   <button
-                    disabled
                     type="button"
                     ref={ref2}
                     className={`create--nft--dropdown  ${
@@ -409,7 +408,11 @@ const MyNFTs = () => {
                           <li
                             aria-hidden="true"
                             onClick={() =>
-                              history.push('/my-nfts/create', { tabIndex: 1, nftType: 'single' })
+                              history.push('/my-nfts/create', {
+                                tabIndex: 1,
+                                nftType: 'single',
+                                backPath: 'myNFTs',
+                              })
                             }
                           >
                             NFT
@@ -420,6 +423,7 @@ const MyNFTs = () => {
                               history.push('/my-nfts/create', {
                                 tabIndex: 1,
                                 nftType: 'collection',
+                                backPath: 'myNFTs',
                               })
                             }
                           >
@@ -442,7 +446,6 @@ const MyNFTs = () => {
               )}
               {myNFTsSelectedTabIndex !== 2 && (
                 <button
-                  disabled
                   type="button"
                   ref={ref2}
                   className={`create--nft--dropdown  ${

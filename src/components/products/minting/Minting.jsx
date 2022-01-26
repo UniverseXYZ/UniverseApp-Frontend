@@ -1,18 +1,48 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
+import Popup from 'reactjs-popup';
 import './Minting.scss';
-import singleIcon from '../../../assets/images/collectionicon.svg';
-import collectionIcon from '../../../assets/images/singleicon.svg';
+import singleIcon from '../../../assets/images/minting-create-nft.png';
+import singleIconHover from '../../../assets/images/minting-create-nft-hover.png';
+import collectionIcon from '../../../assets/images/minting-create-collection.png';
+import collectionIconHover from '../../../assets/images/minting-create-collection-hover.png';
 import { useThemeContext } from '../../../contexts/ThemeContext';
+import { useAuthContext } from '../../../contexts/AuthContext';
+import WrongNetworkPopup from '../../popups/WrongNetworkPopup';
+import NotAuthenticatedPopup from '../../popups/NotAuthenticatedPopup';
 
 const MintingPage = () => {
+  const { isAuthenticated, isWalletConnected } = useAuthContext();
   const history = useHistory();
   const { setDarkMode } = useThemeContext();
+  const [showNotAuthenticatedPopup, setShowNotAuthenticatedPopup] = useState(false);
 
   useEffect(() => {
     setDarkMode(false);
-    history.push('/');
   }, []);
+
+  const singleBoxHandleClick = () => {
+    if (!isAuthenticated && !isWalletConnected) {
+      setShowNotAuthenticatedPopup(true);
+    } else {
+      history.push('/my-nfts/create', {
+        tabIndex: 1,
+        nftType: 'single',
+        backPath: 'minting',
+      });
+    }
+  };
+  const collectionBoxHandleClick = () => {
+    if (!isAuthenticated || !isWalletConnected) {
+      setShowNotAuthenticatedPopup(true);
+    } else {
+      history.push('/my-nfts/create', {
+        tabIndex: 1,
+        nftType: 'collection',
+        backPath: 'minting',
+      });
+    }
+  };
 
   return (
     <div className="minting-page">
@@ -24,13 +54,10 @@ const MintingPage = () => {
       </div>
       <div className="selecttype--section container">
         <div className="nft-section">
-          <div
-            className="single-box"
-            aria-hidden="true"
-            onClick={() => history.push('/my-nfts/create', { tabIndex: 1, nftType: 'single' })}
-          >
+          <div className="single-box" aria-hidden="true" onClick={() => singleBoxHandleClick()}>
             <div className="image-section">
-              <img src={singleIcon} alt="cover2" />
+              <img className="hide--on--hover" src={singleIcon} alt="cover2" />
+              <img className="show--on--hover" src={singleIconHover} alt="cover2" />
             </div>
             <div className="text-section">
               <h3>Create NFT</h3>
@@ -40,16 +67,12 @@ const MintingPage = () => {
               </p>
             </div>
           </div>
-          <div className="singlebox-shadow" />
         </div>
         <div className="nft-section">
-          <div
-            className="single-box"
-            aria-hidden="true"
-            onClick={() => history.push('/my-nfts/create', { tabIndex: 1, nftType: 'collection' })}
-          >
-            <div className="image-box">
-              <img src={collectionIcon} alt="cover" />
+          <div className="single-box" aria-hidden="true" onClick={() => collectionBoxHandleClick()}>
+            <div className="image-section">
+              <img className="hide--on--hover" src={collectionIcon} alt="cover" />
+              <img className="show--on--hover" src={collectionIconHover} alt="cover2" />
             </div>
             <div className="text-section">
               <h3>Create Collection</h3>
@@ -58,9 +81,11 @@ const MintingPage = () => {
               </p>
             </div>
           </div>
-          <div className="singlebox-shadow" />
         </div>
       </div>
+      <Popup closeOnDocumentClick={false} open={showNotAuthenticatedPopup}>
+        <NotAuthenticatedPopup close={() => setShowNotAuthenticatedPopup(false)} />
+      </Popup>
     </div>
   );
 };

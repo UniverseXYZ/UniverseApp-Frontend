@@ -2,7 +2,7 @@ import React from 'react';
 import cogWheel from '../../assets/images/cog.png';
 import './BrokenNFT.scss';
 
-const BrokenNFT = () => (
+const BrokenNFT = React.memo(() => (
   <div className="wrap">
     <div id="broken-nft-container">
       <div>
@@ -16,6 +16,6 @@ const BrokenNFT = () => (
       </div>
     </div>
   </div>
-);
+));
 
 export default BrokenNFT;

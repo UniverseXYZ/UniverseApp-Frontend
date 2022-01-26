@@ -11,6 +11,8 @@ import PendingCollections from './pendingDropdown/pendingCollections/PendingColl
 import universeIcon from '../../assets/images/universe-img.svg';
 import { useMyNftsContext } from '../../contexts/MyNFTsContext';
 
+const CORE_COLLECTION_ADDRESS = process.env.REACT_APP_UNIVERSE_ERC_721_ADDRESS;
+
 const DeployedCollections = () => {
   const { deployedCollections } = useAuthContext();
   const { myMintableCollections } = useMyNftsContext();
@@ -31,6 +33,15 @@ const DeployedCollections = () => {
       setIsDropdownOpened(false);
     }
   };
+
+  const coreCollectionFirst = (a, b) => {
+    if (a.address === CORE_COLLECTION_ADDRESS) {
+      return -1;
+    }
+
+    return 1;
+  };
+
   useEffect(() => {
     document.addEventListener('click', handleClickOutside, true);
     return () => {
@@ -52,67 +63,74 @@ const DeployedCollections = () => {
       {distinctCollections.length ? (
         <>
           <div className="saved__collections__lists">
-            {distinctCollections.slice(offset, offset + perPage).map((collection, index) => (
-              <div
-                className="saved__collection__box"
-                key={uuid()}
-                aria-hidden="true"
-                onClick={() =>
-                  history.push(`/collection/${collection.address}`, {
-                    collection,
-                    saved: true,
-                  })
-                }
-              >
-                <div className="saved__collection__box__header">
-                  {collection.bannerUrl ? (
-                    <img src={collection.bannerUrl} alt={collection.name} />
-                  ) : typeof collection.previewImage === 'string' &&
-                    collection.previewImage.startsWith('#') ? (
-                    <div
-                      className="random__bg__color"
-                      style={{ backgroundColor: collection.previewImage }}
-                    />
-                  ) : collection.coverUrl ? (
-                    <img className="blur" src={collection.coverUrl} alt={collection.name} />
-                  ) : (
-                    <div
-                      style={{
-                        width: '100%',
-                        height: '100%',
-                        backgroundColor: getCollectionBackgroundColor(collection),
-                      }}
-                    />
-                  )}
+            {distinctCollections
+              .sort(coreCollectionFirst)
+              .slice(offset, offset + perPage)
+              .map((collection, index) => (
+                <div
+                  className="saved__collection__box"
+                  key={uuid()}
+                  aria-hidden="true"
+                  onClick={() =>
+                    history.push(`/collection/${collection.address}`, {
+                      collection,
+                      saved: true,
+                    })
+                  }
+                >
+                  <div className="saved__collection__box__header">
+                    {collection.bannerUrl ? (
+                      <img src={collection.bannerUrl} alt={collection.name} />
+                    ) : typeof collection.previewImage === 'string' &&
+                      collection.previewImage.startsWith('#') ? (
+                      <div
+                        className="random__bg__color"
+                        style={{ backgroundColor: collection.previewImage }}
+                      />
+                    ) : collection.coverUrl ? (
+                      <img className="blur" src={collection.coverUrl} alt={collection.name} />
+                    ) : (
+                      <div
+                        style={{
+                          width: '100%',
+                          height: '100%',
+                          backgroundColor: getCollectionBackgroundColor(collection),
+                        }}
+                      />
+                    )}
+                  </div>
+                  <div className="saved__collection__box__body">
+                    {collection.address ===
+                    process.env.REACT_APP_UNIVERSE_ERC_721_ADDRESS.toLowerCase() ? (
+                      <img
+                        className="collection__avatar"
+                        src={universeIcon}
+                        alt={collection.name}
+                      />
+                    ) : !collection.coverUrl ? (
+                      <div
+                        className="random__avatar__color"
+                        style={{
+                          backgroundColor: getCollectionBackgroundColor(collection),
+                        }}
+                      >
+                        {collection.name.charAt(0)}
+                      </div>
+                    ) : (
+                      <img
+                        className="collection__avatar"
+                        src={collection.coverUrl}
+                        alt={collection.name}
+                      />
+                    )}
+                    <h3 title={collection.name} className="collection__name">
+                      {collection.name.length > 32
+                        ? `${collection.name.substring(0, 32)}...`
+                        : collection.name}
+                    </h3>
+                  </div>
                 </div>
-                <div className="saved__collection__box__body">
-                  {collection.address ===
-                  process.env.REACT_APP_UNIVERSE_ERC_721_ADDRESS.toLowerCase() ? (
-                    <img className="collection__avatar" src={universeIcon} alt={collection.name} />
-                  ) : !collection.coverUrl ? (
-                    <div
-                      className="random__avatar__color"
-                      style={{
-                        backgroundColor: getCollectionBackgroundColor(collection),
-                      }}
-                    >
-                      {collection.name.charAt(0)}
-                    </div>
-                  ) : (
-                    <img
-                      className="collection__avatar"
-                      src={collection.coverUrl}
-                      alt={collection.name}
-                    />
-                  )}
-                  <h3 title={collection.name} className="collection__name">
-                    {collection.name.length > 13
-                      ? `${collection.name.substring(0, 13)}...`
-                      : collection.name}
-                  </h3>
-                </div>
-              </div>
-            ))}
+              ))}
           </div>
           <div className="pagination__container">
             <SimplePagination

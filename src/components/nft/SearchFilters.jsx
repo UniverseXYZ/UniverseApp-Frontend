@@ -47,7 +47,7 @@ const SearchFilters = ({ data, setData, setOffset }) => {
     let filteredData = data;
     if (searchValue) {
       filteredData = data.filter((item) =>
-        item.name.toLowerCase().includes(searchValue.toLocaleLowerCase())
+        !item.name ? false : item.name.toLowerCase().includes(searchValue.toLocaleLowerCase())
       );
     }
 
