@@ -488,29 +488,47 @@ const SingleNFTForm = () => {
 
       // Mint the data on Chunks
       const txHashes = [];
+      let actualMintedCount = 0;
       const mintPromises = tokensChunks.map(async (chunk, i) => {
-        const mintTransaction = await collectionContract.batchMintWithDifferentFees(
-          address,
-          chunk,
-          royaltiesChunks[i]
-        );
+        try {
+          const mintTransaction = await collectionContract.batchMintWithDifferentFees(
+            address,
+            chunk,
+            royaltiesChunks[i]
+          );
 
-        txHashes.push(mintTransaction.hash);
-        setActiveTxHashes([...txHashes]);
-        const mintReceipt = await mintTransaction.wait();
-        return mintReceipt.status;
+          txHashes.push(mintTransaction.hash);
+          setActiveTxHashes([...txHashes]);
+          const mintReceipt = await mintTransaction.wait();
+          actualMintedCount += chunk.length;
+          return mintReceipt.status;
+        } catch (err) {
+          // This means user rejected the transaction
+          if (err?.code === 4001) {
+            // This status is used below to show error
+            return 2;
+          }
+          // This status means the tx failed
+          return 0;
+        }
       });
 
-      const res = await Promise.all(mintPromises);
+      const txResults = await Promise.all(mintPromises);
       const mintNftPromises = [];
 
       for (let i = 0; i < txHashes.length; i += 1) {
         const txHash = txHashes[i];
-        mintNftPromises.push(createMintingNFT(txHash, mintInfo.mintingNft.id));
+        mintNftPromises.push(createMintingNFT(txHash, mintInfo.mintingNft.id, actualMintedCount));
       }
 
-      const hasFailedTransaction = res.includes(0);
-      if (!hasFailedTransaction) {
+      if (!txResults.some((status) => status !== 2)) {
+        setShowLoadingPopup(false);
+        return;
+      }
+
+      const hasSuccessfulTransaction = txResults.some((status) => status === 1);
+
+      if (hasSuccessfulTransaction) {
         const [myNfts, mintingNfts, savedNFTS] = await Promise.all([
           getMyNfts(),
           getMyMintingNfts(),
@@ -536,7 +554,6 @@ const SingleNFTForm = () => {
         setRoyaltyAddress([{ address, amount: '10' }]);
       } else {
         setShowLoadingPopup(false);
-        console.error(e, 'Error !');
         setShowError(true);
       }
     } catch (err) {
@@ -639,7 +656,7 @@ const SingleNFTForm = () => {
     setSavedNfts(savedNFTS || []);
     setShowLoadingPopup(false);
     setLoadingText(MINTING_LOADING_TEXT);
-    setShowCongratsPopup(true);
+    setShowCongratsPopupOnSaveForLaterClick(true);
     setName('');
     setDescription('');
     setEditions(1);
