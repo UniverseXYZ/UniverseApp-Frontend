@@ -48,7 +48,6 @@ const Artist = () => {
         const artistNftsInfo = await getUserNfts(artistUsername);
         if (!artistNftsInfo.error) {
           setArtistNFTs(artistNftsInfo.nfts);
-          console.log(artistNftsInfo.nfts);
         }
       } catch (err) {
         console.log(err);
