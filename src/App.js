@@ -55,7 +55,7 @@ import Minting from './components/products/minting/Minting';
 import { App as NewApp } from './app/App';
 import { SellPage, BrowseNFTsPage } from './app/modules/marketplace/pages';
 import { LayoutProvider } from './app/providers';
-import { NFTPage } from './app/modules/nft';
+import { BundlePage, NFTPage } from './app/modules/nft';
 
 class UniverseRoute {
   constructor(
@@ -93,6 +93,7 @@ const routes = {
   '/v2/marketplace/browse': new UniverseRoute(BrowseNFTsPage, false, true),
   '/v2/marketplace/sell': new UniverseRoute(SellPage, false, true),
   '/v2/nft/:collectionAddress/:tokenId': new UniverseRoute(NFTPage, false, true),
+  '/v2/bundle/:hash': new UniverseRoute(BundlePage, false, true),
   '/nft-marketplace/:steps': new UniverseRoute(NFTMarketplace),
   // '/search': new UniverseRoute(Search),
   // '/core-drops': new UniverseRoute(CharectersDrop),
