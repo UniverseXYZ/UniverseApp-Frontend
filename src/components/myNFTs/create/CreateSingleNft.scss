@@ -381,6 +381,7 @@
 
     .single-nft-choose-collection {
       margin-top: 40px;
+      overflow: unset;
       h4 {
         font-family: $spaceGroteskFont;
         font-size: 14px;
@@ -396,6 +397,7 @@
         display: grid;
         grid-template-columns: repeat(4, 1fr);
         grid-gap: 20px;
+        overflow: unset;
 
         .collection-box {
           position: relative;
@@ -645,8 +647,9 @@
         display: flex;
         width: 100%;
         padding: 20px 30px 30px 30px;
-        background: #ffffff;
-        box-shadow: 0px 10px 36px rgba(136, 120, 172, 0.14);
+        background: rgba(255, 255, 255, 0.6);
+        box-shadow: 0px 8px 30px rgba(0, 0, 0, 0.1), inset 0px -1px 1px rgba(0, 0, 0, 0.2),
+          inset 0px 1px 0px rgba(255, 255, 255, 0.4);
         border-radius: 10px;
         margin-bottom: 30px;
 
