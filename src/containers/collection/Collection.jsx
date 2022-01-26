@@ -54,6 +54,8 @@ const Collection = () => {
   const [isDropdownOpened, setIsDropdownOpened] = useState(false);
   const [ownersCount, setOwnersCount] = useState(0);
 
+  const nftsContainerRef = useRef(null);
+
   useEffect(async () => {
     setDarkMode(false);
   }, []);
@@ -70,12 +72,33 @@ const Collection = () => {
     history.push('/my-nfts/create', { tabIndex: 1, nftType: 'collection' });
   };
 
+  const scrollToNftContainer = () => {
+    if (nftsContainerRef && nftsContainerRef.current) {
+      nftsContainerRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   const resetPagination = () => {
     setOffset(0);
     setPage(0);
     setApiPage(0);
     setIsSearching(true);
   };
+
+  const changePerPage = (newPerPage) => {
+    if (newPerPage < collectionData.length) {
+      setPage(0);
+      setOffset(0);
+    } else {
+      const newPage = Math.ceil(offset / newPerPage);
+      setPage(newPage);
+    }
+    setPerPage(newPerPage);
+  };
+
+  useEffect(() => {
+    scrollToNftContainer();
+  }, [page, perPage]);
 
   return !collectionData ? (
     <div className="loader-wrapper">
@@ -120,7 +143,7 @@ const Collection = () => {
             <CollectionPageLoader />
           ) : collectionData?.nfts?.filter((nft) => !nft.hidden).length ? (
             <>
-              <div className="nfts__lists">
+              <div className="nfts__lists" ref={nftsContainerRef}>
                 {collectionData?.nfts
                   .slice(offset, offset + perPage)
                   .filter((nft) => !nft.hidden)
@@ -154,11 +177,10 @@ const Collection = () => {
                 />
                 <ItemsPerPageDropdown
                   perPage={perPage}
-                  setPerPage={setPerPage}
                   itemsPerPage={[8, 16, 32]}
                   offset={offset}
                   page={page}
-                  setPage={setPage}
+                  changePerPage={changePerPage}
                 />
               </div>
             </>
