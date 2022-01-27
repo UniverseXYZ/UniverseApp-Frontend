@@ -10,6 +10,7 @@ import daiIcon from '../../../../assets/images/dai_icon.svg';
 import usdcIcon from '../../../../assets/images/usdc_icon.svg';
 import bondIcon from '../../../../assets/images/bond_icon.svg';
 import snxIcon from '../../../../assets/images/snx.svg';
+import { shortenEthereumAddress } from '../../../../utils/helpers/format';
 
 const bidTokens = [
   {
@@ -154,7 +155,7 @@ const SelectedFilters = ({
               ) : (
                 <img className="sell__collection" src={coll.coverUrl} alt={coll.name} />
               )}
-              {coll.name}
+              {coll.name || shortenEthereumAddress(coll.address)}
               <img
                 className="close"
                 src={closeIcon}
