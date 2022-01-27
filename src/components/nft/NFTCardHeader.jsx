@@ -18,6 +18,7 @@ import { getCollectionBackgroundColor } from '../../utils/helpers';
 import { useMyNftsContext } from '../../contexts/MyNFTsContext';
 import { useAuthContext } from '../../contexts/AuthContext';
 import TransferNFTPopup from '../popups/transferNFT/TransferNFTPopup';
+import { shortenEthereumAddress } from '../../utils/helpers/format';
 
 const NFTCardHeader = ({ nft, creator, owner, collection }) => {
   const history = useHistory();
@@ -121,7 +122,9 @@ const NFTCardHeader = ({ nft, creator, owner, collection }) => {
             ) : (
               <img src={collection.coverUrl} alt={collection.name} />
             )}
-            <span className="tooltiptext">{`Collection: ${collection.name}`}</span>
+            <span className="tooltiptext">{`Collection: ${
+              collection.name || shortenEthereumAddress(collection.address)
+            }`}</span>
           </div>
         )}
         {!owner ? (

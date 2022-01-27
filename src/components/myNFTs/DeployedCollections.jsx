@@ -10,6 +10,7 @@ import { getCollectionBackgroundColor } from '../../utils/helpers';
 import PendingCollections from './pendingDropdown/pendingCollections/PendingCollections';
 import universeIcon from '../../assets/images/universe-img.svg';
 import { useMyNftsContext } from '../../contexts/MyNFTsContext';
+import { shortenEthereumAddress } from '../../utils/helpers/format';
 
 const CORE_COLLECTION_ADDRESS = process.env.REACT_APP_UNIVERSE_ERC_721_ADDRESS;
 
@@ -123,11 +124,17 @@ const DeployedCollections = () => {
                         alt={collection.name}
                       />
                     )}
-                    <h3 title={collection.name} className="collection__name">
-                      {collection.name.length > 32
-                        ? `${collection.name.substring(0, 32)}...`
-                        : collection.name}
-                    </h3>
+                    {collection?.name ? (
+                      <h3 title={collection.name} className="collection__name">
+                        {collection.name.length > 32
+                          ? `${collection.name.substring(0, 32)}...`
+                          : collection.name}
+                      </h3>
+                    ) : (
+                      <h3 title={collection.address} className="collection__name">
+                        {shortenEthereumAddress(collection.address)}
+                      </h3>
+                    )}
                   </div>
                 </div>
               ))}
