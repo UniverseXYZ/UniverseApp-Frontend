@@ -36,7 +36,7 @@ export const parseRoyalties = (royalties, amountPropertyName) =>
  */
 export const formatRoyaltiesForMinting = (royalties) =>
   royalties?.map((royalty) =>
-    royalty.address && royalty.amount ? [royalty.address, royalty.amount * 100] : []
+    royalty.address && royalty.amount ? [royalty.address, Math.round(royalty.amount * 100)] : []
   );
 
 export const parseProperties = (properties) =>
