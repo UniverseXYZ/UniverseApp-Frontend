@@ -21,6 +21,7 @@ import { defaultColors, getCollectionBackgroundColor } from '../../../../utils/h
 import { useAuthContext } from '../../../../contexts/AuthContext';
 import { useMyNftsContext } from '../../../../contexts/MyNFTsContext';
 import universeIcon from '../../../../assets/images/universe-img.svg';
+import { shortenEthereumAddress } from '../../../../utils/helpers/format';
 
 const SortingFilters = ({
   saleTypeButtons,
@@ -472,7 +473,7 @@ const SortingFilters = ({
                     ) : (
                       <img className="sell__collection" src={coll.coverUrl} alt={coll.name} />
                     )}
-                    {coll.name}
+                    {coll.name || shortenEthereumAddress(coll.address)}
                     <img
                       className="close"
                       src={closeIcon}
@@ -521,7 +522,8 @@ const SortingFilters = ({
                         <img className="collection__avatar" src={coll.coverUrl} alt={coll.name} />
                       )}
                       <p>
-                        {coll.name} ({collectionsNFTMap[coll.id]})
+                        {coll.name || shortenEthereumAddress(coll.address)} (
+                        {collectionsNFTMap[coll.id]})
                       </p>
                     </div>
                   ))}

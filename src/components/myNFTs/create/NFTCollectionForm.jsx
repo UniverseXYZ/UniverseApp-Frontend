@@ -440,7 +440,7 @@ const NFTCollectionForm = ({ showCollectible, setShowCollectible }) => {
               />
             )}
             <p className="input-max-chars">
-              {collectionName.length}/{MAX_FIELD_CHARS_LENGTH.name}
+              {collectionName?.length}/{MAX_FIELD_CHARS_LENGTH.name}
             </p>
             <p className="warning">Collection name cannot be changed in future</p>
           </div>
@@ -469,7 +469,7 @@ const NFTCollectionForm = ({ showCollectible, setShowCollectible }) => {
             )}
 
             <p className="input-max-chars">
-              {tokenName.length}/{MAX_FIELD_CHARS_LENGTH.token}
+              {tokenName?.length}/{MAX_FIELD_CHARS_LENGTH.token}
             </p>
             {!errors.tokenName && <p className="warning">Token name cannot be changed in future</p>}
           </div>

@@ -9,6 +9,7 @@ import { useAuthContext } from '../../../../contexts/AuthContext';
 import closeIcon from '../../../../assets/images/close-menu.svg';
 import checkIcon from '../../../../assets/images/check-vector.svg';
 import universeIcon from '../../../../assets/images/universe-img.svg';
+import { shortenEthereumAddress } from '../../../../utils/helpers/format';
 
 const Collections = ({
   savedCollections,
@@ -101,7 +102,7 @@ const Collections = ({
                 ) : (
                   <img className="sell__collection" src={col.coverUrl} alt={col.name} />
                 )}
-                <p>{col.name}</p>
+                <p>{col.name || shortenEthereumAddress(col.address)}</p>
               </div>
             ))}
         </div>

@@ -59,7 +59,10 @@ export const defaultColors = [
 
 export const getCollectionBackgroundColor = (collection) =>
   defaultColors[
-    Math.floor((collection?.id * collection?.name.charCodeAt(0)) % defaultColors.length)
+    Math.floor(
+      (collection?.id * collection?.address.charCodeAt(collection?.address.length - 1)) %
+        defaultColors.length
+    )
   ];
 
 export const mapUserData = (userInfo) => {

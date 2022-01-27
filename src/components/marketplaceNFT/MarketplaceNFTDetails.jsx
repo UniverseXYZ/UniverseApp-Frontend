@@ -24,6 +24,7 @@ import InlineSVG from './InlineSVG';
 import dots from '../../assets/images/3dots.svg';
 import transferIcon from '../../assets/images/transfericon.svg';
 import TransferNFTPopup from '../popups/transferNFT/TransferNFTPopup';
+import { shortenEthereumAddress } from '../../utils/helpers/format';
 
 const MarketplaceNFTDetails = ({ data, onNFT }) => {
   const history = useHistory();
@@ -254,8 +255,10 @@ const MarketplaceNFTDetails = ({ data, onNFT }) => {
                 )}
                 <div className="creator--name">
                   <p>Collection</p>
-                  <h6>{collection.name}</h6>
-                  <span className="tooltiptext tooltiptext--center">{collection.name}</span>
+                  <h6>{collection.name || shortenEthereumAddress(collection.address)}</h6>
+                  <span className="tooltiptext tooltiptext--center">
+                    {collection.name || collection.address}
+                  </span>
                 </div>
               </div>
             )}
