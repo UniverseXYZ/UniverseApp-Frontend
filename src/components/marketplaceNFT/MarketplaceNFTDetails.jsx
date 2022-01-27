@@ -24,6 +24,7 @@ import InlineSVG from './InlineSVG';
 import dots from '../../assets/images/3dots.svg';
 import transferIcon from '../../assets/images/transfericon.svg';
 import TransferNFTPopup from '../popups/transferNFT/TransferNFTPopup';
+import { shortenEthereumAddress } from '../../utils/helpers/format';
 
 const MarketplaceNFTDetails = ({ data, onNFT }) => {
   const history = useHistory();
@@ -100,9 +101,11 @@ const MarketplaceNFTDetails = ({ data, onNFT }) => {
             aria-hidden="true"
           >
             <>
-              {!selectedNFT.artworkType.endsWith('mpeg') &&
-                !selectedNFT.artworkType.endsWith('mp4') &&
-                showNftImage()}
+              {!selectedNFT.artworkType
+                ? showNftImage()
+                : !selectedNFT.artworkType.endsWith('mpeg') &&
+                  !selectedNFT.artworkType.endsWith('mp4') &&
+                  showNftImage()}
 
               {selectedNFT.artworkType && selectedNFT.artworkType.endsWith('mp4') && (
                 <video muted playsInline autoPlay controls>
@@ -252,8 +255,10 @@ const MarketplaceNFTDetails = ({ data, onNFT }) => {
                 )}
                 <div className="creator--name">
                   <p>Collection</p>
-                  <h6>{collection.name}</h6>
-                  <span className="tooltiptext tooltiptext--center">{collection.name}</span>
+                  <h6>{collection.name || shortenEthereumAddress(collection.address)}</h6>
+                  <span className="tooltiptext tooltiptext--center">
+                    {collection.name || collection.address}
+                  </span>
                 </div>
               </div>
             )}
@@ -317,9 +322,11 @@ const MarketplaceNFTDetails = ({ data, onNFT }) => {
           <div>
             {selectedNFT.type !== 'bundles' ? (
               <>
-                {selectedTabIndex === 0 && selectedNFT.properties !== null && (
-                  <Properties properties={selectedNFT.properties || []} />
-                )}
+                {selectedTabIndex === 0 &&
+                  selectedNFT.properties !== null &&
+                  selectedNFT.properties.length && (
+                    <Properties properties={selectedNFT.properties || []} />
+                  )}
                 {selectedTabIndex === 1 && <Owners />}
                 {selectedTabIndex === 2 && <Bids />}
                 {selectedTabIndex === 3 && <Offers view={selectedNFT.view} />}

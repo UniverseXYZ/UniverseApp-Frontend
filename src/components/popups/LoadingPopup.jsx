@@ -7,12 +7,10 @@ import closeIcon from '../../assets/images/cross.svg';
 import { useMyNftsContext } from '../../contexts/MyNFTsContext';
 import Contracts from '../../contracts/contracts.json';
 import { formatAddress } from '../../utils/helpers/format.js';
+import { getEtherscanTxUrl } from '../../utils/helpers.js';
 
 const LoadingPopup = ({ onClose, text, contractInteraction }) => {
   const { activeTxHashes } = useMyNftsContext();
-
-  const chain = Contracts[process.env.REACT_APP_NETWORK_CHAIN_ID];
-  const generateLink = (addr) => `https://${chain.name}.etherscan.io/tx/${addr}`;
 
   return (
     <div className="loading-div popup-div" id="loading-popup-div">
@@ -51,7 +49,7 @@ const LoadingPopup = ({ onClose, text, contractInteraction }) => {
           <>
             <p className="popup-hash">
               Transaction hash:{' '}
-              <a target="_blank" href={generateLink(activeTxHashes[0])} rel="noreferrer">
+              <a target="_blank" href={getEtherscanTxUrl(activeTxHashes[0])} rel="noreferrer">
                 {formatAddress(activeTxHashes[0])}
               </a>
             </p>
@@ -60,7 +58,7 @@ const LoadingPopup = ({ onClose, text, contractInteraction }) => {
           activeTxHashes.map((tx, i) => (
             <p className="popup-hash">
               Transaction hash #{i + 1}:{' '}
-              <a target="_blank" href={generateLink(tx)} rel="noreferrer">
+              <a target="_blank" href={getEtherscanTxUrl(tx)} rel="noreferrer">
                 {formatAddress(tx)}
               </a>
             </p>

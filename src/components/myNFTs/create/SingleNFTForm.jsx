@@ -280,7 +280,11 @@ const SingleNFTForm = () => {
       if (royaltyIndex === index) {
         return {
           ...royalty,
-          amount: val,
+          amount: val
+            .toString()
+            .split('.')
+            .map((el, i) => (i ? el.split('').slice(0, 2).join('') : el))
+            .join('.'),
         };
       }
       return royalty;
@@ -1057,7 +1061,7 @@ const SingleNFTForm = () => {
                   <div key={i} className="properties">
                     <div className="property-name">
                       <h5>
-                        <span>Property name</span>
+                        <span>Property type</span>
                         <p className="input-max-chars">
                           {property.name ? property.name.length : 0}/
                           {MAX_FIELD_CHARS_LENGTH.propertyName}
@@ -1077,7 +1081,7 @@ const SingleNFTForm = () => {
                     </div>
                     <div className="property-value">
                       <h5>
-                        <span>Value</span>
+                        <span>Property name</span>
                         <p className="input-max-chars">
                           {property.value ? property.value.length : 0}/
                           {MAX_FIELD_CHARS_LENGTH.propertyValue}
@@ -1330,7 +1334,8 @@ const SingleNFTForm = () => {
                       )) ||
                     (royalities &&
                       royaltyAddress.find(
-                        (royalty) => royalty.address === '' || royalty.amount === ''
+                        (royalty) =>
+                          royalty.address === '' || royalty.amount === '' || royalty.amount === '0'
                       )) ||
                     (propertyCheck && !properties.length) ||
                     (royalities && !royaltyAddress.length) ||
