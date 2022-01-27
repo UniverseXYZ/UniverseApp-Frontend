@@ -1057,7 +1057,7 @@ const SingleNFTForm = () => {
                   <div key={i} className="properties">
                     <div className="property-name">
                       <h5>
-                        <span>Property name</span>
+                        <span>Property type</span>
                         <p className="input-max-chars">
                           {property.name ? property.name.length : 0}/
                           {MAX_FIELD_CHARS_LENGTH.propertyName}
@@ -1077,7 +1077,7 @@ const SingleNFTForm = () => {
                     </div>
                     <div className="property-value">
                       <h5>
-                        <span>Value</span>
+                        <span>Property name</span>
                         <p className="input-max-chars">
                           {property.value ? property.value.length : 0}/
                           {MAX_FIELD_CHARS_LENGTH.propertyValue}
