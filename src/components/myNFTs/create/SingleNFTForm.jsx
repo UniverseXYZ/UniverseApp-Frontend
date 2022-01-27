@@ -1334,7 +1334,8 @@ const SingleNFTForm = () => {
                       )) ||
                     (royalities &&
                       royaltyAddress.find(
-                        (royalty) => royalty.address === '' || royalty.amount === ''
+                        (royalty) =>
+                          royalty.address === '' || royalty.amount === '' || royalty.amount === '0'
                       )) ||
                     (propertyCheck && !properties.length) ||
                     (royalities && !royaltyAddress.length) ||
