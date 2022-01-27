@@ -19,16 +19,16 @@ export interface IRoyalty {
 }
 
 export interface IUser {
-  id: number;
-  about: string;
+  id?: number;
+  about?: string;
   address: string;
-  createdAt: Date;
-  displayName: string;
-  instagramUser: string;
-  logoImageUrl: string;
-  profileImageUrl: string;
-  twitterUser: string;
-  universePageUrl: string;
+  createdAt?: Date;
+  displayName?: string;
+  instagramUser?: string;
+  logoImageUrl?: string;
+  profileImageUrl?: string;
+  twitterUser?: string;
+  universePageUrl?: string;
 }
 
 export interface IUserBackend extends Omit<IUser, 'createdAt'> {
@@ -65,13 +65,13 @@ export interface INFT {
   collectionId: number;
   collection?: ICollection;
   createdAt: Date;
-  creator?: string | IUser;
+  creator?: IUser;
   description: string | null;
   name: string;
   numberOfEditions: number;
   optimizedUrl: string;
   originalUrl: string;
-  owner?: string | IUser;
+  owner?: IUser;
   properties: Array<Record<string, string>>;
   royalties: Array<IRoyalty>;
   standard: NFTStandard;
@@ -82,6 +82,7 @@ export interface INFT {
   txHash: string | null;
   updatedAt: Date;
   url: string;
+  moreFromCollection?: INFT[];
 }
 
 export interface INFTBackend

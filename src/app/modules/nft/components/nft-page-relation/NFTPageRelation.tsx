@@ -15,8 +15,8 @@ export const TypeNames: Record<RelationType, string> = {
 
 export interface INFTPageRelationProps {
   type: RelationType;
-  image: string;
-  value: string;
+  image?: string;
+  value?: string;
 }
 
 export const NFTPageRelation = ({ type, image, value }: INFTPageRelationProps) => (

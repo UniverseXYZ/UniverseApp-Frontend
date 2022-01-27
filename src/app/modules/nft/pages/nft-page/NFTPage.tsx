@@ -18,7 +18,7 @@ import {
   Tabs,
   Text,
 } from '@chakra-ui/react';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 
 import { NftItem, NFTLikesPopup, NFTMenu } from '../../components';
 import { INft } from '../../types';
@@ -149,6 +149,7 @@ export const NFTPage = () => {
         <Heading {...styles.MoreNFTsTitleStyle}>More from this collection</Heading>
         <Container {...styles.MoreNFTsContainerStyle}>
           <SimpleGrid columns={{ base: 1, md: 2, lg: 4 }} spacingX={'20px'}>
+            {/*@ts-ignore*/}
             {moreNFTs.map((NFT) => (<NftItem key={NFT.id} nft={NFT} />))}
           </SimpleGrid>
         </Container>

@@ -91,27 +91,28 @@ export const NFTSharePopup = ({ isOpen, onClose }: INFTSharePopupProps) => {
             </Box>
           </SimpleGrid>
         </ModalHeader>
-        <ModalBody pt={'40px !important'}>
-          <Heading {...styles.TitleStyle} mb={'20px'}>Send to a friend</Heading>
-          <SearchInput
-            shadowProps={{ width: '100%', }}
-            inputProps={{
-              placeholder: 'Search for people',
-              value: search,
-              onChange: handleSearch,
-            }}
-          />
-          <Text {...styles.ResultsLabelStyle}>Recent</Text>
-          <Box maxH={'250px'} overflowY={'scroll'}>
-            {NftLikes.map((user, i) => (
-              <Flex key={i} {...styles.ResultItemStyle}>
-                <Image src={user.avatar} />
-                <Text>{user.name}</Text>
-                <Button>Send</Button>
-              </Flex>
-            ))}
-          </Box>
-        </ModalBody>
+        {/*TODO: social media*/}
+        {/*<ModalBody pt={'40px !important'}>*/}
+        {/*  <Heading {...styles.TitleStyle} mb={'20px'}>Send to a friend</Heading>*/}
+        {/*  <SearchInput*/}
+        {/*    shadowProps={{ width: '100%', }}*/}
+        {/*    inputProps={{*/}
+        {/*      placeholder: 'Search for people',*/}
+        {/*      value: search,*/}
+        {/*      onChange: handleSearch,*/}
+        {/*    }}*/}
+        {/*  />*/}
+        {/*  <Text {...styles.ResultsLabelStyle}>Recent</Text>*/}
+        {/*  <Box maxH={'250px'} overflowY={'scroll'}>*/}
+        {/*    {NftLikes.map((user, i) => (*/}
+        {/*      <Flex key={i} {...styles.ResultItemStyle}>*/}
+        {/*        <Image src={user.avatar} />*/}
+        {/*        <Text>{user.name}</Text>*/}
+        {/*        <Button>Send</Button>*/}
+        {/*      </Flex>*/}
+        {/*    ))}*/}
+        {/*  </Box>*/}
+        {/*</ModalBody>*/}
       </ModalContent>
     </Modal>
   );

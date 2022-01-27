@@ -2,8 +2,10 @@ import { Box, Image, Text } from '@chakra-ui/react';
 import { useCallback } from 'react';
 import { useHistory } from 'react-router-dom';
 
+import { INFT } from '../../../../types';
+
 interface ITabNFTsProps {
-  NFTs: any[];
+  NFTs: INFT[];
 }
 
 export const TabNFTs = ({ NFTs }: ITabNFTsProps) => {
@@ -78,14 +80,14 @@ export const TabNFTs = ({ NFTs }: ITabNFTsProps) => {
               },
             },
           }}
-          onClick={() => handleNFTClick(NFT.collection.address, NFT.nft.tokenId)}
+          onClick={() => handleNFTClick(NFT.collection?.address, NFT.tokenId)}
         >
-          <Image src={NFT.nft.thumbnail_url} />
+          <Image src={NFT.thumbnailUrl} />
           <Box>
-            <Text>{NFT.nft.name}</Text>
+            <Text>{NFT.name}</Text>
             <Text>
-              <Image src={NFT.owner.profileImageUrl} />
-              {NFT.owner.displayName}
+              <Image src={NFT.owner?.profileImageUrl} />
+              {NFT.owner?.hasOwnProperty('displayName') && NFT?.owner?.displayName}
             </Text>
           </Box>
           <Box>x1</Box>

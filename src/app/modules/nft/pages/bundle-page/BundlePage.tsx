@@ -3,25 +3,25 @@ import {
   Button,
   Container,
   Flex,
-  Heading, HeadingProps,
+  Heading,
+  HeadingProps,
   Link,
   SimpleGrid,
   Tab,
   TabPanel,
   TabPanels,
   Tabs,
-  Text, TextProps,
+  Text,
+  TextProps,
 } from '@chakra-ui/react';
-import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import React, { useCallback, useEffect } from 'react';
+import { useHistory, useParams } from 'react-router-dom';
 
 import * as styles from '../nft-page/styles';
 import { NFTAssetAudio, NFTBuySection, TabBids, TabHistory, TabOffers } from '../nft-page/components';
 import { BundleMenu, NftItem, NFTPageRelation, RelationType } from '../../components';
 import { LineTabList } from '../../../../components';
 import { useThemeContext } from '../../../../../contexts/ThemeContext';
-import { INft } from '../../types';
-import { Nfts as NftsMocks } from '../../../marketplace/mocks/nfts';
 import { BundlePageProvider, useBundlePage } from './BundlePage.provider';
 import { TabNFTs } from './components';
 
@@ -46,18 +46,19 @@ const DescriptionStyle: TextProps = {
 }
 
 export const BundlePageContent = () => {
+  const router = useHistory();
+
   const { setDarkMode } = useThemeContext() as any;
 
   const { owner, NFTs, isLoading, moreFromCollection } = useBundlePage();
 
-  const [moreNFTs] = useState<INft[]>(NftsMocks.slice(0, 4) as INft[]);
+  const handleClickViewCollection = useCallback(() => {
+    if (moreFromCollection && moreFromCollection[0].collection) {
+      router.push(`/collection/${moreFromCollection[0].collection.address}`);
+    }
+  }, [moreFromCollection]);
 
   useEffect(() => setDarkMode(false), []);
-
-  useEffect(() => {
-    // console.log('NFTs', NFTs);
-    console.log('moreFromCollection', moreFromCollection);
-  }, [NFTs])
 
   if (isLoading) {
     return null;
@@ -113,15 +114,17 @@ export const BundlePageContent = () => {
           <NFTBuySection />
         </Box>
       </Box>
-      <Box {...styles.MoreNFTsWrapperStyle}>
-        <Heading {...styles.MoreNFTsTitleStyle}>More from this collection</Heading>
-        <Container {...styles.MoreNFTsContainerStyle}>
-          <SimpleGrid columns={{ base: 1, md: 2, lg: 4 }} spacingX={'20px'}>
-            {moreNFTs.map((NFT) => (<NftItem key={NFT.id} nft={NFT} />))}
-          </SimpleGrid>
-        </Container>
-        <Button {...styles.MoreNFTsButtonStyle}>View collection</Button>
-      </Box>
+      {moreFromCollection && (
+        <Box {...styles.MoreNFTsWrapperStyle}>
+          <Heading {...styles.MoreNFTsTitleStyle}>More from this collection</Heading>
+          <Container {...styles.MoreNFTsContainerStyle}>
+            <SimpleGrid columns={{ base: 1, md: 2, lg: 4 }} spacingX={'20px'}>
+              {moreFromCollection.map((NFT) => (<NftItem key={NFT.id} nft={NFT} />))}
+            </SimpleGrid>
+          </Container>
+          <Button {...styles.MoreNFTsButtonStyle} onClick={handleClickViewCollection}>View collection</Button>
+        </Box>
+      )}
     </>
   )
 };
