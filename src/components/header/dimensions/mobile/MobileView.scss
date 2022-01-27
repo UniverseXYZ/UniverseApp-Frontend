@@ -336,7 +336,19 @@
           font-size: 12px;
           line-height: 22px;
           color: $black;
-          // margin-bottom: 30px;
+          span.badge {
+            background: linear-gradient(135deg, #bceb00 15.57%, #00eaea 84.88%);
+            border-radius: 4px;
+            margin-left: 4px;
+            padding: 2px 4px;
+            font-family: $spaceGroteskFont;
+            font-style: normal;
+            font-weight: bold;
+            font-size: 11px;
+            line-height: 14px;
+            color: $black;
+            text-transform: uppercase;
+          }
         }
         img {
           transition: 0.1s ease-in-out;

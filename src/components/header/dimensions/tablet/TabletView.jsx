@@ -508,7 +508,10 @@ const TabletView = (props) => {
                   <div>
                     <button type="button" onClick={() => history.push('/minting')}>
                       <img src={mintingIcon} alt="Minting" />
-                      <span>Minting</span>
+                      <span>
+                        Minting
+                        <span className="badge">new</span>
+                      </span>
                     </button>
                   </div>
                   <div>

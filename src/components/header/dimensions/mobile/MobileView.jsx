@@ -561,7 +561,10 @@ const MobileView = (props) => {
                         aria-hidden="true"
                         onClick={() => setShowProducts(!showProducts)}
                       >
-                        <p className="title">Products</p>
+                        <p className="title">
+                          Products
+                          <span className="badge">new</span>
+                        </p>
                         <img className={showProducts ? 'rotate' : ''} src={arrowDown} alt="arrow" />
                       </div>
                       {showProducts ? (
