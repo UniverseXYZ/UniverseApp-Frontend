@@ -1,39 +1,46 @@
-import { Box } from '@chakra-ui/react';
-import React, { useEffect, useRef } from 'react';
+import { Box, BoxProps } from '@chakra-ui/react';
+import React, { useCallback, useRef } from 'react';
 import Lottie from 'react-lottie';
+import { useAudio } from 'react-use';
 
 import { LottieOptions } from './constants';
-import { R, G, B, fill } from './helpers';
 import * as styles from './styles';
+import { useAudioAnimation } from './hooks';
 
-export const NFTAssetAudio = () => {
+interface INFTAssetAudioProps extends BoxProps {
+  audio: string;
+}
+
+export const NFTAssetAudio = ({ audio: audioUrl, ...rest }: INFTAssetAudioProps) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
-  useEffect(() => {
-    const context = canvasRef.current?.getContext('2d');
-    if (context) {
-      let t = 0;
+  const [audio, state, controls] = useAudio({
+    src: audioUrl,
+    controls: true,
+    autoPlay: true,
+    loop: true,
+  });
 
-      const run = () => {
-        for (let x = 0; x <= 35; x++) {
-          for (let y = 0; y <= 35; y++) {
-            fill(context, x, y, R(x, y, t), G(x, y, t), B(x, y, t));
-          }
-        }
-        t = t + 0.04;
-        window.requestAnimationFrame(run);
-      }
+  useAudioAnimation(canvasRef.current?.getContext('2d') ?? null, state.playing);
 
-      run();
-    }
-  }, [canvasRef.current]);
+  const toggleAudio = useCallback(() => {
+    state.playing ? controls.pause() : controls.play();
+  }, [state]);
 
   return (
-    <Box {...styles.WrapperStyle}>
+    <Box {...styles.WrapperStyle} {...rest}>
       <canvas ref={canvasRef} width="32" height="32" style={{ width: '100%', height: '100%'}} />
-      <Box {...styles.AudioAnimationContainerStyle}>
-        <Lottie options={LottieOptions} />
+      <Box {...styles.AudioAnimationContainerStyle} onClick={toggleAudio}>
+        <Lottie isPaused={!state.playing} options={LottieOptions} />
       </Box>
+      <Box
+        sx={{
+          position: 'absolute',
+          bottom: '20px',
+          left: '50%',
+          transform: 'translateX(-50%)',
+        }}
+      >{audio}</Box>
     </Box>
   )
 }

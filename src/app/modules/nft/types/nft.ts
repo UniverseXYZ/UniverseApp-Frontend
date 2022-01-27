@@ -7,6 +7,9 @@ export interface INft extends Omit<INftBackend, 'auctionExpDate'> {
 
 export enum NFTArtworkType {
   JPEG = 'jpeg',
+  PNG = 'png',
+  MP4 = 'mp4',
+  MP3 = 'mp3',
 }
 
 export enum NFTStandard {
