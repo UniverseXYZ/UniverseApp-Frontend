@@ -72,7 +72,10 @@ const DesktopView = ({
             className="menu-li"
             onClick={() => setIsMintingDropdownOpened(!isMintingDropdownOpened)}
           >
-            <span className="nav__link__title">&#128293; Products</span>
+            <span className="nav__link__title">
+              Products
+              <span className="badge">new</span>
+            </span>
             <img className="arrow" src={arrowUP} alt="arrow" />
           </button>
           <div className="dropdown minting-drop">
