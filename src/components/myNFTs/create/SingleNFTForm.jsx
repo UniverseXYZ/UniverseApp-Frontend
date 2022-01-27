@@ -280,7 +280,11 @@ const SingleNFTForm = () => {
       if (royaltyIndex === index) {
         return {
           ...royalty,
-          amount: val,
+          amount: val
+            .toString()
+            .split('.')
+            .map((el, i) => (i ? el.split('').slice(0, 2).join('') : el))
+            .join('.'),
         };
       }
       return royalty;
