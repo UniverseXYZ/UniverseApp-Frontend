@@ -52,6 +52,7 @@ import {
 import { useAuthContext } from '../../../../contexts/AuthContext';
 import { useAuctionContext } from '../../../../contexts/AuctionContext';
 import supportIcon from '../../../../assets/images/supportIcon.svg';
+import Badge from '../../../badge/Badge';
 
 const TabletView = (props) => {
   const {
@@ -510,7 +511,7 @@ const TabletView = (props) => {
                       <img src={mintingIcon} alt="Minting" />
                       <span>
                         Minting
-                        <span className="badge">new</span>
+                        <Badge text="new" />
                       </span>
                     </button>
                   </div>
