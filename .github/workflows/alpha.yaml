@@ -55,8 +55,8 @@ jobs:
         REACT_APP_POLYMORPHS_IMAGES_URL: "https://us-central1-polymorphmetadata.cloudfunctions.net/images-function?id="
         REACT_APP_LOBSTER_IMAGES_URL: "https://us-central1-polymorphmetadata.cloudfunctions.net/lobster-images-function?id="
         REACT_APP_ETHERSCAN_URL: "https://etherscan.io"
-        REACT_APP_UNIVERSE_ERC_721_ADDRESS: "0x6Bc88860CABe484097471c2dFfFA0EA0Fc280025"
-        REACT_APP_UNIVERSE_ERC_721_FACTORY_ADDRESS: "0xbFb066D21A479fe50fa158a77aD76523e6c3EC7E"
+        REACT_APP_UNIVERSE_ERC_721_ADDRESS: "0xb67e6711c3bb2aa968be26703de20152d4948b38"
+        REACT_APP_UNIVERSE_ERC_721_FACTORY_ADDRESS: "0x67aacc69f369846733e55a1f767e961743f58978"
 
     - name: Save artifacts
       uses: actions/upload-artifact@v2
