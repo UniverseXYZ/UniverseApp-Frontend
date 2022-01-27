@@ -67,6 +67,7 @@ import {
 import { useAuthContext } from '../../../../contexts/AuthContext';
 import { useAuctionContext } from '../../../../contexts/AuctionContext';
 import supportIcon from '../../../../assets/images/supportIcon.svg';
+import Badge from '../../../badge/Badge';
 
 const MobileView = (props) => {
   const {
@@ -561,7 +562,10 @@ const MobileView = (props) => {
                         aria-hidden="true"
                         onClick={() => setShowProducts(!showProducts)}
                       >
-                        <p className="title">Products</p>
+                        <p className="title">
+                          Products
+                          <Badge text="new" />
+                        </p>
                         <img className={showProducts ? 'rotate' : ''} src={arrowDown} alt="arrow" />
                       </div>
                       {showProducts ? (

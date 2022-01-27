@@ -35,6 +35,7 @@ import {
   toFixed,
 } from '../../../../utils/helpers/format';
 import { useAuthContext } from '../../../../contexts/AuthContext';
+import Badge from '../../../badge/Badge';
 
 const DesktopView = ({
   isWalletConnected,
@@ -74,7 +75,7 @@ const DesktopView = ({
           >
             <span className="nav__link__title">
               Products
-              <span className="badge">new</span>
+              <Badge text="new" />
             </span>
             <img className="arrow" src={arrowUP} alt="arrow" />
           </button>
