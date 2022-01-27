@@ -280,7 +280,11 @@ const SingleNFTForm = () => {
       if (royaltyIndex === index) {
         return {
           ...royalty,
-          amount: val,
+          amount: val
+            .toString()
+            .split('.')
+            .map((el, i) => (i ? el.split('').slice(0, 2).join('') : el))
+            .join('.'),
         };
       }
       return royalty;
@@ -1330,7 +1334,8 @@ const SingleNFTForm = () => {
                       )) ||
                     (royalities &&
                       royaltyAddress.find(
-                        (royalty) => royalty.address === '' || royalty.amount === ''
+                        (royalty) =>
+                          royalty.address === '' || royalty.amount === '' || royalty.amount === '0'
                       )) ||
                     (propertyCheck && !properties.length) ||
                     (royalities && !royaltyAddress.length) ||

@@ -25,7 +25,7 @@ export const parseRoyalties = (royalties, amountPropertyName) =>
     ?.filter((r) => r.address && r.amount)
     .map((r) => ({
       address: r.address,
-      [amountPropertyName || 'amount']: parseInt(r.amount, 10),
+      [amountPropertyName || 'amount']: Number(r.amount),
     }));
 
 /**
