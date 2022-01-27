@@ -100,9 +100,11 @@ const MarketplaceNFTDetails = ({ data, onNFT }) => {
             aria-hidden="true"
           >
             <>
-              {!selectedNFT.artworkType.endsWith('mpeg') &&
-                !selectedNFT.artworkType.endsWith('mp4') &&
-                showNftImage()}
+              {!selectedNFT.artworkType
+                ? showNftImage()
+                : !selectedNFT.artworkType.endsWith('mpeg') &&
+                  !selectedNFT.artworkType.endsWith('mp4') &&
+                  showNftImage()}
 
               {selectedNFT.artworkType && selectedNFT.artworkType.endsWith('mp4') && (
                 <video muted playsInline autoPlay controls>
@@ -317,9 +319,11 @@ const MarketplaceNFTDetails = ({ data, onNFT }) => {
           <div>
             {selectedNFT.type !== 'bundles' ? (
               <>
-                {selectedTabIndex === 0 && selectedNFT.properties !== null && (
-                  <Properties properties={selectedNFT.properties || []} />
-                )}
+                {selectedTabIndex === 0 &&
+                  selectedNFT.properties !== null &&
+                  selectedNFT.properties.length && (
+                    <Properties properties={selectedNFT.properties || []} />
+                  )}
                 {selectedTabIndex === 1 && <Owners />}
                 {selectedTabIndex === 2 && <Bids />}
                 {selectedTabIndex === 3 && <Offers view={selectedNFT.view} />}
