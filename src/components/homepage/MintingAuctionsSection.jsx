@@ -102,7 +102,7 @@ const MintingAuctionsSection = () => {
                 mini DAOs along with an integrated social network.
               </div>
             </p>
-            <Button className="light-button" onClick={() => history.push('/minting')} disabled>
+            <Button className="light-button" onClick={() => history.push('/minting')}>
               Go to minting
               <img src={arrowLeft} alt="arrow-back" />
             </Button>
