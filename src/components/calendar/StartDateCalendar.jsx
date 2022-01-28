@@ -28,8 +28,14 @@ const StartDateCalendar = React.forwardRef(
     const UTCHoursFromNow = getTimezoneOffset() / -60;
     const [currentMonth, setCurrentMonth] = useState([]);
     const [minDateTimeError, setMinDateTimeError] = useState(false);
-    const [minHours, setMinHours] = useState(new Date().getHours() + 1);
-    const [minMins, setMinMins] = useState(new Date().getMinutes() + 1);
+    const [minHours, setMinHours] = useState(
+      new Date().getHours() + 1 < 10 ? `0${new Date().getHours() + 1}` : new Date().getHours() + 1
+    );
+    const [minMins, setMinMins] = useState(
+      new Date().getMinutes() + 1 < 10
+        ? `0${new Date().getMinutes() + 1}`
+        : new Date().getMinutes() + 1
+    );
     const [selectedDate, setSelectedDate] = useState({
       year: values.startDate ? Number(values.startDate.toString().split(' ')[3]) : d.getFullYear(),
       month: values.startDate
