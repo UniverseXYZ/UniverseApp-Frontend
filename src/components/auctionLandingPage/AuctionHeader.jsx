@@ -16,27 +16,32 @@ const AuctionHeader = ({
 }) => {
   const history = useHistory();
   const [copied, setCopied] = useState(false);
+  const [promoImage, setPromoImage] = useState(onAuction.auction.promoImage);
+  const [promoImageUrl, setPromoImageUrl] = useState(onAuction.auction.promoImageUrl);
 
   return (
     <>
       <div
         className={`auction__details__box__image ${
-          onAuction.auction.promoImageUrl
-            ? onAuction.auction.promoImageUrl
-            : onAuction.auction.promoImage && URL.createObjectURL(onAuction.auction.promoImage)
+          promoImageUrl ||
+          (promoImage && typeof promoImage !== 'string'
+            ? URL.createObjectURL(promoImage)
+            : promoImage)
             ? ''
             : 'show__avatar'
         }`}
       >
-        {onAuction.auction.promoImageUrl ? (
-          onAuction.auction.promoImageUrl
-        ) : onAuction.auction.promoImage && URL.createObjectURL(onAuction.auction.promoImage) ? (
+        {promoImageUrl ||
+        (promoImage && typeof promoImage !== 'string'
+          ? URL.createObjectURL(promoImage)
+          : promoImage) ? (
           <img
             className="original"
             src={
-              onAuction.auction.promoImageUrl
-                ? onAuction.auction.promoImageUrl
-                : onAuction.auction.promoImage && URL.createObjectURL(onAuction.auction.promoImage)
+              promoImageUrl ||
+              (promoImage && typeof promoImage !== 'string'
+                ? URL.createObjectURL(promoImage)
+                : promoImage)
             }
             alt={onAuction.auction.headline}
           />

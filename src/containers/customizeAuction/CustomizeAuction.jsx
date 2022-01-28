@@ -54,16 +54,14 @@ const CustomizeAuction = () => {
     link: auction.link,
     promoImage: auction.promoImageUrl
       ? auction.promoImageUrl
-      : (auction.promoImage &&
-          typeof auction.promoImage !== 'string' &&
-          URL.createObjectURL(auction.promoImage)) ||
-        null,
+      : auction.promoImage && typeof auction.promoImage !== 'string'
+      ? URL.createObjectURL(auction.promoImage)
+      : auction.promoImage,
     backgroundImage: auction.backgroundImageUrl
       ? auction.backgroundImageUrl
-      : (auction.backgroundImage &&
-          typeof auction.backgroundImage !== 'string' &&
-          URL.createObjectURL(auction.backgroundImage)) ||
-        null,
+      : auction.backgroundImage && typeof auction.backgroundImage !== 'string'
+      ? URL.createObjectURL(auction.backgroundImage)
+      : auction.backgroundImage,
     backgroundImageBlur: auction.backgroundImageBlur || false,
     status:
       auction.link &&
