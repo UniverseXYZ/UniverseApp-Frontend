@@ -27,8 +27,9 @@ const ActiveAuctionCard = ({ auction }) => {
   }
 
   return (
-    <Link to={auctionLink} className="active__auction__item">
-      <div
+    <div className="active__auction__item">
+      <Link
+        to={auctionLink}
         className={`active__auction__image timeLeft ${auction.promoImageUrl ? '' : 'show__avatar'}`}
       >
         <img className={promoImageProps.class} src={promoImageProps.src} alt={auction.name} />
@@ -37,16 +38,16 @@ const ActiveAuctionCard = ({ auction }) => {
           <label>Time left</label>
           <AuctionsTabsCountdown activeAuction={auction} showLabel={false} />
         </div>
-      </div>
+      </Link>
       <div className="active__auction__details">
         <div className="title">
           <h2>{auction.name}</h2>
         </div>
-        <div className="creator">
+        <Link to={`/${auction.user?.universePageUrl}`} className="creator">
           <img src={auction.user?.profileImageUrl} alt={auction.user?.displayName} />
           <span>by</span>
           {auction.user?.displayName}
-        </div>
+        </Link>
         <div className="statistics">
           <div>
             <label>Winners</label>
@@ -73,7 +74,7 @@ const ActiveAuctionCard = ({ auction }) => {
           </div>
         </div>
       </div>
-    </Link>
+    </div>
   );
 };
 
