@@ -245,6 +245,8 @@
             .tier__body {
               display: flex;
               gap: 13px;
+              flex-wrap: wrap;
+
               .tier__nft__box {
                 position: relative;
                 background: $white;
