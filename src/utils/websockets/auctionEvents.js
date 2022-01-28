@@ -22,7 +22,10 @@ export const initiateAuctionSocket = () => {
 
 export const disconnectAuctionSocket = () => {
   console.log('Disconnecting from auctions socket...');
-  if (socket) socket.disconnect();
+  if (socket) {
+    socket.removeAllListeners();
+    socket.disconnect();
+  }
 };
 
 export const subscribeToStatusChange = (auctionId, cb) => {
