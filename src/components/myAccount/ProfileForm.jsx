@@ -37,12 +37,14 @@ const ProfileForm = ({
   fetchedUserData,
 }) => {
   const disabled =
-    fetchedUserData.accountName === accountName &&
-    fetchedUserData.accountPage === accountPage &&
-    fetchedUserData.about === about &&
-    fetchedUserData.twitterLink === twitterLink &&
-    fetchedUserData.instagramLink === instagramLink &&
-    fetchedUserData.accountImage === accountImage;
+    (fetchedUserData.accountName === accountName &&
+      fetchedUserData.accountPage === accountPage &&
+      fetchedUserData.about === about &&
+      fetchedUserData.twitterLink === twitterLink &&
+      fetchedUserData.instagramLink === instagramLink &&
+      fetchedUserData.accountImage === accountImage) ||
+    accountPage === 'universe.xyz/' ||
+    accountPage === 'universe.xyz/your-address';
 
   const hasError = [accountName, accountPage, about].some((e) => !e);
 
