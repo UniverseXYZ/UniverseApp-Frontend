@@ -237,7 +237,11 @@ const FutureAuctions = ({ setAuction }) => {
         className={configureStepDone && !landingStepDone ? 'light-button' : 'light-border-button'}
         onClick={() => {
           setAuction(auction);
-          history.push('/customize-auction-landing-page', auction.id);
+          history.push({
+            pathname: '/customize-auction-landing-page',
+            id: auction.id,
+            state: configureStepDone && landingStepDone ? 'edit' : 'start',
+          });
         }}
         disabled={isBeforeNow(auction.startDate)}
       >

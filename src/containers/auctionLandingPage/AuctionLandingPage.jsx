@@ -245,20 +245,20 @@ const AuctionLandingPage = () => {
 
   const mockAuctionPreviewData = (auctionData) => {
     const { name, avatar, universePageAddress } = loggedInArtist;
-
-    setLoggedInArtist({
+    const updatedLoggedInArtist = {
       ...loggedInArtist,
       displayName: name,
       profileImageUrl: avatar,
       universePageUrl: universePageAddress,
-    });
+    };
+    setLoggedInArtist(updatedLoggedInArtist);
     auctionData.bidders = [];
 
     const auctionMockedData = {
       auction: auctionData,
       rewardTiers: auctionData.rewardTiers,
       collections: auctionData.collections,
-      artist: loggedInArtist,
+      artist: updatedLoggedInArtist,
       bidders: [],
     };
 

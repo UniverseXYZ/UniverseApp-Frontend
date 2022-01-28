@@ -97,9 +97,9 @@ const DomainAndBranding = ({
 
       if (link) {
         try {
-          const auctionLinkExists = await getAuctionByLink(link);
+          const isAuctionLinkAvailable = await getAuctionByLink(link);
 
-          if (!auctionLinkExists) {
+          if (isAuctionLinkAvailable) {
             setAuctionLinkError(false);
             return;
           }

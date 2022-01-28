@@ -52,6 +52,12 @@ const CustomizeAuction = () => {
   const [domainAndBranding, setDomainAndBranding] = useState({
     headline: auction.headline || '',
     link: auction.link,
+    promoImageFile:
+      auction.promoImage && typeof auction.promoImage !== 'string' ? auction.promoImage : null,
+    backgroundImageFile:
+      auction.backgroundImage && typeof auction.backgroundImage !== 'string'
+        ? auction.backgroundImage
+        : null,
     promoImage: auction.promoImageUrl
       ? auction.promoImageUrl
       : auction.promoImage && typeof auction.promoImage !== 'string'
@@ -175,10 +181,11 @@ const CustomizeAuction = () => {
   };
 
   // auction API calls
-  const saveAuction = async (editedAuction) => {
+  const saveAuction = async (editedAuction, state) => {
     let newAuctionData = null;
 
-    const canEditAuction = validateAuctionData(auction, domainAndBranding);
+    const canEditAuction =
+      state && state === 'edit' ? validateAuctionData(auction, domainAndBranding) : true;
 
     const canEditAuctionImages = validateAuctionImages(
       editedAuction,
@@ -243,9 +250,9 @@ const CustomizeAuction = () => {
     }
   };
 
-  const saveOnServer = async (editedAuction, loggedInArtistClone, action) => {
+  const saveOnServer = async (editedAuction, loggedInArtistClone, action, state) => {
     setLoading(true);
-    const newAuctionData = await saveAuction(editedAuction);
+    const newAuctionData = await saveAuction(editedAuction, state);
     const profileResponses = await saveProfile(loggedInArtistClone);
     const rewardTierResponses = await saveRewardTiers();
 
@@ -303,13 +310,19 @@ const CustomizeAuction = () => {
         instagramLink,
         twitterLink,
       };
+      if (typeof editedAuction.promoImage === 'string') {
+        editedAuction.promoImage = editedAuction.promoImageFile;
+      }
+      if (typeof editedAuction.backgroundImage === 'string') {
+        editedAuction.backgroundImage = editedAuction.backgroundImageFile;
+      }
       if (action === SAVE_PREVIEW_ACTION) {
         saveOnServer(editedAuction, loggedInArtistClone, action);
       } else if (action === PREVIEW_ACTION) {
         setContext(loggedInArtistClone, editedAuction, action);
         setAuction(editedAuction);
       } else {
-        saveOnServer(editedAuction, loggedInArtistClone, action);
+        saveOnServer(editedAuction, loggedInArtistClone, action, location.state);
       }
     }
   };
