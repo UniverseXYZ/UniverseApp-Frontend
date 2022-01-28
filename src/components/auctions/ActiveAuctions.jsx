@@ -11,12 +11,16 @@ import ActiveAndPastCardSkeleton from './skeleton/ActiveAndPastCardSkeleton';
 import SortBySelect from '../input/SortBySelect';
 
 const ActiveAuctions = () => {
+  const sortOptions = ['Newest', 'Oldest'];
+
   const [notFound, setNotFound] = useState(false);
   const [loading, setLoading] = useState(true);
   const [activeAuctions, setActiveAuctions] = useState([]);
   const [offset, setOffset] = useState(0);
   const [perPage, setPerPage] = useState(10);
   const [searchByName, setSearchByName] = useState('');
+  const [filteredAuctions, setFilteredAuctions] = useState([]);
+  const [sortOption, setSortOption] = useState(sortOptions[0]);
 
   useEffect(async () => {
     try {
@@ -26,12 +30,26 @@ const ActiveAuctions = () => {
         setLoading(false);
       } else {
         setActiveAuctions(response.auctions);
+        setFilteredAuctions(response.auctions);
+
         setLoading(false);
       }
     } catch (error) {
       console.error(error);
     }
   }, []);
+
+  useEffect(() => {
+    const newFilteredAuctions = [...activeAuctions].filter((auction) =>
+      auction.name.toLowerCase().includes(searchByName.toLowerCase())
+    );
+    if (sortOption === 'Newest') {
+      newFilteredAuctions.sort((a, b) => new Date(b.startDate) - new Date(a.startDate));
+    } else if (sortOption === 'Oldest') {
+      newFilteredAuctions.sort((a, b) => new Date(a.startDate) - new Date(b.startDate));
+    }
+    setFilteredAuctions(newFilteredAuctions);
+  }, [searchByName, sortOption]);
 
   const handleSearch = (value) => {
     setSearchByName(value);
@@ -54,9 +72,9 @@ const ActiveAuctions = () => {
         </div>
         <SortBySelect
           id="sort--select"
-          defaultValue="Sort by"
-          sortData={['Sort by', 'Newest', 'Oldest']}
-          hideFirstOption
+          defaultValue={sortOptions[0]}
+          sortData={sortOptions}
+          setSort={setSortOption}
         />
       </div>
       {!loading ? (
@@ -64,7 +82,6 @@ const ActiveAuctions = () => {
           {activeAuctions
             .slice(offset, offset + perPage)
             .filter((item) => item.name.toLowerCase().includes(searchByName.toLowerCase()))
-            .filter((item) => item && isBeforeNow(item.startDate) && isAfterNow(item.endDate))
             .map((activeAuction, index) => (
               <ActiveAuctionsTabsCard activeAuction={activeAuction} index={index} />
             ))}
