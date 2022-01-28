@@ -4,6 +4,7 @@ import { BrowserRouter } from 'react-router-dom';
 import App from './App';
 import { AuthContextProvider } from './contexts/AuthContext';
 import { ThemeContextProvider } from './contexts/ThemeContext';
+import { SocketContextProvider } from './contexts/SocketContext';
 import { ErrorContextProvider } from './contexts/ErrorContext';
 
 ReactDOM.render(
@@ -13,11 +14,13 @@ ReactDOM.render(
     }}
   >
     <ErrorContextProvider>
-      <AuthContextProvider>
-        <ThemeContextProvider>
-          <App />
-        </ThemeContextProvider>
-      </AuthContextProvider>
+      <SocketContextProvider>
+        <AuthContextProvider>
+          <ThemeContextProvider>
+            <App />
+          </ThemeContextProvider>
+        </AuthContextProvider>
+      </SocketContextProvider>
     </ErrorContextProvider>
   </BrowserRouter>,
   document.getElementById('root')
