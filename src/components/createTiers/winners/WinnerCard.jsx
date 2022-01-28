@@ -26,7 +26,7 @@ const WinnerCard = ({
     <div
       className={`winner-box${selectedWinner === index ? ' selected' : ''}`}
       key={uuid()}
-      onClick={() => setSelectedWinner(i)}
+      onClick={() => setSelectedWinner(index)}
       aria-hidden
       style={{ width: 160 }}
     >
