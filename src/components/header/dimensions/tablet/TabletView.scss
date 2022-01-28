@@ -394,7 +394,7 @@
         }
       }
     }
-    @media (max-height: 610px) {
+    @media (max-height: 650px) {
       max-height: calc(100vh - 80px);
     }
   }
@@ -569,7 +569,7 @@
           }
         }
       }
-      @media (max-height: 470px) {
+      @media (max-height: 650px) {
         max-height: calc(100vh - 80px);
       }
     }
@@ -577,6 +577,9 @@
   @include xl {
     display: flex;
     justify-content: flex-end;
+  }
+  @media (max-height: 650px) {
+    display: none;
   }
   @include sm {
     display: none;
