@@ -17,7 +17,6 @@ const RightArrow = () => <img src={rightArrow} alt="right arrow" />;
 
 const ActiveAuctionsTab = ({
   auctions,
-  loading,
   showCreatePrompt,
   perPage,
   setPerPage,
@@ -28,63 +27,63 @@ const ActiveAuctionsTab = ({
   const { setAuction } = useAuctionContext();
   const history = useHistory();
 
-  return loading ? (
-    <div className="active__auctions__list">
-      <AuctionsCardSkeleton />
-      <AuctionsCardSkeleton />
-      <AuctionsCardSkeleton />
-    </div>
-  ) : auctions.length ? (
-    <>
-      <ActiveAuctionsList data={auctions} />
-      <div className="pagination__container">
-        <ReactPaginate
-          previousLabel={<LeftArrow />}
-          nextLabel={<RightArrow />}
-          breakLabel="..."
-          breakClassName="break-me"
-          pageCount={pageCount}
-          marginPagesDisplayed={1}
-          pageRangeDisplayed={3}
-          onPageChange={handlePageClick}
-          containerClassName="pagination"
-          subContainerClassName="pages pagination"
-          activeClassName="active"
-        />
-        <ItemsPerPageDropdown perPage={perPage} setPerPage={setPerPage} itemsPerPage={[12, 24]} />
-      </div>
-    </>
-  ) : showCreatePrompt ? (
-    <div className="empty__auction">
-      <img src={bubleIcon} alt="Buble" />
-      <h3>No active auctions found</h3>
-      {!loggedInArtist.name || !loggedInArtist.avatar ? (
-        <div className="warning__div">
-          <img src={Exclamation} alt="Warning" />
-          <p>
-            Please, fill out the profile details before you set up an auction.{' '}
-            <button type="button" onClick={() => history.push('/my-account')}>
-              Go to my profile
-            </button>
-            .
-          </p>
+  if (auctions.length) {
+    return (
+      <>
+        <ActiveAuctionsList data={auctions} />
+        <div className="pagination__container">
+          <ReactPaginate
+            previousLabel={<LeftArrow />}
+            nextLabel={<RightArrow />}
+            breakLabel="..."
+            breakClassName="break-me"
+            pageCount={pageCount}
+            marginPagesDisplayed={1}
+            pageRangeDisplayed={3}
+            onPageChange={handlePageClick}
+            containerClassName="pagination"
+            subContainerClassName="pages pagination"
+            activeClassName="active"
+          />
+          <ItemsPerPageDropdown perPage={perPage} setPerPage={setPerPage} itemsPerPage={[12, 24]} />
         </div>
-      ) : (
-        <p className="desc">Create your first auction by clicking the button below</p>
-      )}
-      <button
-        type="button"
-        className="light-button set_up"
-        onClick={() => {
-          setAuction({ rewardTiers: [] });
-          return loggedInArtist.name && loggedInArtist.avatar && history.push('/setup-auction');
-        }}
-        disabled={!loggedInArtist.name || !loggedInArtist.avatar}
-      >
-        Set up auction
-      </button>
-    </div>
-  ) : (
+      </>
+    );
+  }
+  if (showCreatePrompt) {
+    return (
+      <div className="empty__auction">
+        <img src={bubleIcon} alt="Buble" />
+        <h3>No active auctions found</h3>
+        {!loggedInArtist.name || !loggedInArtist.avatar ? (
+          <div className="warning__div">
+            <img src={Exclamation} alt="Warning" />
+            <p>
+              Please, fill out the profile details before you set up an auction.{' '}
+              <button type="button" onClick={() => history.push('/my-account')}>
+                Go to my profile
+              </button>
+              .
+            </p>
+          </div>
+        ) : (
+          <p className="desc">Create your first auction by clicking the button below</p>
+        )}
+        <button
+          type="button"
+          className="light-button set_up"
+          onClick={() => {
+            setAuction({ rewardTiers: [] });
+            return loggedInArtist.name && loggedInArtist.avatar && history.push('/setup-auction');
+          }}
+          disabled={!loggedInArtist.name || !loggedInArtist.avatar}
+        >
+          Set up auction
+        </button>
+      </div>
+    );
+  }
+  return (
     <div className="empty__auction">
       <img src={bubleIcon} alt="Buble" />
       <h3>No active auctions found</h3>
@@ -94,7 +93,6 @@ const ActiveAuctionsTab = ({
 
 ActiveAuctionsTab.propTypes = {
   auctions: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
-  loading: PropTypes.bool.isRequired,
   showCreatePrompt: PropTypes.bool,
   handlePageClick: PropTypes.func.isRequired,
   pageCount: PropTypes.number.isRequired,

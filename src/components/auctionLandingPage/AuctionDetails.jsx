@@ -21,6 +21,7 @@ const AuctionDetails = ({
   rewardTiersSlots,
   ethPrice,
   currentBid,
+  setCurrentBid,
   isWinningBid,
   winningSlot,
   slotsInfo,
@@ -152,6 +153,7 @@ const AuctionDetails = ({
             ) : (
               <AuctionEndedSection
                 currentBid={currentBid}
+                setCurrentBid={setCurrentBid}
                 bidders={bidders}
                 rewardTiersSlots={rewardTiersSlots}
                 numberOfWinners={rewardTiersSlots.length}
@@ -195,6 +197,7 @@ AuctionDetails.propTypes = {
   rewardTiersSlots: PropTypes.oneOfType([PropTypes.array]).isRequired,
   ethPrice: PropTypes.number.isRequired,
   currentBid: PropTypes.oneOfType([PropTypes.object]),
+  setCurrentBid: PropTypes.func.isRequired,
   isWinningBid: PropTypes.bool.isRequired,
   winningSlot: PropTypes.oneOfType([PropTypes.object]),
   slotsInfo: PropTypes.oneOfType([PropTypes.object]).isRequired,
