@@ -144,7 +144,7 @@ const CustomizeAuction = () => {
   };
 
   // reward tiers API calls
-  const saveRewardTiers = () => {
+  const saveRewardTiers = (editedAuction) => {
     const rewardTiersAuctionClone = [...rewardTiersAuction];
 
     try {
@@ -157,13 +157,13 @@ const CustomizeAuction = () => {
         // Check if data is edited
         const canEditRewardTier =
           state && state === 'edit'
-            ? auction.rewardTiers[index].description !== tier.description ||
-              auction.rewardTiers[index].color !== tier.color
+            ? editedAuction.rewardTiers[index].description !== tier.description ||
+              editedAuction.rewardTiers[index].color !== tier.color
             : true;
 
         const canEditRewardTierImage =
           state && state === 'edit'
-            ? tier.imageUrl && auction.rewardTiers[index].imageUrl !== tier.imageUrl
+            ? tier.imageUrl && editedAuction.rewardTiers[index].imageUrl !== tier.imageUrl
             : true;
 
         if (canEditRewardTier) {
@@ -262,22 +262,22 @@ const CustomizeAuction = () => {
   };
 
   // delete image api calls
-  const deleteImages = async () => {
+  const deleteImages = async (editedAuction) => {
     const { promoImage, backgroundImage } = domainAndBranding;
     const responses = [];
 
-    if (!promoImage && promoImage !== auction.promoImageUrl) {
+    if (!promoImage) {
       try {
-        const response = await removeImage({ id: auction.id, type: 'auctionPromo' });
+        const response = await removeImage({ id: editedAuction.id, type: 'auctionPromo' });
         responses.push(response);
       } catch (error) {
         console.error(error);
       }
     }
 
-    if (!backgroundImage && backgroundImage !== auction.backgroundImageUrl) {
+    if (!backgroundImage) {
       try {
-        const response = await removeImage({ id: auction.id, type: 'auctionBackground' });
+        const response = await removeImage({ id: editedAuction.id, type: 'auctionBackground' });
         responses.push(response);
       } catch (error) {
         console.error(error);
@@ -285,8 +285,8 @@ const CustomizeAuction = () => {
     }
     const deleteTierImageReponses = await Promise.all(
       // eslint-disable-next-line consistent-return
-      rewardTiersAuction.map(async (tier, index) => {
-        if (!tier.imageUrl && tier.imageUrl !== auction.rewardTiers[index].imageUrl) {
+      editedAuction.rewardTiers.map(async (tier, index) => {
+        if (!tier.imageUrl && tier.imageUrl !== editedAuction.rewardTiers[index].imageUrl) {
           try {
             const response = await removeImage({ id: tier.id, type: 'tier' });
             return response;
@@ -304,8 +304,8 @@ const CustomizeAuction = () => {
     setLoading(true);
     const newAuctionData = await saveAuction(editedAuction, state);
     const profileResponses = await saveProfile(loggedInArtistClone);
-    const rewardTierResponses = await saveRewardTiers();
-    const removeImagesResponses = await deleteImages();
+    const rewardTierResponses = await saveRewardTiers(editedAuction);
+    const removeImagesResponses = await deleteImages(editedAuction);
 
     const errors = [];
 
@@ -369,7 +369,8 @@ const CustomizeAuction = () => {
         editedAuction.backgroundImage = editedAuction.backgroundImageFile;
       }
       if (action === SAVE_PREVIEW_ACTION) {
-        saveOnServer(editedAuction, loggedInArtistClone, action);
+        saveOnServer(editedAuction, loggedInArtistClone, action, location.state);
+        setAuction(editedAuction);
       } else if (action === PREVIEW_ACTION) {
         setContext(loggedInArtistClone, editedAuction, action);
         setAuction(editedAuction);

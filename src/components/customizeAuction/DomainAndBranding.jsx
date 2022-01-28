@@ -1,5 +1,6 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { Animated } from 'react-animated-css';
+import { DebounceInput } from 'react-debounce-input';
 import PropTypes from 'prop-types';
 import Button from '../button/Button.jsx';
 import Input from '../input/Input.jsx';
@@ -266,7 +267,8 @@ const DomainAndBranding = ({
               <span>
                 universe.xyz/{loggedInArtist.universePageAddress.split(' ')[0].toLowerCase()}/
               </span>
-              <input
+              <DebounceInput
+                debounceTimeout={1000}
                 type="text"
                 placeholder="auctionname"
                 value={auctionLink}
@@ -346,7 +348,12 @@ const DomainAndBranding = ({
                           alt="Close"
                           aria-hidden="true"
                           onClick={() => {
-                            onChange((prevValues) => ({ ...prevValues, promoImage: null }));
+                            onChange((prevValues) => ({
+                              ...prevValues,
+                              promoImage: null,
+                              promoImageFile: null,
+                              promoImageUrl: null,
+                            }));
                             setPromoImageError(false);
                           }}
                         />
@@ -466,6 +473,8 @@ const DomainAndBranding = ({
                             onChange((prevValues) => ({
                               ...prevValues,
                               backgroundImage: null,
+                              promoImageFile: null,
+                              promoImageUrl: null,
                               backgroundImageBlur: false,
                             }));
                             setBackgroundImageError(false);
