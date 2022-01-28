@@ -63,7 +63,6 @@ const Artist = () => {
       setLoading(false);
     };
     getInfo();
-    return () => disconnectAuctionSocket();
   }, []);
 
   return loading ? (
