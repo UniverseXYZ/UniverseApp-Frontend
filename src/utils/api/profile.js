@@ -90,9 +90,10 @@ export const saveUserLogo = async (file) => {
  * @returns {string} result.address
  * @returns {string} result.createdAt
  * @returns {string} result.displayName
+ * @returns {number} result.id
  * @returns {string} result.instagramUser
- * @returns {string} result.logoImageName
- * @returns {string} result.profileImageName
+ * @returns {string} result.logoImageUrl
+ * @returns {string} result.profileImageUrl
  * @returns {string} result.twitterUser
  * @returns {string} result.universePageUrl
  */
@@ -139,9 +140,10 @@ export const setChallenge = async (challenge) => {
  * @returns {string} result.user.address
  * @returns {string} result.user.createdAt
  * @returns {string} result.user.displayName
+ * @returns {number} result.user.id
  * @returns {string} result.user.instagramUser
- * @returns {string} result.user.logoImageName
- * @returns {string} result.user.profileImageName
+ * @returns {string} result.user.logoImageUrl
+ * @returns {string} result.user.profileImageUrl
  * @returns {string} result.user.twitterUser
  * @returns {string} result.user.universePageUrl
  */

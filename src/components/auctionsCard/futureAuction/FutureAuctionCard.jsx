@@ -31,10 +31,7 @@ const FutureAuctionCard = ({ auction }) => {
       <div className="title">
         <h1>{auction.user?.displayName}</h1>
         <div className="artist__details">
-          <img
-            src={`https://universeapp-assets-dev.s3.amazonaws.com/${auction.user?.profileImageName}`}
-            alt={auction.user?.displayName}
-          />
+          <img src={auction.user?.profileImageUrl} alt={auction.user?.displayName} />
           <span>by</span>
           {auction.user?.displayName}
         </div>
