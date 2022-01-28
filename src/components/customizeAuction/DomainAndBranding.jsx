@@ -46,6 +46,7 @@ const DomainAndBranding = ({
   invalidBackgroundImage,
   setInvalidPromoImage,
   setInvalidBackgroundImage,
+  blurToggleButtonDisabled,
 }) => {
   const { loggedInArtist } = useAuthContext();
   const [promoInfo, setPromoInfo] = useState(false);
@@ -363,6 +364,7 @@ const DomainAndBranding = ({
                   )}
                   <div className="toggle-switch">
                     <input
+                      disabled={blurToggleButtonDisabled}
                       id="toggleSwitch"
                       type="checkbox"
                       className="toggle-switch-checkbox"
@@ -463,6 +465,7 @@ DomainAndBranding.propTypes = {
   invalidBackgroundImage: PropTypes.bool.isRequired,
   setInvalidPromoImage: PropTypes.func.isRequired,
   setInvalidBackgroundImage: PropTypes.func.isRequired,
+  blurToggleButtonDisabled: PropTypes.bool.isRequired,
 };
 
 DomainAndBranding.defaultProps = {
