@@ -472,6 +472,7 @@ const Create = () => {
                 winnersData={winnersData}
                 selectedWinner={selectedWinner}
                 auction={auction}
+                currentTierId={currentTierId}
               />
             ))
           ) : (
