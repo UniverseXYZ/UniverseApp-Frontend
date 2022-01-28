@@ -1,16 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
 import './ReleaseRewards.scss';
 import { useHistory, useLocation } from 'react-router';
 import Popup from 'reactjs-popup';
-import uuid from 'react-uuid';
+import { utils, BigNumber } from 'ethers';
 import Button from '../button/Button.jsx';
-import nft1 from '../../assets/images/marketplace/nfts/nft4.png';
 import arrow from '../../assets/images/arrow.svg';
 import completedCheckmark from '../../assets/images/completedCheckmark.svg';
 import doneIcon from '../../assets/images/Completed.svg';
 import emptyMark from '../../assets/images/emptyMark.svg';
-import emptyWhite from '../../assets/images/emptyWhite.svg';
 import infoIcon from '../../assets/images/icon.svg';
 import CongratsReleaseRewardsPopup from '../popups/CongratsReleaseRewardsPopup';
 import { useAuthContext } from '../../contexts/AuthContext';
@@ -29,6 +26,7 @@ import {
   subscribeToAuctionFinalised,
   subscribeToBidMatched,
   subscribeToSlotCaptured,
+  subscribeToERC721Claimed,
 } from '../../utils/websockets/auctionEvents';
 
 const ReleaseRewards = () => {
@@ -36,146 +34,121 @@ const ReleaseRewards = () => {
   const verificationLoadingText =
     'The transaction is being verified. This will take a few seconds.';
 
-  const {
-    view,
-    auctionData,
-    bidders,
-    rewardTiersSlots,
-    myBid,
-    winningSlot,
-    slotsInfo,
-    backButtonText,
-  } = useLocation().state;
+  const { view, auctionData, bidders, rewardTiersSlots, myBid, winningSlot, backButtonText } =
+    useLocation().state;
 
   const history = useHistory();
   const { setActiveTxHashes } = useMyNftsContext();
 
   const [hideInfo, setHideInfo] = useState(false);
   const [showSlots, setShowSlots] = useState(false);
-  const { universeAuctionHouseContract } = useAuthContext();
-  const [showSuccesPopup, setShowSuccessPopup] = useState(false);
+  const { universeAuctionHouseContract, address, auctionSDK } = useAuthContext();
+  const [showCongratsPopup, setShowCongratsPopup] = useState(false);
   const [auction, setAuction] = useState(auctionData);
   const [batchCaptureRevenueTxs, setBatchCaptureRevenueTxs] = useState([]);
   const [singleCaptureRevenueTxs, setSingleCaptureRevenueTxs] = useState([]);
   const [showLoading, setShowLoading] = useState(false);
   const [bids, setBids] = useState(bidders);
   const [loadingText, setLoadingText] = useState(defaultLoadingText);
+  const [mySlot, setMySlot] = useState(null);
+  const [mySlotIndex, setMySlotIndex] = useState(-1);
+  const [slotsInfo, setSlotsInfo] = useState({});
 
-  const setupPage = async () => {
-    console.log('Slots info:');
-    console.log(slotsInfo);
+  const setupPage = async (slotsData) => {
     let batchCaptureTxs = [];
     if (auction.auction.finalised) {
-      batchCaptureTxs = createBatchCaptureRevenueTxsFinalised(rewardTiersSlots, bids, slotsInfo);
+      batchCaptureTxs = createBatchCaptureRevenueTxsFinalised(rewardTiersSlots, bids, slotsData);
     } else {
       batchCaptureTxs = createBatchCaptureRevenueTxsNotFinalised(rewardTiersSlots);
     }
-    const singleCaptureTxs = createSingleCaptureRevenueTxs(rewardTiersSlots, bids, slotsInfo);
-    console.log(`batchCapture Txs:`);
-    console.log(batchCaptureTxs);
+    const singleCaptureTxs = createSingleCaptureRevenueTxs(rewardTiersSlots, bids, slotsData);
     setBatchCaptureRevenueTxs(batchCaptureTxs);
-
-    console.log(`singleCapture Txs:`);
-    console.log(singleCaptureTxs);
-
     setSingleCaptureRevenueTxs(singleCaptureTxs);
   };
 
-  useEffect(() => {
-    setupPage();
-  }, [universeAuctionHouseContract]);
+  const handleSlotCapturedEvent = (err, { tierId, slotIndex }) => {
+    if (err) return;
+    // Update single capture txs
+    let updatedTxs = [];
+    setSingleCaptureRevenueTxs((txs) => {
+      updatedTxs = [...txs];
+      updatedTxs = updatedTxs.map((tx) => {
+        if (tx.startSlot.toString() === slotIndex.toString()) {
+          const newObj = { ...tx };
+          newObj.slotInfo = { ...tx.slotInfo, revenueCaptured: true };
+          return newObj;
+        }
+        return tx;
+      });
 
-  const getAuctionSlotsInfo = async () => {
-    const onChainAuction = await universeAuctionHouseContract.auctions(auction.auction.onChainId);
+      return updatedTxs;
+    });
 
-    const auctionSlotsInfo = {};
-    for (let i = 1; i <= onChainAuction.numberOfSlots; i += 1) {
-      // eslint-disable-next-line no-await-in-loop
-      const slotInfo = await universeAuctionHouseContract.getSlotInfo(auction.auction.onChainId, i);
-      console.log(slotInfo);
-      auctionSlotsInfo[i] = slotInfo;
-    }
-    return auctionSlotsInfo;
+    let updatedBids = [];
+    setBids((upToDate) => {
+      updatedBids = upToDate;
+      return upToDate;
+    });
+
+    const batchCaptureTxs = createBatchCaptureRevenueTxsFinalised(
+      rewardTiersSlots,
+      updatedBids,
+      updatedTxs.map((tx) => tx.slotInfo)
+    );
+
+    setBatchCaptureRevenueTxs(batchCaptureTxs);
+
+    // Update slots in rewardTier
+    setAuction((upToDate) => {
+      const updatedAuction = { ...upToDate };
+      const newTiers = updatedAuction.rewardTiers.map((r) => {
+        const slots = r.slots.map((slot) => {
+          if (slot.index === slotIndex) {
+            slot.capturedRevenue = true;
+          }
+          return slot;
+        });
+        return slots;
+      });
+      updatedAuction.auction.rewardTiers = newTiers;
+
+      return updatedAuction;
+    });
+
+    // Hide Loading modal
+    setShowLoading(false);
+
+    // Show Congrats modal
+    setShowCongratsPopup(true);
   };
 
-  useEffect(() => {
-    initiateAuctionSocket();
-    subscribeToSlotCaptured(auction.auction.id, (err, { tierId, slotIndex }) => {
-      if (err) return;
-      // Update single capture txs
-      let updatedTxs = [];
-      setSingleCaptureRevenueTxs((txs) => {
-        updatedTxs = [...txs];
-        updatedTxs = updatedTxs.map((tx) => {
-          if (tx.startSlot.toString() === slotIndex.toString()) {
-            const newObj = { ...tx };
-            newObj.slotInfo = { ...tx.slotInfo, revenueCaptured: true };
-            return newObj;
-          }
-          return tx;
-        });
+  const handleBidMatchedEvent = async (err, { bids: bidsData, finalised }) => {
+    if (err) return;
+    setBids(bidsData);
+    if (finalised) {
+      setAuction((upToDate) => ({ ...upToDate, auction: { ...upToDate.auction, finalised } }));
+    }
+    const newSlotsInfo = await auctionSDK.getAuctionSlotsInfo(auction?.auction?.onChainId);
+    const newBatchTxs = createBatchCaptureRevenueTxsFinalised(
+      rewardTiersSlots,
+      bidsData,
+      newSlotsInfo
+    );
+    setBatchCaptureRevenueTxs(newBatchTxs);
 
-        return updatedTxs;
-      });
-
-      let updatedBids = [];
-      setBids((upToDate) => {
-        updatedBids = upToDate;
-        return upToDate;
-      });
-
-      const batchCaptureTxs = createBatchCaptureRevenueTxsFinalised(
-        rewardTiersSlots,
-        updatedBids,
-        updatedTxs.map((tx) => tx.slotInfo)
-      );
-
-      setBatchCaptureRevenueTxs(batchCaptureTxs);
+    if (finalised) {
       setShowLoading(false);
+    }
+  };
 
-      // Update slots in rewardTier
-      setAuction((upToDate) => {
-        const updatedAuction = { ...upToDate };
-        const newTiers = updatedAuction.rewardTiers.map((r) => {
-          const slots = r.slots.map((slot) => {
-            if (slot.index === slotIndex) {
-              slot.capturedRevenue = true;
-            }
-            return slot;
-          });
-          return slots;
-        });
-        updatedAuction.auction.rewardTiers = newTiers;
+  const handleERC721ClaimedEvent = (err, { claimer, slotIndex }) => {
+    const isYourEvent = claimer.toLowerCase() === address.toLowerCase();
 
-        return updatedAuction;
-      });
-    });
-
-    subscribeToBidMatched(auction.auction.id, async (err, { bids: bidsData }) => {
-      if (err) return;
-      setBids(bidsData);
-      const newSlotsInfo = await getAuctionSlotsInfo();
-      const newBatchTxs = createBatchCaptureRevenueTxsFinalised(
-        rewardTiersSlots,
-        bidsData,
-        newSlotsInfo
-      );
-      setBatchCaptureRevenueTxs(newBatchTxs);
+    if (isYourEvent) {
       setShowLoading(false);
-    });
-
-    subscribeToAuctionFinalised(auction.auction.id, async (err) => {
-      if (err) return;
-      setAuction((upToDate) => ({
-        ...upToDate,
-        auction: { ...upToDate.auction, finalised: true },
-      }));
-    });
-    setShowLoading(false);
-    return () => {
-      disconnectAuctionSocket();
-    };
-  }, []);
+      setActiveTxHashes([]);
+    }
+  };
 
   const handleCaptureRevenue = async (captureConfig, configIndex, singleSlot) => {
     try {
@@ -207,9 +180,6 @@ const ReleaseRewards = () => {
     }
   };
 
-  console.log(`auctionData:`);
-  console.log(auction);
-
   const handleFinaliseAuction = async () => {
     try {
       const tx = await universeAuctionHouseContract.finalizeAuction(auction.auction.onChainId);
@@ -226,6 +196,82 @@ const ReleaseRewards = () => {
       console.log(err);
     }
   };
+
+  /**
+   * Upon Claim NFTs Button click, this method will kick in a SC transaction
+   */
+  const handleClaimNfts = async () => {
+    try {
+      const tx = await auctionSDK.handleClaimNfts(
+        auction.auction.onChainId,
+        +mySlotIndex,
+        mySlot.totalDepositedNfts
+      );
+      setShowLoading(true);
+      setActiveTxHashes([tx.hash]);
+
+      const txReceipt = await tx.wait();
+      if (txReceipt.status === 1) {
+        // This modal will be closed upon recieving notifyERC721Claimed event
+        setMySlot({ ...mySlot, totalWithdrawnNfts: mySlot.totalDepositedNfts });
+      }
+    } catch (err) {
+      setShowLoading(false);
+      setActiveTxHashes([]);
+    }
+  };
+
+  // useEffect(() => {
+  //   setupPage();
+  // }, [universeAuctionHouseContract]);
+
+  /**
+   * Initialise and Attach Socket events
+   */
+  useEffect(async () => {
+    initiateAuctionSocket();
+    subscribeToSlotCaptured(auction.auction.id, handleSlotCapturedEvent);
+    subscribeToBidMatched(auction.auction.id, handleBidMatchedEvent);
+    subscribeToERC721Claimed(auction.auction.id, handleERC721ClaimedEvent);
+    subscribeToAuctionFinalised(auction.auction.id, async (err) => {
+      if (err) return;
+      setAuction((upToDate) => ({
+        ...upToDate,
+        auction: { ...upToDate.auction, finalised: true },
+      }));
+    });
+    return () => {
+      disconnectAuctionSocket();
+    };
+  }, [auction?.auction?.id]);
+
+  useEffect(async () => {
+    if (auctionSDK) {
+      const info = await auctionSDK.getAuctionSlotsInfo(auction?.auction?.onChainId);
+      setSlotsInfo(info);
+      setupPage(info);
+    }
+  }, [auctionSDK]);
+
+  useEffect(async () => {
+    // eslint-disable-next-line no-restricted-syntax
+    for (const [slotIndex, slotInfo] of Object.entries(slotsInfo)) {
+      if (slotInfo.winner === utils.getAddress(address)) {
+        setMySlot(slotInfo);
+        setMySlotIndex(slotIndex);
+        break;
+      }
+
+      // TODO:: You cannot withdraw NFTs from this page, so no need to calculate this
+      // const availableForWithdraw =
+      //   slotInfo.winner === '0x0000000000000000000000000000000000000000' &&
+      //   slotInfo.revenueCaptured &&
+      //   slotInfo.totalWithdrawnNfts.toNumber() !== slotInfo.totalDepositedNfts.toNumber();
+      // else if (availableForWithdraw) {
+      //   setSlotsToWithdraw([...slotsToWithdraw, +slotIndex]);
+      // }
+    }
+  }, [slotsInfo]);
 
   return (
     <div className="release__rewards">
@@ -340,8 +386,13 @@ const ReleaseRewards = () => {
           </div>
         </div>
       </div>
-      <Popup closeOnDocumentClick={false} open={showSuccesPopup}>
-        <CongratsReleaseRewardsPopup onClose={() => setShowSuccessPopup(false)} />
+      <Popup closeOnDocumentClick={false} open={showCongratsPopup}>
+        <CongratsReleaseRewardsPopup
+          onClose={() => setShowCongratsPopup(false)}
+          auctionName={auction?.auction?.name}
+          isAuctioneer={view === 'Auctioneer'}
+          handleClaimNfts={handleClaimNfts}
+        />
       </Popup>
       <Popup closeOnDocumentClick={false} open={showLoading}>
         <LoadingPopup text={loadingText} onClose={() => setShowLoading(false)} />

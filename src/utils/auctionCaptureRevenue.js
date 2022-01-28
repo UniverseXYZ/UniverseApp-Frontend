@@ -57,7 +57,6 @@ export const createBatchCaptureRevenueTxsFinalised = (rewardTiersSlots, bidders,
     endSlot: 0,
     totalNfts: 0,
     tiers: [],
-    slotIndices: [],
     revenueCaptured: false,
   };
 
@@ -115,7 +114,6 @@ export const createBatchCaptureRevenueTxsNotFinalised = (rewardTiersSlots) => {
     endSlot: 0,
     totalNfts: 0,
     tiers: [],
-    slotIndices: [],
     revenueCaptured: false,
   };
 
