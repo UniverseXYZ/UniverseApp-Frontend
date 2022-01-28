@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Popup from 'reactjs-popup';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 import AwesomeDebouncePromise from 'awesome-debounce-promise';
 import useConstant from 'use-constant';
 import ProfileForm from '../../components/myAccount/ProfileForm.jsx';
@@ -24,6 +24,7 @@ const MyAccount = () => {
   const { editProfileButtonClick, setEditProfileButtonClick } = useAuctionContext();
   const { setShowError, setErrorTitle, setErrorBody } = useErrorContext();
   const { setDarkMode } = useThemeContext();
+  const location = useLocation();
 
   const history = useHistory();
   const [showLoading, setShowLoading] = useState(false);
@@ -217,7 +218,10 @@ const MyAccount = () => {
         accountPageExists={accountPageExists}
       />
       <Popup closeOnDocumentClick={false} open={showCongrats}>
-        <CongratsProfilePopup onClose={() => setShowCongrats(false)} />
+        <CongratsProfilePopup
+          onClose={() => setShowCongrats(false)}
+          redirect={location.state?.redirect}
+        />
       </Popup>
       <Popup closeOnDocumentClick={false} open={showLoading}>
         <LoadingPopup text="Saving your profile changes" onClose={() => setShowLoading(false)} />
