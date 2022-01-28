@@ -406,6 +406,7 @@ const AuctionEndedSection = ({
                 slotsInfo,
                 mySlot,
                 mySlotIndex,
+                backButtonText: onAuction.auction.headline,
               })
             }
           >
