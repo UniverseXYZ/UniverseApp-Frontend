@@ -78,13 +78,17 @@ const DomainAndBranding = ({
   }, [values?.backgroundImage]);
 
   const handleLink = (e) => {
-    setAuctionLink(e.target.value.replace(' ', '-'));
-    onChange((prevValues) => ({
-      ...prevValues,
-      link: e.target.value,
-      status: e.target.value.length > 0 ? 'filled' : 'empty',
-    }));
-    setValidLink(e.target.value.trim().length !== 0);
+    const validValueRegEx = /^$|^([a-zA-Z0-9-]+)$/;
+    const validChars = validValueRegEx.test(e.target.value);
+    if (validChars) {
+      setAuctionLink(e.target.value.replace(' ', '-'));
+      onChange((prevValues) => ({
+        ...prevValues,
+        link: e.target.value,
+        status: e.target.value.length > 0 ? 'filled' : 'empty',
+      }));
+      setValidLink(e.target.value.trim().length !== 0);
+    }
   };
 
   const handleHeadline = (e) => {
