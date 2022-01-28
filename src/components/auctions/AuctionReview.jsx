@@ -32,14 +32,16 @@ const AuctionReview = () => {
   const [showCongrats, setShowCongrats] = useState(false);
   useEffect(() => {
     const newTierOptions = [];
-    auction.rewardTiers.forEach((tier) => {
-      const newTiers = tier.nftSlots.map((t) => ({
-        value: t.slot,
-        label: `Winner #${t.slot + 1}`,
-        nftsCount: t.nftIds.length,
-      }));
-      newTierOptions.push(newTiers);
-    });
+    auction.rewardTiers
+      .filter((t) => !t.removed)
+      .forEach((tier) => {
+        const newTiers = tier.nftSlots.map((t) => ({
+          value: t.slot,
+          label: `Winner #${t.slot + 1}`,
+          nftsCount: t.nftIds.length,
+        }));
+        newTierOptions.push(newTiers);
+      });
     setTierOption(newTierOptions);
   }, []);
 
