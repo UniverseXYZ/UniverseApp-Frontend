@@ -64,6 +64,7 @@ const MenuList = (props) => {
     <>
       <span className="choose-edition">Choose edition number</span>
       <List
+        className="list"
         height={maxHeight}
         itemCount={children.length}
         itemSize={height}
@@ -183,11 +184,6 @@ const styles = {
     '& i::after': {
       borderColor: '#000 !important',
     },
-  }),
-  menuList: (base) => ({
-    ...base,
-    background: '#fff',
-    borderRadius: '12px',
   }),
 };
 
