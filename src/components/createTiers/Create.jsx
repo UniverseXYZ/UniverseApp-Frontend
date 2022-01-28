@@ -1,28 +1,20 @@
-/* eslint-disable jsx-a11y/click-events-have-key-events */
 import React, { useState, useEffect } from 'react';
 import { useHistory, useLocation, Link } from 'react-router-dom';
 import uuid from 'react-uuid';
-import Slider from 'react-slick';
 import './CreateTiers.scss';
 import '../auctions/Tiers.scss';
 import '../myNFTs/MyNFTs.scss';
 import Input from '../input/Input.jsx';
-import Button from '../button/Button.jsx';
 import { useAuctionContext } from '../../contexts/AuctionContext';
 import AvailabilityNFTCard from '../availableNFTCard';
 import SearchFilters from '../nft/SearchFilters';
 import CreatTiersStickyBar from '../CreateTiersStickyBar';
 import AvailableNFTCardSkeleton from '../availableNFTCard/skeleton/AvailableNFTCardSkeleton';
-import PendingPrevArrow from '../myNFTs/pendingDropdown/misc/PendingPrevArrow';
-import PendingNextArrow from '../myNFTs/pendingDropdown/misc/PendingNextArrow';
 import LoadMore from '../pagination/LoadMore';
+import NumberOfWinners from './NumberOfWinners';
 import arrow from '../../assets/images/arrow.svg';
-import infoIcon from '../../assets/images/icon.svg';
-import WinnerIcon from '../../assets/images/winner-icon.svg';
-import { ReactComponent as IncreaseIcon } from '../../assets/images/plus.svg';
-import { ReactComponent as DecreaseIcon } from '../../assets/images/minus.svg';
-import { ReactComponent as ETHIcon } from '../../assets/images/bid_icon.svg';
-import { ReactComponent as ErrorIcon } from '../../assets/images/Vector.svg';
+import IncludeReservePrice from './IncludeReservePrice';
+import WinnersList from './winners/WinnersList';
 
 const ACTION_TYPES = {
   ADD: 'select-option',
@@ -35,8 +27,6 @@ const MAX_FIELD_CHARS_LENGTH = {
   name: 100,
 };
 
-const MAX_WINNERS_COUNT = 10; // TODO:: where the heck this came from ?
-const MAX_WINNERS_SHOWN = 6;
 const LOAD_NFTS_COUNT = 8;
 
 const Create = () => {
@@ -48,10 +38,9 @@ const Create = () => {
   const tierId = location.state;
   const editedTier = auction?.rewardTiers?.find((element) => element.id === tierId);
 
-  const [showIncludeReservePriceInfoBox, setShowIncludeReservePriceInfoBox] = useState(false);
-  const [showNumberOfWinnersInfoBox, setShowNumberOfWinnersInfoBox] = useState(false);
   const [showReservePrice, setShowReservePrice] = useState(false);
 
+  const [offset, setOffset] = useState(0);
   const [perPage, setPerPage] = useState(12);
   const [filteredNFTs, setFilteredNFTs] = useState([]);
   const [values, setValues] = useState({
@@ -63,34 +52,6 @@ const Create = () => {
   // [{slot: int, nftIds: [44,56], nftsData: [{id, slot, url, artworkType, nftName, collectionName, collectionAddress, collectionUrl}]}]
   const [winnersData, setWinnersData] = useState([]);
   const [fetchingData, setFetchingData] = useState(false);
-
-  const [maxWinnersShown, setMaxWinnersShown] = useState(MAX_WINNERS_SHOWN);
-  const [sliderSettings, setSliderSettings] = useState({
-    dots: false,
-    infinite: false,
-    speed: 500,
-    slidesToShow: 1,
-    slidesToScroll: 1,
-    variableWidth: true,
-  });
-
-  useEffect(() => {
-    if (winnersData.length > maxWinnersShown) {
-      setSliderSettings({
-        ...sliderSettings,
-        infinite: true,
-        nextArrow: <PendingNextArrow />,
-        prevArrow: <PendingPrevArrow />,
-      });
-    } else {
-      setSliderSettings({
-        ...sliderSettings,
-        infinite: false,
-        nextArrow: null,
-        prevArrow: null,
-      });
-    }
-  }, [winnersData]);
 
   useEffect(() => {
     if (values.name) {
@@ -126,13 +87,6 @@ const Create = () => {
         setTierNameError('');
       }
     }
-  };
-
-  const handleReservePriceChange = (value, idx) => {
-    // TODO:: need to add validation logic for the reserve price
-    const winnersCopy = [...winnersData];
-    winnersCopy[idx].reservePrice = value ? Number(value) : '';
-    setWinnersData(winnersCopy);
   };
 
   useEffect(async () => {
@@ -390,186 +344,19 @@ const Create = () => {
               {values.name.length}/{MAX_FIELD_CHARS_LENGTH.name}
             </p>
           </div>
-          <div className="number--of--winners">
-            <span className="inp-label">
-              <span>
-                Number of winners{' '}
-                <img
-                  onMouseOver={() => setShowNumberOfWinnersInfoBox(true)}
-                  onFocus={() => setShowNumberOfWinnersInfoBox(true)}
-                  onMouseLeave={() => setShowNumberOfWinnersInfoBox(false)}
-                  onBlur={() => setShowNumberOfWinnersInfoBox(false)}
-                  src={infoIcon}
-                  alt="Info Icon"
-                />
-              </span>
-              {showNumberOfWinnersInfoBox && (
-                <div className="info-text">
-                  <p>Amount of people who will get NFTs from the current reward tier.</p>
-                </div>
-              )}
-            </span>
-            <div className="counter">
-              <Button
-                className="light-button"
-                onClick={() =>
-                  values.numberOfWinners > 1 &&
-                  setValues((prevValues) => ({
-                    ...prevValues,
-                    numberOfWinners: values.numberOfWinners - 1,
-                  }))
-                }
-              >
-                <DecreaseIcon />
-              </Button>
-              <span>{values.numberOfWinners}</span>
-              <Button
-                className="light-button"
-                onClick={() =>
-                  values.numberOfWinners < MAX_WINNERS_COUNT &&
-                  setValues((prevValues) => ({
-                    ...prevValues,
-                    numberOfWinners: values.numberOfWinners + 1,
-                  }))
-                }
-              >
-                <IncreaseIcon />
-              </Button>
-            </div>
-          </div>
+          <NumberOfWinners values={values} setValues={setValues} />
         </div>
-        <div className="include--reserve--price">
-          <h1>Include reserve price</h1>
-          <img
-            src={infoIcon}
-            alt="Info Icon"
-            onMouseOver={() => setShowIncludeReservePriceInfoBox(true)}
-            onFocus={() => setShowIncludeReservePriceInfoBox(true)}
-            onMouseLeave={() => setShowIncludeReservePriceInfoBox(false)}
-            onBlur={() => setShowIncludeReservePriceInfoBox(false)}
-          />
-          <label className="switch">
-            <input
-              type="checkbox"
-              value={showReservePrice}
-              checked={showReservePrice}
-              onChange={(e) => setShowReservePrice(e.target.checked)}
-            />
-            <span className="slider round" />
-          </label>
-          {showIncludeReservePriceInfoBox && (
-            <div className="info-text">
-              <p>
-                Reserve price parameter may be used to make sure that NFTs from the slot will not be
-                sold under the target price value. <br />
-                <br />
-                You are only able to set the reserve price for the slot when the slot above has
-                equal or higher reserve price.
-              </p>
-            </div>
-          )}
-        </div>
-        <div
-          className={`winner__lists${
-            winnersData.length > maxWinnersShown ? ' isSlider' : ' notSlider'
-          }`}
-        >
-          {winnersData.length > maxWinnersShown ? (
-            <Slider {...sliderSettings}>
-              {winnersData.map((data, i) => {
-                const winnerNumber = i + 1;
-                return (
-                  // eslint-disable-next-line jsx-a11y/no-static-element-interactions
-                  <div
-                    className={`winner-box${selectedWinner === i ? ' selected' : ''}`}
-                    key={uuid()}
-                    onClick={() => setSelectedWinner(i)}
-                    style={{ width: 160 }}
-                  >
-                    <img src={WinnerIcon} alt="winner-icon" />
-                    <p>{`Winner #${winnerNumber}`}</p>
-                    <span>{`${data.nftsData?.length} NFTs`}</span>
-                    {showReservePrice && (
-                      <div className="reserve--price">
-                        <label>Reserve price</label>
-                        <div className="reserve--price--field">
-                          <ETHIcon className="eth--icon" />
-                          <Input
-                            type="number"
-                            min="0"
-                            placeholder="0"
-                            value={data.reservePrice}
-                            onChange={(e) => handleReservePriceChange(e.target.value, i)}
-                            disabled={selectedWinner !== i}
-                            error={data.reservePriceError}
-                            hoverBoxShadowGradient
-                          />
-                          {/* TODO:: need to add validation logic for the reserve price */}
-                          {data.reservePriceError && (
-                            <div className="reserve--price--error">
-                              <ErrorIcon className="error--icon" />
-                              <div className="tooltip">
-                                The reserve price for this slot cannot be higher than for the slot
-                                above
-                              </div>
-                            </div>
-                          )}
-                        </div>
-                      </div>
-                    )}
-                    <div className="box--shadow--effect--block" />
-                  </div>
-                );
-              })}
-            </Slider>
-          ) : (
-            winnersData.map((data, i) => {
-              const winnerNumber = i + 1;
-              return (
-                // eslint-disable-next-line jsx-a11y/no-static-element-interactions
-                <div
-                  className={`winner-box${selectedWinner === i ? ' selected' : ''}`}
-                  key={uuid()}
-                  onClick={() => setSelectedWinner(i)}
-                  style={{ width: 160 }}
-                >
-                  <img src={WinnerIcon} alt="winner-icon" />
-                  <p>{`Winner #${winnerNumber}`}</p>
-                  <span>{`${data.nftsData?.length} NFTs`}</span>
-                  {showReservePrice && (
-                    <div className="reserve--price">
-                      <label>Reserve price</label>
-                      <div className="reserve--price--field">
-                        <ETHIcon className="eth--icon" />
-                        <Input
-                          type="number"
-                          min="0"
-                          placeholder="0"
-                          value={data.reservePrice}
-                          onChange={(e) => handleReservePriceChange(e.target.value, i)}
-                          disabled={selectedWinner !== i}
-                          error={data.reservePriceError}
-                          hoverBoxShadowGradient
-                        />
-                        {/* TODO:: need to add validation logic for the reserve price */}
-                        {data.reservePriceError && (
-                          <div className="reserve--price--error">
-                            <ErrorIcon className="error--icon" />
-                            <div className="tooltip">
-                              The reserve price for this slot cannot be higher than for the slot
-                              above
-                            </div>
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  )}
-                  <div className="box--shadow--effect--block" />
-                </div>
-              );
-            })
-          )}
-        </div>
+        <IncludeReservePrice
+          showReservePrice={showReservePrice}
+          setShowReservePrice={setShowReservePrice}
+        />
+        <WinnersList
+          winnersData={winnersData}
+          setWinnersData={setWinnersData}
+          selectedWinner={selectedWinner}
+          setSelectedWinner={setSelectedWinner}
+          showReservePrice={showReservePrice}
+        />
       </div>
       <span className="hr-line" />
       <div className="selectNftPart container">
@@ -590,20 +377,19 @@ const Create = () => {
               <AvailableNFTCardSkeleton />
             </>
           ) : availableNFTsTolist.length ? (
-            availableNFTsTolist.map(
-              (data, index) =>
-                index < perPage && (
-                  <AvailabilityNFTCard
-                    key={data.nfts.id}
-                    data={data}
-                    onEditionClick={onEditionClick}
-                    canSelect={canSelectNFT}
-                    winnersData={winnersData}
-                    selectedWinner={selectedWinner}
-                    auction={auction}
-                  />
-                )
-            )
+            availableNFTsTolist
+              .slice(offset, offset + perPage)
+              .map((data, index) => (
+                <AvailabilityNFTCard
+                  key={data.nfts.id}
+                  data={data}
+                  onEditionClick={onEditionClick}
+                  canSelect={canSelectNFT}
+                  winnersData={winnersData}
+                  selectedWinner={selectedWinner}
+                  auction={auction}
+                />
+              ))
           ) : (
             <>
               <p>No Available NFTs found</p>
