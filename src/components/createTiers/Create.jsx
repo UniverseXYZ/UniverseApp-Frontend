@@ -46,7 +46,7 @@ const Create = () => {
   });
   const [tierNameError, setTierNameError] = useState('');
 
-  // [{slot: int, nftIds: [44,56], nftsData: [{id, slot, url, artworkType, nftName, collectionName, collectionAddress, collectionUrl}]}]
+  // [{slot: int, minimumBid: int, nftIds: [44,56], nftsData: [{id, slot, url, artworkType, nftName, collectionName, collectionAddress, collectionUrl}]}]
   const [winnersData, setWinnersData] = useState([]);
   const [fetchingData, setFetchingData] = useState(false);
   const [loadMore, setLoadMore] = useState(false);
@@ -204,10 +204,45 @@ const Create = () => {
     const winners = [];
 
     while (slot < n) {
-      winners.push({ slot, nftsData: [], nftIds: [] });
+      winners.push({ slot, nftsData: [], nftIds: [], minimumBid: 0 });
       slot += 1;
     }
     return winners;
+  };
+
+  const parseNFTsPerWinnerRange = (slots) => {
+    const slotsNFTsCount = slots.map((s) => s.nftIds.length);
+    const sortedAscending = slotsNFTsCount.sort();
+    const singleWinner = sortedAscending.length === 1;
+
+    if (singleWinner) {
+      return sortedAscending[0].toString();
+    }
+
+    const uniques = [...new Set(sortedAscending)];
+    const sameRange = uniques.length === 1;
+
+    if (sameRange) {
+      return sortedAscending[0].toString();
+    }
+
+    // Return range value here
+    const min = sortedAscending[0];
+    const max = sortedAscending[sortedAscending.length - 1];
+    return `${min} - ${max}`;
+  };
+
+  const compareSlotMinBidValueWithExistingTiers = (slotValue) => {
+    const numericValue = Number(slotValue);
+    const prevTier = auction.rewardTiers[auction.rewardTiers.length - 1];
+    if (!prevTier) {
+      // There is no need of other tiers min bid comparisons
+      return true;
+    }
+
+    const lastTierSlot = prevTier.nftSlots[prevTier.nftSlots.length - 1];
+    const validBid = lastTierSlot.minimumBid >= numericValue;
+    return validBid;
   };
 
   const handleContinue = (winnersSlots) => {
@@ -230,6 +265,7 @@ const Create = () => {
             name: values.name,
             winners: Number(values.numberOfWinners),
             nftSlots,
+            nftsPerWinner: parseNFTsPerWinnerRange(nftSlots),
           },
         ],
       };
@@ -255,8 +291,33 @@ const Create = () => {
   };
 
   useEffect(() => {
-    const winners = prepareSlotsData(values.numberOfWinners);
-    setWinnersData(winners);
+    // this means that this is the mount of the component;
+    const currentWinnersCount = winnersData.length;
+    if (!currentWinnersCount) {
+      // If we are editing a tier, the data will be populated in the other useffect
+      if (editedTier) return;
+
+      const winners = prepareSlotsData(values.numberOfWinners);
+      setWinnersData(winners);
+    }
+
+    const winnersCountChange = currentWinnersCount !== values.numberOfWinners;
+    if (winnersCountChange) {
+      let winnersCopy = [...winnersData];
+      const shouldAddNewWinner = currentWinnersCount < values.numberOfWinners;
+
+      if (shouldAddNewWinner) {
+        const newWinner = prepareSlotsData(1)[0];
+        newWinner.slot = winnersCopy.length;
+        winnersCopy = [...winnersCopy, newWinner];
+      } else {
+        // Should remove winner
+        winnersCopy.pop();
+      }
+
+      setWinnersData(winnersCopy);
+    }
+
     if (selectedWinner + 1 > values.numberOfWinners) {
       setSelectedWinner(values.numberOfWinners - 1);
     }
@@ -283,6 +344,9 @@ const Create = () => {
       }
 
       setWinnersData([...winnersDataCopy]);
+
+      const hasReservedPrice = winnersDataCopy.some((w) => w.minimumBid > 0);
+      setShowReservePrice(hasReservedPrice);
     }
   }, [editedTier]);
 
@@ -381,6 +445,7 @@ const Create = () => {
           selectedWinner={selectedWinner}
           setSelectedWinner={setSelectedWinner}
           showReservePrice={showReservePrice}
+          compareSlotMinBidValueWithExistingTiers={compareSlotMinBidValueWithExistingTiers}
         />
       </div>
       <span className="hr-line" />
