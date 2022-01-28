@@ -376,11 +376,13 @@ const Create = () => {
   const handleLoadMore = async () => {
     try {
       setLoading(true);
-      const available = await getAvailableNFTs(offset, perPage);
+      const id = typeof auction.id === 'string' ? '' : auction.id;
+      const available = await getAvailableNFTs(offset, perPage, id);
       if (available.nfts.length) {
         const parsedForFilters = available.nfts.map((data) => ({ ...data, ...data.nfts }));
-        setAvailableNFTs(parsedForFilters);
-        setFilteredNFTs(parsedForFilters);
+        const updateAvailalbeNFTs = [...availableNFTs, ...parsedForFilters];
+        setAvailableNFTs(updateAvailalbeNFTs);
+        setFilteredNFTs(updateAvailalbeNFTs);
         setOffset(offset + perPage);
       }
       if (!available.pagination?.hasNextPage) {
