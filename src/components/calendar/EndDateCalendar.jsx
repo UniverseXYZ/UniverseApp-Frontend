@@ -254,19 +254,6 @@ const EndDateCalendar = React.forwardRef(
       createDaysArray();
     }, [selectedDate]);
 
-    const handleClickOutside = (event) => {
-      if (ref.current && !ref.current.contains(event.target)) {
-        onClose();
-      }
-    };
-
-    useEffect(() => {
-      document.addEventListener('click', handleClickOutside, true);
-      return () => {
-        document.removeEventListener('click', handleClickOutside, true);
-      };
-    });
-
     return (
       <div className="calendar" ref={ref}>
         <img className="close" src={closeIcon} alt="Close" onClick={onClose} aria-hidden="true" />

@@ -64,6 +64,9 @@ const AuctionSettings = () => {
   });
 
   const [bidValues, setBidValues] = useState([]);
+  const [isBidTokenOpened, setIsBidTokenOpened] = useState(false);
+  const [isStartDateOpened, setIsStartDateOpened] = useState(false);
+  const [isEndDateOpened, setIsEndDateOpened] = useState(false);
   const isEditingAuction = location.state !== undefined;
   const [royaltyAddress, setRoyaltyAddress] = useState(
     auction && auction.royaltySplits ? [...auction.royaltySplits] : [{ address: '', amount: '' }]
@@ -312,8 +315,15 @@ const AuctionSettings = () => {
           !+el.percentAmount ||
           hasAddressError(el.address, i)
       ));
+
   return (
-    <div className="auction-settings container">
+    <div
+      className={`${
+        isBidTokenOpened || isStartDateOpened || isEndDateOpened
+          ? 'disabled-click-outside auction-settings container'
+          : 'auction-settings container'
+      }`}
+    >
       <div>
         <div className="head-part">
           <h2 className="tier-title">Auction settings</h2>
@@ -350,19 +360,26 @@ const AuctionSettings = () => {
                   <Popup
                     nested
                     closeOnDocumentClick={false}
-                    trigger={
-                      <button type="button" className={dropDown}>
-                        <div className="left--section">
-                          {bidToken?.img && (
-                            <img src={bidToken.img} className="token-logo" alt="icon" />
-                          )}
-                          <span className="button-name">{bidToken?.name}</span>
-                        </div>
-                        <div className="right--section">
-                          <img src={arrowDown} alt="arrow" />
-                        </div>
-                      </button>
-                    }
+                    trigger={(opened) => {
+                      if (opened) {
+                        setIsBidTokenOpened(true);
+                      } else {
+                        setIsBidTokenOpened(false);
+                      }
+                      return (
+                        <button type="button" className={dropDown}>
+                          <div className="left--section">
+                            {bidToken?.img && (
+                              <img src={bidToken.img} className="token-logo" alt="icon" />
+                            )}
+                            <span className="button-name">{bidToken?.name}</span>
+                          </div>
+                          <div className="right--section">
+                            <img src={arrowDown} alt="arrow" />
+                          </div>
+                        </button>
+                      );
+                    }}
                   >
                     {(close) => (
                       <SelectToken options={options} setBidToken={setToken} onClose={close} />
@@ -376,38 +393,45 @@ const AuctionSettings = () => {
                 <div style={{ position: 'relative' }}>
                   <Popup
                     closeOnDocumentClick={false}
-                    trigger={
-                      <div>
-                        <Input
-                          type="text"
-                          readOnly
-                          id="startDate"
-                          label="Start date"
-                          autoComplete="off"
-                          hoverBoxShadowGradient
-                          value={`${startDateTemp.month} ${startDateTemp.day}, ${startDateTemp.year}, ${startDateTemp.hours} ${startDateTemp.minutes}`}
-                          error={isValidFields.startDate ? undefined : 'Start date is required!'}
-                        />
-                        {values.startDate && (
-                          <p className="date--input--value">
-                            <b>
-                              {`${startDateTemp.month} ${startDateTemp.day}, ${startDateTemp.year}, `}
-                            </b>
-                            {`${startDateTemp.hours}:${startDateTemp.minutes}
+                    trigger={(opened) => {
+                      if (opened) {
+                        setIsStartDateOpened(true);
+                      } else {
+                        setIsStartDateOpened(false);
+                      }
+                      return (
+                        <div>
+                          <Input
+                            type="text"
+                            readOnly
+                            id="startDate"
+                            label="Start date"
+                            autoComplete="off"
+                            hoverBoxShadowGradient
+                            value={`${startDateTemp.month} ${startDateTemp.day}, ${startDateTemp.year}, ${startDateTemp.hours} ${startDateTemp.minutes}`}
+                            error={isValidFields.startDate ? undefined : 'Start date is required!'}
+                          />
+                          {values.startDate && (
+                            <p className="date--input--value">
+                              <b>
+                                {`${startDateTemp.month} ${startDateTemp.day}, ${startDateTemp.year}, `}
+                              </b>
+                              {`${startDateTemp.hours}:${startDateTemp.minutes}
                               ${startDateTemp.timezone
                                 ?.toString()
                                 .split(' ')[0]
                                 .replace('GMT', 'UTC')}`}
-                          </p>
-                        )}
-                        <img
-                          aria-hidden="true"
-                          className="callendar__image"
-                          src={callendarIcon}
-                          alt="Callendar"
-                        />
-                      </div>
-                    }
+                            </p>
+                          )}
+                          <img
+                            aria-hidden="true"
+                            className="callendar__image"
+                            src={callendarIcon}
+                            alt="Callendar"
+                          />
+                        </div>
+                      );
+                    }}
                   >
                     {(close) => (
                       <StartDateCalendar
@@ -429,39 +453,46 @@ const AuctionSettings = () => {
                 <div style={{ position: 'relative' }}>
                   <Popup
                     closeOnDocumentClick={false}
-                    trigger={
-                      <div>
-                        <Input
-                          type="text"
-                          readOnly
-                          onClick={() => setShowEndDate(true)}
-                          id="endDate"
-                          label="End date"
-                          autoComplete="off"
-                          hoverBoxShadowGradient
-                          value={`${endDateTemp.month} ${endDateTemp.day}, ${endDateTemp.year}, ${endDateTemp.hours} ${endDateTemp.minutes}`}
-                          error={isValidFields.endDate ? undefined : 'End date is required!'}
-                        />
-                        {values.endDate && (
-                          <p className="date--input--value">
-                            <b>
-                              {`${endDateTemp.month} ${endDateTemp.day}, ${endDateTemp.year}, `}
-                            </b>
-                            {`${endDateTemp.hours}:${endDateTemp.minutes}
+                    trigger={(opened) => {
+                      if (opened) {
+                        setIsEndDateOpened(true);
+                      } else {
+                        setIsEndDateOpened(false);
+                      }
+                      return (
+                        <div>
+                          <Input
+                            type="text"
+                            readOnly
+                            onClick={() => setShowEndDate(true)}
+                            id="endDate"
+                            label="End date"
+                            autoComplete="off"
+                            hoverBoxShadowGradient
+                            value={`${endDateTemp.month} ${endDateTemp.day}, ${endDateTemp.year}, ${endDateTemp.hours} ${endDateTemp.minutes}`}
+                            error={isValidFields.endDate ? undefined : 'End date is required!'}
+                          />
+                          {values.endDate && (
+                            <p className="date--input--value">
+                              <b>
+                                {`${endDateTemp.month} ${endDateTemp.day}, ${endDateTemp.year}, `}
+                              </b>
+                              {`${endDateTemp.hours}:${endDateTemp.minutes}
                               ${endDateTemp.timezone
                                 ?.toString()
                                 .split(' ')[0]
                                 .replace('GMT', 'UTC')}`}
-                          </p>
-                        )}
-                        <img
-                          aria-hidden="true"
-                          className="callendar__image"
-                          src={callendarIcon}
-                          alt="Callendar"
-                        />
-                      </div>
-                    }
+                            </p>
+                          )}
+                          <img
+                            aria-hidden="true"
+                            className="callendar__image"
+                            src={callendarIcon}
+                            alt="Callendar"
+                          />
+                        </div>
+                      );
+                    }}
                   >
                     {(close) => (
                       <EndDateCalendar
