@@ -197,26 +197,28 @@ const AuthContextProvider = ({ children }) => {
   const connectWithMetaMask = async () => {
     const { ethereum } = window;
 
-    const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
-    await web3AuthenticationProccess(null, null, accounts);
+    if (ethereum) {
+      const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
+      await web3AuthenticationProccess(null, null, accounts);
 
-    setProviderName(() => {
-      const name = CONNECTORS_NAMES.MetaMask;
-      localStorage.setItem('providerName', name);
-      return name;
-    });
+      setProviderName(() => {
+        const name = CONNECTORS_NAMES.MetaMask;
+        localStorage.setItem('providerName', name);
+        return name;
+      });
 
-    ethereum.removeListener('accountsChanged', handleAccountsChanged);
-    ethereum.on('accountsChanged', handleAccountsChanged);
+      ethereum.removeListener('accountsChanged', handleAccountsChanged);
+      ethereum.on('accountsChanged', handleAccountsChanged);
 
-    ethereum.on('chainChanged', async (networkId) => {
-      clearStorageAuthData();
-      window.location.reload();
-    });
+      ethereum.on('chainChanged', async (networkId) => {
+        clearStorageAuthData();
+        window.location.reload();
+      });
 
-    ethereum.on('disconnect', async (error) => {
-      resetConnectionState();
-    });
+      ethereum.on('disconnect', async (error) => {
+        resetConnectionState();
+      });
+    }
   };
 
   const connectWithWalletConnect = async () => {
@@ -359,14 +361,14 @@ const AuthContextProvider = ({ children }) => {
   const handleConnectWallet = async (wallet) => {
     // Here need to check if selected wallet is installed in browser
     setSelectedWallet(wallet);
-    if (installed) {
-      if (wallet === CONNECTORS_NAMES.MetaMask && typeof window.ethereum !== 'undefined') {
+    if (wallet === CONNECTORS_NAMES.MetaMask) {
+      if (installed) {
         await connectWithMetaMask();
-      } else if (wallet === CONNECTORS_NAMES.WalletConnect) {
-        await connectWithWalletConnect();
+      } else {
+        setShowInstallWalletPopup(true);
       }
-    } else {
-      setShowInstallWalletPopup(true);
+    } else if (wallet === CONNECTORS_NAMES.WalletConnect) {
+      await connectWithWalletConnect();
     }
   };
 
