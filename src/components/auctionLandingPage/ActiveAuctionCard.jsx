@@ -49,7 +49,7 @@ const ActiveAuctionCard = ({ mainAuction, auction }) => {
         mainAuction.auction.id === auction.id ? 'selected' : ''
       }`}
       onClick={() => {
-        history.push(`/${mainAuction.artist.displayName}/${auction.link}`);
+        history.push(`/${mainAuction.artist.universePageUrl}/${auction.link}`);
       }}
       aria-hidden="true"
       style={{ width: 278 }}

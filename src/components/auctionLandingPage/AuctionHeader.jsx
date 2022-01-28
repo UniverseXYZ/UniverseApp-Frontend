@@ -43,7 +43,10 @@ const AuctionHeader = ({
         <div className="artist__details">
           <img src={onAuction.artist.profileImageUrl} alt={onAuction.artist.displayName} />
           <span>by</span>
-          <button type="button" onClick={() => history.push(`/${onAuction.artist.displayName}`)}>
+          <button
+            type="button"
+            onClick={() => history.push(`/${onAuction.artist.universePageUrl}`)}
+          >
             {onAuction.artist.displayName}
           </button>
         </div>

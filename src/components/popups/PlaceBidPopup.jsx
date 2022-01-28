@@ -1,3 +1,4 @@
+/* eslint-disable no-unreachable */
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Animated } from 'react-animated-css';
@@ -42,6 +43,8 @@ const PlaceBidPopup = ({
   const [showBidEligibleInfo, setShowBidEligibleInfo] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
   const [rewardTier, setRewardTier] = useState(null);
+  const [minBid, setMinBid] = useState(0);
+  const [myBidSlotIndex, setMyBidSlotIndex] = useState(-1);
   const [error, setError] = useState('');
   const [allowance, setAllowance] = useState(0);
   const [balance, setBalance] = useState(0);
@@ -87,16 +90,19 @@ const PlaceBidPopup = ({
         .map((bid) => bid.amount)
         .sort((a, b) => b - a);
       console.log(rankedBids);
-      const myBidIndex = rankedBids.indexOf(+val);
-      console.log(myBidIndex);
+      const myBidIdx = rankedBids.indexOf(+val);
+      console.log(myBidIdx);
       console.log(rewardTiers);
 
       let rewardSlotCounter = 0;
       let hasFound = false;
       rewardTiers.forEach((tier) => {
         rewardSlotCounter += tier.numberOfWinners;
-        if (myBidIndex <= rewardSlotCounter) {
+        if (myBidIdx < rewardSlotCounter && !hasFound) {
           setRewardTier(tier);
+          const slot = tier.slots.find((s) => s.index === myBidIdx + 1);
+          setMyBidSlotIndex(myBidIdx + 1);
+          setMinBid(slot?.minimumBid);
           hasFound = true;
         }
       });
@@ -155,8 +161,8 @@ const PlaceBidPopup = ({
       return;
     }
 
-    if (parseFloat(yourBid) < parseFloat(auction.startingBid)) {
-      setError('Bid must be greater or equal to the starting bid');
+    if (parseFloat(yourBid) < minBid) {
+      setError(`Bid must be greater or equal to the reserve value for the slot: ${minBid}`);
       return;
     }
     setError('');
@@ -260,7 +266,7 @@ const PlaceBidPopup = ({
               onMouseEnter={() => setShowBidEligibleInfo(true)}
               onMouseLeave={() => setShowBidEligibleInfo(false)}
             >
-              Your bid is eligible to win a{' '}
+              Your bid is eligible to win slot {myBidSlotIndex} of{' '}
               <span
                 style={{
                   color: rewardTier.color ? rewardTier.color : '#80CCDF',

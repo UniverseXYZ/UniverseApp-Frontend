@@ -47,10 +47,14 @@ const RewardTiers = ({ auction }) => {
                   </div>
                   <div className="tier__info">
                     <span>
-                      Bidders #{startPlace}-{endPlace}
+                      {startPlace === endPlace
+                        ? `Bidder #${startPlace}`
+                        : `Bidders #${startPlace}-${endPlace}`}
                     </span>
                     {tier.nftsPerWinner > 0 ? (
-                      <span>{`${tier.nftsPerWinner} NFTs per winner`}</span>
+                      <span>{`${tier.nftsPerWinner} NFT${
+                        tier.nftsPerWinner > 1 ? 's' : ''
+                      } per winner`}</span>
                     ) : (
                       <span className="custom--nfts">Different NFTs per winner</span>
                     )}
@@ -70,7 +74,13 @@ const RewardTiers = ({ auction }) => {
                       }
                     >
                       {(close) => (
-                        <PreviewNFTsPopup onClose={close} onTier={tier} auction={auction} />
+                        <PreviewNFTsPopup
+                          onClose={close}
+                          tier={tier}
+                          auction={auction}
+                          startPlace={startPlace}
+                          endPlace={endPlace}
+                        />
                       )}
                     </Popup>
                   </div>
