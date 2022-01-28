@@ -24,9 +24,12 @@ const AUCTION_EVENTS = {
   WITHDRAWN_NFTS: 'withdrawnNfts',
   BID_SUBMITTED: 'bidSubmitted',
   BID_WITHDRAWN: 'bidWithdrawn',
+  BID_MATCHED: 'bidMatched',
   CLAIMED_NFT: 'claimedNft',
   WITHDRAWN_REVENUE: 'withdrawnRevenue',
   FINALISED: 'finalised',
+  EXTENDED: 'extended',
+  SLOT_CAPTURED: 'capturedSlot',
 };
 
 const SocketContextProvider = ({ children }) => {
@@ -62,7 +65,7 @@ const SocketContextProvider = ({ children }) => {
       return false;
     }
 
-    socket.on(`auction_${auctionId}_${eventName}`, () => {
+    socket.on(`auction_${auctionId}_${eventName}`, (msg) => {
       console.info(`Event with name ${eventName} for Auction with id ${auctionId} received!`);
       return cb(null, msg);
     });
@@ -98,14 +101,13 @@ const SocketContextProvider = ({ children }) => {
       socket.removeAllListeners(`auction_${auctionId}_${eventName}`)
     );
 
-    console.info('UnSubscribed from:');
+    console.info(`UnSubscribed from Auction with id ${auctionId} :`);
     console.table(unsubsribeEvents);
   };
 
   return (
     <SocketContext.Provider
       value={{
-        socket,
         auctionEvents,
         subscribeTo,
         unsubscribeFrom,
