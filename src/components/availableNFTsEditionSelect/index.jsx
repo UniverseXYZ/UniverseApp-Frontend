@@ -148,6 +148,7 @@ const styles = {
   valueContainer: (base, state) => ({
     ...base,
     padding: '0 0 0 8px',
+    display: 'grid',
   }),
   dropdownIndicator: (base, state) => ({
     ...base,

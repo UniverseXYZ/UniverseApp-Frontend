@@ -47,7 +47,6 @@ const newTabData = [
 
 const SetupAuction = () => {
   const { setDarkMode } = useThemeContext();
-  // const { auctionSetupState } = useAuctionContext();
   const history = useHistory();
   const location = useLocation();
 
@@ -59,8 +58,6 @@ const SetupAuction = () => {
 
   return (
     <div className="auction-setup">
-      {/* // TODO:: The router prompt is causing rerenders, making the Settings.jsx to lose state Investigate */}
-      {/* <RouterPrompt when onOK={handleOK} editing={auctionSetupState} /> */}
       <div className="setup--auction--welcome--section">
         <div className="setup">
           <div

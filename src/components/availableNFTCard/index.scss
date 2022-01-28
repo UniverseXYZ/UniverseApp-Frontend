@@ -555,4 +555,19 @@ div.collection__count {
   .name--and--price {
     align-items: center;
   }
+  .random--bg--color {
+    height: 20px;
+    width: 20px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: $sharpGroteskMediumFont;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 12px;
+    text-transform: uppercase;
+    color: $black;
+  }
+
 }
