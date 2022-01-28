@@ -73,7 +73,7 @@ const BidRankingsPopup = ({
             const isSlotOpened = openSlots.indexOf(index) >= 0;
             return (
               <div
-                style={{ border: `border: 1px solid ${tier.color ? tier.color : '#bcbcbc'};` }}
+                style={{ border: `border: 1px solid ${tier.color ? tier.color : '#bcbcbc'}` }}
                 className="bid__list"
                 key={tier.slotIndex}
               >
