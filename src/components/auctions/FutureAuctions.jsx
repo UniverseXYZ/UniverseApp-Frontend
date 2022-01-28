@@ -210,17 +210,17 @@ const FutureAuctions = ({ myAuctions, setMyAuctions, setAuction }) => {
 
   const renderStep2Button = (auction) => {
     const configureStepDone = completedConfigureStep(auction);
-    const finalizeStepDone = completedFinalizeStep(auction);
+    const landingStepDone = completedLandingPageStep(auction);
     return (
       <Button
-        className={configureStepDone && !finalizeStepDone ? 'light-button' : 'light-border-button'}
+        className={configureStepDone && !landingStepDone ? 'light-button' : 'light-border-button'}
         onClick={() => {
           setAuction(auction);
           history.push('/customize-auction-landing-page', auction.id);
         }}
         disabled={isBeforeNow(auction.startDate)}
       >
-        {configureStepDone && finalizeStepDone ? 'Edit' : 'Start'}
+        {configureStepDone && landingStepDone ? 'Edit' : 'Start'}
       </Button>
     );
   };
