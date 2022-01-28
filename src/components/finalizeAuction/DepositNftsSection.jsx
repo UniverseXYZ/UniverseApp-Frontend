@@ -3,12 +3,13 @@ import PropTypes from 'prop-types';
 import Button from '../button/Button';
 import emptyMark from '../../assets/images/emptyMark.svg';
 import emptyWhite from '../../assets/images/emptyWhite.svg';
+import warningIcon from '../../assets/images/Exclamation.svg';
 
 const DepositNftsSection = ({
   transactions,
   handleDepositTier,
   completedCollectionsStep,
-  completedDepositStep,
+  completedAuctionCreationStep,
   approvedTxCount,
   approvedTxs,
   handleWithdraw,
@@ -57,20 +58,29 @@ const DepositNftsSection = ({
         );
       }
       return (
-        <Button className="light-border-button" onClick={() => handleWithdraw(txIndex)}>
+        <Button
+          className="light-border-button"
+          disabled={!isCanceledAuction}
+          onClick={() => handleWithdraw(txIndex)}
+        >
           Withdraw
         </Button>
       );
     }
     if (approvedTxs.indexOf(txIndex) >= 0) {
       return (
-        <Button className="light-border-button" onClick={() => handleWithdraw(txIndex)}>
+        <Button
+          className="light-border-button"
+          disabled={!isCanceledAuction}
+          onClick={() => handleWithdraw(txIndex)}
+        >
           Withdraw
         </Button>
       );
     }
     return <></>;
   };
+
   // TODO: Show loading
   return !transactions ? (
     <></>
@@ -90,6 +100,16 @@ const DepositNftsSection = ({
         <p className="auction__description">
           Deposit {getTotalTxNftsCount()} NFTs to the auction contract
         </p>
+        {(!isCanceledAuction && approvedTxs.length) ||
+        (isCanceledAuction && completedAuctionCreationStep && !approvedTxs.length) ? (
+          <div className="warning__div">
+            <img src={warningIcon} alt="Warning" />
+            <p>You need to cancel the auction before you can withdraw you NFTs</p>
+          </div>
+        ) : (
+          <></>
+        )}
+
         {transactions.displayNfts.map((slotNfts, txIndex) => (
           // eslint-disable-next-line react/no-array-index-key
           <div className="transaction" key={txIndex}>
@@ -133,7 +153,7 @@ DepositNftsSection.propTypes = {
   transactions: PropTypes.oneOfType([PropTypes.object]).isRequired,
   handleDepositTier: PropTypes.func.isRequired,
   handleWithdraw: PropTypes.func.isRequired,
-  completedDepositStep: PropTypes.bool.isRequired,
+  completedAuctionCreationStep: PropTypes.bool.isRequired,
   completedCollectionsStep: PropTypes.bool.isRequired,
   isCanceledAuction: PropTypes.bool.isRequired,
   approvedTxCount: PropTypes.number.isRequired,

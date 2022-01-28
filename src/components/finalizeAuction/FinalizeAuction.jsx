@@ -257,29 +257,6 @@ const FinalizeAuction = () => {
 
   const handleWithdraw = async (txIndex) => {
     try {
-      // TODO: What to do if auction is canceled? How do we mark that in the backend? Can we restart the auction?
-      const onChainAuction = await universeAuctionHouseContract.auctions(auction.onChainId);
-
-      // Cancel auction if not canceled
-      if (!onChainAuction.isCanceled) {
-        // Cancel auction
-        setShowAuctionDeployLoading(true);
-        const tx = await universeAuctionHouseContract.cancelAuction(auction.onChainId);
-        setActiveTxHashes([tx.hash]);
-        const txReceipt = await tx.wait();
-        if (txReceipt.status === 1) {
-          await changeAuctionStatus({
-            auctionId: auction.id,
-            statuses: [{ name: 'canceled', value: true }],
-          });
-          setAuction({ ...auction, canceled: true });
-        } else {
-          // Implement error handling
-        }
-
-        setActiveTxHashes([]);
-      }
-
       setShowAuctionDeployLoading(true);
       // We need to withdraw each slot at a time
       // Calculate all count of deposited nfts at a slot
@@ -332,8 +309,25 @@ const FinalizeAuction = () => {
     }
   };
 
-  const handleCancelAuction = () => {
+  const handleCancelAuction = async () => {
     try {
+      setShowAuctionDeployLoading(true);
+      const tx = await universeAuctionHouseContract.cancelAuction(auction.onChainId);
+      setActiveTxHashes([tx.hash]);
+      const txReceipt = await tx.wait();
+      if (txReceipt.status === 1) {
+        await changeAuctionStatus({
+          auctionId: auction.id,
+          statuses: [{ name: 'canceled', value: true }],
+        });
+        setAuction({ ...auction, canceled: true });
+      } else {
+        // Implement error handling
+      }
+
+      setActiveTxHashes([]);
+      setShowAuctionDeployLoading(false);
+
       const response = cancelAuction(auction.id);
       if (!response.error) {
         setAuction({
@@ -344,6 +338,8 @@ const FinalizeAuction = () => {
     } catch (error) {
       // TODO: handle error here
       console.error(error);
+      setShowAuctionDeployLoading(false);
+      setActiveTxHashes([]);
     }
   };
 
@@ -384,24 +380,24 @@ const FinalizeAuction = () => {
               <p className="auction__description">
                 Proceed with the transaction to create the auction instance on the blockchain
               </p>
-              <div className="warning__div">
-                <img src={warningIcon} alt="Warning" />
-                <p>
-                  You will not be able to make any changes to the auction settings if you proceed
-                </p>
-              </div>
+              {!completedAuctionCreationStep ? (
+                <div className="warning__div">
+                  <img src={warningIcon} alt="Warning" />
+                  <p>
+                    You will not be able to make any changes to the auction settings if you proceed
+                  </p>
+                </div>
+              ) : (
+                <></>
+              )}
               {completedAuctionCreationStep ? (
-                <>
-                  <Button className="light-border-button" disabled>
-                    Completed <img src={completedCheckmark} alt="completed" />
-                  </Button>
-                  <Button
-                    onClick={handleCancelAuction}
-                    className="light-border-button attention-button"
-                  >
-                    Cancel
-                  </Button>
-                </>
+                <Button
+                  style={{ marginLeft: 0 }}
+                  onClick={handleCancelAuction}
+                  className="light-border-button attention-button"
+                >
+                  Cancel
+                </Button>
               ) : (
                 <Button className="light-button" onClick={handleCreateAuction}>
                   Proceed
@@ -428,13 +424,17 @@ const FinalizeAuction = () => {
               <p className="auction__description">
                 Approve NFTs for depositing into the auction contract
               </p>
-              <div className="warning__div">
-                <img src={warningIcon} alt="Warning" />
-                <p>
-                  Depending on the gas fee cost, you may need to have a significant amount of ETH to
-                  proceed
-                </p>
-              </div>
+              {!completedCollectionsStep ? (
+                <div className="warning__div">
+                  <img src={warningIcon} alt="Warning" />
+                  <p>
+                    Depending on the gas fee cost, you may need to have a significant amount of ETH
+                    to proceed
+                  </p>
+                </div>
+              ) : (
+                <></>
+              )}
               <div className="collections">
                 {collections.length ? (
                   collections.map((collection, index) => (
@@ -467,6 +467,7 @@ const FinalizeAuction = () => {
             approvedTxCount={approvedTxCount}
             approvedTxs={approvedTxs}
             isCanceledAuction={auction.canceled}
+            completedAuctionCreationStep={completedAuctionCreationStep}
             // withdrawTxs={withdrawTxs}
           />
         </div>
