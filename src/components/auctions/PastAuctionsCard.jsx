@@ -17,6 +17,7 @@ import PastAuctionActionSection from './PastAuctionActionSection';
 import {
   subscribeToSlotCaptured,
   initiateAuctionSocket,
+  removeListener,
 } from '../../utils/websockets/auctionEvents';
 
 const PastAuctionsCard = ({ auction, setShowLoadingModal, setLoadingText }) => {
@@ -124,6 +125,8 @@ const PastAuctionsCard = ({ auction, setShowLoadingModal, setLoadingText }) => {
   useEffect(() => {
     getAuctionSlotsInfo();
   }, [universeAuctionHouseContract, auction]);
+
+  useEffect(() => () => removeListener(`auction_${auction.id}_capturedSlot`), []);
 
   const areAllSlotsCaptured =
     auction.finalised &&
