@@ -8,11 +8,12 @@ import NoAuctionsFound from './NoAuctionsFound';
 import { getActiveAuctions } from '../../utils/api/auctions';
 import ActiveAndPastCardSkeleton from './skeleton/ActiveAndPastCardSkeleton';
 import SortBySelect from '../input/SortBySelect';
+import { useErrorContext } from '../../contexts/ErrorContext';
 
 const ActiveAuctions = () => {
   const sortOptions = ['Newest', 'Oldest'];
   const perPage = 10;
-
+  const { showError, setShowError, setErrorTitle, setErrorBody } = useErrorContext();
   const [notFound, setNotFound] = useState(false);
   const [loading, setLoading] = useState(false);
   const [activeAuctions, setActiveAuctions] = useState([]);
@@ -23,6 +24,11 @@ const ActiveAuctions = () => {
   useEffect(async () => {
     try {
       const response = await getActiveAuctions();
+      if (response.error) {
+        setErrorTitle('Unexpected error');
+        setErrorBody(response.message);
+        setShowError(true);
+      }
       if (!response.auctions?.length) {
         setNotFound(true);
         setLoading(false);

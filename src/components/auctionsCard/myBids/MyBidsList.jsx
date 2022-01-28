@@ -16,12 +16,17 @@ const MyBidsList = () => {
   const [loading, setLoading] = useState(true);
   const [notFound, setNotFound] = useState(false);
   const [myBids, setMyBids] = useState([]);
-  const { showError, setShowError } = useErrorContext();
+  const { showError, setShowError, setErrorTitle, setErrorBody } = useErrorContext();
 
   useEffect(async () => {
     if (address) {
       try {
         const response = await getMyBids(address);
+        if (response.error) {
+          setErrorTitle('Unexpected error');
+          setErrorBody(response.message);
+          setShowError(true);
+        }
         if (!response.bids?.length) {
           setNotFound(true);
         } else {

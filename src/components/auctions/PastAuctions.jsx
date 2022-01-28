@@ -19,6 +19,7 @@ import {
   subscribeToAuctionWithdrawnRevenue,
   subscribeToBidMatched,
 } from '../../utils/websockets/auctionEvents';
+import { useErrorContext } from '../../contexts/ErrorContext';
 
 const PastAuctions = ({ setShowLoadingModal, setLoadingText }) => {
   const sortOptions = ['Newest', 'Oldest'];
@@ -33,11 +34,17 @@ const PastAuctions = ({ setShowLoadingModal, setLoadingText }) => {
   const [filteredAuctions, setFilteredAuctions] = useState([]);
   const { address } = useAuthContext();
   const { setActiveTxHashes } = useMyNftsContext();
+  const { setShowError, setErrorTitle, setErrorBody } = useErrorContext();
 
   useEffect(async () => {
     try {
       initiateAuctionSocket();
       const response = await getPastAuctions();
+      if (response.error) {
+        setErrorTitle('Unexpected error');
+        setErrorBody(response.message);
+        setShowError(true);
+      }
       if (!response.auctions?.length) {
         setNotFound(true);
         setLoading(false);
