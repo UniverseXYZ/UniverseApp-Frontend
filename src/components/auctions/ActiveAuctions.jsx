@@ -3,7 +3,6 @@ import Input from '../input/Input.jsx';
 import '../pagination/Pagination.scss';
 import Pagination from '../pagination/Pagionation.jsx';
 import searchIconGray from '../../assets/images/search-gray.svg';
-import { isAfterNow, isBeforeNow } from '../../utils/dates';
 import ActiveAuctionsTabsCard from '../auctionsCard/ActiveAuctionsTabsCard.jsx';
 import NoAuctionsFound from './NoAuctionsFound';
 import { getActiveAuctions } from '../../utils/api/auctions';
@@ -12,14 +11,13 @@ import SortBySelect from '../input/SortBySelect';
 
 const ActiveAuctions = () => {
   const sortOptions = ['Newest', 'Oldest'];
+  const perPage = 10;
 
   const [notFound, setNotFound] = useState(false);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [activeAuctions, setActiveAuctions] = useState([]);
   const [offset, setOffset] = useState(0);
-  const [perPage, setPerPage] = useState(10);
   const [searchByName, setSearchByName] = useState('');
-  const [filteredAuctions, setFilteredAuctions] = useState([]);
   const [sortOption, setSortOption] = useState(sortOptions[0]);
 
   useEffect(async () => {
@@ -30,8 +28,6 @@ const ActiveAuctions = () => {
         setLoading(false);
       } else {
         setActiveAuctions(response.auctions);
-        setFilteredAuctions(response.auctions);
-
         setLoading(false);
       }
     } catch (error) {
@@ -40,7 +36,7 @@ const ActiveAuctions = () => {
   }, []);
 
   useEffect(() => {
-    const newFilteredAuctions = [...activeAuctions].filter((auction) =>
+    const newFilteredAuctions = activeAuctions.filter((auction) =>
       auction.name.toLowerCase().includes(searchByName.toLowerCase())
     );
     if (sortOption === 'Newest') {
@@ -48,11 +44,16 @@ const ActiveAuctions = () => {
     } else if (sortOption === 'Oldest') {
       newFilteredAuctions.sort((a, b) => new Date(a.startDate) - new Date(b.startDate));
     }
-    setFilteredAuctions(newFilteredAuctions);
-  }, [searchByName, sortOption]);
+    setActiveAuctions(newFilteredAuctions);
+  }, [sortOption]);
 
   const handleSearch = (value) => {
     setSearchByName(value);
+  };
+
+  const removeAuction = (auctionToRemoveId) => {
+    const updatedAuctions = activeAuctions.filter((auction) => auction.id !== auctionToRemoveId);
+    setActiveAuctions(updatedAuctions);
   };
 
   return (
@@ -83,7 +84,11 @@ const ActiveAuctions = () => {
             .slice(offset, offset + perPage)
             .filter((item) => item.name.toLowerCase().includes(searchByName.toLowerCase()))
             .map((activeAuction, index) => (
-              <ActiveAuctionsTabsCard activeAuction={activeAuction} index={index} />
+              <ActiveAuctionsTabsCard
+                activeAuction={activeAuction}
+                index={index}
+                removeAuction={removeAuction}
+              />
             ))}
         </div>
       ) : (
