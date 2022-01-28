@@ -292,7 +292,7 @@ const ReleaseRewards = () => {
               <h2>Finalize auction</h2>
               <p className="auction__description">
                 This function will check which slots have been won, assign the winners and the bid
-                ammounts
+                amounts
               </p>
               <div className="proceed__button">
                 {auction.auction.finalised ? (

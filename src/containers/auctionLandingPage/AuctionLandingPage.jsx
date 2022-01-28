@@ -3,6 +3,7 @@ import { useLocation, useParams } from 'react-router-dom';
 import './AuctionLandingPage.scss';
 import Popup from 'reactjs-popup';
 import BigNumber from 'bignumber.js';
+import { BigNumber as EBigNumber, utils } from 'ethers';
 import AuctionDetails from '../../components/auctionLandingPage/AuctionDetails.jsx';
 import UniverseAuctionDetails from '../../components/auctionLandingPage/UniverseAuctionDetails.jsx';
 import RewardTiers from '../../components/auctionLandingPage/RewardTiers.jsx';
@@ -46,6 +47,14 @@ const AuctionLandingPage = () => {
   const [loadingText, setLoadingText] = useState(defaultLoadingText);
   const [showSuccessfulBid, setShowSuccessfulBid] = useState(false);
   const [showCancelBidPopup, setShowCancelBidPopup] = useState(false);
+  const [selectedAuctionEnded, setSelectedAuctionEnded] = useState(false);
+
+  // Auction ended section
+  const [mySlot, setMySlot] = useState(null);
+  const [mySlotIndex, setMySlotIndex] = useState(-1);
+  const [slotsToWithdraw, setSlotsToWithdraw] = useState([]);
+  const [claimableFunds, setClaimableFunds] = useState(0);
+  const [unreleasedFunds, setUnreleasedFunds] = useState(0);
 
   // useRef is used to access latest state inside socket event callbacks
   // More info why this is used here (https://github.com/facebook/react/issues/16975)
@@ -92,6 +101,52 @@ const AuctionLandingPage = () => {
       }
     }
   }, [bidders, address, rewardTiersSlots]);
+
+  useEffect(async () => {
+    // eslint-disable-next-line no-restricted-syntax
+    for (const [slotIndex, slotInfo] of Object.entries(slotsInfo)) {
+      if (slotInfo.winner === utils.getAddress(address)) {
+        setMySlot(slotInfo);
+        setMySlotIndex(slotIndex);
+        break;
+      } else if (
+        slotInfo.winner === '0x0000000000000000000000000000000000000000' &&
+        slotInfo.revenueCaptured &&
+        slotInfo.totalWithdrawnNfts.toNumber() !== slotInfo.totalDepositedNfts.toNumber()
+      ) {
+        setSlotsToWithdraw([...slotsToWithdraw, +slotIndex]);
+      }
+    }
+  }, [slotsInfo]);
+
+  const getAuctionRevenue = async () => {
+    const revenueToClaim = await universeAuctionHouseContract.auctionsRevenue(
+      auction.auction.onChainId
+    );
+
+    const totalBids = Object.values(slotsInfo).reduce(
+      (acc, slot) => acc.add(slot.winningBidAmount),
+      EBigNumber.from('0')
+    );
+
+    const toClaim = utils.formatEther(revenueToClaim);
+    setClaimableFunds(toClaim);
+
+    const unreleased =
+      utils.formatEther(totalBids.sub(revenueToClaim)) - Number(auction.auction.revenueClaimed);
+
+    setUnreleasedFunds(unreleased);
+  };
+
+  useEffect(() => {
+    if (
+      universeAuctionHouseContract &&
+      Object.values(slotsInfo).length &&
+      address === auction.artist.address
+    ) {
+      getAuctionRevenue();
+    }
+  }, [universeAuctionHouseContract, slotsInfo, address]);
 
   const handleBidSubmittedEvent = (err, { user, amount, userProfile, bids }) => {
     if (err) return;
@@ -154,7 +209,7 @@ const AuctionLandingPage = () => {
     }
   };
 
-  const handleBidWithdrawnEvent = (err, { user, amount, userProfile, bids }) => {
+  const handleBidWithdrawnEvent = (err, { user, amount, userProfile, withdrawn }) => {
     const isYourEvent = user.toLowerCase() === addressRef.current.toLowerCase();
 
     // 1. Update bidders
@@ -176,7 +231,12 @@ const AuctionLandingPage = () => {
 
     // 3. Update current bid
     if (isYourEvent) {
-      setCurrentBid(null);
+      if (withdrawn) {
+        setCurrentBid((currBid) => ({ ...currBid, withdrawn }));
+      } else {
+        setCurrentBid(null);
+      }
+      setShowLoading(false);
       setShowCancelBidPopup(false);
     }
   };
@@ -185,6 +245,7 @@ const AuctionLandingPage = () => {
     const isYourEvent = claimer.toLowerCase() === addressRef.current.toLowerCase();
 
     if (isYourEvent) {
+      setMySlot({ ...mySlot, totalWithdrawnNfts: mySlot.totalDepositedNfts });
       setShowLoading(false);
       setActiveTxHashes([]);
     }
@@ -194,6 +255,7 @@ const AuctionLandingPage = () => {
     const isYourEvent = recipient.toLowerCase() === addressRef.current.toLowerCase();
 
     if (isYourEvent) {
+      setClaimableFunds(0);
       setShowLoading(false);
       setActiveTxHashes([]);
     }
@@ -361,8 +423,19 @@ const AuctionLandingPage = () => {
         winningSlot={rewardTiersSlots[winningSlot]}
         slotsInfo={slotsInfo}
         setShowLoading={setShowLoading}
+        setLoadingText={setLoadingText}
         showCancelBidPopup={showCancelBidPopup}
         setShowCancelBidPopup={setShowCancelBidPopup}
+        selectedAuctionEnded={selectedAuctionEnded}
+        setSelectedAuctionEnded={setSelectedAuctionEnded}
+        mySlot={mySlot}
+        setMySlot={setMySlot}
+        mySlotIndex={mySlotIndex}
+        setMySlotIndex={setMySlotIndex}
+        slotsToWithdraw={slotsToWithdraw}
+        setSlotsToWithdraw={setSlotsToWithdraw}
+        claimableFunds={claimableFunds}
+        unreleasedFunds={unreleasedFunds}
       />
       <UniverseAuctionDetails auction={auction} />
       <RewardTiers auction={auction} />
