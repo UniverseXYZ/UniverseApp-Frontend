@@ -28,7 +28,6 @@ import {
   validateUserAvatar,
   validateAuctionData,
   validateAuctionImages,
-  validateRewardTierData,
 } from './validateData';
 
 const SAVE_PREVIEW_ACTION = 'save-preview';
@@ -46,7 +45,7 @@ const CustomizeAuction = () => {
     setEditProfileButtonClick,
   } = useAuctionContext();
   const { loggedInArtist, setLoggedInArtist } = useAuthContext();
-  const { showError, setShowError, errorTitle, setErrorTitle, setErrorBody } = useErrorContext();
+  const { showError, setShowError, setErrorTitle, setErrorBody } = useErrorContext();
   const [customizeAuctionState, setCustomizeAuctionState] = useState(false);
   const [showPrompt, setShowPrompt] = useState(false);
   const [domainAndBranding, setDomainAndBranding] = useState({
@@ -63,7 +62,6 @@ const CustomizeAuction = () => {
         : 'empty',
   });
   const [rewardTiersAuction, setRewardTiersAuction] = useState(auction.rewardTiers);
-  const [saveAndPreview, setSaveAndPreview] = useState(false);
   const [editButtonClick, setEditButtonClick] = useState(false);
 
   const [about, setAbout] = useState(loggedInArtist.about);

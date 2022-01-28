@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import Popup from 'reactjs-popup';
-import uuid from 'react-uuid';
 import { utils, Contract } from 'ethers';
 import SuccessPopup from '../popups/AuctionCanceledSuccessPopup';
 import arrow from '../../assets/images/arrow.svg';
@@ -11,31 +10,24 @@ import Button from '../button/Button.jsx';
 import doneIcon from '../../assets/images/Completed.svg';
 import emptyMark from '../../assets/images/emptyMark.svg';
 import emptyWhite from '../../assets/images/emptyWhite.svg';
-import completedCheckmark from '../../assets/images/completedCheckmark.svg';
 import { useAuctionContext } from '../../contexts/AuctionContext';
 import { useAuthContext } from '../../contexts/AuthContext';
 import ApproveCollection from './ApproveCollection';
-import {
-  addDeployInfoToAuction,
-  changeAuctionStatus,
-  depositNfts,
-  withdrawNfts,
-  cancelAuction,
-  patchAuction,
-} from '../../utils/api/auctions';
-import LoadingImage from '../general/LoadingImage';
+import { depositNfts, withdrawNfts, patchAuction } from '../../utils/api/auctions';
 import LoadingPopup from '../popups/LoadingPopup';
 import { useMyNftsContext } from '../../contexts/MyNFTsContext';
 import { calculateTransactions } from '../../utils/helpers/depositNfts';
 import DepositNftsSection from './DepositNftsSection';
 import ERC721ABI from '../../contracts/ERC721.json';
 import GoBackPopup from './GoBackPopup';
+import { useErrorContext } from '../../contexts/ErrorContext.jsx';
 
 const FinalizeAuction = () => {
   const history = useHistory();
   const { auction, setAuction, bidExtendTime } = useAuctionContext();
   const { setActiveTxHashes } = useMyNftsContext();
   const { signer, address, universeAuctionHouseContract } = useAuthContext();
+  const { setShowError, setErrorTitle, setErrorBody } = useErrorContext();
 
   const [collections, setCollections] = useState([]);
   const [approvedCollections, setApprovedCollections] = useState([]);
@@ -60,7 +52,6 @@ const FinalizeAuction = () => {
     setTransactions(transactionsConfig);
 
     transactionsConfig.displayNfts.forEach((slotNfts, index) => {
-      console.info(slotNfts);
       const areNftsDeposited = slotNfts.some((nft) => !nft.deposited);
       if (!areNftsDeposited) {
         setApprovedTxs([...approvedTxs, index]);
@@ -77,7 +68,7 @@ const FinalizeAuction = () => {
         // eslint-disable-next-line no-await-in-loop
         const isApproved = await contract.isApprovedForAll(
           address,
-          universeAuctionHouseContract.address
+          universeAuctionHouseContract?.address
         );
 
         if (isApproved && approvedCollections.indexOf(collection.address) < 0) {
@@ -95,6 +86,12 @@ const FinalizeAuction = () => {
       history.push('/my-auctions');
     }
   }, []);
+
+  const setErrors = () => {
+    setErrorTitle('Transaction failed');
+    setErrorBody('Please, try again');
+    setShowError(true);
+  };
 
   const handleCreateAuction = async () => {
     if (approvedTxs.length) {
@@ -171,7 +168,7 @@ const FinalizeAuction = () => {
           canceled: false,
         });
       } else {
-        // TODO: show error that tx has failed
+        setErrors();
       }
       setShowAuctionDeployLoading(false);
       setActiveTxHashes([]);
@@ -196,7 +193,7 @@ const FinalizeAuction = () => {
       if (txReceipt.status === 1) {
         setApprovedCollections([...approvedCollections, collectionAddress]);
       } else {
-        // TODO: show error that tx has failed
+        setErrors();
       }
       setIsApproving(false);
     } catch (err) {
@@ -235,7 +232,7 @@ const FinalizeAuction = () => {
           setShowSuccessPopup(true);
         }
       } else {
-        // TODO: show error that tx has failed
+        setErrors();
       }
 
       setShowAuctionDeployLoading(false);
@@ -311,7 +308,7 @@ const FinalizeAuction = () => {
           canceled: true,
         });
       } else {
-        // Implement error handling
+        setErrors();
       }
 
       setActiveTxHashes([]);
