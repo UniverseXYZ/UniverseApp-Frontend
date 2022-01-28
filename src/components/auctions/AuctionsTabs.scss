@@ -147,12 +147,6 @@
             border-width: 5px;
             border-style: solid;
             border-color: black transparent transparent transparent;
-            @include md {
-              left: 86%;
-            }
-          }
-          @include md {
-            right: -5px;
           }
         }
         &:hover {
@@ -765,9 +759,6 @@
       transform: matrix(-1, 0, 0, 1, 0, 0);
     }
   }
-  .past-auction {
-    padding-bottom: 0;
-  }
   .auction-header {
     .auctionIcon {
       margin-right: 20px;
@@ -915,6 +906,7 @@
     }
     @include md {
       grid-template-columns: repeat(2, 1fr);
+      grid-gap: 12px;
     }
   }
   .funds-and-balance {
