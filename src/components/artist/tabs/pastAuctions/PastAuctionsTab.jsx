@@ -1,25 +1,40 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import { PLACEHOLDER_PAST_AUCTIONS } from '../../../../utils/fixtures/PastAuctionsDummyData';
 import bubleIcon from '../../../../assets/images/text-bubble.png';
 import Exclamation from '../../../../assets/images/Exclamation.svg';
 import { useAuctionContext } from '../../../../contexts/AuctionContext';
 import { useAuthContext } from '../../../../contexts/AuthContext';
 import { isBeforeNow } from '../../../../utils/dates';
 import PastAuctionsList from '../../../auctionsCard/pastAuction/PastAuctionsList.jsx';
+import AuctionsCardSkeleton from '../../../auctionsCard/skeleton/AuctionsCardSkeleton';
+import { getUserPastAuctions } from '../../../../utils/api/auctions';
 
 const PastAuctionsTab = ({ onArtist, showCreatePrompt }) => {
   const { myAuctions, setAuction } = useAuctionContext();
   const { loggedInArtist } = useAuthContext();
+  const [artistPastAuctions, setArtistPastAuctions] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
   const history = useHistory();
 
-  const artistPastAuctions =
-    loggedInArtist.id === onArtist?.id
-      ? myAuctions.filter((item) => item.launch && isBeforeNow(item.endDate))
-      : PLACEHOLDER_PAST_AUCTIONS;
+  useEffect(async () => {
+    if (loggedInArtist.id === onArtist?.id) {
+      setArtistPastAuctions(myAuctions.filter((item) => item.launch && isBeforeNow(item.endDate)));
+      setIsLoading(false);
+    } else {
+      const { auctions } = await await getUserPastAuctions(loggedInArtist.id);
+      setArtistPastAuctions(auctions);
+      setIsLoading(false);
+    }
+  }, []);
 
-  return artistPastAuctions.length ? (
+  return isLoading ? (
+    <div className="future__auctions__list">
+      <AuctionsCardSkeleton />
+      <AuctionsCardSkeleton />
+      <AuctionsCardSkeleton />
+    </div>
+  ) : artistPastAuctions.length ? (
     <PastAuctionsList data={artistPastAuctions} />
   ) : showCreatePrompt ? (
     <div className="empty__auction">

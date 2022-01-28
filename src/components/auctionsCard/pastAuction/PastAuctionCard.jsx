@@ -2,34 +2,33 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
 import './PastAuctionCard.scss';
-import ethIcon from '../../../assets/images/bid_icon.svg';
+import { getPromoImageProps, bidsInUsd, createNftsPerWinnerMarkup } from '../utils';
+import { getBidTypeByName } from '../../../utils/fixtures/BidOptions';
+import { useAuctionContext } from '../../../contexts/AuctionContext';
+import { useAuthContext } from '../../../contexts/AuthContext';
 
 const PastAuctionCard = ({ auction }) => {
+  const { loggedInArtist } = useAuthContext();
+  const { options } = useAuctionContext();
   const history = useHistory();
+
+  const bids = bidsInUsd(auction);
+  const winnersCount = auction.rewardTiers.reduce(
+    (winners, tier) => winners + tier.numberOfWinners,
+    0
+  );
+  const nftsPerWinnerMarkup = createNftsPerWinnerMarkup(auction);
+
+  const { tokenSymbol } = auction;
+  const tokenLogo = getBidTypeByName(tokenSymbol, options);
+  const promoImageProps = getPromoImageProps(auction.promoImageUrl, loggedInArtist.avatar);
 
   return (
     <div className="past__auction__item">
       <div
         className={`past__auction__image timeLeft ${auction.promoImageUrl ? '' : 'show__avatar'}`}
       >
-        {auction.promoImageUrl ? (
-          <img className="original" src={auction.promoImageUrl} alt={auction.name} />
-        ) : (
-          <img
-            className="artist__image"
-            src={
-              typeof auction.artist.avatar === 'string'
-                ? auction.artist.avatar
-                : URL.createObjectURL(auction.artist.avatar)
-            }
-            alt={auction.name}
-          />
-        )}
-        <div className="date">
-          <div className="date__border__div" />
-          <label>Ended on</label>
-          <span>2d 5h 20m 30s</span>
-        </div>
+        <img className={promoImageProps.class} src={promoImageProps.src} alt={auction.name} />
       </div>
       <div className="past__auction__details">
         <div className="title">
@@ -38,46 +37,50 @@ const PastAuctionCard = ({ auction }) => {
         <div className="creator">
           <img
             src={
-              typeof auction.artist.avatar === 'string'
-                ? auction.artist.avatar
-                : URL.createObjectURL(auction.artist.avatar)
+              typeof loggedInArtist.avatar === 'string'
+                ? loggedInArtist.avatar
+                : URL.createObjectURL(loggedInArtist.avatar)
             }
-            alt={auction.artist.name}
+            alt={loggedInArtist.name}
           />
           <span>by</span>
           <a
             aria-hidden="true"
             onClick={() =>
-              history.push(`/${auction.artist.name.split(' ')[0]}`, {
-                id: auction.artist.id,
+              history.push(`/${loggedInArtist.name.split(' ')[0]}`, {
+                id: loggedInArtist.id,
               })
             }
           >
-            {auction.artist.name}
+            {loggedInArtist.name}
           </a>
         </div>
         <div className="statistics">
           <div>
             <label>Winners</label>
-            <p>35</p>
+            <p>{winnersCount}</p>
           </div>
           <div>
             <label>Highest Winning Bid:</label>
-            <p>
-              <img src={ethIcon} alt="eth" />
-              40 <span>~$120,594</span>
-            </p>
+            {bids.highestBidInUsd ? (
+              <p>
+                <img src={tokenLogo.img} alt={tokenSymbol} />
+                {bids.highestBid} <span>{`~$${Math.round(bids.highestBidInUsd)}`}</span>
+              </p>
+            ) : null}
           </div>
           <div>
             <label>NFTs Per Winner:</label>
-            <p>10-7</p>
+            {nftsPerWinnerMarkup}
           </div>
           <div>
             <label>Lowest Winning Bid:</label>
-            <p>
-              <img src={ethIcon} alt="eth" />
-              14 <span>~$41,594</span>
-            </p>
+            {bids.lowestBidInUsd ? (
+              <p>
+                <img src={tokenLogo.img} alt={tokenSymbol} />
+                {bids.lowestBid} <span>{`~$${Math.round(bids.lowestBidInUsd)}`}</span>
+              </p>
+            ) : null}
           </div>
         </div>
       </div>
