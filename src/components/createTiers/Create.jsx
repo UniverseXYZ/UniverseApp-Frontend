@@ -50,6 +50,7 @@ const Create = () => {
   const [winnersData, setWinnersData] = useState([]);
   const [fetchingData, setFetchingData] = useState(false);
   const [loadMore, setLoadMore] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (values.name) {
@@ -304,16 +305,23 @@ const Create = () => {
 
   // End Custom Slots distribution logic
 
-  const handleLoadMore = async (item) => {
-    const available = await getAvailableNFTs(offset, perPage);
-    if (available.nfts.length) {
-      const parsedForFilters = available.nfts.map((data) => ({ ...data, ...data.nfts }));
-      setAvailableNFTs(parsedForFilters);
-      setFilteredNFTs(parsedForFilters);
-      setOffset(offset + perPage);
-    }
-    if (!available.pagination?.hasNextPage) {
-      setLoadMore(false);
+  const handleLoadMore = async () => {
+    try {
+      setLoading(true);
+      const available = await getAvailableNFTs(offset, perPage);
+      if (available.nfts.length) {
+        const parsedForFilters = available.nfts.map((data) => ({ ...data, ...data.nfts }));
+        setAvailableNFTs(parsedForFilters);
+        setFilteredNFTs(parsedForFilters);
+        setOffset(offset + perPage);
+      }
+      if (!available.pagination?.hasNextPage) {
+        setLoadMore(false);
+      }
+      setLoading(false);
+    } catch (err) {
+      console.log(err);
+      setLoading(false);
     }
   };
 
@@ -412,7 +420,9 @@ const Create = () => {
           )}
         </div>
         <div className="pagination__container">
-          {!fetchingData && loadMore ? <LoadMore handleLoadMore={handleLoadMore} /> : null}
+          {!fetchingData && loadMore ? (
+            <LoadMore disabled={loading} handleLoadMore={handleLoadMore} />
+          ) : null}
         </div>
         <CreatTiersStickyBar
           onRemoveEdition={onRemoveEdition}
