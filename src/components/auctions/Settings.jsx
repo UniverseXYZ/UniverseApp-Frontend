@@ -5,7 +5,7 @@ import Popup from 'reactjs-popup';
 import uuid from 'react-uuid';
 import './AuctionSettings.scss';
 import EthereumAddress from 'ethereum-address';
-import { formatISO } from 'date-fns';
+import { formatISO, format } from 'date-fns';
 import callendarIcon from '../../assets/images/calendar.svg';
 import delateIcon from '../../assets/images/RemoveBtn.svg';
 import delIcon from '../../assets/images/red-delete.svg';
@@ -66,20 +66,22 @@ const AuctionSettings = () => {
     auction && auction.properties ? [...auction.properties] : [{ address: '', amount: '' }]
   );
 
-  const hasRoyalties = properties[0].address.length > 0;
+  const hasRoyalties = properties && properties.length && properties[0].address.length > 0;
   const [royalities, useRoyalities] = useState(hasRoyalties);
   const parseDate = (dateString) => {
     const date = dateString ? new Date(dateString) : new Date();
 
-    return {
-      month: monthNames[date.getMonth()],
-      day: date.getDate(),
-      year: date.getFullYear(),
-      hours: date.getHours(),
-      minutes: date.getMinutes() < 10 ? `0${date.getMinutes()}` : date.getMinutes(),
-      timezone: 'GMT +04:00', // // TODO:: this shoud be dynamic ?
-      format: 'AM',
+    const formatedDate = {
+      month: format(date, 'LLL'),
+      day: format(date, 'dd'),
+      year: format(date, 'y'),
+      hours: format(date, 'hh'),
+      minutes: format(date, 'mm'),
+      timezone: format(date, 'aa'),
+      format: format(date, 'O'),
     };
+
+    return formatedDate;
   };
 
   const startDate =
@@ -101,9 +103,9 @@ const AuctionSettings = () => {
       values.name ||
       values.startDate ||
       values.endDate ||
-      properties[0].address ||
-      properties[0].amount ||
-      properties[1]
+      (properties.length && properties[0].address) ||
+      (properties.length && properties[0].amount) ||
+      (properties.length && properties[1])
     ) {
       setAuctionSetupState(true);
     }
@@ -492,13 +494,6 @@ const AuctionSettings = () => {
                   onClick={() => removeProperty(i)}
                   aria-hidden="true"
                 />
-                <Button
-                  className="light-border-button remove-btn"
-                  onClick={() => removeProperty(i)}
-                >
-                  <img src={delIcon} alt="Delete" aria-hidden="true" />
-                  Remove
-                </Button>
               </div>
             ))}
 
