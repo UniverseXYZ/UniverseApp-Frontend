@@ -295,7 +295,7 @@ const RewardTiers = () => {
               state: location.state === 'edit' ? location.state : true,
             })
           }
-          disabled={!auction?.rewardTiers?.length}
+          disabled={!auction?.rewardTiers?.filter((el) => !el.removed).length}
         >
           Continue
         </Button>
