@@ -75,11 +75,12 @@ const styles = {
     fontStyle: 'normal',
     fontWeight: 'normal',
     fontSize: '16px',
+    width: 'fit-content',
   }),
   container: (defaultStyles) => ({
     ...defaultStyles,
     // position: 'unset',
-    minWidth: '135px',
+    minWidth: '120px',
     background:
       'linear-gradient(#ffffff, #ffffff) padding-box, linear-gradient(to right, #bceb00, #00eaea) border-box',
     boxShadow: '0px 10px 20px rgb(136 120 172 / 20%)',
@@ -126,9 +127,11 @@ const styles = {
     flexGrow: '0',
     padding: '0 8px 2px 0',
     cursor: 'pointer',
+    minHeight: 'initial',
   }),
   valueContainer: (base, state) => ({
     ...base,
+    padding: '0 8px',
   }),
   dropdownIndicator: (base, state) => ({
     ...base,
