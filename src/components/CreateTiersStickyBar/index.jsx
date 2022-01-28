@@ -26,6 +26,7 @@ const CreatTiersStickyBar = ({
     { value: 0, label: 'Winner #1', nftsCount: 0 },
   ]);
   const [totalNFTsCount, seTotalNFTsCount] = useState(0);
+  console.log(winnersData);
 
   useEffect(() => {
     const options = winnersData.map((winner) => ({

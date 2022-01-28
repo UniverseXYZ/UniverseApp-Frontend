@@ -88,7 +88,7 @@ const Create = () => {
     }
   };
 
-  const perPage = 12;
+  const perPage = 20;
   useEffect(async () => {
     setFetchingData(true);
     const available = await getAvailableNFTs(offset, perPage);

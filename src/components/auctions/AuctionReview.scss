@@ -29,6 +29,131 @@
       display: flex;
       justify-content: space-between;
       width: 100%;
+
+      .select--winner--tablet {
+        position: relative;
+        .box--shadow--effect--block {
+          position: absolute;
+          width: calc(100% + 8px);
+          min-height: 58px;
+          background: linear-gradient(135deg, #bceb00 15.57%, #00eaea 84.88%);
+          left: -4px;
+          right: 0;
+          top: 0;
+          bottom: 0;
+          margin: auto;
+          border-radius: 12px;
+          opacity: 0;
+          z-index: -1;
+        }
+        .css-1n7v3ny-option {
+          background-color: unset;
+        }
+        .css-1j6oqe3-control {
+          padding: 13px 14px;
+          width: 210px;
+          @include sm {
+            width: 100%;
+          }
+        }
+        .css-bd4tai-control {
+          padding: 13px 14px;
+          width: 210px;
+          @include sm {
+            width: 100%;
+          }
+        }
+        .css-12htazg-ValueContainer {
+          padding: 0%;
+
+          label.option {
+            display: flex;
+            align-items: center;
+            img {
+              width: 16px;
+              height: 16px;
+              margin-right: 10px;
+            }
+            span.label-and-value {
+              font-family: $sharpGroteskMediumFont;
+              font-style: normal;
+              font-weight: 600;
+              font-size: 11px;
+              line-height: 120%;
+              color: $black;
+              display: flex;
+              align-items: center;
+
+              span.nfts-count {
+                font-family: $spaceGroteskFont;
+                font-style: normal;
+                font-weight: 600;
+                font-size: 10px;
+                line-height: 120%;
+                color: $black;
+                margin-left: 10px;
+              }
+            }
+          }
+        }
+        .css-13rqmqc-menu {
+          .css-4ljt47-MenuList {
+            padding-top: 0px;
+            padding-bottom: 0px;
+
+            .available-select {
+              .option {
+                padding: 12px;
+
+                label.option-items {
+                  display: flex;
+                  align-items: center;
+                  img {
+                    width: 16px;
+                    height: 16px;
+                    margin-right: 10px;
+                  }
+                  span.label-and-value {
+                    font-family: $sharpGroteskMediumFont;
+                    font-style: normal;
+                    font-weight: 600;
+                    font-size: 11px;
+                    line-height: 120%;
+                    color: $black;
+                    display: flex;
+                    align-items: center;
+                    span.nfts-count {
+                      font-family: $spaceGroteskFont;
+                      font-style: normal;
+                      font-weight: 600;
+                      font-size: 10px;
+                      line-height: 120%;
+                      color: $black;
+                      margin-left: 10px;
+                    }
+                  }
+                  //   &:hover {
+                  //     background: rgba(0, 0, 0, 0.05);
+                  //     border-radius: 6px;
+                  //     flex: none;
+                  //     order: 0;
+                  //     align-self: stretch;
+                  //     flex-grow: 0;
+                  //     margin: 0px 0px;
+                  //   }
+                }
+                &:hover {
+                  background: rgba(0, 0, 0, 0.05);
+                  border-radius: 6px;
+                }
+              }
+            }
+          }
+        }
+      }
+      @include lg {
+        display: grid;
+      }
     }
     .auctions-tier {
       margin-top: 20px;
@@ -182,8 +307,78 @@
     }
   }
   .auction-reward {
-    display: flex;
-    flex-wrap: wrap;
+    // display: flex;
+    // flex-wrap: wrap;
+    .slick-track {
+      height: 98px;
+
+      @include sm {
+        width: 2000px;
+      }
+    }
+    .slick-prev,
+    .slick-next {
+      @include sm {
+        display: none !important;
+      }
+    }
+
+    .imgs-winner {
+      width: 87px;
+      height: 87px;
+      padding: 6px;
+      border: 1px solid rgba(0, 0, 0, 0.1);
+      border-radius: 12px;
+      background: $white;
+      margin-right: 12px;
+
+      .for-editions-count {
+        position: absolute;
+        width: 15px;
+        height: 15px;
+        top: 10px;
+        right: 10px;
+        background: rgba(0, 0, 0, 0.8);
+        backdrop-filter: blur(2px);
+        border-radius: 3px;
+        font-family: "Space Grotesk", sans-serif;
+        font-style: normal;
+        font-weight: 600;
+        font-size: 10px;
+        line-height: 150%;
+        color: #ffffff;
+        text-align: center;
+      }
+      .delete-hover {
+        display: none;
+      }
+      .auction-reward__box__highlight__one {
+        position: absolute;
+        bottom: -5px;
+        background-color: #ffffff;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        border-left: 1px solid rgba(0, 0, 0, 0.1);
+        border-right: 1px solid rgba(0, 0, 0, 0.1);
+        border-bottom-left-radius: 150px;
+        border-bottom-right-radius: 150px;
+        width: 75px;
+        height: 4px;
+        left: 6px;
+      }
+      .auction-reward__box__highlight__two {
+        position: absolute;
+        bottom: -9px;
+        background-color: #ffffff;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        border-left: 1px solid rgba(0, 0, 0, 0.1);
+        border-right: 1px solid rgba(0, 0, 0, 0.1);
+        border-bottom-left-radius: 150px;
+        border-bottom-right-radius: 150px;
+        width: 63px;
+        height: 4px;
+        left: 12px;
+      }
+    }
 
     .auction-reward__box {
       background: $white;
@@ -244,6 +439,10 @@
         height: 4px;
         left: 12px;
       }
+    }
+    @include sm {
+      display: flex;
+      overflow-x: auto;
     }
   }
   .auction-settings-head {
@@ -387,13 +586,6 @@
       width: 100%;
       .bid-part {
         display: flex;
-        .bidToken {
-          margin-right: 30px;
-
-          @include lg {
-            margin-right: 25px;
-          }
-        }
 
         .startingBid,
         .bidToken {
