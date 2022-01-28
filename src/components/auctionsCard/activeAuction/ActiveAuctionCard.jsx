@@ -32,15 +32,14 @@ const ActiveAuctionCard = ({ auction, removeAuction }) => {
         console.error(err);
         return;
       }
-      console.log(bids);
       setAuctionUpdated(updateBidValues(bids));
     });
-    subscribeToBidWithdrawn(auction.id, (err, data) => {
+    subscribeToBidWithdrawn(auction.id, (err, { bids }) => {
       if (err) {
         console.error(err);
         return;
       }
-      console.log(data);
+      setAuctionUpdated(updateBidValues(bids));
     });
   }, [auction]);
 
