@@ -1,30 +1,37 @@
 import React, { useState, useEffect } from 'react';
 import { withRouter } from 'react-router-dom';
+import { useErrorContext } from '../../../../contexts/ErrorContext';
 import './Tabs.scss';
 import ActiveAuctionsTab from './activeAuctions/ActiveAuctionsTab.jsx';
 import FutureAuctionsTab from './futureAuctions/FutureAuctionsTab.jsx';
 import { getAllFutureAuctions, getAllActiveAuctions } from '../../../../utils/api/auctions';
 
-const ENDING = 'ending';
-const RECENT = 'recent';
-const HIGHEST_BID = 'highestBid';
-const LOWEST_BID = 'lowestBid';
-const STARTING = 'starting';
+const ENDING = { filter: 'ending', option: 'Ending soon' };
+const RECENT = { filter: 'recent', option: 'Recently added' };
+const HIGHEST_BID = { filter: 'highestBid', option: 'Highest winning bid' };
+const LOWEST_BID = { filter: 'lowestBid', option: 'Lowest winning bid' };
+const STARTING = { filter: 'starting', option: 'Starts soon' };
 
 const Tabs = () => {
+  const { setShowError, setErrorTitle, setErrorBody } = useErrorContext();
   const [auctions, setAuctions] = useState([]);
   const [selectedTabIndex, setSelectedTabIndex] = useState(0);
   const [loading, setLoading] = useState(false);
-  const [perPage, setPerPage] = useState(2);
+  const [perPage, setPerPage] = useState(12);
   const [pageCount, setPageCount] = useState(0);
-  const [sortActive, setSortActive] = useState('Ending soon');
-  const [sortPast, setSortPast] = useState('Starts soon');
+  const [sortActive, setSortActive] = useState(ENDING.option);
+  const [sortPast, setSortPast] = useState(STARTING.option);
   const [currentPage, setCurrentPage] = useState(0);
 
   const getAuctions = async (request, _offset, filter) => {
     setLoading(true);
     try {
       const response = await request(_offset, perPage, filter);
+      if (response.error) {
+        setErrorTitle('Unexpected error');
+        setErrorBody(response.message);
+        setShowError(true);
+      }
       if (response.auctions) {
         setAuctions(response.auctions);
       }
@@ -36,27 +43,26 @@ const Tabs = () => {
       }
       setLoading(false);
     } catch (error) {
-      // TODO: handle errors
       console.error(error);
     }
   };
 
   const requestWithParams = (offset) => {
     if (selectedTabIndex === 0) {
-      if (sortActive === 'Ending soon') {
-        getAuctions(getAllActiveAuctions, offset, ENDING);
-      } else if (sortActive === 'Recently added') {
-        getAuctions(getAllActiveAuctions, offset, RECENT);
-      } else if (sortActive === 'Highest winning bid') {
-        getAuctions(getAllActiveAuctions, offset, HIGHEST_BID);
-      } else if (sortActive === 'Lowest winning bid') {
-        getAuctions(getAllActiveAuctions, offset, LOWEST_BID);
+      if (sortActive === ENDING.option) {
+        getAuctions(getAllActiveAuctions, offset, ENDING.filter);
+      } else if (sortActive === RECENT.option) {
+        getAuctions(getAllActiveAuctions, offset, RECENT.filter);
+      } else if (sortActive === HIGHEST_BID.option) {
+        getAuctions(getAllActiveAuctions, offset, HIGHEST_BID.filter);
+      } else if (sortActive === LOWEST_BID.option) {
+        getAuctions(getAllActiveAuctions, offset, LOWEST_BID.filter);
       }
     } else if (selectedTabIndex === 1) {
-      if (sortPast === 'Starts soon') {
-        getAuctions(getAllFutureAuctions, offset, STARTING);
-      } else if (sortPast === 'Recently added') {
-        getAuctions(getAllFutureAuctions, offset, RECENT);
+      if (sortPast === STARTING.option) {
+        getAuctions(getAllFutureAuctions, offset, STARTING.filter);
+      } else if (sortPast === RECENT.option) {
+        getAuctions(getAllFutureAuctions, offset, RECENT.filter);
       }
     }
   };
