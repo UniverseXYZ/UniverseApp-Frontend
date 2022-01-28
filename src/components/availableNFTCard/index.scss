@@ -97,7 +97,7 @@ div.collection__count {
   }
 
   &.selected, &.has-selected-editions {
-    background: linear-gradient($white, $white) padding-box, linear-gradient(to right, #bceb00, #00eaea) border-box;
+    background: linear-gradient($white, $white) padding-box, linear-gradient(to right, #bceb00, #00eaea) border-box !important;
     border: 2px solid transparent;
 
     .nft__box__highlight__one {
