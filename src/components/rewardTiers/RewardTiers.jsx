@@ -22,6 +22,7 @@ const RewardTiers = () => {
   const [shownActionId, setShownActionId] = useState(null);
   const [totalWinners, setTotalWinners] = useState(0);
   const [selectedWinners, setSelectedWinners] = useState({});
+  const [currentSlide, setCurrentSlide] = useState(0);
 
   const { auction, bidtype } = useAuctionContext();
 
@@ -220,13 +221,16 @@ const RewardTiers = () => {
                 <div hidden={shownActionId !== tier.id} className="auctions-tier">
                   <WinnersList
                     tier={tier}
-                    selectedWinner={selectedWinners[tier.id] || 0}
+                    selectedWinnerIndex={selectedWinners[tier.id] || 0}
+                    selectedWinners={selectedWinners}
                     setSelectedWinners={setSelectedWinners}
+                    currentSlide={currentSlide}
+                    setCurrentSlide={setCurrentSlide}
                   />
                   <div className="line-winners-nfts" />
                   <NftsList
                     onlyUniqueNFTs={onlyUniqueNFTs}
-                    selectedWinner={selectedWinners[tier.id] || 0}
+                    selectedWinnerIndex={selectedWinners[tier.id] || 0}
                   />
                 </div>
               </div>
