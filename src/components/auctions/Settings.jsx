@@ -111,7 +111,7 @@ const AuctionSettings = () => {
         ...prevValues,
         startDate: values.startDate.length !== 0,
         endDate: values.endDate.length !== 0,
-        name: values.name.trim().length !== 0,
+        name: values.name?.trim().length !== 0,
         properties: royalities ? properties : [{ address: '', amount: '' }],
       }));
     }, 2000);
@@ -243,6 +243,8 @@ const AuctionSettings = () => {
       setRoyaltyValidAddress(true);
     }
   }, [handleAddAuction]);
+
+  const continueButtonDisabled = !values.startDate || !values.endDate || !values.name;
 
   return (
     <div className="auction-settings container">
@@ -515,7 +517,11 @@ const AuctionSettings = () => {
         <Button className="light-border-button" onClick={() => history.push('/my-auctions')}>
           Back
         </Button>
-        <Button className="light-button" onClick={handleAddAuction}>
+        <Button
+          disabled={continueButtonDisabled}
+          className="light-button"
+          onClick={handleAddAuction}
+        >
           Continue
         </Button>
       </div>
