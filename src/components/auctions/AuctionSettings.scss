@@ -60,16 +60,14 @@
           font-weight: normal;
           font-size: 16px;
           line-height: 20px;
-          position: relative;
+          position: absolute;
           box-sizing: border-box;
           z-index: 5;
-          left: 93px;
-          bottom: 36px;
+          right: 10px;
+          top: 38px;
           width: 20px;
-        @include sm {
-            bottom: unset;
-            right: 3%;
-            bottom: 30%;
+          @include sm {
+            top: 44px;
           }
         }
         .intup-l {
@@ -301,11 +299,6 @@
         }
       }
       .drop-down {
-        position: absolute;
-        width: 100%;
-        height: 52px;
-        top: 23px;
-        z-index: 101;
         button {
           background-color: $white;
           padding: 15px;
@@ -329,7 +322,6 @@
       }
       @include sm {
         display: block;
-        margin-top: 75px;
         margin-bottom: 10px;
       }
     }

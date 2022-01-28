@@ -1,8 +1,8 @@
-@import '../../assets/scss/variables';
-@import '../../assets/scss/_mixins';
+@import "../../assets/scss/variables";
+@import "../../assets/scss/_mixins";
 
 .customize__auction {
-  background-image: url('../../assets/images/set-up-auction-desktop.png');
+  background-image: url("../../assets/images/set-up-auction-desktop.png");
   background-size: 100% 200px;
   background-repeat: no-repeat;
   background-position-y: 80px;
@@ -1078,13 +1078,14 @@
 
     @include sm {
       display: grid;
+      grid-template-columns: 1fr;
     }
   }
   @include lg {
-    background-image: url('../../assets//images/set-up-auction-tablet.png');
+    background-image: url("../../assets//images/set-up-auction-tablet.png");
   }
   @include sm {
-    background-image: url('../../assets/images/set-up-auction-mobile.png');
+    background-image: url("../../assets/images/set-up-auction-mobile.png");
   }
 }
 
@@ -1122,7 +1123,7 @@
       box-sizing: border-box;
     }
     &:before {
-      content: '';
+      content: "";
       padding-left: 10px;
       background: linear-gradient(135deg, #bceb00 15.57%, #00eaea 84.88%);
       color: #fff;
@@ -1137,7 +1138,7 @@
     }
   }
   &-inner:after {
-    content: '';
+    content: "";
     padding-right: 10px;
     background-color: rgba(0, 0, 0, 0.1);
   }
@@ -1257,6 +1258,7 @@
 
   @include sm {
     right: unset;
-    left: 0%;
+    left: 50%;
+    transform: translateX(-50%);
   }
 }
