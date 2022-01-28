@@ -78,13 +78,13 @@ const PastAuctionsCard = ({ auction, setShowLoadingModal, setLoadingText }) => {
         auctionSlotsInfo[i] = slotInfo;
       }
       setSlotsInfo(auctionSlotsInfo);
+      console.log(auctionSlotsInfo);
 
       // eslint-disable-next-line no-restricted-syntax
       for (const [slotIndex, slotInfo] of Object.entries(auctionSlotsInfo)) {
         if (slotInfo.winner === utils.getAddress(address)) {
           setMySlot(slotInfo);
           setMySlotIndex(slotIndex);
-          break;
         } else if (
           slotInfo.winner === '0x0000000000000000000000000000000000000000' &&
           slotInfo.revenueCaptured &&
@@ -142,6 +142,7 @@ const PastAuctionsCard = ({ auction, setShowLoadingModal, setLoadingText }) => {
       if (txReceipt.status === 1) {
         // This modal will be closed upon recieving handleAuctionWithdrawnRevenueEvent
         setLoadingText(verifyClaimLoadingText);
+        // TODO: This should be moved in the event handler somehow
         setClaimableFunds(0);
       }
     } catch (err) {
@@ -371,7 +372,7 @@ const PastAuctionsCard = ({ auction, setShowLoadingModal, setLoadingText }) => {
         </div>
       </div>
 
-      {auction.canceled || auction.bids.bidsCount === 0 ? (
+      {auction.bids.bidsCount < Object.values(slotsInfo).length && (
         <div className="empty-section">
           <PastAuctionActionSection
             auction={auction}
@@ -381,9 +382,8 @@ const PastAuctionsCard = ({ auction, setShowLoadingModal, setLoadingText }) => {
             setShowLoading={setShowLoadingModal}
           />
         </div>
-      ) : (
-        <></>
       )}
+
       {showMore ? (
         <div className="auctions-tier">
           {auction.rewardTiers.map((tier) => (

@@ -123,6 +123,7 @@ const ReleaseRewards = () => {
     const isYourEvent = claimer.toLowerCase() === address.toLowerCase();
 
     if (isYourEvent) {
+      setMySlot({ ...mySlot, totalWithdrawnNfts: mySlot.totalDepositedNfts });
       setShowLoading(false);
       setActiveTxHashes([]);
     }
@@ -181,6 +182,7 @@ const ReleaseRewards = () => {
   const handleClaimNfts = async () => {
     try {
       setShowCongratsPopup(false);
+      setLoadingText(defaultLoadingText);
       setShowLoading(true);
       const tx = await auctionSDK.handleClaimNfts({
         auctionChainId: auction.auction.onChainId,
@@ -190,8 +192,8 @@ const ReleaseRewards = () => {
       setActiveTxHashes([tx.hash]);
       const txReceipt = await tx.wait();
       if (txReceipt.status === 1) {
+        setLoadingText(verificationLoadingText);
         // This modal will be closed upon recieving notifyERC721Claimed event
-        setMySlot({ ...mySlot, totalWithdrawnNfts: mySlot.totalDepositedNfts });
       }
     } catch (err) {
       setShowLoading(false);
