@@ -3,8 +3,8 @@ import { utils } from 'ethers';
 // This comes from the contract. Max 5 NFTs can be deposited per tx
 const chunkSize = 5;
 
-// Calculated by the reward tiers below
-let maxSlotSize = 0;
+// Taken from batchDepositToAuction() function require
+const maxSlotSize = 10;
 
 const chunkifySlots = (nftsBySlots) => {
   const chunkedSlots = {};
@@ -65,6 +65,7 @@ const splitSlots = (chunkedSlots, collections) => {
         const collAddress = collections.find((coll) => coll.id === nft.collectionId)?.address;
         nftsChunke.push([nft.tokenId, utils.getAddress(collAddress)]);
       });
+
       slotIndices.push(nonZeroIndexKeys[i]);
       nfts.push(nftsChunke);
       if (slotIndices.length === maxSlotSize) {
@@ -130,9 +131,6 @@ const setMaxSlotSize = (rewardTiers) => {
 };
 
 export const calculateTransactions = (auction) => {
-  // TODO: Ask Stan about this require "Incorrect auction slots"
-  maxSlotSize = setMaxSlotSize(auction.rewardTiers);
-
   const nftsBySlots = groupTiersToSlots(auction.rewardTiers);
   // console.log(nftsBySlots);
 
