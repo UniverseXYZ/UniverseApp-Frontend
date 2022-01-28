@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import bubleIcon from '../../../../assets/images/text-bubble.png';
 import Exclamation from '../../../../assets/images/Exclamation.svg';
 import { useAuthContext } from '../../../../contexts/AuthContext';
+import { useAuctionContext } from '../../../../contexts/AuctionContext';
 import PastAuctionsList from '../../../auctionsCard/pastAuction/PastAuctionsList.jsx';
 import AuctionsCardSkeleton from '../../../auctionsCard/skeleton/AuctionsCardSkeleton';
 import ItemsPerPageDropdown from '../../../pagination/ItemsPerPageDropdown.jsx';
@@ -24,6 +25,7 @@ const PastAuctionsTab = ({
   handlePageClick,
 }) => {
   const { loggedInArtist } = useAuthContext();
+  const { setAuction } = useAuctionContext();
   const history = useHistory();
 
   return loading ? (
