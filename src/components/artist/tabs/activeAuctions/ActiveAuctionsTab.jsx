@@ -22,6 +22,7 @@ const ActiveAuctionsTab = ({
   setPerPage,
   pageCount,
   handlePageClick,
+  loading,
 }) => {
   const { loggedInArtist } = useAuthContext();
   const { setAuction } = useAuctionContext();
@@ -30,7 +31,7 @@ const ActiveAuctionsTab = ({
   if (auctions.length) {
     return (
       <>
-        <ActiveAuctionsList data={auctions} />
+        <ActiveAuctionsList data={auctions} loading={loading} />
         <div className="pagination__container">
           <ReactPaginate
             previousLabel={<LeftArrow />}
@@ -98,6 +99,7 @@ ActiveAuctionsTab.propTypes = {
   pageCount: PropTypes.number.isRequired,
   perPage: PropTypes.number.isRequired,
   setPerPage: PropTypes.func.isRequired,
+  loading: PropTypes.bool.isRequired,
 };
 
 ActiveAuctionsTab.defaultProps = {
