@@ -4,12 +4,10 @@ import { Animated } from 'react-animated-css';
 import { useHistory } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import uuid from 'react-uuid';
-import { format } from 'date-fns';
 import Popup from 'reactjs-popup';
 import Button from '../button/Button.jsx';
 import arrowUp from '../../assets/images/Arrow_Up.svg';
 import arrowDown from '../../assets/images/ArrowDown.svg';
-import infoIconRed from '../../assets/images/Vector.svg';
 import doneIcon from '../../assets/images/Completed.svg';
 import searchIconGray from '../../assets/images/search-gray.svg';
 import emptyMark from '../../assets/images/emptyMark.svg';
@@ -22,10 +20,11 @@ import { getFutureAuctions, deleteFutureAuction } from '../../utils/api/auctions
 import NoAuctionsFound from './NoAuctionsFound';
 import SortBySelect from '../input/SortBySelect';
 import SuccessPopup from '../popups/AuctionCanceledSuccessPopup.jsx';
+import FutureAuctionDateTooltip from './FutureAuctionDateTooltip.jsx';
+import FutureAuctionTierInfo from './FutureAuctionTierInfo.jsx';
 
 const FutureAuctions = ({ myAuctions, setMyAuctions, setAuction }) => {
-  const [hideLaunchIcon, setHideLaunchIcon] = useState(0);
-  const [hideEndIcon, setHideEndIcon] = useState(true);
+  const sortOptions = ['Newest', 'Oldest'];
   const [shownActionId, setshownActionId] = useState(null);
   const [offset, setOffset] = useState(0);
   const [perPage, setPerPage] = useState(10);
@@ -36,6 +35,8 @@ const FutureAuctions = ({ myAuctions, setMyAuctions, setAuction }) => {
   const [notFound, setNotFound] = useState(false);
   const [removedAuction, setRemovedAuction] = useState(false);
   const history = useHistory();
+  const [filteredAuctions, setFilteredAuctions] = useState([]);
+  const [sortOption, setSortOption] = useState(sortOptions[0]);
 
   useEffect(async () => {
     try {
@@ -45,6 +46,7 @@ const FutureAuctions = ({ myAuctions, setMyAuctions, setAuction }) => {
         setLoading(false);
       } else {
         setFutureAuctions(response.auctions);
+        setFilteredAuctions(response.auctions);
         setLoading(false);
       }
     } catch (error) {
@@ -55,6 +57,18 @@ const FutureAuctions = ({ myAuctions, setMyAuctions, setAuction }) => {
   useEffect(() => {
     setFutureAuctions(myAuctions);
   }, [myAuctions]);
+
+  useEffect(() => {
+    const newFilteredAuctions = [...futureAuctions].filter((auction) =>
+      auction.name.toLowerCase().includes(searchByName.toLowerCase())
+    );
+    if (sortOption === 'Newest') {
+      newFilteredAuctions.sort((a, b) => new Date(b.startDate) - new Date(a.startDate));
+    } else if (sortOption === 'Oldest') {
+      newFilteredAuctions.sort((a, b) => new Date(a.startDate) - new Date(b.startDate));
+    }
+    setFilteredAuctions(newFilteredAuctions);
+  }, [searchByName, sortOption]);
 
   const handleRemove = async (id) => {
     const auctionToDelete = futureAuctions.find((auction) => auction.id === id);
@@ -91,10 +105,156 @@ const FutureAuctions = ({ myAuctions, setMyAuctions, setAuction }) => {
   const getTotalNFTSperAuction = (auction) => {
     let nftsCount = 0;
     auction?.rewardTiers?.forEach((tier) => {
-      nftsCount += tier.numberOfWinners * tier.nftsPerWinner;
+      nftsCount += tier.nfts.length;
     });
     return nftsCount;
   };
+
+  const completedConfigureStep = (auction) => isAfterNow(auction.startDate);
+
+  const completedLandingPageStep = (auction) => completedConfigureStep(auction) && auction.link;
+
+  const completedFinalizeStep = (auction) =>
+    completedLandingPageStep(auction) && auction.onChain && auction.depositedNfts;
+
+  const renderStep1Cirle = (auction, mobile = false) => {
+    const completed = completedConfigureStep(auction);
+    if (mobile) {
+      return (
+        <>
+          <div className="circle">
+            {completed ? (
+              <img src={doneIcon} alt="Done" />
+            ) : (
+              <img src={emptyMark} alt="Empty mark" />
+            )}
+          </div>
+          {completed ? <div className="hz-line2" /> : <div className="hz-line1" />}
+        </>
+      );
+    }
+
+    return (
+      <div className="circle">
+        {completed ? (
+          <>
+            <img src={doneIcon} alt="Done" />
+            <div className="hz-line1" />
+          </>
+        ) : (
+          <>
+            <img src={emptyMark} alt="Empty mark" />
+            <div className="hz-line2" />
+          </>
+        )}
+      </div>
+    );
+  };
+
+  const renderStep1Button = (auction) => (
+    <Button
+      className="light-border-button"
+      disabled={auction.onChain && !auction.canceled}
+      onClick={() => {
+        setAuction(auction);
+        history.push({
+          pathname: '/setup-auction/auction-settings',
+          state: 'edit',
+        });
+      }}
+    >
+      Edit
+    </Button>
+  );
+
+  const renderStep2Circle = (auction, mobile) => {
+    const configreStepDone = completedConfigureStep(auction);
+    const landingStepDone = completedLandingPageStep(auction);
+
+    if (mobile) {
+      return (
+        <>
+          <div className="circle">
+            {configreStepDone ? (
+              <img src={doneIcon} alt="Done" />
+            ) : landingStepDone ? (
+              <img src={emptyMark} alt="Empty mark" />
+            ) : (
+              <img src={emptyWhite} alt="Empty white" />
+            )}
+          </div>
+          {configreStepDone ? <div className="hz-line1" /> : <div className="hz-line2" />}
+        </>
+      );
+    }
+    return (
+      <div className="circle">
+        {configreStepDone ? (
+          <>
+            <img src={doneIcon} alt="Done" />
+            <div className="hz-line1" />
+          </>
+        ) : (
+          <>
+            {landingStepDone ? (
+              <img src={emptyMark} alt="Empty mark" />
+            ) : (
+              <img src={emptyWhite} alt="Empty white" />
+            )}
+            <div className="hz-line2" />
+          </>
+        )}
+      </div>
+    );
+  };
+
+  const renderStep2Button = (auction) => {
+    const configureStepDone = completedConfigureStep(auction);
+    const finalizeStepDone = completedFinalizeStep(auction);
+    return (
+      <Button
+        className={configureStepDone && !finalizeStepDone ? 'light-button' : 'light-border-button'}
+        onClick={() => {
+          setAuction(auction);
+          history.push('/customize-auction-landing-page', auction.id);
+        }}
+        disabled={isBeforeNow(auction.startDate)}
+      >
+        {configureStepDone && finalizeStepDone ? 'Edit' : 'Start'}
+      </Button>
+    );
+  };
+
+  const renderStep3Circle = (auction) => (
+    <div className="circle">
+      {completedFinalizeStep(auction) ? (
+        <img alt="landing_page" src={doneIcon} />
+      ) : completedLandingPageStep(auction) ? (
+        <img alt="landing_page" src={emptyMark} />
+      ) : (
+        <img alt="landing_page" src={emptyWhite} />
+      )}
+    </div>
+  );
+
+  const renderStep3Button = (auction) =>
+    completedLandingPageStep(auction) ? (
+      <Button
+        className={completedFinalizeStep(auction) ? 'light-border-button' : 'light-button'}
+        onClick={() => {
+          setAuction(auction);
+          history.push('/finalize-auction', auction.id);
+        }}
+        disabled={isBeforeNow(auction.startDate)}
+      >
+        {!auction.onChain ? 'Start' : !auction.depositedNfts ? 'Continue' : 'Edit'}
+      </Button>
+    ) : (
+      <Button className="light-border-button" disabled>
+        Start
+      </Button>
+    );
+
   return (
     <div className="future-auctions">
       <div className="search-sort-section">
@@ -112,353 +272,125 @@ const FutureAuctions = ({ myAuctions, setMyAuctions, setAuction }) => {
         </div>
         <SortBySelect
           id="sort--select"
-          defaultValue="Sort by"
-          sortData={['Sort by', 'Newest', 'Oldest']}
-          hideFirstOption
+          defaultValue={sortOptions[0]}
+          sortData={sortOptions}
+          setSort={setSortOption}
         />
       </div>
-      {!loading ? (
-        futureAuctions
-          .slice(offset, offset + perPage)
-          .filter((item) => item.name?.toLowerCase().includes(searchByName.toLowerCase()))
-          .filter((item) => !item.launch || (item.launch && isAfterNow(item.startDate)))
-          .map((futureAuction) => {
-            const startDate = format(new Date(futureAuction.startDate), 'MMMM dd, HH:mm');
-            const endDate = format(new Date(futureAuction.endDate), 'MMMM dd, HH:mm');
-            const removeButtonDisabled =
-              (!futureAuction.canceled && futureAuction.depositedNfts) || futureAuction.onChainId;
-            return (
-              <div className="auction" key={uuid()}>
+      {loading ? (
+        <FutureCardSkeleton />
+      ) : (
+        filteredAuctions.slice(offset, offset + perPage).map((futureAuction) => {
+          const removeButtonDisabled =
+            (!futureAuction.canceled && futureAuction.depositedNfts) || futureAuction.onChainId;
+          return (
+            <div className="auction" key={futureAuction.id}>
+              <div
+                className={`left-border-effect ${
+                  isBeforeNow(futureAuction.startDate) ? 'datePassed' : ''
+                } ${
+                  futureAuction.onChain && !futureAuction.canceled && futureAuction.depositedNfts
+                    ? 'readyForLaunch'
+                    : ''
+                }`}
+              />
+              <div className="auction-header">
+                <div className="auction-header-button">
+                  <h3>{futureAuction.name}</h3>
+                </div>
                 <div
-                  className={`left-border-effect ${
-                    isBeforeNow(futureAuction.startDate) ? 'datePassed' : ''
-                  } ${
-                    futureAuction.launch && isAfterNow(futureAuction.startDate)
-                      ? 'readyForLaunch'
-                      : ''
-                  }`}
-                />
-                <div className="auction-header">
-                  <div className="auction-header-button">
-                    <h3>{futureAuction.name}</h3>
-                  </div>
-                  <div
-                    aria-hidden
-                    onClick={() => handleAuctionExpand(futureAuction.id)}
-                    role="button"
-                    tabIndex={0}
-                    className="launch-auction"
-                  >
-                    <div className="arrow">
-                      {shownActionId === futureAuction.id ? (
-                        <>
-                          <span className="tooltiptext">Show less</span>
-                          <img src={arrowUp} alt="Arrow up" aria-hidden="true" />
-                        </>
-                      ) : (
-                        <>
-                          <span className="tooltiptext">Show more</span>
-                          <img src={arrowDown} alt="Arrow down" aria-hidden="true" />
-                        </>
-                      )}
-                    </div>
+                  aria-hidden
+                  onClick={() => handleAuctionExpand(futureAuction.id)}
+                  role="button"
+                  tabIndex={0}
+                  className="launch-auction"
+                >
+                  <div className="arrow">
+                    {shownActionId === futureAuction.id ? (
+                      <>
+                        <span className="tooltiptext">Show less</span>
+                        <img src={arrowUp} alt="Arrow up" aria-hidden="true" />
+                      </>
+                    ) : (
+                      <>
+                        <span className="tooltiptext">Show more</span>
+                        <img src={arrowDown} alt="Arrow down" aria-hidden="true" />
+                      </>
+                    )}
                   </div>
                 </div>
-                <div className="auctions-launch-dates">
-                  <div className="total-dates">
-                    <p>
-                      Total NFTs: <b>{getTotalNFTSperAuction(futureAuction)}</b>
-                    </p>
-                  </div>
-                  <div
-                    className={`total-dates ${
-                      isBeforeNow(futureAuction.startDate) ? 'dateError' : ''
-                    }`}
-                  >
-                    <span
-                      onMouseOver={() => setHideLaunchIcon(futureAuction.id)}
-                      onFocus={() => setHideLaunchIcon(futureAuction.id)}
-                      onMouseLeave={() => setHideLaunchIcon(0)}
-                      onBlur={() => setHideLaunchIcon(0)}
-                    >
-                      Launch date:{' '}
-                      <b>
-                        <time>{startDate}</time>
-                      </b>
-                      {isBeforeNow(futureAuction.startDate) && (
-                        <div className="launch__date__info">
-                          {hideLaunchIcon === futureAuction.id && (
-                            <Animated animationIn="zoomIn" style={{ position: 'relative' }}>
-                              <div className="launch-info">
-                                Your launch date has already passed. Go to “Edit Auction” and adjust
-                                the launch and end dates.
-                              </div>
-                            </Animated>
-                          )}
-                          <img src={infoIconRed} alt="Info" />
-                        </div>
-                      )}
-                    </span>
-                  </div>
-                  <div
-                    className={`total-dates ${
-                      isBeforeNow(futureAuction.endDate) ? 'dateError' : ''
-                    }`}
-                  >
-                    <span
-                      onMouseOver={() => setHideEndIcon(futureAuction.id)}
-                      onFocus={() => setHideEndIcon(futureAuction.id)}
-                      onMouseLeave={() => setHideEndIcon(0)}
-                      onBlur={() => setHideEndIcon(0)}
-                    >
-                      End date:{' '}
-                      <b>
-                        <time>{endDate}</time>
-                      </b>
-                      {isBeforeNow(futureAuction.endDate) && (
-                        <div className="end__date__info">
-                          {hideEndIcon === futureAuction.id && (
-                            <Animated animationIn="zoomIn" style={{ position: 'relative' }}>
-                              <div hidden={hideEndIcon !== futureAuction.id} className="end-info">
-                                Your launch and end date has already passed. Go to “Edit Auction”
-                                and adjust the launch and end dates.
-                              </div>
-                            </Animated>
-                          )}
-                          <img src={infoIconRed} alt="Info" />
-                        </div>
-                      )}
-                    </span>
-                  </div>
+              </div>
+              <div className="auctions-launch-dates">
+                <div className="total-dates">
+                  <p>
+                    Total NFTs: <b>{getTotalNFTSperAuction(futureAuction)}</b>
+                  </p>
                 </div>
-                <div className="auctions-steps">
+                <FutureAuctionDateTooltip date={futureAuction.startDate} />
+                <FutureAuctionDateTooltip date={futureAuction.endDate} />
+              </div>
+              <div className="auctions-steps">
+                <div className="step-1">
+                  <h6>Step 1</h6>
+                  <h4>Configure auction</h4>
+                  {renderStep1Cirle(futureAuction)}
+                  {renderStep1Button(futureAuction)}
+                </div>
+                <div className="step-2">
+                  <h6>Step 2</h6>
+                  <h4>Customize landing page</h4>
+                  {renderStep2Circle(futureAuction)}
+                  {renderStep2Button(futureAuction)}
+                </div>
+                <div className="step-3">
+                  <h6>Step 3</h6>
+                  <h4>Finalize auction</h4>
+                  {renderStep3Circle(futureAuction)}
+                  {renderStep3Button(futureAuction)}
+                </div>
+              </div>
+
+              <div className="auction-steps-mobile">
+                <div className="auction-steps-moves">
+                  {renderStep1Cirle(futureAuction, true)}
+                  {renderStep2Circle(futureAuction, true)}
+                  {renderStep3Circle(futureAuction, true)}
+                </div>
+                <div className="steps">
                   <div className="step-1">
                     <h6>Step 1</h6>
                     <h4>Configure auction</h4>
-                    <div className="circle">
-                      <img src={doneIcon} alt="Done" />
-                      <div className="hz-line1" />
-                    </div>
-                    <Button
-                      className={futureAuction.onChain ? 'light-button' : 'light-border-button'}
-                      disabled={futureAuction.onChain}
-                      onClick={() => {
-                        setAuction(futureAuction);
-                        history.push({
-                          pathname: '/setup-auction/auction-settings',
-                          state: 'edit',
-                        });
-                      }}
-                    >
-                      Edit
-                    </Button>
+                    {renderStep1Button(futureAuction)}
                   </div>
                   <div className="step-2">
-                    <h6>Step2</h6>
+                    <h6>Step 2</h6>
                     <h4>Customize landing page</h4>
-                    <div className="circle">
-                      <img
-                        hidden={!futureAuction.headline && !futureAuction.link}
-                        src={doneIcon}
-                        alt="Done"
-                      />
-                      <img
-                        hidden={futureAuction.headline || futureAuction.link}
-                        src={emptyMark}
-                        alt="Empty mark"
-                      />
-                      <div className="hz-line2" />
-                    </div>
-                    <Button
-                      className={
-                        futureAuction.headline || futureAuction.link
-                          ? 'light-border-button'
-                          : 'light-button'
-                      }
-                      onClick={() => {
-                        setAuction(futureAuction);
-                        history.push('/customize-auction-landing-page', futureAuction.id);
-                      }}
-                      disabled={isBeforeNow(futureAuction.startDate)}
-                    >
-                      {futureAuction.headline || futureAuction.link ? 'Edit' : 'Start'}
-                    </Button>
+                    {renderStep2Button(futureAuction)}
                   </div>
                   <div className="step-3">
                     <h6>Step 3</h6>
                     <h4>Finalize auction</h4>
-                    <div className="circle">
-                      {futureAuction.headline || futureAuction.link ? (
-                        <img alt="landing_page" src={emptyMark} />
-                      ) : !futureAuction.onChain && !futureAuction.depositedNfts ? (
-                        <img alt="landing_page" src={emptyWhite} />
-                      ) : (
-                        <img alt="landing_page" src={doneIcon} />
-                      )}
-                    </div>
-                    {futureAuction.headline || futureAuction.link ? (
-                      <Button
-                        className={
-                          futureAuction.launch && isAfterNow(futureAuction.startDate)
-                            ? 'light-border-button'
-                            : 'light-button'
-                        }
-                        onClick={() => {
-                          setAuction(futureAuction);
-                          history.push('/finalize-auction', futureAuction.id);
-                        }}
-                        disabled={isBeforeNow(futureAuction.startDate)}
-                      >
-                        {!futureAuction.onChain
-                          ? 'Start'
-                          : !futureAuction.depositedNfts
-                          ? 'Deposit NFTs'
-                          : 'Edit'}
-                      </Button>
-                    ) : (
-                      <Button className="light-button" disabled>
-                        Start
-                      </Button>
-                    )}
+                    {renderStep3Button(futureAuction)}
                   </div>
-                </div>
-
-                <div className="auction-steps-mobile">
-                  <div className="auction-steps-moves">
-                    <div className="circle">
-                      <img src={doneIcon} alt="Done" />
-                    </div>
-                    <div className="hz-line1" />
-                    <div className="circle">
-                      <img
-                        hidden={!futureAuction.headline && !futureAuction.link}
-                        src={doneIcon}
-                        alt="Done"
-                      />
-                      <img
-                        hidden={futureAuction.headline || futureAuction.link}
-                        src={emptyMark}
-                        alt="Empty mark"
-                      />
-                    </div>
-                    <div className="hz-line2" />
-                    <div className="circle">
-                      {futureAuction.headline || futureAuction.link ? (
-                        <img alt="landing_page" src={emptyMark} />
-                      ) : (
-                        <img alt="landing_page" src={emptyWhite} />
-                      )}
-                    </div>
-                  </div>
-                  <div className="steps">
-                    <div className="step-1">
-                      <h6>Step 1</h6>
-                      <h4>Configure auction</h4>
-                      <Button
-                        className={futureAuction.onChain ? 'light-button' : 'light-border-button'}
-                        disabled={futureAuction.onChain}
-                        onClick={() => {
-                          setAuction(futureAuction);
-                          history.push('/setup-auction/auction-settings', futureAuction.id);
-                        }}
-                      >
-                        Edit
-                      </Button>
-                    </div>
-                    <div className="step-2">
-                      <h6>Step2</h6>
-                      <h4>Customize landing page</h4>
-                      <Button
-                        className={
-                          futureAuction.headline || futureAuction.link
-                            ? 'light-border-button'
-                            : 'light-button'
-                        }
-                        onClick={() => {
-                          setAuction(futureAuction);
-                          history.push('/customize-auction-landing-page', futureAuction.id);
-                        }}
-                        disabled={isBeforeNow(futureAuction.startDate)}
-                      >
-                        {futureAuction.headline || futureAuction.link ? 'Edit' : 'Start'}
-                      </Button>
-                    </div>
-                    <div className="step-3">
-                      <h6>Step 3</h6>
-                      <h4>Finalize auction</h4>
-                      {futureAuction.headline || futureAuction.link ? (
-                        <Button
-                          className="light-button"
-                          onClick={() => {
-                            setAuction(futureAuction);
-                            history.push('/finalize-auction', futureAuction.id);
-                          }}
-                          disabled={isBeforeNow(futureAuction.startDate)}
-                        >
-                          Start
-                        </Button>
-                      ) : (
-                        <Button className="light-button" disabled>
-                          Start
-                        </Button>
-                      )}
-                    </div>
-                  </div>
-                </div>
-
-                <div hidden={shownActionId !== futureAuction.id} className="auctions-tier">
-                  {futureAuction.rewardTiers.length &&
-                    futureAuction.rewardTiers.map((tier) => (
-                      <div className="tier" key={uuid()}>
-                        <div className="tier-header">
-                          <h3>{tier.name}</h3>
-                          <div className="tier-header-description">
-                            <p>
-                              NFTs per winner: <b>{tier.nftsPerWinner}</b>
-                            </p>
-                            <p>
-                              Winners: <b>{tier.numberOfWinners}</b>
-                            </p>
-                            <p>
-                              Total NFTs: <b>{tier.numberOfWinners * tier.nftsPerWinner}</b>
-                            </p>
-                          </div>
-                        </div>
-                        <div className="tier-body">
-                          {tier.nfts
-                            .filter(
-                              (value, index, nfts) =>
-                                index ===
-                                nfts.findIndex((nft) => nft.editionUUID === value.editionUUID)
-                            )
-                            .map((nft) => (
-                              <div className="tier-image" key={uuid()}>
-                                {nft?.numberOfEditions > 2 && <div className="tier-image-second" />}
-                                {nft?.numberOfEditions > 1 && <div className="tier-image-first" />}
-                                <div className="tier-image-main">
-                                  <div className="amount-of-editions">
-                                    <p>{nft?.numberOfEditions}</p>
-                                  </div>
-                                  <img src={nft?.thumbnail_url} alt={nft?.name} />
-                                </div>
-                              </div>
-                            ))}
-                        </div>
-                      </div>
-                    ))}
-                  <Button
-                    className="light-border-button"
-                    onClick={() => handleRemove(futureAuction.id)}
-                    disabled={removeButtonDisabled}
-                  >
-                    Remove
-                  </Button>
                 </div>
               </div>
-            );
-          })
-      ) : (
-        <FutureCardSkeleton />
+
+              <div hidden={shownActionId !== futureAuction.id} className="auctions-tier">
+                {futureAuction.rewardTiers.length &&
+                  futureAuction.rewardTiers.map((tier) => (
+                    <FutureAuctionTierInfo key={tier.id} tier={tier} />
+                  ))}
+                <Button
+                  className="light-border-button"
+                  onClick={() => handleRemove(futureAuction.id)}
+                  disabled={removeButtonDisabled}
+                >
+                  Remove
+                </Button>
+              </div>
+            </div>
+          );
+        })
       )}
       {notFound && <NoAuctionsFound title="No scheduled auctions found" />}
       <div className="pagination__container">
