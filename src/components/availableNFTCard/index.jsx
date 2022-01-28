@@ -126,7 +126,7 @@ const NFTCard = React.memo(
             )}
           </div>
         </div>
-        <div className="nft--card--footer">
+        <div className="nft--card--footer availability-cards">
           <div className="name--and--price">
             <h4>{nfts.name}</h4>
             <Select options={updateOptionsWithAllTiersData} onChange={onEditionClick} isMulti />
