@@ -12,7 +12,6 @@ import AuctionHeader from './AuctionHeader.jsx';
 import { getBidTypeByName } from '../../utils/fixtures/BidOptions.js';
 import { useAuctionContext } from '../../contexts/AuctionContext.jsx';
 import { useAuthContext } from '../../contexts/AuthContext.jsx';
-import CancelBidPopup from '../popups/CancelBidPopup';
 
 const AuctionDetails = ({
   onAuction,
@@ -28,7 +27,6 @@ const AuctionDetails = ({
   setShowLoading,
   setLoadingText,
   setShowCancelBidPopup,
-  showCancelBidPopup,
   selectedAuctionEnded,
   setSelectedAuctionEnded,
   mySlot,
@@ -201,10 +199,6 @@ const AuctionDetails = ({
           collections={onAuction.collections}
         />
       </Popup>
-
-      <Popup open={showCancelBidPopup} closeOnDocumentClick={false}>
-        <CancelBidPopup close={() => setShowCancelBidPopup(false)} auction={onAuction} />
-      </Popup>
     </div>
   );
 };
@@ -222,7 +216,6 @@ AuctionDetails.propTypes = {
   slotsInfo: PropTypes.oneOfType([PropTypes.object]).isRequired,
   setShowLoading: PropTypes.func.isRequired,
   setShowCancelBidPopup: PropTypes.func.isRequired,
-  showCancelBidPopup: PropTypes.bool.isRequired,
   selectedAuctionEnded: PropTypes.func.isRequired,
   setSelectedAuctionEnded: PropTypes.bool.isRequired,
   setLoadingText: PropTypes.func.isRequired,

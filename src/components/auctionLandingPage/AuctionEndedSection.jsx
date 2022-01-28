@@ -41,7 +41,7 @@ const AuctionEndedSection = ({
 
   const history = useHistory();
 
-  const { address, universeAuctionHouseContract, yourBalance, setYourBalance } = useAuthContext();
+  const { address, universeAuctionHouseContract } = useAuthContext();
   const { setActiveTxHashes, activeTxHashes } = useMyNftsContext();
 
   const [isAuctionner, setIsAuctioneer] = useState(address === onAuction.artist.address);

@@ -13,6 +13,8 @@ import NotFound from '../../components/notFound/NotFound.jsx';
 import { getAuctionLandingPage } from '../../utils/api/auctions';
 import PlaceBidPopup from '../../components/popups/PlaceBidPopup';
 import LoadingPopup from '../../components/popups/LoadingPopup';
+import CancelBidPopup from '../../components/popups/CancelBidPopup';
+
 import { getEthPriceCoingecko } from '../../utils/api/etherscan';
 import { useAuctionContext } from '../../contexts/AuctionContext';
 import { useAuthContext } from '../../contexts/AuthContext';
@@ -176,6 +178,16 @@ const AuctionLandingPage = () => {
     }
   }, [universeAuctionHouseContract, slotsInfo, address]);
 
+  /**
+   * This method gets invoked upon receiving a bid subbmited event from the BE socket connection
+   * @param {Object} err
+   * @param {Object} param1
+   * @param {String} param1.user the Address of the user who submitted the event
+   * @param {String} param1.amount the amount of the bid
+   * @param {Object} param1.userProfile Object containing user information
+   * @param {Object} param1.bids Object containing bids information (bidsCount, highestBid, lowestBid, totalBids)
+   * @returns void
+   */
   const handleBidSubmittedEvent = (err, { user, amount, userProfile, bids }) => {
     if (err) return;
     const isYourEvent = user.toLowerCase() === addressRef.current.toLowerCase();
@@ -237,6 +249,16 @@ const AuctionLandingPage = () => {
     }
   };
 
+  /**
+   * This method gets invoked upon receiving a bid withdrawn event from the BE socket connection
+   * @param {Object} err
+   * @param {Object} param1
+   * @param {String} param1.user the Address of the user who submitted the event
+   * @param {String} param1.amount the amount of the bid
+   * @param {Object} param1.userProfile Object containing user information
+   * @param {Boolean} param1.withdrawn
+   * @returns void
+   */
   const handleBidWithdrawnEvent = (err, { user, amount, userProfile, withdrawn }) => {
     const isYourEvent = user.toLowerCase() === addressRef.current.toLowerCase();
 
@@ -253,7 +275,7 @@ const AuctionLandingPage = () => {
     const shouldUpdateBalance =
       isYourEvent && auctionRef.current.auction.tokenSymbol.toLowerCase() === 'eth';
     if (shouldUpdateBalance) {
-      const newBalance = parseFloat(yourBalance) + parseFloat(amount);
+      const newBalance = parseFloat(yourBalanceRef.current) + parseFloat(amount);
       setYourBalance(newBalance);
     }
 
@@ -399,7 +421,6 @@ const AuctionLandingPage = () => {
   };
 
   useEffect(() => {
-    // We need socket initialization to happens first
     getAuctionData();
     getEthPrice();
   }, [artistUsername, auctionName]);
@@ -514,6 +535,9 @@ const AuctionLandingPage = () => {
           auctionHeadline={auction.auction?.headline || ''}
           artistName={auction.artist?.displayName}
         />
+      </Popup>
+      <Popup open={showCancelBidPopup} closeOnDocumentClick={false}>
+        <CancelBidPopup close={() => setShowCancelBidPopup(false)} auction={auction} />
       </Popup>
     </div>
   ) : loading ? (
