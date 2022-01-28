@@ -42,6 +42,7 @@ const AuctioneerView = ({
             ) : (
               <Button
                 className="light-button"
+                disabled={!auctionData.auction.finalised}
                 onClick={() => handleCaptureRevenue(tx, txIndex, false)}
               >
                 Proceed

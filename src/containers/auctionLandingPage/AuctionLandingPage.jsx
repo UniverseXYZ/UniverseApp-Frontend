@@ -64,11 +64,21 @@ const AuctionLandingPage = () => {
       console.log(auctionInfo);
 
       const tierSlots = [];
-      auctionInfo.rewardTiers.forEach((rewardTiers) => {
-        for (let i = 0; i < rewardTiers.numberOfWinners; i += 1) {
-          tierSlots.push({ ...rewardTiers, winner: auctionInfo.bidders[i]?.user?.address });
-        }
-      });
+      let slotIndexCounter = 1;
+      auctionInfo.rewardTiers
+        .sort((a, b) => a.tierPosition - b.tierPosition)
+        .forEach((rewardTier) => {
+          for (let i = 0; i < rewardTier.numberOfWinners; i += 1) {
+            // eslint-disable-next-line no-loop-func
+            const nfts = rewardTier.nfts.filter((t) => t.slot === slotIndexCounter);
+            tierSlots.push({
+              ...rewardTier,
+              nfts,
+              winner: auctionInfo.bidders[i]?.user?.address,
+            });
+            slotIndexCounter += 1;
+          }
+        });
       setBidders(auctionInfo.bidders);
       setRewardTiersSlots(tierSlots);
       setAuction(auctionInfo);

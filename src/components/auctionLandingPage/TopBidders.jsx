@@ -56,45 +56,50 @@ const TopBidders = ({
           ))}
         </div>
       </div>
-      <div className="auction__details__box__top__bidders__footer">
-        <div className="your__bid">
-          {currentBid ? (
-            <span className="your__current__bid">
-              <b>
-                Your bid:
-                <img src={currencyIcon} alt="Currency" />
-                {currentBid.amount}
-              </b>
-              {`(#${bidders.findIndex((x) => x.address === currentBid.address) + 1} in the list)`}
-            </span>
-          ) : (
-            <span className="no__bids">You haven&apos;t placed any bids</span>
-          )}
-        </div>
-        {!selectedAuctionEnded && canPlaceBids ? (
-          <div className="place__bid">
-            <button onClick={() => setShowBidPopup(true)} type="button" className="light-button">
-              Place a bid
-            </button>
-            {currentBid && !isWinningBid ? ( // TODO: add is winning bid //
-              <div className="cacnel__bid">
-                <button
-                  type="button"
-                  className="cancel--button"
-                  onClick={() => setShowCancelBidPopup(true)}
-                >
-                  <span className="tooltiptext">Cancel my bid</span>
-                  <img src={cancelIcon} alt="cancel" />
-                </button>
-              </div>
+      {selectedAuctionEnded ? (
+        <></>
+      ) : (
+        <div className="auction__details__box__top__bidders__footer">
+          <div className="your__bid">
+            {currentBid ? (
+              <span className="your__current__bid">
+                <b>
+                  Your bid:
+                  <img src={currencyIcon} alt="Currency" />
+                  {currentBid.amount}
+                </b>
+                {`(#${bidders.findIndex((x) => x.userId === currentBid.userId) + 1} in the list)`}
+              </span>
             ) : (
-              <></>
+              <span className="no__bids">You haven&apos;t placed any bids</span>
             )}
           </div>
-        ) : (
-          <></>
-        )}
-      </div>
+          {canPlaceBids ? (
+            <div className="place__bid">
+              <button onClick={() => setShowBidPopup(true)} type="button" className="light-button">
+                Place a bid
+              </button>
+              {currentBid && !isWinningBid ? ( // TODO: add is winning bid //
+                <div className="cacnel__bid">
+                  <button
+                    type="button"
+                    className="cancel--button"
+                    onClick={() => setShowCancelBidPopup(true)}
+                  >
+                    <span className="tooltiptext">Cancel my bid</span>
+                    <img src={cancelIcon} alt="cancel" />
+                  </button>
+                </div>
+              ) : (
+                <></>
+              )}
+            </div>
+          ) : (
+            <></>
+          )}
+        </div>
+      )}
+
       <Popup open={showCancelBidPopup} closeOnDocumentClick={false}>
         <CancelBidPopup
           close={() => setShowCancelBidPopup(false)}

@@ -48,7 +48,7 @@ const PlaceBidPopup = ({
 
   const setERC20Info = async () => {
     if (
-      auction.tokenAddress.toLowerCase() !== 'eth' &&
+      auction.tokenSymbol.toLowerCase() !== 'eth' &&
       signer &&
       universeAuctionHouseContract &&
       address
@@ -69,6 +69,7 @@ const PlaceBidPopup = ({
       setBalance(+utils.formatEther(erc20Balance));
     } else {
       setBalance(yourBalance);
+      setAllowance(yourBalance);
     }
   };
   useEffect(() => {
