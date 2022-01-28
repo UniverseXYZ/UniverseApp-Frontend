@@ -577,8 +577,13 @@
         .tier__title {
           display: flex;
           align-items: center;
+          width: 80%;
 
           h4 {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 50%;
             font-family: $sharpGroteskSemiBoldFont;
             font-weight: 600;
             font-size: 16px;
