@@ -23,9 +23,11 @@ import GoBackPopup from './GoBackPopup';
 import {
   disconnectAuctionSocket,
   initiateAuctionSocket,
+  removeAllListeners,
   subscribeToCancelation,
   subscribeToDepositNfts,
   subscribeToOnChainCreation,
+  subscribeToWithdrawNfts,
 } from '../../utils/websockets/auctionEvents';
 
 const FinalizeAuction = () => {
@@ -50,7 +52,8 @@ const FinalizeAuction = () => {
   const [approvedTxCount, setApprovedTxCount] = useState(0);
   const [approvedTxs, setApprovedTxs] = useState([]);
   const [loadingText, setLoadingText] = useState(defaultLoadingText);
-  const [verifyingTxIndex, setVerifyingTxIndex] = useState([]);
+  const [depositVerifyingTxIndex, setDepositVerifyingTxIndex] = useState([]);
+  const [withdrawVerifyingTxIndex, setWithdrawVerifyingTxIndex] = useState([]);
 
   useEffect(() => {
     if (auction.id) {
@@ -72,16 +75,35 @@ const FinalizeAuction = () => {
       subscribeToDepositNfts(auction.id, (err, data) => {
         if (err) return;
         setApprovedTxCount(approvedTxCount + 1);
-        setApprovedTxs([...approvedTxs, verifyingTxIndex.pop()]);
+        const newVerifyTxs = [...depositVerifyingTxIndex];
+        const txIndex = newVerifyTxs.pop();
+        setApprovedTxs([...approvedTxs, txIndex]);
         setAuction({ ...auction, depositNfts: true });
+        setDepositVerifyingTxIndex(newVerifyTxs);
         setShowLoading(false);
         if (!auction.canceled && txIndex === transactions.finalSlotIndices.length - 1) {
           setShowSuccessPopup(true);
         }
       });
+
+      subscribeToWithdrawNfts(auction.id, (err, { hasWithdrawnAll }) => {
+        if (err) return;
+
+        const newApprovedTxs = [...approvedTxs];
+        const newVerifyTxs = [...withdrawVerifyingTxIndex];
+        const txIndex = newVerifyTxs.pop();
+        newApprovedTxs.splice(newApprovedTxs.indexOf(txIndex), 1);
+        setApprovedTxs(newApprovedTxs);
+        setApprovedTxCount(approvedTxCount - 1);
+        setWithdrawVerifyingTxIndex(newVerifyTxs);
+        if (hasWithdrawnAll) {
+          setAuction({ ...auction, depositedNfts: false });
+        }
+      });
     }
 
     return () => {
+      removeAllListeners(auction.id);
       disconnectAuctionSocket();
     };
   }, [auction.id]);
@@ -189,6 +211,7 @@ const FinalizeAuction = () => {
       const txResult = await tx.wait();
 
       if (txResult.status === 1) {
+        setLoadingText(verificationLoadingText);
         await patchAuction(auction.id, {
           createAuctionTxHash: tx.hash,
         });
@@ -239,7 +262,7 @@ const FinalizeAuction = () => {
       const txReceipt = await tx.wait();
       if (txReceipt.status === 1) {
         setLoadingText(verificationLoadingText);
-        setVerifyingTxIndex([...verifyingTxIndex, txIndex]);
+        setDepositVerifyingTxIndex([...depositVerifyingTxIndex, txIndex]);
       } else {
         setErrors();
       }
@@ -271,6 +294,7 @@ const FinalizeAuction = () => {
           slot,
           nftsCountMap[slot]
         );
+        setLoadingText(defaultLoadingText);
         setShowLoading(true);
         txHashes.push(tx.hash);
         setActiveTxHashes(txHashes);
@@ -278,23 +302,17 @@ const FinalizeAuction = () => {
         const txReceipt = await tx.wait();
         return txReceipt.status;
       });
-      setActiveTxHashes(txHashes);
-      const results = await Promise.all(txs);
-      setActiveTxHashes([]);
-      setShowAuctionDeployLoading(false);
-      // Withdraw from backend
-      const nftIds = transactions.displayNfts[txIndex].map((nft) => nft.id);
-      const withdrawBE = await withdrawNfts({ auctionId: auction.id, nftIds });
 
-      // Update nfts to withdraw
-      const newApprovedTxs = [...approvedTxs];
-      newApprovedTxs.splice(newApprovedTxs.indexOf(txIndex), 1);
-      if (newApprovedTxs.length === 0) {
-        await patchAuction(auction.id, { depositedNfts: false });
-        setAuction({ ...auction, depositedNfts: false });
+      setActiveTxHashes(txHashes);
+
+      const results = await Promise.all(txs);
+
+      if (!results.find((status) => status !== 1)) {
+        setLoadingText(verificationLoadingText);
+        setWithdrawVerifyingTxIndex([...withdrawVerifyingTxIndex, txIndex]);
+      } else {
+        console.log('error ocurred');
       }
-      setApprovedTxs(newApprovedTxs);
-      setApprovedTxCount(approvedTxCount - 1);
     } catch (err) {
       console.log(err);
       setShowLoading(false);
