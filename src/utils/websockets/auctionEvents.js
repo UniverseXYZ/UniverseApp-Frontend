@@ -96,6 +96,7 @@ export const subscribeToSlotCaptured = (auctionId, cb) => {
     console.log('Auction capture slot event received!');
     return cb(null, msg);
   });
+  console.log('Subscirbed for subscribeToSlotCaptured');
 };
 
 export const subscribeToBidWithdraw = (auctionId, cb) => {

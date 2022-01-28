@@ -27,6 +27,7 @@ import {
   subscribeToBidMatched,
   subscribeToSlotCaptured,
   subscribeToERC721Claimed,
+  removeAllListeners,
 } from '../../utils/websockets/auctionEvents';
 
 const ReleaseRewards = () => {
@@ -194,14 +195,14 @@ const ReleaseRewards = () => {
    */
   const handleClaimNfts = async () => {
     try {
-      const tx = await auctionSDK.handleClaimNfts(
-        auction.auction.onChainId,
-        +mySlotIndex,
-        mySlot.totalDepositedNfts
-      );
+      setShowCongratsPopup(false);
       setShowLoading(true);
+      const tx = await auctionSDK.handleClaimNfts({
+        auctionChainId: auction.auction.onChainId,
+        slotIndex: +mySlotIndex,
+        amount: mySlot.totalDepositedNfts,
+      });
       setActiveTxHashes([tx.hash]);
-
       const txReceipt = await tx.wait();
       if (txReceipt.status === 1) {
         // This modal will be closed upon recieving notifyERC721Claimed event
@@ -213,37 +214,38 @@ const ReleaseRewards = () => {
     }
   };
 
-  // useEffect(() => {
-  //   setupPage();
-  // }, [universeAuctionHouseContract]);
-
   /**
    * Initialise and Attach Socket events
    */
   useEffect(async () => {
     initiateAuctionSocket();
-    subscribeToSlotCaptured(auction.auction.id, handleSlotCapturedEvent);
-    subscribeToBidMatched(auction.auction.id, handleBidMatchedEvent);
-    subscribeToERC721Claimed(auction.auction.id, handleERC721ClaimedEvent);
-    subscribeToAuctionFinalised(auction.auction.id, async (err) => {
-      if (err) return;
-      setAuction((upToDate) => ({
-        ...upToDate,
-        auction: { ...upToDate.auction, finalised: true },
-      }));
-    });
-    return () => {
-      disconnectAuctionSocket();
-    };
-  }, [auction?.auction?.id]);
+  }, []);
 
   useEffect(async () => {
-    if (auctionSDK) {
+    if (auctionSDK && auction?.auction?.onChainId) {
       const info = await auctionSDK.getAuctionSlotsInfo(auction?.auction?.onChainId);
       setSlotsInfo(info);
       setupPage(info);
+
+      removeAllListeners(auction.auction.id);
+      subscribeToSlotCaptured(auction.auction.id, handleSlotCapturedEvent);
+      subscribeToBidMatched(auction.auction.id, handleBidMatchedEvent);
+      subscribeToERC721Claimed(auction.auction.id, handleERC721ClaimedEvent);
+
+      subscribeToAuctionFinalised(auction.auction.id, async (err) => {
+        if (err) return;
+        setAuction((upToDate) => ({
+          ...upToDate,
+          auction: { ...upToDate.auction, finalised: true },
+        }));
+      });
     }
-  }, [auctionSDK]);
+
+    return () => {
+      removeAllListeners(auction.auction.id);
+      disconnectAuctionSocket();
+    };
+  }, [auctionSDK, auction?.auction?.onChainId]);
 
   useEffect(async () => {
     // eslint-disable-next-line no-restricted-syntax
@@ -253,15 +255,6 @@ const ReleaseRewards = () => {
         setMySlotIndex(slotIndex);
         break;
       }
-
-      // TODO:: You cannot withdraw NFTs from this page, so no need to calculate this
-      // const availableForWithdraw =
-      //   slotInfo.winner === '0x0000000000000000000000000000000000000000' &&
-      //   slotInfo.revenueCaptured &&
-      //   slotInfo.totalWithdrawnNfts.toNumber() !== slotInfo.totalDepositedNfts.toNumber();
-      // else if (availableForWithdraw) {
-      //   setSlotsToWithdraw([...slotsToWithdraw, +slotIndex]);
-      // }
     }
   }, [slotsInfo]);
 
