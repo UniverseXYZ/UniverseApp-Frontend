@@ -15,7 +15,6 @@ const DepositNftsSection = ({
   completedCollectionsStep,
   completedAuctionCreationStep,
   completedDepositStep,
-  approvedTxCount,
   approvedTxs,
   handleWithdraw,
   isCanceledAuction,
@@ -47,7 +46,7 @@ const DepositNftsSection = ({
       if (approvedTxs.indexOf(txIndex) < 0) {
         const isDisabled =
           txIndex === 0
-            ? !(completedCollectionsStep && approvedTxCount === 0)
+            ? !(completedCollectionsStep && approvedTxs.length === 0)
             : !(completedCollectionsStep && approvedTxs.indexOf(txIndex - 1) >= 0);
 
         return (
@@ -191,7 +190,6 @@ DepositNftsSection.propTypes = {
   completedCollectionsStep: PropTypes.bool.isRequired,
   completedDepositStep: PropTypes.bool.isRequired,
   isCanceledAuction: PropTypes.bool.isRequired,
-  approvedTxCount: PropTypes.number.isRequired,
   approvedTxs: PropTypes.oneOfType([PropTypes.array]).isRequired,
 };
 
