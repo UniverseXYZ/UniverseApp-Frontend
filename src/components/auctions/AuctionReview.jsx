@@ -343,8 +343,8 @@ const AuctionReview = () => {
           <img src={yellowIcon} alt="icon" />
         </span>
         <h1>
-          Creating an auction doesn’t launch it. You will be able to mint all the NFTs and set up a
-          landing page to host your launch. Once you launch anyone can start bidding.
+          Creating an auction doesn’t launch it. You will be able to deposit all the NFTs and set up
+          a landing page to host your launch. Once you launch anyone can start bidding.
         </h1>
       </div>
       <div className="btn-div">
