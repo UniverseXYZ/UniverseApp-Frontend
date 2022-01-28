@@ -4,20 +4,17 @@ import uuid from 'react-uuid';
 import './RewardTiers.scss';
 import '../auctions/Tiers.scss';
 import { Popup } from 'reactjs-popup';
-import Slider from 'react-slick';
 import union from '../../assets/images/Union.svg';
-import mp3Icon from '../../assets/images/mp3-icon.png';
-import videoIcon from '../../assets/images/video-icon.svg';
 import arrowUp from '../../assets/images/Arrow_Up.svg';
 import arrowDown from '../../assets/images/ArrowDown.svg';
 import pencil from '../../assets/images/pencil.svg';
-import universeIcon from '../../assets/images/universe-img.svg';
-import WinnerIcon from '../../assets/images/winner-icon.svg';
 import Button from '../button/Button.jsx';
 import delateIcon from '../../assets/images/RemoveBtn.svg';
 import { useAuctionContext } from '../../contexts/AuctionContext';
 import RewardTierRemovePopup from '../popups/RewardTierRemovePopup';
 import { AUCTION_SETTINGS_LIMITATION } from '../../utils/config';
+import WinnersList from './WinnersList/WinnersList';
+import NftsList from './NftsList/NftsList';
 
 const RewardTiers = () => {
   const history = useHistory();
@@ -45,10 +42,6 @@ const RewardTiers = () => {
       });
     setSelectedWinners(selectedWinnersClone);
   }, [auction]);
-
-  const updateSelectedWinners = (id, index) => {
-    setSelectedWinners({ ...selectedWinners, [id]: index });
-  };
 
   return (
     <div className="container reward-tiers">
@@ -141,83 +134,6 @@ const RewardTiers = () => {
               countNfts += a.length;
             });
 
-            const selectedWinner = selectedWinners[tier.id] || 0;
-
-            const winnerNftLength = Object.keys(onlyUniqueNFTs[selectedWinner]).length;
-            const settingsNfts = {
-              variableWidth: true,
-              infinite: winnerNftLength > 5,
-              slidesToShow: winnerNftLength < 6 ? winnerNftLength : 1,
-              initialSlide: 0,
-              responsive: [
-                {
-                  breakpoint: 993,
-                  settings: {
-                    infinite: winnerNftLength > 3,
-                    slidesToShow: winnerNftLength < 4 ? winnerNftLength : 1,
-                  },
-                },
-                {
-                  breakpoint: 640,
-                  settings: {
-                    infinite: winnerNftLength > 2,
-                    slidesToShow: winnerNftLength < 3 ? winnerNftLength : 1,
-                  },
-                },
-                {
-                  breakpoint: 426,
-                  settings: {
-                    infinite: winnerNftLength > 1,
-                    slidesToShow: winnerNftLength < 2 ? winnerNftLength : 1,
-                  },
-                },
-              ],
-            };
-
-            const settingsWinners = {
-              variableWidth: true,
-              infinite: tier.winners > 7,
-              slidesToShow: tier.winners < 8 ? tier.winners : 1,
-              initialSlide: 0,
-              responsive: [
-                {
-                  breakpoint: 1225,
-                  settings: {
-                    infinite: tier.winners > 6,
-                    slidesToShow: tier.winners < 7 ? tier.winners : 1,
-                  },
-                },
-                {
-                  breakpoint: 992,
-                  settings: {
-                    infinite: tier.winners > 4,
-                    slidesToShow: tier.winners < 5 ? tier.winners : 1,
-                  },
-                },
-                {
-                  breakpoint: 680,
-                  settings: {
-                    infinite: tier.winners > 3,
-                    slidesToShow: tier.winners < 4 ? tier.winners : 1,
-                  },
-                },
-                {
-                  breakpoint: 497,
-                  settings: {
-                    infinite: tier.winners > 2,
-                    slidesToShow: tier.winners < 3 ? tier.winners : 1,
-                  },
-                },
-                {
-                  breakpoint: 367,
-                  settings: {
-                    infinite: tier.winners > 1,
-                    slidesToShow: tier.winners < 2 ? tier.winners : 1,
-                  },
-                },
-              ],
-            };
-
             return (
               <div className="view-tier" key={uuid()}>
                 <div className="auction-header">
@@ -302,133 +218,16 @@ const RewardTiers = () => {
                   </div>
                 </div>
                 <div hidden={shownActionId !== tier.id} className="auctions-tier">
-                  <div className="reward__winner__lists">
-                    <Slider {...settingsWinners}>
-                      {tier.nftSlots.map((data, i) => (
-                        <div
-                          className={
-                            selectedWinner === i
-                              ? 'reward__winner-box selected'
-                              : 'reward__winner-box'
-                          }
-                          aria-hidden="true"
-                          key={uuid()}
-                          onClick={() => updateSelectedWinners(tier.id, i)}
-                        >
-                          <img src={WinnerIcon} alt="winner-icon" />
-                          <p>Winner #{data.slot + 1}</p>
-                          <span>{data.nftsData?.length} NFTs</span>
-                          <div className="box--shadow--effect--block" />
-                        </div>
-                      ))}
-                    </Slider>
-                  </div>
+                  <WinnersList
+                    tier={tier}
+                    selectedWinner={selectedWinners[tier.id] || 0}
+                    setSelectedWinners={setSelectedWinners}
+                  />
                   <div className="line-winners-nfts" />
-                  <div className="rev-reward">
-                    <Slider {...settingsNfts}>
-                      {Object.keys(onlyUniqueNFTs[selectedWinner]).map((key) => {
-                        const {
-                          artworkType,
-                          url,
-                          count,
-                          nftName,
-                          collectioName,
-                          collectionAddress,
-                          collectionUrl,
-                          tokenIds,
-                        } = onlyUniqueNFTs[selectedWinner][key];
-                        const nftIsImage =
-                          artworkType === 'png' ||
-                          artworkType === 'jpg' ||
-                          artworkType === 'jpeg' ||
-                          artworkType === 'mpeg' ||
-                          artworkType === 'webp';
-
-                        let tokenIdString = '';
-                        const tokenIdsLength = tokenIds.length > 5 ? 4 : tokenIds.length - 1;
-                        for (let i = 0; i <= tokenIdsLength; i += 1) {
-                          tokenIdString += ` #${tokenIds[i]},`;
-                        }
-                        tokenIdString = tokenIdString.slice(0, tokenIdString.length - 1);
-                        if (tokenIds.length > 5) {
-                          tokenIdString += ' .....';
-                        }
-
-                        return (
-                          <div className="rev-reward__box">
-                            <div className="rev-reward__box__image">
-                              {artworkType === 'mp4' && (
-                                <video
-                                  onMouseOver={(event) => event.target.play()}
-                                  onFocus={(event) => event.target.play()}
-                                  onMouseOut={(event) => event.target.pause()}
-                                  onBlur={(event) => event.target.pause()}
-                                >
-                                  <source src={url} type="video/mp4" />
-                                  <track kind="captions" />
-                                  Your browser does not support the video tag.
-                                </video>
-                              )}
-                              {artworkType === 'mpeg' && (
-                                <img className="preview-image" src={mp3Icon} alt={nftName} />
-                              )}
-                              {nftIsImage && (
-                                <img className="preview-image" src={url} alt={nftName} />
-                              )}
-                              {artworkType === 'mp4' && (
-                                <img className="video__icon" src={videoIcon} alt="Video Icon" />
-                              )}
-                            </div>
-                            <div className="rev-reward__box__name">
-                              <h3>{nftName}</h3>
-                            </div>
-                            <div className="rev-reward__box__footer">
-                              <div className="collection__details">
-                                {collectioName && (
-                                  <>
-                                    {typeof collectionUrl === 'string' &&
-                                    collectionUrl.startsWith('#') ? (
-                                      <div
-                                        className="random__bg__color"
-                                        style={{ backgroundColor: collectionUrl }}
-                                      >
-                                        {collectioName.charAt(0)}
-                                      </div>
-                                    ) : collectionAddress ===
-                                      process.env.REACT_APP_UNIVERSE_ERC_721_ADDRESS.toLowerCase() ? (
-                                      <img src={universeIcon} alt={collectioName} />
-                                    ) : (
-                                      <img src={collectionUrl} alt={collectioName} />
-                                    )}
-                                    <span>{collectioName}</span>
-                                  </>
-                                )}
-                              </div>
-                              <div>
-                                {count > 1 ? (
-                                  <div className="tickeid-popup">
-                                    <span className="ed-count">{`x${count || 1}`}</span>
-                                    <div className="tooltiptext nft-tokenid-block">
-                                      <span className="nft-tokenid-title">Token IDs: </span>
-                                      <span className="nft-tokenids">{tokenIdString}</span>
-                                    </div>
-                                  </div>
-                                ) : (
-                                  <span className="ed-count">{`x${count || 1}`}</span>
-                                )}
-                              </div>
-                            </div>
-                            {count > 1 && (
-                              <>
-                                <div className="rev-reward__box__highlight__one" />
-                                <div className="rev-reward__box__highlight__two" />
-                              </>
-                            )}
-                          </div>
-                        );
-                      })}
-                    </Slider>
-                  </div>
+                  <NftsList
+                    onlyUniqueNFTs={onlyUniqueNFTs}
+                    selectedWinner={selectedWinners[tier.id] || 0}
+                  />
                 </div>
               </div>
             );

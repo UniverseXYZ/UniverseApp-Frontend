@@ -1,0 +1,17 @@
+@import "../../../assets/scss/variables";
+@import "../../../assets/scss/_mixins";
+
+.rev-reward {
+  .slick-track {
+    padding-bottom: 15px;
+  }
+  @include lg {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  @include md {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  @include sm {
+    grid-template-columns: 1fr;
+  }
+}
