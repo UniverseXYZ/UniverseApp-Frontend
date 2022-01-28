@@ -279,6 +279,17 @@ const AuctionSettings = () => {
     }
   }, []);
 
+  useEffect(() => {
+    if (isEditingAuction && royaltyAddress.length > 0) {
+      const royaltiesMapIndexesValues = {};
+
+      royaltyAddress.forEach((element, index) => {
+        royaltiesMapIndexesValues[element.address] = [index];
+      });
+      setRoyaltiesMapIndexes(royaltiesMapIndexesValues);
+    }
+  }, []);
+
   const continueButtonDisabled =
     !values.startDate ||
     !values.endDate ||
