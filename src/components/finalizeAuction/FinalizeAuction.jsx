@@ -1,5 +1,5 @@
 /* eslint-disable no-loop-func */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useHistory } from 'react-router-dom';
 import Popup from 'reactjs-popup';
 import { utils, Contract } from 'ethers';
@@ -25,8 +25,7 @@ import { useErrorContext } from '../../contexts/ErrorContext';
 import { useSocketContext } from '../../contexts/SocketContext';
 
 const FinalizeAuction = () => {
-  const defaultLoadingText =
-    'The transaction is in progress. Keep this window opened. Navigating away from the page will reset the curent progress.';
+  const defaultLoadingText = 'The transaction is in progress...';
   const verificationLoadingText =
     'The transaction is being verified. This will take a few seconds.';
 
@@ -44,175 +43,194 @@ const FinalizeAuction = () => {
   const [showSuccessPopup, setShowSuccessPopup] = useState(false);
   const [showGoBackPopup, setShowGoBackPopup] = useState(false);
   const [transactions, setTransactions] = useState(null);
+
+  // Only one deposit button has to be enabled at a time
+  // Buttons are enabled one at a time starting from the first one
+  // After the nfts are deposited approvedTxs is updated with the approved tx indices
+  // tx indices range: 0 - N
   const [approvedTxs, setApprovedTxs] = useState([]);
+
   const [loadingText, setLoadingText] = useState(defaultLoadingText);
-  const [depositVerifyingTxIndex, setDepositVerifyingTxIndex] = useState([]);
-  const [withdrawVerifyingTokenIds, setWithdrawVerifyingTokenIds] = useState([]);
+  const [depositVerifyingTxIndex, setDepositVerifyingTxIndex] = useState(null);
+  const [withdrawVerifyingTokenIds, setWithdrawVerifyingTokenIds] = useState(null);
   const [approvingCollections, setApprovingCollections] = useState([]);
 
-  const subscribeToOnChainCreation = (err, msg) => {
+  // useRef is used to access latest state inside socket event callbacks
+  // More info why this is used here (https://github.com/facebook/react/issues/16975)
+  // Start of useRef section
+
+  const transactionsRef = useRef(transactions);
+  const approvedTxsRef = useRef(approvedTxs);
+  const depositVerifyingTxIndexRef = useRef(depositVerifyingTxIndex);
+  const withdrawVerifyingTokenIdsRef = useRef(withdrawVerifyingTokenIds);
+
+  useEffect(() => {
+    transactionsRef.current = transactions;
+  }, [transactions]);
+
+  useEffect(() => {
+    approvedTxsRef.current = approvedTxs;
+  }, [approvedTxs]);
+
+  useEffect(() => {
+    depositVerifyingTxIndexRef.current = depositVerifyingTxIndex;
+  }, [depositVerifyingTxIndex]);
+
+  useEffect(() => {
+    withdrawVerifyingTokenIdsRef.current = withdrawVerifyingTokenIds;
+  }, [withdrawVerifyingTokenIds]);
+
+  // End of useRef section
+
+  const handleAuctionCreatedEvent = (err, { onChainId }) => {
     if (err) return;
-    const { onChainId } = msg;
     setAuction((upToDateAuction) => ({ ...upToDateAuction, onChainId, canceled: false }));
     setShowLoading(false);
   };
 
-  const subscribeToCancelation = (err) => {
+  const handleAuctionCanceledEvent = (err, data) => {
     if (err) return;
     setAuction((upToDateAuction) => ({ ...upToDateAuction, canceled: true }));
     setShowLoading(false);
   };
 
-  const subscribeToDepositNfts = (err, msg) => {
+  const handlerErc721DepositedEvent = (err, { tokenId, collectionAddress }) => {
     if (err) return;
-    const { tokenId, collectionAddress } = msg;
-    let newAuction = null;
-    let newVerifyTxs = [];
 
-    setDepositVerifyingTxIndex((upToDate) => {
-      newVerifyTxs = [...upToDate];
-      return upToDate;
-    });
+    // 1. Get tx index that is being verified
+    const txIndex = depositVerifyingTxIndexRef.current;
+    if (txIndex !== null) {
+      // 2. Get nfts from the transactions config
+      const slotNfts = transactionsRef.current.displayNfts[txIndex] || [];
+      const collectionMatch = auction.collections.find(
+        (c) => c.address.toLowerCase() === collectionAddress.toLowerCase()
+      );
 
-    const txIndex = newVerifyTxs.pop();
+      // 3. Iterate over each nft
+      for (let i = 0; i < slotNfts.length; i += 1) {
+        const nft = slotNfts[i];
 
-    if (txIndex !== undefined) {
-      setTransactions((txs) => {
-        const txsConfig = txs;
-        const slotNfts = txsConfig.displayNfts[txIndex] || [];
-        const collectionMatch = auction.collections.find(
-          (c) => c.address.toLowerCase() === collectionAddress.toLowerCase()
-        );
-        for (let i = 0; i < slotNfts.length; i += 1) {
-          const nft = slotNfts[i];
-          const hasNftMatch = !!(nft.tokenId === tokenId && collectionMatch);
-          if (hasNftMatch) {
-            nft.deposited = true;
+        // 4. Check if current nft is the one received from the event params
+        const hasNftMatch = !!(nft.tokenId === tokenId && collectionMatch);
 
-            const hasNotDepositedNfts = slotNfts.some((slotNft) => !slotNft.deposited);
-            if (!hasNotDepositedNfts) {
-              setApprovedTxs((upToDate) => {
-                if (upToDate.indexOf(txIndex) < 0) {
-                  return [...upToDate, txIndex];
-                }
-                return upToDate;
-              });
-              setDepositVerifyingTxIndex(newVerifyTxs);
-              setAuction((auct) => {
-                newAuction = { ...auct, depositedNfts: true };
-                return newAuction;
-              });
+        // 5. If it is -> mark as deposited
+        if (hasNftMatch) {
+          nft.deposited = true;
 
-              if (!newVerifyTxs.length) {
-                setShowLoading(false);
+          const hasNotDepositedNfts = slotNfts.some((slotNft) => !slotNft.deposited);
+          // 6. If all nfts are deposited for the transaction -> add the tx index as approved
+          if (!hasNotDepositedNfts) {
+            if (approvedTxsRef.current.indexOf(txIndex) < 0) {
+              const newApprovedTxs = [...approvedTxsRef.current, txIndex];
+              setApprovedTxs(newApprovedTxs);
+              setDepositVerifyingTxIndex(null);
+              setShowLoading(false);
+
+              // 7. If all transactions have been deposited show success modal
+              if (newApprovedTxs.length === transactionsRef.current.finalSlotIndices.length) {
                 setShowSuccessPopup(true);
               }
             }
-          }
-          if (hasNftMatch) {
-            break;
+
+            // 8. Set auction deposited nfts status to true
+            setAuction((auct) => ({ ...auct, depositedNfts: true }));
           }
         }
 
-        return txsConfig;
-      });
+        // If we have found a matching nft there is no need to loop futher
+        if (hasNftMatch) {
+          break;
+        }
+      }
     }
+    setTransactions(transactionsRef.current);
   };
 
-  const subscribeToWithdrawNfts = (err, msg) => {
+  const handlerErc721WithdrawnEvent = (err, { hasWithdrawnAll, tokenId }) => {
     if (err) return;
-    const { tokenId, hasWithdrawnAll } = msg;
-    let apprTxss = null;
 
-    setApprovedTxs((txs) => {
-      apprTxss = txs;
-      return txs;
-    });
+    // 1. Get tx index that is being withdrawn
+    const txIndex = withdrawVerifyingTokenIdsRef.current;
 
-    let newVerifyTokenIds = null;
-    setWithdrawVerifyingTokenIds((upToDate) => {
-      newVerifyTokenIds = [...upToDate];
-      newVerifyTokenIds.splice(newVerifyTokenIds.indexOf(tokenId.toString()), 1);
-      return newVerifyTokenIds;
-    });
+    if (txIndex !== null) {
+      // 2. Get nfts from the transactions config
+      const slotNfts = transactionsRef.current.displayNfts[txIndex] || [];
 
-    let txsConfig = [];
-    setTransactions((txs) => {
-      let foundNft = false;
-      txsConfig = txs;
-      for (let slotIndex = 0; slotIndex < txsConfig.displayNfts.length; slotIndex += 1) {
-        const slotNfts = txsConfig.displayNfts[slotIndex] || [];
-        for (let i = 0; i < slotNfts.length; i += 1) {
-          const nft = slotNfts[i];
-          if (nft.tokenId === tokenId.toString()) {
-            nft.deposited = false;
-            foundNft = true;
+      // 3. Iterate over each nft
+      for (let i = 0; i < slotNfts.length; i += 1) {
+        let foundNft = false;
+        const nft = slotNfts[i];
+        // 4. If nft match is found mark as not deposited
+        if (nft.tokenId === tokenId.toString()) {
+          nft.deposited = false;
+          foundNft = true;
 
-            const hasDepositedNfts = slotNfts.some((slotNft) => slotNft.deposited);
-            if (!hasDepositedNfts) {
-              apprTxss.splice(apprTxss.indexOf(slotIndex), 1);
-              setApprovedTxs(apprTxss);
-            }
-          }
-          if (foundNft) {
-            break;
+          // 5. If all nfts have been withdraw, pop the approved tx index
+          const hasDepositedNfts = slotNfts.some((slotNft) => slotNft.deposited);
+          if (!hasDepositedNfts) {
+            approvedTxsRef.current.splice(approvedTxsRef.current.indexOf(txIndex), 1);
+
+            setApprovedTxs(approvedTxsRef.current);
+            setShowLoading(false);
           }
         }
+        // 6. If nft has been found there is no need to loop further
         if (foundNft) {
           break;
         }
       }
-
-      return txsConfig;
-    });
-
-    if (hasWithdrawnAll) {
-      setAuction((upToDate) => ({ ...upToDate, depositedNfts: false }));
     }
 
-    if (!newVerifyTokenIds.length) {
-      setShowLoading(false);
+    setTransactions(transactionsRef.current);
+
+    // 7. If all nfts have been withdrawn set the auction deposited nfts status to false
+    if (hasWithdrawnAll) {
+      setAuction((upToDate) => ({ ...upToDate, depositedNfts: false }));
     }
   };
 
   useEffect(() => {
-    if (auction.id) {
+    if (auction?.id) {
+      // Ready & Tested
       subscribeTo({
         auctionId: auction.id,
         eventName: auctionEvents.CREATED,
-        cb: (err, msg) => subscribeToOnChainCreation(err, msg),
+        cb: handleAuctionCreatedEvent,
       });
 
+      // Ready & Tested
       subscribeTo({
         auctionId: auction.id,
         eventName: auctionEvents.CANCELED,
-        cb: (err) => subscribeToCancelation(err),
+        cb: handleAuctionCanceledEvent,
       });
 
+      // Ready & Tested
       subscribeTo({
         auctionId: auction.id,
         eventName: auctionEvents.DEPOSITED_NFTS,
-        cb: (err, msg) => subscribeToDepositNfts(err, msg),
+        cb: handlerErc721DepositedEvent,
       });
 
+      // Ready & Tested
       subscribeTo({
         auctionId: auction.id,
         eventName: auctionEvents.WITHDRAWN_NFTS,
-        cb: (err, msg) => subscribeToWithdrawNfts(err, msg),
+        cb: handlerErc721WithdrawnEvent,
       });
     }
-    return () => {
-      unsubscribeFrom({
-        auctionId: auction.id,
-        eventNames: [
-          auctionEvents.CREATED,
-          auctionEvents.CANCELED,
-          auctionEvents.DEPOSITED_NFTS,
-          auctionEvents.WITHDRAWN_NFTS,
-        ],
-      });
-    };
-  }, [auction.id]);
+  }, [auction?.id]);
+
+  // eslint-disable-next-line consistent-return
+  useEffect(() => {
+    if (auction?.id) {
+      return () => {
+        unsubscribeFrom({
+          auctionId: auction.id,
+        });
+      };
+    }
+  }, [auction?.id]);
 
   const completedAuctionCreationStep = auction.onChainId && !auction.canceled;
 
@@ -226,12 +244,14 @@ const FinalizeAuction = () => {
     const transactionsConfig = calculateTransactions(auction);
     setTransactions(transactionsConfig);
 
+    const apprTxs = [];
     transactionsConfig.displayNfts.forEach((slotNfts, index) => {
       const areNftsDeposited = slotNfts.some((nft) => nft.deposited);
       if (areNftsDeposited) {
-        setApprovedTxs([...approvedTxs, index]);
+        apprTxs.push(index);
       }
     });
+    setApprovedTxs(apprTxs);
 
     if (auction.collections) {
       setCollections(auction.collections);
@@ -372,7 +392,7 @@ const FinalizeAuction = () => {
       const txReceipt = await tx.wait();
       if (txReceipt.status === 1) {
         setLoadingText(verificationLoadingText);
-        setDepositVerifyingTxIndex([...depositVerifyingTxIndex, txIndex]);
+        setDepositVerifyingTxIndex(txIndex);
       } else {
         setErrors();
       }
@@ -407,7 +427,6 @@ const FinalizeAuction = () => {
       });
       const txHashes = [];
       const txs = [];
-      const withdrawTokens = [];
       Object.keys(nftsCountMap).forEach(async (slot) => {
         // Wrapped in try catch to handle the case where user doesn't accept all txs
         try {
@@ -423,8 +442,7 @@ const FinalizeAuction = () => {
           txHashes.push(tx.hash);
           setActiveTxHashes(txHashes);
 
-          withdrawTokens.push(...nftTokenidsMap[slot]);
-          setWithdrawVerifyingTokenIds(withdrawTokens);
+          setWithdrawVerifyingTokenIds(txIndex);
           const txReceipt = await tx.wait();
           return txReceipt.status;
         } catch (err) {
