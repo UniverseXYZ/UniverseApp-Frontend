@@ -1,4 +1,5 @@
 import React, { useRef, useState, useEffect, useMemo } from 'react';
+import { DebounceInput } from 'react-debounce-input';
 import PropTypes from 'prop-types';
 import Social from './Social';
 import Button from '../button/Button.jsx';
@@ -159,7 +160,8 @@ const ProfileForm = ({
               {accountName.length}/{MAX_FIELD_CHARS_LENGTH.name}
             </p>
           </h5>
-          <Input
+          <DebounceInput
+            debounceTimeout={1000}
             placeholder="Enter your display name"
             className={!accountName || accountNameExists ? 'error-inp' : 'inp'}
             value={accountName}
