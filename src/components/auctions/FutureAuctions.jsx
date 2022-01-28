@@ -327,8 +327,8 @@ const FutureAuctions = ({ myAuctions, setMyAuctions, setAuction }) => {
                     Total NFTs: <b>{getTotalNFTSperAuction(futureAuction)}</b>
                   </p>
                 </div>
-                <FutureAuctionDateTooltip date={futureAuction.startDate} />
-                <FutureAuctionDateTooltip date={futureAuction.endDate} />
+                <FutureAuctionDateTooltip date={futureAuction.startDate} dateType="Launch date: " />
+                <FutureAuctionDateTooltip date={futureAuction.endDate} dateType="End date: " />
               </div>
               <div className="auctions-steps">
                 <div className="step-1">
