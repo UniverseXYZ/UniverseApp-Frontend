@@ -51,7 +51,6 @@ const ValueContainer = (props) => {
           value {values.value}
           nfts count {values.nftsCount}
         </label>
-        <p>Winner be</p>
       </components.ValueContainer>
     </div>
   );
@@ -114,7 +113,7 @@ const styles = {
 };
 
 const SelectComponent = (props) => {
-  const { options, onChange } = props;
+  const { options, onChange, selectedWinner } = props;
   const ref = useRef(null);
 
   return (
@@ -131,6 +130,7 @@ const SelectComponent = (props) => {
         }}
         menuPlacement="auto"
         defaultValue={options[0]}
+        value={options[selectedWinner]}
         closeMenuOnSelect
         hideSelectedOptions={false}
         isClearable={false}
@@ -150,6 +150,7 @@ SelectComponent.propTypes = {
     })
   ).isRequired,
   onChange: PropTypes.func.isRequired,
+  selectedWinner: PropTypes.number.isRequired,
 };
 
 export default SelectComponent;
