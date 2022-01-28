@@ -170,6 +170,7 @@ const AuctionLandingPage = () => {
       setAuction(auctionInfo);
       setLoading(false);
       initiateAuctionSocket();
+      setRewardTiersSlots(tierSlots);
     } else {
       setLoading(false);
     }
