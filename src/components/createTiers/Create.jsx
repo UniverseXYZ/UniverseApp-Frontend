@@ -439,7 +439,12 @@ const Create = () => {
               {values.name.length}/{MAX_FIELD_CHARS_LENGTH.name}
             </p>
           </div>
-          <NumberOfWinners values={values} setValues={setValues} />
+          <NumberOfWinners
+            values={values}
+            setValues={setValues}
+            auction={auction}
+            currentTierId={currentTierId}
+          />
         </div>
         <IncludeReservePrice
           showReservePrice={showReservePrice}
