@@ -106,6 +106,9 @@ const CustomizeAuction = () => {
     accountPage === 'universe.xyz/your-address' ||
     !accountPage ||
     auctionLinkError ||
+    invalidBackgroundImage ||
+    invalidPromoImage ||
+    invalidTierImageIds.length ||
     !about;
 
   const setContext = (_loggedInArtistClone, _editedAuction, action) => {
