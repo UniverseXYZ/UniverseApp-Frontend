@@ -316,13 +316,14 @@ const AuctionSettings = () => {
           hasAddressError(el.address, i)
       ));
 
-  let disableClickOutsideClass = '';
-  if (isBidTokenOpened || isStartDateOpened || isEndDateOpened) {
-    disableClickOutsideClass = 'disabled-click-outside';
-  }
-
   return (
-    <div className={`${disableClickOutsideClass} auction-settings container`}>
+    <div
+      className={`${
+        isBidTokenOpened || isStartDateOpened || isEndDateOpened
+          ? 'disabled-click-outside auction-settings container'
+          : 'auction-settings container'
+      }`}
+    >
       <div>
         <div className="head-part">
           <h2 className="tier-title">Auction settings</h2>
