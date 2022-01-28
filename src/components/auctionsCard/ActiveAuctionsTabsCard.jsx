@@ -57,8 +57,20 @@ const ActiveAuctionsTabsCard = ({ activeAuction, setActiveAuctions, removeAuctio
     });
   };
 
-  const handleBidWithdrawn = (err, { user, amount, userProfile, bids }) => {
-    // TODO:: hande this event when the BE is ready.
+  const handleBidWithdrawnEvent = (err, { user, amount, userProfile, bids }) => {
+    if (bids) {
+      setActiveAuctions((upToDateAuctions) => {
+        const newAuctions = [...upToDateAuctions];
+        const updatedAuctions = newAuctions.map((auction) => {
+          const updatedAuction = { ...auction };
+          if (updatedAuction.id === activeAuction.id) {
+            updatedAuction.bids = bids;
+          }
+          return updatedAuction;
+        });
+        return updatedAuctions;
+      });
+    }
   };
 
   useEffect(() => {
@@ -67,7 +79,7 @@ const ActiveAuctionsTabsCard = ({ activeAuction, setActiveAuctions, removeAuctio
       removeAllListeners(activeAuction.id);
 
       subscribeToBidSubmitted(activeAuction.id, handleBidSubmittedEvent);
-      subscribeToBidWithdrawn(activeAuction.id, handleBidWithdrawn);
+      subscribeToBidWithdrawn(activeAuction.id, handleBidWithdrawnEvent);
     }
 
     return () => {
