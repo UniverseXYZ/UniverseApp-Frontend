@@ -23,24 +23,28 @@ const AuctionOwnerDetails = ({ artist }) => {
             <div className="avatar">
               {/* // TODO:: we should have a fallback image here */}
               <img
-                src={artist && typeof artist.avatar === 'string' ? artist.avatar : instagramIcon}
-                alt="artist.name"
+                src={
+                  artist && typeof artist.profileImageUrl === 'string'
+                    ? artist.profileImageUrl
+                    : instagramIcon
+                }
+                alt="artist.displayName"
               />
-              <h2 className="show__on__mobile">artist.name</h2>
+              <h2 className="show__on__mobile">{artist.displayName}</h2>
             </div>
             <div className="info">
-              <h1 className="title">{`About ${'artist.name'}`}</h1>
-              <p className="desc">artist.about</p>
+              <h1 className="title">{`About ${artist.displayName}`}</h1>
+              <p className="desc">{artist.about}</p>
               <div className="social__links">
                 <a
-                  href={`https://www.instagram.com/${artist?.instagramLink}`}
+                  href={`https://www.instagram.com/${artist?.instagramLink || ''}`}
                   target="_blank"
                   rel="noreferrer"
                 >
                   <img src={instagramIcon} alt="Instagram" />
                 </a>
                 <a
-                  href={`https://twitter.com/${artist?.twitterLink}`}
+                  href={`https://twitter.com/${artist?.twitterLink || ''}`}
                   target="_blank"
                   rel="noreferrer"
                 >

@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import AddToken from './AddTokenPopup.jsx';
 import './PopupStyle.scss';
 import closeIcon from '../../assets/images/cross.svg';
-import AppContext from '../../ContextAPI';
 import SearchField from '../input/SearchField';
 import { useAuctionContext } from '../../contexts/AuctionContext.jsx';
 

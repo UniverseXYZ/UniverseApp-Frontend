@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import Popup from 'reactjs-popup';
 import uuid from 'react-uuid';
+import { utils, Contract } from 'ethers';
 import SuccessPopup from '../popups/SuccessPopup';
 import arrow from '../../assets/images/arrow.svg';
 import './FinalizeAuction.scss';
@@ -13,83 +14,328 @@ import emptyWhite from '../../assets/images/emptyWhite.svg';
 import completedCheckmark from '../../assets/images/completedCheckmark.svg';
 import { useAuctionContext } from '../../contexts/AuctionContext';
 import { useAuthContext } from '../../contexts/AuthContext';
+import ApproveCollection from './ApproveCollection';
+import {
+  addDeployInfoToAuction,
+  changeAuctionStatus,
+  depositNfts,
+  withdrawNfts,
+} from '../../utils/api/auctions';
+import LoadingImage from '../general/LoadingImage';
+import LoadingPopup from '../popups/LoadingPopup';
+import { useMyNftsContext } from '../../contexts/MyNFTsContext';
+import { calculateTransactions } from '../../utils/helpers/depositNfts';
+import DepositNftsSection from './DepositNftsSection';
+import ERC721ABI from '../../contracts/ERC721.json';
 
 const FinalizeAuction = () => {
   const history = useHistory();
-  const { auction, myAuctions, setMyAuctions } = useAuctionContext();
-  const { deployedCollections, setDeployedCollections } = useAuthContext();
-  const [proceed, setProceed] = useState(false);
-  const [approvals, setApprovals] = useState(1);
-  const [loadingApproval, setLoadingApproval] = useState(undefined);
+  const { auction, setAuction, bidExtendTime } = useAuctionContext();
+  const { setActiveTxHashes } = useMyNftsContext();
+  const { signer, address, universeAuctionHouseContract } = useAuthContext();
+
   const [collections, setCollections] = useState([]);
   const [approvedCollections, setApprovedCollections] = useState([]);
 
-  useEffect(() => {
-    let arr = [];
-    deployedCollections.forEach((item) => {
-      auction.rewardTiers.forEach((tier) => {
-        if (tier.nfts.filter((nft) => nft.collection?.id === item.id && !item.approved).length) {
-          arr.push(item);
+  const [showAuctionDeployLoading, setShowAuctionDeployLoading] = useState(false);
+  const [showSuccessPopup, setShowSuccessPopup] = useState(false);
+
+  const [transactions, setTransactions] = useState(null);
+  const [approvedTxCount, setApprovedTxCount] = useState(0);
+  const [approvedTxs, setApprovedTxs] = useState([]);
+
+  // console.log(auction);
+  // console.log(approvedTxCount);
+  // console.log(approvedTxs);
+  // console.log(collections.length);
+  // console.log(universeAuctionHouseContract);
+
+  const completedAuctionCreationStep = auction.onChainId && !auction.canceled;
+
+  const completedCollectionsStep =
+    completedAuctionCreationStep && approvedCollections.length === collections.length;
+
+  const completedDepositStep =
+    completedCollectionsStep && approvedTxCount === transactions?.finalSlotIndices.length;
+
+  const setupPage = async () => {
+    // Set nftsToWithdraw
+    const transactionsConfig = calculateTransactions(auction);
+    setTransactions(transactionsConfig);
+    // console.log(transactionsConfig);
+
+    if (auction.collections) {
+      setCollections(auction.collections);
+      for (let i = 0; i < auction.collections.length; i += 1) {
+        const collection = auction.collections[i];
+        const contract = new Contract(collection.address, ERC721ABI, signer);
+        // eslint-disable-next-line no-await-in-loop
+        const isApproved = await contract.isApprovedForAll(
+          address,
+          universeAuctionHouseContract.address
+        );
+        if (isApproved && approvedCollections.indexOf(contract.address) < 0) {
+          setApprovedCollections([...approvedCollections, contract.address]);
         }
-      });
-    });
-    arr = arr.filter((v, i, a) => a.findIndex((t) => t.id === v.id) === i);
-    setCollections(arr);
-    setApprovedCollections(deployedCollections);
+      }
+    }
+  };
+
+  useEffect(() => {
+    if (auction.id) {
+      setupPage();
+    } else {
+      history.push('/my-auctions');
+    }
   }, []);
 
-  useEffect(() => {
-    if (loadingApproval !== undefined) {
-      setTimeout(() => {
-        setApprovals(loadingApproval + 1);
-        setLoadingApproval(undefined);
-      }, 1000);
+  const handleCreateAuction = async () => {
+    if (approvedTxs.length) {
+      alert('Please withdraw your nfts before creating a new auction');
+      return;
     }
-  }, [loadingApproval]);
+    setShowAuctionDeployLoading(true);
 
-  const handleProceed = () => {
-    setProceed(true);
-    setApprovals(approvals + 1);
-  };
+    try {
+      let numberOfSlots = 0;
+      let paymentSplits = [];
+      const minimumReserveValues = [];
+      // TODO: Order by slotIndex
+      auction.rewardTiers
+        .sort((a, b) => +a.tierPosition - +b.tierPosition)
+        .forEach((tier) => {
+          const minimumBids = Array.from(Array(tier.numberOfWinners).keys()).map((slot) =>
+            utils.parseEther(tier.minimumBid.toString()).toString()
+          );
+          minimumReserveValues.push(...minimumBids);
+          numberOfSlots += tier.numberOfWinners;
+        });
 
-  const handleClick = (id) => {
-    setApprovedCollections(
-      approvedCollections.map((item) => (item.id === id ? { ...item, approved: true } : item))
-    );
-    setLoadingApproval(approvals);
-  };
+      if (auction.royaltySplits) {
+        paymentSplits = auction.royaltySplits.map((royalty) => [
+          royalty.address,
+          royalty.percentAmount * 1000,
+        ]);
+      }
+      const startTime = (
+        new Date(new Date(auction.startDate).toUTCString()).getTime() / 1000
+      ).toFixed(0);
 
-  const handleDeposit = () => {
-    setApprovals(approvals + 1);
-  };
-
-  const handleLastDeposit = () => {
-    setApprovals(approvals + 1);
-    setTimeout(() => {
-      setDeployedCollections(approvedCollections);
-      setMyAuctions(
-        myAuctions.map((item) => (item.id === auction.id ? { ...item, launch: true } : item))
+      const endTime = (new Date(new Date(auction.endDate).toUTCString()).getTime() / 1000).toFixed(
+        0
       );
-      setTimeout(() => {
-        document.getElementById('success-hidden-btn').click();
-      }, 1000);
-    }, 1000);
+      const tx = await universeAuctionHouseContract.createAuction([
+        startTime,
+        endTime,
+        bidExtendTime * 60,
+        numberOfSlots,
+        auction.tokenAddress,
+        minimumReserveValues,
+        paymentSplits,
+      ]);
+      // TODO: Show tx hash
+      setActiveTxHashes([tx.hash]);
+      const txResult = await tx.wait();
+
+      if (txResult.status === 1) {
+        console.log(txResult);
+        const auctionid = txResult.events[0].args[0].toString();
+
+        // TODO: Call api to change auction
+        // This will be temporary while the scraper isn't ready
+        if (auction.canceled) {
+          await changeAuctionStatus({
+            auctionId: auction.id,
+            statuses: [{ name: 'canceled', value: false }],
+          });
+        }
+
+        await addDeployInfoToAuction({
+          auctionId: +auction.id,
+          onChainId: +auctionid,
+          txHash: tx.hash,
+        });
+
+        setAuction({
+          ...auction,
+          auctionId: +auction.id,
+          onChainId: +auctionid,
+          txHash: tx.hash,
+          canceled: false,
+        });
+      } else {
+        // TODO: show error that tx has failed
+      }
+      setShowAuctionDeployLoading(false);
+      setActiveTxHashes([]);
+    } catch (err) {
+      console.error(err);
+      setShowAuctionDeployLoading(false);
+      setActiveTxHashes([]);
+    }
   };
 
-  return (
-    <div className="finalize__auction">
-      <Popup
-        trigger={
-          <button
-            type="button"
-            id="success-hidden-btn"
-            aria-label="hidden"
-            style={{ display: 'none' }}
-          />
+  const handleApproveCollection = async (collectionAddress, setIsApproving) => {
+    try {
+      setIsApproving(true);
+
+      const contract = new Contract(collectionAddress, ERC721ABI, signer);
+
+      const tx = await contract.setApprovalForAll(
+        process.env.REACT_APP_UNIVERSE_AUCTION_HOUSE_ADDRESS,
+        true
+      );
+      const txReceipt = await tx.wait();
+      if (txReceipt.status === 1) {
+        setApprovedCollections([...approvedCollections, collectionAddress]);
+      } else {
+        // TODO: show error that tx has failed
+      }
+      setIsApproving(false);
+    } catch (err) {
+      console.log(err);
+      setIsApproving(false);
+    }
+  };
+
+  function getNftIds(nftMap) {
+    const nftIds = [];
+    nftMap.forEach((slot) => {
+      slot.forEach((slotArray) => {
+        nftIds.push(slotArray[0]);
+      });
+    });
+
+    return nftIds;
+  }
+
+  const handleDepositTier = async (txIndex) => {
+    try {
+      setShowAuctionDeployLoading(true);
+
+      // Deposit tier
+      const tx = await universeAuctionHouseContract.batchDepositToAuction(
+        auction.onChainId,
+        transactions.finalSlotIndices[txIndex],
+        transactions.finalNfts[txIndex]
+      );
+      setActiveTxHashes([tx.hash]);
+
+      const txReceipt = await tx.wait();
+      // If last tier show success modal
+      if (txReceipt.status === 1) {
+        // TODO: Mark nfts as deployed on backend
+        // const result = await depositNfts({ auctionId: auction.id, nftIds });
+        const nftIds = getNftIds(transactions.finalNfts[txIndex]);
+        const result = await depositNfts({ auctionId: auction.id, nftIds });
+        if (!auction.depositedNfts) {
+          await changeAuctionStatus({
+            auctionId: auction.id,
+            statuses: [{ name: 'depositedNfts', value: true }],
+          });
+          setAuction({ ...auction, depositedNfts: true });
         }
-      >
-        {(close) => <SuccessPopup onClose={close} onAuction={auction} />}
-      </Popup>
+        setApprovedTxCount(approvedTxCount + 1);
+        setApprovedTxs([...approvedTxs, txIndex]);
+
+        if (!auction.canceled && txIndex === transactions.finalSlotIndices.length - 1) {
+          setShowSuccessPopup(true);
+        }
+      } else {
+        // TODO: show error that tx has failed
+      }
+
+      setShowAuctionDeployLoading(false);
+      setActiveTxHashes([]);
+    } catch (err) {
+      setShowAuctionDeployLoading(false);
+      setActiveTxHashes([]);
+
+      console.log(err);
+    }
+  };
+
+  const handleWithdraw = async (txIndex) => {
+    try {
+      // TODO: What to do if auction is canceled? How do we mark that in the backend? Can we restart the auction?
+      const onChainAuction = await universeAuctionHouseContract.auctions(auction.onChainId);
+
+      // Cancel auction if not canceled
+      if (!onChainAuction.isCanceled) {
+        // Cancel auction
+        setShowAuctionDeployLoading(true);
+        const tx = await universeAuctionHouseContract.cancelAuction(auction.onChainId);
+        setActiveTxHashes([tx.hash]);
+        const txReceipt = await tx.wait();
+        if (txReceipt.status === 1) {
+          await changeAuctionStatus({
+            auctionId: auction.id,
+            statuses: [{ name: 'canceled', value: true }],
+          });
+          setAuction({ ...auction, canceled: true });
+        } else {
+          // Implement error handling
+        }
+
+        setActiveTxHashes([]);
+      }
+
+      setShowAuctionDeployLoading(true);
+      // We need to withdraw each slot at a time
+      // Calculate all count of deposited nfts at a slot
+      const nftsCountMap = {};
+      const nfts = transactions.finalNfts[txIndex];
+      transactions.finalSlotIndices[txIndex].forEach((slot, index) => {
+        if (!nftsCountMap[slot]) {
+          nftsCountMap[slot] = nfts[index].length;
+        } else {
+          nftsCountMap[slot] += nfts[index].length;
+        }
+      });
+      const nftIds = getNftIds(nfts);
+      console.log(nftsCountMap);
+      const txHashes = [];
+      const txs = Object.keys(nftsCountMap).map(async (slot) => {
+        const tx = await universeAuctionHouseContract.withdrawDepositedERC721(
+          auction.onChainId,
+          slot,
+          nftsCountMap[slot]
+        );
+        txHashes.push(tx.hash);
+        setActiveTxHashes(txHashes);
+
+        const txReceipt = await tx.wait();
+        return txReceipt.status;
+      });
+      const results = await Promise.all(txs);
+      setShowAuctionDeployLoading(false);
+      // Withdraw from backend
+      const withdrawBE = await withdrawNfts({ auction: auction.onChainId, nftIds });
+      console.log(results);
+      console.log(withdrawBE);
+
+      // Update nfts to withdraw
+      const newApprovedTxs = [...approvedTxs];
+      newApprovedTxs.splice(newApprovedTxs.indexOf(txIndex), 1);
+      if (newApprovedTxs.length === 0) {
+        await changeAuctionStatus({
+          auctionId: auction.id,
+          statuses: [{ name: 'depositedNfts', value: false }],
+        });
+        setAuction({ ...auction, depositedNfts: false });
+      }
+      setApprovedTxs(newApprovedTxs);
+      setApprovedTxCount(approvedTxCount - 1);
+    } catch (err) {
+      console.log(err);
+      setShowAuctionDeployLoading(false);
+    }
+  };
+
+  return !auction ? (
+    <></>
+  ) : (
+    <div className="finalize__auction">
       <div className="finalize container">
         <div
           className="back-rew"
@@ -110,13 +356,13 @@ const FinalizeAuction = () => {
           <div className="create__auction">
             <div className="step">
               <div className="circle">
-                {proceed ? (
+                {completedAuctionCreationStep ? (
                   <img src={doneIcon} alt="Done" />
                 ) : (
                   <img src={emptyMark} alt="Empty mark" />
                 )}
               </div>
-              <div className={`line ${proceed ? 'colored' : ''}`} />
+              <div className={`line ${completedAuctionCreationStep ? 'colored' : ''}`} />
             </div>
             <div className="create__auction__body">
               <h2>Create auction</h2>
@@ -129,186 +375,89 @@ const FinalizeAuction = () => {
                   You will not be able to make any changes to the auction settings if you proceed
                 </p>
               </div>
-              {proceed ? (
+              {completedAuctionCreationStep ? (
                 <Button className="light-border-button" disabled>
                   Completed <img src={completedCheckmark} alt="completed" />
                 </Button>
               ) : (
-                <Button className="light-button" onClick={handleProceed}>
+                <Button className="light-button" onClick={handleCreateAuction}>
                   Proceed
                 </Button>
               )}
             </div>
           </div>
-          {collections.length ? (
-            <div className="create__auction">
-              <div className="step">
-                <div className="circle">
-                  {proceed && approvals - 2 !== collections.length ? (
-                    <img alt="Empty mark" src={emptyMark} />
-                  ) : proceed && approvals - 2 === collections.length ? (
-                    <img alt="Empty mark" src={doneIcon} />
-                  ) : (
-                    <img alt="Empty white" src={emptyWhite} />
-                  )}
-                </div>
-                <div
-                  className={`line ${
-                    proceed && approvals - 2 === collections.length ? 'colored' : ''
-                  }`}
-                />
-              </div>
-              <div className="create__auction__body">
-                <h2>Set approvals</h2>
-                <p className="auction__description">
-                  Approve NFTs for depositing into the auction contract
-                </p>
-                <div className="warning__div">
-                  <img src={warningIcon} alt="Warning" />
-                  <p>
-                    Depending on the gas fee cost, you may need to have a significant amount of ETH
-                    to proceed
-                  </p>
-                </div>
-                <div className="collections">
-                  {collections.length ? (
-                    collections.map((collection, index) => (
-                      <div className="collection__div" key={uuid()}>
-                        {collection.bgImage ? (
-                          <img
-                            src={URL.createObjectURL(collection.bgImage)}
-                            alt={collection.name}
-                          />
-                        ) : typeof collection.previewImage === 'string' &&
-                          collection.previewImage.startsWith('#') ? (
-                          <div
-                            className="random__bg__color"
-                            style={{ backgroundColor: collection.previewImage }}
-                          />
-                        ) : (
-                          <img
-                            className="blur"
-                            src={URL.createObjectURL(collection.previewImage)}
-                            alt={collection.name}
-                          />
-                        )}
-                        <div>
-                          <h3>{collection.name}</h3>
-                          {loadingApproval !== index + 2 ? (
-                            <Button
-                              className={`${
-                                approvals > index + 2 ? 'light-border-button' : 'light-button'
-                              } approve-btn`}
-                              disabled={approvals !== index + 2}
-                              onClick={() => handleClick(collection.id)}
-                            >
-                              {approvals > index + 2 ? (
-                                <>
-                                  Approved
-                                  <img
-                                    src={completedCheckmark}
-                                    className="checkmark"
-                                    alt="Approved"
-                                  />
-                                </>
-                              ) : (
-                                'Approve'
-                              )}
-                            </Button>
-                          ) : (
-                            <div className="loading-ring">
-                              <div />
-                              <div />
-                              <div />
-                              <div />
-                            </div>
-                          )}
-                        </div>
-                      </div>
-                    ))
-                  ) : (
-                    <div className="empty__nfts">
-                      <h3>No Collections found</h3>
-                    </div>
-                  )}
-                </div>
-              </div>
-            </div>
-          ) : (
-            <></>
-          )}
+
           <div className="create__auction">
             <div className="step">
               <div className="circle">
-                {proceed && approvals - 2 === collections.length ? (
+                {!completedCollectionsStep ? (
                   <img alt="Empty mark" src={emptyMark} />
+                ) : completedCollectionsStep ? (
+                  <img alt="Empty mark" src={doneIcon} />
                 ) : (
                   <img alt="Empty white" src={emptyWhite} />
                 )}
               </div>
+              <div className={`line ${completedCollectionsStep ? 'colored' : ''}`} />
             </div>
             <div className="create__auction__body">
-              <h2>Deposit NFTs</h2>
-              <p className="auction__description">Deposit 55 NFTs to the auction contract</p>
-              {auction.rewardTiers.map((tier, tierIndex) => (
-                <div className="transaction" key={uuid()}>
-                  <div className="transaction__details">
-                    <div className="transaction__header">
-                      <h4>{tier.name}</h4>
-                      <div className="head">
-                        <p>
-                          Slot: <b>{tier.numberOfWinners}</b>
-                        </p>
-                        <p>
-                          Total NFTs: <b>{tier.numberOfWinners * tier.nftsPerWinner}</b>
-                        </p>
-                      </div>
-                    </div>
-                    <div className="transaction__body">
-                      {tier.nfts.map(
-                        (nft, index) =>
-                          index < 3 && (
-                            <div className="transaction__image" key={nft.id}>
-                              <div className="first" />
-                              <div className="second" />
-                              <div className="image-main">
-                                <img src={nft.original_url} alt={nft.name} />
-                                {tier.nfts.length > 3 && (
-                                  <span className="show__more">{`+${
-                                    tier.nfts.length - 3
-                                  } more`}</span>
-                                )}
-                              </div>
-                            </div>
-                          )
-                      )}
-                    </div>
+              <h2>Set approvals</h2>
+              <p className="auction__description">
+                Approve NFTs for depositing into the auction contract
+              </p>
+              <div className="warning__div">
+                <img src={warningIcon} alt="Warning" />
+                <p>
+                  Depending on the gas fee cost, you may need to have a significant amount of ETH to
+                  proceed
+                </p>
+              </div>
+              <div className="collections">
+                {collections.length ? (
+                  collections.map((collection, index) => (
+                    <ApproveCollection
+                      collection={collection}
+                      approveCollection={handleApproveCollection}
+                      isApproved={
+                        !!approvedCollections.find(
+                          (collAddress) => collAddress === collection.address
+                        )
+                      }
+                      auctionOnChainId={auction.onChainId}
+                    />
+                  ))
+                ) : (
+                  <div className="empty__nfts">
+                    <h3>No Collections found</h3>
                   </div>
-                  <div className="deposit__button">
-                    {approvals === collections.length + 2 + tierIndex &&
-                    auction.rewardTiers.length !== tierIndex + 1 ? (
-                      <Button className="light-button" onClick={handleDeposit}>
-                        Deposit
-                      </Button>
-                    ) : approvals === collections.length + 2 + tierIndex &&
-                      auction.rewardTiers.length === tierIndex + 1 ? (
-                      <button type="button" className="light-button" onClick={handleLastDeposit}>
-                        Deposit
-                      </button>
-                    ) : approvals > collections.length + 2 + tierIndex ? (
-                      <Button className="light-border-button">Withdraw</Button>
-                    ) : (
-                      <Button className="light-button" disabled>
-                        Deposit
-                      </Button>
-                    )}
-                  </div>
-                </div>
-              ))}
+                )}
+              </div>
             </div>
           </div>
+
+          <DepositNftsSection
+            transactions={transactions}
+            handleDepositTier={handleDepositTier}
+            handleWithdraw={handleWithdraw}
+            completedDepositStep={completedDepositStep}
+            completedCollectionsStep={completedCollectionsStep}
+            approvedTxCount={approvedTxCount}
+            approvedTxs={approvedTxs}
+            isCanceledAuction={auction.canceled}
+            // withdrawTxs={withdrawTxs}
+          />
         </div>
       </div>
+      <Popup open={showAuctionDeployLoading} closeOnDocumentClick={false}>
+        <LoadingPopup
+          text="The transaction is in progress. Keep this window opened. Navigating away from the page will reset the curent progress."
+          onClose={() => setShowAuctionDeployLoading(false)}
+          contractInteraction
+        />
+      </Popup>
+      <Popup closeOnDocumentClick={false} open={showSuccessPopup}>
+        <SuccessPopup onClose={() => setShowSuccessPopup(false)} onAuction={auction} />
+      </Popup>
     </div>
   );
 };

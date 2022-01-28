@@ -36,6 +36,7 @@ import {
 } from '../../../../utils/helpers/format';
 import { useAuthContext } from '../../../../contexts/AuthContext';
 import Badge from '../../../badge/Badge';
+import { whitepaperUrl } from '../../../../utils/helpers';
 
 const DesktopView = ({
   isWalletConnected,
@@ -89,7 +90,7 @@ const DesktopView = ({
                 type="button"
                 className="disable"
                 onClick={() => {
-                  // history.push('/minting-and-auctions/marketplace/active-auctions');
+                  // history.push('/products/auction-house');
                   // setIsMintingDropdownOpened(false);
                 }}
               >
@@ -220,7 +221,7 @@ const DesktopView = ({
               <button
                 type="button"
                 onClick={() => {
-                  window.open('https://github.com/UniverseXYZ/UniverseXYZ-Whitepaper');
+                  window.open(whitepaperUrl);
                   setIsAboutDropdownOpened(false);
                 }}
               >
@@ -408,7 +409,7 @@ const DesktopView = ({
                   <img src={myNFTsIcon} alt="My NFTs" />
                   My NFTs
                 </button>
-                {/* <button
+                <button
                   type="button"
                   onClick={() => {
                     history.push('/my-auctions');
@@ -417,7 +418,7 @@ const DesktopView = ({
                 >
                   <img src={auctionHouseIcon} alt="My Auctions" />
                   My auctions
-                </button> */}
+                </button>
                 <button
                   type="button"
                   className="signOut"

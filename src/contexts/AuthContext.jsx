@@ -46,6 +46,7 @@ const AuthContextProvider = ({ children }) => {
   const [universeERC721FactoryContract, setUniverseERC721FactoryContract] = useState(null);
   const [contracts, setContracts] = useState(false);
   const [deployedCollections, setDeployedCollections] = useState([]);
+  const [universeAuctionHouseContract, setUniverseAuctionHouseContract] = useState(null);
   const history = useHistory();
   // Getters
   const getEthPriceData = async (balance) => {
@@ -87,6 +88,13 @@ const AuthContextProvider = ({ children }) => {
       signerResult
     );
 
+    // Auctions
+    const auctionHouseContract = new Contract(
+      process.env.REACT_APP_UNIVERSE_AUCTION_HOUSE_ADDRESS,
+      contractsData.UniverseAuctionHouse.abi,
+      signerResult
+    );
+
     const polymContract = contractsData.PolymorphWithGeneChanger;
 
     const polymorphContractInstance = new Contract(
@@ -115,6 +123,8 @@ const AuthContextProvider = ({ children }) => {
 
     setPolymorphContract(polymorphContractInstance);
     setLobsterContract(lobsterContractInstance);
+
+    setUniverseAuctionHouseContract(auctionHouseContract);
   };
 
   const resetConnectionState = async (walletConnectEvent) => {
@@ -262,12 +272,12 @@ const AuthContextProvider = ({ children }) => {
           });
 
           if (!authInfo.error) {
-            setIsAuthenticated(true);
-            setLoggedInArtist(mapUserData(authInfo.user));
-
             // Save xyz_access_token into the local storage for later API requests usage
             localStorage.setItem('xyz_access_token', authInfo.token);
             localStorage.setItem('user_address', address);
+
+            setIsAuthenticated(true);
+            setLoggedInArtist(mapUserData(authInfo.user));
           } else {
             setIsAuthenticated(false);
           }
@@ -358,6 +368,7 @@ const AuthContextProvider = ({ children }) => {
         connectWithMetaMask,
         connectWeb3,
         connectWithWalletConnect,
+        universeAuctionHouseContract,
       }}
     >
       {children}

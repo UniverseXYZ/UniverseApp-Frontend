@@ -27,15 +27,18 @@ const Welcome = () => {
           </AnimatedOnScroll>
           <AnimatedOnScroll animationIn="fadeIn" animationInDelay={600}>
             <div className="links">
-              {/* <Button className="light-button" onClick={() => history.push('/my-auctions')}>
+              <Button
+                className="light-button"
+                onClick={() => history.push('/setup-auction/auction-settings')}
+              >
                 Set up auction
               </Button>
               <Button
                 className="light-border-button"
-                onClick={() => history.push('/minting-and-auctions/marketplace/active-auctions')}
+                onClick={() => history.push('/products/auction-house')}
               >
                 Auction house
-              </Button> */}
+              </Button>
             </div>
           </AnimatedOnScroll>
         </div>

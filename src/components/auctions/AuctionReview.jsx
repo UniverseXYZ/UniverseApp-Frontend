@@ -1,12 +1,12 @@
 /* eslint-disable no-debugger */
 /* eslint-disable no-cond-assign */
 import React, { useState, useEffect } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 import Popup from 'reactjs-popup';
-import moment from 'moment';
 import './AuctionReview.scss';
 import './Tiers.scss';
 import uuid from 'react-uuid';
+import { format } from 'date-fns';
 import infoIcon from '../../assets/images/icon.svg';
 import mp3Icon from '../../assets/images/mp3-icon.png';
 import ethIcon from '../../assets/images/bid_icon.svg';
@@ -20,22 +20,16 @@ import pencil from '../../assets/images/pencil.svg';
 import Button from '../button/Button.jsx';
 import CongratsAuctionPopup from '../popups/CongratsAuctionPopup.jsx';
 import LoadingPopup from '../popups/LoadingPopup.jsx';
-import {
-  isImage,
-  isVideo,
-  isAudio,
-  getNftImage,
-  getEditionsCount,
-} from '../../utils/helpers/pureFunctions/nfts';
 import { AuctionCreate, AuctionUpdate } from '../../userFlows/AuctionCreate';
 import { getFutureAuctions } from '../../utils/api/auctions';
 import { useAuctionContext } from '../../contexts/AuctionContext';
-import { useMyNftsContext } from '../../contexts/MyNFTsContext';
+import { useErrorContext } from '../../contexts/ErrorContext';
 
 const AuctionReview = () => {
-  const { auction, setAuction, bidtype, options, myAuctions, setMyAuctions, setSelectedTabIndex } =
-    useAuctionContext();
-  const { myNFTs, setMyNFTs } = useMyNftsContext();
+  const { auction, bidtype, options, myAuctions, setMyAuctions } = useAuctionContext();
+  const { setShowError, setErrorTitle, setErrorBody } = useErrorContext();
+
+  const location = useLocation();
   const history = useHistory();
   const [hideIcon, setHideIcon] = useState(false);
   const [bidicon, setBidicon] = useState(null);
@@ -60,29 +54,8 @@ const AuctionReview = () => {
   }, []);
 
   const handleSetAuction = async () => {
-    // TODO:: after the new design changes we must add logic which prevents the user to select the same nfts for different tiers
     if (auction && auction?.rewardTiers?.length) {
-      // TODO: usedNFTsIds should be changed to [{nftId: ${id}, slot: ${slotNumber}, ...}]
-      // Let Viktor know that you've reached this point so we make sure the api is already deployed
-      const usedNFTsIds = [];
-      auction.rewardTiers.forEach((tier) => {
-        tier.nfts.forEach((n) => {
-          if (!usedNFTsIds.includes(n.id)) {
-            usedNFTsIds.push(n.id);
-          }
-        });
-      });
-      const newMyNFTs = [...myNFTs];
-      usedNFTsIds.forEach((id) => {
-        newMyNFTs.forEach((nft) => {
-          if (nft.id === id) {
-            nft.isUsed = true;
-          }
-        });
-      });
-      setMyNFTs(newMyNFTs);
-      setSelectedTabIndex(1);
-      // document.getElementById('loading-hidden-btn').click();
+      document.getElementById('loading-hidden-btn').click();
       const popupRoot = document.getElementById('popup-root');
       if (popupRoot) popupRoot.remove();
 
@@ -95,28 +68,15 @@ const AuctionReview = () => {
 
       if (res?.id) {
         document.getElementById('congrats-hidden-btn').click();
-      } else {
-        console.error('an error occurred');
-      }
-    }
-  };
+      } else if (res.error) {
+        document.getElementById('congrats-hidden-btn').click();
+        const errorMsg =
+          res?.errors[0]?.message || 'An error occured, please check the network tab !';
 
-  const handleSaveAuction = () => {
-    if (auction && auction?.rewardTiers?.length) {
-      let totalNFTs = 0;
-      auction?.rewardTiers?.forEach((tier) => {
-        totalNFTs += tier.winners * tier.nftsPerWinner;
-      });
-      document.getElementById('loading-hidden-btn').click();
-      setSelectedTabIndex(1);
-      setTimeout(() => {
-        document.getElementById('popup-root').remove();
-        const newAuction = { ...auction };
-        newAuction.totalNFTs = totalNFTs;
-        setMyAuctions(myAuctions.map((item) => (item.id === newAuction.id ? newAuction : item)));
-        setAuction({ tiers: [] });
-        history.push('/my-auctions');
-      }, 2000);
+        setShowError(true);
+        setErrorTitle('Failed to update/create auction !');
+        setErrorBody(errorMsg);
+      }
     }
   };
 
@@ -124,6 +84,9 @@ const AuctionReview = () => {
     const futureAuctionResponse = await getFutureAuctions();
     setMyAuctions(futureAuctionResponse?.auctions || []);
   };
+
+  const startDate = format(new Date(auction.startDate), 'MMMM dd, yyyy, HH:mm');
+  const endDate = format(new Date(auction.endDate), 'MMMM dd, yyyy, HH:mm');
 
   return (
     <div className="container auction-reward">
@@ -180,7 +143,7 @@ const AuctionReview = () => {
               </div>
               <div className="startDate">
                 <p>Start date</p>
-                <span>{moment(auction.startDate).format('MMMM DD, YYYY, HH:mm')} EST</span>
+                <span>{startDate} EST</span>
               </div>
             </div>
             <div className="date-part">
@@ -199,7 +162,7 @@ const AuctionReview = () => {
               </div>
               <div className="endDate">
                 <p>End date</p>
-                <span>{moment(auction.endDate).format('MMMM DD, YYYY, HH:mm')} EST</span>
+                <span>{endDate} EST</span>
                 <span className="auction-ext">
                   Ending auction extension timer: 3 minutes
                   <img
@@ -227,7 +190,7 @@ const AuctionReview = () => {
         {auction.properties &&
           auction.properties.length &&
           auction.properties
-            .map((item) => item.address !== '' && item.amount !== '')
+            .map((item) => item.address !== '' && item.percentAmount !== '')
             .find((element) => element) && (
             <div className="royalty-settings-head">
               <h2 className="royalty-settings-title">Royalty splits</h2>
@@ -239,7 +202,7 @@ const AuctionReview = () => {
             {auction.properties.map(
               (item) =>
                 item.address &&
-                item.amount && (
+                item.percentAmount && (
                   <div key={item.address} className="royalty">
                     <p className="show--on--desktop">{item.address}</p>
                     <p className="hide--on--desktop">
@@ -248,7 +211,7 @@ const AuctionReview = () => {
                         item.address.length
                       )}`}
                     </p>
-                    <span>{item.amount}%</span>
+                    <span>{item.percentAmount}%</span>
                   </div>
                 )
             )}
@@ -267,74 +230,130 @@ const AuctionReview = () => {
             Edit <img src={pencil} alt="edit-icon" />
           </button>
         </div>
-        {auction?.rewardTiers?.map((tier) => (
-          <div key={tier.id} className="view-tier">
-            <div className="auction-header">
-              <div className="img_head">
-                <div className="img_head_title">
-                  <h3>{tier.name}</h3>
-                </div>
-                <div className="winners__edit__btn">
-                  <div className="winners">
-                    <div className="tier-perwinners">
-                      <h4>
-                        NFTs per winner:&nbsp;<b>{tier.nftsPerWinner}</b>
-                      </h4>
+        {auction?.rewardTiers
+          ?.filter((t) => !t.removed)
+          .map((tier) => {
+            const allTierNFTs = tier.nftSlots.reduce((res, curr) => {
+              const nfts = curr.nftsData;
+
+              res.push(...nfts);
+              return res;
+            }, []);
+
+            const onlyUniqueNFTs = allTierNFTs.reduce((res, curr) => {
+              const { url, artworkType, nftName, collectioName, collectionAddress, collectionUrl } =
+                curr;
+              res[url] = res[url] || {
+                url,
+                count: 0,
+                artworkType: '',
+                nftName: '',
+                collectioName: '',
+                collectionAddress: '',
+                collectionUrl: '',
+              };
+
+              res[url].count += 1;
+              res[url].artworkType = artworkType;
+              res[url].collectioName = collectioName;
+              res[url].collectionAddress = collectionAddress;
+              res[url].collectionUrl = collectionUrl;
+              res[url].nftName = nftName;
+              return res;
+            }, {});
+
+            return (
+              <div key={tier.id} className="view-tier">
+                <div className="auction-header">
+                  <div className="img_head">
+                    <div className="img_head_title">
+                      <h3>{tier.name}</h3>
                     </div>
-                    <div className="tier-winners">
-                      <h4>
-                        Winners:&nbsp;<b>{tier.winners}</b>
-                      </h4>
-                    </div>
-                    <div className="tier-minbid">
-                      <h4>
-                        Total NFTs:&nbsp;
-                        <b>{tier.nftsPerWinner * tier.winners}</b>
-                      </h4>
+                    <div className="winners__edit__btn">
+                      <div className="winners">
+                        <div className="tier-perwinners">
+                          <h4>
+                            NFTs per winner:&nbsp;
+                            <b>
+                              {tier.customNFTsPerWinner || tier.nftsPerWinner === 0
+                                ? 'custom'
+                                : tier.nftsPerWinner}
+                            </b>
+                          </h4>
+                        </div>
+                        <div className="tier-winners">
+                          <h4>
+                            Winners:&nbsp;<b>{tier.winners || tier.numberOfWinners}</b>
+                          </h4>
+                        </div>
+                        <div className="tier-minbid">
+                          <h4>
+                            Total NFTs:&nbsp;
+                            <b>{allTierNFTs.length}</b>
+                          </h4>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            </div>
-            <div className="auctions-tier">
-              <div className="auction-reward">
-                {tier.nfts.map((nft) => (
-                  <div className="auction-reward__box" key={uuid()}>
-                    <div className="auction-reward__box__image">
-                      {isVideo(nft) && (
-                        <video
-                          onMouseOver={(event) => event.target.play()}
-                          onFocus={(event) => event.target.play()}
-                          onMouseOut={(event) => event.target.pause()}
-                          onBlur={(event) => event.target.pause()}
-                        >
-                          <source src={nft.optimized_url} type="video/mp4" />
-                          <track kind="captions" />
-                          Your browser does not support the video tag.
-                        </video>
-                      )}
-                      {isAudio(nft) && (
-                        <img className="preview-image" src={mp3Icon} alt={nft.name} />
-                      )}
-                      {isImage(nft) && (
-                        <img className="preview-image" src={getNftImage(nft)} alt={nft.name} />
-                      )}
-                      {isVideo(nft) && (
-                        <img className="video__icon" src={videoIcon} alt="Video Icon" />
-                      )}
-                    </div>
-                    {getEditionsCount(nft) > 1 && (
-                      <>
-                        <div className="auction-reward__box__highlight__one" />
-                        <div className="auction-reward__box__highlight__two" />
-                      </>
-                    )}
+                <div className="auctions-tier">
+                  <div className="auction-reward">
+                    {Object.keys(onlyUniqueNFTs).map((key) => {
+                      const {
+                        artworkType,
+                        url,
+                        count,
+                        nftName,
+                        collectioName,
+                        collectionAddress,
+                        collectionUrl,
+                      } = onlyUniqueNFTs[key];
+                      const nftIsImage =
+                        artworkType === 'png' ||
+                        artworkType === 'jpg' ||
+                        artworkType === 'jpeg' ||
+                        artworkType === 'mpeg' ||
+                        artworkType === 'webp';
+
+                      return (
+                        <div className="auction-reward__box" key={uuid()}>
+                          <div className="auction-reward__box__image">
+                            {artworkType === 'mp4' && (
+                              <video
+                                onMouseOver={(event) => event.target.play()}
+                                onFocus={(event) => event.target.play()}
+                                onMouseOut={(event) => event.target.pause()}
+                                onBlur={(event) => event.target.pause()}
+                              >
+                                <source src={url} type="video/mp4" />
+                                <track kind="captions" />
+                                Your browser does not support the video tag.
+                              </video>
+                            )}
+                            {artworkType === 'mpeg' && (
+                              <img className="preview-image" src={mp3Icon} alt={nftName} />
+                            )}
+                            {nftIsImage && (
+                              <img className="preview-image" src={url} alt={nftName} />
+                            )}
+                            {artworkType === 'mp4' && (
+                              <img className="video__icon" src={videoIcon} alt="Video Icon" />
+                            )}
+                          </div>
+                          {count > 1 && (
+                            <>
+                              <div className="auction-reward__box__highlight__one" />
+                              <div className="auction-reward__box__highlight__two" />
+                            </>
+                          )}
+                        </div>
+                      );
+                    })}
                   </div>
-                ))}
+                </div>
               </div>
-            </div>
-          </div>
-        ))}
+            );
+          })}
       </div>
       <div className="message">
         <span>
@@ -348,7 +367,12 @@ const AuctionReview = () => {
       <div className="btn-div">
         <Button
           className="light-border-button"
-          onClick={() => history.push('/setup-auction/reward-tiers')}
+          onClick={() =>
+            history.push({
+              pathname: '/setup-auction/reward-tiers',
+              state: location.state === 'edit' ? location.state : true,
+            })
+          }
         >
           Back
         </Button>

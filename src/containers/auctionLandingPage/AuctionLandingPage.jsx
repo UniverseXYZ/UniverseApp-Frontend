@@ -1,7 +1,9 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useHistory, useLocation, useParams } from 'react-router-dom';
 import uuid from 'react-uuid';
 import './AuctionLandingPage.scss';
+import Popup from 'reactjs-popup';
+// import useSocketIO, { ReadyState } from 'react-use-websocket';
 import AuctionDetails from '../../components/auctionLandingPage/AuctionDetails.jsx';
 import UniverseAuctionDetails from '../../components/auctionLandingPage/UniverseAuctionDetails.jsx';
 import RewardTiers from '../../components/auctionLandingPage/RewardTiers.jsx';
@@ -11,126 +13,137 @@ import AppContext from '../../ContextAPI';
 import NotFound from '../../components/notFound/NotFound.jsx';
 import { useThemeContext } from '../../contexts/ThemeContext';
 import { useAuctionContext } from '../../contexts/AuctionContext';
+import { getAuctionLandingPage } from '../../utils/api/auctions';
+import PlaceBidPopup from '../../components/popups/PlaceBidPopup';
+import LoadingPopup from '../../components/popups/LoadingPopup';
+import { getEthPriceCoingecko } from '../../utils/api/etherscan';
+import { useAuthContext } from '../../contexts/AuthContext';
+import { LandingPageLoader } from '../../components/auctionLandingPage/LandingPageLoader';
 
 const AuctionLandingPage = () => {
-  const { auction } = useAuctionContext();
-  const { setDarkMode } = useThemeContext();
-  const location = useLocation();
-  const selectedAuction = auction || null;
-  const artist = selectedAuction?.artist;
-
-  const [bidders, setBidders] = useState([]);
+  const locationState = useLocation().state;
+  // TODO: Disable bidding buttons until the auction is started or is canceled
+  const { artistUsername, auctionName } = useParams();
+  const { address } = useAuthContext();
+  const [auction, setAuction] = useState(null);
+  const [bidders, setBidders] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [showBidPopup, setShowBidPopup] = useState(false);
+  const [showLoading, setShowLoading] = useState(false);
+  const [rewardTiersSlots, setRewardTiersSlots] = useState([]);
+  const [ethPrice, setEthPrice] = useState(0);
+  const [currentBid, setCurrentBid] = useState(null);
+  const [isWinningBid, setIsWinningBid] = useState(false);
+  const [winningSlot, setWinningSlot] = useState(-1);
 
   useEffect(() => {
-    setDarkMode(false);
-    document.title = `Universe Minting - Auction - ${selectedAuction?.name}`;
-    if (selectedAuction) {
-      // Fake data for testing
-      setBidders([
-        {
-          id: uuid(),
-          aucionId: selectedAuction.id,
-          artistId: uuid(),
-          name: 'Whaleshark',
-          bid: 10,
-          rewardTier: 'Silver',
-        },
-        {
-          id: uuid(),
-          aucionId: selectedAuction.id,
-          artistId: uuid(),
-          name: 'WeirdWoman',
-          bid: 24,
-          rewardTier: 'Gold',
-        },
-        {
-          id: uuid(),
-          aucionId: selectedAuction.id,
-          artistId: uuid(),
-          name: 'TopBidder',
-          bid: 13.5,
-          rewardTier: 'Silver',
-        },
-        {
-          id: uuid(),
-          aucionId: selectedAuction.id,
-          artistId: uuid(),
-          name: 'Weird Man',
-          bid: 23,
-          rewardTier: 'Gold',
-        },
-        {
-          id: uuid(),
-          aucionId: selectedAuction.id,
-          artistId: uuid(),
-          name: 'Weird Man',
-          bid: 20,
-          rewardTier: 'Silver',
-        },
-        {
-          id: uuid(),
-          aucionId: selectedAuction.id,
-          artistId: uuid(),
-          name: 'Weird Man',
-          bid: 40,
-          rewardTier: 'Platinum',
-        },
-        {
-          id: uuid(),
-          aucionId: selectedAuction.id,
-          artistId: uuid(),
-          name: 'WeirdWoman',
-          bid: 5,
-          rewardTier: 'Silver',
-        },
-        {
-          id: uuid(),
-          aucionId: selectedAuction.id,
-          artistId: uuid(),
-          name: 'TopBidder',
-          bid: 9,
-          rewardTier: 'Silver',
-        },
-        {
-          id: uuid(),
-          aucionId: selectedAuction.id,
-          artistId: uuid(),
-          name: 'Warden',
-          bid: 17,
-          rewardTier: 'Silver',
-        },
-        {
-          id: uuid(),
-          aucionId: selectedAuction.id,
-          artistId: uuid(),
-          name: 'Weird Man',
-          bid: 6.8,
-          rewardTier: 'Silver',
-        },
-      ]);
-    }
-    return () => {
-      document.title = 'Universe Minting';
-    };
-  }, [selectedAuction]);
+    if (bidders) {
+      const currBidder = bidders.find((bidder) => bidder.user.address === address);
+      if (currBidder) {
+        setCurrentBid(currBidder);
+        console.log('Current bidder:');
+        console.log(currBidder);
 
-  return selectedAuction ? (
+        const currBidderIndex = bidders.map((bidder) => bidder.user.address).indexOf(address);
+        if (currBidderIndex <= rewardTiersSlots.length - 1) {
+          setIsWinningBid(true);
+          setWinningSlot(currBidderIndex);
+        }
+        console.log('is winning bid:');
+        console.log(currBidderIndex <= rewardTiersSlots.length - 1);
+      }
+      console.log('Bidders:');
+      console.log(bidders);
+    }
+  }, [bidders, address, rewardTiersSlots]);
+
+  const getAuctionData = async () => {
+    const auctionInfo =
+      locationState?.auction || (await getAuctionLandingPage(artistUsername, auctionName));
+    if (!auctionInfo.error) {
+      console.log(auctionInfo);
+
+      const tierSlots = [];
+      auctionInfo.rewardTiers.forEach((rewardTiers) => {
+        for (let i = 0; i < rewardTiers.numberOfWinners; i += 1) {
+          tierSlots.push(rewardTiers);
+        }
+      });
+      setBidders(auctionInfo.bidders);
+      setRewardTiersSlots(tierSlots);
+      setAuction(auctionInfo);
+      setLoading(false);
+    } else {
+      setLoading(false);
+    }
+  };
+
+  const getEthPrice = async () => {
+    const price = await getEthPriceCoingecko();
+    setEthPrice(price?.market_data?.current_price?.usd);
+  };
+
+  useEffect(() => {
+    getAuctionData();
+    getEthPrice();
+  }, [artistUsername, auctionName]);
+
+  return auction ? (
     <div className="auction__landing__page">
-      <AuctionDetails onAuction={selectedAuction} bidders={bidders} setBidders={setBidders} />
+      <AuctionDetails
+        onAuction={auction}
+        bidders={bidders}
+        setBidders={setBidders}
+        setShowBidPopup={setShowBidPopup}
+        rewardTiersSlots={rewardTiersSlots}
+        ethPrice={ethPrice}
+        currentBid={currentBid}
+        setCurrentBid={setCurrentBid}
+        loading={loading}
+        isWinningBid={isWinningBid}
+        winningSlot={rewardTiersSlots[winningSlot]}
+      />
       <UniverseAuctionDetails />
-      <RewardTiers auction={selectedAuction} />
-      <AuctionOwnerDetails artist={artist} />
-      <PlaceBid auction={selectedAuction} bidders={bidders} setBidders={setBidders} />
-      {artist && artist.personalLogo ? (
+      <RewardTiers auction={auction} />
+      <AuctionOwnerDetails artist={auction.artist} />
+      <PlaceBid
+        auction={auction}
+        bidders={bidders}
+        setBidders={setBidders}
+        setShowBidPopup={setShowBidPopup}
+      />
+      {auction.artist && auction.artist.personalLogo ? (
         <div className="artist__personal__logo">
           <div>
-            <img src={URL.createObjectURL(artist.personalLogo)} alt="Artist personal logo" />
+            <img src={auction.artist.personalLogo} alt="Artist personal logo" />
           </div>
         </div>
       ) : (
         <></>
       )}
+      <Popup open={showBidPopup} closeOnDocumentClick={false}>
+        <PlaceBidPopup
+          onClose={() => setShowBidPopup(false)}
+          setShowLoading={setShowLoading}
+          auction={auction.auction}
+          rewardTiers={auction.rewardTiers}
+          artistName={auction.artist?.displayName}
+          onBidders={bidders}
+          onSetBidders={setBidders}
+          currentBid={currentBid}
+          setCurrentBid={setCurrentBid}
+        />
+      </Popup>
+      <Popup open={showLoading} closeOnDocumentClick={false}>
+        <LoadingPopup
+          text="The transaction is in progress. Keep this window opened. Navigating away from the page will reset the curent progress."
+          onClose={() => setShowLoading(false)}
+          contractInteraction
+        />
+      </Popup>
     </div>
+  ) : loading ? (
+    <LandingPageLoader />
   ) : (
     <NotFound />
   );

@@ -32,12 +32,10 @@ const Lists = ({
 
   const tierById = !!(winners && nftsPerWinner);
   const editMode = auction?.rewardTiers?.find((element) => element.id === location.state);
-
   const activateInfo = (index) => {
     setHideIcon(true);
     setActiveIndex(index);
   };
-
   const handleSavedNfts = (clickedNFT) => {
     if (isCreatingAction) {
       if (tierById && winners <= clickedNFT.tokenIds.length && !clickedNFT.isUsed) {
@@ -103,7 +101,6 @@ const Lists = ({
       }
     }
   };
-
   return (
     <div className="nfts__lists">
       {data

@@ -1,28 +1,26 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import moment from 'moment';
 import { PLACEHOLDER_PAST_AUCTIONS } from '../../../../utils/fixtures/PastAuctionsDummyData';
 import bubleIcon from '../../../../assets/images/text-bubble.png';
 import Exclamation from '../../../../assets/images/Exclamation.svg';
-import PastAuctionsCard from '../../../auctionsCard/PastAuctionsCard';
 import { useAuctionContext } from '../../../../contexts/AuctionContext';
 import { useAuthContext } from '../../../../contexts/AuthContext';
+import { isBeforeNow } from '../../../../utils/dates';
+import PastAuctionsList from '../../../auctionsCard/pastAuction/PastAuctionsList.jsx';
 
 const PastAuctionsTab = ({ onArtist, showCreatePrompt }) => {
-  const { myAuctions } = useAuctionContext();
+  const { myAuctions, setAuction } = useAuctionContext();
   const { loggedInArtist } = useAuthContext();
   const history = useHistory();
 
   const artistPastAuctions =
     loggedInArtist.id === onArtist?.id
-      ? myAuctions.filter((item) => item.launch && moment(item.endDate).isBefore(moment.now()))
+      ? myAuctions.filter((item) => item.launch && isBeforeNow(item.endDate))
       : PLACEHOLDER_PAST_AUCTIONS;
 
   return artistPastAuctions.length ? (
-    <>
-      <PastAuctionsCard data={artistPastAuctions} />
-    </>
+    <PastAuctionsList data={artistPastAuctions} />
   ) : showCreatePrompt ? (
     <div className="empty__auction">
       <img src={bubleIcon} alt="Buble" />
@@ -44,9 +42,10 @@ const PastAuctionsTab = ({ onArtist, showCreatePrompt }) => {
       <button
         type="button"
         className="light-button set_up"
-        onClick={() =>
-          loggedInArtist.name && loggedInArtist.avatar && history.push('/setup-auction')
-        }
+        onClick={() => {
+          setAuction({ rewardTiers: [] });
+          return loggedInArtist.name && loggedInArtist.avatar && history.push('/setup-auction');
+        }}
         disabled={!loggedInArtist.name || !loggedInArtist.avatar}
       >
         Set up auction

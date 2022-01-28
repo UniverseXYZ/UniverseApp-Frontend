@@ -2,10 +2,10 @@ import { useLocation, useHistory } from 'react-router-dom';
 import React, { useEffect, useState, useRef } from 'react';
 import 'react-datepicker/dist/react-datepicker.css';
 import Popup from 'reactjs-popup';
-import moment from 'moment';
 import uuid from 'react-uuid';
 import './AuctionSettings.scss';
 import EthereumAddress from 'ethereum-address';
+import { formatISO } from 'date-fns';
 import callendarIcon from '../../assets/images/calendar.svg';
 import delateIcon from '../../assets/images/RemoveBtn.svg';
 import delIcon from '../../assets/images/red-delete.svg';
@@ -18,6 +18,10 @@ import addIcon from '../../assets/images/Add.svg';
 import StartDateCalendar from '../calendar/StartDateCalendar.jsx';
 import EndDateCalendar from '../calendar/EndDateCalendar.jsx';
 import { useAuctionContext } from '../../contexts/AuctionContext';
+
+const MAX_FIELD_CHARS_LENGTH = {
+  name: 100,
+};
 
 const AuctionSettings = () => {
   const monthNames = [
@@ -39,7 +43,6 @@ const AuctionSettings = () => {
   const history = useHistory();
   const { auction, setAuction, bidtype, setBidtype, options, setAuctionSetupState } =
     useAuctionContext();
-
   const [hideIcon1, setHideIcon1] = useState(false);
   const [royaltyValidAddress, setRoyaltyValidAddress] = useState(true);
   const [minBid, setMinBId] = useState(false);
@@ -58,14 +61,14 @@ const AuctionSettings = () => {
   });
 
   const [bidValues, setBidValues] = useState([]);
-  const hasRoyalties = auction.royaltySplits ? auction.royaltySplits.length : false;
-  const [royalities, useRoyalities] = useState(hasRoyalties);
   const isEditingAuction = location.state !== undefined;
 
   const [properties, setProperties] = useState(
-    auction && auction.royaltySplits ? [...auction.royaltySplits] : [{ address: '', amount: '' }]
+    auction && auction.properties ? [...auction.properties] : [{ address: '', amount: '' }]
   );
 
+  const hasRoyalties = properties[0].address.length > 0;
+  const [royalities, useRoyalities] = useState(hasRoyalties);
   const parseDate = (dateString) => {
     const date = dateString ? new Date(dateString) : new Date();
 
@@ -119,11 +122,13 @@ const AuctionSettings = () => {
         startDate: values.startDate.length !== 0,
         endDate: values.endDate.length !== 0,
         name: values.name.trim().length !== 0,
+        properties: royalities ? properties : [{ address: '', amount: '' }],
       }));
     }, 2000);
 
     let auctionFieldsValid = false;
     let bidFieldsValid = false;
+    setProperties(royalities ? properties : [{ address: '', amount: '' }]);
 
     if (values.name && values.startingBid && values.startDate && values.endDate) {
       if (isValidFields.startingBid && isValidFields.startDate && isValidFields.endDate) {
@@ -156,27 +161,30 @@ const AuctionSettings = () => {
           launch: false,
           name: values.name,
           startingBid: values.startingBid,
-          startDate: moment(values.startDate).format(),
-          endDate: moment(values.endDate).format(),
+          startDate: formatISO(values.startDate),
+          endDate: formatISO(values.endDate),
           rewardTiers: minBid
             ? prevValue.rewardTiers.map((tier, idx) => ({ ...tier, minBid: bidValues[idx] }))
             : prevValue.rewardTiers,
-          properties: properties.length === 1 && !properties[0].address ? null : properties,
+          properties: royalities ? properties : null,
         }));
       } else {
         setAuction((prevValue) => ({
           ...prevValue,
           name: values.name,
           startingBid: values.startingBid,
-          startDate: moment(values.startDate).format(),
-          endDate: moment(values.endDate).format(),
-          properties,
+          startDate: formatISO(values.startDate),
+          endDate: formatISO(values.endDate),
+          properties: royalities ? properties : null,
           rewardTiers: minBid
             ? prevValue.rewardTiers.map((tier) => ({ ...tier, minBid: bidValues[tier.id] }))
             : prevValue.rewardTiers,
         }));
       }
-      history.push('/setup-auction/reward-tiers', location.pathname);
+      history.push({
+        pathname: '/setup-auction/reward-tiers',
+        state: location.state === 'edit' ? location.state : true,
+      });
     }
   };
 
@@ -213,7 +221,7 @@ const AuctionSettings = () => {
       return property;
     });
     const result = newProperties.reduce(
-      (accumulator, current) => accumulator + Number(current.amount),
+      (accumulator, current) => accumulator + Number(current.percentAmount),
       0
     );
     if (result <= 100 && val >= 0) {
@@ -232,8 +240,8 @@ const AuctionSettings = () => {
       setValues({
         name: auction.name,
         startingBid: auction.startingBid,
-        startDate: new Date(auction.startDate),
-        endDate: new Date(auction.endDate),
+        startDate: auction.startDate ? new Date(auction.startDate) : '',
+        endDate: auction.endDate ? new Date(auction.endDate) : '',
       });
     }
   }, []);
@@ -264,20 +272,29 @@ const AuctionSettings = () => {
               <div className="auction-name">
                 <Input
                   id="name"
-                  onChange={handleOnChange}
                   label="Auction name"
                   value={values.name}
                   hoverBoxShadowGradient
+                  onChange={(e) => {
+                    if (e.target.value.length > MAX_FIELD_CHARS_LENGTH.name) return;
+                    handleOnChange(e);
+                  }}
                   error={
                     isValidFields.name ? undefined : '"Auction name" is not allowed to be empty!'
                   }
                 />
+                <p className="input-max-chars">
+                  Characters: {values.name && values.name.length}/{MAX_FIELD_CHARS_LENGTH.name}
+                </p>
               </div>
               <div className="starting-bid">
                 <Input
                   id="startingBid"
                   type="number"
-                  onChange={handleOnChange}
+                  onChange={(e) => {
+                    if (e.target.value && Number(e.target.value) < 0) e.target.value = '';
+                    handleOnChange(e);
+                  }}
                   label="Starting bid"
                   value={values.startingBid}
                   hoverBoxShadowGradient
@@ -288,6 +305,7 @@ const AuctionSettings = () => {
                   <Popup
                     nested
                     handleEdit
+                    closeOnDocumentClick={false}
                     trigger={
                       <button type="button" className={dropDown}>
                         {bid.img && <img src={bid.img} alt="icon" />}
@@ -305,6 +323,7 @@ const AuctionSettings = () => {
               <div className="date__input">
                 <div style={{ position: 'relative' }}>
                   <Popup
+                    closeOnDocumentClick={false}
                     trigger={
                       <div>
                         <Input
@@ -352,6 +371,7 @@ const AuctionSettings = () => {
               <div className="date__input">
                 <div style={{ position: 'relative' }}>
                   <Popup
+                    closeOnDocumentClick={false}
                     trigger={
                       <div>
                         <Input
@@ -495,12 +515,14 @@ const AuctionSettings = () => {
               </div>
             ))}
 
-            <div className="property-add" onClick={() => addProperty()} aria-hidden="true">
-              <h5>
-                <img src={addIcon} alt="Add" />
-                Add wallet
-              </h5>
-            </div>
+            {properties.length < 5 && (
+              <div className="property-add" onClick={() => addProperty()} aria-hidden="true">
+                <h5>
+                  <img src={addIcon} alt="Add" />
+                  Add wallet
+                </h5>
+              </div>
+            )}
           </div>
         )}
       </div>
