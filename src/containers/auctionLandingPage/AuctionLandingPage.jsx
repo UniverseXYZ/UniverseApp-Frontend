@@ -23,6 +23,7 @@ import {
   subscribeToBidWithdrawn,
   subscribeToAuctionExtended,
   subscribeToERC721Claimed,
+  subscribeToAuctionWithdrawnRevenue,
 } from '../../utils/websockets/auctionEvents';
 import SuccessBidPopup from '../../components/popups/SuccessBidPopup';
 
@@ -176,6 +177,15 @@ const AuctionLandingPage = () => {
     }
   };
 
+  const handleAuctionWithdrawnRevenueEvent = (err, totalRevenue, recipient) => {
+    const isYourEvent = recipient.toLowerCase() === address.toLowerCase();
+
+    if (isYourEvent) {
+      setShowLoading(false);
+      setActiveTxHashes([]);
+    }
+  };
+
   useEffect(() => {
     // We need to update the callback function every time the state used inside it changes
     // Otherwise we will get old state in the callback
@@ -192,6 +202,10 @@ const AuctionLandingPage = () => {
 
       subscribeToERC721Claimed(auction.auction.id, (err, { claimer, slotIndex }) => {
         handleERC721ClaimedEvent(err, claimer, slotIndex);
+      });
+
+      subscribeToAuctionWithdrawnRevenue(auction.auction.id, (err, { totalRevenue, recipient }) => {
+        handleAuctionWithdrawnRevenueEvent(err, totalRevenue, recipient);
       });
 
       subscribeToAuctionExtended(auction.auction.id, (err, { endDate }) => {
