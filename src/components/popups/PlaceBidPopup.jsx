@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Animated } from 'react-animated-css';
 import uuid from 'react-uuid';
-import { utils } from 'ethers';
+import { BigNumber, utils } from 'ethers';
 import closeIcon from '../../assets/images/close-menu.svg';
 import currencyIcon from '../../assets/images/currency-eth.svg';
 import infoIcon from '../../assets/images/icon.svg';
@@ -12,6 +12,7 @@ import Input from '../input/Input.jsx';
 import { useAuthContext } from '../../contexts/AuthContext';
 import { useMyNftsContext } from '../../contexts/MyNFTsContext';
 import { placeAuctionBid } from '../../utils/api/auctions';
+import { getERC20Contract } from '../../utils/helpers/pureFunctions/auctions';
 
 const PlaceBidPopup = ({
   onClose,
@@ -25,8 +26,14 @@ const PlaceBidPopup = ({
   setCurrentBid,
 }) => {
   const floatNumberRegex = /([0-9]*[.])?[0-9]+/;
-  const { yourBalance, setYourBalance, universeAuctionHouseContract, address, loggedInArtist } =
-    useAuthContext();
+  const {
+    yourBalance,
+    setYourBalance,
+    universeAuctionHouseContract,
+    address,
+    loggedInArtist,
+    signer,
+  } = useAuthContext();
   const { setActiveTxHashes } = useMyNftsContext();
   console.log(loggedInArtist);
   const [yourBid, setYourBid] = useState('');
@@ -36,6 +43,37 @@ const PlaceBidPopup = ({
   const [showSuccess, setShowSuccess] = useState(false);
   const [rewardTier, setRewardTier] = useState(null);
   const [error, setError] = useState('');
+  const [allowance, setAllowance] = useState(0);
+  const [balance, setBalance] = useState(0);
+
+  const setERC20Info = async () => {
+    if (
+      auction.tokenAddress.toLowerCase() !== 'eth' &&
+      signer &&
+      universeAuctionHouseContract &&
+      address
+    ) {
+      const erc20Contract = getERC20Contract(auction.tokenAddress, signer);
+      const erc20Allowance = await erc20Contract.allowance(
+        address,
+        universeAuctionHouseContract.address
+      );
+      const erc20Balance = await erc20Contract.balanceOf(address);
+
+      console.log('erc20Allowance:');
+      console.log(utils.formatEther(erc20Allowance));
+      setAllowance(+utils.formatEther(erc20Allowance));
+
+      console.log('erc20Balance:');
+      console.log(utils.formatEther(erc20Balance));
+      setBalance(+utils.formatEther(erc20Balance));
+    } else {
+      setBalance(yourBalance);
+    }
+  };
+  useEffect(() => {
+    setERC20Info();
+  }, [signer, universeAuctionHouseContract, address]);
 
   const handleInputChange = (val) => {
     setYourBid(val);
@@ -100,7 +138,7 @@ const PlaceBidPopup = ({
     onSetBidders(newBidders);
   };
 
-  const handlePlaceBidClick = async () => {
+  const handlePlaceBid = async () => {
     if (!yourBid) {
       setError('"Your bid" field is required.');
       return;
@@ -111,7 +149,7 @@ const PlaceBidPopup = ({
       return;
     }
 
-    if (parseFloat(yourBid) > yourBalance) {
+    if (parseFloat(yourBid) > balance) {
       setError('Not enough funds');
       return;
     }
@@ -123,6 +161,7 @@ const PlaceBidPopup = ({
     setError('');
 
     // TODO: Check if bid is winning any slot
+    console.log(utils.parseEther(yourBid));
     try {
       let bidTx = null;
       if (auction.tokenSymbol === 'ETH') {
@@ -143,11 +182,39 @@ const PlaceBidPopup = ({
         await saveBidToBE();
         updateBids();
         setShowSuccess(true);
-        setYourBalance(parseFloat(yourBalance) - parseFloat(yourBid));
+        setBalance(parseFloat(balance) - parseFloat(yourBid));
+        if (auction.tokenSymbol.toLowerCase() === 'eth') {
+          setYourBalance(parseFloat(yourBalance) - parseFloat(yourBid));
+        }
         setShowLoading(false);
         setActiveTxHashes([]);
       }
       // await saveBidToBE();
+    } catch (err) {
+      setShowLoading(false);
+      setActiveTxHashes([]);
+      console.log(err);
+      setError(err.error?.message);
+    }
+  };
+
+  const handleIncreaseAllowance = async () => {
+    try {
+      const erc20Contract = getERC20Contract(auction.tokenAddress, signer);
+      const approveTx = await erc20Contract.approve(
+        universeAuctionHouseContract.address,
+        BigNumber.from(utils.parseEther(yourBid))
+      );
+
+      setShowLoading(true);
+      setActiveTxHashes([approveTx.hash]);
+      const approveTxReceipt = await approveTx.wait();
+
+      if (approveTxReceipt.status === 1) {
+        setAllowance(+yourBid);
+        setShowLoading(true);
+        setActiveTxHashes([]);
+      }
     } catch (err) {
       setShowLoading(false);
       setActiveTxHashes([]);
@@ -220,7 +287,9 @@ const PlaceBidPopup = ({
           <div className="total">
             <div className="total_row">
               <div className="label">Your balance</div>
-              <div className="value">{`${yourBalance.toString().substring(0, 5)} ETH`}</div>
+              <div className="value">{`${balance.toString().substring(0, 5)} ${
+                auction.tokenSymbol
+              }`}</div>
             </div>
             <div className="total_row">
               <div
@@ -277,7 +346,24 @@ const PlaceBidPopup = ({
             </div>
           </div>
           <div className="place__bid__btn">
-            <Button className="light-button w-100" onClick={handlePlaceBidClick} disabled={!!error}>
+            {auction.tokenSymbol.toLowerCase() !== 'eth' ? (
+              <Button
+                style={{ marginBottom: 20 }}
+                className="light-button w-100"
+                onClick={handleIncreaseAllowance}
+                disabled={+yourBid <= allowance}
+              >
+                Approve {auction.tokenSymbol}
+              </Button>
+            ) : (
+              <></>
+            )}
+
+            <Button
+              className="light-button w-100"
+              onClick={handlePlaceBid}
+              disabled={+yourBid > allowance || !+yourBid || !!error}
+            >
               Place a bid
             </Button>
           </div>

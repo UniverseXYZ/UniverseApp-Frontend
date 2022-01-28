@@ -3,7 +3,6 @@
 /* eslint-disable no-await-in-loop */
 import { Contract } from 'ethers';
 import { chunkifyArray, formatRoyaltiesForMinting } from '../contractInteraction';
-
 /**
  * @param {Object} data
  * @param {Object} data.helpers
