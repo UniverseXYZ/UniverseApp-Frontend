@@ -387,9 +387,9 @@ export const getAvailableNFTs = async (offset, limit, auctionId) => {
   return result;
 };
 
-export const addDeployInfoToAuction = async (body) => {
+export const addTxHashToAuction = async (auctionId, body) => {
   const requestOptions = {
-    method: 'post',
+    method: 'PATCH',
     headers: {
       'Content-type': 'application/json; charset=UTF-8',
       Authorization: `Bearer ${localStorage.getItem('xyz_access_token')}`,
@@ -397,7 +397,7 @@ export const addDeployInfoToAuction = async (body) => {
     body: JSON.stringify(body),
   };
 
-  const request = await fetch(ADD_DEPLOY_INFO, requestOptions);
+  const request = await fetch(ADD_TX_HASH(auctionId), requestOptions);
 
   const result = await request.text().then((data) => JSON.parse(data));
 
