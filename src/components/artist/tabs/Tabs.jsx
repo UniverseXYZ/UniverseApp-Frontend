@@ -13,29 +13,35 @@ import {
   getUserPastAuctions,
 } from '../../../utils/api/auctions';
 
-const Tabs = ({ nfts }) => {
+const Tabs = ({ nfts, artistId }) => {
   const { loggedInArtist } = useAuthContext();
   const [selectedTabIndex, setSelectedTabIndex] = useState(0);
-  const [auctions, setAuctions] = useState([]);
+  const [futureAuctions, setFutureAuctions] = useState([]);
+  const [pastAuctions, setPastAuctions] = useState([]);
+  const [activeAuctions, setActiveAuctions] = useState([]);
+  const [totalActiveCount, setTotalActiveCount] = useState(0);
+  const [totalFutureCount, setTotalFutureCount] = useState(0);
+  const [totalPastCount, setTotalPastCount] = useState(0);
   const [loading, setLoading] = useState(false);
   const [perPage, setPerPage] = useState(12);
   const [pageCount, setPageCount] = useState(0);
 
-  const getAuctions = async (request, offset) => {
+  const getAuctions = async (request, offset, setAuctionState, setAuctionCount) => {
     setLoading(true);
     try {
-      const response = await request(loggedInArtist.id, offset, perPage);
+      const response = await request(artistId, offset, perPage);
 
       if (response.auctions?.length) {
-        setAuctions(response.auctions);
+        setAuctionState(response.auctions);
       } else {
-        setAuctions([]);
+        setAuctionState([]);
       }
 
       if (response.pagination) {
         const { total } = response.pagination;
         const pages = Math.ceil(total / perPage);
         setPageCount(pages);
+        setAuctionCount(total);
       }
       setLoading(false);
     } catch (error) {
@@ -44,27 +50,33 @@ const Tabs = ({ nfts }) => {
     }
   };
 
+  useEffect(() => {
+    getAuctions(getUserActiveAuctions, 0, setActiveAuctions, setTotalActiveCount);
+    getAuctions(getUserFutureAuctions, 0, setFutureAuctions, setTotalFutureCount);
+    getAuctions(getUserPastAuctions, 0, setPastAuctions, setTotalPastCount);
+  }, []);
+
   useEffect(async () => {
     // window.scrollTo(0, 360);
     if (selectedTabIndex === 1) {
-      getAuctions(getUserActiveAuctions, 0, perPage);
+      getAuctions(getUserActiveAuctions, 0, perPage, setActiveAuctions, setTotalActiveCount);
     } else if (selectedTabIndex === 2) {
-      getAuctions(getUserFutureAuctions, 0, perPage);
+      getAuctions(getUserFutureAuctions, 0, perPage, setFutureAuctions, setTotalFutureCount);
     } else if (selectedTabIndex === 3) {
-      getAuctions(getUserPastAuctions, 0, perPage);
+      getAuctions(getUserPastAuctions, 0, perPage, setPastAuctions, setTotalPastCount);
     }
-  }, [selectedTabIndex, perPage]);
+  }, [perPage]);
 
   const handlePageClick = (item) => {
     // let the user see the tabs after changing page
     window.scrollTo(0, 360);
     const offset = Math.ceil(item.selected * perPage);
     if (selectedTabIndex === 1) {
-      getAuctions(getUserActiveAuctions, offset);
+      getAuctions(getUserActiveAuctions, offset, perPage, setActiveAuctions, setTotalActiveCount);
     } else if (selectedTabIndex === 2) {
-      getAuctions(getUserFutureAuctions, offset);
+      getAuctions(getUserFutureAuctions, offset, perPage, setFutureAuctions, setTotalFutureCount);
     } else if (selectedTabIndex === 3) {
-      getAuctions(getUserPastAuctions, offset);
+      getAuctions(getUserPastAuctions, offset, perPage, setPastAuctions, setTotalPastCount);
     }
   };
 
@@ -94,21 +106,21 @@ const Tabs = ({ nfts }) => {
                 onClick={() => setSelectedTabIndex(1)}
                 className={selectedTabIndex === 1 ? 'active' : ''}
               >
-                Active auctions
+                {`Active auctions (${totalActiveCount})`}
               </button>
               <button
                 type="button"
                 onClick={() => setSelectedTabIndex(2)}
                 className={selectedTabIndex === 2 ? 'active' : ''}
               >
-                Future auctions
+                {`Future auctions (${totalFutureCount})`}
               </button>
               <button
                 type="button"
                 onClick={() => setSelectedTabIndex(3)}
                 className={selectedTabIndex === 3 ? 'active' : ''}
               >
-                Past auctions
+                {`Past auctions (${totalPastCount})`}
               </button>
             </div>
           </div>
@@ -126,7 +138,7 @@ const Tabs = ({ nfts }) => {
           {selectedTabIndex === 1 && (
             <ActiveAuctionsTab
               showCreatePrompt={false}
-              auctions={auctions}
+              auctions={activeAuctions}
               loading={loading}
               handlePageClick={handlePageClick}
               pageCount={pageCount}
@@ -137,7 +149,7 @@ const Tabs = ({ nfts }) => {
           {selectedTabIndex === 2 && (
             <FutureAuctionsTab
               showCreatePrompt={false}
-              auctions={auctions}
+              auctions={futureAuctions}
               loading={loading}
               handlePageClick={handlePageClick}
               pageCount={pageCount}
@@ -148,7 +160,7 @@ const Tabs = ({ nfts }) => {
           {selectedTabIndex === 3 && (
             <PastAuctionsTab
               showCreatePrompt={false}
-              auctions={auctions}
+              auctions={pastAuctions}
               loading={loading}
               handlePageClick={handlePageClick}
               pageCount={pageCount}
@@ -164,6 +176,7 @@ const Tabs = ({ nfts }) => {
 
 Tabs.propTypes = {
   nfts: PropTypes.oneOfType([PropTypes.array]).isRequired,
+  artistId: PropTypes.number.isRequired,
 };
 
 export default Tabs;
