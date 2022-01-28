@@ -129,9 +129,11 @@ const FinalizeAuction = () => {
         setApprovedTxCount((upToDate) => upToDate - 1);
 
         if (hasWithdrawnAll) {
+          // This implementation assumes that you will withdraw all nfts.
+          // TODO: Figure out a way if a user withdraws 1 out of 3 nfts for example
           setAuction((upToDate) => ({ ...upToDate, depositedNfts: false }));
+          setShowLoading(false);
         }
-        setShowLoading(false);
       });
     }
 
