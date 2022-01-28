@@ -12,7 +12,6 @@ import Button from '../button/Button.jsx';
 import Input from '../input/Input.jsx';
 import { useAuthContext } from '../../contexts/AuthContext';
 import { useMyNftsContext } from '../../contexts/MyNFTsContext';
-import { placeAuctionBid } from '../../utils/api/auctions';
 import { getERC20Contract } from '../../utils/helpers/pureFunctions/auctions';
 
 const PlaceBidPopup = ({
@@ -96,38 +95,6 @@ const PlaceBidPopup = ({
       }
     }
   };
-
-  // const saveBidToBE = async () => {
-  //   setShowLoading(true);
-
-  //   const placeBidResult = await placeAuctionBid({
-  //     auctionId: auction.id,
-  //     amount: parseFloat(yourBid),
-  //   });
-
-  //   console.log(placeBidResult);
-  //   setShowLoading(false);
-  //   setShowSuccess(true);
-  // };
-
-  // const updateBids = () => {
-  //   const newBidders = [...onBidders];
-  //   const existingBidderIndex = newBidders.map((bidder) => bidder.user.address).indexOf(address);
-  //   if (existingBidderIndex >= 0) {
-  //     newBidders[existingBidderIndex].amount = +newBidders[existingBidderIndex].amount + +yourBid;
-  //   } else {
-  //     newBidders.push({
-  //       amount: +yourBid,
-  //       user: {
-  //         id: loggedInArtist.id,
-  //         displayName: loggedInArtist.name,
-  //         address,
-  //       },
-  //     });
-  //   }
-  //   newBidders.sort((a, b) => b.amount - a.amount);
-  //   onSetBidders(newBidders);
-  // };
 
   const handlePlaceBid = async () => {
     if (!yourBid) {

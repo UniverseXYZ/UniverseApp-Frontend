@@ -5,6 +5,7 @@ import videoIcon from '../../assets/images/video-icon.svg';
 import universeIcon from '../../assets/images/universe-img.svg';
 import arrowDownIcon from '../../assets/images/arrow-down.svg';
 import { shortenEthereumAddress } from '../../utils/helpers/format.js';
+import { getCollectionBackgroundColor } from '../../utils/helpers';
 
 const TopBidders = ({
   bidders,
