@@ -13,6 +13,7 @@ const WinnerCard = ({
   setSelectedWinner,
   showReservePrice,
   setReservedPrice,
+  currencyImg,
 }) => (
   <div
     className={`winner-box${selectedWinner === index ? ' selected' : ''}`}
@@ -28,7 +29,7 @@ const WinnerCard = ({
       <div className="reserve--price">
         <label>Reserve price</label>
         <div className="reserve--price--field">
-          <img className="eth--icon" src={ETHIcon} alt="eth" />
+          <img className="eth--icon" src={currencyImg} alt="eth" />
           <Input
             type="number"
             min="0"
@@ -64,6 +65,7 @@ WinnerCard.propTypes = {
   selectedWinner: PropTypes.number.isRequired,
   setSelectedWinner: PropTypes.func.isRequired,
   showReservePrice: PropTypes.bool.isRequired,
+  currencyImg: PropTypes.string.isRequired,
 };
 
 export default WinnerCard;

@@ -10,6 +10,8 @@ import Input from '../../input/Input.jsx';
 import ETHIcon from '../../../assets/images/bid_icon.svg';
 import { ReactComponent as ErrorIcon } from '../../../assets/images/Vector.svg';
 import { ReactComponent as WinnerIcon } from '../../../assets/images/winner-icon.svg';
+import { useAuctionContext } from '../../../contexts/AuctionContext';
+import { getBidTypeByValue } from '../../../utils/fixtures/BidOptions';
 
 const MAX_WINNERS_SHOWN = 6;
 
@@ -21,6 +23,7 @@ const WinnersList = ({
   showReservePrice,
   compareSlotMinBidValueWithExistingTiers,
 }) => {
+  const { bidtype, options } = useAuctionContext();
   const [maxWinnersShown, setMaxWinnersShown] = useState(MAX_WINNERS_SHOWN);
   const [sliderSettings, setSliderSettings] = useState({
     dots: false,
@@ -30,6 +33,8 @@ const WinnersList = ({
     slidesToScroll: 1,
     variableWidth: true,
   });
+
+  const currencyImg = getBidTypeByValue(bidtype, options).img;
 
   const handleReservePriceChange = (value, idx) => {
     const winnersCopy = [...winnersData];
@@ -85,6 +90,7 @@ const WinnersList = ({
                 setSelectedWinner={setSelectedWinner}
                 showReservePrice={showReservePrice}
                 setReservedPrice={handleReservePriceChange}
+                currencyImg={currencyImg}
               />
             );
           })}
@@ -103,6 +109,7 @@ const WinnersList = ({
                 setSelectedWinner={setSelectedWinner}
                 showReservePrice={showReservePrice}
                 setReservedPrice={handleReservePriceChange}
+                currencyImg={currencyImg}
               />
             );
           })}
