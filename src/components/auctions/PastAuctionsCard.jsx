@@ -307,7 +307,7 @@ const PastAuctionsCard = ({ auction }) => {
                       auctionData: { auction },
                       myBid: null,
                       view: 'Auctioneer',
-                      bidders: [],
+                      bidders: auction.bidders,
                       rewardTiersSlots,
                       winningSlot: null,
                       slotsInfo,

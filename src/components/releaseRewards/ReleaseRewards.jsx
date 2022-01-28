@@ -60,7 +60,6 @@ const ReleaseRewards = () => {
   const [showLoading, setShowLoading] = useState(false);
   const [bids, setBids] = useState(bidders);
   const [loadingText, setLoadingText] = useState(defaultLoadingText);
-  const [capturedSlotIndices, setCapturedSlotIndices] = useState([]);
 
   const setupPage = async () => {
     console.log('Slots info:');
@@ -80,17 +79,6 @@ const ReleaseRewards = () => {
     console.log(singleCaptureTxs);
 
     setSingleCaptureRevenueTxs(singleCaptureTxs);
-
-    // We need this to track and update UI correctly from captureSlotRevenueRange
-    // It handles multiple slots with separate emitted events
-    const capturedIdxs = [];
-    singleCaptureTxs.forEach((tx) => {
-      if (tx.revenueCaptured) {
-        capturedIdxs.push(+tx.startSlot);
-      }
-    });
-
-    setCapturedSlotIndices(capturedIdxs);
   };
 
   useEffect(() => {
@@ -128,14 +116,6 @@ const ReleaseRewards = () => {
         });
 
         return updatedTxs;
-      });
-
-      // Update captured slots indices
-      let updatedIndices = [];
-      setCapturedSlotIndices((indices) => {
-        updatedIndices = [...indices];
-        updatedIndices.push(slotIndex);
-        return updatedIndices;
       });
 
       let updatedBids = [];
@@ -280,12 +260,10 @@ const ReleaseRewards = () => {
           <div className="release__finalize__auction">
             <div className="step">
               <div className="circle">
-                {showSuccesPopup && auction.auction.finalised ? (
-                  <img src={doneIcon} alt="Done" />
-                ) : auction.auction.finalised ? (
+                {!auction.auction.finalised || batchCaptureRevenueTxs.length ? (
                   <img src={emptyMark} alt="Empty mark" />
                 ) : (
-                  <img src={emptyWhite} alt="Empty white" />
+                  <img src={doneIcon} alt="Done" />
                 )}
               </div>
             </div>
