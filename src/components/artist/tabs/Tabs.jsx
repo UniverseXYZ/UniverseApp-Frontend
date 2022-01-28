@@ -14,7 +14,6 @@ import {
 } from '../../../utils/api/auctions';
 
 const Tabs = ({ nfts, artistId }) => {
-  const { loggedInArtist } = useAuthContext();
   const [selectedTabIndex, setSelectedTabIndex] = useState(0);
   const [futureAuctions, setFutureAuctions] = useState([]);
   const [pastAuctions, setPastAuctions] = useState([]);
@@ -25,6 +24,7 @@ const Tabs = ({ nfts, artistId }) => {
   const [loading, setLoading] = useState(false);
   const [perPage, setPerPage] = useState(12);
   const [pageCount, setPageCount] = useState(0);
+  const [currentPage, setCurrentPage] = useState(0);
 
   const getAuctions = async (request, offset, setAuctionState, setAuctionCount) => {
     setLoading(true);
@@ -55,30 +55,33 @@ const Tabs = ({ nfts, artistId }) => {
     getAuctions(getUserFutureAuctions, 0, setFutureAuctions, setTotalFutureCount);
     getAuctions(getUserPastAuctions, 0, setPastAuctions, setTotalPastCount);
   }, []);
+  const fetchAuctionsForTab = () => {
+    if (selectedTabIndex === 1) {
+      getAuctions(getUserActiveAuctions, 0, setActiveAuctions, setTotalActiveCount);
+    } else if (selectedTabIndex === 2) {
+      getAuctions(getUserFutureAuctions, 0, setFutureAuctions, setTotalFutureCount);
+    } else if (selectedTabIndex === 3) {
+      getAuctions(getUserPastAuctions, 0, setPastAuctions, setTotalPastCount);
+    }
+  };
 
   useEffect(async () => {
-    // window.scrollTo(0, 360);
-    if (selectedTabIndex === 1) {
-      getAuctions(getUserActiveAuctions, 0, perPage, setActiveAuctions, setTotalActiveCount);
-    } else if (selectedTabIndex === 2) {
-      getAuctions(getUserFutureAuctions, 0, perPage, setFutureAuctions, setTotalFutureCount);
-    } else if (selectedTabIndex === 3) {
-      getAuctions(getUserPastAuctions, 0, perPage, setPastAuctions, setTotalPastCount);
-    }
+    window.scrollTo(0, 360);
+    fetchAuctionsForTab();
   }, [perPage]);
 
   const handlePageClick = (item) => {
     // let the user see the tabs after changing page
     window.scrollTo(0, 360);
     const offset = Math.ceil(item.selected * perPage);
-    if (selectedTabIndex === 1) {
-      getAuctions(getUserActiveAuctions, offset, perPage, setActiveAuctions, setTotalActiveCount);
-    } else if (selectedTabIndex === 2) {
-      getAuctions(getUserFutureAuctions, offset, perPage, setFutureAuctions, setTotalFutureCount);
-    } else if (selectedTabIndex === 3) {
-      getAuctions(getUserPastAuctions, offset, perPage, setPastAuctions, setTotalPastCount);
-    }
+    setCurrentPage(item.selected);
+    fetchAuctionsForTab();
   };
+
+  useEffect(() => {
+    setCurrentPage(0);
+    fetchAuctionsForTab();
+  }, [selectedTabIndex]);
 
   return (
     <div className="tabs__section">
@@ -144,6 +147,7 @@ const Tabs = ({ nfts, artistId }) => {
               pageCount={pageCount}
               perPage={perPage}
               setPerPage={setPerPage}
+              currentPage={currentPage}
             />
           )}
           {selectedTabIndex === 2 && (
@@ -155,6 +159,7 @@ const Tabs = ({ nfts, artistId }) => {
               pageCount={pageCount}
               perPage={perPage}
               setPerPage={setPerPage}
+              currentPage={currentPage}
             />
           )}
           {selectedTabIndex === 3 && (
@@ -166,6 +171,7 @@ const Tabs = ({ nfts, artistId }) => {
               pageCount={pageCount}
               perPage={perPage}
               setPerPage={setPerPage}
+              currentPage={currentPage}
             />
           )}
         </div>

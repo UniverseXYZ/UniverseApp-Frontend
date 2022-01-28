@@ -23,6 +23,7 @@ const PastAuctionsTab = ({
   setPerPage,
   pageCount,
   handlePageClick,
+  currentPage,
 }) => {
   const { loggedInArtist } = useAuthContext();
   const { setAuction } = useAuctionContext();
@@ -50,6 +51,7 @@ const PastAuctionsTab = ({
           containerClassName="pagination"
           subContainerClassName="pages pagination"
           activeClassName="active"
+          forcePage={currentPage}
         />
         <ItemsPerPageDropdown perPage={perPage} setPerPage={setPerPage} itemsPerPage={[12, 24]} />
       </div>
@@ -99,6 +101,7 @@ PastAuctionsTab.propTypes = {
   handlePageClick: PropTypes.func.isRequired,
   pageCount: PropTypes.number.isRequired,
   perPage: PropTypes.number.isRequired,
+  currentPage: PropTypes.number.isRequired,
   setPerPage: PropTypes.func.isRequired,
 };
 
