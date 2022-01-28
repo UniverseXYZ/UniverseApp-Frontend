@@ -9,12 +9,12 @@ import AuctionsTabsCountdown from '../../auctions/AuctionsTabsCountdown';
 import {
   subscribeToBidSubmitted,
   subscribeToBidWithdrawn,
-  subscribeToBidWithdraw,
+  removeAllListeners,
 } from '../../../utils/websockets/auctionEvents';
 
 const ActiveAuctionCard = ({ auction, removeAuction }) => {
   const { options } = useAuctionContext();
-  const [auctionUpdated, setAuctionUpdated] = useState(null);
+  const [auctionUpdated, setAuctionUpdated] = useState(auction);
 
   const updateBidValues = (bids) => {
     const updatedAuction = {
@@ -26,24 +26,25 @@ const ActiveAuctionCard = ({ auction, removeAuction }) => {
     return updatedAuction;
   };
 
+  const handleUpdateAuction = (err, bids) => {
+    if (err) {
+      console.error(err);
+      return;
+    }
+    setAuctionUpdated(updateBidValues(bids));
+  };
+
   useEffect(() => {
+    removeAllListeners(auction.id);
     subscribeToBidSubmitted(auction.id, (err, { bids }) => {
-      if (err) {
-        console.error(err);
-        return;
-      }
-      setAuctionUpdated(updateBidValues(bids));
+      handleUpdateAuction(err, bids);
     });
     subscribeToBidWithdrawn(auction.id, (err, { bids }) => {
-      if (err) {
-        console.error(err);
-        return;
-      }
-      setAuctionUpdated(updateBidValues(bids));
+      handleUpdateAuction(err, bids);
     });
   }, [auction]);
 
-  const bids = bidsInUsd(auctionUpdated || auction);
+  const bids = bidsInUsd(auctionUpdated);
   const winnersCount = auction.rewardTiers.reduce(
     (winners, tier) => winners + tier.numberOfWinners,
     0

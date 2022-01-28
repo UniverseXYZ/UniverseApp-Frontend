@@ -32,7 +32,6 @@ const Tabs = () => {
 
   useEffect(() => {
     initiateAuctionSocket();
-    return () => disconnectAuctionSocket();
   }, []);
 
   const getAuctions = async (request, _offset, filter) => {
