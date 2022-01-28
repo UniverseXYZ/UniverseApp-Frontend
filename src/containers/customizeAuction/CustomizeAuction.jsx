@@ -300,7 +300,7 @@ const CustomizeAuction = () => {
     return Promise.all(responses);
   };
 
-  const saveOnServer = async (editedAuction, loggedInArtistClone, action) => {
+  const saveOnServer = async (editedAuction, loggedInArtistClone, action, state) => {
     setLoading(true);
     const newAuctionData = await saveAuction(editedAuction, state);
     const profileResponses = await saveProfile(loggedInArtistClone);
