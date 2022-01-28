@@ -14,6 +14,10 @@ import infoIcon from '../../assets/images/icon.svg';
 import { useAuthContext } from '../../contexts/AuthContext';
 import { useMyNftsContext } from '../../contexts/MyNFTsContext';
 import PastAuctionActionSection from './PastAuctionActionSection';
+import {
+  subscribeToSlotCaptured,
+  initiateAuctionSocket,
+} from '../../utils/websockets/auctionEvents';
 
 const PastAuctionsCard = ({ auction, setShowLoadingModal, setLoadingText }) => {
   const history = useHistory();
@@ -133,15 +137,16 @@ const PastAuctionsCard = ({ auction, setShowLoadingModal, setLoadingText }) => {
         auction.onChainId
       );
       setActiveTxHashes([tx.hash]);
-
       const txReceipt = await tx.wait();
       if (txReceipt.status === 1) {
         // This modal will be closed upon recieving handleAuctionWithdrawnRevenueEvent
+        initiateAuctionSocket();
+        subscribeToSlotCaptured(auction.id, getAuctionRevenue);
         setLoadingText(verifyClaimLoadingText);
         setClaimableFunds(0);
       }
     } catch (err) {
-      setShowLoading(false);
+      setShowLoadingModal(false);
       setActiveTxHashes([]);
       console.log(err);
     }
