@@ -3,7 +3,8 @@ import CopyToClipboard from 'react-copy-to-clipboard';
 import PropTypes from 'prop-types';
 import { useHistory } from 'react-router';
 import { format } from 'date-fns';
-import { utils, BigNumber } from 'ethers';
+import { utils, BigNumber as EBigNumber } from 'ethers';
+import BigNumber from 'bignumber.js';
 import videoIcon from '../../assets/images/video-icon.svg';
 import Button from '../button/Button';
 import copyIcon from '../../assets/images/copy1.svg';
@@ -48,6 +49,13 @@ const PastAuctionsCard = ({ auction, setShowLoadingModal, setLoadingText }) => {
     slotsInfoRef.current = slotsInfo;
   }, [slotsInfo]);
 
+  const areAllSlotsCaptured =
+    auction.finalised &&
+    !auction.rewardTiers
+      .map((r) => r.slots)
+      .flat()
+      .some((s) => !s.capturedRevenue);
+
   const getAuctionSlotsInfo = async () => {
     if (
       address &&
@@ -88,19 +96,35 @@ const PastAuctionsCard = ({ auction, setShowLoadingModal, setLoadingText }) => {
 
   const getAuctionRevenue = async () => {
     if (universeAuctionHouseContract && Object.values(slotsInfoRef.current).length) {
+      // 1. Claimable funds
       const revenueToClaim = await universeAuctionHouseContract.auctionsRevenue(auction.onChainId);
-
-      const totalBids = Object.values(slotsInfoRef.current).reduce(
-        (acc, slot) => acc.add(slot.winningBidAmount),
-        BigNumber.from('0')
-      );
 
       const toClaim = utils.formatEther(revenueToClaim);
       setClaimableFunds(toClaim);
 
-      const unreleased =
-        utils.formatEther(totalBids.sub(revenueToClaim)) - Number(auction.revenueClaimed);
-      setUnreleasedFunds(unreleased);
+      // 2. Unreleased funds
+      if (!auction.finalised) {
+        // If auction isn't finalised We need to calcuate the total amount of winning bids from the bids
+
+        // We take the first N bids and sum them, N = number of slots from contract
+        const totalBids = auction.bidders
+          .slice(0, Object.values(slotsInfo).length)
+          .reduce((acc, bid) => acc.plus(bid.amount), new BigNumber('0'));
+
+        setUnreleasedFunds(totalBids.toFixed());
+      } else if (!areAllSlotsCaptured) {
+        // If auction is finalised we can use the data from the contract
+        const totalBids = Object.values(slotsInfo).reduce(
+          (acc, slot) => acc.add(slot.winningBidAmount),
+          EBigNumber.from('0')
+        );
+
+        const unreleased =
+          utils.formatEther(totalBids.sub(revenueToClaim)) - Number(auction.revenueClaimed);
+
+        setUnreleasedFunds(unreleased);
+      }
+      // If all slots are captured we unreleased funds are 0
     }
   };
 
@@ -133,13 +157,6 @@ const PastAuctionsCard = ({ auction, setShowLoadingModal, setLoadingText }) => {
       console.log(err);
     }
   };
-
-  const areAllSlotsCaptured =
-    auction.finalised &&
-    !auction.rewardTiers
-      .map((r) => r.slots)
-      .flat()
-      .some((s) => !s.capturedRevenue);
 
   const releaseRewardsDisabled = areAllSlotsCaptured || !auction.depositedNfts;
 
