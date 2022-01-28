@@ -14,7 +14,7 @@ const SingleCaptureRevenueTxs = ({
   rewardTiersSlots,
 }) => (
   <div className="slots__list">
-    {singleCaptureRevenueTxs.length &&
+    {singleCaptureRevenueTxs.length ? (
       singleCaptureRevenueTxs.map((tx, txIndex) => (
         <div className="slot">
           <div className="slot__content">
@@ -117,7 +117,10 @@ const SingleCaptureRevenueTxs = ({
             </div>
           )}
         </div>
-      ))}
+      ))
+    ) : (
+      <></>
+    )}
   </div>
 );
 SingleCaptureRevenueTxs.propTypes = {

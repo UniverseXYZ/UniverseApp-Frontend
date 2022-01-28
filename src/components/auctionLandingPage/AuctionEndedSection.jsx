@@ -76,9 +76,9 @@ const AuctionEndedSection = ({
       console.log('available funds to claim:');
       console.log(toClaim);
 
-      const unreleased = utils.formatEther(
-        totalBids.sub(revenueToClaim).sub(onAuction.auction.claimedFunds || 0)
-      );
+      const unreleased =
+        utils.formatEther(totalBids.sub(revenueToClaim)) - +onAuction.auction.revenueClaimed;
+
       setUnreleasedFunds(unreleased);
       console.log('unreleased funds:');
       console.log(unreleased);

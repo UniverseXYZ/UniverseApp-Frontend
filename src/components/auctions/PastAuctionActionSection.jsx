@@ -9,7 +9,13 @@ import Exclamation from '../../assets/images/Exclamation.svg';
 import plusIcon from '../../assets/images/plus.svg';
 import { useMyNftsContext } from '../../contexts/MyNFTsContext';
 
-const PastAuctionActionSection = ({ auction, slotsToWithdraw, setSlotsToWithdraw, slotsInfo }) => {
+const PastAuctionActionSection = ({
+  auction,
+  slotsToWithdraw,
+  setSlotsToWithdraw,
+  slotsInfo,
+  setShowLoading,
+}) => {
   const history = useHistory();
 
   const { loggedInArtist, universeAuctionHouseContract, address } = useAuthContext();
@@ -32,11 +38,11 @@ const PastAuctionActionSection = ({ auction, slotsToWithdraw, setSlotsToWithdraw
   };
 
   const getDescriptionText = () => {
-    if (slotsToWithdraw.length) {
-      return 'You can withdraw your NFTs by clicking a button below.';
+    if (auction.finalised && !slotsToWithdraw.length) {
+      return 'You have already withdrawn your NFTs to your wallet.';
     }
 
-    return 'You have already withdrawn your NFTs to your wallet.';
+    return 'You can withdraw your NFTs by clicking a button below.';
   };
 
   const handleWithdrawNfts = async () => {
@@ -99,18 +105,25 @@ const PastAuctionActionSection = ({ auction, slotsToWithdraw, setSlotsToWithdraw
       ) : (
         <p className="desc">{getDescriptionText()}</p>
       )}
-      {slotsToWithdraw.length ? (
-        <button
-          type="button"
-          className="light-button set_up"
-          onClick={redirectToWithdrawPage}
-          disabled={!loggedInArtist.name || !loggedInArtist.avatar}
-        >
-          Withdraw NFTs
-          <img src={plusIcon} alt="icon" style={{ marginLeft: '12px' }} />
-        </button>
-      ) : (
+      {auction.finalised && !slotsToWithdraw.length ? (
         <></>
+      ) : (
+        <>
+          <div className="warning__div">
+            <img src={Exclamation} alt="Warning" />
+            <p>You’ll be able to withdraw your NFTs right after all the rewards are released.</p>
+          </div>
+
+          <button
+            disabled={!auction.finalised}
+            type="button"
+            className="light-button set_up"
+            onClick={redirectToWithdrawPage}
+          >
+            Withdraw NFTs
+            <img src={plusIcon} alt="icon" style={{ marginLeft: '12px' }} />
+          </button>
+        </>
       )}
     </div>
   );
@@ -121,6 +134,7 @@ PastAuctionActionSection.propTypes = {
   slotsToWithdraw: PropTypes.oneOfType([PropTypes.array]).isRequired,
   setSlotsToWithdraw: PropTypes.func.isRequired,
   slotsInfo: PropTypes.oneOfType([PropTypes.array]).isRequired,
+  setShowLoading: PropTypes.func.isRequired,
 };
 
 export default PastAuctionActionSection;

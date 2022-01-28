@@ -61,10 +61,22 @@ const PastAuctions = ({ setShowLoadingModal, setLoadingText }) => {
     setSearchByName(value);
   };
 
-  const handleAuctionWithdrawnRevenueEvent = (err, totalRevenue, recipient) => {
+  const handleAuctionWithdrawnRevenueEvent = (err, auctionId, totalRevenue, recipient) => {
     const isYourEvent = recipient.toLowerCase() === address.toLowerCase();
 
     if (isYourEvent) {
+      setFilteredAuctions((upToDate) => {
+        let newAuctions = { ...upToDate };
+
+        newAuctions = newAuctions.map((auction) => {
+          if (auction.id === auctionId) {
+            auction.revenueClaimed = totalRevenue;
+          }
+          return auction;
+        });
+
+        return newAuctions;
+      });
       setShowLoadingModal(false);
       setActiveTxHashes([]);
     }
@@ -79,7 +91,7 @@ const PastAuctions = ({ setShowLoadingModal, setLoadingText }) => {
       // Attach events to all visible Auctions in the tab
       filteredAuctions.forEach((a) => {
         subscribeToAuctionWithdrawnRevenue(a.id, (err, { totalRevenue, recipient }) => {
-          handleAuctionWithdrawnRevenueEvent(err, totalRevenue, recipient);
+          handleAuctionWithdrawnRevenueEvent(err, a.id, totalRevenue, recipient);
           removeAllListeners(a.id);
         });
       });

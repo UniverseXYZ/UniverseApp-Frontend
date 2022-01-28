@@ -132,6 +132,23 @@ const ReleaseRewards = () => {
 
       setBatchCaptureRevenueTxs(batchCaptureTxs);
       setShowLoading(false);
+
+      // Update slots in rewardTier
+      setAuction((upToDate) => {
+        const updatedAuction = { ...upToDate };
+        const newTiers = updatedAuction.auction.rewardTiers.map((r) => {
+          const slots = r.slots.map((slot) => {
+            if (slot.index === slotIndex) {
+              slot.capturedRevenue = true;
+            }
+            return slot;
+          });
+          return slots;
+        });
+        updatedAuction.auction.rewardTiers = newTiers;
+
+        return updatedAuction;
+      });
     });
 
     subscribeToBidMatched(auction.auction.id, async (err, { bids: bidsData, finalised }) => {
