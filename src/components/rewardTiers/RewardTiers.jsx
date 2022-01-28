@@ -55,29 +55,10 @@ const RewardTiers = () => {
                 dots: true,
                 slidesToShow: 2,
                 variableWidth: true,
-                // nextArrow: <SampleArrow />,
-                // prevArrow: <SampleArrow />,
               };
               let allTierNFTs = [];
               if (tier.nftSlots) {
                 // If we have tier.nftSlots it means we have local data to work with, otherwise we are editing an existing future auction fetched from the server and the response will be different
-                // allTierNFTs = tier.nftSlots.reduce((res, curr) => {
-                //   const nfts = [...curr.nftsData];
-                //   if (auction.collections) {
-                //     // We need to attach the collections data in order to be used in the screen
-                //     nfts.forEach((nft) => {
-                //       const collection = auction.collections.find((c) => c.id === nft.collectionId);
-                //       if (collection) {
-                //         nft.collectioName = collection.name;
-                //         nft.collectionAddress = collection.address;
-                //         nft.collectionUrl = collection.coverUrl;
-                //       }
-                //     });
-                //   }
-                //   res.push(...nfts);
-                //   return res;
-                // }, []);
-
                 tier.nftSlots.forEach((curr) => {
                   const nfts = [...curr.nftsData];
                   if (auction.collections) {
