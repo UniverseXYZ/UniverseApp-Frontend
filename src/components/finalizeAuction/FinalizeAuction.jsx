@@ -21,16 +21,8 @@ import { calculateTransactions } from '../../utils/helpers/depositNfts';
 import DepositNftsSection from './DepositNftsSection';
 import ERC721ABI from '../../contracts/ERC721.json';
 import GoBackPopup from './GoBackPopup';
-import {
-  disconnectAuctionSocket,
-  initiateAuctionSocket,
-  removeAllListeners,
-  subscribeToCancelation,
-  subscribeToDepositNfts,
-  subscribeToOnChainCreation,
-  subscribeToWithdrawNfts,
-} from '../../utils/websockets/auctionEvents';
 import { useErrorContext } from '../../contexts/ErrorContext';
+import { useSocketContext } from '../../contexts/SocketContext';
 
 const FinalizeAuction = () => {
   const defaultLoadingText =
@@ -38,6 +30,7 @@ const FinalizeAuction = () => {
   const verificationLoadingText =
     'The transaction is being verified. This will take a few seconds.';
 
+  const { auctionEvents, subscribeTo, unsubscribeFrom } = useSocketContext();
   const history = useHistory();
   const { auction, setAuction, bidExtendTime } = useAuctionContext();
   const { setActiveTxHashes } = useMyNftsContext();
@@ -57,138 +50,167 @@ const FinalizeAuction = () => {
   const [withdrawVerifyingTokenIds, setWithdrawVerifyingTokenIds] = useState([]);
   const [approvingCollections, setApprovingCollections] = useState([]);
 
-  useEffect(() => {
-    if (auction.id) {
-      initiateAuctionSocket();
+  const subscribeToOnChainCreation = (err, msg) => {
+    if (err) return;
+    const { onChainId } = msg;
+    setAuction((upToDateAuction) => ({ ...upToDateAuction, onChainId, canceled: false }));
+    setShowLoading(false);
+  };
 
-      subscribeToOnChainCreation(auction.id, (err, data) => {
-        if (err) return;
-        const { onChainId } = data;
-        setAuction((upToDateAuction) => ({ ...upToDateAuction, onChainId, canceled: false }));
-        setShowLoading(false);
-      });
+  const subscribeToCancelation = (err) => {
+    if (err) return;
+    setAuction((upToDateAuction) => ({ ...upToDateAuction, canceled: true }));
+    setShowLoading(false);
+  };
 
-      subscribeToCancelation(auction.id, (err, data) => {
-        if (err) return;
-        setAuction((upToDateAuction) => ({ ...upToDateAuction, canceled: true }));
-        setShowLoading(false);
-      });
+  const subscribeToDepositNfts = (err, msg) => {
+    if (err) return;
+    const { tokenId, collectionAddress } = msg;
+    let newAuction = null;
+    let newVerifyTxs = [];
 
-      subscribeToDepositNfts(auction.id, (err, { tokenId, collectionAddress }) => {
-        if (err) return;
-        let newAuction = null;
-        let newVerifyTxs = [];
+    setDepositVerifyingTxIndex((upToDate) => {
+      newVerifyTxs = [...upToDate];
+      return upToDate;
+    });
 
-        setDepositVerifyingTxIndex((upToDate) => {
-          newVerifyTxs = [...upToDate];
-          return upToDate;
-        });
+    const txIndex = newVerifyTxs.pop();
 
-        const txIndex = newVerifyTxs.pop();
+    if (txIndex !== undefined) {
+      setTransactions((txs) => {
+        const txsConfig = txs;
+        const slotNfts = txsConfig.displayNfts[txIndex] || [];
+        const collectionMatch = auction.collections.find(
+          (c) => c.address.toLowerCase() === collectionAddress.toLowerCase()
+        );
+        for (let i = 0; i < slotNfts.length; i += 1) {
+          const nft = slotNfts[i];
+          const hasNftMatch = !!(nft.tokenId === tokenId && collectionMatch);
+          if (hasNftMatch) {
+            nft.deposited = true;
 
-        if (txIndex !== undefined) {
-          setTransactions((txs) => {
-            const txsConfig = txs;
-            const slotNfts = txsConfig.displayNfts[txIndex] || [];
-            const collectionMatch = auction.collections.find(
-              (c) => c.address.toLowerCase() === collectionAddress.toLowerCase()
-            );
-            for (let i = 0; i < slotNfts.length; i += 1) {
-              const nft = slotNfts[i];
-              const hasNftMatch = !!(nft.tokenId === tokenId && collectionMatch);
-              if (hasNftMatch) {
-                nft.deposited = true;
-
-                const hasNotDepositedNfts = slotNfts.some((slotNft) => !slotNft.deposited);
-                if (!hasNotDepositedNfts) {
-                  setApprovedTxs((upToDate) => {
-                    if (upToDate.indexOf(txIndex) < 0) {
-                      return [...upToDate, txIndex];
-                    }
-                    return upToDate;
-                  });
-                  setDepositVerifyingTxIndex(newVerifyTxs);
-                  setAuction((auct) => {
-                    newAuction = { ...auct, depositedNfts: true };
-                    return newAuction;
-                  });
-
-                  if (!newVerifyTxs.length) {
-                    setShowLoading(false);
-                    setShowSuccessPopup(true);
-                  }
+            const hasNotDepositedNfts = slotNfts.some((slotNft) => !slotNft.deposited);
+            if (!hasNotDepositedNfts) {
+              setApprovedTxs((upToDate) => {
+                if (upToDate.indexOf(txIndex) < 0) {
+                  return [...upToDate, txIndex];
                 }
+                return upToDate;
+              });
+              setDepositVerifyingTxIndex(newVerifyTxs);
+              setAuction((auct) => {
+                newAuction = { ...auct, depositedNfts: true };
+                return newAuction;
+              });
+
+              if (!newVerifyTxs.length) {
+                setShowLoading(false);
+                setShowSuccessPopup(true);
               }
-              if (hasNftMatch) {
-                break;
-              }
-            }
-
-            return txsConfig;
-          });
-        }
-      });
-
-      subscribeToWithdrawNfts(auction.id, (err, { hasWithdrawnAll, tokenId }) => {
-        if (err) return;
-
-        let apprTxss = null;
-
-        setApprovedTxs((txs) => {
-          apprTxss = txs;
-          return txs;
-        });
-
-        let newVerifyTokenIds = null;
-        setWithdrawVerifyingTokenIds((upToDate) => {
-          newVerifyTokenIds = [...upToDate];
-          newVerifyTokenIds.splice(newVerifyTokenIds.indexOf(tokenId.toString()), 1);
-          return newVerifyTokenIds;
-        });
-
-        let txsConfig = [];
-        setTransactions((txs) => {
-          let foundNft = false;
-          txsConfig = txs;
-          for (let slotIndex = 0; slotIndex < txsConfig.displayNfts.length; slotIndex += 1) {
-            const slotNfts = txsConfig.displayNfts[slotIndex] || [];
-            for (let i = 0; i < slotNfts.length; i += 1) {
-              const nft = slotNfts[i];
-              if (nft.tokenId === tokenId.toString()) {
-                nft.deposited = false;
-                foundNft = true;
-
-                const hasDepositedNfts = slotNfts.some((slotNft) => slotNft.deposited);
-                if (!hasDepositedNfts) {
-                  apprTxss.splice(apprTxss.indexOf(slotIndex), 1);
-                  setApprovedTxs(apprTxss);
-                }
-              }
-              if (foundNft) {
-                break;
-              }
-            }
-            if (foundNft) {
-              break;
             }
           }
-
-          return txsConfig;
-        });
-
-        if (hasWithdrawnAll) {
-          setAuction((upToDate) => ({ ...upToDate, depositedNfts: false }));
+          if (hasNftMatch) {
+            break;
+          }
         }
 
-        if (!newVerifyTokenIds.length) {
-          setShowLoading(false);
-        }
+        return txsConfig;
       });
     }
+  };
 
+  const subscribeToWithdrawNfts = (err, msg) => {
+    if (err) return;
+    const { tokenId, hasWithdrawnAll } = msg;
+    let apprTxss = null;
+
+    setApprovedTxs((txs) => {
+      apprTxss = txs;
+      return txs;
+    });
+
+    let newVerifyTokenIds = null;
+    setWithdrawVerifyingTokenIds((upToDate) => {
+      newVerifyTokenIds = [...upToDate];
+      newVerifyTokenIds.splice(newVerifyTokenIds.indexOf(tokenId.toString()), 1);
+      return newVerifyTokenIds;
+    });
+
+    let txsConfig = [];
+    setTransactions((txs) => {
+      let foundNft = false;
+      txsConfig = txs;
+      for (let slotIndex = 0; slotIndex < txsConfig.displayNfts.length; slotIndex += 1) {
+        const slotNfts = txsConfig.displayNfts[slotIndex] || [];
+        for (let i = 0; i < slotNfts.length; i += 1) {
+          const nft = slotNfts[i];
+          if (nft.tokenId === tokenId.toString()) {
+            nft.deposited = false;
+            foundNft = true;
+
+            const hasDepositedNfts = slotNfts.some((slotNft) => slotNft.deposited);
+            if (!hasDepositedNfts) {
+              apprTxss.splice(apprTxss.indexOf(slotIndex), 1);
+              setApprovedTxs(apprTxss);
+            }
+          }
+          if (foundNft) {
+            break;
+          }
+        }
+        if (foundNft) {
+          break;
+        }
+      }
+
+      return txsConfig;
+    });
+
+    if (hasWithdrawnAll) {
+      setAuction((upToDate) => ({ ...upToDate, depositedNfts: false }));
+    }
+
+    if (!newVerifyTokenIds.length) {
+      setShowLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (auction.id) {
+      subscribeTo({
+        auctionId: auction.id,
+        eventName: auctionEvents.CREATED,
+        cb: (err, msg) => subscribeToOnChainCreation(err, msg),
+      });
+
+      subscribeTo({
+        auctionId: auction.id,
+        eventName: auctionEvents.CANCELED,
+        cb: (err) => subscribeToCancelation(err),
+      });
+
+      subscribeTo({
+        auctionId: auction.id,
+        eventName: auctionEvents.DEPOSITED_NFTS,
+        cb: (err, msg) => subscribeToDepositNfts(err, msg),
+      });
+
+      subscribeTo({
+        auctionId: auction.id,
+        eventName: auctionEvents.WITHDRAWN_NFTS,
+        cb: (err, msg) => subscribeToWithdrawNfts(err, msg),
+      });
+    }
     return () => {
-      removeAllListeners(auction.id);
-      disconnectAuctionSocket();
+      unsubscribeFrom({
+        auctionId: auction.id,
+        eventNames: [
+          auctionEvents.CREATED,
+          auctionEvents.CANCELED,
+          auctionEvents.DEPOSITED_NFTS,
+          auctionEvents.WITHDRAWN_NFTS,
+        ],
+      });
     };
   }, [auction.id]);
 
