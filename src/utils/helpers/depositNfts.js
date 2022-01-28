@@ -1,10 +1,5 @@
 import { utils } from 'ethers';
-
-// This comes from the contract. Max 5 NFTs can be deposited per tx
-const chunkSize = 5;
-
-// Taken from batchDepositToAuction() function require
-const maxSlotSize = 10;
+import { DEPOSIT_CHUNK_SIZE, MAX_DEPOSIT_SLOT_SIZE } from './auctionContants';
 
 const chunkifySlots = (nftsBySlots) => {
   const chunkedSlots = {};
@@ -13,8 +8,8 @@ const chunkifySlots = (nftsBySlots) => {
     let q;
     let j;
 
-    for (q = 0, j = slotsMap.length; q < j; q += chunkSize) {
-      const chunked = slotsMap.slice(q, q + chunkSize);
+    for (q = 0, j = slotsMap.length; q < j; q += DEPOSIT_CHUNK_SIZE) {
+      const chunked = slotsMap.slice(q, q + DEPOSIT_CHUNK_SIZE);
       const group = chunkedSlots[slotKey] || [];
       group.push(chunked);
       chunkedSlots[slotKey] = group;
@@ -68,7 +63,7 @@ const splitSlots = (chunkedSlots, collections) => {
 
       slotIndices.push(nonZeroIndexKeys[i]);
       nfts.push(nftsChunke);
-      if (slotIndices.length === maxSlotSize) {
+      if (slotIndices.length === MAX_DEPOSIT_SLOT_SIZE) {
         finalSlotIndices.push(slotIndices);
         slotIndices = [];
         finalNfts.push(nfts);
@@ -117,17 +112,6 @@ const groupTiersToSlots = (rewardTiers) => {
     });
   });
   return flatNftsBySlots;
-};
-
-const setMaxSlotSize = (rewardTiers) => {
-  let numberOfSlots = 0;
-  rewardTiers
-    .sort((a, b) => +a.tierPosition - +b.tierPosition)
-    .forEach((tier) => {
-      numberOfSlots += tier.numberOfWinners;
-    });
-
-  return numberOfSlots;
 };
 
 export const calculateTransactions = (auction) => {
