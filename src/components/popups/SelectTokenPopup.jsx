@@ -6,12 +6,14 @@ import closeIcon from '../../assets/images/cross.svg';
 import SearchField from '../input/SearchField';
 import { useAuctionContext } from '../../contexts/AuctionContext.jsx';
 import { useAuthContext } from '../../contexts/AuthContext';
+import SetTokenErrorPopup from './SetTokenErrorPopup';
 
 const SelectTokenPopup = ({ onClose }) => {
   const { options, setBidtype } = useAuctionContext();
   const { universeAuctionHouseContract } = useAuthContext();
   const [showAddTokenPopup, setShowAddTokenPopup] = useState(false);
   const [optionsClone, setOptionsClone] = useState([...options]);
+  const [tokenError, setTokenError] = useState(false);
 
   const handleChange = (key) => {
     setBidtype(key);
@@ -21,15 +23,20 @@ const SelectTokenPopup = ({ onClose }) => {
     const supportedTokens = [];
     for (let i = 0; i < options.length; i += 1) {
       const token = options[i];
-      // eslint-disable-next-line no-await-in-loop
-      const isSupported = await universeAuctionHouseContract.supportedBidTokens(token.address);
 
-      if (isSupported) {
-        supportedTokens.push(token);
-      }
+      try {
+        // eslint-disable-next-line no-await-in-loop
+        const isSupported = await universeAuctionHouseContract.supportedBidTokens(token.address);
 
-      if (i === options.length - 1) {
-        setOptionsClone(supportedTokens);
+        if (isSupported) {
+          supportedTokens.push(token);
+        }
+
+        if (i === options.length - 1) {
+          setOptionsClone(supportedTokens);
+        }
+      } catch (error) {
+        setTokenError(true);
       }
     }
   }, []);
@@ -39,8 +46,7 @@ const SelectTokenPopup = ({ onClose }) => {
 
     return () => document.body.classList.remove('no__scroll');
   }, []);
-
-  return (
+  const selectToken = (
     <div
       className="select-token"
       style={{ overflow: `${optionsClone.length > 5 ? 'scroll' : ''}` }}
@@ -82,6 +88,13 @@ const SelectTokenPopup = ({ onClose }) => {
       )}
     </div>
   );
+  const selectTokenError = (
+    <SetTokenErrorPopup setTokenError={setTokenError} onClose={() => onClose()} />
+  );
+  if (tokenError) {
+    return selectTokenError;
+  }
+  return selectToken;
 };
 SelectTokenPopup.propTypes = {
   onClose: PropTypes.func.isRequired,
