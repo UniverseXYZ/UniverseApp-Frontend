@@ -82,10 +82,10 @@ const CarouselForNfts = ({ winnersData, onRemoveEdition, selectedWinner }) => {
     <Slider {...settings} slidesToShow={slidesToShow} className="carousel img-div">
       {Object.values(winnerData).length ? (
         Object.values(winnerData).map((nft) => (
-          <WinnerNft key={uuid()} nft={nft} onRemoveEdition={onRemoveEdition} />
+          <WinnerNft key={nft.id} nft={nft} onRemoveEdition={onRemoveEdition} />
         ))
       ) : (
-        <div className="placeholder-winners" key={uuid()} />
+        <div className="placeholder-winners" />
       )}
     </Slider>
   );
