@@ -7,7 +7,7 @@ import { useAuctionContext } from '../../../contexts/AuctionContext';
 import { getBidTypeByName } from '../../../utils/fixtures/BidOptions';
 import AuctionsTabsCountdown from '../../auctions/AuctionsTabsCountdown';
 
-const ActiveAuctionCard = ({ auction }) => {
+const ActiveAuctionCard = ({ auction, removeAuction }) => {
   const { options } = useAuctionContext();
 
   const bids = bidsInUsd(auction);
@@ -36,7 +36,11 @@ const ActiveAuctionCard = ({ auction }) => {
         <div className="date">
           <div className="date__border__div" />
           <label>Time left</label>
-          <AuctionsTabsCountdown activeAuction={auction} showLabel={false} />
+          <AuctionsTabsCountdown
+            activeAuction={auction}
+            showLabel={false}
+            removeAuction={removeAuction}
+          />
         </div>
       </Link>
       <div className="active__auction__details">
@@ -80,6 +84,11 @@ const ActiveAuctionCard = ({ auction }) => {
 
 ActiveAuctionCard.propTypes = {
   auction: PropTypes.oneOfType([PropTypes.object]).isRequired,
+  removeAuction: PropTypes.func,
+};
+
+ActiveAuctionCard.defaultProps = {
+  removeAuction: () => {},
 };
 
 export default ActiveAuctionCard;
