@@ -2,7 +2,6 @@ import React, { useEffect } from 'react';
 import { Route, Switch, useLocation } from 'react-router-dom';
 import Popup from 'reactjs-popup';
 import './assets/scss/normalize.scss';
-import Snowfall from 'react-snowfall';
 import Header from './components/header/Header.jsx';
 import Footer from './components/footer/Footer.jsx';
 import Auctions from './containers/auctions/Auction.jsx';
@@ -75,7 +74,6 @@ const App = () => {
 
   return (
     <PolymorphContextProvider>
-      <Snowfall color="#A0E3F6" snowflakeCount={250} />
       <LobsterContextProvider>
         <MyNFTsContextProvider>
           <AuctionContextProvider>

@@ -354,6 +354,8 @@
           font-size: 14px;
           line-height: 140%;
           border-radius: 10px;
+          color: black;
+          -webkit-text-fill-color: black;
           &.disable {
             position: relative;
             cursor: default;
