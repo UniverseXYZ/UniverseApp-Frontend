@@ -7,7 +7,7 @@ import { useAuthContext } from './AuthContext';
 const AuctionContext = createContext(null);
 
 const AuctionContextProvider = ({ children }) => {
-  const bidExtendTime = 3;
+  const bidExtendTime = 5;
   const { isAuthenticated } = useAuthContext();
 
   const [myAuctions, setMyAuctions] = useState([]);
