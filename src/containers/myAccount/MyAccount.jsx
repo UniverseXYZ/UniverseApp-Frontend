@@ -86,6 +86,13 @@ const MyAccount = () => {
         const { profileImageUrl } = await saveUserImage(accountImage);
         if (!profileImageUrl) {
           setShowLoading(false);
+          if (result.status === 409) {
+            setErrorTitle('Universe address already taken');
+            setErrorBody('Please choose another one.');
+          } else {
+            setErrorBody(result.message);
+          }
+
           setShowError(true);
           return;
         }
@@ -93,16 +100,23 @@ const MyAccount = () => {
           artistData.avatar = profileImageUrl;
         }
       }
-
-      if (!result.ok) {
-        setShowLoading(false);
-        if (result.status === 409) {
-          setErrorTitle('Universe address already taken');
-          setErrorBody('Please choose another one.');
+      try {
+        if (typeof accountImage === 'object') {
+          const saveImageRequest = await saveUserImage(accountImage);
+          if (saveImageRequest.error) {
+            setShowLoading(false);
+            setErrorBody(saveImageRequest.message);
+            setShowError(true);
+            return;
+          }
+          if (saveImageRequest.profileImageUrl) {
+            artistData.avatar = saveImageRequest.profileImageUrl;
+          }
         }
-        setShowError(true);
-        return;
+      } catch (error) {
+        console.info(error);
       }
+
       setAccountPage(`universe.xyz/${page}`);
       setLoggedInArtist({ ...artistData });
       setFetchedUserData({
@@ -125,7 +139,7 @@ const MyAccount = () => {
       setShowError(true);
     }
   };
-  console.log(accountPage);
+
   const cancelChanges = () => {
     setAccountName(loggedInArtist.name);
     if (loggedInArtist.universePageAddress) {
