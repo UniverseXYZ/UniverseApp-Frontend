@@ -9,19 +9,6 @@ import uuid from 'react-uuid';
 import { format } from 'date-fns';
 import infoIcon from '../../assets/images/icon.svg';
 import mp3Icon from '../../assets/images/mp3-icon.png';
-import ethIcon from '../../assets/images/bid_icon.svg';
-import daiIcon from '../../assets/images/dai_icon.svg';
-import usdcIcon from '../../assets/images/usdc_icon.svg';
-import bondIcon from '../../assets/images/bond_icon.svg';
-import snxIcon from '../../assets/images/snx.svg';
-import wethIcon from '../../assets/images/WETH 20x20.svg';
-import wbtcIcon from '../../assets/images/WBTC 20x20.svg';
-import aaveIcon from '../../assets/images/aave 20x20.png';
-import compIcon from '../../assets/images/COMP 20x20.svg';
-import ilvIcon from '../../assets/images/ILV 20x20.png';
-import linkIcon from '../../assets/images/LINK 20x20.svg';
-import sushiIcon from '../../assets/images/sushi 20x20.png';
-import xyzIcon from '../../assets/images/XYZ 20x20.png';
 import yellowIcon from '../../assets/images/yellowIcon.svg';
 import videoIcon from '../../assets/images/video-icon.svg';
 import pencil from '../../assets/images/pencil.svg';
@@ -32,6 +19,7 @@ import { AuctionCreate, AuctionUpdate } from '../../userFlows/AuctionCreate';
 import { getFutureAuctions } from '../../utils/api/auctions';
 import { useAuctionContext } from '../../contexts/AuctionContext';
 import { useErrorContext } from '../../contexts/ErrorContext';
+import { getBidTypeByValue } from '../../utils/fixtures/BidOptions.js';
 
 const AuctionReview = () => {
   const { auction, bidtype, options, myAuctions, setMyAuctions } = useAuctionContext();
@@ -44,45 +32,8 @@ const AuctionReview = () => {
   const isEditingAuction = myAuctions.filter((a) => a.id === auction.id);
 
   useEffect(() => {
-    if (bidtype === 'eth') {
-      setBidicon(ethIcon);
-    }
-    if (bidtype === 'dai') {
-      setBidicon(daiIcon);
-    }
-    if (bidtype === 'usdc') {
-      setBidicon(usdcIcon);
-    }
-    if (bidtype === 'bond') {
-      setBidicon(bondIcon);
-    }
-    if (bidtype === 'snx') {
-      setBidicon(snxIcon);
-    }
-    if (bidtype === 'weth') {
-      setBidicon(wethIcon);
-    }
-    if (bidtype === 'wbtc') {
-      setBidicon(wbtcIcon);
-    }
-    if (bidtype === 'aave') {
-      setBidicon(aaveIcon);
-    }
-    if (bidtype === 'link') {
-      setBidicon(linkIcon);
-    }
-    if (bidtype === 'comp') {
-      setBidicon(compIcon);
-    }
-    if (bidtype === 'ilv') {
-      setBidicon(ilvIcon);
-    }
-    if (bidtype === 'sushi') {
-      setBidicon(sushiIcon);
-    }
-    if (bidtype === 'xyz') {
-      setBidicon(xyzIcon);
-    }
+    const bidIcon = getBidTypeByValue(bidtype, options).img;
+    setBidicon(bidIcon);
   }, []);
 
   const handleSetAuction = async () => {

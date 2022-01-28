@@ -1,29 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { Animated } from 'react-animated-css';
 import { useHistory } from 'react-router-dom';
 import Popup from 'reactjs-popup';
 import BidRankingsPopup from '../popups/BidRankingsPopup.jsx';
 import leftArrow from '../../assets/images/arrow.svg';
-import AuctionCountdown from './AuctionCountdown.jsx';
 import ActiveAuctions from './ActiveAuctions.jsx';
 import TopBidders from './TopBidders.jsx';
 import AuctionEndedSection from './AuctionEndedSection.jsx';
 import AuctionHeader from './AuctionHeader.jsx';
-import ethIcon from '../../assets/images/bid_icon.svg';
-import daiIcon from '../../assets/images/dai_icon.svg';
-import usdcIcon from '../../assets/images/usdc_icon.svg';
-import bondIcon from '../../assets/images/bond_icon.svg';
-import snxIcon from '../../assets/images/snx.svg';
-import wethIcon from '../../assets/images/WETH 20x20.svg';
-import wbtcIcon from '../../assets/images/WBTC 20x20.svg';
-import aaveIcon from '../../assets/images/aave 20x20.png';
-import compIcon from '../../assets/images/COMP 20x20.svg';
-import ilvIcon from '../../assets/images/ILV 20x20.png';
-import linkIcon from '../../assets/images/LINK 20x20.svg';
-import sushiIcon from '../../assets/images/sushi 20x20.png';
-import xyzIcon from '../../assets/images/XYZ 20x20.png';
+import { getBidTypeByName } from '../../utils/fixtures/BidOptions.js';
+import { useAuctionContext } from '../../contexts/AuctionContext.jsx';
 
 const AuctionDetails = ({
   onAuction,
@@ -40,6 +27,7 @@ const AuctionDetails = ({
   setShowLoading,
 }) => {
   const history = useHistory();
+  const { options } = useAuctionContext();
   const [selectedAuctionEnded, setSelectedAuctionEnded] = useState(false);
   const [showBidRankings, setShowBidRankings] = useState(false);
   const [currencyIcon, setCurrencyIcon] = useState(null);
@@ -67,47 +55,10 @@ const AuctionDetails = ({
   }, []);
 
   useEffect(() => {
-    const bidtype = onAuction.auction.tokenSymbol;
+    const auctionBidType = onAuction.auction.tokenSymbol;
+    const bidTypeImg = getBidTypeByName(auctionBidType, options).img;
 
-    if (bidtype === 'ETH') {
-      setCurrencyIcon(ethIcon);
-    }
-    if (bidtype === 'DAI') {
-      setCurrencyIcon(daiIcon);
-    }
-    if (bidtype === 'USDC') {
-      setCurrencyIcon(usdcIcon);
-    }
-    if (bidtype === 'BOND') {
-      setCurrencyIcon(bondIcon);
-    }
-    if (bidtype === 'SNX') {
-      setCurrencyIcon(snxIcon);
-    }
-    if (bidtype === 'WETH') {
-      setCurrencyIcon(wethIcon);
-    }
-    if (bidtype === 'WBTC') {
-      setCurrencyIcon(wbtcIcon);
-    }
-    if (bidtype === 'AAVE') {
-      setCurrencyIcon(aaveIcon);
-    }
-    if (bidtype === 'LINK') {
-      setCurrencyIcon(linkIcon);
-    }
-    if (bidtype === 'COMP') {
-      setCurrencyIcon(compIcon);
-    }
-    if (bidtype === 'ILV') {
-      setCurrencyIcon(ilvIcon);
-    }
-    if (bidtype === 'SUSHI') {
-      setCurrencyIcon(sushiIcon);
-    }
-    if (bidtype === 'XYZ') {
-      setCurrencyIcon(xyzIcon);
-    }
+    setCurrencyIcon(bidTypeImg);
   }, []);
 
   const getRewardTierSpanStyles = (rewardTier) => {
