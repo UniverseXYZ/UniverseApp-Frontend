@@ -249,9 +249,18 @@ const FinalizeAuction = () => {
     }
   }, []);
 
-  const setErrors = () => {
-    setErrorTitle('Transaction failed');
-    setErrorBody('Please, try again');
+  const setErrors = (err, contractError) => {
+    if (contractError) {
+      setErrorTitle('Transaction failed');
+    } else {
+      setErrorTitle('Error occurred');
+    }
+
+    if (err.code === 4001) {
+      setErrorBody('User denied transaction signature');
+    } else if (err.error?.message) {
+      setErrorBody(err.error?.message);
+    }
     setShowError(true);
   };
 
@@ -307,9 +316,9 @@ const FinalizeAuction = () => {
         setErrors();
       }
     } catch (err) {
-      console.error(err);
       setShowLoading(false);
       setActiveTxHashes([]);
+      setErrors(err);
     }
   };
 
@@ -331,7 +340,7 @@ const FinalizeAuction = () => {
       }
       setIsApproving(false);
     } catch (err) {
-      console.log(err);
+      setErrors(err);
       setIsApproving(false);
     }
   };
@@ -357,6 +366,7 @@ const FinalizeAuction = () => {
     } catch (err) {
       setShowLoading(false);
       setActiveTxHashes([]);
+      setErrors(err);
 
       console.error(err);
     }
@@ -414,8 +424,8 @@ const FinalizeAuction = () => {
         console.log('error ocurred');
       }
     } catch (err) {
-      console.log(err);
       setShowLoading(false);
+      setErrors(err);
     }
   };
 
@@ -436,6 +446,7 @@ const FinalizeAuction = () => {
       console.error(error);
       setShowLoading(false);
       setActiveTxHashes([]);
+      setErrors(err);
     }
   };
 
