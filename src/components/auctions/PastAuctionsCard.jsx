@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import CopyToClipboard from 'react-copy-to-clipboard';
 import PropTypes from 'prop-types';
 import { useHistory } from 'react-router';
@@ -18,7 +18,12 @@ import {
   subscribeToSlotCaptured,
   initiateAuctionSocket,
   removeListener,
+  disconnectAuctionSocket,
+  subscribeToBidMatched,
+  subscribeToAuctionFinalised,
+  subscribeToRevenueWithdraw,
 } from '../../utils/websockets/auctionEvents';
+import { createRewardsTiersSlots } from '../../utils/helpers';
 
 const PastAuctionsCard = ({ auction, setShowLoadingModal, setLoadingText }) => {
   const history = useHistory();
@@ -31,7 +36,7 @@ const PastAuctionsCard = ({ auction, setShowLoadingModal, setLoadingText }) => {
   const [showAuctioneerTooltip, setShowAuctioneerTooltip] = useState(false);
   const [showRewardsTooltip, setShowRewardsTooltip] = useState(false);
   const [slotsToWithdraw, setSlotsToWithdraw] = useState([]);
-  const [slotsInfo, setSlotsInfo] = useState([]);
+  const [slotsInfo, setSlotsInfo] = useState({});
   const [mySlot, setMySlot] = useState(null);
   const [mySlotIndex, setMySlotIndex] = useState(-1);
   const [claimableFunds, setClaimableFunds] = useState(0);
@@ -46,6 +51,12 @@ const PastAuctionsCard = ({ auction, setShowLoadingModal, setLoadingText }) => {
   const verifyClaimLoadingText = 'Your Claim tx is being verified. This will take a few seconds.';
   const defaultLoadingText = 'Your Claim tx is being processed. This will take a few seconds.';
 
+  const slotsInfoRef = useRef(slotsInfo);
+
+  useEffect(() => {
+    slotsInfoRef.current = slotsInfo;
+  }, [slotsInfo]);
+
   const getAuctionSlotsInfo = async () => {
     if (
       address &&
@@ -55,22 +66,7 @@ const PastAuctionsCard = ({ auction, setShowLoadingModal, setLoadingText }) => {
       auction.onChainId &&
       auction.onChain
     ) {
-      const tierSlots = [];
-      let slotIndexCounter = 1;
-      auction.rewardTiers
-        .sort((a, b) => a.tierPosition - b.tierPosition)
-        .forEach((rewardTier) => {
-          for (let i = 0; i < rewardTier.numberOfWinners; i += 1) {
-            // eslint-disable-next-line no-loop-func
-            const nfts = rewardTier.nfts.filter((t) => t.slot === slotIndexCounter);
-            tierSlots.push({
-              ...rewardTier,
-              nfts,
-              // winner: auction.bidders[i]?.user?.address,
-            });
-            slotIndexCounter += 1;
-          }
-        });
+      const tierSlots = createRewardsTiersSlots(auction.rewardTiers, auction.bidders);
       setRewardTiersSlots(tierSlots);
 
       const onChainAuction = await universeAuctionHouseContract.auctions(auction.onChainId);
@@ -101,10 +97,10 @@ const PastAuctionsCard = ({ auction, setShowLoadingModal, setLoadingText }) => {
   };
 
   const getAuctionRevenue = async () => {
-    if (universeAuctionHouseContract && Object.values(slotsInfo).length) {
+    if (universeAuctionHouseContract && Object.values(slotsInfoRef.current).length) {
       const revenueToClaim = await universeAuctionHouseContract.auctionsRevenue(auction.onChainId);
 
-      const totalBids = Object.values(slotsInfo).reduce(
+      const totalBids = Object.values(slotsInfoRef.current).reduce(
         (acc, slot) => acc.add(slot.winningBidAmount),
         BigNumber.from('0')
       );
@@ -126,11 +122,13 @@ const PastAuctionsCard = ({ auction, setShowLoadingModal, setLoadingText }) => {
     getAuctionSlotsInfo();
   }, [universeAuctionHouseContract, auction]);
 
-  useEffect(() => () => removeListener(`auction_${auction.id}_capturedSlot`), []);
+  useEffect(() => {
+    subscribeToSlotCaptured(auction.id, getAuctionRevenue);
 
-  const areAllSlotsCaptured =
-    auction.finalised &&
-    auction.rewardTiers.map((r) => r.slots).map((s) => s.capturedRevenue).length;
+    return () => {
+      removeListener(`auction_${auction.id}_capturedSlot`);
+    };
+  }, []);
 
   const handleClaimFunds = async () => {
     try {
@@ -143,8 +141,6 @@ const PastAuctionsCard = ({ auction, setShowLoadingModal, setLoadingText }) => {
       const txReceipt = await tx.wait();
       if (txReceipt.status === 1) {
         // This modal will be closed upon recieving handleAuctionWithdrawnRevenueEvent
-        initiateAuctionSocket();
-        subscribeToSlotCaptured(auction.id, getAuctionRevenue);
         setLoadingText(verifyClaimLoadingText);
         setClaimableFunds(0);
       }
@@ -154,6 +150,13 @@ const PastAuctionsCard = ({ auction, setShowLoadingModal, setLoadingText }) => {
       console.log(err);
     }
   };
+
+  const areAllSlotsCaptured =
+    auction.finalised &&
+    !auction.rewardTiers
+      .map((r) => r.slots)
+      .flat()
+      .some((s) => !s.capturedRevenue);
 
   return (
     <div className="auction past-auction" key={auction.id}>
