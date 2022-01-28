@@ -21,13 +21,23 @@ const AuctionHeader = ({
     <>
       <div
         className={`auction__details__box__image ${
-          onAuction.auction.promoImageUrl ? '' : 'show__avatar'
+          onAuction.auction.promoImageUrl
+            ? onAuction.auction.promoImageUrl
+            : onAuction.auction.promoImage && URL.createObjectURL(onAuction.auction.promoImage)
+            ? ''
+            : 'show__avatar'
         }`}
       >
         {onAuction.auction.promoImageUrl ? (
+          onAuction.auction.promoImageUrl
+        ) : onAuction.auction.promoImage && URL.createObjectURL(onAuction.auction.promoImage) ? (
           <img
             className="original"
-            src={onAuction.auction.promoImageUrl}
+            src={
+              onAuction.auction.promoImageUrl
+                ? onAuction.auction.promoImageUrl
+                : onAuction.auction.promoImage && URL.createObjectURL(onAuction.auction.promoImage)
+            }
             alt={onAuction.auction.headline}
           />
         ) : (

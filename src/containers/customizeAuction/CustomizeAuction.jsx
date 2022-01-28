@@ -38,6 +38,7 @@ const CustomizeAuction = () => {
   const location = useLocation();
   const {
     auction,
+    setAuction,
     myAuctions,
     setMyAuctions,
     futureAuctions,
@@ -51,8 +52,18 @@ const CustomizeAuction = () => {
   const [domainAndBranding, setDomainAndBranding] = useState({
     headline: auction.headline || '',
     link: auction.link,
-    promoImage: auction.promoImageUrl || null,
-    backgroundImage: auction.backgroundImageUrl || null,
+    promoImage: auction.promoImageUrl
+      ? auction.promoImageUrl
+      : (auction.promoImage &&
+          typeof auction.promoImage !== 'string' &&
+          URL.createObjectURL(auction.promoImage)) ||
+        null,
+    backgroundImage: auction.backgroundImageUrl
+      ? auction.backgroundImageUrl
+      : (auction.backgroundImage &&
+          typeof auction.backgroundImage !== 'string' &&
+          URL.createObjectURL(auction.backgroundImage)) ||
+        null,
     backgroundImageBlur: auction.backgroundImageBlur || false,
     status:
       auction.link &&
@@ -79,6 +90,7 @@ const CustomizeAuction = () => {
   const [invalidPromoImage, setInvalidPromoImage] = useState(null);
   const [invalidBackgroundImage, setInvalidBackgroundImage] = useState(null);
   const [invalidTierImageIds, setInvalidTierImageIds] = useState([]);
+  const [auctionLinkError, setAuctionLinkError] = useState(false);
 
   const disableSaveChanges = () =>
     !domainAndBranding.headline ||
@@ -89,6 +101,7 @@ const CustomizeAuction = () => {
     accountPage === 'universe.xyz/' ||
     accountPage === 'universe.xyz/your-address' ||
     !accountPage ||
+    auctionLinkError ||
     !about;
 
   const setContext = (_loggedInArtistClone, _editedAuction, action) => {
@@ -296,6 +309,7 @@ const CustomizeAuction = () => {
         saveOnServer(editedAuction, loggedInArtistClone, action);
       } else if (action === PREVIEW_ACTION) {
         setContext(loggedInArtistClone, editedAuction, action);
+        setAuction(editedAuction);
       } else {
         saveOnServer(editedAuction, loggedInArtistClone, action);
       }
@@ -329,11 +343,13 @@ const CustomizeAuction = () => {
         </div>
         <div className="customize__auction_title">
           <h2>Customize auction landing page</h2>
-          <Button className="light-button" onClick={handlePreview}>
+          <Button className="light-button" onClick={handlePreview} disabled={disableSave}>
             Preview
           </Button>
         </div>
         <DomainAndBranding
+          auctionLinkError={auctionLinkError}
+          setAuctionLinkError={setAuctionLinkError}
           blurToggleButtonDisabled={blurToggleButtonDisabled}
           invalidPromoImage={invalidPromoImage}
           setInvalidPromoImage={setInvalidPromoImage}

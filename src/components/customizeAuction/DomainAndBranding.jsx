@@ -15,6 +15,7 @@ import {
   auctionPagePromoImageErrorMessage,
 } from '../../utils/helpers.js';
 import { getImageDimensions } from '../../utils/helpers/pureFunctions/auctions';
+import { getAuctionByLink } from '../../utils/api/auctions';
 
 const PROMO_IMAGE = 'promo-image';
 const BACKGROUND_IMAGE = 'background-image';
@@ -45,6 +46,8 @@ const DomainAndBranding = ({
   onChange,
   editButtonClick,
   setEditButtonClick,
+  auctionLinkError,
+  setAuctionLinkError,
   invalidPromoImage,
   invalidBackgroundImage,
   setInvalidPromoImage,
@@ -77,10 +80,11 @@ const DomainAndBranding = ({
     }
   }, [values?.backgroundImage]);
 
-  const handleLink = (e) => {
+  const handleLink = async (e) => {
     const validValueRegEx = /^$|^([a-zA-Z0-9-]+)$/;
     const validChars = validValueRegEx.test(e.target.value);
     if (validChars) {
+      const link = e.target.value.replace(' ', '-');
       setAuctionLink(e.target.value.replace(' ', '-'));
       onChange((prevValues) => ({
         ...prevValues,
@@ -88,6 +92,18 @@ const DomainAndBranding = ({
         status: e.target.value.length > 0 ? 'filled' : 'empty',
       }));
       setValidLink(e.target.value.trim().length !== 0);
+
+      if (link) {
+        const auctionLinkExists = getAuctionByLink(link);
+
+        if (!auctionLinkExists) {
+          setAuctionLinkError(false);
+          return;
+        }
+        setAuctionLinkError(true);
+        return;
+      }
+      setAuctionLinkError(false);
     }
   };
 
@@ -235,12 +251,13 @@ const DomainAndBranding = ({
             <h5>Auction link</h5>
             <div
               className={
-                (editButtonClick || !validLink) &&
-                (values.link ===
-                  `universe.xyz/${loggedInArtist.universePageAddress
-                    .split(' ')[0]
-                    .toLowerCase()}/` ||
-                  auctionLink.length === 0)
+                ((editButtonClick || !validLink) &&
+                  (values.link ===
+                    `universe.xyz/${loggedInArtist.universePageAddress
+                      .split(' ')[0]
+                      .toLowerCase()}/` ||
+                    auctionLink.length === 0)) ||
+                auctionLinkError
                   ? 'auction--link--div error-inp'
                   : `auction--link--div ${inputStyle}`
               }
@@ -265,6 +282,7 @@ const DomainAndBranding = ({
                   &quot;Auction website link&quot; is not allowed to be empty
                 </p>
               )}
+            {auctionLinkError && <p className="error__text">Auction link already exists</p>}
           </div>
         </div>
 
@@ -482,6 +500,8 @@ const DomainAndBranding = ({
 DomainAndBranding.propTypes = {
   values: PropTypes.oneOfType([PropTypes.object]),
   onChange: PropTypes.func.isRequired,
+  auctionLinkError: PropTypes.bool.isRequired,
+  setAuctionLinkError: PropTypes.func.isRequired,
   editButtonClick: PropTypes.bool,
   setEditButtonClick: PropTypes.func,
   invalidPromoImage: PropTypes.bool.isRequired,
