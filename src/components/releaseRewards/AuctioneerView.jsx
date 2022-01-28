@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import completedCheckmark from '../../assets/images/completedCheckmark.svg';
 import SingleCaptureRevenueTxs from './SingleCaptureRevenueTxs';
 import Button from '../button/Button';
+import videoIcon from '../../assets/images/video-icon.svg';
 
 const AuctioneerView = ({
   auctionData,
@@ -79,7 +80,23 @@ const AuctioneerView = ({
             <div className="tier__body">
               {tier.nfts.map((nft) => (
                 <div className="tier__nft__box">
-                  <img src={nft.optimized_url} alt="NFT" />
+                  {nft.artworkType === 'mp4' ? (
+                    <video
+                      onMouseOver={(event) => event.target.play()}
+                      onFocus={(event) => event.target.play()}
+                      onMouseOut={(event) => event.target.pause()}
+                      onBlur={(event) => event.target.pause()}
+                    >
+                      <source src={nft.optimized_url} type="video/mp4" />
+                      <track kind="captions" />
+                      Your browser does not support the video tag.
+                    </video>
+                  ) : (
+                    <img src={nft.optimized_url} alt="NFT" />
+                  )}
+                  {nft.artworkType === 'mp4' && (
+                    <img className="video-icon" src={videoIcon} alt="Video Icon" />
+                  )}
                   <div className="tier__nft__box__highlight__one" />
                   <div className="tier__nft__box__highlight__two" />
                 </div>

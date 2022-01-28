@@ -6,6 +6,7 @@ import { getRewardTierSpanStyles } from '../../utils/helpers';
 import arrowDown from '../../assets/images/arrow-down.svg';
 import warningIcon from '../../assets/images/Exclamation.svg';
 import SingleCaptureRevenueTxs from './SingleCaptureRevenueTxs';
+import videoIcon from '../../assets/images/video-icon.svg';
 
 const BidderView = ({
   auctionData,
@@ -119,7 +120,23 @@ const BidderView = ({
               <div className="slot__body">
                 {winningSlot.nfts.map((nft) => (
                   <div className="slot__nft__box">
-                    <img src={nft.optimized_url} alt="NFT" />
+                    {nft.artworkType === 'mp4' ? (
+                      <video
+                        onMouseOver={(event) => event.target.play()}
+                        onFocus={(event) => event.target.play()}
+                        onMouseOut={(event) => event.target.pause()}
+                        onBlur={(event) => event.target.pause()}
+                      >
+                        <source src={nft.optimized_url} type="video/mp4" />
+                        <track kind="captions" />
+                        Your browser does not support the video tag.
+                      </video>
+                    ) : (
+                      <img src={nft.optimized_url} alt="NFT" />
+                    )}
+                    {nft.artworkType === 'mp4' && (
+                      <img className="video-icon" src={videoIcon} alt="Video Icon" />
+                    )}
                     {nft.editions > 1 && (
                       <>
                         <div className="slot__nft__box__highlight__one" />
