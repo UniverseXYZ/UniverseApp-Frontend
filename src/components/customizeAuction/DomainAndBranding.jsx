@@ -150,6 +150,7 @@ const DomainAndBranding = ({
           if (imageType === PROMO_IMAGE) {
             if (height < MIN_PROMO_IMAGE_SIZE.height || width < MIN_PROMO_IMAGE_SIZE.width) {
               setPromoImageError(true);
+              uploadFile(file, imageType);
             } else {
               setPromoImageError(false);
               uploadFile(file, imageType);
@@ -160,6 +161,7 @@ const DomainAndBranding = ({
               width < MIN_BACKGROUND_IMAGE_SIZE.width
             ) {
               setBackgroundImageError(true);
+              uploadFile(file, imageType);
             } else {
               setBackgroundImageError(false);
               uploadFile(file, imageType);
@@ -180,6 +182,10 @@ const DomainAndBranding = ({
 
   const onDragOver = (e) => {
     e.preventDefault();
+  };
+
+  const onInputClick = (event) => {
+    event.target.value = '';
   };
 
   const promoImageSrc =
@@ -301,6 +307,7 @@ const DomainAndBranding = ({
                   type="file"
                   className="inp-disable"
                   ref={inputPromo}
+                  onClick={onInputClick}
                   onChange={(e) => validateFile(e.target.files[0], PROMO_IMAGE)}
                 />
                 <div className="promo__preview">
@@ -314,9 +321,10 @@ const DomainAndBranding = ({
                           src={closeIcon}
                           alt="Close"
                           aria-hidden="true"
-                          onClick={() =>
-                            onChange((prevValues) => ({ ...prevValues, promoImage: null }))
-                          }
+                          onClick={() => {
+                            onChange((prevValues) => ({ ...prevValues, promoImage: null }));
+                            setPromoImageError(false);
+                          }}
                         />
                       </>
                     ) : (
@@ -413,6 +421,7 @@ const DomainAndBranding = ({
                   type="file"
                   className="inp-disable"
                   ref={inputBackground}
+                  onClick={onInputClick}
                   onChange={(e) => validateFile(e.target.files[0], BACKGROUND_IMAGE)}
                 />
                 <div className="background__preview">
@@ -427,9 +436,14 @@ const DomainAndBranding = ({
                           src={closeIcon}
                           alt="Close"
                           aria-hidden="true"
-                          onClick={() =>
-                            onChange((prevValues) => ({ ...prevValues, backgroundImage: null }))
-                          }
+                          onClick={() => {
+                            onChange((prevValues) => ({
+                              ...prevValues,
+                              backgroundImage: null,
+                              backgroundImageBlur: false,
+                            }));
+                            setBackgroundImageError(false);
+                          }}
                         />
                       </>
                     ) : (
