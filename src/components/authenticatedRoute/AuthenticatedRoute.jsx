@@ -13,7 +13,7 @@ function AuthenticatedRoute({ children, requireProfile, ...restOfProps }) {
       return true;
     }
     const hasSetupProfile =
-      loggedInArtist && loggedInArtist.universePageUrl && loggedInArtist.avatar;
+      loggedInArtist && loggedInArtist.universePageAddress && loggedInArtist.avatar;
     if (requireProfile && hasSetupProfile) {
       return true;
     }
