@@ -18,7 +18,6 @@ const AuctionContextProvider = ({ children }) => {
   const [bidtype, setBidtype] = useState('eth');
   const [options, setOptions] = useState(BidOptions);
   const [sortName, setSortName] = useState('Sort by');
-  const [editProfileButtonClick, setEditProfileButtonClick] = useState(false);
   const [selectedTokenIndex, setSelectedTokenIndex] = useState(0);
   const [selectedTabIndex, setSelectedTabIndex] = useState(0);
   const [availableNFTs, setAvailableNFTs] = useState([]);
@@ -43,8 +42,6 @@ const AuctionContextProvider = ({ children }) => {
         setOptions,
         sortName,
         setSortName,
-        editProfileButtonClick,
-        setEditProfileButtonClick,
         selectedTokenIndex,
         setSelectedTokenIndex,
         selectedTabIndex,

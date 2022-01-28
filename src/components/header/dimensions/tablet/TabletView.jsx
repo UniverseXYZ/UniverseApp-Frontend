@@ -74,7 +74,6 @@ const TabletView = (props) => {
     setshowWalletPopup,
   } = useAuthContext();
 
-  const { editProfileButtonClick } = useAuctionContext();
   const [isAccountDropdownOpened, setIsAccountDropdownOpened] = useState(false);
   const [copied, setCopied] = useState(false);
   const [searchFocus, setSearchFocus] = useState(false);
@@ -436,20 +435,6 @@ const TabletView = (props) => {
                     onClick={() => {
                       history.push('/my-account');
                       setIsAccountDropdownOpened(false);
-                      // if (
-                      //   loggedInArtist.name &&
-                      //   loggedInArtist.universePageAddress &&
-                      //   loggedInArtist.avatar &&
-                      //   loggedInArtist.about &&
-                      //   editProfileButtonClick
-                      // ) {
-                      //   history.push(`/${loggedInArtist.universePageAddress}`, {
-                      //     id: loggedInArtist.id,
-                      //   });
-                      // } else {
-                      //   history.push('/my-account');
-                      // }
-                      // setIsAccountDropdownOpened(!isAccountDropdownOpened);
                     }}
                   >
                     <img src={myProfileIcon} alt="My Profile" />

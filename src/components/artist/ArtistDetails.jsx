@@ -29,7 +29,6 @@ const ArtistDetails = ({ artistAddress, onArtist, loading }) => {
 
   const history = useHistory();
 
-  const { setEditProfileButtonClick } = useAuctionContext();
   const { address } = useAuthContext();
 
   const [copied, setCopied] = useState(false);
@@ -86,7 +85,6 @@ const ArtistDetails = ({ artistAddress, onArtist, loading }) => {
                     className="light-border-button"
                     onClick={() => {
                       history.push('/my-account');
-                      setEditProfileButtonClick(false);
                     }}
                   >
                     Edit <img src={pencilIcon} alt="Pencil" />
@@ -135,7 +133,6 @@ const ArtistDetails = ({ artistAddress, onArtist, loading }) => {
                       className="light-border-button"
                       onClick={() => {
                         history.push('/my-account');
-                        setEditProfileButtonClick(false);
                       }}
                     >
                       Edit <img src={pencilIcon} alt="Pencil" />

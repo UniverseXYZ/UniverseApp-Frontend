@@ -96,7 +96,6 @@ const MobileView = (props) => {
   const [searchValue, setSearchValue] = useState('');
   const [searchFocus, setSearchFocus] = useState(false);
   const { loggedInArtist } = useAuthContext();
-  const { editProfileButtonClick } = useAuctionContext();
   const [showProducts, setShowProducts] = useState(false);
   const [showNFTDrops, setShowNFTDrops] = useState(false);
   const [showRarityCharts, setShowRarityCharts] = useState(false);
@@ -492,20 +491,6 @@ const MobileView = (props) => {
                     onClick={() => {
                       history.push('/my-account');
                       setIsAccountDropdownOpened(false);
-                      // if (
-                      //   loggedInArtist.name &&
-                      //   loggedInArtist.universePageAddress &&
-                      //   loggedInArtist.avatar &&
-                      //   loggedInArtist.about &&
-                      //   editProfileButtonClick
-                      // ) {
-                      //   history.push(`/${loggedInArtist.universePageAddress}`, {
-                      //     id: loggedInArtist.id,
-                      //   });
-                      // } else {
-                      //   history.push('/my-account');
-                      // }
-                      // setIsAccountDropdownOpened(!isAccountDropdownOpened);
                     }}
                   >
                     <img src={myProfileIcon} alt="My Profile" />
