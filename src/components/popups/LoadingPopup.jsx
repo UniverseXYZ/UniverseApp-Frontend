@@ -43,27 +43,28 @@ const LoadingPopup = ({ onClose, text, contractInteraction }) => {
         )}
       </div>
       <div style={{ maxHeight: 150, overflowY: 'scroll', marginTop: 0 }} className="loading-text">
-        {contractInteraction && !activeTxHashes?.length ? (
-          <p className="popup-semi-text">The transaction hash will appear here soon.</p>
-        ) : activeTxHashes.length === 1 ? (
-          <>
-            <p className="popup-hash">
-              Transaction hash:{' '}
-              <a target="_blank" href={getEtherscanTxUrl(activeTxHashes[0])} rel="noreferrer">
-                {formatAddress(activeTxHashes[0])}
-              </a>
-            </p>
-          </>
-        ) : (
-          activeTxHashes.map((tx, i) => (
-            <p className="popup-hash" key={tx}>
-              Transaction hash #{i + 1}:{' '}
-              <a target="_blank" href={getEtherscanTxUrl(tx)} rel="noreferrer">
-                {formatAddress(tx)}
-              </a>
-            </p>
-          ))
-        )}
+        {contractInteraction &&
+          (!activeTxHashes?.length ? (
+            <p className="popup-semi-text">The transaction hash will appear here soon.</p>
+          ) : activeTxHashes.length === 1 ? (
+            <>
+              <p className="popup-hash">
+                Transaction hash:{' '}
+                <a target="_blank" href={generateLink(activeTxHashes[0])} rel="noreferrer">
+                  {formatAddress(activeTxHashes[0])}
+                </a>
+              </p>
+            </>
+          ) : (
+            activeTxHashes.map((tx, i) => (
+              <p className="popup-hash" key={tx}>
+                Transaction hash #{i + 1}:{' '}
+                <a target="_blank" href={generateLink(tx)} rel="noreferrer">
+                  {formatAddress(tx)}
+                </a>
+              </p>
+            ))
+          ))}
       </div>
       <div className="loading-btns">
         <Button onClick={onClose} className="light-border-button">
