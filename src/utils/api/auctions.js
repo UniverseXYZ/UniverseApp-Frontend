@@ -298,7 +298,8 @@ export const getAvailableNFTs = async () => {
     },
   };
 
-  const request = await fetch(GET_AVAILABLE_NFTS, requestOptions);
+  // TODO:: Discuss how much NFTS needs to fetch
+  const request = await fetch(`${GET_AVAILABLE_NFTS}?limit=22`, requestOptions);
 
   const result = await request.text().then((data) => JSON.parse(data));
 
