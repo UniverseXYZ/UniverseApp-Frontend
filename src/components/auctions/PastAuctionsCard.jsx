@@ -183,7 +183,7 @@ const PastAuctionsCard = ({ auction }) => {
           </Button>
           <div
             className="arrow"
-            onClick={() => setShowMore(true)}
+            onClick={() => setShowMore(!showMore)}
             role="button"
             tabIndex={0}
             aria-hidden
