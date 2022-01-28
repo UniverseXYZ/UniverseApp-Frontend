@@ -31,14 +31,7 @@ const FutureAuctionCard = ({ auction }) => {
       <div className="title">
         <h1>{auction.name}</h1>
         <div className="artist__details">
-          <img
-            src={
-              typeof loggedInArtist.avatar === 'string'
-                ? loggedInArtist.avatar
-                : URL.createObjectURL(loggedInArtist.avatar)
-            }
-            alt={loggedInArtist.name}
-          />
+          <img src={loggedInArtist.avatar} alt={loggedInArtist.name} />
           <span>by</span>
           <button
             type="button"

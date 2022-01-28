@@ -48,14 +48,7 @@ const ActiveAuctionCard = ({ auction }) => {
           <h2>{auction.name}</h2>
         </div>
         <div className="creator">
-          <img
-            src={
-              typeof loggedInArtist.avatar === 'string'
-                ? loggedInArtist.avatar
-                : URL.createObjectURL(loggedInArtist.avatar)
-            }
-            alt={loggedInArtist.name}
-          />
+          <img src={loggedInArtist.avatar} alt={loggedInArtist.name} />
           <span>by</span>
           <a
             aria-hidden="true"
