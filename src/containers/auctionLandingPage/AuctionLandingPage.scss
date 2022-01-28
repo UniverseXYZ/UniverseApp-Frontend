@@ -1241,6 +1241,14 @@
                 &:nth-child(3) {
                   margin-left: -20%;
                 }
+                @include sm {
+                  &:nth-child(2) {
+                    margin-left: 0;
+                  }
+                  &:nth-child(3) {
+                    margin-left: 0;
+                  }
+                }
                 .nft__image {
                   position: relative;
                   height: 220px;
