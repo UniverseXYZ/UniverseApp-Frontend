@@ -17,25 +17,33 @@ const FutureAuctionCard = ({ auction }) => {
   }
 
   return (
-    <Link to={auctionLink} className="future__auction__item">
-      <div className={`auction__img ${auction.promoImageUrl ? '' : 'show__avatar'}`}>
-        {auction.promoImageUrl && (
+    <div className="future__auction__item">
+      <Link
+        to={auctionLink}
+        className={`auction__img ${auction.promoImageUrl ? '' : 'show__avatar'}`}
+      >
+        {auction.promoImageUrl ? (
           <img className="original" src={auction.promoImageUrl} alt={auction.name} />
+        ) : (
+          <img
+            className="artist__image"
+            src={auction.user?.profileImageUrl}
+            alt={auction.user?.displayName}
+          />
         )}
-        <img className="artist__image" src="" alt={auction.name} />
         <div className="start__date">
           <label>STARTS IN</label>
           <AuctionsTabsCountdown activeAuction={auction} showLabel={false} />
         </div>
-      </div>
-      <div className="title">
+      </Link>
+      <Link to={`/${auction.user.universePageUrl}`} className="title">
         <h1>{auction.user?.displayName}</h1>
         <div className="artist__details">
           <img src={auction.user?.profileImageUrl} alt={auction.user?.displayName} />
           <span>by</span>
           {auction.user?.displayName}
         </div>
-      </div>
+      </Link>
       <div className="auction__details">
         <div className="auction__details__box">
           <label>Winners</label>
@@ -46,7 +54,7 @@ const FutureAuctionCard = ({ auction }) => {
           {nftsPerWinnerMarkup}
         </div>
       </div>
-    </Link>
+    </div>
   );
 };
 

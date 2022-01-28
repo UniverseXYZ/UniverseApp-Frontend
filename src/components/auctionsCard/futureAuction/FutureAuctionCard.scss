@@ -11,7 +11,6 @@
     box-sizing: border-box;
     border-radius: 12px;
     padding: 12px;
-    cursor: pointer;
 
     .title {
       h1 {
@@ -24,8 +23,12 @@
         margin-bottom: 6px;
       }
       .artist__details {
-        display: flex;
+        display: inline-flex;
         align-items: center;
+        font-family: $spaceGroteskFont;
+        font-style: normal;
+        font-weight: bold;
+        font-size: 12px;
 
         img {
           width: 30px;
