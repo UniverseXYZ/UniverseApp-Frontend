@@ -543,6 +543,7 @@ const FinalizeAuction = () => {
                 {collections.length ? (
                   collections.map((collection, index) => (
                     <ApproveCollection
+                      key={collection.id}
                       collection={collection}
                       approveCollection={handleApproveCollection}
                       isApproved={
