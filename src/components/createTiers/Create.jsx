@@ -67,18 +67,22 @@ const Create = () => {
   const perPage = 20;
   useEffect(async () => {
     setFetchingData(true);
-    const id = typeof auction.id === 'string' ? '' : auction.id;
-    const available = await getAvailableNFTs(offset, perPage, id);
-    if (available?.nfts?.length) {
-      const parsedForFilters = available.nfts.map((data) => ({ ...data, ...data.nfts }));
+    try {
+      const id = typeof auction.id === 'string' ? '' : auction.id;
+      const available = await getAvailableNFTs(offset, perPage, id);
+      if (available?.nfts?.length) {
+        const parsedForFilters = available.nfts.map((data) => ({ ...data, ...data.nfts }));
 
-      setAvailableNFTs(parsedForFilters);
-      setFilteredNFTs(parsedForFilters);
-      setOffset(offset + perPage);
-    }
+        setAvailableNFTs(parsedForFilters);
+        setFilteredNFTs(parsedForFilters);
+        setOffset(offset + perPage);
+      }
 
-    if (available.pagination?.hasNextPage) {
-      setLoadMore(true);
+      if (available.pagination?.hasNextPage) {
+        setLoadMore(true);
+      }
+    } catch (error) {
+      console.error(error);
     }
 
     setFetchingData(false);

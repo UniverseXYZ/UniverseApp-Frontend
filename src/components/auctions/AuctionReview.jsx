@@ -59,9 +59,17 @@ const AuctionReview = () => {
       setShowLoading(true);
       let res;
       if (isEditingAuction.length) {
-        res = await AuctionUpdate({ auction, bidtype, options });
+        try {
+          res = await AuctionUpdate({ auction, bidtype, options });
+        } catch (error) {
+          console.error(error);
+        }
       } else {
-        res = await AuctionCreate({ auction, bidtype, options });
+        try {
+          res = await AuctionCreate({ auction, bidtype, options });
+        } catch (error) {
+          console.error(error);
+        }
       }
 
       setShowLoading(false);
