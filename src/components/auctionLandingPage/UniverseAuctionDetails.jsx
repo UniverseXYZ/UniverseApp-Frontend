@@ -19,18 +19,28 @@ const UniverseAuctionDetails = ({ auction }) => {
       const hoursDuration = Math.floor(dateDifference / 3600) % 24;
 
       // Calculate days and hours
-      const days = daysDuration > 0 ? (daysDuration === 1 ? '1 day' : `${daysDuration} days`) : '';
-      const hours =
-        hoursDuration > 0 ? (hoursDuration === 1 ? `1 hour` : `${hoursDuration} hours`) : '';
+      let days = '';
+      if (daysDuration > 0) {
+        days = `${daysDuration} day${daysDuration > 1 ? 's' : ''}`;
+      }
+
+      let hours = '';
+      if (daysDuration > 0) {
+        hours = `${hoursDuration} hour${hoursDuration > 1 ? 's' : ''}`;
+      }
 
       // If we have both days and hours add 'and' between them
       const duration = days && hours ? `${days} and ${hours}` : days || hours;
 
       // Make sure if in some case the text will be empty (hours < 0)
+      let finalText = '';
       if (duration) {
-        const finalText = `will last ${duration} and`;
-        setDurationText(finalText);
+        finalText = `will last ${duration} and`;
+      } else {
+        finalText = 'will last less than 1 hour and';
       }
+
+      setDurationText(finalText);
     }
   }, [endDate, startDate]);
 
