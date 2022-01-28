@@ -199,17 +199,6 @@ const FinalizeAuction = () => {
     }
   };
 
-  function getNftIds(nftMap) {
-    const nftIds = [];
-    nftMap.forEach((slot) => {
-      slot.forEach((slotArray) => {
-        nftIds.push(slotArray[0]);
-      });
-    });
-
-    return nftIds;
-  }
-
   const handleDepositTier = async (txIndex) => {
     try {
       setShowAuctionDeployLoading(true);
