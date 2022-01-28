@@ -224,7 +224,7 @@ const AuctionEndedSection = ({
       </div>
       <div className="footer">
         <div className="funds-and-balance">
-          <div className="unreleased-funds">
+          <div className="unreleased-funds" style={{ borderRight: '1px solid rgba(0,0,0,10%)' }}>
             <div className="head">
               <span>Unreleased funds</span>
               <span
@@ -275,7 +275,7 @@ const AuctionEndedSection = ({
               </Button>
             </div>
           </div>
-          <div className="available-balance">
+          <div className="available-balance" style={{ marginLeft: 50 }}>
             <div className="head">
               <span>Available balance</span>
               <span
