@@ -23,15 +23,6 @@ const AuctionContextProvider = ({ children }) => {
   const [selectedTabIndex, setSelectedTabIndex] = useState(0);
   const [availableNFTs, setAvailableNFTs] = useState([]);
 
-  useEffect(async () => {
-    if (isAuthenticated) {
-      const futureAuctionResponse = await getFutureAuctions();
-      setMyAuctions(futureAuctionResponse?.auctions || []);
-    } else {
-      setMyAuctions([]);
-    }
-  }, [isAuthenticated]);
-
   return (
     <AuctionContext.Provider
       value={{
