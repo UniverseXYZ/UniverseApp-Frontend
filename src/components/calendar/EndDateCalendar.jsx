@@ -348,7 +348,11 @@ const EndDateCalendar = React.forwardRef(
             <div className="timezone">
               <div className="label">Select time</div>
               <div className="selected__timezone" aria-hidden="true">
-                {`Your time zone is ${endDateTemp.timezone}`}
+                {`Your time zone is UTC${
+                  new Date().getTimezoneOffset() / -60 > 0
+                    ? `+${new Date().getTimezoneOffset() / -60}`
+                    : new Date().getTimezoneOffset() / -60
+                }`}
               </div>
             </div>
             <div className="time">
