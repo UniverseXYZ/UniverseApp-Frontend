@@ -13,6 +13,7 @@ import PlaceBidPopup from '../../components/popups/PlaceBidPopup';
 import LoadingPopup from '../../components/popups/LoadingPopup';
 import { getEthPriceCoingecko } from '../../utils/api/etherscan';
 import { useAuthContext } from '../../contexts/AuthContext';
+import { useMyNftsContext } from '../../contexts/MyNFTsContext';
 import { LandingPageLoader } from '../../components/auctionLandingPage/LandingPageLoader';
 import {
   disconnectAuctionSocket,
@@ -21,6 +22,7 @@ import {
   subscribeToBidSubmitted,
   subscribeToBidWithdrawn,
   subscribeToAuctionExtended,
+  subscribeToERC721Claimed,
 } from '../../utils/websockets/auctionEvents';
 import SuccessBidPopup from '../../components/popups/SuccessBidPopup';
 
@@ -28,6 +30,7 @@ const AuctionLandingPage = () => {
   const defaultLoadingText =
     'The transaction is in progress. Keep this window opened. Navigating away from the page will reset the curent progress.';
   const locationState = useLocation().state;
+  const { setActiveTxHashes, activeTxHashes } = useMyNftsContext();
   const { universeAuctionHouseContract, yourBalance, setYourBalance } = useAuthContext();
   // TODO: Disable bidding buttons until the auction is started or is canceled
   const { artistUsername, auctionName } = useParams();
@@ -90,7 +93,7 @@ const AuctionLandingPage = () => {
     // as we don't have access to the latest state when using a callback
 
     if (err) return;
-    const isYourEvent = user === address;
+    const isYourEvent = user.toLowerCase() === address.toLowerCase();
 
     // Update the Bidders
     let newBidderScope = [];
@@ -145,7 +148,7 @@ const AuctionLandingPage = () => {
   };
 
   const handleBidWithdrawnEvent = (err, user, amount) => {
-    const isYourEvent = user === address;
+    const isYourEvent = user.toLowerCase() === address.toLowerCase();
     const newBidders = [...bidders];
     const existingBidderIndex = newBidders.map((bidder) => bidder.user.address).indexOf(user);
     if (existingBidderIndex >= 0) {
@@ -164,6 +167,15 @@ const AuctionLandingPage = () => {
     setShowCancelBidPopup(false);
   };
 
+  const handleERC721ClaimedEvent = (err, claimer, slotIndex) => {
+    const isYourEvent = claimer.toLowerCase() === address.toLowerCase();
+
+    if (isYourEvent) {
+      setShowLoading(false);
+      setActiveTxHashes([]);
+    }
+  };
+
   useEffect(() => {
     // We need to update the callback function every time the state used inside it changes
     // Otherwise we will get old state in the callback
@@ -176,6 +188,10 @@ const AuctionLandingPage = () => {
 
       subscribeToBidWithdrawn(auction.auction.id, (err, { user, amount }) => {
         handleBidWithdrawnEvent(err, user, amount);
+      });
+
+      subscribeToERC721Claimed(auction.auction.id, (err, { claimer, slotIndex }) => {
+        handleERC721ClaimedEvent(err, claimer, slotIndex);
       });
 
       subscribeToAuctionExtended(auction.auction.id, (err, { endDate }) => {

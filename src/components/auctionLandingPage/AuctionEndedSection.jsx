@@ -115,11 +115,6 @@ const AuctionEndedSection = ({
   };
 
   const handleClaimNfts = async () => {
-    console.log(
-      !mySlot ||
-        !mySlot.revenueCaptured ||
-        mySlot.totalDepositedNfts.toNumber() === mySlot.totalWithdrawnNfts.toNumber()
-    );
     try {
       const tx = await universeAuctionHouseContract.claimERC721Rewards(
         onAuction.auction.onChainId,
@@ -131,15 +126,12 @@ const AuctionEndedSection = ({
 
       const txReceipt = await tx.wait();
       if (txReceipt.status === 1) {
-        setShowLoading(false);
-        setActiveTxHashes([]);
+        // This modal will be closed upon recieving notifyERC721Claimed event
         setMySlot({ ...mySlot, totalWithdrawnNfts: mySlot.totalDepositedNfts });
       }
     } catch (err) {
       setShowLoading(false);
       setActiveTxHashes([]);
-
-      console.log(err);
     }
   };
 
