@@ -36,6 +36,9 @@ const MIN_BACKGROUND_IMAGE_SIZE = {
   width: 1280,
   height: 720,
 };
+const PROMO_IMAGE_MAX_SIZE_MB = 3;
+const BACKGROUND_IMAGE_MAX_SIZE_MB = 1;
+const MB_IN_BYTES = 1048576;
 
 const DomainAndBranding = ({
   values,
@@ -115,9 +118,10 @@ const DomainAndBranding = ({
     }
   };
 
-  const validateFile = (file, imageType) => {
+  const validateFile = (file, imageType, maxSize) => {
     const fileValid =
-      (file.type === 'image/jpeg' || file.type === 'image/png') && file.size / 1048576 < 30;
+      (file.type === 'image/jpeg' || file.type === 'image/png') &&
+      file.size / MB_IN_BYTES < maxSize;
     const reader = new FileReader();
 
     getImageDimensions(file, ({ width, height }) => {
@@ -138,6 +142,7 @@ const DomainAndBranding = ({
     });
 
     handleImageError(imageType, fileValid, file);
+
     if (fileValid) {
       // Read the contents of Image File.
       reader.readAsDataURL(file);
@@ -169,12 +174,12 @@ const DomainAndBranding = ({
     }
   };
 
-  const onDrop = (e, imageType) => {
+  const onDrop = (e, imageType, maxSize) => {
     e.preventDefault();
     const {
       dataTransfer: { files },
     } = e;
-    validateFile(files[0], imageType);
+    validateFile(files[0], imageType, maxSize);
   };
 
   const onDragOver = (e) => {
@@ -263,7 +268,7 @@ const DomainAndBranding = ({
           <div className="upload__promo">
             <div
               className="dropzone"
-              onDrop={(e) => onDrop(e, PROMO_IMAGE)}
+              onDrop={(e) => onDrop(e, PROMO_IMAGE, PROMO_IMAGE_MAX_SIZE_MB)}
               onDragOver={(e) => onDragOver(e)}
             >
               <div className="upload__promo__title">
@@ -305,7 +310,9 @@ const DomainAndBranding = ({
                   className="inp-disable"
                   ref={inputPromo}
                   onClick={onInputClick}
-                  onChange={(e) => validateFile(e.target.files[0], PROMO_IMAGE)}
+                  onChange={(e) =>
+                    validateFile(e.target.files[0], PROMO_IMAGE, PROMO_IMAGE_MAX_SIZE_MB)
+                  }
                 />
                 <div className="promo__preview">
                   <h6>Preview</h6>
@@ -341,7 +348,7 @@ const DomainAndBranding = ({
           <div className="upload__background">
             <div
               className="dropzone"
-              onDrop={(e) => onDrop(e, BACKGROUND_IMAGE)}
+              onDrop={(e) => onDrop(e, BACKGROUND_IMAGE, BACKGROUND_IMAGE_MAX_SIZE_MB)}
               onDragOver={(e) => onDragOver(e)}
             >
               <div className="upload__background__title">
@@ -419,7 +426,9 @@ const DomainAndBranding = ({
                   className="inp-disable"
                   ref={inputBackground}
                   onClick={onInputClick}
-                  onChange={(e) => validateFile(e.target.files[0], BACKGROUND_IMAGE)}
+                  onChange={(e) =>
+                    validateFile(e.target.files[0], BACKGROUND_IMAGE, BACKGROUND_IMAGE_MAX_SIZE_MB)
+                  }
                 />
                 <div className="background__preview">
                   <h6>Preview</h6>

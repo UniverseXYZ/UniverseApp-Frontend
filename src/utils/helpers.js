@@ -87,14 +87,11 @@ export const getEtherscanContractUrl = (address) =>
 export const getEtherscanTxUrl = (txHash) => `${process.env.REACT_APP_ETHERSCAN_URL}/tx/${txHash}`;
 
 export const auctionPageTierImageErrorMessage =
-  'File format must be PNG or JPEG (Max Size: 30mb) and at least 800X800px ';
-
+  'File format must be PNG or JPEG (Max Size: 3mb) and at least 800X800px ';
 export const auctionPageBackgroundImageErrorMessage =
-  'File format must be PNG or JPEG (Max Size: 30mb) and at least 1280X720px ';
-
+  'File format must be PNG or JPEG (Max Size: 1mb) and at least 1280X720px ';
 export const auctionPagePromoImageErrorMessage =
-  'File format must be PNG or JPEG (Max Size: 30mb) and at least 1080X1080px ';
-
+  'File format must be PNG or JPEG (Max Size: 3mb) and at least 1080X1080px ';
 export const whitepaperUrl = 'https://github.com/UniverseXYZ/UniverseXYZ-Whitepaper';
 
 export const getRewardTierSpanStyles = (rewardTier) => {
