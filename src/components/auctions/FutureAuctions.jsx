@@ -9,6 +9,7 @@ import Button from '../button/Button.jsx';
 import arrowUp from '../../assets/images/Arrow_Up.svg';
 import arrowDown from '../../assets/images/ArrowDown.svg';
 import doneIcon from '../../assets/images/Completed.svg';
+import delIcon from '../../assets/images/red-delete.svg';
 import searchIconGray from '../../assets/images/search-gray.svg';
 import emptyMark from '../../assets/images/emptyMark.svg';
 import emptyWhite from '../../assets/images/emptyWhite.svg';
@@ -382,11 +383,12 @@ const FutureAuctions = ({ myAuctions, setMyAuctions, setAuction }) => {
                     <FutureAuctionTierInfo key={tier.id} tier={tier} />
                   ))}
                 <Button
-                  className="light-border-button"
+                  className="light-border-button red"
                   onClick={() => handleRemove(futureAuction.id)}
                   disabled={removeButtonDisabled}
                 >
                   Remove
+                  <img src={delIcon} className="del--icon" alt="Delete" aria-hidden="true" />
                 </Button>
               </div>
             </div>
