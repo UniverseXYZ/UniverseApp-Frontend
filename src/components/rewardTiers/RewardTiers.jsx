@@ -233,18 +233,6 @@ const RewardTiers = () => {
                             </b>
                           </h4>
                         </div>
-                        {tier.minBidValue ? (
-                          <div className="tier-minbid">
-                            <h4>
-                              Minimum bid per tier:&nbsp;
-                              <b>
-                                {tier.minBidValue} <span className="bidtype">{bidtype}</span>
-                              </b>
-                            </h4>
-                          </div>
-                        ) : (
-                          <></>
-                        )}
                       </div>
                       <Button
                         className="light-border-button"
