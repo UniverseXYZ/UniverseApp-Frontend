@@ -86,6 +86,7 @@ const ActiveAuctions = () => {
             .map((activeAuction, index) => (
               <ActiveAuctionsTabsCard
                 activeAuction={activeAuction}
+                setActiveAuctions={setActiveAuctions}
                 index={index}
                 removeAuction={removeAuction}
               />
