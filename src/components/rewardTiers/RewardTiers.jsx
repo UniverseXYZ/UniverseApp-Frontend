@@ -24,7 +24,7 @@ const RewardTiers = () => {
   const location = useLocation();
   const [shownActionId, setShownActionId] = useState(null);
   const [totalWinners, setTotalWinners] = useState(0);
-  const [selectedWinner, setSelectedWinner] = useState(0);
+  const [selectedWinners, setSelectedWinners] = useState({});
 
   const { auction, bidtype } = useAuctionContext();
 
@@ -36,7 +36,19 @@ const RewardTiers = () => {
       });
       setTotalWinners(count);
     }
+
+    const selectedWinnersClone = { ...selectedWinners };
+    auction.rewardTiers
+      .filter((a) => !a.removed)
+      .forEach((tier) => {
+        selectedWinnersClone[tier.id] = 0;
+      });
+    setSelectedWinners(selectedWinnersClone);
   }, [auction]);
+
+  const updateSelectedWinners = (id, index) => {
+    setSelectedWinners({ ...selectedWinners, [id]: index });
+  };
 
   return (
     <div className="container reward-tiers">
@@ -128,6 +140,8 @@ const RewardTiers = () => {
             allTierNFTs.forEach((a) => {
               countNfts += a.length;
             });
+
+            const selectedWinner = selectedWinners[tier.id] || 0;
 
             const winnerNftLength = Object.keys(onlyUniqueNFTs[selectedWinner]).length;
             const settingsNfts = {
@@ -226,11 +240,7 @@ const RewardTiers = () => {
                         <div className="tier-perwinners">
                           <h4>
                             Reserve price:&nbsp;
-                            <b>
-                              {tier.customNFTsPerWinner || tier.nftsPerWinner === 0
-                                ? '0-2.3 ETH'
-                                : tier.nftsPerWinner}
-                            </b>
+                            <b>0-2.3 ETH</b>
                           </h4>
                         </div>
                       </div>
@@ -303,8 +313,7 @@ const RewardTiers = () => {
                           }
                           aria-hidden="true"
                           key={uuid()}
-                          onClick={() => setSelectedWinner(i)}
-                          onKeyDown={() => setSelectedWinner(i)}
+                          onClick={() => updateSelectedWinners(tier.id, i)}
                         >
                           <img src={WinnerIcon} alt="winner-icon" />
                           <p>Winner #{data.slot + 1}</p>

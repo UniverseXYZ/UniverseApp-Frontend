@@ -34,8 +34,7 @@ const PreviewNFTsPopup = ({ onClose, tier, auction, startPlace, endPlace }) => {
     }));
 
     setFilteredNfts(uniqueFiltered);
-
-    const slot = tier.slots.find((s) => s.index === selectedBidderIndex);
+    const slot = tier.slots?.find((s) => s.index === selectedBidderIndex);
     setSelectedNFTIndex(0);
     setSlotReserveValue(slot?.minimumBid || 0);
   }, [selectedBidderIndex]);
