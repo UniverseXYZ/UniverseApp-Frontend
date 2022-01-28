@@ -95,8 +95,10 @@ const styles = {
     right: '3%',
     top: '90%',
   }),
-  indicatorsContainer: (defaultStyles) => ({
-    ...defaultStyles,
+  indicatorsContainer: () => ({
+    '& > div': {
+      padding: 0,
+    },
   }),
   input: (defaultStyles) => ({
     ...defaultStyles,
