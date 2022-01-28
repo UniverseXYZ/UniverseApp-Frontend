@@ -1,18 +1,16 @@
-/* eslint-disable no-unreachable */
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Animated } from 'react-animated-css';
-import uuid from 'react-uuid';
 import { BigNumber, utils } from 'ethers';
 import closeIcon from '../../assets/images/close-menu.svg';
 import currencyIcon from '../../assets/images/currency-eth.svg';
 import infoIcon from '../../assets/images/icon.svg';
-import bidSubmittedIcon from '../../assets/images/bid-submitted.png';
 import Button from '../button/Button.jsx';
 import Input from '../input/Input.jsx';
 import { useAuthContext } from '../../contexts/AuthContext';
 import { useMyNftsContext } from '../../contexts/MyNFTsContext';
 import { getERC20Contract } from '../../utils/helpers/pureFunctions/auctions';
+import { toFixedEth } from '../../utils/helpers/format';
 
 const PlaceBidPopup = ({
   onClose,
@@ -65,7 +63,14 @@ const PlaceBidPopup = ({
     setERC20Info();
   }, [signer, universeAuctionHouseContract, address]);
 
+  /**
+   *
+   * @param {*} val -> string
+   * @returns void
+   */
   const handleInputChange = (val) => {
+    // return if value is less than 1 wei as on opensea
+    if (val.length > 20) return;
     setYourBid(val);
     if (val && !val.match(floatNumberRegex)) {
       setError('Invalid bid');
@@ -170,6 +175,8 @@ const PlaceBidPopup = ({
       setError(err.error?.message);
     }
   };
+
+  const totalBid = toFixedEth(+yourBid + (+currentBid?.amount || 0));
 
   return (
     <div className="place__bid__popup">
@@ -286,12 +293,8 @@ const PlaceBidPopup = ({
             <div className="value">{`${yourBid || 0} ${auction.tokenSymbol}`}</div>
           </div>
           <div className="total_row">
-            <div className="label">
-              <span>Total bid</span>
-            </div>
-            <div className="value">{`${+yourBid + (+currentBid?.amount || 0)} ${
-              auction.tokenSymbol
-            }`}</div>
+            <div className="label">Total bid</div>
+            <div className="value">{`${totalBid} ${auction.tokenSymbol}`}</div>
           </div>
         </div>
         <div className="place__bid__btn">
