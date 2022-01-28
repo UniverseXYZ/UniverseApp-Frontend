@@ -170,7 +170,7 @@ const RewardTiersAuction = ({
                     </p>
                   </div>
                   <textarea
-                    className={editButtonClick && !description ? 'inp error-inp' : 'inp'}
+                    className={!description ? 'inp error-inp' : 'inp'}
                     placeholder="Enter the description"
                     // eslint-disable-next-line react/prop-types
                     value={values[i].description}
