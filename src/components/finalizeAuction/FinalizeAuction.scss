@@ -330,6 +330,14 @@
       }
     }
   }
+  .attention-button {
+    color: #FF4949;
+    border: 1px solid #FF4949;
+    margin-left: 25px;
+  }
+  .attention-button:hover {
+    background-image: none;
+  }
   @include lg {
     background-image: url("../../assets/images/finalise-auction-tablet.png");
   }
