@@ -5,15 +5,34 @@ import './PopupStyle.scss';
 import closeIcon from '../../assets/images/cross.svg';
 import SearchField from '../input/SearchField';
 import { useAuctionContext } from '../../contexts/AuctionContext.jsx';
+import { useAuthContext } from '../../contexts/AuthContext';
 
 const SelectTokenPopup = ({ onClose }) => {
   const { options, setBidtype } = useAuctionContext();
+  const { universeAuctionHouseContract } = useAuthContext();
   const [showAddTokenPopup, setShowAddTokenPopup] = useState(false);
   const [optionsClone, setOptionsClone] = useState([...options]);
 
   const handleChange = (key) => {
     setBidtype(key);
   };
+
+  useEffect(async () => {
+    const supportedTokens = [];
+    for (let i = 0; i < options.length; i += 1) {
+      const token = options[i];
+      // eslint-disable-next-line no-await-in-loop
+      const isSupported = await universeAuctionHouseContract.supportedBidTokens(token.address);
+
+      if (isSupported) {
+        supportedTokens.push(token);
+      }
+
+      if (i === options.length - 1) {
+        setOptionsClone(supportedTokens);
+      }
+    }
+  }, []);
 
   useEffect(() => {
     document.body.classList.add('no__scroll');
@@ -22,7 +41,10 @@ const SelectTokenPopup = ({ onClose }) => {
   }, []);
 
   return (
-    <div className="select-token">
+    <div
+      className="select-token"
+      style={{ overflow: `${optionsClone.length > 5 ? 'scroll' : ''}` }}
+    >
       <img className="close" src={closeIcon} alt="Close" onClick={onClose} aria-hidden="true" />
       {!showAddTokenPopup ? (
         <ul className="option-list">
