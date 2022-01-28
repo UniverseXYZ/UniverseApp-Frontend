@@ -10,7 +10,7 @@ import { fees, totalFee } from './constants';
 import { SellMethod } from '../../../enums';
 import { IFixedListingForm } from '../../../types';
 import { Tokens } from '../../../../../../../enums';
-import { TokenIcon } from '../../../../../../../components/token-icon';
+import { TokenIcon } from '../../../../../../../components';
 
 const styles: Record<string, SystemStyleObject> = {
   mainContainer: {

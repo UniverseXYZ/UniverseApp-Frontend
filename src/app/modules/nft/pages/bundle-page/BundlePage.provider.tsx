@@ -2,7 +2,7 @@ import React, { createContext, useContext } from 'react';
 import { useQuery } from 'react-query';
 import axios from 'axios';
 
-import { INFT, IOrder, IOrderBackend, IUser, NFTArtworkType } from '../../types';
+import { INFT, IOrder, IOrderBackend, IUser } from '../../types';
 import { GetNFTApi } from '../../api';
 import { mapBackendOrder } from '../../helpers';
 

@@ -10,8 +10,13 @@ import { NFTPlaceABidPopup } from '../nft-place-a-bid-popup';
 import { NFTMakeAnOfferPopup } from '../nft-make-an-offer-popup';
 
 import ClockIcon from '../../../../../../../assets/images/clock.svg';
+import { IOrder } from '../../../../types';
 
-export const NFTBuySection = () => {
+interface INFTBuySectionProps {
+  order?: IOrder;
+}
+
+export const NFTBuySection = ({ order }: INFTBuySectionProps) => {
   const buyNFTSection = useBuyNFTSection(8);
 
   const { countDownString } = useDateCountDown(new Date(new Date().setDate(new Date().getDate() + 1)));
@@ -101,9 +106,20 @@ export const NFTBuySection = () => {
           </>
         )}
       </Box>
-      <NFTCheckoutPopup isOpen={isCheckoutPopupOpened} onClose={() => setIsCheckoutPopupOpened(false)} />
-      <NFTPlaceABidPopup isOpen={isPlaceABidPopupOpened} onClose={() => setIsPlaceABidPopupOpened(false)} />
-      <NFTMakeAnOfferPopup isOpen={isMakeAnOfferPopupOpened} onClose={() => setIsMakeAnOfferPopupOpened(false)} />
+      <NFTCheckoutPopup
+        isOpen={isCheckoutPopupOpened}
+        onClose={() => setIsCheckoutPopupOpened(false)}
+      />
+      <NFTPlaceABidPopup
+        order={order}
+        isOpen={isPlaceABidPopupOpened}
+        onClose={() => setIsPlaceABidPopupOpened(false)}
+      />
+      <NFTMakeAnOfferPopup
+        order={order}
+        isOpen={isMakeAnOfferPopupOpened}
+        onClose={() => setIsMakeAnOfferPopupOpened(false)}
+      />
     </Box>
   );
 }

@@ -1,6 +1,5 @@
 import {
   Box,
-  BoxProps,
   Button,
   Heading,
   Image,
@@ -17,14 +16,7 @@ import { useHistory } from 'react-router-dom';
 import { useMarketplaceSellData } from '../../../../../hooks';
 import { Status } from './enums';
 import * as styles from './styles';
-
-const Loading = (props: BoxProps) => (
-  <Box position={'relative'} display={'block'} h={'80px'} {...props}>
-    <Box className="lds-roller" transform={'translate(-50%, -50%)'}>
-      {Array(8).fill(null).map((_, i) => (<Box key={i} />))}
-    </Box>
-  </Box>
-)
+import { Loading } from '../../../../../../../../../components';
 
 interface IPostingPopupProps {
   status: Status;
