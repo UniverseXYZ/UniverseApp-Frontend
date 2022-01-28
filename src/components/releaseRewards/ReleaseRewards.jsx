@@ -32,8 +32,9 @@ import {
 } from '../../utils/websockets/auctionEvents';
 
 const ReleaseRewards = () => {
-  const defaultLoadingText = '';
-  const verificationLoadingText = '';
+  const defaultLoadingText = 'The transaction is being processed.';
+  const verificationLoadingText =
+    'The transaction is being verified. This will take a few seconds.';
 
   const {
     view,
@@ -104,14 +105,14 @@ const ReleaseRewards = () => {
   };
 
   useEffect(() => {
-    initiateAuctionSocket(auctionData.auction.id);
-    subscribeToSlotCaptured((err, data) => {
+    initiateAuctionSocket();
+    subscribeToSlotCaptured(auctionData.auction.id, (err, data) => {
       if (err) return;
 
       setBids(data);
     });
 
-    subscribeToBidMatched((err, { bids: bidsData, finalised }) => {
+    subscribeToBidMatched(auctionData.auction.id, (err, { bids: bidsData, finalised }) => {
       if (err) return;
       setBids(bidsData);
       setAuction((upToDate) => ({ ...upToDate, auction: { ...upToDate, finalised } }));
