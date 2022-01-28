@@ -4,9 +4,7 @@ import Button from '../button/Button.jsx';
 import { ReactComponent as IncreaseIcon } from '../../assets/images/plus.svg';
 import { ReactComponent as DecreaseIcon } from '../../assets/images/minus.svg';
 import { ReactComponent as InfoIcon } from '../../assets/images/icon.svg';
-
-// TODO:: Move this into a config file and use it here
-const MAX_WINNERS_COUNT = 10;
+import { TIER_SETTINGS_LIMITATION } from '../../utils/config';
 
 const NumberOfWinners = ({ values, setValues }) => {
   const [showNumberOfWinnersInfoBox, setShowNumberOfWinnersInfoBox] = useState(false);
@@ -32,7 +30,10 @@ const NumberOfWinners = ({ values, setValues }) => {
       <div className="counter">
         <Button
           className="light-button"
-          style={{ opacity: values.numberOfWinners === 1 ? '0.3' : 1 }}
+          style={{
+            opacity:
+              values.numberOfWinners === TIER_SETTINGS_LIMITATION.MIN_WINNERS_COUNT ? '0.3' : 1,
+          }}
           onClick={() =>
             values.numberOfWinners > 1 &&
             setValues((prevValues) => ({
@@ -46,9 +47,12 @@ const NumberOfWinners = ({ values, setValues }) => {
         <span>{values.numberOfWinners}</span>
         <Button
           className="light-button"
-          style={{ opacity: values.numberOfWinners === MAX_WINNERS_COUNT ? '0.3' : 1 }}
+          style={{
+            opacity:
+              values.numberOfWinners === TIER_SETTINGS_LIMITATION.MAX_WINNERS_COUNT ? '0.3' : 1,
+          }}
           onClick={() =>
-            values.numberOfWinners < MAX_WINNERS_COUNT &&
+            values.numberOfWinners < TIER_SETTINGS_LIMITATION.MAX_WINNERS_COUNT &&
             setValues((prevValues) => ({
               ...prevValues,
               numberOfWinners: values.numberOfWinners + 1,

@@ -4,6 +4,7 @@ import Input from '../../input/Input.jsx';
 import ETHIcon from '../../../assets/images/bid_icon.svg';
 import { ReactComponent as ErrorIcon } from '../../../assets/images/Vector.svg';
 import { ReactComponent as WinnerIcon } from '../../../assets/images/winner-icon.svg';
+import { TIER_SETTINGS_LIMITATION } from '../../../utils/config';
 
 const WinnerCard = ({
   data,
@@ -24,7 +25,7 @@ const WinnerCard = ({
   >
     <WinnerIcon className="winner--icon" />
     <p>{`Winner #${winnerNumber}`}</p>
-    <span>{`${data.nftsData?.length} NFTs`}</span>
+    <span>{`${data.nftsData?.length} / ${TIER_SETTINGS_LIMITATION.MAX_WINNER_NFT_COUNT} NFTs`}</span>
     {showReservePrice && (
       <div className="reserve--price">
         <label>Reserve price</label>
