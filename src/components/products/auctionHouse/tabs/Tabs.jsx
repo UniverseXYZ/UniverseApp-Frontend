@@ -5,6 +5,8 @@ import './Tabs.scss';
 import ActiveAuctionsTab from './activeAuctions/ActiveAuctionsTab.jsx';
 import FutureAuctionsTab from './futureAuctions/FutureAuctionsTab.jsx';
 import { getAllFutureAuctions, getAllActiveAuctions } from '../../../../utils/api/auctions';
+import ActiveAuctionsFilters from './activeAuctions/Filters';
+import FutureAuctionsFilters from './futureAuctions/Filters';
 
 const ENDING = { filter: 'ending', option: 'Ending soon' };
 const RECENT = { filter: 'recent', option: 'Recently added' };
@@ -20,13 +22,15 @@ const Tabs = () => {
   const [perPage, setPerPage] = useState(12);
   const [pageCount, setPageCount] = useState(0);
   const [sortActive, setSortActive] = useState(ENDING.option);
-  const [sortPast, setSortPast] = useState(STARTING.option);
+  const [sortFuture, setSortFuture] = useState(STARTING.option);
   const [currentPage, setCurrentPage] = useState(0);
+  const [searchValue, setSearchValue] = useState('');
 
   const getAuctions = async (request, _offset, filter) => {
+    // finally call the API
     setLoading(true);
     try {
-      const response = await request(_offset, perPage, filter);
+      const response = await request(_offset, perPage, filter, searchValue);
       if (response.error) {
         setErrorTitle('Unexpected error');
         setErrorBody(response.message);
@@ -35,7 +39,6 @@ const Tabs = () => {
       if (response.auctions) {
         setAuctions(response.auctions);
       }
-
       if (response.pagination) {
         const { total } = response.pagination;
         const pages = Math.ceil(total / perPage);
@@ -48,6 +51,7 @@ const Tabs = () => {
   };
 
   const requestWithParams = (offset) => {
+    // determine the request and add parameters
     if (selectedTabIndex === 0) {
       if (sortActive === ENDING.option) {
         getAuctions(getAllActiveAuctions, offset, ENDING.filter);
@@ -59,9 +63,9 @@ const Tabs = () => {
         getAuctions(getAllActiveAuctions, offset, LOWEST_BID.filter);
       }
     } else if (selectedTabIndex === 1) {
-      if (sortPast === STARTING.option) {
+      if (sortFuture === STARTING.option) {
         getAuctions(getAllFutureAuctions, offset, STARTING.filter);
-      } else if (sortPast === RECENT.option) {
+      } else if (sortFuture === RECENT.option) {
         getAuctions(getAllFutureAuctions, offset, RECENT.filter);
       }
     }
@@ -76,9 +80,10 @@ const Tabs = () => {
   };
 
   useEffect(() => {
+    // when tab, items per page, filter or search value is changed  - set current page to 1 and make a request with 0 offset
     setCurrentPage(0);
     requestWithParams(0);
-  }, [selectedTabIndex, perPage, sortActive, sortPast]);
+  }, [selectedTabIndex, perPage, sortActive, sortFuture, searchValue]);
 
   return (
     <div className="auction__house__tabs__section">
@@ -114,29 +119,45 @@ const Tabs = () => {
         </div>
         <div className="tab__content">
           {selectedTabIndex === 0 ? (
-            <ActiveAuctionsTab
-              auctions={auctions}
-              loading={loading}
-              handlePageClick={handlePageClick}
-              pageCount={pageCount}
-              perPage={perPage}
-              setPerPage={setPerPage}
-              sort={sortActive}
-              setSort={setSortActive}
-              forcePage={currentPage}
-            />
+            <>
+              <ActiveAuctionsFilters
+                sort={sortActive}
+                setSort={setSortActive}
+                searchValue={searchValue}
+                setSearchValue={setSearchValue}
+              />
+              <ActiveAuctionsTab
+                auctions={auctions}
+                loading={loading}
+                handlePageClick={handlePageClick}
+                pageCount={pageCount}
+                perPage={perPage}
+                setPerPage={setPerPage}
+                forcePage={currentPage}
+                searchValue={searchValue}
+                setSearchValue={setSearchValue}
+              />
+            </>
           ) : (
-            <FutureAuctionsTab
-              auctions={auctions}
-              loading={loading}
-              handlePageClick={handlePageClick}
-              pageCount={pageCount}
-              perPage={perPage}
-              setPerPage={setPerPage}
-              sort={sortPast}
-              setSort={setSortPast}
-              forcePage={currentPage}
-            />
+            <>
+              <FutureAuctionsFilters
+                sort={sortFuture}
+                setSort={setSortFuture}
+                searchValue={searchValue}
+                setSearchValue={setSearchValue}
+              />
+              <FutureAuctionsTab
+                auctions={auctions}
+                loading={loading}
+                handlePageClick={handlePageClick}
+                pageCount={pageCount}
+                perPage={perPage}
+                setPerPage={setPerPage}
+                forcePage={currentPage}
+                searchValue={searchValue}
+                setSearchValue={setSearchValue}
+              />
+            </>
           )}
         </div>
       </div>

@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import ReactPaginate from 'react-paginate';
-import FutureAuctionsFilters from './Filters.jsx';
 import FutureAuctionsList from '../../../../auctionsCard/futureAuction/FutureAuctionsList.jsx';
 import ItemsPerPageDropdown from '../../../../pagination/ItemsPerPageDropdown.jsx';
 import leftArrow from '../../../../../assets/images/left-arrow.svg';
@@ -17,14 +16,11 @@ const FutureAuctionsTab = ({
   pageCount,
   perPage,
   setPerPage,
-  sort,
-  setSort,
   forcePage,
 }) => (
   <div className="future__auctions__tab">
     {auctions.length ? (
       <>
-        <FutureAuctionsFilters sort={sort} setSort={setSort} />
         <FutureAuctionsList data={auctions} loading={loading} />
         <div className="pagination__container">
           <ReactPaginate
@@ -59,8 +55,6 @@ FutureAuctionsTab.propTypes = {
   pageCount: PropTypes.number.isRequired,
   perPage: PropTypes.number.isRequired,
   setPerPage: PropTypes.func.isRequired,
-  setSort: PropTypes.func.isRequired,
-  sort: PropTypes.string.isRequired,
   forcePage: PropTypes.number.isRequired,
 };
 
