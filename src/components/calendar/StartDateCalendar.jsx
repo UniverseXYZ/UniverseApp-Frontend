@@ -5,6 +5,7 @@ import uuid from 'react-uuid';
 import arrow from '../../assets/images/arrow.svg';
 import closeIcon from '../../assets/images/cross.svg';
 import Button from '../button/Button.jsx';
+import { parseDateForDatePicker } from './utils';
 
 const StartDateCalendar = React.forwardRef(
   (
@@ -142,16 +143,7 @@ const StartDateCalendar = React.forwardRef(
 
     const handleCancelClick = () => {
       if (!values.startDate) {
-        setStartDateTemp({
-          month: monthNames[d.getMonth()],
-          day: d.getDate(),
-          year: d.getFullYear(),
-          hours: new Date().getHours(),
-          minutes:
-            new Date().getMinutes() < 10 ? `0${new Date().getMinutes()}` : new Date().getMinutes(),
-          timezone: 'GMT +04:00',
-          format: 'AM',
-        });
+        setStartDateTemp(parseDateForDatePicker(d));
       } else {
         setStartDateTemp({
           month: values.startDate.toString().split(' ')[1],
@@ -315,7 +307,7 @@ const StartDateCalendar = React.forwardRef(
             <div className="timezone">
               <div className="label">Select time</div>
               <div className="selected__timezone" aria-hidden="true">
-                Your time zone is UTC+3
+                {`Your time zone is ${startDateTemp.timezone}`}
               </div>
             </div>
             <div className="time">

@@ -5,7 +5,7 @@ import Popup from 'reactjs-popup';
 import uuid from 'react-uuid';
 import './AuctionSettings.scss';
 import EthereumAddress from 'ethereum-address';
-import { formatISO, format } from 'date-fns';
+import { formatISO } from 'date-fns';
 import callendarIcon from '../../assets/images/calendar.svg';
 import delateIcon from '../../assets/images/RemoveBtn.svg';
 import delIcon from '../../assets/images/red-delete.svg';
@@ -18,6 +18,7 @@ import addIcon from '../../assets/images/Add.svg';
 import StartDateCalendar from '../calendar/StartDateCalendar.jsx';
 import EndDateCalendar from '../calendar/EndDateCalendar.jsx';
 import { useAuctionContext } from '../../contexts/AuctionContext';
+import { parseDateForDatePicker } from '../calendar/utils';
 
 const MAX_FIELD_CHARS_LENGTH = {
   name: 100,
@@ -71,16 +72,7 @@ const AuctionSettings = () => {
   const parseDate = (dateString) => {
     const date = dateString ? new Date(dateString) : new Date();
 
-    const formatedDate = {
-      month: format(date, 'LLL'),
-      day: format(date, 'dd'),
-      year: format(date, 'y'),
-      hours: format(date, 'hh'),
-      minutes: format(date, 'mm'),
-      timezone: format(date, 'aa'),
-      format: format(date, 'O'),
-    };
-
+    const formatedDate = parseDateForDatePicker(date);
     return formatedDate;
   };
 
