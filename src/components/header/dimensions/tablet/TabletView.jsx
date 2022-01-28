@@ -59,11 +59,6 @@ const TabletView = (props) => {
     isWalletConnected,
     setIsWalletConnected,
     ethereumAddress,
-    handleConnectWallet,
-    showInstallWalletPopup,
-    setShowInstallWalletPopup,
-    selectedWallet,
-    setSelectedWallet,
     showMenu,
     setShowMenu,
     showSearch,
@@ -76,6 +71,7 @@ const TabletView = (props) => {
     usdEthBalance,
     resetConnectionState,
     loggedInArtist,
+    setshowWalletPopup,
   } = useAuthContext();
 
   const { editProfileButtonClick } = useAuctionContext();
@@ -141,6 +137,13 @@ const TabletView = (props) => {
     setIsAccountDropdownOpened(!isAccountDropdownOpened);
     setShowMenu(false);
   };
+
+  // This will close the menu when authentication is successful
+  useEffect(() => {
+    if (ethereumAddress) {
+      setShowMenu(false);
+    }
+  }, [ethereumAddress]);
 
   return (
     <div className="tablet__nav">
@@ -705,21 +708,9 @@ const TabletView = (props) => {
                 {/* <Popup trigger={<button type="button">Join newsletter</button>}>
                   {(close) => <SubscribePopup close={close} />}
                 </Popup> */}
-                <Popup
-                  closeOnDocumentClick={false}
-                  trigger={<button type="button">Sign in</button>}
-                >
-                  {(close) => (
-                    <SelectWalletPopup
-                      close={close}
-                      handleConnectWallet={handleConnectWallet}
-                      showInstallWalletPopup={showInstallWalletPopup}
-                      setShowInstallWalletPopup={setShowInstallWalletPopup}
-                      selectedWallet={selectedWallet}
-                      setSelectedWallet={setSelectedWallet}
-                    />
-                  )}
-                </Popup>
+                <button type="button" onClick={() => setshowWalletPopup(true)}>
+                  Sign in
+                </button>
               </li>
             )}
           </ul>
@@ -733,11 +724,6 @@ TabletView.propTypes = {
   isWalletConnected: PropTypes.bool.isRequired,
   setIsWalletConnected: PropTypes.func.isRequired,
   ethereumAddress: PropTypes.string.isRequired,
-  handleConnectWallet: PropTypes.func.isRequired,
-  showInstallWalletPopup: PropTypes.bool.isRequired,
-  setShowInstallWalletPopup: PropTypes.func.isRequired,
-  selectedWallet: PropTypes.string.isRequired,
-  setSelectedWallet: PropTypes.func.isRequired,
   showMenu: PropTypes.bool.isRequired,
   setShowMenu: PropTypes.func.isRequired,
   showSearch: PropTypes.bool.isRequired,
