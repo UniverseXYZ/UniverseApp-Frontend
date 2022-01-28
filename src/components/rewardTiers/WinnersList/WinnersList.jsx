@@ -13,47 +13,48 @@ const WinnersList = ({
   setCurrentSlide,
 }) => {
   const settings = {
-    infinite: tier.winners > 7,
-    slidesToShow: tier.winners < 8 ? tier.winners : 1,
+    infinite: tier.numberOfWinners > 7,
+    slidesToShow: tier.numberOfWinners < 8 ? tier.numberOfWinners : 1,
     initialSlide: currentSlide,
-    afterChange(current) {
-      setCurrentSlide(current);
-    },
+    afterChange: (current) => setCurrentSlide(current),
     variableWidth: true,
+    speed: 500,
+    useTransform: true,
+    cssEase: 'cubic-bezier(0.770, 0.000, 0.175, 1.000)',
     responsive: [
       {
         breakpoint: 1225,
         settings: {
-          infinite: tier.winners > 6,
-          slidesToShow: tier.winners < 7 ? tier.winners : 1,
+          infinite: tier.numberOfWinners > 6,
+          slidesToShow: tier.numberOfWinners < 7 ? tier.numberOfWinners : 1,
         },
       },
       {
         breakpoint: 992,
         settings: {
-          infinite: tier.winners > 4,
-          slidesToShow: tier.winners < 5 ? tier.winners : 1,
+          infinite: tier.numberOfWinners > 4,
+          slidesToShow: tier.numberOfWinners < 5 ? tier.numberOfWinners : 1,
         },
       },
       {
         breakpoint: 680,
         settings: {
-          infinite: tier.winners > 3,
-          slidesToShow: tier.winners < 4 ? tier.winners : 1,
+          infinite: tier.numberOfWinners > 3,
+          slidesToShow: tier.numberOfWinners < 4 ? tier.numberOfWinners : 1,
         },
       },
       {
         breakpoint: 497,
         settings: {
-          infinite: tier.winners > 2,
-          slidesToShow: tier.winners < 3 ? tier.winners : 1,
+          infinite: tier.numberOfWinners > 2,
+          slidesToShow: tier.numberOfWinners < 3 ? tier.numberOfWinners : 1,
         },
       },
       {
         breakpoint: 367,
         settings: {
-          infinite: tier.winners > 1,
-          slidesToShow: tier.winners < 2 ? tier.winners : 1,
+          infinite: tier.numberOfWinners > 1,
+          slidesToShow: tier.numberOfWinners < 2 ? tier.numberOfWinners : 1,
         },
       },
     ],
@@ -62,16 +63,22 @@ const WinnersList = ({
   return (
     <div className="reward__winner__lists">
       <Slider {...settings}>
-        {tier.nftSlots.map((data, index) => (
-          <WinnerBox
-            selectedWinnerIndex={selectedWinnerIndex}
-            selectedWinners={selectedWinners}
-            data={data}
-            tierId={tier.id}
-            index={index}
-            setSelectedWinners={setSelectedWinners}
-          />
-        ))}
+        {tier.nftSlots.map((data, index) => {
+          const activeClass = selectedWinnerIndex === index;
+          const winnerNumber = data.slot + 1;
+          const nftsCount = data.nftsData?.length;
+          return (
+            <WinnerBox
+              activeClass={activeClass}
+              selectedWinners={selectedWinners}
+              winnerNumber={winnerNumber}
+              tierId={tier.id}
+              nftsCount={nftsCount}
+              index={index}
+              setSelectedWinners={setSelectedWinners}
+            />
+          );
+        })}
       </Slider>
     </div>
   );
