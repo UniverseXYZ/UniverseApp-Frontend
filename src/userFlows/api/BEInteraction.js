@@ -112,46 +112,16 @@ export const sendUpdateAuctionRequest = async ({ requestObject }) => {
   const res = await editAuction(requestObject);
 
   const auctionId = requestObject.id;
-  const newTiers = requestObject.rewardTiers.filter(
-    (tier) => !tier.removed && typeof tier.id === 'string' && tier.id.startsWith('new-tier')
+  const newTiers = requestObject.rewardTiers.filter((tier) => !tier.removed);
+  const removeTiers = requestObject.rewardTiers.filter(
+    (tier) => !(typeof tier.id === 'string' && tier.id.startsWith('new-tier'))
   );
-  const updateTiers = requestObject.rewardTiers.filter(
-    (tier) =>
-      tier.id && !tier.removed && !(typeof tier.id === 'string' && tier.id.startsWith('new-tier'))
-  );
-
-  const removeTiers = requestObject.rewardTiers.filter((t) => t.removed);
   let error = null;
 
   // eslint-disable-next-line no-restricted-syntax
   for (const tier of removeTiers) {
     const { id } = tier;
     const r = await removeRewardTier(id);
-    if (r.error) {
-      error = r.error;
-      break;
-    }
-  }
-
-  if (error) {
-    return {
-      error: true,
-      errors: error,
-    };
-  }
-
-  // eslint-disable-next-line no-restricted-syntax
-  for (const tier of updateTiers) {
-    const { name, numberOfWinners, nftsPerWinner, minimumBid, nftSlots, id } = tier;
-    const minBid = parseFloat(minimumBid);
-    const requestTier = {
-      name,
-      numberOfWinners,
-      nftsPerWinner,
-      minimumBid: minBid,
-      nftSlots,
-    };
-    const r = await editRewardTier(requestTier, id);
     if (r.error) {
       error = r.error;
       break;
