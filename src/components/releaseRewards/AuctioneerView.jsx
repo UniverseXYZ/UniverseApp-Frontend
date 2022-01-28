@@ -70,7 +70,7 @@ const AuctioneerView = ({
             <div className="tier__head">
               <h4>{tier.name}</h4>
               <p>
-                Slots: <b>{tier.numberOfWinners}</b>
+                Slots: <b>{+tx.endSlot - +tx.startSlot + 1}</b>
               </p>
               <p>
                 NFTs: <b>{tier.nfts.length}</b>

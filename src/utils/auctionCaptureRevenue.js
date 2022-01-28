@@ -65,7 +65,7 @@ export const createBatchCaptureRevenueTxsFinalised = (rewardTiersSlots, bidders,
     // If we get to an already captured slot or exceed the maxNftsPerTxLimit
     // We push the current txs
     if (!tx.slotInfo) {
-      if (txs.length) {
+      if (txObject.totalNfts) {
         txs.push(txObject);
         txObject = {
           startSlot: 0,
