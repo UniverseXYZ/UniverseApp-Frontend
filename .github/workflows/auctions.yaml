@@ -114,7 +114,7 @@ jobs:
         aws-region: us-east-1
 
     - name: Deploy static site to S3
-      run: ls -l && aws s3 sync . s3://auctions-auctionsuniversexyz-origin --delete
+      run: ls -l && aws s3 sync . s3://auctions-auctionsdevuniversexyz-origin --delete
 
     - name: Invalidate CloudFront cache
       run: |
