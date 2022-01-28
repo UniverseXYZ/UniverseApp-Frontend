@@ -394,15 +394,17 @@ const FutureAuctions = ({ myAuctions, setMyAuctions, setAuction }) => {
         })
       )}
       {notFound && <NoAuctionsFound title="No scheduled auctions found" />}
-      <div className="pagination__container">
-        <Pagination
-          data={myAuctions}
-          perPage={perPage}
-          setOffset={setOffset}
-          page={page}
-          setPage={setPage}
-        />
-      </div>
+      {filteredAuctions?.length ? (
+        <div className="pagination__container">
+          <Pagination
+            data={myAuctions}
+            perPage={perPage}
+            setOffset={setOffset}
+            page={page}
+            setPage={setPage}
+          />
+        </div>
+      ) : null}
       <Popup closeOnDocumentClick={false} open={!!removedAuction}>
         <SuccessPopup
           onClose={() => setRemovedAuction(false)}
