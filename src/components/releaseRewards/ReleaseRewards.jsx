@@ -123,7 +123,6 @@ const ReleaseRewards = () => {
     const isYourEvent = claimer.toLowerCase() === address.toLowerCase();
 
     if (isYourEvent) {
-      setMySlot({ ...mySlot, totalWithdrawnNfts: mySlot.totalDepositedNfts });
       setShowLoading(false);
       setActiveTxHashes([]);
     }
@@ -194,6 +193,7 @@ const ReleaseRewards = () => {
       if (txReceipt.status === 1) {
         setLoadingText(verificationLoadingText);
         // This modal will be closed upon recieving notifyERC721Claimed event
+        setMySlot({ ...mySlot, totalWithdrawnNfts: mySlot.totalDepositedNfts });
       }
     } catch (err) {
       setShowLoading(false);
