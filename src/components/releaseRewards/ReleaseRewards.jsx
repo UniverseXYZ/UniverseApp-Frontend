@@ -66,23 +66,8 @@ const ReleaseRewards = () => {
     setSingleCaptureRevenueTxs(singleCaptureTxs);
   };
 
-  const handleSlotCapturedEvent = (err, { tierId, slotIndex }) => {
+  const handleSlotCapturedEvent = async (err, { tierId, slotIndex }) => {
     if (err) return;
-    // Update single capture txs
-    let updatedTxs = [];
-    setSingleCaptureRevenueTxs((txs) => {
-      updatedTxs = [...txs];
-      updatedTxs = updatedTxs.map((tx) => {
-        if (tx.startSlot.toString() === slotIndex.toString()) {
-          const newObj = { ...tx };
-          newObj.slotInfo = { ...tx.slotInfo, revenueCaptured: true };
-          return newObj;
-        }
-        return tx;
-      });
-
-      return updatedTxs;
-    });
 
     let updatedBids = [];
     setBids((upToDate) => {
@@ -90,13 +75,17 @@ const ReleaseRewards = () => {
       return upToDate;
     });
 
-    const batchCaptureTxs = createBatchCaptureRevenueTxsFinalised(
+    const newSlotsInfo = await auctionSDK.getAuctionSlotsInfo(auction?.auction?.onChainId);
+    const newSingleTxs = createSingleCaptureRevenueTxs(rewardTiersSlots, updatedBids, newSlotsInfo);
+
+    const newBatchTxs = createBatchCaptureRevenueTxsFinalised(
       rewardTiersSlots,
       updatedBids,
-      updatedTxs.map((tx) => tx.slotInfo)
+      newSlotsInfo
     );
 
-    setBatchCaptureRevenueTxs(batchCaptureTxs);
+    setBatchCaptureRevenueTxs(newBatchTxs);
+    setSingleCaptureRevenueTxs(newSingleTxs);
 
     // Update slots in rewardTier
     setAuction((upToDate) => {
