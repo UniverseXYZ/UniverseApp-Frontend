@@ -209,7 +209,7 @@ const AuctionLandingPage = () => {
   };
 
   useEffect(() => {
-    if (auction?.id) {
+    if (auction?.auction?.id) {
       // Ready & Tested
       subscribeTo({
         auctionId: auction.auction.id,
@@ -244,7 +244,7 @@ const AuctionLandingPage = () => {
         cb: handeAuctionExtendedEvent,
       });
     }
-  }, [auction?.id]);
+  }, [auction?.auction?.id]);
 
   const mockAuctionPreviewData = (auctionData) => {
     const { name, avatar, universePageAddress } = loggedInArtist;
