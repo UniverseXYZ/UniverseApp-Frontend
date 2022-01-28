@@ -44,7 +44,6 @@ const RewardTiers = ({ auction }) => {
                                   <>
                                     <video
                                       aria-hidden
-                                      onClick={() => window.open(nft.url, '_blank')}
                                       className="preview-video"
                                       onMouseOver={(event) => event.target.play()}
                                       onFocus={(event) => event.target.play()}
