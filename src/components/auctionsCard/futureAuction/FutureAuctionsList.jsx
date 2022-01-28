@@ -9,7 +9,7 @@ const FutureAuctionsList = ({ data, loading, removeAuction }) => (
   <div className="future__auctions__list">
     {data.map((auction) => {
       if (!auction.depositedNfts) {
-        return null;
+        return <></>;
       }
       return (
         <Animated animationIn="fadeIn" key={auction.id}>
