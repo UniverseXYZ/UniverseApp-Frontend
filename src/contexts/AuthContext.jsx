@@ -61,7 +61,7 @@ const AuthContextProvider = ({ children }) => {
   const getEthPriceData = async (balance) => {
     try {
       const ethUsdPice = await getEthPriceCoingecko();
-      setUsdEthBalance(ethUsdPice?.market_data?.current_price?.usd * balance);
+      setUsdEthBalance((ethUsdPice?.market_data?.current_price?.usd || 0) * balance);
       setEthPrice(ethUsdPice);
     } catch (error) {
       console.error(error);

@@ -302,7 +302,7 @@ const AuctionLandingPage = () => {
   const getEthPrice = async () => {
     try {
       const price = await getEthPriceCoingecko();
-      setEthPrice(price?.market_data?.current_price?.usd);
+      setEthPrice(price?.market_data?.current_price?.usd || 0);
     } catch (error) {
       console.log(error);
     }
