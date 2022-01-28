@@ -173,6 +173,7 @@ const AuthContextProvider = ({ children }) => {
       if (account) {
         // await connectWithMetaMask();
         history.push('/');
+        await resetConnectionState();
         web3AuthenticationProccess(provider, network, [account]);
       } else {
         resetConnectionState();
@@ -277,6 +278,8 @@ const AuthContextProvider = ({ children }) => {
             localStorage.setItem('user_address', address);
 
             setIsAuthenticated(true);
+            setIsWalletConnected(true);
+
             setLoggedInArtist(mapUserData(authInfo.user));
           } else {
             setIsAuthenticated(false);

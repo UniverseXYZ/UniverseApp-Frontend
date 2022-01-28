@@ -23,6 +23,7 @@ const MyNFTsContextProvider = ({ children }) => {
     deployedCollections,
     setDeployedCollections,
     isAuthenticated,
+    address,
   } = useAuthContext();
   const history = useHistory();
 
@@ -178,7 +179,7 @@ const MyNFTsContextProvider = ({ children }) => {
   }, [mintingCollectionsCount]);
 
   useEffect(() => {
-    const canRequestData = loggedInArtist && isWalletConnected && isAuthenticated;
+    const canRequestData = isWalletConnected && isAuthenticated && address;
     if (canRequestData) {
       fetchNfts();
     } else {
@@ -186,7 +187,7 @@ const MyNFTsContextProvider = ({ children }) => {
       setMyNFTs([]);
       setDeployedCollections([]);
     }
-  }, [loggedInArtist && isWalletConnected]);
+  }, [isWalletConnected, isAuthenticated, address]);
 
   const navigateToMyUniverseNFTsTab = (characterFilter) => {
     setCollectionFilter(characterFilter);
