@@ -17,6 +17,7 @@ const SelectTokenPopup = ({ onClose }) => {
 
   const handleChange = (key) => {
     setBidtype(key);
+    onClose();
   };
 
   useEffect(async () => {

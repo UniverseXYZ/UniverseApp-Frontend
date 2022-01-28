@@ -1,6 +1,5 @@
 import { Contract } from 'ethers';
 import { getBidTypeByValue } from '../../fixtures/BidOptions';
-import { parseRoyalties } from '../contractInteraction';
 import ERC20ABI from '../../../contracts/ERC20.json';
 
 export const getERC20Contract = (erc20Address, signer) =>
@@ -47,8 +46,11 @@ export const attachTokenData = ({ auction, bidtype, requestObject, options }) =>
 };
 
 export const parseNumbers = ({ auction, requestObject }) => {
-  const propertyNameForAmount = 'percentAmount';
-  const royaltiesParsed = parseRoyalties(auction.properties, propertyNameForAmount);
+  const royaltiesParsed = auction.royaltySplits.map((r) => ({
+    address: r.address,
+    percentAmount: +r.percentAmount,
+  }));
+
   const numbersParsedObject = {
     royaltySplits: royaltiesParsed,
     startingBid: parseFloat(requestObject.startingBid),
