@@ -542,11 +542,7 @@ const MobileView = (props) => {
         </div>
       )}
       <button type="button" className="hamburger" onClick={() => setShowMenu(!showMenu)}>
-        {!showMenu ? (
-          <img src={hamburgerIcon} alt="Hamburger" />
-        ) : (
-          <img src={closeIcon} alt="Close" />
-        )}
+        {!showMenu ? <img src={hamburgerIcon} alt="Menu" /> : <img src={closeIcon} alt="Close" />}
       </button>
       {showMenu && (
         <>

@@ -1,17 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import Slider from 'react-slick';
 import './WinnersList.scss';
 import WinnerBox from './WinnerBox/WinnerBox';
 
-const WinnersList = ({
-  selectedWinnerIndex,
-  selectedWinners,
-  tier,
-  setSelectedWinners,
-  currentSlide,
-  setCurrentSlide,
-}) => {
+const WinnersList = ({ selectedWinnerIndex, tier, setSelectedWinners }) => {
+  const [currentSlide, setCurrentSlide] = useState(selectedWinnerIndex);
+
   const settings = {
     infinite: tier.numberOfWinners > 7,
     slidesToShow: tier.numberOfWinners < 8 ? tier.numberOfWinners : 1,
@@ -70,7 +65,6 @@ const WinnersList = ({
           return (
             <WinnerBox
               activeClass={activeClass}
-              selectedWinners={selectedWinners}
               winnerNumber={winnerNumber}
               tierId={tier.id}
               nftsCount={nftsCount}
@@ -89,8 +83,6 @@ WinnersList.propTypes = {
   selectedWinners: PropTypes.oneOfType([PropTypes.object]).isRequired,
   tier: PropTypes.oneOfType([PropTypes.object]).isRequired,
   setSelectedWinners: PropTypes.func.isRequired,
-  currentSlide: PropTypes.number.isRequired,
-  setCurrentSlide: PropTypes.func.isRequired,
 };
 
 export default WinnersList;

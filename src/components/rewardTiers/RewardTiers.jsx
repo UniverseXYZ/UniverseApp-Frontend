@@ -22,9 +22,12 @@ const RewardTiers = () => {
   const [shownActionId, setShownActionId] = useState(null);
   const [totalWinners, setTotalWinners] = useState(0);
   const [selectedWinners, setSelectedWinners] = useState({});
-  const [currentSlide, setCurrentSlide] = useState(0);
 
-  const { auction, bidtype } = useAuctionContext();
+  const { auction } = useAuctionContext();
+
+  useEffect(() => {
+    console.log(selectedWinners);
+  }, [selectedWinners]);
 
   useEffect(() => {
     if (auction?.rewardTiers?.length) {
@@ -59,6 +62,7 @@ const RewardTiers = () => {
           .filter((a) => !a.removed)
           .map((tier) => {
             let allTierNFTs = [];
+
             if (tier.nftSlots) {
               // If we have tier.nftSlots it means we have local data to work with, otherwise we are editing an existing future auction fetched from the server and the response will be different
               tier.nftSlots.forEach((curr) => {
@@ -222,11 +226,9 @@ const RewardTiers = () => {
                   <WinnersList
                     tier={tier}
                     selectedWinnerIndex={selectedWinners[tier.id] || 0}
-                    selectedWinners={selectedWinners}
                     setSelectedWinners={setSelectedWinners}
-                    currentSlide={currentSlide}
-                    setCurrentSlide={setCurrentSlide}
                   />
+
                   <div className="line-winners-nfts" />
                   <NftsList
                     onlyUniqueNFTs={onlyUniqueNFTs}
