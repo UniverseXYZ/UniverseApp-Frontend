@@ -240,7 +240,8 @@ const FutureAuctions = ({ myAuctions, setMyAuctions, setAuction }) => {
                       <div className="hz-line1" />
                     </div>
                     <Button
-                      className="light-border-button"
+                      className={futureAuction.onChain ? 'light-button' : 'light-border-button'}
+                      disabled={futureAuction.onChain}
                       onClick={() => {
                         setAuction(futureAuction);
                         history.push({
@@ -354,7 +355,8 @@ const FutureAuctions = ({ myAuctions, setMyAuctions, setAuction }) => {
                       <h6>Step 1</h6>
                       <h4>Configure auction</h4>
                       <Button
-                        className="light-border-button"
+                        className={futureAuction.onChain ? 'light-button' : 'light-border-button'}
+                        disabled={futureAuction.onChain}
                         onClick={() => {
                           setAuction(futureAuction);
                           history.push('/setup-auction/auction-settings', futureAuction.id);
@@ -423,18 +425,24 @@ const FutureAuctions = ({ myAuctions, setMyAuctions, setAuction }) => {
                           </div>
                         </div>
                         <div className="tier-body">
-                          {tier.nfts.map((nft) => (
-                            <div className="tier-image" key={uuid()}>
-                              <div className="tier-image-second" />
-                              <div className="tier-image-first" />
-                              <div className="tier-image-main">
-                                <div className="amount-of-editions">
-                                  <p>{nft?.numberOfEditions}</p>
+                          {tier.nfts
+                            .filter(
+                              (value, index, nfts) =>
+                                index ===
+                                nfts.findIndex((nft) => nft.editionUUID === value.editionUUID)
+                            )
+                            .map((nft) => (
+                              <div className="tier-image" key={uuid()}>
+                                {nft?.numberOfEditions > 2 && <div className="tier-image-second" />}
+                                {nft?.numberOfEditions > 1 && <div className="tier-image-first" />}
+                                <div className="tier-image-main">
+                                  <div className="amount-of-editions">
+                                    <p>{nft?.numberOfEditions}</p>
+                                  </div>
+                                  <img src={nft?.thumbnail_url} alt={nft?.name} />
                                 </div>
-                                <img src={nft?.thumbnail_url} alt={nft?.name} />
                               </div>
-                            </div>
-                          ))}
+                            ))}
                         </div>
                       </div>
                     ))}
