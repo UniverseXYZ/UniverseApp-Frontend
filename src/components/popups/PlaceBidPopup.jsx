@@ -70,17 +70,24 @@ const PlaceBidPopup = ({
    */
   const handleInputChange = (val) => {
     // return if value is less than 1 wei as on opensea
-    if (val.length > 20) return;
+    const safeVal = bigNumber(val).toFixed();
+
+    if (safeVal.length > 20) return;
     setYourBid(val);
-    if (val && !val.match(floatNumberRegex)) {
+    if (safeVal && !safeVal.match(floatNumberRegex)) {
       setError('Invalid bid');
     } else {
       setError('');
       // TODO: Compute eligible reward tier based on other bids
-      const rankedBids = [...onBidders, { amount: +val }]
-        .map((bid) => bid.amount)
-        .sort((a, b) => b - a);
-      const myBidIdx = rankedBids.indexOf(+val);
+      const rankedBids = [...onBidders, { amount: safeVal }]
+        .map((bid) => bid.amount.toString())
+        .sort((a, b) => {
+          const safeA = bigNumber(a);
+          const safeB = bigNumber(b);
+          return safeB.minus(safeA);
+        });
+
+      const myBidIdx = rankedBids.indexOf(safeVal);
 
       let rewardSlotCounter = 0;
       let hasFound = false;
@@ -176,7 +183,9 @@ const PlaceBidPopup = ({
     }
   };
 
-  const totalBid = bigNumber(+yourBid + (+currentBid?.amount || 0));
+  const yourBidSafe = bigNumber(yourBid || '0');
+  const currentBidAmmountSafe = bigNumber(currentBid?.amount || '0');
+  const totalBid = yourBidSafe.plus(currentBidAmmountSafe);
 
   return (
     <div className="place__bid__popup">
