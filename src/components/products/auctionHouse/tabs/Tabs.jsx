@@ -7,10 +7,6 @@ import FutureAuctionsTab from './futureAuctions/FutureAuctionsTab.jsx';
 import { getAllFutureAuctions, getAllActiveAuctions } from '../../../../utils/api/auctions';
 import ActiveAuctionsFilters from './activeAuctions/Filters';
 import FutureAuctionsFilters from './futureAuctions/Filters';
-import {
-  initiateAuctionSocket,
-  disconnectAuctionSocket,
-} from '../../../../utils/websockets/auctionEvents';
 
 const ENDING = { filter: 'ending', option: 'Ending soon' };
 const RECENT = { filter: 'recent', option: 'Recently added' };
@@ -29,10 +25,6 @@ const Tabs = () => {
   const [sortFuture, setSortFuture] = useState(STARTING.option);
   const [currentPage, setCurrentPage] = useState(0);
   const [searchValue, setSearchValue] = useState('');
-
-  useEffect(() => {
-    initiateAuctionSocket();
-  }, []);
 
   const getAuctions = async (request, _offset, filter) => {
     // finally call the API

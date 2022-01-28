@@ -14,15 +14,6 @@ import infoIcon from '../../assets/images/icon.svg';
 import { useAuthContext } from '../../contexts/AuthContext';
 import { useMyNftsContext } from '../../contexts/MyNFTsContext';
 import PastAuctionActionSection from './PastAuctionActionSection';
-import {
-  subscribeToSlotCaptured,
-  initiateAuctionSocket,
-  removeListener,
-  disconnectAuctionSocket,
-  subscribeToBidMatched,
-  subscribeToAuctionFinalised,
-  subscribeToRevenueWithdraw,
-} from '../../utils/websockets/auctionEvents';
 import { createRewardsTiersSlots } from '../../utils/helpers';
 
 const PastAuctionsCard = ({ auction, setShowLoadingModal, setLoadingText }) => {
@@ -78,7 +69,6 @@ const PastAuctionsCard = ({ auction, setShowLoadingModal, setLoadingText }) => {
         auctionSlotsInfo[i] = slotInfo;
       }
       setSlotsInfo(auctionSlotsInfo);
-      console.log(auctionSlotsInfo);
 
       // eslint-disable-next-line no-restricted-syntax
       for (const [slotIndex, slotInfo] of Object.entries(auctionSlotsInfo)) {
@@ -121,14 +111,6 @@ const PastAuctionsCard = ({ auction, setShowLoadingModal, setLoadingText }) => {
   useEffect(() => {
     getAuctionSlotsInfo();
   }, [universeAuctionHouseContract, auction]);
-
-  useEffect(() => {
-    subscribeToSlotCaptured(auction.id, getAuctionRevenue);
-
-    return () => {
-      removeListener(`auction_${auction.id}_capturedSlot`);
-    };
-  }, []);
 
   const handleClaimFunds = async () => {
     try {
