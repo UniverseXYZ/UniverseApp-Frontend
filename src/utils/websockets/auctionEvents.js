@@ -73,6 +73,15 @@ export const subscribeToBidSubmitted = (auctionId, cb) => {
   });
 };
 
+export const subscribeToBidWithdrawn = (auctionId, cb) => {
+  if (!socket) return true;
+  socket.on(`auction_${auctionId}_bidWithdrawn`, (msg) => {
+    console.log('Auction bid withdrawn event received!');
+    return cb(null, msg);
+  });
+  console.log('Subscribed for _bidWithdrawn event !');
+};
+
 export const removeAllListeners = (auctionId) => {
   if (!socket) return true;
   console.log(`Removing all listeners for ${auctionId}`);
@@ -83,4 +92,5 @@ export const removeAllListeners = (auctionId) => {
   socket.removeAllListeners(`auction_${auctionId}_depositedNfts`);
   socket.removeAllListeners(`auction_${auctionId}_withdrawnNfts`);
   socket.removeAllListeners(`auction_${auctionId}_bidSubmitted`);
+  socket.removeAllListeners(`auction_${auctionId}_bidWithdrawn`);
 };
