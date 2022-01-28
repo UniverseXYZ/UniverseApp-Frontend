@@ -50,7 +50,7 @@ const LoadingPopup = ({ onClose, text, contractInteraction }) => {
             <>
               <p className="popup-hash">
                 Transaction hash:{' '}
-                <a target="_blank" href={generateLink(activeTxHashes[0])} rel="noreferrer">
+                <a target="_blank" href={getEtherscanTxUrl(activeTxHashes[0])} rel="noreferrer">
                   {formatAddress(activeTxHashes[0])}
                 </a>
               </p>
@@ -59,7 +59,7 @@ const LoadingPopup = ({ onClose, text, contractInteraction }) => {
             activeTxHashes.map((tx, i) => (
               <p className="popup-hash" key={tx}>
                 Transaction hash #{i + 1}:{' '}
-                <a target="_blank" href={generateLink(tx)} rel="noreferrer">
+                <a target="_blank" href={getEtherscanTxUrl(tx)} rel="noreferrer">
                   {formatAddress(tx)}
                 </a>
               </p>
