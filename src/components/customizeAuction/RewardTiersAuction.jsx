@@ -75,10 +75,11 @@ const RewardTiersAuction = ({
         dimensionsValid = true;
       }
       handleImageError(tierId, fileValid, dimensionsValid);
-    });
 
-    // always show an image preview, so the user is able to remove an incorrect image
-    handleUploadImage(file, tierId);
+      if (dimensionsValid) {
+        handleUploadImage(file, tierId);
+      }
+    });
   };
 
   const onDrop = (e, tierId) => {

@@ -90,10 +90,7 @@ const CustomizeAuction = () => {
     !accountName ||
     accountPage === 'universe.xyz/' ||
     accountPage === 'universe.xyz/your-address' ||
-    !about ||
-    invalidPromoImage ||
-    invalidBackgroundImage ||
-    invalidTierImageIds.length;
+    !about;
 
   const setContext = (_loggedInArtistClone, _editedAuction, action) => {
     setLoggedInArtist(_loggedInArtistClone);

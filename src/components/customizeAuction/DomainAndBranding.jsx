@@ -137,7 +137,6 @@ const DomainAndBranding = ({
       handleImageError(imageType, fileValid, dimensionsValid);
     });
 
-    // always show an image preview, so the user is able to remove an incorrect image
     handleImageError(imageType, fileValid, file);
     if (fileValid) {
       // Read the contents of Image File.
@@ -150,7 +149,6 @@ const DomainAndBranding = ({
           if (imageType === PROMO_IMAGE) {
             if (height < MIN_PROMO_IMAGE_SIZE.height || width < MIN_PROMO_IMAGE_SIZE.width) {
               setPromoImageError(true);
-              uploadFile(file, imageType);
             } else {
               setPromoImageError(false);
               uploadFile(file, imageType);
@@ -161,7 +159,6 @@ const DomainAndBranding = ({
               width < MIN_BACKGROUND_IMAGE_SIZE.width
             ) {
               setBackgroundImageError(true);
-              uploadFile(file, imageType);
             } else {
               setBackgroundImageError(false);
               uploadFile(file, imageType);
@@ -442,7 +439,6 @@ const DomainAndBranding = ({
                               backgroundImage: null,
                               backgroundImageBlur: false,
                             }));
-                            setBackgroundImageError(false);
                           }}
                         />
                       </>
