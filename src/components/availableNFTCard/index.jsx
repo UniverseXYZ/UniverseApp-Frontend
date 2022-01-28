@@ -83,13 +83,14 @@ const NFTCard = React.memo(
       (option) => !option.isDisabled && !option.isSelected
     );
     const deselectAllValues = updateOptionsWithAllTiersData.filter((option) => option.isSelected);
+    const hasSelectedEditions = updatedOptionsForCurrentTier.find((item) => item.isSelected);
+
     updateOptionsWithAllTiersData.unshift({
       label: 'Select all',
-      isSelected: !selectAllValues.length,
+      isSelected: !selectAllValues.length && hasSelectedEditions,
+      isDisabled: !selectAllValues.length && !hasSelectedEditions,
       value: { selectValues: selectAllValues, deselectValues: deselectAllValues },
     });
-
-    const hasSelectedEditions = updatedOptionsForCurrentTier.find((item) => item.isSelected);
 
     return (
       <div
