@@ -2,6 +2,7 @@ import React, { useEffect, useState, useContext, useRef } from 'react';
 import { useLocation, useParams } from 'react-router-dom';
 import './AuctionLandingPage.scss';
 import Popup from 'reactjs-popup';
+import BigNumber from 'bignumber.js';
 import AuctionDetails from '../../components/auctionLandingPage/AuctionDetails.jsx';
 import UniverseAuctionDetails from '../../components/auctionLandingPage/UniverseAuctionDetails.jsx';
 import RewardTiers from '../../components/auctionLandingPage/RewardTiers.jsx';
@@ -103,10 +104,10 @@ const AuctionLandingPage = () => {
       .indexOf(user.toLowerCase());
 
     if (existingBidderIndex >= 0) {
-      newBidders[existingBidderIndex].amount = parseFloat(amount);
+      newBidders[existingBidderIndex].amount = amount;
     } else {
       newBidders.push({
-        amount: parseFloat(amount),
+        amount,
         user: {
           ...userProfile,
           address: user,
@@ -114,7 +115,7 @@ const AuctionLandingPage = () => {
       });
     }
 
-    newBidders.sort((a, b) => b.amount - a.amount);
+    newBidders.sort((a, b) => new BigNumber(b.amount).minus(a.amount).toNumber());
     setBidders(newBidders);
 
     // 2. Update user's balance
@@ -122,7 +123,7 @@ const AuctionLandingPage = () => {
       isYourEvent && auctionRef.current.auction.tokenSymbol.toLowerCase() === 'eth';
 
     if (shouldUpdateBalance) {
-      const newBalance = parseFloat(yourBalanceRef.current) - parseFloat(amount);
+      const newBalance = new BigNumber(yourBalanceRef.current).minus(amount);
       setYourBalance(newBalance);
     }
 
@@ -161,7 +162,7 @@ const AuctionLandingPage = () => {
     const existingBidderIndex = newBidders.map((bidder) => bidder.user.address).indexOf(user);
     if (existingBidderIndex >= 0) {
       newBidders.splice(existingBidderIndex, 1);
-      newBidders.sort((a, b) => b.amount - a.amount);
+      newBidders.sort((a, b) => new BigNumber(b.amount).minus(a.amount).toNumber());
       setBidders(newBidders);
     }
 
