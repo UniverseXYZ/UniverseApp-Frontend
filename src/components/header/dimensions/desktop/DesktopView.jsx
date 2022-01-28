@@ -88,15 +88,14 @@ const DesktopView = ({
               </button>
               <button
                 type="button"
-                className="disable"
                 onClick={() => {
-                  // history.push('/products/auction-house');
-                  // setIsMintingDropdownOpened(false);
+                  history.push('/products/auction-house');
+                  setIsMintingDropdownOpened(false);
                 }}
               >
                 <img src={auctionHouseIcon} alt="Auction House" />
                 <span>Auction house</span>
-                <span className="tooltiptext">Coming soon</span>
+                {/* <span className="tooltiptext">Coming soon</span> */}
               </button>
               <button
                 type="button"

@@ -1,31 +1,23 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import ActiveAuctionsFilters from './Filters.jsx';
-import { useAuctionContext } from '../../../../../contexts/AuctionContext.jsx';
 import { isAfterNow } from '../../../../../utils/dates';
-import { PLACEHOLDER_AUCTIONS } from '../../../../../utils/fixtures/AuctionsDummyData.js';
 import ActiveAuctionsList from '../../../../auctionsCard/activeAuction/ActiveAuctionsList.jsx';
 import ItemsPerPageDropdown from '../../../../pagination/ItemsPerPageDropdown.jsx';
 import Pagination from '../../../../pagination/Pagionation.jsx';
 
-const ActiveAuctionsTab = () => {
-  const { myAuctions } = useAuctionContext();
+const ActiveAuctionsTab = ({ auctions, loading }) => {
   const [offset, setOffset] = useState(0);
   const [perPage, setPerPage] = useState(12);
 
   return (
     <div className="active__auctions__tab">
-      {PLACEHOLDER_AUCTIONS.filter((item) => isAfterNow(item.endDate)).length ? (
+      {auctions.length ? (
         <>
           <ActiveAuctionsFilters />
-          <ActiveAuctionsList
-            data={PLACEHOLDER_AUCTIONS.filter((item) => isAfterNow(item.endDate))}
-          />
+          <ActiveAuctionsList data={auctions} loading={loading} />
           <div className="pagination__container">
-            <Pagination
-              data={PLACEHOLDER_AUCTIONS.filter((item) => isAfterNow(item.endDate))}
-              perPage={perPage}
-              setOffset={setOffset}
-            />
+            <Pagination data={auctions} perPage={perPage} setOffset={setOffset} />
             <ItemsPerPageDropdown
               perPage={perPage}
               setPerPage={setPerPage}
@@ -40,6 +32,11 @@ const ActiveAuctionsTab = () => {
       )}
     </div>
   );
+};
+
+ActiveAuctionsTab.propTypes = {
+  auctions: PropTypes.oneOfType([PropTypes.object]).isRequired,
+  loading: PropTypes.bool.isRequired,
 };
 
 export default ActiveAuctionsTab;

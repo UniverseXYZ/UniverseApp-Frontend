@@ -3,9 +3,12 @@ import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
 import './FutureAuctionCard.scss';
 import ethIcon from '../../../assets/images/bid_icon.svg';
+import { getTimeLeft } from '../utils';
 
 const FutureAuctionCard = ({ auction }) => {
   const history = useHistory();
+
+  const timeLeft = getTimeLeft(auction.endDate);
 
   return (
     <div className="future__auction__item">
@@ -13,41 +16,19 @@ const FutureAuctionCard = ({ auction }) => {
         {auction.promoImageUrl && (
           <img className="original" src={auction.promoImageUrl} alt={auction.name} />
         )}
-        <img
-          className="artist__image"
-          src={
-            typeof auction.artist.avatar === 'string'
-              ? auction.artist.avatar
-              : URL.createObjectURL(auction.artist.avatar)
-          }
-          alt={auction.name}
-        />
+        <img className="artist__image" src="" alt={auction.name} />
         <div className="start__date">
           <label>STARTS IN</label>
-          <p>2d 5h 20m 30s</p>
+          <p>{timeLeft.length && timeLeft.join(' ')}</p>
         </div>
       </div>
       <div className="title">
         <h1>{auction.name}</h1>
         <div className="artist__details">
-          <img
-            src={
-              typeof auction.artist.avatar === 'string'
-                ? auction.artist.avatar
-                : URL.createObjectURL(auction.artist.avatar)
-            }
-            alt={auction.artist.name}
-          />
+          <img src="" alt="" />
           <span>by</span>
-          <button
-            type="button"
-            onClick={() =>
-              history.push(`/${auction.artist.name.split(' ')[0]}`, {
-                id: auction.artist.id,
-              })
-            }
-          >
-            {auction.artist.name}
+          <button type="button" onClick={() => console.info('redirect')}>
+            artist name
           </button>
         </div>
       </div>
