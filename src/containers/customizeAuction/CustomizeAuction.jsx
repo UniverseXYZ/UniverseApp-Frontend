@@ -145,15 +145,19 @@ const CustomizeAuction = () => {
     try {
       const tiers = rewardTiersAuctionClone.map(async (tier, index) => {
         let newTierData = null;
+        const { state } = location;
         const tierResponses = [];
         tier.nftIds = tier.nfts.map((nft) => nft.id);
         tier.minimumBid = parseFloat(tier.minimumBid, 10);
         // Check if data is edited
         const canEditRewardTier =
-          auction.rewardTiers[index].description !== tier.description ||
-          auction.rewardTiers[index].color !== tier.color;
+          state && state === 'edit'
+            ? auction.rewardTiers[index].description !== tier.description ||
+              auction.rewardTiers[index].color !== tier.color
+            : true;
 
-        const canEditRewardTierImage = auction.rewardTiers[index].imageUrl !== tier.imageUrl;
+        const canEditRewardTierImage =
+          state && state === 'edit' ? auction.rewardTiers[index].imageUrl !== tier.imageUrl : true;
 
         if (canEditRewardTier) {
           try {
@@ -297,6 +301,7 @@ const CustomizeAuction = () => {
       const editedAuction = {
         ...auction,
         ...domainAndBranding,
+        rewardTiers: rewardTiersAuction,
       };
 
       const page = accountPage.substring(13);
