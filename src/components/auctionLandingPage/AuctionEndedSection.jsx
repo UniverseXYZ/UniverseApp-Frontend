@@ -441,7 +441,11 @@ AuctionEndedSection.propTypes = {
   slotsInfo: PropTypes.oneOfType([PropTypes.array]).isRequired,
   setShowLoading: PropTypes.func.isRequired,
   ethPrice: PropTypes.number.isRequired,
-  currencyIcon: PropTypes.string.isRequired,
+  currencyIcon: PropTypes.string,
   isWinningBid: PropTypes.bool.isRequired,
+};
+
+AuctionEndedSection.defaultProps = {
+  currencyIcon: '',
 };
 export default AuctionEndedSection;
