@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Animated } from 'react-animated-css';
 import { BigNumber, utils } from 'ethers';
+import { BigNumber as bigNumber } from 'bignumber.js';
 import closeIcon from '../../assets/images/close-menu.svg';
 import currencyIcon from '../../assets/images/currency-eth.svg';
 import infoIcon from '../../assets/images/icon.svg';
@@ -10,7 +11,6 @@ import Input from '../input/Input.jsx';
 import { useAuthContext } from '../../contexts/AuthContext';
 import { useMyNftsContext } from '../../contexts/MyNFTsContext';
 import { getERC20Contract } from '../../utils/helpers/pureFunctions/auctions';
-import { toFixedEth } from '../../utils/helpers/format';
 
 const PlaceBidPopup = ({
   onClose,
@@ -176,7 +176,7 @@ const PlaceBidPopup = ({
     }
   };
 
-  const totalBid = toFixedEth(+yourBid + (+currentBid?.amount || 0));
+  const totalBid = bigNumber(+yourBid + (+currentBid?.amount || 0));
 
   return (
     <div className="place__bid__popup">
