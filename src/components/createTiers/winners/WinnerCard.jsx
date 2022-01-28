@@ -34,7 +34,7 @@ const WinnerCard = ({
             type="number"
             min="0"
             placeholder="0"
-            value={data.minimumBid}
+            value={data.minimumBid || ''}
             onChange={(e) => {
               setReservedPrice(e.target.value, index);
             }}
