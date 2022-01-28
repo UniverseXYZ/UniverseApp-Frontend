@@ -100,8 +100,6 @@ const AuctionLandingPage = () => {
 
   const handleBidSubmittedEvent = (err, user, amount, userProfile, bids) => {
     if (err) return;
-    console.log('BIDS FROM SOCKET:');
-    console.log(bids);
     const isYourEvent = user.toLowerCase() === addressRef.current.toLowerCase();
 
     // 1. Update bidders
@@ -161,8 +159,6 @@ const AuctionLandingPage = () => {
 
   const handleBidWithdrawnEvent = (err, user, amount, userProfile, bids) => {
     const isYourEvent = user.toLowerCase() === addressRef.current.toLowerCase();
-    console.log('BIDS:');
-    console.log(bids);
 
     // 1. Update bidders
     const newBidders = [...biddersRef.current];
