@@ -40,6 +40,7 @@ import { sign } from '../../../../../../helpers';
 
 import ArrowIcon from '../../../../../../../assets/images/arrow-down.svg';
 import SuccessIcon from '../../../../../../../assets/images/bid-submitted.png';
+import { IToken } from '../../../../../../types';
 
 export enum MakeAnOfferState {
   FORM,
@@ -47,9 +48,10 @@ export enum MakeAnOfferState {
   SUCCESS,
 }
 
-export const ValidationSchema = Yup.object().shape({
+export const NFTMakeAnOfferValidationSchema = Yup.object().shape({
   token: Yup.string().required('This field is required'),
   amount: Yup.number().required('This field is required').moreThan(0),
+  expireAt: Yup.date().typeError('This field is required').required('This field is required').min(new Date()),
 });
 
 interface INFTMakeAnOfferPopupProps {
@@ -80,13 +82,13 @@ export const NFTMakeAnOfferPopup = ({ order, isOpen, onClose, }: INFTMakeAnOffer
     return axios.get(`${process.env.REACT_APP_MARKETPLACE_BACKEND}/v1/orders/salt/${address}`);
   });
 
-  const formik = useFormik({
+  const formik = useFormik<{ amount: string; token: Tokens, expireAt: Date | null; }>({
     initialValues: {
       amount: '',
       token: TOKENS_MAP.WETH.ticker,
-      expireAt: null, // TODO: pass to data
+      expireAt: null,
     },
-    validationSchema: ValidationSchema,
+    validationSchema: NFTMakeAnOfferValidationSchema,
     onSubmit: async (value) => {
       setState(MakeAnOfferState.PROCESSING);
 
@@ -112,7 +114,7 @@ export const NFTMakeAnOfferPopup = ({ order, isOpen, onClose, }: INFTMakeAnOffer
         side: 0,
         salt: salt,
         start: 0,
-        end: 0, // TODO
+        end: (value.expireAt as Date).getTime(),
         data: order?.data,
       };
 
@@ -198,6 +200,7 @@ export const NFTMakeAnOfferPopup = ({ order, isOpen, onClose, }: INFTMakeAnOffer
                   value={formik.values.expireAt}
                   modalName={'Offer Expiration'}
                   onChange={(date) => formik.setFieldValue('expireAt', date)}
+                  onClose={() => formik.setFieldTouched('expireAt', true)}
                 />
                 <FormErrorMessage>{formik.errors.expireAt}</FormErrorMessage>
               </FormControl>

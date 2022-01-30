@@ -39,10 +39,12 @@ interface IDateTimePickerProps {
   modalName: string;
   value: Date | null,
   onChange?: (val: Date) => void,
+  onOpen?: () => void,
+  onClose?: () => void,
 }
 
-export const DateTimePicker = ({ value, onChange,  ...props }: IDateTimePickerProps) => {
-  const { isOpen, onOpen, onClose } = useDisclosure();
+export const DateTimePicker = ({ value, onChange, onOpen, onClose, ...props }: IDateTimePickerProps) => {
+  const { isOpen, onOpen: openDisclosure, onClose: closeDisclosure } = useDisclosure();
 
   const formik = useFormik<{
     date?: Date | null,
@@ -61,7 +63,7 @@ export const DateTimePicker = ({ value, onChange,  ...props }: IDateTimePickerPr
       result.setMinutes(values.minutes as number);
 
       onChange && onChange(result);
-      onClose();
+      handleClose();
     }
   });
 
@@ -71,8 +73,14 @@ export const DateTimePicker = ({ value, onChange,  ...props }: IDateTimePickerPr
       hours: value ? value?.getHours().toString().padStart(2, '0') : undefined,
       minutes: value ? value?.getMinutes().toString().padStart(2, '0') : undefined,
     });
-    onOpen();
-  }, [value]);
+    openDisclosure();
+    onOpen && onOpen();
+  }, [value, onOpen]);
+
+  const handleClose = useCallback(() => {
+    closeDisclosure();
+    onClose && onClose();
+  }, [onClose]);
 
   return (
     <>
@@ -91,7 +99,7 @@ export const DateTimePicker = ({ value, onChange,  ...props }: IDateTimePickerPr
         </Box>
       </Button>
 
-      <Modal isOpen={isOpen} onClose={onClose}>
+      <Modal isOpen={isOpen} onClose={handleClose}>
         <ModalOverlay />
         <ModalContent width={'auto'}>
           <ModalHeader p={'34px 30px 0 30px'}>
@@ -132,7 +140,7 @@ export const DateTimePicker = ({ value, onChange,  ...props }: IDateTimePickerPr
           </ModalBody>
 
           <ModalFooter sx={styles.modalFooter}>
-            <Button ml={0} variant="outline" onClick={onClose}>Cancel</Button>
+            <Button ml={0} variant="outline" onClick={handleClose}>Cancel</Button>
             <Button mr={0} boxShadow={'lg'} onClick={formik.submitForm}>Save</Button>
           </ModalFooter>
         </ModalContent>

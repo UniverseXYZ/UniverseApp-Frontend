@@ -14,51 +14,7 @@ import {
 } from './components';
 import { ItemWrapper } from '../../../../components';
 import { isNFTAssetAudio, isNFTAssetImage, isNFTAssetVideo } from '../../helpers';
-
-
-interface IStyles {
-  assetContainer: BoxProps;
-  assetLabelContainer: BoxProps;
-  NFTContent: BoxProps;
-  firstContentRow: BoxProps;
-  secondContentRow: BoxProps;
-}
-
-const styles: IStyles = {
-  assetContainer: {
-    overflow: 'hidden',
-    position: 'relative',
-    zIndex: 3,
-  },
-  assetLabelContainer: {
-    display: 'flex',
-    position: 'absolute',
-    top: '10px',
-    left: '10px',
-    zIndex: 1,
-  },
-  NFTContent: {
-    padding: '16px 14px 14px 14px',
-    position: 'relative',
-    zIndex: 4,
-  },
-  firstContentRow: {
-    display: 'flex',
-    fontSize: '14px',
-    fontWeight: 700,
-    justifyContent: 'space-between',
-  },
-  secondContentRow: {
-    display: 'flex',
-    fontSize: '11px',
-    fontWeight: 600,
-    justifyContent: 'space-between',
-    color: '#00000066',
-    mt: '12px',
-    mb: '14px',
-    alignItems: 'center',
-  }
-};
+import * as styles from './styles';
 
 interface INftItemProps {
   nft: INFT;
@@ -138,12 +94,12 @@ export const NftItem = (
       {renderHeader}
 
       <Box
-        {...styles.assetContainer}
+        {...styles.AssetContainerStyle}
         borderRadius={renderHeader ? '' : '12px 12px 0 0'}
       >
         <NFTItemAsset nft={nft} bundleNFTs={bundleNFTs} showSwiperPagination={!showAuctionTimer} />
 
-        <Box {...styles.assetLabelContainer} {...assetLabelContainerProps}>
+        <Box {...styles.AssetLabelContainerStyle} {...assetLabelContainerProps}>
           {renderAssetLabel || renderAssetLabel === null ? renderAssetLabel : (
             showAssetTypeLabels && (
               <>
@@ -161,10 +117,10 @@ export const NftItem = (
         {/*  )*/}
         {/*)}*/}
       </Box>
-      <Box {...styles.NFTContent}>
+      <Box {...styles.NFTContentStyle}>
         {renderContent || renderContent === null ? renderContent : (
           <>
-            <Box {...styles.firstContentRow}>
+            <Box {...styles.FirstContentRowStyle}>
               {renderNFTName || renderNFTName === null ? renderNFTName : <Text>{nft.name}</Text>}
               {/*TODO: provide price*/}
               {/*{renderNFTPrice || renderNFTPrice === null ? renderNFTPrice : (nft.price && (*/}
@@ -172,7 +128,7 @@ export const NftItem = (
               {/*))}*/}
             </Box>
 
-            <Box {...styles.secondContentRow}>
+            <Box {...styles.SecondContentRowStyle}>
               <NFTItemBindings creator={nft.creator} collection={nft.collection} owner={nft.owner} />
               {/*TODO: provide offer price*/}
               {/*{renderNFTPriceInfo || renderNFTPriceInfo === null ? renderNFTPriceInfo : (*/}
