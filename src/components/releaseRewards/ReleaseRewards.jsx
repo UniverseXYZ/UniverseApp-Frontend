@@ -50,6 +50,7 @@ const ReleaseRewards = () => {
   const auctionFinalised = auction?.auction?.finalised;
 
   useEffect(() => {
+    // if the page gets accessed manually (by typing the url in the address bar) auctionFinalised is undefined and we redirect the user
     if (auctionFinalised === undefined) {
       history.push('/');
     }
@@ -75,6 +76,7 @@ const ReleaseRewards = () => {
     setSingleCaptureRevenueTxs(singleCaptureTxs);
   };
 
+  // web socket event handlers - start
   const handleSlotCapturedEvent = async (err, { sender, slotIndex }) => {
     if (err) return;
 
@@ -149,6 +151,7 @@ const ReleaseRewards = () => {
 
     setShowLoading(false);
   };
+  // web socket event handlers - end
 
   const handleCaptureRevenue = async (captureConfig, configIndex, singleSlot) => {
     try {
@@ -224,6 +227,7 @@ const ReleaseRewards = () => {
   };
 
   useEffect(async () => {
+    // web socket event subscriptions
     if (auctionSDK && auction?.auction?.onChainId) {
       const info = await auctionSDK.getAuctionSlotsInfo(auction?.auction?.onChainId);
       setSlotsInfo(info);
@@ -257,6 +261,7 @@ const ReleaseRewards = () => {
 
   // eslint-disable-next-line consistent-return
   useEffect(() => {
+    // unsubscribe from web socket events
     if (auction?.auction?.id) {
       return () => {
         unsubscribeFrom({
@@ -277,6 +282,8 @@ const ReleaseRewards = () => {
     }
   }, [slotsInfo]);
 
+  const isAuctioneer = locationState?.view === 'Auctioneer';
+
   let viewType = (
     <BidderView
       auctionData={auction}
@@ -289,7 +296,7 @@ const ReleaseRewards = () => {
     />
   );
 
-  if (locationState?.view === 'Auctioneer') {
+  if (isAuctioneer) {
     viewType = (
       <AuctioneerView
         auctionData={auction}
@@ -400,7 +407,7 @@ const ReleaseRewards = () => {
         <CongratsReleaseRewardsPopup
           onClose={() => setShowCongratsPopup(false)}
           auctionName={auction?.auction?.name}
-          isAuctioneer={locationState?.view === 'Auctioneer'}
+          isAuctioneer={isAuctioneer}
           handleClaimNfts={handleClaimNfts}
         />
       </Popup>
