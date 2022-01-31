@@ -30,9 +30,9 @@ const BidderView = ({
 
     setOpenSlots(newOpenSlots);
   };
-  const myTxIndex = singleCaptureRevenueTxs
-    .map((tx) => tx.bidder?.user?.address)
-    .indexOf(myBid.user.address);
+  const myTxIndex =
+    singleCaptureRevenueTxs.length &&
+    singleCaptureRevenueTxs.map((tx) => tx.bidder?.user?.address).indexOf(myBid.user.address);
   const myTx = singleCaptureRevenueTxs[myTxIndex];
   return (
     <>
