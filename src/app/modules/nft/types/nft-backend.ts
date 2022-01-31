@@ -52,6 +52,34 @@ export interface INftBackend {
     name?: string;
     avatar?: string;
   };
+  nft: {
+    "id": number;
+    "collectionId": number;
+    "txHash": string;
+    "creator": string;
+    "owner": string;
+    "name": string;
+    "description": string;
+    "tokenId": string;
+    "artworkType": string;
+    "url": string;
+    "optimized_url": string;
+    "thumbnail_url": string;
+    "original_url": string;
+    "tokenUri": string;
+    "properties": any,
+    "royalties": [
+      {
+        "amount": number;
+        "address": string;
+      }
+    ],
+    "numberOfEditions": number;
+    "createdAt": string;
+    "updatedAt": string;
+    "amount": number;
+    "standard": string;
+  };
   properties: any[];
   royalties: Array<{
     address: string;
@@ -76,4 +104,51 @@ export interface INftBackend {
   price: number | string;
   offerPrice: number | string;
   lastPrice: number | string;
+  moreFromCollection?: Array<IMoreNftBackend>
+}
+
+export interface IMoreNftBackend {
+  id: number;
+  collectionId: number;
+  txHash: string;
+  creator: {
+    id: number;
+    address: string;
+    displayName?: string;
+    universePageUrl?: string;
+    about?: string;
+    instagramUser?: string;
+    twitterUser?: string;
+    createdAt: string;
+    profileImageUrl?: string | null;
+    logoImageUrl?: string | null;
+  },
+  owner: {
+    id: number;
+    address: string;
+    displayName?: string;
+    universePageUrl?: string;
+    about?: string;
+    instagramUser?: string;
+    twitterUser?: string;
+    createdAt: string;
+    profileImageUrl?: string | null;
+    logoImageUrl?: string | null;
+  },
+  name: string;
+  description?: string |  null;
+  tokenId: string;
+  artworkType: string;
+  url: string;
+  optimized_url: string;
+  thumbnail_url: string;
+  original_url: string;
+  tokenUri: string;
+  properties?: any | null;
+  royalties: any;
+  numberOfEditions: number;
+  createdAt: string;
+  updatedAt: string;
+  amount: number;
+  standard: string;
 }
