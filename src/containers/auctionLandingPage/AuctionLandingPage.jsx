@@ -113,7 +113,7 @@ const AuctionLandingPage = () => {
   useEffect(async () => {
     // eslint-disable-next-line no-restricted-syntax
     for (const [slotIndex, slotInfo] of Object.entries(slotsInfo)) {
-      if (slotInfo.winner === utils.getAddress(address)) {
+      if (address && slotInfo.winner === utils.getAddress(address)) {
         setMySlot(slotInfo);
         setMySlotIndex(slotIndex);
         break;

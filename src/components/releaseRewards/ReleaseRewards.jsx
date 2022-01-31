@@ -27,8 +27,7 @@ const ReleaseRewards = () => {
   const verificationLoadingText =
     'The transaction is being verified. This will take a few seconds.';
 
-  const { view, auctionData, bidders, rewardTiersSlots, myBid, winningSlot, backButtonText } =
-    useLocation().state;
+  const locationState = useLocation().state;
 
   const history = useHistory();
   const { setActiveTxHashes } = useMyNftsContext();
@@ -38,24 +37,40 @@ const ReleaseRewards = () => {
   const [showSlots, setShowSlots] = useState(false);
   const { universeAuctionHouseContract, address, auctionSDK } = useAuthContext();
   const [showCongratsPopup, setShowCongratsPopup] = useState(false);
-  const [auction, setAuction] = useState(auctionData);
+  const [auction, setAuction] = useState(locationState?.auctionData);
   const [batchCaptureRevenueTxs, setBatchCaptureRevenueTxs] = useState([]);
   const [singleCaptureRevenueTxs, setSingleCaptureRevenueTxs] = useState([]);
   const [showLoading, setShowLoading] = useState(false);
-  const [bids, setBids] = useState(bidders);
+  const [bids, setBids] = useState(locationState?.bidders);
   const [loadingText, setLoadingText] = useState(defaultLoadingText);
   const [mySlot, setMySlot] = useState(null);
   const [mySlotIndex, setMySlotIndex] = useState(-1);
   const [slotsInfo, setSlotsInfo] = useState({});
 
+  const auctionFinalised = auction?.auction?.finalised;
+
+  useEffect(() => {
+    if (auctionFinalised === undefined) {
+      history.push('/');
+    }
+  }, []);
+
   const setupPage = async (slotsData) => {
     let batchCaptureTxs = [];
-    if (auction.auction.finalised) {
-      batchCaptureTxs = createBatchCaptureRevenueTxsFinalised(rewardTiersSlots, bids, slotsData);
+    if (auctionFinalised) {
+      batchCaptureTxs = createBatchCaptureRevenueTxsFinalised(
+        locationState?.rewardTiersSlots,
+        bids,
+        slotsData
+      );
     } else {
-      batchCaptureTxs = createBatchCaptureRevenueTxsNotFinalised(rewardTiersSlots);
+      batchCaptureTxs = createBatchCaptureRevenueTxsNotFinalised(locationState?.rewardTiersSlots);
     }
-    const singleCaptureTxs = createSingleCaptureRevenueTxs(rewardTiersSlots, bids, slotsData);
+    const singleCaptureTxs = createSingleCaptureRevenueTxs(
+      locationState?.rewardTiersSlots,
+      bids,
+      slotsData
+    );
     setBatchCaptureRevenueTxs(batchCaptureTxs);
     setSingleCaptureRevenueTxs(singleCaptureTxs);
   };
@@ -70,10 +85,14 @@ const ReleaseRewards = () => {
     });
 
     const newSlotsInfo = await auctionSDK.getAuctionSlotsInfo(auction?.auction?.onChainId);
-    const newSingleTxs = createSingleCaptureRevenueTxs(rewardTiersSlots, updatedBids, newSlotsInfo);
+    const newSingleTxs = createSingleCaptureRevenueTxs(
+      locationState?.rewardTiersSlots,
+      updatedBids,
+      newSlotsInfo
+    );
 
     const newBatchTxs = createBatchCaptureRevenueTxsFinalised(
-      rewardTiersSlots,
+      locationState?.rewardTiersSlots,
       updatedBids,
       newSlotsInfo
     );
@@ -105,7 +124,7 @@ const ReleaseRewards = () => {
     }
     const newSlotsInfo = await auctionSDK.getAuctionSlotsInfo(auction?.auction?.onChainId);
     const newBatchTxs = createBatchCaptureRevenueTxsFinalised(
-      rewardTiersSlots,
+      locationState?.rewardTiersSlots,
       bidsData,
       newSlotsInfo
     );
@@ -258,6 +277,31 @@ const ReleaseRewards = () => {
     }
   }, [slotsInfo]);
 
+  let viewType = (
+    <BidderView
+      auctionData={auction}
+      showSlots={showSlots}
+      singleCaptureRevenueTxs={singleCaptureRevenueTxs}
+      handleCaptureRevenue={handleCaptureRevenue}
+      winningSlot={locationState?.winningSlot}
+      myBid={locationState?.myBid}
+      rewardTiersSlots={locationState?.rewardTiersSlots}
+    />
+  );
+
+  if (locationState?.view === 'Auctioneer') {
+    viewType = (
+      <AuctioneerView
+        auctionData={auction}
+        showSlots={showSlots}
+        batchCaptureRevenueTxs={batchCaptureRevenueTxs}
+        singleCaptureRevenueTxs={singleCaptureRevenueTxs}
+        handleCaptureRevenue={handleCaptureRevenue}
+        rewardTiersSlots={locationState?.rewardTiersSlots}
+      />
+    );
+  }
+
   return (
     <div className="release__rewards">
       <div className="release container">
@@ -269,7 +313,7 @@ const ReleaseRewards = () => {
           }}
         >
           <img src={arrow} alt="back" />
-          <span>{backButtonText}</span>
+          <span>{locationState?.backButtonText}</span>
           <h1 className="set-text">Release rewards</h1>
         </div>
         <p className="description">
@@ -280,13 +324,13 @@ const ReleaseRewards = () => {
           <div className="release__finalize__auction">
             <div className="step">
               <div className="circle">
-                {auction.auction.finalised ? (
+                {auctionFinalised ? (
                   <img src={doneIcon} alt="Done" />
                 ) : (
                   <img src={emptyMark} alt="Empty mark" />
                 )}
               </div>
-              <div className={`line ${auction.auction.finalised ? 'colored' : ''}`} />
+              <div className={`line ${auctionFinalised ? 'colored' : ''}`} />
             </div>
             <div className="release__auction__body">
               <h2>Finalize auction</h2>
@@ -295,7 +339,7 @@ const ReleaseRewards = () => {
                 amounts
               </p>
               <div className="proceed__button">
-                {auction.auction.finalised ? (
+                {auctionFinalised ? (
                   <Button className="light-border-button" disabled>
                     Completed <img src={completedCheckmark} alt="completed" />
                   </Button>
@@ -310,7 +354,7 @@ const ReleaseRewards = () => {
           <div className="release__finalize__auction">
             <div className="step">
               <div className="circle">
-                {!auction.auction.finalised || batchCaptureRevenueTxs.length ? (
+                {!auctionFinalised || batchCaptureRevenueTxs.length ? (
                   <img src={emptyMark} alt="Empty mark" />
                 ) : (
                   <img src={doneIcon} alt="Done" />
@@ -347,26 +391,7 @@ const ReleaseRewards = () => {
               <p className="auction__description">
                 Once the auction is finalized, the revenue for each slot should be captured.
               </p>
-              {view === 'Auctioneer' ? (
-                <AuctioneerView
-                  auctionData={auction}
-                  showSlots={showSlots}
-                  batchCaptureRevenueTxs={batchCaptureRevenueTxs}
-                  singleCaptureRevenueTxs={singleCaptureRevenueTxs}
-                  handleCaptureRevenue={handleCaptureRevenue}
-                  rewardTiersSlots={rewardTiersSlots}
-                />
-              ) : (
-                <BidderView
-                  auctionData={auction}
-                  showSlots={showSlots}
-                  singleCaptureRevenueTxs={singleCaptureRevenueTxs}
-                  handleCaptureRevenue={handleCaptureRevenue}
-                  winningSlot={winningSlot}
-                  myBid={myBid}
-                  rewardTiersSlots={rewardTiersSlots}
-                />
-              )}
+              {viewType}
             </div>
           </div>
         </div>
@@ -375,7 +400,7 @@ const ReleaseRewards = () => {
         <CongratsReleaseRewardsPopup
           onClose={() => setShowCongratsPopup(false)}
           auctionName={auction?.auction?.name}
-          isAuctioneer={view === 'Auctioneer'}
+          isAuctioneer={locationState?.view === 'Auctioneer'}
           handleClaimNfts={handleClaimNfts}
         />
       </Popup>
