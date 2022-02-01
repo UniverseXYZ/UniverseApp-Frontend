@@ -193,6 +193,18 @@ const ReleaseRewards = () => {
       if (txReceipt.status === 1) {
         setLoadingText(verificationLoadingText);
       }
+      setAuction((upToDate) => ({
+        ...upToDate,
+        auction: { ...upToDate.auction, finalised: true },
+      }));
+      if (auctionSDK && auction?.auction?.onChainId) {
+        const info = await auctionSDK.getAuctionSlotsInfo(auction?.auction?.onChainId);
+        const batchCaptureTxs = createBatchCaptureRevenueTxsFinalised(rewardTiersSlots, bids, info);
+        const singleCaptureTxs = createSingleCaptureRevenueTxs(rewardTiersSlots, bids, info);
+        setBatchCaptureRevenueTxs(batchCaptureTxs);
+        setSingleCaptureRevenueTxs(singleCaptureTxs);
+        setSlotsInfo(info);
+      }
     } catch (err) {
       setActiveTxHashes([]);
       setShowLoading(false);

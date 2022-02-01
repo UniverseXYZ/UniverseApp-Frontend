@@ -63,6 +63,7 @@ const AuctionLandingPage = () => {
   // More info why this is used here (https://github.com/facebook/react/issues/16975)
   // Start of useRef section
 
+  const mySlotRef = useRef(mySlot);
   const addressRef = useRef(address);
   const biddersRef = useRef(bidders);
   const auctionRef = useRef(auction);
@@ -71,6 +72,10 @@ const AuctionLandingPage = () => {
   useEffect(() => {
     addressRef.current = address;
   }, [address]);
+
+  useEffect(() => {
+    mySlotRef.current = mySlot;
+  }, [mySlot]);
 
   useEffect(() => {
     biddersRef.current = bidders;
@@ -295,7 +300,7 @@ const AuctionLandingPage = () => {
     const isYourEvent = claimer.toLowerCase() === addressRef.current.toLowerCase();
 
     if (isYourEvent) {
-      setMySlot({ ...mySlot, totalWithdrawnNfts: mySlot.totalDepositedNfts });
+      setMySlot({ ...mySlotRef.current, totalWithdrawnNfts: mySlotRef.current.totalDepositedNfts });
       setShowLoading(false);
       setActiveTxHashes([]);
     }
