@@ -5,8 +5,6 @@ import PropTypes from 'prop-types';
 import bubbleIcon from '../../assets/images/text-bubble.png';
 import plusIcon from '../../assets/images/plus.svg';
 import { useAuthContext } from '../../contexts/AuthContext';
-import SimplePagination from '../pagination/SimplePaginations';
-import ItemsPerPageDropdown from '../pagination/ItemsPerPageDropdown';
 import { getCollectionBackgroundColor } from '../../utils/helpers';
 import PendingCollections from './pendingDropdown/pendingCollections/PendingCollections';
 import universeIcon from '../../assets/images/universe-img.svg';

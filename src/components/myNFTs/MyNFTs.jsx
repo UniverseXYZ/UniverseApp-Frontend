@@ -93,23 +93,6 @@ const MyNFTs = () => {
     fetchNftSummary();
   }, []);
 
-  useEffect(() => {
-    function handleResize() {
-      if (document.querySelector('.tab__right__arrow')) {
-        if (window.innerWidth < 660) {
-          document.querySelector('.tab__right__arrow').style.display = 'flex';
-        } else {
-          document.querySelector('.tab__right__arrow').style.display = 'none';
-          document.querySelector('.tab__left__arrow').style.display = 'none';
-        }
-      }
-    }
-    window.addEventListener('resize', handleResize);
-    handleResize();
-
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
-
   const handleMintSelected = async () => {
     setShowLoading(true);
     setActiveTxHashes([]);
