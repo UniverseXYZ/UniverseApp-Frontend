@@ -75,9 +75,9 @@ export const NftItem = (
   //   setShowAuctionTimer(nft.auctionExpDate && renderAuctionTime !== null);
   // }, [nft.auctionExpDate, renderAuctionTime]);
 
-  const isAudio = isNFTAssetAudio(nft.artworkType);
-  const isVideo = isNFTAssetVideo(nft.artworkType);
   const isImage = isNFTAssetImage(nft.artworkType);
+  const isVideo = isNFTAssetVideo(nft.artworkType);
+  const isAudio = isNFTAssetAudio(nft.artworkType);
 
   return (
     <ItemWrapper

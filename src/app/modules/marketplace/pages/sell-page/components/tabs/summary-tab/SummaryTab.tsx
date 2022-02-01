@@ -11,6 +11,8 @@ import { SellMethod } from '../../../enums';
 import { IFixedListingForm } from '../../../types';
 import { Tokens } from '../../../../../../../enums';
 import { TokenIcon } from '../../../../../../../components';
+import { isNFTAssetAudio, isNFTAssetImage, isNFTAssetVideo } from '../../../../../../nft';
+import { NFTAssetAudio, NFTAssetImage, NFTAssetVideo } from '../../../../../../nft/pages/nft-page/components';
 
 const styles: Record<string, SystemStyleObject> = {
   mainContainer: {
@@ -104,15 +106,15 @@ export const SummaryTab = () => {
     <>
       <Flex sx={styles.mainContainer}>
         <Box sx={styles.imageContainer}>
-          <Image
-            src={nft.thumbnailUrl}
-            sx={{
-              objectFit: 'cover',
-              borderRadius: '12px',
-              h: 'var(--image-size)',
-              w: 'var(--image-size)',
-            }}
-          />
+          {isNFTAssetImage(nft.artworkType) &&
+            <NFTAssetImage image={nft.originalUrl} h={'var(--image-size)'} w={'var(--image-size)'} />
+          }
+          {isNFTAssetVideo(nft.artworkType) &&
+            <NFTAssetVideo video={nft.originalUrl} h={'var(--image-size)'} w={'var(--image-size)'} />
+          }
+          {isNFTAssetAudio(nft.artworkType) &&
+            <NFTAssetAudio audio={nft.originalUrl} h={'var(--image-size)'} w={'var(--image-size)'} />
+          }
         </Box>
         <Flex sx={styles.textContainer}>
           <Center flexDir={'column'} alignItems={'flex-start'} w={'100%'}>

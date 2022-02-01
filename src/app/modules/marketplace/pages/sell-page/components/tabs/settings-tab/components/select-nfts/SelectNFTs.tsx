@@ -27,7 +27,7 @@ import closeWhiteIcon from '../../../../../../../../../../assets/images/marketpl
 import { SortNftsOptions } from '../../../../../../../constants';
 import { InputShadow, Select } from '../../../../../../../../../components';
 import { NftItem } from '../../../../../../../../nft/components';
-import { INFT } from '../../../../../../../../nft/types';
+import { INFT, INFTBackend } from '../../../../../../../../nft/types';
 import { SelectEditionsDropdown } from '../../../../select-editions-dropdown';
 import { useMarketplaceSellData } from '../../../../../hooks';
 import { useStickyFooter } from '../../../../../../../../../hooks';
@@ -45,6 +45,13 @@ import { FilterArtistsItems } from '../../../../../../../mocks/filter-artists';
 import { useMyNftsContext } from '../../../../../../../../../../contexts/MyNFTsContext';
 import { useAuthContext } from '../../../../../../../../../../contexts/AuthContext';
 import universeIcon from '../../../../../../../../../../assets/images/universe-img.svg';
+import {
+  isNFTAssetAudio,
+  isNFTAssetImage,
+  isNFTAssetVideo,
+  mapBackendNft,
+  mapBackendUser,
+} from '../../../../../../../../nft';
 
 interface IActionBarNFTItemProps {
   nft: INFT;
@@ -77,6 +84,10 @@ const ActionBarNFTItem = (
       onRemove(selectedEditions.filter((edition) => !editionsForRemove.includes(edition)));
     }
   }, [onRemove]);
+
+  const isImage = isNFTAssetImage(nft.artworkType);
+  const isVideo = isNFTAssetVideo(nft.artworkType);
+  const isAudio = isNFTAssetAudio(nft.artworkType);
 
   return (
     <>
@@ -112,12 +123,8 @@ const ActionBarNFTItem = (
           }}
           onClick={handleRemove}
         >
-          <Image
-            src={nft.thumbnailUrl}
-            height={'54px'}
-            width={'54px'}
-            objectFit={'cover'}
-          />
+          {isImage && (<Image src={nft.thumbnailUrl} height={'54px'} width={'54px'} objectFit={'cover'} />)}
+          {isVideo && (<video src={nft.thumbnailUrl} style={{ objectFit: 'cover', height: '54px', width: '54px' }} />)}
           {isNFTBundle && (
             <Text
               sx={{
@@ -195,17 +202,15 @@ export const SelectNFTs = ({}: ISelectNFTsProps) => {
   }, [form.values.bundleSelectedNFTs]);
 
   const MyNFTsDB = useMemo(() => {
-    return myNFTs.filter((_nft: any) => !_nft.hidden && _nft.id !== nft.id).map((nft: any) => {
-      nft.owner = loggedInArtist;
-
-      if (nft.collection) {
-        if (nft.collection.address === process.env.REACT_APP_UNIVERSE_ERC_721_ADDRESS) {
-          nft.collection.coverUrl = universeIcon;
-        }
+    return myNFTs.reduce((acc: INFT[], _NFTBackend: INFTBackend) => {
+      if (_NFTBackend.id !== nft.id && !_NFTBackend.hidden) {
+        const _NFT = mapBackendNft(_NFTBackend);
+        _NFT.owner = mapBackendUser(loggedInArtist);
+        acc.push(_NFT);
       }
 
-      return nft;
-    });
+      return acc;
+    }, []);
   }, [myNFTs, nft]);
 
   const selectedNFTsNumber = useMemo(() => {

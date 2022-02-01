@@ -78,6 +78,7 @@ export interface INFT {
   txHash: string | null;
   updatedAt: Date;
   url: string;
+  hidden?: boolean;
   moreFromCollection?: INFT[];
 }
 
