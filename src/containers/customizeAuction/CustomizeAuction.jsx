@@ -162,13 +162,17 @@ const CustomizeAuction = () => {
   };
 
   // reward tiers API calls
-  const saveRewardTiers = () => {
+  const saveRewardTiers = async () => {
     try {
-      const tiers = rewardTiersAuction.map(async (tier, index) => {
+      const tiers = [];
+      for (let index = 0; index < rewardTiersAuction.length; index += 1) {
+        const tier = rewardTiersAuction[index];
+
         let newTierData = null;
         const tierResponses = [];
         tier.nftIds = tier.nfts.map((nft) => nft.id);
         tier.minimumBid = parseFloat(tier.minimumBid, 10);
+
         // Check if data is edited
         const canEditRewardTier =
           auction.rewardTiers[index].description !== tier.description ||
@@ -180,24 +184,27 @@ const CustomizeAuction = () => {
 
         if (canEditRewardTier) {
           try {
+            // eslint-disable-next-line no-await-in-loop
             newTierData = await editRewardTier(tier, tier.id);
             tierResponses.push(newTierData);
           } catch (error) {
             return error;
           }
         }
+
         const updatedTier = { ...tier, newTierData };
         if (canEditRewardTierImage) {
           try {
+            // eslint-disable-next-line no-await-in-loop
             newTierData = await editRewardTierImage(tier.imageUrl, tier.id);
             tierResponses.push(newTierData);
           } catch (error) {
             return error;
           }
         }
-        return { ...updatedTier, ...newTierData };
-      });
-      return Promise.all(tiers);
+        tiers.push({ ...updatedTier, ...newTierData });
+      }
+      return tiers;
     } catch (error) {
       return error;
     }
