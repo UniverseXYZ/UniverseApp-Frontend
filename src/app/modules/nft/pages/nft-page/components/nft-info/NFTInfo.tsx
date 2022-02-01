@@ -2,7 +2,6 @@ import {
   Box,
   Flex,
   Heading,
-  Image,
   Link,
   Tab,
   TabPanel,
@@ -10,73 +9,57 @@ import {
   Tabs,
   Text,
 } from '@chakra-ui/react';
-// @ts-ignore
+import React, { useState } from 'react';
 import ReactReadMoreReadLess from 'react-read-more-read-less';
+import { UseMeasureRect } from 'react-use/lib/useMeasure';
 
-import { Tabs as NFTTabs } from './constants';
 import { Bindings } from '../../mocks';
 import { LineTabList } from '../../../../../../components';
+import { NFTAssetImage, NFTAssetAudio, NFTBuySection, NFTAssetVideo } from '../';
+import { useNFTPageData } from '../../NFTPage.context';
+import { isNFTAssetAudio, isNFTAssetImage, isNFTAssetVideo } from '../../../../helpers';
+import { NFTMenu } from '../../../../components';
+import { TabBids, TabHistory, TabMetadata, TabOffers, TabOwners, TabProperties } from './components';
+import { CollectionPageLoader } from '../../../../../../../containers/collection/CollectionPageLoader';
+import NotFound from '../../../../../../../components/notFound/NotFound';
 import * as styles from '../../styles';
-
-import { NFTAssetImage, NFTAssetAudio, NFTBuySection } from '../';
-import {
-  CollectionPageLoader
-} from "../../../../../../../containers/collection/CollectionPageLoader";
-import {useNFTPageData} from "../../NFTPage.context";
-import NotFound from "../../../../../../../components/notFound/NotFound";
-import React, { useMemo } from 'react';
-
-enum NFTAssetType {
-  IMAGE,
-  AUDIO,
-  VIDEO,
-  BUNDLE,
-  STORY_BOOK,
-}
 
 // TODO: hide metadata tab for not Polymorph NFT type
 export const NFTInfo = () => {
   const { NFT, isLoading } = useNFTPageData();
 
-  console.log('NFT', NFT);
-
-  const assetType = useMemo<NFTAssetType | null>(() => {
-    if(NFT) {
-      // TODO: Find out the audio format
-      const { nft } = NFT;
-
-      switch (true) {
-        case NFT.nft.artworkType.endsWith('png'): return NFTAssetType.IMAGE;
-        case NFT.nft.artworkType.endsWith('audio/mpeg'): return NFTAssetType.AUDIO;
-      }
-    }
-    return null;
-  }, [NFT]);
+  const [buySectionMeasure, setBuySectionMeasure] = useState<UseMeasureRect>();
 
   return (
     <>
       {isLoading
       ? (
-          <div className="loader-wrapper">
+          <div className='loader-wrapper'>
             <CollectionPageLoader />
           </div>
         )
       : NFT ? (
           <Box>
             <Box {...styles.NFTAssetContainerStyle}>
-              {/*TODO: ✅ image / ✅ audio / ☑️ video / ☑️ bundle / ☑️ storybook */}
-              {assetType === NFTAssetType.IMAGE && (<NFTAssetImage src={NFT.nft.original_url} />)}
-              {assetType === NFTAssetType.AUDIO && (<NFTAssetAudio />)}
+              {isNFTAssetImage(NFT.artworkType) &&
+                <NFTAssetImage image={NFT.originalUrl} />
+              }
+              {isNFTAssetVideo(NFT.artworkType) &&
+                <NFTAssetVideo video={NFT.originalUrl} />
+              }
+              {isNFTAssetAudio(NFT.artworkType) &&
+                <NFTAssetAudio audio={NFT.originalUrl} />
+              }
             </Box>
             <Box {...styles.NFTDetailsContainerStyle}>
-              <Box sx={{ p: '60px 40px', }}>
+              <Box sx={{ p: '60px 40px', minH: `calc(100vh - 80px - ${buySectionMeasure?.height}px)`, }}>
                 <Flex sx={{
                   alignItems: 'center',
                   mb: '12px',
                   justifyContent: 'space-between'
                 }}>
-                  <Heading as={'h2'} sx={{ fontSize: '26px', }}>{NFT.nft.name}</Heading>
-                  {/*<Box>*/}
+                  <Heading as={'h2'} sx={{ fontSize: '26px', }}>{NFT.name}</Heading>
+                  <Box>
                   {/*  <NFTLike*/}
                   {/*    likes={NFT.likes}*/}
                   {/*    isLiked={false}*/}
@@ -89,8 +72,8 @@ export const NFTInfo = () => {
                   {/*    onOpen={() => setIsLikesPopupOpened(true)}*/}
                   {/*  />*/}
 
-                  {/*  <NFTMenu />*/}
-                  {/*</Box>*/}
+                    <NFTMenu nft={NFT} />
+                  </Box>
                 </Flex>
 
                 <Text
@@ -102,18 +85,26 @@ export const NFTInfo = () => {
                   }}
                 >
                   Edition&nbsp;
-                  {`${NFT.tokenIds ? NFT.tokenIds.length : 1}/${
-                    NFT.numberOfEditions
-                      ? NFT.numberOfEditions
-                      : NFT.tokenIds
-                        ? NFT.tokenIds.length
-                        : 1
-                  }`}
+                  {`${NFT.tokenIds ? NFT.tokenIds.length : 1}/${NFT.numberOfEditions || (NFT.tokenIds || [NFT.tokenId]).length}`}
                 </Text>
 
                 <Flex mb={'24px'}>
                   {Bindings.map((binding, i) => (
-                    <Link to={binding.getLink(NFT)}>
+                    <Link to={binding.getLink(NFT)} sx={{
+                      _hover: {
+                        textDecoration: 'none !important',
+                        'div p:nth-of-type(2)': {
+                          textDecoration: 'underline',
+                        }
+                      },
+                      _notLast: {
+                        '> div > div': {
+                          _last: {
+                            pr: '20px'
+                          }
+                        },
+                      },
+                    }}>
                       <Flex key={i} sx={{
                         alignItems: 'center',
                         flex: 1,
@@ -144,33 +135,35 @@ export const NFTInfo = () => {
                     readMoreText="Read more"
                     readLessText="Read less"
                   >
-                    {NFT.nft.description || ''}
+                    {NFT.description || ''}
                   </ReactReadMoreReadLess>
                 </Text>
 
                 <Tabs>
                   <LineTabList>
-                    {NFTTabs.map(({ name }, i) => (<Tab key={i}>{name}</Tab>))}
+                    <Tab>Properties</Tab>
+                    <Tab>Metadata</Tab>
+                    <Tab>Owners</Tab>
+                    <Tab>Bids</Tab>
+                    <Tab>Offers</Tab>
+                    <Tab>History</Tab>
                   </LineTabList>
 
-                  <TabPanels>
-                    {NFTTabs.map(({ component: TabContentComponent, name }, i) => {
-                      return (
-                        <TabPanel key={i} px={0} pt={'30px'} pb={0}>
-                          <TabContentComponent {...(name === 'Properties' ? { properties: NFT.nft.properties } : {})} />
-                        </TabPanel>
-                      )
-                    })}
+                  <TabPanels sx={{ '> div' : { px: 0, pb: 0, pt: '30px', }}}>
+                    <TabPanel><TabProperties properties={NFT.properties || []} /></TabPanel>
+                    <TabPanel><TabMetadata /></TabPanel>
+                    <TabPanel><TabOwners /></TabPanel>
+                    <TabPanel><TabBids /></TabPanel>
+                    <TabPanel><TabOffers /></TabPanel>
+                    <TabPanel><TabHistory /></TabPanel>
                   </TabPanels>
                 </Tabs>
               </Box>
-              <NFTBuySection />
+              <NFTBuySection onMeasureChange={(measure) => setBuySectionMeasure(measure)} />
             </Box>
           </Box>
         )
-      : (
-            <NotFound />
-          )}
+      : (<NotFound />)}
     </>
   )
 };

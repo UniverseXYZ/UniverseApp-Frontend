@@ -1,14 +1,13 @@
 import { FC, createContext, useContext, useEffect } from 'react';
-import { request } from "graphql-request";
-import { gql, ApolloClient, InMemoryCache } from '@apollo/client';
+import { useQuery } from 'react-query';
+import { useParams } from 'react-router-dom';
 
-import { INft } from '../../types';
-import {useQuery} from "react-query";
-import {getNftData} from "../../../../../utils/api/mintNFT";
-import {useParams} from "react-router-dom";
+import { INFT } from '../../types';
+import { getNftData } from '../../../../../utils/api/mintNFT';
+import { GetNFTApi } from '../../api';
 
 export interface INFTPageContext {
-  NFT: INft;
+  NFT: INFT;
   isLoading: boolean;
   isPolymorph: boolean;
 }
@@ -20,44 +19,15 @@ export function useNFTPageData(): INFTPageContext {
 }
 
 const NFTPageProvider: FC = ({ children }) => {
-  // @ts-ignore
-  const { collectionAddress, tokenId } = useParams();
+  const { collectionAddress, tokenId } = useParams() as any;
   // TODO: change cache key getNftData --> nft / id
-  // @ts-ignore
-  const { isLoading, data, error } = useQuery('getNftData', () => getNftData(collectionAddress, tokenId))
-
-  const { data: subgraphsData } =  useQuery("subgraphs", async () => {
-    const { orderMatchEntities } = await request(
-      'https://api.thegraph.com/subgraphs/name/kunone/marketplace-rinkeby-v2',
-      gql`
-          query {
-              orderMatchEntities(first: 1, orderBy: blockNumber, orderDirection: asc, where: {blockNumber_gte: 0}) {
-                  id
-                  txFrom
-                  txValue
-                  blockNumber
-                  blockTimestamp
-                  leftOrderHash
-                  rightOrderHash
-                  leftMaker
-                  rightMaker
-                  newLeftFill
-                  newRightFill
-                  leftAssetClass
-                  rightAssetClass
-                  leftAssetData
-                  rightAssetData
-              }
-          }
-      `
-    );
-    return orderMatchEntities;
-  });
-
-  console.log('subgraphsData', subgraphsData)
+  const { isLoading, data, error } = useQuery(
+    ['getNftData', collectionAddress, tokenId],
+    () => GetNFTApi(collectionAddress, tokenId)
+  );
 
   const value: INFTPageContext = {
-    NFT: data,
+    NFT: data as INFT,
     isLoading,
     isPolymorph: false
   };

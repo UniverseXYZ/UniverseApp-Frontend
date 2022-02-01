@@ -6,11 +6,13 @@ import {
   MenuList,
 } from '@chakra-ui/react';
 import React, { useCallback, useState } from 'react';
+import { useHistory } from 'react-router-dom';
 
-import { NFTReportPopup } from '../nft-report-popup';
 import { MenuItem } from './components';
 import * as styles from './styles';
-import { INft } from '../../types';
+import { INFT } from '../../types';
+import { NFTReportPopup } from '../nft-report-popup';
+import { NFTSharePopup } from '../nft-share-popup';
 
 import DotsIcon from '../../../../../assets/images/marketplace/3-dots.svg';
 import SellIcon from '../../../../../assets/images/sell-nft.svg';
@@ -22,11 +24,9 @@ import EditIcon from '../../../../../assets/images/edit.svg';
 import BurnIcon from '../../../../../assets/images/burn-nft.svg';
 import RemoveIcon from '../../../../../assets/images/remove.svg';
 import ReportIcon from '../../../../../assets/images/report.svg';
-import { NFTSharePopup } from '../nft-share-popup';
-import { useHistory } from 'react-router-dom';
 
 interface INFTMenuProps {
-  nft: INft;
+  nft: INFT;
   showSell?: boolean;
   showTransfer?: boolean;
   showShare?: boolean;
@@ -35,7 +35,6 @@ interface INFTMenuProps {
   showBurn?: boolean;
   showRemove?: boolean;
   showReport?: boolean;
-  onSell?: () => void;
   onTransfer?: () => void;
   onShare?: () => void;
   onHideUnhide?: () => void;
@@ -56,7 +55,6 @@ export const NFTMenu = (
     showBurn = true,
     showRemove = true,
     showReport = true,
-    onSell,
     onTransfer,
     onShare,
     onHideUnhide,
@@ -71,13 +69,8 @@ export const NFTMenu = (
   const [isSharePopupOpened, setIsSharePopupOpened] = useState(false);
 
   const handleSell = useCallback(() => {
-    router.push(`/v2/marketplace/sell?nft=${'0x73faeb0216be26b45794890a77a6124772146666'}&tokenId=${4}`)
-    // if (onSell) {
-    //   onSell();
-    // } else {
-    //
-    // }
-  }, [nft, onSell]);
+    router.push(`/v2/marketplace/sell?nft=${nft.collection?.address}&tokenId=${nft.tokenId}`)
+  }, [nft]);
 
   const handleTransfer = useCallback(() => {
     if (onTransfer) {

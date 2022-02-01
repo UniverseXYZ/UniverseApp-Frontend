@@ -1,5 +1,5 @@
 import { Box, Button, Image, SimpleGrid, Text } from '@chakra-ui/react';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { useBuyNFTSection } from '../../mocks';
 import { useDateCountDown } from '../../../../../../hooks';
@@ -11,13 +11,22 @@ import { NFTMakeAnOfferPopup } from '../nft-make-an-offer-popup';
 
 import ClockIcon from '../../../../../../../assets/images/clock.svg';
 import { IOrder } from '../../../../types';
+import { useMeasure } from 'react-use';
+import { UseMeasureRect } from 'react-use/lib/useMeasure';
 
 interface INFTBuySectionProps {
   order?: IOrder;
+  onMeasureChange?: (measure: UseMeasureRect) => void;
 }
 
-export const NFTBuySection = ({ order }: INFTBuySectionProps) => {
+export const NFTBuySection = ({ order, onMeasureChange }: INFTBuySectionProps) => {
   const buyNFTSection = useBuyNFTSection(8);
+
+  const [ref, measure] = useMeasure<HTMLDivElement>();
+
+  useEffect(() => {
+    onMeasureChange && onMeasureChange(measure);
+  }, [measure]);
 
   const { countDownString } = useDateCountDown(new Date(new Date().setDate(new Date().getDate() + 1)));
 
@@ -26,7 +35,7 @@ export const NFTBuySection = ({ order }: INFTBuySectionProps) => {
   const [isMakeAnOfferPopupOpened, setIsMakeAnOfferPopupOpened] = useState(false);
 
   return (
-    <Box {...styles.WrapperStyle}>
+    <Box {...styles.WrapperStyle} ref={ref}>
       <Box {...styles.CountDownWrapperStyle} cursor={'pointer'} onClick={buyNFTSection.changeBuyNFTSection}>
         <Box {...styles.CountDownContentStyle} minW={`${((countDownString?.length ?? 0) + 5) * 10}px`}>
           <Text>

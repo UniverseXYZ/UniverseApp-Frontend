@@ -45,7 +45,7 @@ export const NFTSharePopup = ({ isOpen, onClose }: INFTSharePopupProps) => {
   }, []);
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose}>
+    <Modal isOpen={isOpen} onClose={onClose} isCentered>
       <ModalOverlay />
       <ModalContent maxW={'480px'}>
         <ModalCloseButton />
@@ -65,10 +65,9 @@ export const NFTSharePopup = ({ isOpen, onClose }: INFTSharePopupProps) => {
               <Text {...styles.ShareButtonTextStyle}>Twitter</Text>
             </LinkBox>
             <Box>
-              {/*TODO: provide facebook app_id*/}
               <LinkOverlay
                 {...styles.getShareButtonStyle(FacebookSVG) as LinkOverlayProps}
-                href={`https://www.facebook.com/dialog/share?app_id=XXX&href=${encodeURIComponent(location?.href)}&display=popup`}
+                href={`https://www.facebook.com/dialog/share?app_id=${process.env.REACT_APP_FACEBOOK_APP_ID}&href=${encodeURIComponent(location?.href)}&display=popup`}
                 target={'_blank'}
               />
               <Text {...styles.ShareButtonTextStyle}>Facebook</Text>

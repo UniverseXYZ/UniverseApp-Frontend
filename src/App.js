@@ -172,7 +172,7 @@ const App = () => {
           </MyNFTsContextProvider>
         </LobsterContextProvider>
       </PolymorphContextProvider>
-      <ReactQueryDevtools initialIsOpen={false} />
+      {/* <ReactQueryDevtools initialIsOpen={false} /> */}
     </QueryClientProvider>
   );
 };

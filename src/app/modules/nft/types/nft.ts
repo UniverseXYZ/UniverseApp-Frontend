@@ -1,10 +1,3 @@
-import { INftBackend } from './nft-backend';
-
-// TODO: remove interface (in favor of INFT)
-export interface INft extends Omit<INftBackend, 'auctionExpDate'> {
-  auctionExpDate: Date;
-}
-
 export enum NFTArtworkType {
   JPEG = 'jpeg',
   PNG = 'png',

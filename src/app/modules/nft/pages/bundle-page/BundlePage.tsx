@@ -24,10 +24,11 @@ import {
   NFTAssetImage,
   NFTAssetVideo,
   NFTBuySection,
-  TabBids,
-  TabHistory,
-  TabOffers,
+  // TabBids,
+  // TabHistory,
+  // TabOffers,
 } from '../nft-page/components';
+import { TabBids, TabHistory, TabOffers } from '../nft-page/components/nft-info/components';
 import { BundleMenu, NftItem, NFTPageRelation, RelationType } from '../../components';
 import { LineTabList } from '../../../../components';
 import { useThemeContext } from '../../../../../contexts/ThemeContext';

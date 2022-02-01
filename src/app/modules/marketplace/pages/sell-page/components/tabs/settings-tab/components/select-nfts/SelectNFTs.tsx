@@ -27,7 +27,7 @@ import closeWhiteIcon from '../../../../../../../../../../assets/images/marketpl
 import { SortNftsOptions } from '../../../../../../../constants';
 import { InputShadow, Select } from '../../../../../../../../../components';
 import { NftItem } from '../../../../../../../../nft/components';
-import { INFT, INft } from '../../../../../../../../nft/types';
+import { INFT } from '../../../../../../../../nft/types';
 import { SelectEditionsDropdown } from '../../../../select-editions-dropdown';
 import { useMarketplaceSellData } from '../../../../../hooks';
 import { useStickyFooter } from '../../../../../../../../../hooks';
@@ -47,7 +47,7 @@ import { useAuthContext } from '../../../../../../../../../../contexts/AuthConte
 import universeIcon from '../../../../../../../../../../assets/images/universe-img.svg';
 
 interface IActionBarNFTItemProps {
-  nft: INft;
+  nft: INFT;
   selectedEditions?: string[];
   onRemove: (editions: string[]) => void;
 }
@@ -113,7 +113,7 @@ const ActionBarNFTItem = (
           onClick={handleRemove}
         >
           <Image
-            src={nft.thumbnail_url}
+            src={nft.thumbnailUrl}
             height={'54px'}
             width={'54px'}
             objectFit={'cover'}
@@ -195,7 +195,7 @@ export const SelectNFTs = ({}: ISelectNFTsProps) => {
   }, [form.values.bundleSelectedNFTs]);
 
   const MyNFTsDB = useMemo(() => {
-    return myNFTs.filter((_nft: any) => !_nft.hidden && _nft.id !== nft.nft.id).map((nft: any) => {
+    return myNFTs.filter((_nft: any) => !_nft.hidden && _nft.id !== nft.id).map((nft: any) => {
       nft.owner = loggedInArtist;
 
       if (nft.collection) {
@@ -316,21 +316,19 @@ export const SelectNFTs = ({}: ISelectNFTsProps) => {
             return (
               <NftItem
                 key={nft.id}
-                // @ts-ignore
-                nft={nft as INFT}
+                nft={nft}
                 isSelected={!!selectedEditions.length}
                 selectedLabel={isMultipleEditions ? `${selectedEditions.length} / ${tokensNumber}` : undefined}
                 renderNFTAdditions={isMultipleEditions
                   ? (
                     <SelectEditionsDropdown
-                      nft={nft as INft}
+                      NFT={nft}
                       selectedEditions={selectedEditions}
                       onChange={(editions) => handleCheckNFT(nft, editions)}
                     />
                   )
                   : (
-                    // @ts-ignore
-                    <NFTItemEditionsLabel nft={nft as INFT} mr={'6px'}>
+                    <NFTItemEditionsLabel nft={nft} mr={'6px'}>
                       {nft.tokenIds ? `#${nft.tokenIds[0]}` : ''}
                     </NFTItemEditionsLabel>)
                 }
@@ -463,7 +461,7 @@ export const SelectNFTs = ({}: ISelectNFTsProps) => {
                     return (
                       <SwiperSlide key={nft.id as number}>
                         <ActionBarNFTItem
-                          nft={nft as INft}
+                          nft={nft}
                           selectedEditions={selectedEditions as string[]}
                           onRemove={(editions) => handleCheckNFT(nft, editions)}
                         />

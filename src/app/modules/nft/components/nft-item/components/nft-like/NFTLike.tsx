@@ -1,6 +1,7 @@
 import {
   Avatar,
-  AvatarGroup, Box,
+  AvatarGroup,
+  Box,
   Button,
   ButtonProps,
   Image,
@@ -12,12 +13,13 @@ import {
 } from '@chakra-ui/react';
 import React from 'react';
 
-import { INft } from '../../../../types';
 import heartFilled from '../../../../../../../assets/images/marketplace/heart-filled.svg';
 import heart from '../../../../../../../assets/images/marketplace/heart.svg';
 import heartHover from '../../../../../../../assets/images/marketplace/heart-hover.svg';
 
-interface INFTLikeProps extends ButtonProps, Pick<INft, 'likes' | 'isLiked'> {
+interface INFTLikeProps extends ButtonProps {
+  likes: string[];
+  isLiked: boolean;
   onToggle?: (isLiked: boolean) => void;
   onOpen?: () => void;
 }
