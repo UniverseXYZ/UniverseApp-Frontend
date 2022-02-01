@@ -15,6 +15,7 @@ const GET_SPECIFIC_COLLECTION = `${process.env.REACT_APP_API_BASE_URL}/api/pages
 const EDIT_COLLECTION_URL = `${process.env.REACT_APP_API_BASE_URL}/api/collections`;
 const GET_NFT_INFO = `${process.env.REACT_APP_API_BASE_URL}/api/pages/nft`;
 const CREATE_MINTING_NFT = `${process.env.REACT_APP_API_BASE_URL}/api/minting-nfts`;
+const GET_NFT_SUMMARY = `${process.env.REACT_APP_API_BASE_URL}/api/pages/my-nfts/summary`;
 
 const EDIT_COLLECTION_COVER_URL = (id) =>
   `${process.env.REACT_APP_API_BASE_URL}/api/collections/${id}/cover-image`;
@@ -147,7 +148,7 @@ export const getMyMintingNfts = async () => {
   }
   const result = await request.text().then((data) => JSON.parse(data));
 
-  return result.mintingNfts;
+  return result;
 };
 
 export const getMyMintingNftsCount = async () => {
@@ -374,7 +375,7 @@ export const updateSavedNft = async ({
   }
 };
 
-export const getMyMintableCollections = async () => {
+export const getMyMintableCollections = async (offset, limit) => {
   const requestOptions = {
     method: 'GET',
     headers: {
@@ -382,14 +383,14 @@ export const getMyMintableCollections = async () => {
       Authorization: `Bearer ${localStorage.getItem('xyz_access_token')}`,
     },
   };
-  const url = `${GET_MY_MINTED_COLLECTIONS}?mintable=true`;
+  const url = `${GET_MY_MINTED_COLLECTIONS}?mintable=true&offset=${offset}&limit=${limit}`;
   const request = await fetch(url, requestOptions);
   const result = await request.text().then((res) => JSON.parse(res));
 
   return result;
 };
 
-export const getMyMintedCollections = async () => {
+export const getMyMintedCollections = async (offset, limit) => {
   const requestOptions = {
     method: 'GET',
     headers: {
@@ -556,4 +557,32 @@ export const createMintingNFT = async (txHash, nftId, actualMintedCount) => {
   // const result = await request.text().then((data) => JSON.parse(data));
   // console.log(result);
   // return result;
+};
+
+export const getNftSummary = async () => {
+  const request = await fetch(GET_NFT_SUMMARY, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${localStorage.getItem('xyz_access_token')}`,
+    },
+  });
+
+  const result = await request.text().then((data) => JSON.parse(data));
+  return result;
+};
+
+export const getMyCollections = async (offset, limit) => {
+  const endpoint = `${process.env.REACT_APP_API_BASE_URL}/api/pages/my-nfts/collections?offset=${offset}&limit=${limit}`;
+
+  const request = await fetch(endpoint, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${localStorage.getItem('xyz_access_token')}`,
+    },
+  });
+
+  const result = await request.text().then((data) => JSON.parse(data));
+  return result;
 };

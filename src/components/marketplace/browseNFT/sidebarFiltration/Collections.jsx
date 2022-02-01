@@ -68,6 +68,7 @@ const Collections = ({
           </div>
           {collections
             .filter((item) => item.name.toLowerCase().includes(searchByCollections.toLowerCase()))
+            .sort((a, b) => b.nftCount - a.nftCount)
             .map((col, index) => (
               <div
                 className="collections--list"
@@ -102,7 +103,9 @@ const Collections = ({
                 ) : (
                   <img className="sell__collection" src={col.coverUrl} alt={col.name} />
                 )}
-                <p>{col.name || shortenEthereumAddress(col.address)}</p>
+                <p>
+                  {col.name || shortenEthereumAddress(col.address)} ({col.nftCount})
+                </p>
               </div>
             ))}
         </div>

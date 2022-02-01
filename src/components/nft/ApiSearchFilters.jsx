@@ -10,13 +10,20 @@ import SelectedFilters from '../marketplace/browseNFT/selectedFiltersAndSorting/
 import BrowseFilterPopup from '../popups/BrowseFiltersPopup';
 import ApiSortingFilters from '../marketplace/browseNFT/selectedFiltersAndSorting/ApiSortingFilters';
 
-const ApiCollectionSearchFilters = ({ searchText, search, resetPagination }) => {
+const ApiSearchFilters = ({
+  searchText,
+  search,
+  resetPagination,
+  selectedCollections,
+  setSelectedCollections,
+  allCollections,
+}) => {
   const [showFilters, setShowFilters] = useState(false);
   const [selectedPrice, setSelectedPrice] = useState(null);
   const [sliderValue, setSliderValue] = useState({ min: 0.01, max: 100 });
   const [selectedTokenIndex, setSelectedTokenIndex] = useState(0);
   const [savedCollections, setSavedCollections] = useState([]);
-  const [selectedCollections, setSelectedCollections] = useState([]);
+  // const [selectedCollections, setSelectedCollections] = useState([]);
   const [savedCreators, setSavedCreators] = useState([]);
   const [selectedCreators, setSelectedCreators] = useState([]);
 
@@ -99,14 +106,15 @@ const ApiCollectionSearchFilters = ({ searchText, search, resetPagination }) => 
             setSliderValue={setSliderValue}
             selectedTokenIndex={selectedTokenIndex}
             setSelectedTokenIndex={setSelectedTokenIndex}
-            selectedCollections={selectedCollections}
-            setSelectedCollections={setSelectedCollections}
             savedCollections={savedCollections}
             setSavedCollections={setSavedCollections}
             selectedCreators={selectedCreators}
             setSelectedCreators={setSelectedCreators}
             savedCreators={savedCreators}
             setSavedCreators={setSavedCreators}
+            allCollections={allCollections}
+            selectedCollections={selectedCollections}
+            setSelectedCollections={setSelectedCollections}
           />
         )}
         {saleTypeButtons.filter((item) => item.selected === true).length > 0 ||
@@ -121,14 +129,14 @@ const ApiCollectionSearchFilters = ({ searchText, search, resetPagination }) => 
             setSliderValue={setSliderValue}
             selectedTokenIndex={selectedTokenIndex}
             setSelectedTokenIndex={setSelectedTokenIndex}
-            selectedCollections={selectedCollections}
-            setSelectedCollections={setSelectedCollections}
             savedCollections={savedCollections}
             setSavedCollections={setSavedCollections}
             selectedCreators={selectedCreators}
             setSelectedCreators={setSelectedCreators}
             savedCreators={savedCreators}
             setSavedCreators={setSavedCreators}
+            selectedCollections={selectedCollections}
+            setSelectedCollections={setSelectedCollections}
           />
         ) : (
           <></>
@@ -177,10 +185,13 @@ const ApiCollectionSearchFilters = ({ searchText, search, resetPagination }) => 
   );
 };
 
-ApiCollectionSearchFilters.propTypes = {
+ApiSearchFilters.propTypes = {
   search: PropTypes.func.isRequired,
   searchText: PropTypes.string.isRequired,
   resetPagination: PropTypes.func.isRequired,
+  selectedCollections: PropTypes.oneOfType([PropTypes.array]).isRequired,
+  setSelectedCollections: PropTypes.func.isRequired,
+  allCollections: PropTypes.oneOfType([PropTypes.array]).isRequired,
 };
 
-export default ApiCollectionSearchFilters;
+export default ApiSearchFilters;
