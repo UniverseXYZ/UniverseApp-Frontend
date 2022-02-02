@@ -15,7 +15,7 @@ import React, { useCallback } from 'react';
 import ArrowIcon from '../../../assets/images/arrow-down.svg';
 
 import { TOKENS, TOKENS_MAP } from '../../constants';
-import { Tokens } from '../../enums';
+import { TokenTicker } from '../../enums';
 import * as styles from './styles';
 
 interface ICurrencyInputProps extends Omit<NumberInputProps, 'onChange'> {
@@ -42,8 +42,8 @@ export const CurrencyInput = (
     <Box position={'relative'}>
       <Menu>
         <MenuButton as={Button} size={'sm'} {...styles.ButtonStyle}>
-          <Image src={TOKENS_MAP[currencyValue as Tokens].icons[0]} mr={'10px'} h={'20px'} w={'20px'} />
-          {TOKENS_MAP[currencyValue as Tokens].ticker}
+          <Image src={TOKENS_MAP[currencyValue as TokenTicker].icons[0]} mr={'10px'} h={'20px'} w={'20px'} />
+          {TOKENS_MAP[currencyValue as TokenTicker].ticker}
           <Image src={ArrowIcon} />
         </MenuButton>
         <MenuList {...styles.OptionsContainerStyle}>

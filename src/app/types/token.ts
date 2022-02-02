@@ -1,7 +1,7 @@
-import { Tokens } from '../enums';
+import { TokenTicker } from '../enums';
 
 export interface IToken {
-  ticker: Tokens;
+  ticker: TokenTicker;
   decimals: number;
   name: string;
   icons: string[];

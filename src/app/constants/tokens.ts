@@ -1,4 +1,4 @@
-import { Tokens } from '../enums';
+import { TokenTicker } from '../enums';
 import { IToken } from '../types';
 
 import ETHWhiteIcon from './../../assets/images/v2/tokens/ETH_white.svg';
@@ -8,37 +8,37 @@ import DAIIcon from './../../assets/images/v2/tokens/DAI.svg';
 import XYZIcon from './../../assets/images/v2/tokens/XYZ.svg';
 import WETHIcon from './../../assets/images/v2/tokens/WETH.svg';
 
-export const TOKENS_MAP: Record<Tokens, IToken> = {
-  [Tokens.ETH]: {
-    ticker: Tokens.ETH,
+export const TOKENS_MAP: Record<TokenTicker, IToken> = {
+  [TokenTicker.ETH]: {
+    ticker: TokenTicker.ETH,
     decimals: 18,
     name: 'Ethereum',
     icons: [ETHWhiteIcon, ETHIcon],
   },
-  [Tokens.USDC]: {
-    ticker: Tokens.USDC,
+  [TokenTicker.USDC]: {
+    ticker: TokenTicker.USDC,
     decimals: 6,
     name: 'USDC Coin',
     icons: [USDCIcon],
   },
-  [Tokens.DAI]: {
-    ticker: Tokens.DAI,
+  [TokenTicker.DAI]: {
+    ticker: TokenTicker.DAI,
     decimals: 18,
     name: 'DAI Stablecoin',
     icons: [DAIIcon],
   },
-  [Tokens.XYZ]: {
-    ticker: Tokens.XYZ,
+  [TokenTicker.XYZ]: {
+    ticker: TokenTicker.XYZ,
     decimals: 18,
     name: 'XYZ Governance Token',
     icons: [XYZIcon],
   },
-  [Tokens.WETH]: {
-    ticker: Tokens.WETH,
+  [TokenTicker.WETH]: {
+    ticker: TokenTicker.WETH,
     decimals: 18,
     name: 'Wrapped Ether',
     icons: [WETHIcon],
   },
 };
 
-export const TOKENS = Object.keys(TOKENS_MAP).map((ticker) => TOKENS_MAP[ticker as Tokens]);
+export const TOKENS = Object.keys(TOKENS_MAP).map((ticker) => TOKENS_MAP[ticker as TokenTicker]);

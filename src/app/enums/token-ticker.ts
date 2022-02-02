@@ -1,4 +1,4 @@
-export enum Tokens {
+export enum TokenTicker {
   ETH = 'ETH',
   USDC = 'USDC',
   DAI = 'DAI',

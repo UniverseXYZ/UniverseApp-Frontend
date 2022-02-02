@@ -1,11 +1,11 @@
 import { Image, ImageProps } from '@chakra-ui/react';
 import React, { useMemo } from 'react';
 
-import { Tokens } from '../../enums';
+import { TokenTicker } from '../../enums';
 import { TOKENS_MAP } from '../../constants';
 
 interface ITokenIconProps extends ImageProps {
-  ticker: Tokens;
+  ticker: TokenTicker;
   variant?: number;
   size?: number | string | [number, number];
 }
