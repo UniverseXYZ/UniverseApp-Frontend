@@ -166,7 +166,7 @@ export const BundlePageContent = () => {
               }}
               spacingX={'20px'}
             >
-              {moreFromCollection.map((NFT) => (<NftItem key={NFT.id} nft={NFT} />))}
+              {moreFromCollection.map((NFT) => (<NftItem key={NFT.id} NFT={NFT} />))}
             </SimpleGrid>
           </Container>
           <Button {...styles.MoreNFTsButtonStyle} onClick={handleClickViewCollection}>View collection</Button>

@@ -321,7 +321,7 @@ export const SelectNFTs = ({}: ISelectNFTsProps) => {
             return (
               <NftItem
                 key={nft.id}
-                nft={nft}
+                NFT={nft}
                 isSelected={!!selectedEditions.length}
                 selectedLabel={isMultipleEditions ? `${selectedEditions.length} / ${tokensNumber}` : undefined}
                 renderNFTAdditions={isMultipleEditions

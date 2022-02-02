@@ -172,7 +172,7 @@ export const NFTInfo = () => {
                     }}
                     spacingX={'20px'}
                   >
-                    {NFT.moreFromCollection.map((NFT) => (<NftItem key={NFT.id} nft={NFT} />))}
+                    {NFT.moreFromCollection.map((NFT) => (<NftItem key={NFT.id} NFT={NFT} />))}
                   </SimpleGrid>
                 </Container>
                 <Button {...styles.MoreNFTsButtonStyle} onClick={handleClickViewCollection}>View collection</Button>

@@ -1,3 +1,3 @@
-export * from './useDateCountDown';
+export * from './useDateCountdown';
 export * from './useStickyHeader';
 export * from './useStickyFooter';
