@@ -132,17 +132,7 @@ export const NFTInfo = () => {
                     ))}
                   </Flex>
 
-                  <Text sx={{
-                    color: 'rgba(0, 0, 0, 0.6)',
-                    fontSize: '14px',
-                    mb: '40px',
-
-                    a: {
-                      color: 'black',
-                      fontWeight: 'bold',
-                      ml: '6px',
-                    },
-                  }}>
+                  <Text {...styles.DescriptionStyle}>
                     <ReactReadMoreReadLess
                       charLimit={150}
                       readMoreText="Read more"

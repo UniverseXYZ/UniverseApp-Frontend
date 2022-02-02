@@ -5,7 +5,6 @@ import {
   Flex,
   Heading,
   Image,
-  Link,
   SimpleGrid,
   Tab,
   TabPanel,
@@ -16,6 +15,7 @@ import {
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import { uniqBy } from 'lodash';
+import ReactReadMoreReadLess from 'react-read-more-read-less';
 
 import * as styles from '../nft-page/styles';
 import * as styles2 from './styles';
@@ -116,9 +116,14 @@ export const BundlePageContent = () => {
               <NFTPageRelation type={RelationType.CREATOR} image={owner.profileImageUrl} value={owner.displayName} />
             </Flex>
 
-            <Text {...styles2.DescriptionStyle}>
-              {(order.make.assetType as IERC721BundleAssetType).bundleDescription}
-              {/*<Link>Read more</Link>*/}
+            <Text mt={'24px'} {...styles.DescriptionStyle}>
+              <ReactReadMoreReadLess
+                charLimit={150}
+                readMoreText="Read more"
+                readLessText="Read less"
+              >
+                {(order.make.assetType as IERC721BundleAssetType).bundleDescription}
+              </ReactReadMoreReadLess>
             </Text>
 
             <Tabs>
