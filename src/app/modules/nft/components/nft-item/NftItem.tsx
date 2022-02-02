@@ -7,16 +7,10 @@ import 'swiper/swiper-bundle.min.css';
 import 'swiper/swiper.min.css';
 
 import { INFT } from '../../types';
-import {
-  NFTItemAsset,
-  NFTItemAuctionTimer,
-  NFTItemBindings,
-  NFTItemFooter,
-  NFTItemPrice,
-  NFTItemPriceInfo,
-} from './components';
+import { NFTItemAsset, NFTItemFooter, NFTItemRelation } from './components';
 import { ItemWrapper } from '../../../../components';
 import * as styles from './styles';
+import { NFTRelationType } from '../../enums';
 
 interface INftItemProps {
   nft: INFT;
@@ -27,10 +21,7 @@ interface INftItemProps {
   renderHeader?: React.ReactNode | null;
   renderContent?: React.ReactNode | null;
   renderFooter?: React.ReactNode | null;
-  renderNFTName?: React.ReactNode | null;
-  renderNFTPrice?: React.ReactNode | null;
   renderNFTAdditions?: React.ReactNode | null;
-  renderNFTPriceInfo?: React.ReactNode | null;
   renderAuctionTime?: React.ReactNode | null;
   renderAssetLabel?: React.ReactNode;
 
@@ -46,21 +37,18 @@ export const NftItem = (
     bundleNFTs = [],
     isSelected,
     selectedLabel,
-    onAuctionTimeOut,
 
     renderHeader = null,
     renderContent,
     renderFooter,
-    renderNFTName,
-    renderNFTPrice,
     renderNFTAdditions,
-    renderNFTPriceInfo,
     renderAuctionTime,
     renderAssetLabel,
 
     assetLabelContainerProps,
 
     onClick,
+    onAuctionTimeOut,
   }: INftItemProps
 ) => {
   const [showAuctionTimer, setShowAuctionTimer] = useState(false);
@@ -123,20 +111,26 @@ export const NftItem = (
       <Box {...styles.NFTContentStyle}>
         {renderContent || renderContent === null ? renderContent : (
           <>
-            <Box {...styles.FirstContentRowStyle}>
-              {renderNFTName || renderNFTName === null ? renderNFTName : <Text>{nft.name}</Text>}
-              {/*TODO: provide price*/}
-              {/*{renderNFTPrice || renderNFTPrice === null ? renderNFTPrice : (nft.price && (*/}
-              {/*  <NFTItemPrice price={nft.price} />*/}
-              {/*))}*/}
-            </Box>
+            <Text fontSize={'14px'} fontWeight={700} mb={'12px'}>{nft.name}</Text>
 
-            <Box {...styles.SecondContentRowStyle}>
-              <NFTItemBindings creator={nft.creator} collection={nft.collection} owner={nft.owner} />
-              {/*TODO: provide offer price*/}
-              {/*{renderNFTPriceInfo || renderNFTPriceInfo === null ? renderNFTPriceInfo : (*/}
-              {/*  <NFTItemPriceInfo offerPrice={nft.offerPrice} lastPrice={nft.lastPrice} />*/}
-              {/*)}*/}
+            <Box mb={'14px'}>
+              <Box>
+                <NFTItemRelation
+                  type={NFTRelationType.CREATOR}
+                  image={nft.creator?.profileImageUrl ?? ''}
+                  value={nft.creator?.displayName ?? ''}
+                />
+                <NFTItemRelation
+                  type={NFTRelationType.COLLECTION}
+                  image={nft.collection?.coverUrl ?? ''}
+                  value={nft.collection?.name ?? ''}
+                />
+                <NFTItemRelation
+                  type={NFTRelationType.OWNER}
+                  image={nft.owner?.profileImageUrl ?? ''}
+                  value={nft.owner?.displayName ?? ''}
+                />
+              </Box>
             </Box>
           </>
         )}

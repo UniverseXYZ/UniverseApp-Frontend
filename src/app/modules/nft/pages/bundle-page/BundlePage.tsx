@@ -17,6 +17,8 @@ import { useHistory, useParams } from 'react-router-dom';
 import { uniqBy } from 'lodash';
 import ReactReadMoreReadLess from 'react-read-more-read-less';
 
+import AudioNFTPreviewImage from './../../../../../assets/images/v2/audio-nft-preview.png';
+
 import * as styles from '../nft-page/styles';
 import * as styles2 from './styles';
 import {
@@ -29,15 +31,14 @@ import {
   // TabOffers,
 } from '../nft-page/components';
 import { TabBids, TabHistory, TabOffers } from '../nft-page/components/nft-info/components';
-import { BundleMenu, NftItem, NFTPageRelation, RelationType } from '../../components';
+import { BundleMenu, NftItem, NFTPageRelation } from '../../components';
 import { LineTabList } from '../../../../components';
 import { useThemeContext } from '../../../../../contexts/ThemeContext';
 import { BundlePageProvider, useBundlePage } from './BundlePage.provider';
 import { TabNFTs } from './components';
 import { IERC721BundleAssetType, INFT } from '../../types';
 import { isNFTAssetAudio, isNFTAssetImage, isNFTAssetVideo } from '../../helpers';
-
-import AudioNFTPreviewImage from './../../../../../assets/images/v2/audio-nft-preview.png';
+import { NFTRelationType } from '../../enums';
 
 export const BundlePageContent = () => {
   const router = useHistory();
@@ -113,7 +114,11 @@ export const BundlePageContent = () => {
             </Flex>
 
             <Flex>
-              <NFTPageRelation type={RelationType.CREATOR} image={owner.profileImageUrl} value={owner.displayName} />
+              <NFTPageRelation
+                type={NFTRelationType.CREATOR}
+                image={owner.profileImageUrl ?? ''}
+                value={owner.displayName ?? ''}
+              />
             </Flex>
 
             <Text mt={'24px'} {...styles.DescriptionStyle}>

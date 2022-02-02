@@ -119,7 +119,15 @@ const routes = {
   '*': new UniverseRoute(NotFound, false, false, { exact: false }),
 };
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      refetchOnWindowFocus: false,
+      refetchOnMount: false,
+      refetchOnReconnect: false,
+    },
+  },
+});
 
 const App = () => {
   const location = useLocation();

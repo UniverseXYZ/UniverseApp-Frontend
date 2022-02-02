@@ -1,31 +1,35 @@
 import { Box, Button, Container, Flex, Heading, Link, SimpleGrid, Text } from '@chakra-ui/react';
 import { useFormik } from 'formik';
 import React, { useCallback, useRef, useState } from 'react';
-import { useInfiniteQuery, useMutation, useQuery } from 'react-query';
+import { useInfiniteQuery, useMutation } from 'react-query';
 import axios from 'axios';
+import { utils } from 'ethers';
 
 import {
   ArtistsFilter,
   CollectionsFilter,
+  ICollectionsFilterValue,
+  INftTypeFilterValue,
+  IPriceRangeFilterValue,
   ISaleTypeFilterValue,
   NFTTypeFilter,
   PriceRangeFilter,
   SaleTypeFilter,
-  INftTypeFilterValue,
-  IPriceRangeFilterValue,
-  ICollectionsFilterValue,
 } from '../../components';
 import { SortNftsOptions } from '../../constants';
 import { BackToTopButton, Select } from '../../../../components';
 import { NftItem } from '../../../nft/components';
 import { IERC721AssetType, IERC721BundleAssetType, INFT, IOrder, IOrderBackend } from '../../../nft/types';
-import { useStickyHeader, useStickyHeader2 } from '../../../../hooks';
+import { useStickyHeader2 } from '../../../../hooks';
 import { coins } from '../../../../mocks';
 import { mapBackendOrder } from '../../../nft';
 import { ORDERS_PER_PAGE } from './constants';
 import { GetNFTApi } from '../../../nft/api';
 
-import BrowseNFTsIntroImage from './../../../../../assets/images/marketplace/v2/browse_nfts_intro.png'
+import BrowseNFTsIntroImage from './../../../../../assets/images/marketplace/v2/browse_nfts_intro.png';
+import { NFTItemContentWithPrice } from '../../../nft/components/nft-item/components';
+import { Tokens } from '../../../../enums';
+import { TOKENS_MAP } from '../../../../constants';
 
 export const BrowseNFTsPage = () => {
   const saleTypeFilterForm = useFormik<ISaleTypeFilterValue>({
@@ -187,7 +191,7 @@ export const BrowseNFTsPage = () => {
   //   }
   // });
 
-  const { data: ordersResult, fetchNextPage, hasNextPage } = useInfiniteQuery('browse-nfts:orders', async ({ pageParam = 1 }) => {
+  const { data: ordersResult, fetchNextPage, hasNextPage, isFetching } = useInfiniteQuery('browse-nfts:orders', async ({ pageParam = 1 }) => {
     const [data, total] = (await axios.get<[IOrderBackend[], number]>(
       `${process.env.REACT_APP_MARKETPLACE_BACKEND}/v1/orders`,
       {
@@ -390,16 +394,6 @@ export const BrowseNFTsPage = () => {
       <Box px={'20px'} pt={{ base: '20px', md: 0, }}>
         <Container maxW={'1360px'} pt={'0 !important'} position={'relative'}>
           <SimpleGrid columns={{ base: 1, md: 2, lg: 4 }} spacingX={'20px'} spacingY={'30px'} mb={'40px'}>
-            {/*{nfts.map((nft, i) => {*/}
-            {/*  return (*/}
-            {/*    <NftItem*/}
-            {/*      key={nft.id}*/}
-            {/*      // @ts-ignore*/}
-            {/*      nft={nft as INFT}*/}
-            {/*      onAuctionTimeOut={() => handleNFTAuctionTimeOut(i)}*/}
-            {/*    />*/}
-            {/*  );*/}
-            {/*})}*/}
             {(ordersResult?.pages ?? []).map((page) => {
               return page.data.map(({ order, NFTs }) => {
                 if (!NFTs.length) {
@@ -407,14 +401,29 @@ export const BrowseNFTsPage = () => {
                 }
 
                 return (
-                  <NftItem key={order.id} nft={NFTs[0]} bundleNFTs={NFTs.slice(1)} />
+                  <NftItem
+                    key={order.id}
+                    nft={NFTs[0]}
+                    bundleNFTs={NFTs.slice(1)}
+                    renderContent={(
+                      <NFTItemContentWithPrice
+                        name={NFTs[0].name}
+                        creator={NFTs[0].creator}
+                        collection={NFTs[0].collection}
+                        owner={NFTs[0].owner}
+                        price={+utils.formatUnits(order.take.value, `${TOKENS_MAP[order.take.assetType.assetClass as Tokens].decimals}`)}
+                        priceToken={order.take.assetType.assetClass as Tokens}
+                      />
+                    )}
+                  />
                 );
               })
             })}
           </SimpleGrid>
-          {/*{(ordersResult?.pages.length ?? 0) * ORDERS_PER_PAGE < ordersResult?.pages}*/}
           {hasNextPage && (
-            <Button variant={'outline'} isFullWidth mb={'20px'} onClick={() => fetchNextPage()}>Load More</Button>
+            <Button variant={'outline'} isFullWidth mb={'20px'} onClick={() => fetchNextPage()}>
+              {isFetching ? 'Loading...' : 'Load More'}
+            </Button>
           )}
           <BackToTopButton />
         </Container>
