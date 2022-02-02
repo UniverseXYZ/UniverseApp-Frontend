@@ -103,6 +103,8 @@ export const SellPage = () => {
           assetClass: 'ERC721_BUNDLE',
           contracts: contracts,
           tokenIds: tokenIds,
+          bundleName: values.bundleName,
+          bundleDescription: values.bundleDescription,
         };
       }
 

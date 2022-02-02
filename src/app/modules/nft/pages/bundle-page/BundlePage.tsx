@@ -34,7 +34,7 @@ import { LineTabList } from '../../../../components';
 import { useThemeContext } from '../../../../../contexts/ThemeContext';
 import { BundlePageProvider, useBundlePage } from './BundlePage.provider';
 import { TabNFTs } from './components';
-import { INFT } from '../../types';
+import { IERC721BundleAssetType, INFT } from '../../types';
 import { isNFTAssetAudio, isNFTAssetImage, isNFTAssetVideo } from '../../helpers';
 
 import AudioNFTPreviewImage from './../../../../../assets/images/v2/audio-nft-preview.png';
@@ -106,7 +106,7 @@ export const BundlePageContent = () => {
               mb: '12px',
               justifyContent: 'space-between'
             }}>
-              <Heading {...styles2.NameStyle}>Bundle long name</Heading>
+              <Heading {...styles2.NameStyle}>{(order.make.assetType as IERC721BundleAssetType).bundleName}</Heading>
               <Box>
                 <BundleMenu />
               </Box>
@@ -117,10 +117,8 @@ export const BundlePageContent = () => {
             </Flex>
 
             <Text {...styles2.DescriptionStyle}>
-              Cras vel eget vitae quis scelerisque arcu ut.
-              Tristique velit nec sed sit massa. Odio molestie velit purus at blandit.
-              Lacus, fusce quam dolor imperdiet velit augue neque tincidunt lorem et diam...
-              <Link>Read more</Link>
+              {(order.make.assetType as IERC721BundleAssetType).bundleDescription}
+              {/*<Link>Read more</Link>*/}
             </Text>
 
             <Tabs>
