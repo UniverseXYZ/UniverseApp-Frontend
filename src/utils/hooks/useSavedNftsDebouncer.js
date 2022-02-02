@@ -67,7 +67,6 @@ export const useSearchSavedNfts = (triggerRefetch, setTriggerRefetch) => {
   const search = useAsyncAbortable(
     async (abortSignal, text) => {
       if (triggerRefetch) {
-        console.log('Setting to false');
         setTriggerRefetch(false);
       }
       const endpoint = buildSavedNftsUrl(perPage * apiPage, perPage);

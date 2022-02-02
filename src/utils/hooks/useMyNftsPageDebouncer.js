@@ -20,7 +20,7 @@ const buildMyNftsEndpointUrl = (offset, perPage, text, collections) => {
 export const useSearchMyNfts = () => {
   const debounceInterval = 500;
   // Must be > 32 because we need at least 2 pages in order for the continuous load to work
-  const perPage = 10;
+  const perPage = 33;
   const [inputText, setInputText] = useState('');
   const [apiPage, setApiPage] = useState(0);
   const [results, setResults] = useState([]);

@@ -63,9 +63,6 @@ const SavedNFTs = ({
     }
   }, [results]);
 
-  // setInterval(() => {
-  //   setTriggerRefetch(true);
-  // }, 3000);
   const handleSavedNfts = (index) => {
     const newSavedNfts = [...savedNftData?.nfts] || [];
     newSavedNfts[index].selected = !newSavedNfts[index].selected;
