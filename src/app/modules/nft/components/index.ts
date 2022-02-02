@@ -1,3 +1,4 @@
+export * from './bundle-item';
 export * from './bundle-menu';
 export * from './nft-item';
 export * from './nft-likes-popup';

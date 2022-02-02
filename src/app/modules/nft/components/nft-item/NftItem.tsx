@@ -1,11 +1,14 @@
 import { Box, BoxProps, Text } from '@chakra-ui/react';
 import React, { useCallback, useState } from 'react';
+import { Swiper, SwiperSlide } from 'swiper/react/swiper-react';
+import { Navigation, Pagination } from 'swiper';
 
-import { INFT, NFTArtworkType } from '../../types';
+import 'swiper/swiper-bundle.min.css';
+import 'swiper/swiper.min.css';
+
+import { INFT } from '../../types';
 import {
   NFTItemAsset,
-  NFTItemAssetAudioLabel,
-  NFTItemAssetVideoLabel,
   NFTItemAuctionTimer,
   NFTItemBindings,
   NFTItemFooter,
@@ -13,7 +16,6 @@ import {
   NFTItemPriceInfo,
 } from './components';
 import { ItemWrapper } from '../../../../components';
-import { isNFTAssetAudio, isNFTAssetImage, isNFTAssetVideo } from '../../helpers';
 import * as styles from './styles';
 
 interface INftItemProps {
@@ -32,7 +34,6 @@ interface INftItemProps {
   renderAuctionTime?: React.ReactNode | null;
   renderAssetLabel?: React.ReactNode;
 
-  showAssetTypeLabels?: boolean;
   assetLabelContainerProps?: BoxProps;
 
   onClick?: (nft: INFT) => void;
@@ -57,7 +58,6 @@ export const NftItem = (
     renderAuctionTime,
     renderAssetLabel,
 
-    showAssetTypeLabels = true,
     assetLabelContainerProps,
 
     onClick,
@@ -75,10 +75,6 @@ export const NftItem = (
   //   setShowAuctionTimer(nft.auctionExpDate && renderAuctionTime !== null);
   // }, [nft.auctionExpDate, renderAuctionTime]);
 
-  const isImage = isNFTAssetImage(nft.artworkType);
-  const isVideo = isNFTAssetVideo(nft.artworkType);
-  const isAudio = isNFTAssetAudio(nft.artworkType);
-
   return (
     <ItemWrapper
       isBundle={!!(nft.numberOfEditions > 1 || bundleNFTs?.length)}
@@ -93,22 +89,29 @@ export const NftItem = (
     >
       {renderHeader}
 
-      <Box
-        {...styles.AssetContainerStyle}
-        borderRadius={renderHeader ? '' : '12px 12px 0 0'}
-      >
-        <NFTItemAsset nft={nft} bundleNFTs={bundleNFTs} showSwiperPagination={!showAuctionTimer} />
-
-        <Box {...styles.AssetLabelContainerStyle} {...assetLabelContainerProps}>
-          {renderAssetLabel || renderAssetLabel === null ? renderAssetLabel : (
-            showAssetTypeLabels && (
-              <>
-                {isAudio && (<NFTItemAssetAudioLabel />)}
-                {isVideo && (<NFTItemAssetVideoLabel />)}
-              </>
-            )
-          )}
-        </Box>
+      <Box{...styles.AssetContainerStyle} borderRadius={renderHeader ? '' : '12px 12px 0 0'}>
+        {!bundleNFTs?.length
+          ? <NFTItemAsset NFT={nft} renderAssetLabel={renderAssetLabel} />
+          : (
+            <Box {...styles.SwiperStyle}>
+              <Swiper
+                modules={[Navigation, Pagination]}
+                navigation={true}
+                pagination={!showAuctionTimer && {
+                  dynamicBullets: true,
+                  clickable: true,
+                }}
+                loop={true}
+              >
+                {[nft, ...bundleNFTs].map((NFT, i) => (
+                  <SwiperSlide key={i}>
+                    <NFTItemAsset NFT={NFT} renderAssetLabel={renderAssetLabel} />
+                  </SwiperSlide>
+                ))}
+              </Swiper>
+            </Box>
+          )
+        }
 
         {/*TODO: auction*/}
         {/*{showAuctionTimer && (*/}
@@ -142,6 +145,8 @@ export const NftItem = (
           <NFTItemFooter
             nft={nft}
             renderNFTAdditions={renderNFTAdditions}
+            /*TODO: remove +1 trick*/
+            bundleNFTsLength={bundleNFTs?.length ? bundleNFTs.length + 1 : 0}
           />
         )}
       </Box>
