@@ -5,7 +5,7 @@ import { handleTabLeftScrolling, handleTabRightScrolling } from '../../utils/scr
 import tabArrow from '../../assets/images/tab-arrow.svg';
 import './Tabs.scss';
 
-const Tabs = ({ items }) => (
+const Tabs = ({ items, scrollContainer }) => (
   <div className="container tabs__wrapper">
     <div className="tab__left__arrow">
       <img
@@ -15,7 +15,7 @@ const Tabs = ({ items }) => (
         alt="Tab left arrow"
       />
     </div>
-    <div className="tabs">
+    <div className="tabs" ref={scrollContainer}>
       <ul className="tab_items">
         {items.map((tab, index) =>
           tab.name !== 'Hidden' && tab.name !== 'Liked' ? (
@@ -80,6 +80,7 @@ Tabs.propTypes = {
       label: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     })
   ).isRequired,
+  scrollContainer: PropTypes.oneOfType([PropTypes.object]).isRequired,
 };
 
 export default Tabs;

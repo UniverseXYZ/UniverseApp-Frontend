@@ -28,6 +28,7 @@ const SavedNFTs = ({
   selectedSavedNfts,
   triggerRefetch,
   setTriggerRefetch,
+  scrollContainer,
 }) => {
   const { setSavedNfts } = useMyNftsContext();
 
@@ -161,6 +162,16 @@ const SavedNFTs = ({
     }
     setPerPage(newPerPage);
   };
+
+  const scrollToNftContainer = () => {
+    if (scrollContainer && scrollContainer.current) {
+      scrollContainer.current.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+  };
+
+  useEffect(() => {
+    scrollToNftContainer();
+  }, [page, perPage]);
 
   return (
     <div className="tab__saved__nfts">
@@ -337,5 +348,6 @@ SavedNFTs.propTypes = {
   selectedSavedNfts: PropTypes.oneOfType([PropTypes.array]).isRequired,
   triggerRefetch: PropTypes.bool.isRequired,
   setTriggerRefetch: PropTypes.func.isRequired,
+  scrollContainer: PropTypes.oneOfType([PropTypes.object]).isRequired,
 };
 export default SavedNFTs;

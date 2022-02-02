@@ -1,6 +1,7 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import uuid from 'react-uuid';
+import PropTypes from 'prop-types';
 import bubbleIcon from '../../assets/images/text-bubble.png';
 import plusIcon from '../../assets/images/plus.svg';
 import { useAuthContext } from '../../contexts/AuthContext';
@@ -20,7 +21,7 @@ import { getMyMintingCollectionsCount, getMyMintingCollections } from '../../uti
 
 const CORE_COLLECTION_ADDRESS = process.env.REACT_APP_UNIVERSE_ERC_721_ADDRESS;
 
-const DeployedCollections = () => {
+const DeployedCollections = ({ scrollContainer }) => {
   const nftPollInterval = null;
   let collPollInterval = null;
   const pollingInterval = 10000;
@@ -97,8 +98,20 @@ const DeployedCollections = () => {
     }
   }, [mintingCollectionsCount]);
 
+  const collectionsContainerRef = useRef(null);
+
+  const scrollToCollectionsContainer = () => {
+    if (scrollContainer && scrollContainer.current) {
+      scrollContainer.current.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+  };
+
+  useEffect(() => {
+    scrollToCollectionsContainer();
+  }, [page, perPage]);
+
   return (
-    <div className="tab__saved__collections">
+    <div className="tab__saved__collections" ref={collectionsContainerRef}>
       <PendingCollections myMintingCollections={mintingCollections} />
       {isSearching ? (
         <div className="saved__collections__lists">
@@ -223,5 +236,7 @@ const DeployedCollections = () => {
     </div>
   );
 };
-
+DeployedCollections.propTypes = {
+  scrollContainer: PropTypes.oneOfType([PropTypes.object]).isRequired,
+};
 export default DeployedCollections;

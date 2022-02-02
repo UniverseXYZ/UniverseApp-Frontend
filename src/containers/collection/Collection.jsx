@@ -75,7 +75,7 @@ const Collection = () => {
 
   const scrollToNftContainer = () => {
     if (nftsContainerRef && nftsContainerRef.current) {
-      nftsContainerRef.current.scrollIntoView({ behavior: 'smooth' });
+      nftsContainerRef.current.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     }
   };
 

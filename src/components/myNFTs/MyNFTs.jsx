@@ -45,6 +45,8 @@ const MyNFTs = () => {
 
   const { setDarkMode } = useThemeContext();
 
+  const scrollContainer = useRef(null);
+
   // State hooks
   const [showloading, setShowLoading] = useState(false);
   const [showCongrats, setShowCongrats] = useState(false);
@@ -144,6 +146,7 @@ const MyNFTs = () => {
 
   const renderTabsWrapper = () => (
     <Tabs
+      scrollContainer={scrollContainer}
       items={tabs.map((tab, index) => ({
         name: tab,
         active: myNFTsSelectedTabIndex === index,
@@ -298,14 +301,15 @@ const MyNFTs = () => {
       </div>
 
       <div className="container mynfts__page__body">
-        {myNFTsSelectedTabIndex === 0 && <Wallet />}
-        {myNFTsSelectedTabIndex === 1 && <DeployedCollections />}
+        {myNFTsSelectedTabIndex === 0 && <Wallet scrollContainer={scrollContainer} />}
+        {myNFTsSelectedTabIndex === 1 && <DeployedCollections scrollContainer={scrollContainer} />}
         {myNFTsSelectedTabIndex === 2 && (
           <SavedNFTs
             selectedSavedNfts={selectedSavedNfts}
             setSelectedSavedNfts={setSelectedSavedNfts}
             triggerRefetch={triggerRefetch}
             setTriggerRefetch={setTriggerRefetch}
+            scrollContainer={scrollContainer}
           />
         )}
         {myNFTsSelectedTabIndex === 3 && <UniverseNFTs />}

@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import '../pagination/Pagination.scss';
 import '../marketplace/browseNFT/NFTsList.scss';
+import PropTypes from 'prop-types';
 import NFTCard from '../nft/NFTCard';
 import PendingNFTs from './pendingDropdown/pendingNFTs/PendingNFTs';
 import NftCardSkeleton from '../skeletons/nftCardSkeleton/NftCardSkeleton';
@@ -17,7 +18,7 @@ import {
 } from '../../utils/api/mintNFT';
 import { useMyNftsContext } from '../../contexts/MyNFTsContext';
 
-const Wallet = React.memo(() => {
+const Wallet = React.memo(({ scrollContainer }) => {
   const [perPage, setPerPage] = useState(8);
   const [offset, setOffset] = useState(0);
   const [page, setPage] = useState(0);
@@ -86,11 +87,6 @@ const Wallet = React.memo(() => {
 
   useEffect(() => {
     if (mintingNftsCount && !nftPollInterval) {
-      // setTimeout(async () => {
-      //   // We need to wait a bit as the API isn't fast enough
-      // let [myNfts, mintingNftsCount] = await Promise.all([getMyNfts(), getMyMintingNftsCount()]);
-      // setMyNFTs(myNfts);
-      // setMyMintingNFTs(mintingNfts);
       nftPollInterval = setInterval(async () => {
         const nftCount = await getMyMintingNftsCount();
         if (nftCount !== mintingNftsCount) {
@@ -103,7 +99,6 @@ const Wallet = React.memo(() => {
           }
         }
       }, pollingInterval);
-      // }, 1000);
     } else if (!mintingNftsCount && nftPollInterval) {
       clearInterval(nftPollInterval);
     }
@@ -119,6 +114,16 @@ const Wallet = React.memo(() => {
     }
     setPerPage(newPerPage);
   };
+
+  const scrollToNftContainer = () => {
+    if (scrollContainer && scrollContainer.current) {
+      scrollContainer.current.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+  };
+
+  useEffect(() => {
+    scrollToNftContainer();
+  }, [page, perPage]);
 
   return (
     <div className="tab__wallet">
@@ -185,9 +190,7 @@ const Wallet = React.memo(() => {
   );
 });
 
-// Wallet.propTypes = {
-//   myNFTs: PropTypes.oneOfType([PropTypes.array]).isRequired,
-//   myNftsLoading: PropTypes.bool.isRequired,
-//   myMintingNFTs: PropTypes.oneOfType([PropTypes.array]).isRequired,
-// };
+Wallet.propTypes = {
+  scrollContainer: PropTypes.oneOfType([PropTypes.object]).isRequired,
+};
 export default Wallet;
