@@ -25,7 +25,8 @@ import {
 import { useMyNftsContext } from '../../../contexts/MyNFTsContext.jsx';
 import { useAuthContext } from '../../../contexts/AuthContext.jsx';
 import { useErrorContext } from '../../../contexts/ErrorContext';
-import Contracts from '../../../contracts/contracts.json';
+import RevenueSplits from '../revenueSplits/RevenueSplits.jsx';
+import SocialConnections from '../socialConnections/SocialConnections.jsx';
 
 const MAX_FIELD_CHARS_LENGTH = {
   name: 32,
@@ -67,8 +68,6 @@ const NFTCollectionForm = ({ showCollectible, setShowCollectible }) => {
   const [border, setBorder] = useState(false);
   const [showLoading, setShowLoading] = useState(false);
   const [showCongrats, setShowCongrats] = useState(false);
-  const [trasnactionLink, setTransactionLink] = useState('');
-
   const [errors, setErrors] = useState({
     coverImage: '',
     collectionName: '',
@@ -76,6 +75,14 @@ const NFTCollectionForm = ({ showCollectible, setShowCollectible }) => {
     collectible: '',
     shorturl: '',
   });
+  const [showRevenueSplits, setShowRevenueSplits] = useState(true);
+  const [revenueSplits, setRevenueSplits] = useState([{ walletAddress: '', amount: '10' }]);
+  const [revenueSplitsValidAddress, setRevenueSplitsValidAddress] = useState(true);
+  const [siteLink, setSiteLink] = useState('');
+  const [discordLink, setDiscordLink] = useState('');
+  const [instagramLink, setInstagramLink] = useState('');
+  const [mediumLink, setMediumLink] = useState('');
+  const [telegramLink, setTelegramLink] = useState('');
 
   const validateFile = (file) => {
     setMintNowClick(false);
@@ -353,7 +360,7 @@ const NFTCollectionForm = ({ showCollectible, setShowCollectible }) => {
           message="NFT collection was successfully created/updated and should be displayed in your wallet shortly"
         />
       </Popup>
-      <div className="image--name--token">
+      <div className={`image--name--token${location.state?.collection?.id ? ' align-center' : ''}`}>
         <div className="collection--cover--image">
           <div
             className={`dropzone collection--cover--image--circle
@@ -408,44 +415,25 @@ const NFTCollectionForm = ({ showCollectible, setShowCollectible }) => {
           <input type="file" ref={inputFile} onChange={(e) => validateFile(e.target.files[0])} />
         </div>
         <div className="collection--name--and--token">
-          <div className={`collection--name ${location.state?.collection?.id ? 'inactive' : ''}`}>
-            {location.state?.collection?.id ? (
-              <Input
-                label="Collection name"
-                error={errors.collectionName}
-                placeholder="Enter the collection name"
-                value={collectionName}
-                disabled
-              />
-            ) : (
-              <Input
-                label="Collection name"
-                error={errors.collectionName}
-                placeholder="Enter the collection name"
-                onChange={(e) => {
-                  if (e.target.value.length > MAX_FIELD_CHARS_LENGTH.name) return;
-                  handleCollectionName(e.target.value);
-                  setShowPrompt(true);
-                }}
-                value={collectionName}
-                hoverBoxShadowGradient
-              />
-            )}
+          <div className="collection--name">
+            <Input
+              label="Collection name"
+              error={errors.collectionName}
+              placeholder="Enter the collection name"
+              onChange={(e) => {
+                if (e.target.value.length > MAX_FIELD_CHARS_LENGTH.name) return;
+                handleCollectionName(e.target.value);
+                setShowPrompt(true);
+              }}
+              value={collectionName}
+              hoverBoxShadowGradient
+            />
             <p className="input-max-chars">
               {collectionName?.length}/{MAX_FIELD_CHARS_LENGTH.name}
             </p>
-            <p className="warning">Collection name cannot be changed in future</p>
           </div>
-          <div className={`collection--token ${location.state?.collection?.id ? 'inactive' : ''}`}>
-            {location.state?.collection?.id ? (
-              <Input
-                label="Token name"
-                error={errors.tokenName}
-                placeholder="$ART"
-                value={tokenName}
-                disabled
-              />
-            ) : (
+          {!location.state?.collection?.id ? (
+            <div className="collection--token">
               <Input
                 label="Token name"
                 error={errors.tokenName}
@@ -458,13 +446,16 @@ const NFTCollectionForm = ({ showCollectible, setShowCollectible }) => {
                 value={tokenName}
                 hoverBoxShadowGradient
               />
-            )}
-
-            <p className="input-max-chars">
-              {tokenName?.length}/{MAX_FIELD_CHARS_LENGTH.token}
-            </p>
-            {!errors.tokenName && <p className="warning">Token name cannot be changed in future</p>}
-          </div>
+              <p className="input-max-chars">
+                {tokenName?.length}/{MAX_FIELD_CHARS_LENGTH.token}
+              </p>
+              {!errors.tokenName && (
+                <p className="warning">Token name cannot be changed in future</p>
+              )}
+            </div>
+          ) : (
+            <></>
+          )}
         </div>
       </div>
       <div className="collection--description">
@@ -487,6 +478,26 @@ const NFTCollectionForm = ({ showCollectible, setShowCollectible }) => {
           {description ? description.length : 0}/{MAX_FIELD_CHARS_LENGTH.description}
         </p>
       </div>
+      <RevenueSplits
+        showRevenueSplits={showRevenueSplits}
+        setShowRevenueSplits={setShowRevenueSplits}
+        revenueSplits={revenueSplits}
+        setRevenueSplits={setRevenueSplits}
+        revenueSplitsValidAddress={revenueSplitsValidAddress}
+        setRevenueSplitsValidAddress={setRevenueSplitsValidAddress}
+      />
+      <SocialConnections
+        siteLink={siteLink}
+        setSiteLink={setSiteLink}
+        discordLink={discordLink}
+        setDiscordLink={setDiscordLink}
+        instagramLink={instagramLink}
+        setInstagramLink={setInstagramLink}
+        mediumLink={mediumLink}
+        setMediumLink={setMediumLink}
+        telegramLink={telegramLink}
+        setTelegramLink={setTelegramLink}
+      />
       <div className="collection--nfts">
         {(errors.collectionName || errors.tokenName) && (
           <div className="collection--final--error">
