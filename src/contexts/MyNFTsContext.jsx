@@ -1,31 +1,11 @@
 import React, { createContext, useState, useEffect, useContext } from 'react';
 import PropTypes from 'prop-types';
 import { useHistory } from 'react-router';
-import { useAuthContext } from './AuthContext';
-import {
-  getMyMintableCollections,
-  getMyMintedCollections,
-  getMyMintingCollections,
-  getMyMintingCollectionsCount,
-  getMyMintingNfts,
-  getMyMintingNftsCount,
-  getMyNfts,
-  getNftSummary,
-  getSavedNfts,
-} from '../utils/api/mintNFT';
-import universeIcon from '../assets/images/universe-img.svg';
+import { getNftSummary } from '../utils/api/mintNFT';
 
 const MyNFTsContext = createContext(null);
 
 const MyNFTsContextProvider = ({ children }) => {
-  const {
-    loggedInArtist,
-    isWalletConnected,
-    deployedCollections,
-    setDeployedCollections,
-    isAuthenticated,
-  } = useAuthContext();
-
   const history = useHistory();
 
   const allCharactersFilter = 'All Characters';
@@ -49,7 +29,6 @@ const MyNFTsContextProvider = ({ children }) => {
   const [myMintingCollections, setMyMintingCollections] = useState([]);
   const [mintingNftsCount, setMintingNftsCount] = useState(0);
   const [mintingCollectionsCount, setMintingCollectionsCount] = useState(0);
-  const [universeCollection, setUniverseCollection] = useState(null);
   const [myNftsLoading, setMyNftsLoading] = useState(true);
   const [myMintableCollections, setMyMintableCollections] = useState([]);
   const [userPageNftsCount, setUserPageNftsCount] = useState(0);
@@ -60,48 +39,6 @@ const MyNFTsContextProvider = ({ children }) => {
     const summary = await getNftSummary();
     setNftSummary(summary);
   };
-
-  const fetchNfts = async () => {
-    try {
-      setMyNftsLoading(true);
-
-      const mintableCollections = await getMyMintableCollections(0, 1000);
-
-      const universeColl = mintableCollections.collections.filter(
-        (coll) =>
-          coll.address.toLowerCase() ===
-          process.env.REACT_APP_UNIVERSE_ERC_721_ADDRESS.toLowerCase()
-      )[0];
-
-      if (!universeColl) {
-        alert('Failed to load Universe Core collection');
-      } else {
-        setUniverseCollection({
-          ...universeColl,
-          coverUrl: universeIcon,
-        });
-      }
-    } catch (err) {
-      alert(
-        'Failed to fetch nfts. Most likely due to failed notifcation. Please sign out and sign in again.'
-      );
-    }
-  };
-
-  useEffect(() => {
-    const mapping = {};
-    deployedCollections.forEach((collection) => {
-      mapping[collection.id] = collection.address;
-    });
-    setCollectionsIdAddressMapping(mapping);
-  }, [deployedCollections]);
-
-  useEffect(() => {
-    const canRequestData = loggedInArtist && isWalletConnected && isAuthenticated;
-    if (canRequestData) {
-      fetchNfts();
-    }
-  }, [loggedInArtist, isWalletConnected, isAuthenticated]);
 
   const navigateToMyUniverseNFTsTab = (characterFilter) => {
     setCollectionFilter(characterFilter);
@@ -153,7 +90,6 @@ const MyNFTsContextProvider = ({ children }) => {
         setMintingNftsCount,
         mintingCollectionsCount,
         setMintingCollectionsCount,
-        universeCollection,
         myNftsLoading,
         myMintableCollections,
         setMyMintableCollections,

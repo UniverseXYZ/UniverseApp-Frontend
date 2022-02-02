@@ -199,7 +199,7 @@ const Collection = () => {
                   } light-button`}
                   onClick={() =>
                     history.push('/my-nfts/create', {
-                      collection: collectionData.collection,
+                      collectionId: collectionData.collection,
                       tabIndex: 1,
                       nftType: 'single',
                     })

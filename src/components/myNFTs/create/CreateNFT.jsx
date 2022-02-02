@@ -57,7 +57,9 @@ const CreateNFT = () => {
             Edit NFT
           </h1>
         )}
-        {!location.state?.collection?.id && <h1 className="page--title">Edit collection</h1>}
+        {location.state?.collection?.id && selectedNFTType === 'collection' && (
+          <h1 className="page--title">Edit collection</h1>
+        )}
         <div className="tab__content">
           {selectedTabIndex === 1 && selectedNFTType === 'single' && <SingleNFTForm />}
           {selectedTabIndex === 1 && selectedNFTType === 'collection' && (

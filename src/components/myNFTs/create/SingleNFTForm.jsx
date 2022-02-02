@@ -42,6 +42,7 @@ import { useMyNftsContext } from '../../../contexts/MyNFTsContext';
 import { useAuthContext } from '../../../contexts/AuthContext';
 import { useErrorContext } from '../../../contexts/ErrorContext';
 import CollectionChoice from './CollectionChoice';
+import universeIcon from '../../../assets/images/universe-img.svg';
 
 const MAX_FIELD_CHARS_LENGTH = {
   name: 32,
@@ -71,17 +72,7 @@ const SAVING_FOR_LATER_LOADING_TEXT =
 const INVALID_ADDRESS_TEXT = 'Please enter valid address or ENS';
 
 const SingleNFTForm = () => {
-  const {
-    myNFTs,
-    setMyNFTs,
-    setMyMintingNFTs,
-    activeTxHashes,
-    setActiveTxHashes,
-    mintingNftsCount,
-    setMintingNftsCount,
-    universeCollection,
-    setMyNFTsSelectedTabIndex,
-  } = useMyNftsContext();
+  const { setActiveTxHashes, setMyNFTsSelectedTabIndex } = useMyNftsContext();
 
   const {
     deployedCollections,
@@ -133,6 +124,8 @@ const SingleNFTForm = () => {
     })
   );
 
+  const [universeCollection, setUniverseCollection] = useState(null);
+
   const [royaltyValidAddress, setRoyaltyValidAddress] = useState(true);
   const [propertiesIndexes, setPropertiesMapIndexes] = useState({});
   const [selectedCollection, setSelectedCollection] = useState(
@@ -154,10 +147,22 @@ const SingleNFTForm = () => {
 
   useEffect(() => {
     (async () => {
-      const mintableColls = await getMyMintableCollections(0, 1000);
+      console.log('Fetching');
+      const mintableColls = await getMyMintableCollections();
       setMintableCollections(mintableColls.collections);
+
+      const universeColl = mintableColls.collections.filter(
+        (coll) =>
+          coll.address.toLowerCase() ===
+          process.env.REACT_APP_UNIVERSE_ERC_721_ADDRESS.toLowerCase()
+      )[0];
+      if (!universeColl) {
+        alert('Failed to load Universe Singularity Collection');
+      } else {
+        setUniverseCollection({ ...universeColl, coverUrl: universeIcon });
+      }
     })();
-  });
+  }, []);
 
   const hasAddressError = (royalty, index) => {
     if (royalty && royaltiesMapIndexes[royalty]) {
@@ -743,7 +748,7 @@ const SingleNFTForm = () => {
       setRoyaltyAddress(res.royalties);
       setRoyaltyAddress(res.royalties || [{ name: '', value: '' }]);
       setProperties(parsedProperties);
-      if (parsedProperties.length) {
+      if (parsedProperties.length && parsedProperties[0].name) {
         setPropertyCheck(true);
       }
       if (res.collectionId) {

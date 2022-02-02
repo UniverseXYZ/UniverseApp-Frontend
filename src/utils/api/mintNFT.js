@@ -377,7 +377,7 @@ export const updateSavedNft = async ({
   }
 };
 
-export const getMyMintableCollections = async (offset, limit) => {
+export const getMyMintableCollections = async () => {
   const requestOptions = {
     method: 'GET',
     headers: {
@@ -385,7 +385,7 @@ export const getMyMintableCollections = async (offset, limit) => {
       Authorization: `Bearer ${localStorage.getItem('xyz_access_token')}`,
     },
   };
-  const url = `${GET_MY_MINTED_COLLECTIONS}?mintable=true&offset=${offset}&limit=${limit}`;
+  const url = `${GET_MY_MINTED_COLLECTIONS}?mintable=true`;
   const request = await fetch(url, requestOptions);
   const result = await request.text().then((res) => JSON.parse(res));
 

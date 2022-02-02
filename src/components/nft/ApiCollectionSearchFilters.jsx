@@ -8,7 +8,6 @@ import CollectionSortingFilters from '../marketplace/browseNFT/selectedFiltersAn
 import filtersIcon from '../../assets/images/marketplace/filters.svg';
 import SelectedFilters from '../marketplace/browseNFT/selectedFiltersAndSorting/SelectedFilters';
 import BrowseFilterPopup from '../popups/BrowseFiltersPopup';
-import ApiSortingFilters from '../marketplace/browseNFT/selectedFiltersAndSorting/ApiSortingFilters';
 
 const ApiCollectionSearchFilters = ({ searchText, search, resetPagination }) => {
   const [showFilters, setShowFilters] = useState(false);
@@ -89,26 +88,6 @@ const ApiCollectionSearchFilters = ({ searchText, search, resetPagination }) => 
           )}
           Filters
         </div>
-        {showFilters && (
-          <ApiSortingFilters
-            saleTypeButtons={saleTypeButtons}
-            setSaleTypeButtons={setSaleTypeButtons}
-            selectedPrice={selectedPrice}
-            setSelectedPrice={setSelectedPrice}
-            sliderValue={sliderValue}
-            setSliderValue={setSliderValue}
-            selectedTokenIndex={selectedTokenIndex}
-            setSelectedTokenIndex={setSelectedTokenIndex}
-            selectedCollections={selectedCollections}
-            setSelectedCollections={setSelectedCollections}
-            savedCollections={savedCollections}
-            setSavedCollections={setSavedCollections}
-            selectedCreators={selectedCreators}
-            setSelectedCreators={setSelectedCreators}
-            savedCreators={savedCreators}
-            setSavedCreators={setSavedCreators}
-          />
-        )}
         {saleTypeButtons.filter((item) => item.selected === true).length > 0 ||
         selectedPrice ||
         savedCollections.length > 0 ||
