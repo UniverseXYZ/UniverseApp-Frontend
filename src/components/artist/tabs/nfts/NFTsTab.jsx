@@ -5,7 +5,7 @@ import bubbleIcon from '../../../../assets/images/text-bubble.png';
 import Button from '../../../button/Button';
 import plusIcon from '../../../../assets/images/PlusIcon.png';
 import NFTCard from '../../../nft/NFTCard';
-import { getMyMintedCollections, getUserCollections } from '../../../../utils/api/mintNFT';
+import { getUserCollections } from '../../../../utils/api/mintNFT';
 import ApiSearchFilters from '../../../nft/ApiSearchFilters';
 import NftCardSkeleton from '../../../skeletons/nftCardSkeleton/NftCardSkeleton';
 import ApiPagination from '../../../pagination/ApiPagination';

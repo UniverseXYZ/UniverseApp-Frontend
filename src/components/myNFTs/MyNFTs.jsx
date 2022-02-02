@@ -312,7 +312,7 @@ const MyNFTs = () => {
             scrollContainer={scrollContainer}
           />
         )}
-        {myNFTsSelectedTabIndex === 3 && <UniverseNFTs />}
+        {myNFTsSelectedTabIndex === 3 && <UniverseNFTs scrollContainer={scrollContainer} />}
         {myNFTsSelectedTabIndex === 4 && <HiddenNFTs />}
         {myNFTsSelectedTabIndex === 5 && <LikedNFTs />}
         {myNFTsSelectedTabIndex === 6 && <NFTsActivity />}

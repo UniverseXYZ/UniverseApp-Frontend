@@ -11,7 +11,7 @@ import CollectionDropdown from './CollectionDropdown';
 import { useThemeContext } from '../../contexts/ThemeContext';
 import { useLobsterContext } from '../../contexts/LobsterContext';
 
-const MyLobstersChart = ({ isDropdownOpened, setIsDropdownOpened }) => {
+const MyLobstersChart = ({ isDropdownOpened, setIsDropdownOpened, scrollContainer }) => {
   const { userLobsters } = useLobsterContext();
   const { setDarkMode } = useThemeContext();
   const [offset, setOffset] = useState(0);
@@ -67,6 +67,16 @@ const MyLobstersChart = ({ isDropdownOpened, setIsDropdownOpened }) => {
     setFilter(newFilter);
   };
 
+  const scrollToNftContainer = () => {
+    if (scrollContainer && scrollContainer.current) {
+      scrollContainer.current.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+  };
+
+  useEffect(() => {
+    scrollToNftContainer();
+  }, [perPage, page]);
+
   return (
     <div className="lobster-rarity--charts--page--container">
       <LobsterRarityFilters
@@ -104,5 +114,6 @@ const MyLobstersChart = ({ isDropdownOpened, setIsDropdownOpened }) => {
 MyLobstersChart.propTypes = {
   isDropdownOpened: PropTypes.bool.isRequired,
   setIsDropdownOpened: PropTypes.func.isRequired,
+  scrollContainer: PropTypes.oneOfType([PropTypes.object]).isRequired,
 };
 export default MyLobstersChart;
