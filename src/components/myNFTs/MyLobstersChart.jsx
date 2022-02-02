@@ -12,7 +12,7 @@ import { useThemeContext } from '../../contexts/ThemeContext';
 import { useLobsterContext } from '../../contexts/LobsterContext';
 
 const MyLobstersChart = ({ isDropdownOpened, setIsDropdownOpened, scrollContainer }) => {
-  const { userLobsters } = useLobsterContext();
+  const { userLobstersWithMetadata, loadLobsterMetadata } = useLobsterContext();
   const { setDarkMode } = useThemeContext();
   const [offset, setOffset] = useState(0);
   const [perPage, setPerPage] = useState(8);
@@ -20,13 +20,20 @@ const MyLobstersChart = ({ isDropdownOpened, setIsDropdownOpened, scrollContaine
   const [sortField, setSortField] = useState('id');
   const [sortDir, setSortDir] = useState('asc');
   const [categories, setCategories] = useState(categoriesArray);
-  const [filteredLobsters, setFilteredLobsters] = useState(userLobsters);
+  const [filteredLobsters, setFilteredLobsters] = useState(userLobstersWithMetadata);
   const [categoriesIndexes, setCategoriesIndexes] = useState([]);
   const [page, setPage] = useState(0);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    loadLobsterMetadata();
+    setLoading(false);
     setDarkMode(true);
   }, []);
+
+  useEffect(() => {
+    setFilteredLobsters(userLobstersWithMetadata);
+  }, [userLobstersWithMetadata]);
 
   const resetPagination = () => {
     setPage(0);
@@ -34,7 +41,7 @@ const MyLobstersChart = ({ isDropdownOpened, setIsDropdownOpened, scrollContaine
   };
 
   useEffect(() => {
-    const filtered = userLobsters
+    const filtered = userLobstersWithMetadata
       .filter((lobster) => lobster.id.includes(searchText))
       .sort((a, b) => {
         let sort = -1;
@@ -107,6 +114,7 @@ const MyLobstersChart = ({ isDropdownOpened, setIsDropdownOpened, scrollContaine
         setOffset={setOffset}
         page={page}
         setPage={setPage}
+        loading={loading}
       />
     </div>
   );
