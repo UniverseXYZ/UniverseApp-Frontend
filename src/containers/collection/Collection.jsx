@@ -119,7 +119,7 @@ const Collection = () => {
           />
         </div>
         <Description selectedCollection={collectionData.collection} />
-        {address !== collectionData?.collection?.owner ? (
+        {address === collectionData?.collection?.owner ? (
           <div className="collection__edit">
             <Button
               className="light-border-button"
