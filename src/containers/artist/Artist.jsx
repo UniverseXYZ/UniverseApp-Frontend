@@ -18,6 +18,7 @@ const Artist = () => {
   const [loading, setLoading] = useState(true);
   const [artistNFTs, setArtistNFTs] = useState([]);
   const [notFound, setNotFound] = useState(false);
+  const [artistAddress, setArtistAddress] = useState('');
 
   useEffect(() => {
     setDarkMode(false);
@@ -35,21 +36,13 @@ const Artist = () => {
           if (!artistInfo.error) {
             const mappedArtist = mapUserData(artistInfo);
             setArtist(mappedArtist);
+            setArtistAddress(artistInfo.address.toLowerCase());
           } else {
             setNotFound(true);
           }
         }
       } catch (err) {
         setNotFound(true);
-        console.log(err);
-      }
-
-      try {
-        const artistNftsInfo = await getUserNfts(artistUsername);
-        if (!artistNftsInfo.error) {
-          setArtistNFTs(artistNftsInfo.nfts);
-        }
-      } catch (err) {
         console.log(err);
       }
 
@@ -92,7 +85,7 @@ const Artist = () => {
   ) : (
     <div className="artist__page">
       <ArtistDetails artistAddress={artistUsername} onArtist={artist} loading={loading} />
-      <ArtistPageTabs nfts={artistNFTs} />
+      <ArtistPageTabs username={artistUsername} artistAddress={artistAddress} />
       {artist && artist.personalLogo ? (
         <div className="artist__personal__logo">
           <img src={artist.personalLogo} alt="Artist personal logo" />

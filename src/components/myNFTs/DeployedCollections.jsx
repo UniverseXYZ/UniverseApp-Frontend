@@ -26,6 +26,7 @@ const DeployedCollections = () => {
   const pollingInterval = 10000;
 
   const history = useHistory();
+  const { fetchNftSummary } = useMyNftsContext();
 
   const coreCollectionFirst = (a, b) => {
     if (a.address === CORE_COLLECTION_ADDRESS) {
@@ -82,7 +83,7 @@ const DeployedCollections = () => {
           const currentlyMinting = await getMyMintingCollections();
           setMintingCollections(currentlyMinting.collections);
           setMintingCollectionsCount(currentlyMinting?.collections?.length || 0);
-
+          fetchNftSummary();
           if (
             !currentlyMinting?.collections?.length ||
             currentlyMinting?.collections?.length === 0

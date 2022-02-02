@@ -15,6 +15,7 @@ import {
   getMyMintingNfts,
   getMyMintingNftsCount,
 } from '../../utils/api/mintNFT';
+import { useMyNftsContext } from '../../contexts/MyNFTsContext';
 
 const Wallet = React.memo(() => {
   const [perPage, setPerPage] = useState(8);
@@ -24,6 +25,7 @@ const Wallet = React.memo(() => {
   const [shownNFTs, setShownNFTs] = useState([]);
   const [isSearching, setIsSearching] = useState(false);
   const [allCollections, setAllCollections] = useState([]);
+  const { fetchNftSummary } = useMyNftsContext();
 
   useEffect(() => {
     setOffset(0);
@@ -61,9 +63,6 @@ const Wallet = React.memo(() => {
     getMyCollections();
   }, []);
 
-  // We need this otherwise after updating my nfts with
-  // the newly minted ones from the polling mechanism
-  // the component won't rerender and show the new ones
   useEffect(() => {
     if (results.nfts) {
       setShownNFTs(results);
@@ -98,7 +97,7 @@ const Wallet = React.memo(() => {
           const nfts = await getMyMintingNfts();
           setMintingNftsCount(nfts.mintingNfts.length);
           setMintingNfts(nfts.mintingNfts);
-
+          fetchNftSummary();
           if (!nfts?.length || nfts.length === 0) {
             clearInterval(nftPollInterval);
           }

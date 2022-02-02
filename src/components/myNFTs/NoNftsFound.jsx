@@ -2,6 +2,7 @@ import React, { useRef, useEffect, useState } from 'react';
 import { useHistory } from 'react-router';
 import bubbleIcon from '../../assets/images/text-bubble.png';
 import plusIcon from '../../assets/images/plus.svg';
+import Button from '../button/Button';
 
 const NoNftsFound = () => {
   const [isDropdownOpened, setIsDropdownOpened] = useState(false);

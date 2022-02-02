@@ -10,6 +10,7 @@ import {
   getMyMintingNfts,
   getMyMintingNftsCount,
   getMyNfts,
+  getNftSummary,
   getSavedNfts,
 } from '../utils/api/mintNFT';
 import universeIcon from '../assets/images/universe-img.svg';
@@ -41,9 +42,6 @@ const MyNFTsContextProvider = ({ children }) => {
   const [myUniverseNFTsOffset, setMyUniverseNFTsOffset] = useState(0);
   const [collectionFilter, setCollectionFilter] = useState(polymorphsFilter);
   const [myNFTsSelectedTabIndex, setMyNFTsSelectedTabIndex] = useState(0);
-  const [activeView, setActiveView] = useState(null);
-  const [savedNFTsID, setSavedNFTsID] = useState(null);
-  const [savedCollectionID, setSavedCollectionID] = useState(null);
   const [myCollectionID, setMyCollectionID] = useState(null);
   const [universeNFTs, setUniverseNFTs] = useState([]);
   const [savedCollections, setSavedCollections] = useState([]);
@@ -54,10 +52,14 @@ const MyNFTsContextProvider = ({ children }) => {
   const [universeCollection, setUniverseCollection] = useState(null);
   const [myNftsLoading, setMyNftsLoading] = useState(true);
   const [myMintableCollections, setMyMintableCollections] = useState([]);
+  const [userPageNftsCount, setUserPageNftsCount] = useState(0);
 
-  // let nftPollInterval = null;
-  // let collPollInterval = null;
-  // const pollingInterval = 10000;
+  const [nftSummary, setNftSummary] = useState(null);
+
+  const fetchNftSummary = async () => {
+    const summary = await getNftSummary();
+    setNftSummary(summary);
+  };
 
   const fetchNfts = async () => {
     try {
@@ -135,12 +137,6 @@ const MyNFTsContextProvider = ({ children }) => {
         setCollectionFilter,
         myNFTsSelectedTabIndex,
         setMyNFTsSelectedTabIndex,
-        activeView,
-        setActiveView,
-        savedNFTsID,
-        setSavedNFTsID,
-        savedCollectionID,
-        setSavedCollectionID,
         myCollectionID,
         setMyCollectionID,
         universeNFTs,
@@ -161,6 +157,10 @@ const MyNFTsContextProvider = ({ children }) => {
         myNftsLoading,
         myMintableCollections,
         setMyMintableCollections,
+        fetchNftSummary,
+        nftSummary,
+        userPageNftsCount,
+        setUserPageNftsCount,
       }}
     >
       {children}

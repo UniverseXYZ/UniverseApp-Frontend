@@ -9,28 +9,18 @@ import { useMyNftsContext } from '../../../contexts/MyNFTsContext';
 const CreateNFT = () => {
   const history = useHistory();
   const location = useLocation();
-  const { savedNFTsID, savedCollectionID, myMintableCollections } = useMyNftsContext();
   const [selectedTabIndex, setSelectedTabIndex] = useState(0);
   const [selectedNFTType, setSelectedNFTType] = useState('');
   const [backPath, setBackPath] = useState('');
   const [showCollectible, setShowCollectible] = useState(false);
 
-  const collection = myMintableCollections.find((item) => item.id === savedCollectionID);
-
   const goToCollectionPage = () => {
-    if (collection) {
-      history.push(`/collection/${collection.address}`, {
-        collection,
-        saved: false,
-      });
+    if (location.state && location.state.collection) {
+      history.push(`/collection/${location.state.collection.address}`);
     }
   };
 
   useEffect(() => {
-    if (savedNFTsID) {
-      setSelectedTabIndex(1);
-      setSelectedNFTType('single');
-    }
     if (location.state) {
       setSelectedTabIndex(location.state.tabIndex);
       setSelectedNFTType(location.state.nftType);
@@ -42,10 +32,10 @@ const CreateNFT = () => {
     <div className="create--nft--page">
       <div className="create--nft--background" />
       <div className="create--nft--page--container">
-        {savedCollectionID ? (
+        {location.state?.collection?.id ? (
           <div className="back-btn" onClick={goToCollectionPage} aria-hidden="true">
             <img src={arrow} alt="back" />
-            <span>{collection?.name}</span>
+            <span>{location.state?.collection?.name}</span>
           </div>
         ) : (
           <div className="back-btn" onClick={() => history.goBack()} aria-hidden="true">
@@ -53,7 +43,7 @@ const CreateNFT = () => {
             <span>Go Back</span>
           </div>
         )}
-        {!savedCollectionID && !savedNFTsID && (
+        {!location.state?.collection?.id && !location.state.savedNft?.id && (
           <h1 className="page--title">
             {selectedTabIndex === 0 ||
             (selectedTabIndex === 1 && selectedNFTType === 'single') ||
@@ -62,12 +52,12 @@ const CreateNFT = () => {
               : 'Create NFT collection'}
           </h1>
         )}
-        {savedNFTsID && (
+        {location.state.savedNft?.id && (
           <h1 className="page--title" style={{ marginBottom: '20px' }}>
             Edit NFT
           </h1>
         )}
-        {savedCollectionID && <h1 className="page--title">Edit collection</h1>}
+        {!location.state?.collection?.id && <h1 className="page--title">Edit collection</h1>}
         <div className="tab__content">
           {selectedTabIndex === 1 && selectedNFTType === 'single' && <SingleNFTForm />}
           {selectedTabIndex === 1 && selectedNFTType === 'collection' && (

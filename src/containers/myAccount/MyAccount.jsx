@@ -125,7 +125,7 @@ const MyAccount = () => {
       setShowError(true);
     }
   };
-  console.log(accountPage);
+
   const cancelChanges = () => {
     setAccountName(loggedInArtist.name);
     if (loggedInArtist.universePageAddress) {

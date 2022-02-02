@@ -1,25 +1,14 @@
-import React, { useContext, useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import Popup from 'reactjs-popup';
-import { useLocation, useHistory } from 'react-router-dom';
-import uuid from 'react-uuid';
+import { useHistory } from 'react-router-dom';
 import './MyNFTs.scss';
-import { number } from 'prop-types';
 import Wallet from './Wallet.jsx';
 import SavedNFTs from './SavedNFTs.jsx';
 import UniverseNFTs from './UniverseNFTs.jsx';
-import Button from '../button/Button';
-import AppContext from '../../ContextAPI';
 import LoadingPopup from '../popups/LoadingPopup.jsx';
 import CongratsPopup from '../popups/CongratsPopup.jsx';
-import arrow from '../../assets/images/arrow.svg';
-import union from '../../assets/images/Union.svg';
-import bubbleIcon from '../../assets/images/text-bubble.png';
-import tabArrow from '../../assets/images/tab-arrow.svg';
 import DeployedCollections from './DeployedCollections.jsx';
-import { handleTabRightScrolling, handleTabLeftScrolling } from '../../utils/scrollingHandlers';
-import { UNIVERSE_NFTS } from '../../utils/fixtures/NFTsUniverseDummyData';
 import Tabs from '../tabs/Tabs';
-import EmptyTabs from '../tabs/EmptyTabs';
 import HiddenNFTs from './HiddenNFTs';
 import plusIcon from '../../assets/images/plus.svg';
 import NFTsActivity from './NFTsActivity';
@@ -32,157 +21,41 @@ import { useLobsterContext } from '../../contexts/LobsterContext';
 import { usePolymorphContext } from '../../contexts/PolymorphContext';
 import { useErrorContext } from '../../contexts/ErrorContext';
 
-import {
-  getMyMintableCollections,
-  getMyMintedCollections,
-  getMyMintingCollections,
-  getMyMintingCollectionsCount,
-  getMyMintingNfts,
-  getMyMintingNftsCount,
-  getMyNfts,
-  getNftSummary,
-  getSavedNfts,
-} from '../../utils/api/mintNFT';
-import { useSearchMyNfts } from '../../utils/hooks/useMyNftsPageDebouncer';
-
 const MyNFTs = () => {
-  // Constants
-  const nftPollInterval = null;
-  const collPollInterval = null;
-  const pollingInterval = 10000;
-
   const tabs = ['Wallet', 'Collections', 'Saved NFTs', 'Universe NFTs'];
   const history = useHistory();
   const createButtonRef = useRef(null);
 
   // Context hooks
   const {
-    //   savedNfts,
-    //   setSavedNfts,
-    //   myNFTs,
-    //   setMyNFTs,
     myNFTsSelectedTabIndex,
     setMyNFTsSelectedTabIndex,
-    //   collectionsIdAddressMapping,
     activeTxHashes,
     setActiveTxHashes,
-    //   mintingNftsCount,
-    //   setMintingNftsCount,
-    //   myMintableCollections,
+    nftSummary,
+    fetchNftSummary,
   } = useMyNftsContext();
 
   const { userLobsters } = useLobsterContext();
   const { userPolymorphs } = usePolymorphContext();
 
-  const {
-    deployedCollections,
-    universeERC721CoreContract,
-    contracts,
-    signer,
-    address,
-    loggedInArtist,
-    isWalletConnected,
-    setDeployedCollections,
-    isAuthenticated,
-  } = useAuthContext();
+  const { universeERC721CoreContract, contracts, signer, address } = useAuthContext();
 
   const { setShowError, setErrorTitle, setErrorBody } = useErrorContext();
 
   const { setDarkMode } = useThemeContext();
 
   // State hooks
-  const [selectedNFTIds, setSelectedNFTIds] = useState([]);
   const [showloading, setShowLoading] = useState(false);
   const [showCongrats, setShowCongrats] = useState(false);
   const [showCongratsMintedSavedForLater, setShowCongratsMintedSavedForLater] = useState(false);
-  const [filteredNFTs, setFilteredNFTs] = useState([]);
   const [isDropdownOpened, setIsDropdownOpened] = useState(false);
 
   // NEW
   const [savedNfts, setSavedNfts] = useState([]);
-  const [myNFTs, setMyNFTs] = useState([]);
-  const [myMintingNFTs, setMyMintingNFTs] = useState([]);
-  const [myMintableCollections, setMyMintableCollections] = useState([]);
-  const [myMintingCollections, setMyMintingCollections] = useState([]);
-  const [mintingNftsCount, setMintingNftsCount] = useState(0);
-  const [mintingCollectionsCount, setMintingCollectionsCount] = useState(0);
-  const [myNftsLoading, setMyNftsLoading] = useState(true);
-  const [nftSummary, setNftSummary] = useState(null);
+  const [selectedSavedNfts, setSelectedSavedNfts] = useState([]);
 
-  const [distinctCollections, setDisinctCollections] = useState([
-    ...new Map(
-      [...deployedCollections, ...myMintableCollections].map((item) => [item.id, item])
-    ).values(),
-  ]);
-
-  // END NEW
-
-  // Load Nfts
-  // const fetchNfts = async () => {
-  //   try {
-  //     setMyNftsLoading(true);
-  //     const [
-  //       savedNFTS,
-  //       myNfts,
-  //       mintingNfts,
-  //       mintedCollectionsRequest,
-  //       mintingcollectionsRequest,
-  //       mintableCollections,
-  //     ] = await Promise.all([
-  //       getSavedNfts(),
-  //       getMyNfts(),
-  //       getMyMintingNfts(),
-  //       getMyMintedCollections(),
-  //       getMyMintingCollections(),
-  //       getMyMintableCollections(0, 1000),
-  //     ]);
-
-  //     setSavedNfts(savedNFTS.nfts || []);
-
-  //     setMyNFTs(myNfts || []);
-  //     setMyNftsLoading(false);
-  //     setMyMintingNFTs(mintingNfts || []);
-
-  //     setDeployedCollections(mintedCollectionsRequest.collections || []);
-  //     setMyMintableCollections(mintableCollections.collections || []);
-  //     setMyMintingCollections(mintingcollectionsRequest.collections || []);
-
-  //     if (mintingNfts.length) {
-  //       setMintingNftsCount(mintingNfts.length);
-  //     }
-
-  //     if (mintingcollectionsRequest.collections.length) {
-  //       setMintingCollectionsCount(mintingcollectionsRequest.collections.length);
-  //     }
-  //   } catch (err) {
-  //     console.error(
-  //       'Failed to fetch nfts. Most likely due to failed notifcation. Please sign out and sign in again.'
-  //     );
-  //     setMyNftsLoading(false);
-  //   }
-  //   setMyNftsLoading(false);
-  // };
-
-  // useEffect(() => {
-  //   const canRequestData = loggedInArtist && isWalletConnected && isAuthenticated;
-  //   if (canRequestData) {
-  //     fetchNfts();
-  //   } else {
-  //     setSavedNfts([]);
-  //     setMyNFTs([]);
-  //     setDeployedCollections([]);
-  //   }
-  // }, [loggedInArtist, isWalletConnected]);
-
-  // UseEffects
-  useEffect(() => {
-    const newDistinct = [
-      ...new Map(
-        [...deployedCollections, ...myMintableCollections].map((item) => [item.id, item])
-      ).values(),
-    ];
-    setDisinctCollections(newDistinct);
-  }, [deployedCollections, myMintableCollections]);
+  const [triggerRefetch, setTriggerRefetch] = useState(false);
 
   const handleClickOutside = (event) => {
     if (createButtonRef.current && !createButtonRef.current.contains(event.target)) {
@@ -210,14 +83,6 @@ const MyNFTs = () => {
   }, []);
 
   useEffect(() => {
-    setFilteredNFTs(myNFTs);
-  }, []);
-
-  const fetchNftSummary = async () => {
-    const summary = await getNftSummary();
-    setNftSummary(summary);
-  };
-  useEffect(() => {
     fetchNftSummary();
   }, []);
 
@@ -238,18 +103,17 @@ const MyNFTs = () => {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  const checkSelectedSavedNfts = () => {
-    const res = savedNfts.filter((nft) => nft.selected);
-
-    return !res.length;
-  };
-
   const handleMintSelected = async () => {
     setShowLoading(true);
     try {
-      const selectedNfts = savedNfts.filter((nft) => nft.selected);
+      const nftCollections = selectedSavedNfts.map((nft) => nft.collection);
+      const mapping = {};
+      nftCollections.forEach((collection) => {
+        mapping[collection.id] = collection.address;
+      });
+
       const mintingFlowContext = {
-        collectionsIdAddressMapping,
+        collectionsIdAddressMapping: mapping,
         universeERC721CoreContract,
         contracts,
         signer,
@@ -259,20 +123,14 @@ const MyNFTs = () => {
       };
 
       await MintSavedNftsFlow({
-        nfts: selectedNfts,
+        nfts: selectedSavedNfts,
         helpers: mintingFlowContext,
       });
 
-      const serverProcessTime = 5000; // The BE needs some time to catch the transaction
-      setTimeout(async () => {
-        const [mintedNFTS, savedNFTS] = await Promise.all([getMyNfts(), getSavedNfts()]);
-        setMyNFTs(mintedNFTS || []);
-        setSavedNfts(savedNFTS || []);
-
-        setMintingNftsCount(mintingNftsCount + selectedNfts.length);
-        setShowLoading(false);
-        setShowCongratsMintedSavedForLater(true);
-      }, serverProcessTime);
+      setShowLoading(false);
+      setShowCongratsMintedSavedForLater(true);
+      setTriggerRefetch(true);
+      fetchNftSummary();
     } catch (e) {
       console.error(e, 'Error !');
       setShowLoading(false);
@@ -338,7 +196,7 @@ const MyNFTs = () => {
                   type="button"
                   className="mint__btn"
                   onClick={handleMintSelected}
-                  disabled={checkSelectedSavedNfts()}
+                  disabled={!selectedSavedNfts.length}
                 >
                   Mint selected
                 </button>
@@ -442,7 +300,14 @@ const MyNFTs = () => {
       <div className="container mynfts__page__body">
         {myNFTsSelectedTabIndex === 0 && <Wallet />}
         {myNFTsSelectedTabIndex === 1 && <DeployedCollections />}
-        {myNFTsSelectedTabIndex === 2 && <SavedNFTs />}
+        {myNFTsSelectedTabIndex === 2 && (
+          <SavedNFTs
+            selectedSavedNfts={selectedSavedNfts}
+            setSelectedSavedNfts={setSelectedSavedNfts}
+            triggerRefetch={triggerRefetch}
+            setTriggerRefetch={setTriggerRefetch}
+          />
+        )}
         {myNFTsSelectedTabIndex === 3 && <UniverseNFTs />}
         {myNFTsSelectedTabIndex === 4 && <HiddenNFTs />}
         {myNFTsSelectedTabIndex === 5 && <LikedNFTs />}

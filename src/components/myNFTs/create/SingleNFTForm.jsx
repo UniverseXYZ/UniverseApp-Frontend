@@ -72,10 +72,6 @@ const INVALID_ADDRESS_TEXT = 'Please enter valid address or ENS';
 
 const SingleNFTForm = () => {
   const {
-    savedNfts,
-    setSavedNfts,
-    savedNFTsID,
-    setSavedNFTsID,
     myNFTs,
     setMyNFTs,
     setMyMintingNFTs,
@@ -467,9 +463,9 @@ const SingleNFTForm = () => {
           : universeERC721CoreContract;
 
       // Update saved NFT data, before getting the TokenURI
-      if (savedNFTsID) {
+      if (location.state && location.state.savedNft && location.state.savedNft.id) {
         // Attach the needed data to identify the NFT and its Collection
-        data.id = savedNFTsID;
+        data.id = location.state.savedNft.id;
 
         let result = await updateSavedForLaterNft(data);
 
@@ -488,8 +484,8 @@ const SingleNFTForm = () => {
         }
       }
 
-      const mintInfo = savedNFTsID
-        ? await getMetaForSavedNft(savedNFTsID)
+      const mintInfo = location.state.savedNft?.id
+        ? await getMetaForSavedNft(location.state.savedNft.id)
         : await getTokenURI(data);
 
       // Prepare the data for the smart contract
@@ -554,7 +550,7 @@ const SingleNFTForm = () => {
 
         // setMintingNftsCount(mintingNftsCount + 1);
         setShowLoadingPopup(false);
-        if (savedNFTsID) {
+        if (location.state.savedNft?.id) {
           setShowCongratsMintedSavedForLater(true);
         } else {
           setShowCongratsPopup(true);
@@ -647,7 +643,7 @@ const SingleNFTForm = () => {
       editions,
       propertiesParsed,
       royaltiesParsed,
-      id: savedNFTsID,
+      id: location.state.savedNft?.id,
       collectionId: selectedCollection?.id,
     };
 
@@ -718,7 +714,7 @@ const SingleNFTForm = () => {
   useEffect(async () => {
     if (saveForLateClick) {
       if (!errors.name && !errors.edition && !errors.previewImage) {
-        if (!savedNFTsID) {
+        if (!location.state.savedNft?.id) {
           onSaveNftForLaterMinting();
         } else {
           onEditSavedNft();
@@ -735,34 +731,28 @@ const SingleNFTForm = () => {
 
   useEffect(() => {
     // This means it's editing an saved nft
-    if (savedNFTsID) {
-      const res = savedNfts.filter((item) => item.id === savedNFTsID)[0];
-      if (res) {
-        const parsedProperties = res.properties
-          ? parsePropertiesForFrontEnd(res.properties)
-          : [{ name: '', value: '', errors: { name: '', value: '' } }];
-        setName(res.name);
-        setDescription(res.description);
-        setEditions(res.numberOfEditions);
-        setPreviewImage(res.url);
-        setRoyaltyAddress(res.royalties);
-        setRoyaltyAddress(res.royalties || [{ name: '', value: '' }]);
-        setProperties(parsedProperties);
-        if (parsedProperties.length) {
-          setPropertyCheck(true);
-        }
-        if (res.collectionId) {
-          const getCollection = mintableCollections.filter((col) => col.id === res.collectionId)[0];
-          if (getCollection) {
-            setSelectedCollection(getCollection);
-          }
+    if (location.state.savedNft) {
+      const res = location.state.savedNft;
+      const parsedProperties = res.properties
+        ? parsePropertiesForFrontEnd(res.properties)
+        : [{ name: '', value: '', errors: { name: '', value: '' } }];
+      setName(res.name);
+      setDescription(res.description);
+      setEditions(res.numberOfEditions);
+      setPreviewImage(res.url);
+      setRoyaltyAddress(res.royalties);
+      setRoyaltyAddress(res.royalties || [{ name: '', value: '' }]);
+      setProperties(parsedProperties);
+      if (parsedProperties.length) {
+        setPropertyCheck(true);
+      }
+      if (res.collectionId) {
+        const getCollection = mintableCollections.filter((col) => col.id === res.collectionId)[0];
+        if (getCollection) {
+          setSelectedCollection(getCollection);
         }
       }
     }
-
-    return function resetSavedNFTsID() {
-      setSavedNFTsID(null);
-    };
   }, []);
 
   useEffect(() => {
@@ -1317,7 +1307,7 @@ const SingleNFTForm = () => {
             )
           )}
           <div className="single-nft-buttons">
-            {!savedNFTsID ? (
+            {!location.state.savedNft?.id ? (
               <>
                 <Button
                   className="light-border-button"

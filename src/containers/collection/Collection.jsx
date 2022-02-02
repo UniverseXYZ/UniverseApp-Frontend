@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState, useRef } from 'react';
-import { useHistory, useLocation, useParams } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 import NotFound from '../../components/notFound/NotFound.jsx';
 import './Collection.scss';
 import Cover from '../../components/collection/Cover.jsx';
@@ -24,11 +24,9 @@ import { CollectionPageLoader } from './CollectionPageLoader.jsx';
 import ApiItemsPerPageDropdown from '../../components/pagination/ApiItemsPerPageDropdown.jsx';
 
 const Collection = () => {
-  const { setSavedCollectionID } = useMyNftsContext();
   const { address } = useAuthContext();
   const { setDarkMode } = useThemeContext();
   const { collectionAddress } = useParams();
-  const location = useLocation();
   const history = useHistory();
   const ref = useRef(null);
 
@@ -68,8 +66,11 @@ const Collection = () => {
   }, [results]);
 
   const handleEdit = (id) => {
-    setSavedCollectionID(id);
-    history.push('/my-nfts/create', { tabIndex: 1, nftType: 'collection' });
+    history.push('/my-nfts/create', {
+      tabIndex: 1,
+      nftType: 'collection',
+      collection: collectionData?.collection,
+    });
   };
 
   const scrollToNftContainer = () => {
@@ -113,7 +114,6 @@ const Collection = () => {
           <Avatar selectedCollection={collectionData.collection} />
           <Title
             selectedCollection={collectionData.collection}
-            saved={location.state?.saved}
             nftsCount={collectionData?.pagination?.totalCount}
             ownersCount={ownersCount}
           />

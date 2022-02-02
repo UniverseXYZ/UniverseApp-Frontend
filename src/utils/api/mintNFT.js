@@ -9,6 +9,8 @@ const GET_MY_MINTING_NFTS_COUNT_URL = `${process.env.REACT_APP_API_BASE_URL}/api
 const GENERATE_TOKEN_URI_URL = `${process.env.REACT_APP_API_BASE_URL}/api/nfts/token-uri`;
 const CREATE_COLLECTION_URL = `${process.env.REACT_APP_API_BASE_URL}/api/nfts/minting-collections`;
 const GET_MY_MINTED_COLLECTIONS = `${process.env.REACT_APP_API_BASE_URL}/api/nfts/collections/my-collections`;
+const GET_USER_COLLECTIONS = (address) =>
+  `${process.env.REACT_APP_API_BASE_URL}/api/nfts/collections/${address}`;
 const GET_MY_MINTING_COLLECTIONS = `${process.env.REACT_APP_API_BASE_URL}/api/pages/my-collections/pending`;
 const GET_MY_MINTING_COLLECTIONS_COUNT = `${process.env.REACT_APP_API_BASE_URL}/api/pages/my-collections/pending/count`;
 const GET_SPECIFIC_COLLECTION = `${process.env.REACT_APP_API_BASE_URL}/api/pages/collection`;
@@ -390,7 +392,7 @@ export const getMyMintableCollections = async (offset, limit) => {
   return result;
 };
 
-export const getMyMintedCollections = async (offset, limit) => {
+export const getMyMintedCollections = async () => {
   const requestOptions = {
     method: 'GET',
     headers: {
@@ -399,6 +401,17 @@ export const getMyMintedCollections = async (offset, limit) => {
     },
   };
   const url = `${GET_MY_MINTED_COLLECTIONS}?mintable=false`;
+  const request = await fetch(url, requestOptions);
+  const result = await request.text().then((res) => JSON.parse(res));
+
+  return result;
+};
+
+export const getUserCollections = async (address) => {
+  const requestOptions = {
+    method: 'GET',
+  };
+  const url = GET_USER_COLLECTIONS(address);
   const request = await fetch(url, requestOptions);
   const result = await request.text().then((res) => JSON.parse(res));
 
@@ -549,7 +562,7 @@ export const createMintingNFT = async (txHash, nftId, actualMintedCount) => {
     },
     body: JSON.stringify({
       txHash,
-      numberOfEditions: actualMintedCount,
+      numberOfEditions: actualMintedCount || 0,
     }),
   });
 
