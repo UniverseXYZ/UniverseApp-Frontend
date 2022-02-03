@@ -82,5 +82,14 @@ export const useStickyHeader2 = (ref: React.RefObject<HTMLElement>) => {
     }
   }, [ref.current, headerRef.current]);
 
+  useEffect(() => {
+    return () => {
+      if (headerRef.current) {
+        headerRef.current.style.position = 'fixed';
+        headerRef.current.style.bottom = ``;
+      }
+    }
+  }, []);
+
   return scrollY > originalRefY;
 };

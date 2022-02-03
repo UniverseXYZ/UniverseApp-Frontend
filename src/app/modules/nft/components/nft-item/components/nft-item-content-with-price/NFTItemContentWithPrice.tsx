@@ -73,22 +73,25 @@ export const NFTItemContentWithPrice = (
           {creator && (
             <NFTItemRelation
               type={NFTRelationType.CREATOR}
-              image={creator?.profileImageUrl ?? ''}
-              value={creator?.displayName ?? ''}
+              image={creator.profileImageUrl ?? ''}
+              value={creator.displayName ?? ''}
+              linkParam={creator.universePageUrl ?? ''}
             />
           )}
           {collection && (
             <NFTItemRelation
               type={NFTRelationType.COLLECTION}
-              image={collection?.coverUrl ?? ''}
-              value={collection?.name ?? ''}
+              image={collection.coverUrl ?? ''}
+              value={collection.name ?? ''}
+              linkParam={collection.address ?? ''}
             />
           )}
           {owner && (
             <NFTItemRelation
               type={NFTRelationType.OWNER}
-              image={owner?.profileImageUrl ?? ''}
-              value={owner?.displayName ?? ''}
+              image={owner.profileImageUrl ?? ''}
+              value={owner.displayName ?? ''}
+              linkParam={owner.universePageUrl ?? ''}
             />
           )}
         </Box>
