@@ -289,7 +289,17 @@ export const getTokenURI = async ({
 };
 
 export const saveCollection = async (data) => {
-  const { file, name, symbol, description } = data;
+  const {
+    file,
+    name,
+    symbol,
+    description,
+    siteLink,
+    discordLink,
+    instagramLink,
+    mediumLink,
+    telegramLink,
+  } = data;
 
   const formData = new FormData();
   if (file) formData.append('file', file, file.name);
@@ -297,6 +307,21 @@ export const saveCollection = async (data) => {
   formData.append('symbol', symbol);
   if (description) {
     formData.append('description', description);
+  }
+  if (siteLink) {
+    formData.append('siteLink', siteLink);
+  }
+  if (discordLink) {
+    formData.append('discordLink', discordLink);
+  }
+  if (instagramLink) {
+    formData.append('instagramLink', instagramLink);
+  }
+  if (mediumLink) {
+    formData.append('mediumLink', mediumLink);
+  }
+  if (telegramLink) {
+    formData.append('telegramLink', telegramLink);
   }
 
   const requestUrl = CREATE_COLLECTION_URL;
@@ -479,6 +504,11 @@ export const editCollection = async (data) => {
     },
     body: JSON.stringify({
       description: data.description || '',
+      siteLink: data.siteLink || '',
+      discordLink: data.discordLink || '',
+      instagramLink: data.instagramLink || '',
+      mediumLink: data.mediumLink || '',
+      telegramLink: data.telegramLink || '',
     }),
   };
 

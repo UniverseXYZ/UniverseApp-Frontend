@@ -182,6 +182,11 @@ const NFTCollectionForm = ({ showCollectible, setShowCollectible }) => {
         symbol: tokenName,
         description,
         tokenName,
+        siteLink,
+        discordLink,
+        instagramLink,
+        mediumLink,
+        telegramLink,
       };
 
       let res;
@@ -190,6 +195,11 @@ const NFTCollectionForm = ({ showCollectible, setShowCollectible }) => {
         res = await editCollection({
           id: location.state?.collection?.id,
           description,
+          siteLink,
+          discordLink,
+          instagramLink,
+          mediumLink,
+          telegramLink,
         });
 
         if (res.message) {
@@ -199,15 +209,6 @@ const NFTCollectionForm = ({ showCollectible, setShowCollectible }) => {
           if (updateCoverImage) {
             res = await editCollectionImage(coverImage, location.state?.collection?.id);
           }
-
-          /* eslint-disable no-param-reassign */
-          const updatedCollections = myMintableCollections.map((col) => {
-            if (col.id === location.state?.collection?.id) {
-              return res;
-            }
-            return col;
-          });
-          setMyMintableCollections(updatedCollections);
         }
       } else {
         // Create the collection
@@ -222,20 +223,6 @@ const NFTCollectionForm = ({ showCollectible, setShowCollectible }) => {
 
         const [save, tx] = await Promise.all([saveRequestPromise, txReqPromise]);
         res = await attachTxHashToCollection(tx.hash, save.id);
-
-        // We need to wait for server process time, otherwise the new collection is not retunred imediatly
-        // const serverProcessTime = 5000; // ms
-        // await sleep(serverProcessTime);
-        // get the new collections and update the state
-        const mintedCollectionsRequest = await getMyMintedCollections();
-        if (!mintedCollectionsRequest.message) {
-          setDeployedCollections(mintedCollectionsRequest.collections);
-        }
-        const mintingCollectionsRequest = await getMyMintingCollections();
-        if (!mintingCollectionsRequest.message) {
-          setMyMintingCollections(mintingCollectionsRequest.collections);
-        }
-        setMintingCollectionsCount(mintingCollectionsCount + 1);
       }
 
       setShowLoading(false);
@@ -303,10 +290,8 @@ const NFTCollectionForm = ({ showCollectible, setShowCollectible }) => {
   });
 
   useEffect(() => {
-    if (mintNowClick) {
-      if (!errors.collectionName && !errors.tokenName && !errors.coverImage) {
-        onMintCollection();
-      }
+    if (mintNowClick && !errors.collectionName && !errors.tokenName && !errors.coverImage) {
+      onMintCollection();
     }
   }, [errors]);
 
@@ -319,6 +304,11 @@ const NFTCollectionForm = ({ showCollectible, setShowCollectible }) => {
       setCoverImage(res.coverUrl);
       setTokenName(res.symbol);
       setDescription(res.description);
+      setSiteLink(res.siteLink);
+      setDiscordLink(res.discordLink);
+      setMediumLink(res.mediumLink);
+      setInstagramLink(res.instagramLink);
+      setTelegramLink(res.telegramLink);
       setBgImage(res.bgImage || null);
     }
   }, [location.state?.collection]);
@@ -485,6 +475,7 @@ const NFTCollectionForm = ({ showCollectible, setShowCollectible }) => {
         setRevenueSplits={setRevenueSplits}
         revenueSplitsValidAddress={revenueSplitsValidAddress}
         setRevenueSplitsValidAddress={setRevenueSplitsValidAddress}
+        disabled
       />
       <SocialConnections
         siteLink={siteLink}

@@ -28,6 +28,7 @@ const RevenueSplits = (props) => {
     setRevenueSplits,
     revenueSplitsValidAddress,
     setRevenueSplitsValidAddress,
+    disabled,
   } = props;
 
   const [revenueSplitsMapIndexes, setRevenueSplitsMapIndexes] = useState(
@@ -162,14 +163,16 @@ const RevenueSplits = (props) => {
         </div>
         <label className="switch">
           <input
+            disabled={disabled}
             type="checkbox"
-            checked={showRevenueSplits}
+            checked={showRevenueSplits && !disabled}
             onChange={(e) => setShowRevenueSplits(e.target.checked)}
           />
           <span className="slider round" />
         </label>
       </div>
       {showRevenueSplits &&
+        !disabled &&
         revenueSplits.map((elm, i) => {
           const error = elm.error || hasAddressError(elm.walletAddress, i);
 
@@ -213,7 +216,7 @@ const RevenueSplits = (props) => {
             </div>
           );
         })}
-      {showRevenueSplits && (
+      {showRevenueSplits && !disabled && (
         <div
           className="property--add"
           onClick={() => {
@@ -239,6 +242,11 @@ RevenueSplits.propTypes = {
   setRevenueSplits: PropTypes.func.isRequired,
   revenueSplitsValidAddress: PropTypes.bool.isRequired,
   setRevenueSplitsValidAddress: PropTypes.func.isRequired,
+  disabled: PropTypes.bool,
+};
+
+RevenueSplits.defaultProps = {
+  disabled: false,
 };
 
 export default RevenueSplits;

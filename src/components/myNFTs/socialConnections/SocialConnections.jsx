@@ -53,12 +53,13 @@ const SocialConnections = (props) => {
           </div>
           <div className="connect--btn">
             {!isTwitterConnected ? (
-              <Button className="light-button" onClick={() => setIsTwitterConnected(true)}>
+              <Button disabled className="light-button" onClick={() => setIsTwitterConnected(true)}>
                 Connect
               </Button>
             ) : (
               <div className="twitter--connected">
                 <Button
+                  disabled
                   className="light-border-button"
                   onClick={() => setIsTwitterConnected(false)}
                 >
