@@ -1,7 +1,10 @@
+/* eslint-disable no-plusplus */
+/* eslint-disable no-return-assign */
 import React, { useEffect, useState, useRef } from 'react';
 import Popup from 'reactjs-popup';
 import { useHistory } from 'react-router-dom';
 import './MyNFTs.scss';
+import { Contract, utils } from 'ethers';
 import Wallet from './Wallet.jsx';
 import SavedNFTs from './SavedNFTs.jsx';
 import UniverseNFTs from './UniverseNFTs.jsx';
@@ -13,13 +16,15 @@ import HiddenNFTs from './HiddenNFTs';
 import plusIcon from '../../assets/images/plus.svg';
 import NFTsActivity from './NFTsActivity';
 import LikedNFTs from './LikedNFTs';
-import { MintSavedNftsFlow } from '../../userFlows/MintSavedNftsFlow';
 import { useThemeContext } from '../../contexts/ThemeContext';
 import { useMyNftsContext } from '../../contexts/MyNFTsContext';
 import { useAuthContext } from '../../contexts/AuthContext';
 import { useLobsterContext } from '../../contexts/LobsterContext';
 import { usePolymorphContext } from '../../contexts/PolymorphContext';
 import { useErrorContext } from '../../contexts/ErrorContext';
+import { sendBatchMintRequest, sendMintRequest } from '../../userFlows/api/ContractInteraction';
+import { createMintingNFT, getMetaForSavedNft } from '../../utils/api/mintNFT';
+import { formatRoyaltiesForMinting } from '../../utils/helpers/contractInteraction';
 
 const MyNFTs = () => {
   const tabs = ['Wallet', 'Collections', 'Saved NFTs', 'Universe NFTs'];
@@ -107,6 +112,7 @@ const MyNFTs = () => {
 
   const handleMintSelected = async () => {
     setShowLoading(true);
+    setActiveTxHashes([]);
     try {
       const nftCollections = selectedSavedNfts.map((nft) => nft.collection);
       const mapping = {};
@@ -124,15 +130,122 @@ const MyNFTs = () => {
         setActiveTxHashes,
       };
 
-      await MintSavedNftsFlow({
-        nfts: selectedSavedNfts,
-        helpers: mintingFlowContext,
+      const requiredContracts = {};
+
+      selectedSavedNfts.forEach((nft) => {
+        const contractAddress = mintingFlowContext.collectionsIdAddressMapping[nft.collectionId];
+        requiredContracts[nft.collectionId] = requiredContracts[nft.collectionId] || {};
+
+        if (!contractAddress) {
+          requiredContracts[nft.collectionId] = mintingFlowContext.universeERC721CoreContract;
+        } else {
+          requiredContracts[nft.collectionId] = new Contract(
+            contractAddress,
+            mintingFlowContext.contracts.UniverseERC721.abi,
+            mintingFlowContext.signer
+          );
+        }
       });
 
-      setShowLoading(false);
-      setShowCongratsMintedSavedForLater(true);
-      setTriggerRefetch(true);
-      fetchNftSummary();
+      const formatNfts = selectedSavedNfts.map((nft) => ({
+        collectionId: nft.collectionId ? nft.collectionId : 0,
+        royalties: nft.royalties ? formatRoyaltiesForMinting(nft.royalties) : [],
+        id: nft.id,
+        numberOfEditions: nft.numberOfEditions,
+        name: nft.name,
+        description: nft.description,
+      }));
+
+      const tokenURIsPromises = formatNfts.map(async (nft) => {
+        const meta = await getMetaForSavedNft(nft.id);
+        return { ...meta, nftId: nft.id };
+      });
+      const tokenURIs = await Promise.all(tokenURIsPromises);
+
+      if (!tokenURIs.length) {
+        console.error('server error. cannot get meta data');
+        setShowError(true);
+        return;
+      }
+
+      const nftsAttachedTokenUri = formatNfts.map((nft) => {
+        const tokenData = tokenURIs.find((data) => data.nftId === nft.id);
+
+        return {
+          ...nft,
+          tokenUri: tokenData.tokenUris,
+          mintingId: tokenData.mintingNft.id,
+        };
+      });
+
+      const tokenURIsAndRoyaltiesObject = {};
+
+      nftsAttachedTokenUri.forEach((nft) => {
+        if (!tokenURIsAndRoyaltiesObject[nft.collectionId])
+          tokenURIsAndRoyaltiesObject[nft.collectionId] = [];
+
+        nft.tokenUri.forEach((token) => {
+          tokenURIsAndRoyaltiesObject[nft.collectionId].push({
+            token,
+            royalties: nft.royalties,
+            mintingId: nft.mintingId,
+          });
+        });
+      });
+
+      const isSingle =
+        nftsAttachedTokenUri.length === 1 && nftsAttachedTokenUri[0].tokenUri.length === 1;
+
+      const txDataArray = isSingle
+        ? await sendMintRequest(requiredContracts, tokenURIsAndRoyaltiesObject, mintingFlowContext)
+        : await sendBatchMintRequest(
+            requiredContracts,
+            tokenURIsAndRoyaltiesObject,
+            mintingFlowContext
+          );
+
+      const totalMintedMapping = {};
+      const mintingNftsPromises = txDataArray.map(async (data) => {
+        const { transaction, mintingIds, status, tokens } = data;
+        // transaction is undefined if tx has failed/was rejected by the user
+        if (transaction) {
+          const txHash = transaction.hash;
+          const uniqueMintingIds = mintingIds.filter((c, index) => mintingIds.indexOf(c) === index);
+
+          // Count the actual minted count and update using createMintingNFT()
+          mintingIds.forEach((id) => {
+            if (totalMintedMapping[id]) {
+              totalMintedMapping[id] += 1;
+            } else {
+              totalMintedMapping[id] = 1;
+            }
+          });
+
+          const mints = uniqueMintingIds.map((id) =>
+            createMintingNFT(txHash, id, totalMintedMapping[id])
+          );
+          await Promise.all(mints);
+        }
+      });
+
+      await Promise.all(mintingNftsPromises);
+
+      if (!txDataArray.some((data) => data.status !== 2)) {
+        setShowLoading(false);
+        return;
+      }
+
+      const hasSuccessfulTransaction = txDataArray.some((data) => data.status === 1);
+
+      if (hasSuccessfulTransaction) {
+        setShowLoading(false);
+        setShowCongratsMintedSavedForLater(true);
+        setTriggerRefetch(true);
+        fetchNftSummary();
+      } else {
+        setShowLoading(false);
+        setShowError(true);
+      }
     } catch (e) {
       console.error(e, 'Error !');
       setShowLoading(false);

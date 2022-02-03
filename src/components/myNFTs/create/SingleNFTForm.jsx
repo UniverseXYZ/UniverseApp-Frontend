@@ -544,16 +544,6 @@ const SingleNFTForm = () => {
       const hasSuccessfulTransaction = txResults.some((status) => status === 1);
 
       if (hasSuccessfulTransaction) {
-        // const [myNfts, mintingNfts, savedNFTS] = await Promise.all([
-        //   getMyNfts(),
-        //   getMyMintingNfts(),
-        //   getSavedNfts(),
-        // ]);
-        // setMyNFTs(myNfts || []);
-        // setMyMintingNFTs(mintingNfts || []);
-        // setSavedNfts(savedNFTS || []);
-
-        // setMintingNftsCount(mintingNftsCount + 1);
         setShowLoadingPopup(false);
         if (location.state.savedNft?.id) {
           setShowCongratsMintedSavedForLater(true);

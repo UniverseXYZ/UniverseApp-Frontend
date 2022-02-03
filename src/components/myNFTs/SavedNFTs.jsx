@@ -301,11 +301,17 @@ const SavedNFTs = ({
                     <div className="collection__count">{`x${nft.numberOfEditions}`}</div>
                   )}
                 </div>
-                {nft.numberOfEditions > 1 && (
+                {nft.numberOfEditions === 2 ? (
+                  <>
+                    <div className="saved__nft__box__highlight__one" />
+                  </>
+                ) : nft.numberOfEditions > 2 ? (
                   <>
                     <div className="saved__nft__box__highlight__one" />
                     <div className="saved__nft__box__highlight__two" />
                   </>
+                ) : (
+                  <></>
                 )}
                 <span className="tooltiptext">Complete editing this NFT</span>
               </div>
