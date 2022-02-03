@@ -78,7 +78,7 @@ ApiPagination.propTypes = {
   setApiPage: PropTypes.func.isRequired,
   page: PropTypes.number.isRequired,
   setPage: PropTypes.func.isRequired,
-  pagination: PropTypes.oneOfType(PropTypes.object).isRequired,
+  pagination: PropTypes.oneOfType([PropTypes.object]).isRequired,
 };
 
 export default ApiPagination;

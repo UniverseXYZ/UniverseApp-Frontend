@@ -3,11 +3,11 @@ import PropTypes from 'prop-types';
 import ReadMoreAndLess from 'react-read-more-less';
 
 const Description = ({ selectedCollection }) => (
-  <p className="desc">
+  <div className="desc">
     <ReadMoreAndLess charLimit={200} readMoreText="Read more" readLessText="Read less">
       {selectedCollection.description || ''}
     </ReadMoreAndLess>
-  </p>
+  </div>
 );
 
 Description.propTypes = {

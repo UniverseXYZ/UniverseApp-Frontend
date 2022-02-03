@@ -139,11 +139,20 @@ const SocialLinks = ({
 };
 
 SocialLinks.propTypes = {
-  instagramLink: PropTypes.string.isRequired,
-  siteLink: PropTypes.string.isRequired,
-  mediumLink: PropTypes.string.isRequired,
-  discordLink: PropTypes.string.isRequired,
-  telegramLink: PropTypes.string.isRequired,
-  twitterLink: PropTypes.string.isRequired,
+  instagramLink: PropTypes.string,
+  siteLink: PropTypes.string,
+  mediumLink: PropTypes.string,
+  discordLink: PropTypes.string,
+  telegramLink: PropTypes.string,
+  twitterLink: PropTypes.string,
+};
+
+SocialLinks.defaultProps = {
+  instagramLink: '',
+  siteLink: '',
+  mediumLink: '',
+  discordLink: '',
+  telegramLink: '',
+  twitterLink: '',
 };
 export default SocialLinks;

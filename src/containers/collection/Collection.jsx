@@ -110,11 +110,11 @@ const Collection = () => {
 
       <div className="collection__details__section">
         <SocialLinks
-          instagramLink={collectionData.collection.instagramLink}
-          siteLink={collectionData.collection.siteLink}
-          mediumLink={collectionData.collection.mediumLink}
-          discordLink={collectionData.collection.discordLink}
-          telegramLink={collectionData.collection.telegramLink}
+          instagramLink={collectionData.collection.instagramLink || ''}
+          siteLink={collectionData.collection.siteLink || ''}
+          mediumLink={collectionData.collection.mediumLink || ''}
+          discordLink={collectionData.collection.discordLink || ''}
+          telegramLink={collectionData.collection.telegramLink || ''}
           twitterLink=""
         />
         {address === collectionData?.collection?.owner ? (
