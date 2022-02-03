@@ -1,12 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import ReactReadMoreReadLess from 'react-read-more-read-less';
+import ReadMoreAndLess from 'react-read-more-less';
 
 const Description = ({ selectedCollection }) => (
   <p className="desc">
-    <ReactReadMoreReadLess charLimit={200} readMoreText="Read more" readLessText="Read less">
+    <ReadMoreAndLess charLimit={200} readMoreText="Read more" readLessText="Read less">
       {selectedCollection.description || ''}
-    </ReactReadMoreReadLess>
+    </ReadMoreAndLess>
   </p>
 );
 

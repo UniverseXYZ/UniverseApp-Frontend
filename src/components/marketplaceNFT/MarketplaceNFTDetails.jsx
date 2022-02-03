@@ -4,7 +4,7 @@ import '../marketplace/browseNFT/NFTsList.scss';
 import uuid from 'react-uuid';
 import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
-import ReactReadMoreReadLess from 'react-read-more-read-less';
+import ReadMoreAndLess from 'react-read-more-less';
 import Blockies from 'react-blockies';
 import Properties from '../marketplaceTabComponents/Properties.jsx';
 import Owners from '../marketplaceTabComponents/Owners.jsx';
@@ -295,13 +295,9 @@ const MarketplaceNFTDetails = ({ data, onNFT }) => {
 
           <div className="Marketplace--text">
             <p>
-              <ReactReadMoreReadLess
-                charLimit={150}
-                readMoreText="Read more"
-                readLessText="Read less"
-              >
+              <ReadMoreAndLess charLimit={150} readMoreText="Read more" readLessText="Read less">
                 {selectedNFT.description || ''}
-              </ReactReadMoreReadLess>
+              </ReadMoreAndLess>
             </p>
           </div>
           <div className="tabs">
