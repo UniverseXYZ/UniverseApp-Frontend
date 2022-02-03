@@ -266,13 +266,13 @@ const MyNFTs = () => {
         handler: setMyNFTsSelectedTabIndex.bind(this, index),
         length:
           index === 0
-            ? nftSummary?.nfts || null
+            ? nftSummary?.nfts || '0'
             : index === 1
-            ? nftSummary?.collections || null
+            ? nftSummary?.collections || '0'
             : index === 2
-            ? nftSummary?.savedNfts
+            ? nftSummary?.savedNfts || '0'
             : index === 3
-            ? (userLobsters.length || null) + (userPolymorphs.length || null) || null
+            ? (userLobsters.length || 0) + (userPolymorphs.length || 0) || '0'
             : null,
       }))}
     />
