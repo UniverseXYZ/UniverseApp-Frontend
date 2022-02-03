@@ -341,7 +341,6 @@ export const SelectNFTs = ({}: ISelectNFTsProps) => {
                   ? undefined
                   : () => handleCheckNFT(nft, !!selectedEditions.length ? [] : [nft.tokenId])
                 }
-                onAuctionTimeOut={() => handleNFTAuctionTimeOut(i)}
               />
             );
           })}

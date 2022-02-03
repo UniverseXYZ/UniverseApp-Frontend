@@ -1,5 +1,5 @@
-import { Box, BoxProps, Text } from '@chakra-ui/react';
-import React, { useCallback, useState } from 'react';
+import { Box, Text } from '@chakra-ui/react';
+import React  from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react/swiper-react';
 import { Navigation, Pagination } from 'swiper';
 

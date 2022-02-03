@@ -1,11 +1,16 @@
 import { Box, Button, Container, Flex, Heading, Link, SimpleGrid, Text } from '@chakra-ui/react';
 import { useFormik } from 'formik';
-import React, { useCallback, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useInfiniteQuery } from 'react-query';
+import { useHistory } from 'react-router-dom';
 import axios from 'axios';
 import { utils } from 'ethers';
 
-import BrowseNFTsIntroImage from './../../../../../assets/images/marketplace/v2/browse_nfts_intro.png';
+import NoiseTextureImage from './../../../../../assets/images/v2/marketplace/noise_texture.png';
+import IntroDesktopBGImage from './../../../../../assets/images/v2/marketplace/img_hero_desktop.png';
+import IntroTabletBGImage from './../../../../../assets/images/v2/marketplace/img_hero_tablet.png';
+import IntroMobileBGImage from './../../../../../assets/images/v2/marketplace/img_hero_mobile.png';
+import BGImage from './../../../../../assets/images/v2/stone_bg.jpg';
 
 import {
   ArtistsFilter,
@@ -29,8 +34,13 @@ import { ORDERS_PER_PAGE } from './constants';
 import { GetNFTApi } from '../../../nft/api';
 import { TokenTicker } from '../../../../enums';
 import { TOKENS_MAP } from '../../../../constants';
+import { useThemeContext } from '../../../../../contexts/ThemeContext';
 
 export const BrowseNFTsPage = () => {
+  const { setDarkMode } = useThemeContext() as any;
+
+  const router = useHistory();
+
   const saleTypeFilterForm = useFormik<ISaleTypeFilterValue>({
     initialValues: {
       buyNow: false,
@@ -178,13 +188,21 @@ export const BrowseNFTsPage = () => {
     artistsFilterForm.resetForm();
   }, []);
 
+  useEffect(() => setDarkMode(false), []);
+
   return (
-    <Box>
+    <Box sx={{
+      bg: `url(${BGImage}) center / cover`
+    }}>
       <Flex
         sx={{
           alignItems: 'center',
-          bg: `url(${BrowseNFTsIntroImage}) center / cover, black`,
-          color: 'white',
+          bg: {
+            base: `url(${IntroMobileBGImage}) center / cover`,
+            md: `url(${IntroTabletBGImage}) center / cover`,
+            lg: `url(${IntroDesktopBGImage}) center / cover`
+          },
+          color: 'black',
           justifyContent: 'center',
           h: '250px',
           minH: '250px',
@@ -192,7 +210,7 @@ export const BrowseNFTsPage = () => {
         }}
       >
         <Box>
-          <Text fontSize={'12px'} fontWeight={500} textTransform={'uppercase'} mb={'23px'}>Welcome to the</Text>
+          <Text fontSize={'12px'} fontWeight={500} textTransform={'uppercase'} mb={'23px'} letterSpacing={'5px'}>Welcome to the</Text>
           <Heading as={'h1'} fontSize={'36px'}>Marketplace</Heading>
         </Box>
       </Flex>
@@ -206,6 +224,7 @@ export const BrowseNFTsPage = () => {
           },
           my: '20px',
           p: '20px !important',
+          transition: '200ms',
           w: '100%',
           zIndex: 30,
         }}
@@ -307,6 +326,37 @@ export const BrowseNFTsPage = () => {
               {isFetching ? 'Loading...' : 'Load More'}
             </Button>
           )}
+
+          <Box sx={{
+            bg: `linear-gradient(92.86deg, #D5ACFD -3.25%, #ABB3FC 49.31%, #81EEBF 104.41%)`,
+            borderRadius: '12px',
+            position: 'relative',
+            filter: 'drop-shadow(0px 10px 36px rgba(136, 120, 172, 0.14))',
+            mt: '60px',
+            p: '60px',
+            _before: {
+              bg: `url(${NoiseTextureImage}) center / 20%, linear-gradient(92.86deg, #D5ACFD -3.25%, #ABB3FC 49.31%, #81EEBF 104.41%)`,
+              borderRadius: 'inherit',
+              position: 'absolute',
+              backgroundBlendMode: 'overlay',
+              top: 0,
+              left: 0,
+              w: '100%',
+              h: '100%',
+              content: '""',
+              opacity: 0.3,
+              zIndex: -1,
+            },
+          }}>
+            <Flex alignItems={'center'} justifyContent={'space-between'}>
+              <Box>
+                <Heading fontSize={'26px'} mb={'10px'}>List your NFTs</Heading>
+                <Text fontSize={'14px'}>Choose the NFT you’d like to list from your wallet and put them on sale for FREE.</Text>
+              </Box>
+              <Button variant={'black'} onClick={() => router.push('/my-nfts')}>List an NFT</Button>
+            </Flex>
+          </Box>
+
           <BackToTopButton />
         </Container>
       </Box>

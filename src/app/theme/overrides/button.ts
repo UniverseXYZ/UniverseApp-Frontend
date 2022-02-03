@@ -50,10 +50,12 @@ export const Button = {
       _active: {
         backgroundImage: 'linear-gradient(175deg,#bceb00,#00eaea)',
         borderColor: 'transparent',
-        boxShadow: 'inset 2px 1000px 1px white',
+        boxShadow: 'inset 2px 1000px 1px hsla(0,0%,100%,.9)',
+        transform: 'scale(0.95)',
       }
     },
     dropdown: {
+      bg: 'white',
       borderRadius: '12px',
       padding: '11px 26px',
       position: 'relative',
@@ -109,7 +111,33 @@ export const Button = {
       _focus: {
         boxShadow: 'none',
       },
-    }
+    },
+    black: {
+      background: 'black',
+      borderRadius: '12px',
+      color: 'white',
+      padding: '11px 26px',
+      lineHeight: '21px',
+      _hover: {
+        background: '#242424',
+      },
+      _focus: {
+        background: '#242424',
+        boxShadow: 'none',
+      },
+      _active: {
+        transform: 'scale(0.95)',
+      },
+      _disabled: {
+        background: 'rgba(0, 0, 0, 0.1)',
+        color: 'rgba(0, 0, 0, 0.4)',
+
+        _hover: {
+          background: 'rgba(0, 0, 0, 0.1) !important',
+          color: 'rgba(0, 0, 0, 0.4) !important',
+        }
+      },
+    },
   },
   sizes: {
     lg: {
