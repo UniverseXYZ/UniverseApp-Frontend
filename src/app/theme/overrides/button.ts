@@ -14,10 +14,11 @@ export const Button = {
       },
       _focus: {
         background: 'linear-gradient(0deg, rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0.4)), linear-gradient(170deg, #bceb00 15.57%, #00eaea 84.88%) !important',
-        boxShadow: 'xl',
+        boxShadow: 'none',
       },
       _active: {
-        boxShadow: 'lg',
+        background: 'linear-gradient(170deg, #bceb00 15.57%, #00eaea 84.88%) !important',
+        transform: 'scale(0.95)',
       },
       _disabled: {
         background: 'rgba(0, 0, 0, 0.1)',
