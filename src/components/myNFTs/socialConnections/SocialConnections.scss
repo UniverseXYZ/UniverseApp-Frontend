@@ -20,6 +20,12 @@
       -webkit-background-clip: text;
       text-shadow: 2px 2px 5px rgba(255, 255, 255, 0.3);
     }
+    span {
+      margin-left: 6px;
+      font-family: $sharpGroteskSemiBoldFont;
+      color: #999999;
+    }
+
     .social--connections--info {
       position: relative;
       display: flex;

@@ -29,15 +29,15 @@ const Title = ({ selectedCollection, nftsCount, ownersCount }) => {
           <h1>{NFTSCount}</h1>
           <span>items</span>
         </div>
-        <div className="bordered">
-          <h1>{ownersCount}</h1>
-          <span>owners</span>
+        <div className="bordered" style={{ height: '100%' }}>
+          {/* <h1>{ownersCount}</h1>
+          <span>owners</span> */}
         </div>
         <div>
-          <h1>
+          {/* <h1>
             <img src={currencyIcon} alt="Currency" />0
           </h1>
-          <span>volume traded</span>
+          <span>volume traded</span> */}
         </div>
       </div>
     </div>

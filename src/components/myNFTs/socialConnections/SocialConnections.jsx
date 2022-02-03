@@ -39,12 +39,13 @@ const SocialConnections = (props) => {
     <div className="social--connections">
       <div className="title">
         <h4>Social connections</h4>
-        <div className="social--connections--info">
+        <span>(optional)</span>
+        {/* <div className="social--connections--info">
           <InfoIcon />
           <div className="social--connections--info--text">
             <p>Help collectors verify your collection by connecting Twitter</p>
           </div>
-        </div>
+        </div> */}
       </div>
       <div className="social--items--grid">
         <div className="twitter--section">
