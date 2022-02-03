@@ -45,31 +45,51 @@ const SocialLinks = ({
           </div>
         )}
         {!!discordLink && (
-          <div className="social--icons--grid--item">
+          <div
+            className="social--icons--grid--item"
+            onClick={() => window.open(`https://discord.gg/${discordLink}`, '_blank').focus()}
+            aria-hidden
+          >
             <span className="tooltiptext">Discord</span>
             <DiscordIcon width="18" height="14" fillColor="rgba(0, 0, 0, 0.4)" />
           </div>
         )}
         {!!siteLink && (
-          <div className="social--icons--grid--item">
+          <div
+            className="social--icons--grid--item"
+            onClick={() => window.open(siteLink, '_blank').focus()}
+            aria-hidden
+          >
             <span className="tooltiptext">Website</span>
             <WebsiteIcon width="16" height="16" fillColor="rgba(0, 0, 0, 0.4)" />
           </div>
         )}
         {!!instagramLink && (
-          <div className="social--icons--grid--item">
+          <div
+            className="social--icons--grid--item"
+            onClick={() => window.open(`https://instagram.com/${instagramLink}`, '_blank').focus()}
+            aria-hidden
+          >
             <span className="tooltiptext">Instagram</span>
             <InstagramIcon width="16" height="16" fillColor="rgba(0, 0, 0, 0.4)" />
           </div>
         )}
         {!!mediumLink && (
-          <div className="social--icons--grid--item">
+          <div
+            className="social--icons--grid--item"
+            onClick={() => window.open(`https://medium.com/@${mediumLink}`, '_blank').focus()}
+            aria-hidden
+          >
             <span className="tooltiptext">Medium</span>
             <MediumIcon width="18" height="14" fillColor="rgba(0, 0, 0, 0.4)" />
           </div>
         )}
         {!!telegramLink && (
-          <div className="social--icons--grid--item">
+          <div
+            className="social--icons--grid--item"
+            onClick={() => window.open(`https://t.me/${telegramLink}`, '_blank').focus()}
+            aria-hidden
+          >
             <span className="tooltiptext">Telegram</span>
             <TelegramIcon width="19" height="15" fillColor="rgba(0, 0, 0, 0.4)" />
           </div>
