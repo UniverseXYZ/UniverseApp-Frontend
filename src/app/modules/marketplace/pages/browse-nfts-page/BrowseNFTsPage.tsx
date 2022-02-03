@@ -25,7 +25,13 @@ import {
 } from '../../components';
 import { SortNftsOptions } from '../../constants';
 import { BackToTopButton, Select } from '../../../../components';
-import { NftItem, NFTItemContentWithPrice, NFTItemAsset, NFTItemAuctionCountdown } from '../../../nft/components';
+import {
+  NftItem,
+  NFTItemContentWithPrice,
+  NFTItemAsset,
+  NFTItemAuctionCountdown,
+  BundleItem,
+} from '../../../nft/components';
 import { IERC721AssetType, IERC721BundleAssetType, INFT, IOrder, IOrderBackend } from '../../../nft/types';
 import { useStickyHeader2 } from '../../../../hooks';
 import { coins } from '../../../../mocks';
@@ -301,11 +307,10 @@ export const BrowseNFTsPage = () => {
                   return null;
                 }
 
-                return (
+                return order.make.assetType.assetClass === 'ERC721' ? (
                   <NftItem
                     key={order.id}
                     NFT={NFTs[0]}
-                    bundleNFTs={NFTs.slice(1)}
                     renderContent={() => (
                       <NFTItemContentWithPrice
                         name={NFTs[0].name}
@@ -316,7 +321,20 @@ export const BrowseNFTsPage = () => {
                         priceToken={order.take.assetType.assetClass as TokenTicker}
                       />
                     )}
-                    onClick={(NFT) => console.log('NFT', NFT)}
+                  />
+                ) : (
+                  <BundleItem
+                    key={order.id}
+                    NFTs={NFTs}
+                    order={order}
+                    renderContent={() => (
+                      <NFTItemContentWithPrice
+                        name={(order.make.assetType as IERC721BundleAssetType).bundleName}
+                        creator={NFTs[0].creator}
+                        price={+utils.formatUnits(order.take.value, `${TOKENS_MAP[order.take.assetType.assetClass as TokenTicker].decimals}`)}
+                        priceToken={order.take.assetType.assetClass as TokenTicker}
+                      />
+                    )}
                   />
                 );
               })

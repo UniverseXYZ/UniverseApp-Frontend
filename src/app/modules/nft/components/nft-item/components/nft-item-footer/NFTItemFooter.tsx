@@ -34,7 +34,7 @@ export const NFTItemFooter = (
 
       <Box>
         {/*TODO: likes*/}
-        <NFTLike likes={[]} isLiked={true} />
+        {/*<NFTLike likes={[]} isLiked={true} />*/}
       </Box>
     </Flex>
   );
