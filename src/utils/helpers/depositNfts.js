@@ -19,7 +19,7 @@ const chunkifySlots = (nftsBySlots) => {
   return chunkedSlots;
 };
 
-const splitSlots = (chunkedSlots, collections) => {
+const splitSlots = (chunkedSlots, collections, numberOfSlots) => {
   // Used for SC transactions
   const finalNfts = [];
   let nfts = [];
@@ -63,7 +63,7 @@ const splitSlots = (chunkedSlots, collections) => {
 
       slotIndices.push(nonZeroIndexKeys[i]);
       nfts.push(nftsChunke);
-      if (slotIndices.length === MAX_DEPOSIT_SLOT_SIZE) {
+      if (slotIndices.length === MAX_DEPOSIT_SLOT_SIZE || slotIndices.length === numberOfSlots) {
         finalSlotIndices.push(slotIndices);
         slotIndices = [];
         finalNfts.push(nfts);
@@ -116,6 +116,16 @@ const groupTiersToSlots = (rewardTiers) => {
 
 export const calculateTransactions = (auction) => {
   const nftsBySlots = groupTiersToSlots(auction.rewardTiers);
+
+  let numberOfSlots = 0;
+
+  auction.rewardTiers
+    .sort((a, b) => a.tierPosition - b.tierPosition)
+    .forEach((tier) => {
+      tier.slots.forEach((slot) => {
+        numberOfSlots += 1;
+      });
+    });
   // console.log(nftsBySlots);
 
   const chunkedSlots = chunkifySlots(nftsBySlots);
@@ -123,7 +133,7 @@ export const calculateTransactions = (auction) => {
 
   // Create slot arrays for function
   // We assume the slots start from
-  const transactionConfig = splitSlots(chunkedSlots, auction.collections);
+  const transactionConfig = splitSlots(chunkedSlots, auction.collections, numberOfSlots);
   // console.log(slotArrays);
 
   return transactionConfig;
