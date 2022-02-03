@@ -1,4 +1,4 @@
-import { Box, Flex } from '@chakra-ui/react';
+import { Box, Button, Flex } from '@chakra-ui/react';
 import React from 'react';
 
 import { INFT } from '../../../../types';
@@ -23,6 +23,7 @@ export const NFTItemFooter = (
   return (
     <Flex {...styles.WrapperStyle}>
       <Flex>
+        {/*<Button size={'sm'} mr={'5px'} borderRadius={'8px'}>Buy now</Button>*/}
         {renderNFTAdditions || renderNFTAdditions === null ? renderNFTAdditions : (
           <NFTItemEditionsLabel nft={NFT} mr={'6px'} />
         )}
@@ -33,7 +34,7 @@ export const NFTItemFooter = (
 
       <Box>
         {/*TODO: likes*/}
-        {/*<NFTLike likes={[]} isLiked={true} />*/}
+        <NFTLike likes={[]} isLiked={true} />
       </Box>
     </Flex>
   );
