@@ -66,9 +66,9 @@ const MAX_ROYALTY_PERCENT = 20;
 const COLLECTIONS_PER_ROW = 4;
 
 const MINTING_LOADING_TEXT =
-  'The transaction is in progress. Keep this window opened. Navigating away from the page will reset the curent progress.';
+  'The transaction is in progress. Keep this window opened. Navigating away from the page will reset the current progress.';
 const SAVING_FOR_LATER_LOADING_TEXT =
-  'You nft is being saved for later minting. Keep this window opened. Navigating away from the page will reset the curent progress.';
+  'You nft is being saved for later minting. Keep this window opened. Navigating away from the page will reset the current progress.';
 const INVALID_ADDRESS_TEXT = 'Please enter valid address or ENS';
 
 const SingleNFTForm = () => {
@@ -351,6 +351,9 @@ const SingleNFTForm = () => {
 
   const propertyChangesValue = (index, value) => {
     const newProperties = [...properties];
+    if (!newProperties[index].errors) {
+      newProperties[index].errors = { name: '', value: '' };
+    }
     newProperties[index].value = value;
     newProperties[index].errors.value = !value ? '“Property value” is not allowed to be empty' : '';
     setProperties(newProperties);
@@ -760,21 +763,22 @@ const SingleNFTForm = () => {
 
   useEffect(() => {
     // reset state in order to hide the errors if the toggle is not checked
-    if (!propertyCheck) {
-      setProperties([{ name: '', value: '', errors: { name: '', value: '' } }]);
-    }
-
-    if (!royalities) {
-      setRoyaltyAddress([{ address, amount: '10' }]);
-      setRoyaltiesMapIndexes(
-        Object.defineProperty({}, `${address}`, {
-          value: [0],
-          writable: true,
-          configurable: true,
-          enumerable: true,
-        })
-      );
-      setRoyaltyValidAddress(true);
+    if (!location.state.savedNft) {
+      if (!propertyCheck) {
+        setProperties([{ name: '', value: '', errors: { name: '', value: '' } }]);
+      }
+      if (!royalities) {
+        setRoyaltyAddress([{ address, amount: '10' }]);
+        setRoyaltiesMapIndexes(
+          Object.defineProperty({}, `${address}`, {
+            value: [0],
+            writable: true,
+            configurable: true,
+            enumerable: true,
+          })
+        );
+        setRoyaltyValidAddress(true);
+      }
     }
   }, [propertyCheck, royalities]);
 
