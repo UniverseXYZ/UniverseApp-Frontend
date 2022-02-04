@@ -32,7 +32,7 @@ const BidderView = ({
   };
   const myTxIndex =
     singleCaptureRevenueTxs.length &&
-    singleCaptureRevenueTxs.map((tx) => tx.bidder?.user?.address).indexOf(myBid.user.address);
+    singleCaptureRevenueTxs.map((tx) => tx.bidder?.user?.address).indexOf(myBid?.user?.address);
   const myTx = singleCaptureRevenueTxs[myTxIndex];
   return (
     <>

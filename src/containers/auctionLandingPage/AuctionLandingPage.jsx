@@ -174,11 +174,7 @@ const AuctionLandingPage = () => {
   };
 
   useEffect(() => {
-    if (
-      universeAuctionHouseContract &&
-      Object.values(slotsInfo).length &&
-      address === auction.artist.address
-    ) {
+    if (universeAuctionHouseContract && Object.values(slotsInfo).length) {
       getAuctionRevenue();
     }
   }, [universeAuctionHouseContract, slotsInfo, address]);
