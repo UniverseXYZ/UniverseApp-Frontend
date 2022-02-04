@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useState, useEffect } from 'react';
 import './PendingNFTs.scss';
 import PropTypes from 'prop-types';
 import Blockies from 'react-blockies';
@@ -11,6 +11,12 @@ import { formatAddress } from '../../../../utils/helpers/format';
 
 const PendingNFTs = ({ mintingNfts }) => {
   const { loggedInArtist, address } = useAuthContext();
+
+  const [user, setUser] = useState(loggedInArtist);
+
+  useEffect(() => {
+    setUser(loggedInArtist);
+  }, [loggedInArtist]);
 
   const generateLink = (addr) => `${process.env.REACT_APP_ETHERSCAN_URL}/tx/${addr}`;
   const renderMintingNfts = useMemo(
@@ -43,11 +49,10 @@ const PendingNFTs = ({ mintingNfts }) => {
 
           <div className="nft__card__header">
             <div className="three__images">
-              {loggedInArtist &&
-              (loggedInArtist.avatar ||
-                (loggedInArtist.profileImageUrl && loggedInArtist.profileImageUrl.length > 48)) ? (
+              {user &&
+              (user.avatar || (user.profileImageUrl && user.profileImageUrl.length > 48)) ? (
                 <div className="creator--details">
-                  <img src={loggedInArtist.avatar} alt="first" />
+                  <img src={user.avatar} alt="first" />
                 </div>
               ) : (
                 <div className="creator--details">
@@ -64,11 +69,10 @@ const PendingNFTs = ({ mintingNfts }) => {
                 )}
               </div>
 
-              {loggedInArtist &&
-              (loggedInArtist.avatar ||
-                (loggedInArtist.profileImageUrl && loggedInArtist.profileImageUrl.length > 48)) ? (
+              {user &&
+              (user.avatar || (user.profileImageUrl && user.profileImageUrl.length > 48)) ? (
                 <div className="owner--details">
-                  <img src={loggedInArtist?.avatar} alt="last" />
+                  <img src={user?.avatar} alt="last" />
                 </div>
               ) : (
                 <div className="owner--details">
