@@ -354,7 +354,7 @@ const MarketplaceNFTDetails = ({ data, onNFT }) => {
             <div className="view--button">
               <button
                 type="button"
-                className="light-button"
+                className="light-border-button"
                 onClick={() =>
                   history.push(`/collection/${collection.address}`, {
                     collection,
