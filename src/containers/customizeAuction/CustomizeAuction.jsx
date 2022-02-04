@@ -104,7 +104,7 @@ const CustomizeAuction = () => {
   const [invalidPromoImage, setInvalidPromoImage] = useState(null);
   const [invalidBackgroundImage, setInvalidBackgroundImage] = useState(null);
   const [invalidTierImageIds, setInvalidTierImageIds] = useState([]);
-  const [auctionLinkError, setAuctionLinkError] = useState(false);
+  const [auctionLinkError, setAuctionLinkError] = useState('');
   const [accountNameExists, setAccountNameExists] = useState(false);
   const [accountPageExists, setAccountPageExists] = useState(false);
 

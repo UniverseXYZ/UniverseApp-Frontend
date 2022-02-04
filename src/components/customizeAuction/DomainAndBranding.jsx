@@ -15,6 +15,7 @@ import { useErrorContext } from '../../contexts/ErrorContext.jsx';
 import {
   auctionPageBackgroundImageErrorMessage,
   auctionPagePromoImageErrorMessage,
+  sanitizeUrlString,
 } from '../../utils/helpers.js';
 import { getImageDimensions } from '../../utils/helpers/pureFunctions/auctions';
 import { getAuctionByLink } from '../../utils/api/auctions';
@@ -43,11 +44,16 @@ const PROMO_IMAGE_MAX_SIZE_MB = 3;
 const BACKGROUND_IMAGE_MAX_SIZE_MB = 1;
 const MB_IN_BYTES = 1048576;
 
+const PAGE_LINK_ERRORS = {
+  empty: '"Auction website link" is not allowed to be empty',
+  existing: 'Auction link already exists',
+  notAllowed: 'Only english letters are allowed',
+};
+
 const DomainAndBranding = ({
   values,
   onChange,
   editButtonClick,
-  setEditButtonClick,
   auctionLinkError,
   setAuctionLinkError,
   invalidPromoImage,
@@ -64,7 +70,6 @@ const DomainAndBranding = ({
 
   const inputPromo = useRef(null);
   const inputBackground = useRef(null);
-  const [validLink, setValidLink] = useState(true);
   const [validHeadline, setValidHeadline] = useState(true);
   const [backgroundImage, setBackgroundImage] = useState(null);
   const [promoImageError, setPromoImageError] = useState(false);
@@ -84,33 +89,42 @@ const DomainAndBranding = ({
   }, [values?.backgroundImage]);
 
   const handleLink = async (e) => {
+    const { value } = e.target;
+    const { empty, existing, notAllowed } = PAGE_LINK_ERRORS;
     const validValueRegEx = /^$|^([a-zA-Z0-9-]+)$/;
-    const validChars = validValueRegEx.test(e.target.value);
+    const validChars = validValueRegEx.test(value);
+
+    if (!value) {
+      setAuctionLinkError(empty);
+      return;
+    }
+
     if (validChars) {
-      const link = e.target.value.replace(' ', '-');
+      const link = sanitizeUrlString(value);
       setAuctionLink(link);
       onChange((prevValues) => ({
         ...prevValues,
         link,
-        status: e.target.value.length > 0 ? 'filled' : 'empty',
+        status: value.length > 0 ? 'filled' : 'empty',
       }));
-      setValidLink(e.target.value.trim().length !== 0);
 
       if (link) {
         try {
           const isAuctionLinkAvailable = await getAuctionByLink(link);
 
           if (isAuctionLinkAvailable) {
-            setAuctionLinkError(false);
+            setAuctionLinkError('');
             return;
           }
-          setAuctionLinkError(true);
+          setAuctionLinkError(existing);
           return;
         } catch (error) {
           setShowError(true);
         }
       }
-      setAuctionLinkError(false);
+      setAuctionLinkError('');
+    } else {
+      setAuctionLinkError(notAllowed);
     }
   };
 
@@ -259,7 +273,7 @@ const DomainAndBranding = ({
             <h5>Auction link</h5>
             <div
               className={
-                ((editButtonClick || !validLink) && auctionLink.length === 0) || auctionLinkError
+                auctionLinkError
                   ? 'auction--link--div error-inp'
                   : `auction--link--div ${inputStyle}`
               }
@@ -277,12 +291,7 @@ const DomainAndBranding = ({
                 onChange={(e) => handleLink(e)}
               />
             </div>
-            {(editButtonClick || !validLink) && auctionLink.length === 0 && (
-              <p className="error__text">
-                &quot;Auction website link&quot; is not allowed to be empty
-              </p>
-            )}
-            {auctionLinkError && <p className="error__text">Auction link already exists</p>}
+            {auctionLinkError && <p className="error__text">{auctionLinkError}</p>}
           </div>
         </div>
 
@@ -509,10 +518,9 @@ const DomainAndBranding = ({
 DomainAndBranding.propTypes = {
   values: PropTypes.oneOfType([PropTypes.object]),
   onChange: PropTypes.func.isRequired,
-  auctionLinkError: PropTypes.bool.isRequired,
+  auctionLinkError: PropTypes.string.isRequired,
   setAuctionLinkError: PropTypes.func.isRequired,
   editButtonClick: PropTypes.bool,
-  setEditButtonClick: PropTypes.func,
   invalidPromoImage: PropTypes.bool.isRequired,
   invalidBackgroundImage: PropTypes.bool.isRequired,
   setInvalidPromoImage: PropTypes.func.isRequired,
@@ -527,6 +535,5 @@ DomainAndBranding.defaultProps = {
     backgroundImageBlur: false,
   },
   editButtonClick: false,
-  setEditButtonClick: () => {},
 };
 export default DomainAndBranding;
