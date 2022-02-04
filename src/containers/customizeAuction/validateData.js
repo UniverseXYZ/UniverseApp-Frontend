@@ -25,7 +25,6 @@ export const validateAuctionData = (auction, domainAndBranding) => {
   const { headline, link, backgroundImageBlur } = auction;
   const canEditAuction =
     headline !== domainAndBranding.headline ||
-    // TODO: handle link changes
     link !== domainAndBranding.link ||
     backgroundImageBlur !== domainAndBranding.backgroundImageBlur;
   return canEditAuction;
