@@ -14,6 +14,7 @@ import { shortenEthereumAddress } from '../../utils/helpers/format';
 import { getRewardTierSpanStyles } from '../../utils/helpers';
 import CongratsSection from './CongratsSection';
 import WarningSection from './WarningSection';
+import UnfortunatelySection from './UnfortunatelySection';
 
 const AuctionEndedSection = ({
   currentBid,
@@ -160,6 +161,11 @@ const AuctionEndedSection = ({
     mySlot?.revenueCaptured &&
     mySlot?.totalDepositedNfts?.toNumber() > mySlot?.totalWithdrawnNfts?.toNumber();
 
+  const bidWithdrawn = currentBid && currentBid.withdrawn;
+  const hasUnreleasedFunds = Number(unreleasedFunds) > 0;
+  const hasClaimableFunds = Number(claimableFunds) > 0;
+  const allSlotsCaptured = !Object.values(slotsInfo).some((slot) => !slot.revenueCaptured);
+
   return isAuctionner ? (
     <div className="auction__details__box__top__bidders">
       {/* Tested with 3 different auctions
@@ -170,11 +176,6 @@ const AuctionEndedSection = ({
 
       {/* The Auctioneer has Bid in his own auction and has a winning Bid */}
       {isWinningBid ? (
-        // 1. If the Bid is winning show Congrats & Warning message
-        // 2. If the Auctioneer has released the rewards for his winning slot, we must show Congrats & claim btn & view rankings btn
-        // 3. If the auctioneer has claimed its NFTs, show Success & view rankings btn
-        // 4. If All of the rewards has been released we should hide release rewards btn
-        // 5. If All rewards are released and funds are claimed we should show only the Success
         <>
           {/* Congrats Text must change based on the statusеs
             1. Auctioneer has won a slot but not captured slot revenue
@@ -195,7 +196,10 @@ const AuctionEndedSection = ({
                     Your bid won the <b>{winningSlot?.name}</b> tier. You can claim your NFTs by
                     clicking the button below
                   </span>
-                ) : auctioneerBidWon && auctioneerSlotRevenueCaptured && !hasNFTsToClaim ? (
+                ) : auctioneerBidWon &&
+                  auctioneerSlotRevenueCaptured &&
+                  !hasNFTsToClaim &&
+                  !allSlotsCaptured ? (
                   <span>
                     You have already claimed your NFTs. If you want more NFTs to claim - go to other
                     auctions and bid.
@@ -239,13 +243,43 @@ const AuctionEndedSection = ({
         </>
       ) : !isWinningBid && currentBid ? (
         //  The Auctioneer has Bid in his own auction and has a Lost
-        // 1. Unfortunately heading & withdraw btn & view rankings btn
-        // 2. If the Auctioneer has withdrawn hide the withdraw btn
-        // 3. If All of the rewards has been released we should hide release rewards btn
-        // 5. If All rewards are released and funds are claimed we should show only the Success
         <>
-          <p>auctioneer has bid and lost in his own auction</p>
-          <p>The aucitoneer has withdrawn his bid {currentBid.withdrawn}</p>
+          <UnfortunatelySection
+            text={
+              <>
+                {!auctioneerBidWon && !bidWithdrawn ? (
+                  <span>
+                    You are able to withdraw your funds by clicking the Withdraw button below. You
+                    can still buy individual NFTs from other sellers on NFT marketplaces.
+                  </span>
+                ) : !auctioneerBidWon && bidWithdrawn ? (
+                  <span>
+                    You have already withdrawed your funds. You can still buy individual NFTs from
+                    other sellers on NFT marketplaces.
+                  </span>
+                ) : (
+                  <></>
+                )}
+              </>
+            }
+          />
+
+          <div className="view-rankings-btn-container">
+            {/* The Auctioneer has Bid in his own auction and has lost.. so show Withdraw Button */}
+            {!bidWithdrawn && (
+              <Button onClick={withdrawBid} className="light-button">
+                Withdraw
+              </Button>
+            )}
+
+            <button
+              type="button"
+              className="light-border-button"
+              onClick={() => setShowBidRankings(true)}
+            >
+              View rankings
+            </button>
+          </div>
         </>
       ) : (
         <>
@@ -293,11 +327,20 @@ const AuctionEndedSection = ({
       )}
 
       <div className="footer">
-        <div className="funds-and-balance">
+        <div
+          className={`funds-and-balance ${
+            allSlotsCaptured && !hasClaimableFunds && !hasUnreleasedFunds && auctioneerBidWon
+              ? 'auctioneerClaimedAllFundsAndWonSlot'
+              : ''
+          }`}
+        >
           {/* If the Auction slots have been captured, hide the Release Rewards Button Section */}
-          {!Object.values(slotsInfo).some((slot) => !slot.revenueCaptured) ||
-          !depositedNfts ? null : (
-            <div className="unreleased-funds" style={{ borderRight: '1px solid rgba(0,0,0,10%)' }}>
+          {allSlotsCaptured || !depositedNfts ? null : (
+            <div
+              className={`unreleased-funds ${
+                hasClaimableFunds ? 'hasClaimableFunds' : 'noClaimableFunds'
+              }`}
+            >
               <div className="head">
                 <span>Unreleased funds</span>
                 <span
@@ -326,10 +369,6 @@ const AuctionEndedSection = ({
                   </span>
                 </span>
                 <Button
-                  disabled={
-                    !Object.values(slotsInfo).some((slot) => !slot.revenueCaptured) ||
-                    !depositedNfts
-                  }
                   style={{ width: 180 }}
                   className="light-button"
                   onClick={() =>
@@ -354,8 +393,12 @@ const AuctionEndedSection = ({
           )}
 
           {/* If the Auction has no claimable funds or unreleasedFunds hide the Claim Funds Button Section */}
-          {Number(claimableFunds) > 0 || Number(unreleasedFunds) > 0 ? (
-            <div className="available-balance" style={{ marginLeft: 50 }}>
+          {hasClaimableFunds ? (
+            <div
+              className={`available-balance ${
+                allSlotsCaptured ? 'allSlotsCaptured' : 'notAllSlotsCaptured'
+              }`}
+            >
               <div className="head">
                 <span>Available balance</span>
                 <span
@@ -390,6 +433,18 @@ const AuctionEndedSection = ({
               </div>
             </div>
           ) : null}
+
+          {/* If all slot have been captured and the Auction has no claimable funds or unreleasedFunds, show success message */}
+          {!auctioneerBidWon && allSlotsCaptured && !hasClaimableFunds && !hasUnreleasedFunds && (
+            <CongratsSection
+              text={<>You have already claimed all your funds.</>}
+              heading={
+                <>
+                  <span>Success!</span>
+                </>
+              }
+            />
+          )}
         </div>
       </div>
     </div>
