@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
-import { Link, useHistory } from 'react-router-dom';
+import { format } from 'date-fns';
+import { Link } from 'react-router-dom';
 import './PastAuctionCard.scss';
 import { getPromoImageProps, bidsInUsd, createNftsPerWinnerMarkup } from '../utils';
 import { getBidTypeByName } from '../../../utils/fixtures/BidOptions';
@@ -8,7 +9,6 @@ import { useAuctionContext } from '../../../contexts/AuctionContext';
 
 const PastAuctionCard = ({ auction }) => {
   const { options } = useAuctionContext();
-  const history = useHistory();
 
   const bids = bidsInUsd(auction);
   const winnersCount = auction.rewardTiers.reduce(
@@ -28,19 +28,25 @@ const PastAuctionCard = ({ auction }) => {
 
   return (
     <div className="past__auction__item">
-      <Link
+      <div
         className={`past__auction__image timeLeft ${auction.promoImageUrl ? '' : 'show__avatar'}`}
-        to={`/${auction.user.universePageUrl}/${auction.link}`}
       >
-        <img className={promoImageProps.class} src={promoImageProps.src} alt={auction.name} />
-      </Link>
+        <Link to={`/${auction.user.universePageUrl}/${auction.link}`}>
+          <img className={promoImageProps.class} src={promoImageProps.src} alt={auction.name} />
+        </Link>
+        <div className="date">
+          <label>Ended on</label>
+          <span>{format(new Date(auction.endDate), "MMMM dd, yyyy 'at' h:mm aaaa")}</span>
+        </div>
+      </div>
       <div className="past__auction__details">
         <div className="title">
           <h2>{auction.name}</h2>
         </div>
         <Link to={`/${auction.user.universePageUrl}`} className="creator">
           <img src={auction.user.profileImageUrl} alt={auction.user.displayName} />
-          <span>by {auction.user.displayName}</span>
+          <span>by</span>
+          {auction.user.displayName}
         </Link>
         <div className="statistics">
           <div>
@@ -48,15 +54,15 @@ const PastAuctionCard = ({ auction }) => {
             <p>{winnersCount}</p>
           </div>
           <div>
+            <label>NFTs Per Winner:</label>
+            {nftsPerWinnerMarkup}
+          </div>
+          <div>
             <label>Highest Winning Bid:</label>
             <p>
               <img src={tokenLogo.img} alt={tokenSymbol} />
               {bids.highestBid || 0} <span>{`~$${Math.round(bids.highestBidInUsd || 0)}`}</span>
             </p>
-          </div>
-          <div>
-            <label>NFTs Per Winner:</label>
-            {nftsPerWinnerMarkup}
           </div>
           <div>
             <label>Lowest Winning Bid:</label>

@@ -101,6 +101,10 @@ const ActiveAuctionCard = ({ auction, removeAuction }) => {
             <p>{winnersCount}</p>
           </div>
           <div>
+            <label>NFTs Per Winner:</label>
+            {nftsPerWinnerMarkup}
+          </div>
+          <div>
             <label>Highest Winning Bid:</label>
             <p>
               <img src={tokenLogo} alt={tokenSymbol} />
@@ -108,12 +112,7 @@ const ActiveAuctionCard = ({ auction, removeAuction }) => {
             </p>
           </div>
           <div>
-            <label>NFTs Per Winner:</label>
-            {nftsPerWinnerMarkup}
-          </div>
-          <div>
             <label>Lowest Winning Bid:</label>
-
             <p>
               <img src={tokenLogo} alt={tokenSymbol} />
               {bids.lowestBid} <span>{`~$${Math.round(bids.lowestBidInUsd)}`}</span>
