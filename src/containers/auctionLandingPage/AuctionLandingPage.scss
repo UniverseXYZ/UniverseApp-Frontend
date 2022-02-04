@@ -1053,7 +1053,6 @@
             justify-content: center;
             gap: 14px;
             padding: 15px;
-            border-top: 1px solid rgba(0, 0, 0, 0.1);
             button {
               @include sm {
                 width: 100%;
@@ -1768,4 +1767,44 @@
 .funds-and-balance {
   display: flex;
   padding: 20px 50px;
+  justify-content: center;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  margin-top: 30px;
+
+  .hasClaimableFunds {
+    border-right: 1px solid rgba(0, 0, 0, 0.1);
+  }
+
+  .noClaimableFunds {
+    width: 100%;
+    .balance-body {
+      justify-content: space-between;
+    }
+  }
+
+  .allSlotsCaptured {
+    width: 100%;
+
+    .balance-body {
+      justify-content: space-between;
+    }
+  }
+  .notAllSlotsCaptured {
+    margin-left: 50px;
+  }
+
+  &.auctioneerClaimedAllFundsAndWonSlot {
+    border-top: none;
+    margin-top: 0px;
+  }
+}
+
+.view-rankings-btn-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 30px;
+
+  button {
+    margin-right: 10px;
+  }
 }
