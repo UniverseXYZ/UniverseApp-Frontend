@@ -173,6 +173,12 @@
           height: 248px;
           &.align-center {
             align-items: center;
+            .collection--cover--image {
+              height: 228px;
+              @include sm {
+                height: unset;
+              }
+            }
             .collection--name {
               margin-bottom: 0 !important;
             }
