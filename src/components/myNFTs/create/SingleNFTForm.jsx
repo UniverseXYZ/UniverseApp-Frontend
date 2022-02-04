@@ -147,7 +147,6 @@ const SingleNFTForm = () => {
 
   useEffect(() => {
     (async () => {
-      console.log('Fetching');
       const mintableColls = await getMyMintableCollections();
       setMintableCollections(mintableColls.collections);
 
