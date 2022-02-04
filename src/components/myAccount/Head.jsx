@@ -22,19 +22,21 @@ const Head = () => {
   };
 
   return (
-    <div className="my-account-title container">
-      <div>
-        <h1>Edit my profile</h1>
+    <div className="edit--my--profile--header">
+      <div className="my-account-title">
+        <div>
+          <h1>Edit my profile</h1>
+        </div>
+        <div className="button-section">
+          <Button className="light-border-button public-button" onClick={() => handlePublicPage()}>
+            See public view
+          </Button>
+        </div>
+        <p>
+          You can set your preffered display name, create a branded profile URL and manage other
+          personal settings.
+        </p>
       </div>
-      <div className="button-section">
-        <Button className="light-border-button public-button" onClick={() => handlePublicPage()}>
-          See public page
-        </Button>
-      </div>
-      <p>
-        You can set your preffered display name, create a branded profile URL and manage other
-        personal settings.
-      </p>
     </div>
   );
 };
