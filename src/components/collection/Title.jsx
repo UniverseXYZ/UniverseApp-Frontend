@@ -6,6 +6,12 @@ import currencyIcon from '../../assets/images/eth-icon-new.svg';
 const Title = ({ selectedCollection, nftsCount, ownersCount }) => {
   const NFTSCount = nftsCount >= 1000 ? `${nftsCount / 1000}K` : nftsCount;
 
+  const shortenCollectionAddress = () =>
+    `${selectedCollection.address.substring(0, 13)}...${selectedCollection.address.substring(
+      27,
+      selectedCollection.address.length
+    )}`;
+
   return (
     <div className="collection__info">
       <div className="collection__name__desc">
@@ -19,10 +25,7 @@ const Title = ({ selectedCollection, nftsCount, ownersCount }) => {
         }}
         aria-hidden
       >
-        {`${selectedCollection.address.substring(0, 13)}...${selectedCollection.address.substring(
-          27,
-          selectedCollection.address.length
-        )}`}
+        {shortenCollectionAddress()}
       </h2>
       <div className="item_info">
         <div className="bordered">
