@@ -15,15 +15,10 @@ import NFTs from '../marketplaceTabComponents/NFTs.jsx';
 import NFTCard from '../nft/NFTCard.jsx';
 import universeIcon from '../../assets/images/universe-img.svg';
 import checkIcon from '../../assets/images/check.svg';
-import { useMyNftsContext } from '../../contexts/MyNFTsContext';
-import { useAuthContext } from '../../contexts/AuthContext';
 import { getCollectionBackgroundColor } from '../../utils/helpers';
 import SearchTokenIdField from '../input/SearchTokenIdField.jsx';
 import LoadingImage from '../general/LoadingImage';
-import InlineSVG from './InlineSVG';
-import dots from '../../assets/images/3dots.svg';
-import transferIcon from '../../assets/images/transfericon.svg';
-import TransferNFTPopup from '../popups/transferNFT/TransferNFTPopup';
+import SVGImageLoader from './InlineSVG';
 import { shortenEthereumAddress } from '../../utils/helpers/format';
 
 const MarketplaceNFTDetails = ({ data, onNFT }) => {
@@ -80,7 +75,7 @@ const MarketplaceNFTDetails = ({ data, onNFT }) => {
       return <LoadingImage showSpinner src={generateImage()} alt={selectedNFT.name} />;
     }
 
-    return <InlineSVG svgUrl={selectedNFT.optimized_url || selectedNFT.thumbnail_url} />;
+    return <SVGImageLoader svgUrl={selectedNFT.optimized_url || selectedNFT.thumbnail_url} />;
   };
 
   const getVideoUrl = () =>
