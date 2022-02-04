@@ -22,6 +22,8 @@ const PastAuctionActionSection = ({
   const { setAuction } = useAuctionContext();
   const { activeTxHashes, setActiveTxHashes } = useMyNftsContext();
   const [canWithdrawNfts, setCanWithdrawNfts] = useState(false);
+  const [revenueCaptured, setRevenueCaptured] = useState(false);
+  const [withdrawn, setWithdrawn] = useState(false);
 
   const getTitleText = () => {
     const winners = 0;
@@ -38,12 +40,15 @@ const PastAuctionActionSection = ({
     return '';
   };
 
+  // eslint-disable-next-line consistent-return
   const getDescriptionText = () => {
-    if (auction.finalised && !slotsToWithdraw.length) {
+    if (auction.finalised && withdrawn && !slotsToWithdraw.length) {
       return 'You have already withdrawn your NFTs to your wallet.';
     }
 
-    return 'You can withdraw your NFTs by clicking a button below.';
+    if (auction.finalised && revenueCaptured && slotsToWithdraw.length) {
+      return 'You can withdraw your NFTs by clicking a button below.';
+    }
   };
 
   const handleWithdrawNfts = async () => {
@@ -60,6 +65,7 @@ const PastAuctionActionSection = ({
         setActiveTxHashes([...activeTxHashes, tx.hash]);
         // eslint-disable-next-line no-await-in-loop
         const txReceipt = await tx.wait();
+        setWithdrawn(true);
         return txReceipt.status;
       });
 
@@ -83,12 +89,15 @@ const PastAuctionActionSection = ({
     let canWithdraw = true;
     if (!auction.finalised) {
       canWithdraw = false;
+    } else if (!slotsToWithdraw.length) {
+      canWithdraw = false;
     } else {
       // eslint-disable-next-line no-restricted-syntax
       for (const [slotIndex, slotInfo] of Object.entries(slotsInfo)) {
         // Check if slot has been captured
         const slotsCantBeWithdrawn =
           slotsToWithdraw.find((index) => index === slotIndex) && !slotInfo.revenueCaptured;
+        setRevenueCaptured(slotInfo.revenueCaptured);
         if (slotsCantBeWithdrawn) {
           canWithdraw = false;
         }
@@ -99,45 +108,58 @@ const PastAuctionActionSection = ({
     setCanWithdrawNfts(canWithdraw);
   }, [slotsInfo, slotsToWithdraw]);
 
+  useEffect(() => {
+    if (auction.finalised) {
+      // eslint-disable-next-line no-restricted-syntax
+      for (const [slotIndex, slotInfo] of Object.entries(slotsInfo)) {
+        setWithdrawn(
+          slotInfo.totalWithdrawnNfts.toNumber() === slotInfo.totalDepositedNfts.toNumber()
+        );
+      }
+    }
+  }, []);
+
   return (
-    <div className="empty__auction">
-      <img src={bubleIcon} alt="Buble" />
-      <h3>{getTitleText()}</h3>
-      {!loggedInArtist.name || !loggedInArtist.avatar ? (
-        <div className="warning__div">
-          <img src={Exclamation} alt="Warning" />
-          <p>
-            Please, fill out the profile details before you set up an auction.{' '}
-            <button
-              type="button"
-              onClick={() => history.push('/my-account', { redirect: 'setup-auction' })}
-            >
-              Go to my profile
-            </button>
-            .
-          </p>
-        </div>
-      ) : (
-        <p className="desc">{getDescriptionText()}</p>
-      )}
-      {!canWithdrawNfts && slotsToWithdraw.length && (
-        <div className="warning__div">
-          <img src={Exclamation} alt="Warning" />
-          <p>You’ll be able to withdraw your NFTs right after all the rewards are released.</p>
-        </div>
-      )}
-      {!!slotsToWithdraw.length && (
-        <button
-          disabled={!canWithdrawNfts}
-          type="button"
-          className="light-button set_up"
-          onClick={handleWithdrawNfts}
-        >
-          Withdraw NFTs
-          <img src={plusIcon} alt="icon" style={{ marginLeft: '12px' }} />
-        </button>
-      )}
-    </div>
+    auction.finalised && (
+      <div className="empty__auction">
+        <img src={bubleIcon} alt="Buble" />
+        <h3>{getTitleText()}</h3>
+        {!loggedInArtist.name || !loggedInArtist.avatar ? (
+          <div className="warning__div">
+            <img src={Exclamation} alt="Warning" />
+            <p>
+              Please, fill out the profile details before you set up an auction.{' '}
+              <button
+                type="button"
+                onClick={() => history.push('/my-account', { redirect: 'setup-auction' })}
+              >
+                Go to my profile
+              </button>
+              .
+            </p>
+          </div>
+        ) : (
+          <p className="desc">{getDescriptionText()}</p>
+        )}
+        {!canWithdrawNfts && !revenueCaptured && !withdrawn && (
+          <div className="warning__div">
+            <img src={Exclamation} alt="Warning" />
+            <p>You’ll be able to withdraw your NFTs right after all the rewards are released.</p>
+          </div>
+        )}
+        {
+          <button
+            disabled={!canWithdrawNfts}
+            type="button"
+            className="light-button set_up"
+            onClick={handleWithdrawNfts}
+          >
+            Withdraw NFTs
+            <img src={plusIcon} alt="icon" style={{ marginLeft: '12px' }} />
+          </button>
+        }
+      </div>
+    )
   );
 };
 
