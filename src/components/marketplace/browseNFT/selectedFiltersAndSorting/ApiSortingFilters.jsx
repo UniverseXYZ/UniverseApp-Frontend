@@ -1,6 +1,5 @@
 import React, { useContext, useState, useRef, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import uuid from 'react-uuid';
 import InputRange from 'react-input-range';
 import { PLACEHOLDER_MARKETPLACE_USERS } from '../../../../utils/fixtures/BrowseNFTsDummyData';
 

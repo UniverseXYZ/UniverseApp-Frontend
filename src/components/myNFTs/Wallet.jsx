@@ -18,6 +18,8 @@ import {
 } from '../../utils/api/mintNFT';
 import { useMyNftsContext } from '../../contexts/MyNFTsContext';
 
+const pollingInterval = 10000;
+
 const Wallet = React.memo(({ scrollContainer }) => {
   const [perPage, setPerPage] = useState(8);
   const [offset, setOffset] = useState(0);
@@ -27,6 +29,14 @@ const Wallet = React.memo(({ scrollContainer }) => {
   const [isSearching, setIsSearching] = useState(false);
   const [allCollections, setAllCollections] = useState([]);
   const { fetchNftSummary } = useMyNftsContext();
+
+  const [nftPoll, setNftPoll] = useState(null);
+  const pollRef = useRef(null);
+
+  // Update ref so that the cleanup function works
+  useEffect(() => {
+    pollRef.current = nftPoll;
+  }, [nftPoll]);
 
   useEffect(() => {
     setOffset(0);
@@ -82,26 +92,29 @@ const Wallet = React.memo(({ scrollContainer }) => {
     resetPagination();
   }, [collections]);
 
-  let nftPollInterval = null;
-  const pollingInterval = 10000;
-
   useEffect(() => {
-    if (mintingNftsCount && !nftPollInterval) {
-      nftPollInterval = setInterval(async () => {
-        const nftCount = await getMyMintingNftsCount();
-        if (nftCount !== mintingNftsCount) {
-          const nfts = await getMyMintingNfts();
-          setMintingNftsCount(nfts.mintingNfts.length);
-          setMintingNfts(nfts.mintingNfts);
-          fetchNftSummary();
-          if (!nfts?.length || nfts.length === 0) {
-            clearInterval(nftPollInterval);
+    if (mintingNftsCount && !pollRef.current) {
+      setNftPoll(
+        setInterval(async () => {
+          const nftCount = await getMyMintingNftsCount();
+          if (nftCount !== mintingNftsCount) {
+            const nfts = await getMyMintingNfts();
+            setMintingNftsCount(nfts.mintingNfts.length);
+            setMintingNfts(nfts.mintingNfts);
+            fetchNftSummary();
+            if (!nfts?.length || nfts.length === 0) {
+              clearInterval(pollRef.current);
+            }
           }
-        }
-      }, pollingInterval);
-    } else if (!mintingNftsCount && nftPollInterval) {
-      clearInterval(nftPollInterval);
+        }, pollingInterval)
+      );
+    } else if (!mintingNftsCount && pollRef.current) {
+      clearInterval(pollRef.current);
     }
+
+    return () => {
+      clearInterval(pollRef.current);
+    };
   }, [mintingNftsCount]);
 
   const changePerPage = (newPerPage) => {

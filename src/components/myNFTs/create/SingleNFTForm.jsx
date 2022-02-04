@@ -601,9 +601,6 @@ const SingleNFTForm = () => {
       console.error('server error. cant get meta data');
     }
 
-    // const savedNFTS = await getSavedNfts();
-    // setSavedNfts(savedNFTS || []);
-
     setShowLoadingPopup(false);
     setLoadingText(MINTING_LOADING_TEXT);
     setShowCongratsPopupOnSaveForLaterClick(true);

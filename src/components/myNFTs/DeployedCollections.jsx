@@ -1,10 +1,6 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
-import uuid from 'react-uuid';
 import PropTypes from 'prop-types';
-import bubbleIcon from '../../assets/images/text-bubble.png';
-import plusIcon from '../../assets/images/plus.svg';
-import { useAuthContext } from '../../contexts/AuthContext';
 import { getCollectionBackgroundColor } from '../../utils/helpers';
 import PendingCollections from './pendingDropdown/pendingCollections/PendingCollections';
 import universeIcon from '../../assets/images/universe-img.svg';
@@ -19,11 +15,9 @@ import { getMyMintingCollectionsCount, getMyMintingCollections } from '../../uti
 
 const CORE_COLLECTION_ADDRESS = process.env.REACT_APP_UNIVERSE_ERC_721_ADDRESS;
 
-const DeployedCollections = ({ scrollContainer }) => {
-  const nftPollInterval = null;
-  let collPollInterval = null;
-  const pollingInterval = 10000;
+const pollingInterval = 1000;
 
+const DeployedCollections = ({ scrollContainer }) => {
   const history = useHistory();
   const { fetchNftSummary } = useMyNftsContext();
 
@@ -40,6 +34,13 @@ const DeployedCollections = ({ scrollContainer }) => {
   const [page, setPage] = useState(0);
   const [isSearching, setIsSearching] = useState(true);
   const [collectionData, setCollectionData] = useState(null);
+  const [collPoll, setCollPoll] = useState(null);
+  const collPollRef = useRef(null);
+
+  // Update ref so that the cleanup function works
+  useEffect(() => {
+    collPollRef.current = collPoll;
+  }, [collPoll]);
 
   const {
     apiPage,
@@ -75,25 +76,31 @@ const DeployedCollections = ({ scrollContainer }) => {
   };
 
   useEffect(() => {
-    if (mintingCollectionsCount && !collPollInterval) {
-      collPollInterval = setInterval(async () => {
-        const apiMintingCount = await getMyMintingCollectionsCount();
-        if (apiMintingCount !== mintingCollectionsCount) {
-          const currentlyMinting = await getMyMintingCollections();
-          setMintingCollections(currentlyMinting.collections);
-          setMintingCollectionsCount(currentlyMinting?.collections?.length || 0);
-          fetchNftSummary();
-          if (
-            !currentlyMinting?.collections?.length ||
-            currentlyMinting?.collections?.length === 0
-          ) {
-            clearInterval(collPollInterval);
+    if (mintingCollectionsCount && !collPollRef.current) {
+      setCollPoll(
+        setInterval(async () => {
+          const apiMintingCount = await getMyMintingCollectionsCount();
+          if (apiMintingCount !== mintingCollectionsCount) {
+            const currentlyMinting = await getMyMintingCollections();
+            setMintingCollections(currentlyMinting.collections);
+            setMintingCollectionsCount(currentlyMinting?.collections?.length || 0);
+            fetchNftSummary();
+            if (
+              !currentlyMinting?.collections?.length ||
+              currentlyMinting?.collections?.length === 0
+            ) {
+              clearInterval(collPollRef.current);
+            }
           }
-        }
-      }, pollingInterval);
-    } else if (!mintingCollectionsCount && nftPollInterval) {
-      clearInterval(collPollInterval);
+        }, pollingInterval)
+      );
+    } else if (!mintingCollectionsCount && collPollRef.current) {
+      clearInterval(collPollRef.current);
     }
+
+    return () => {
+      clearInterval(collPollRef.current);
+    };
   }, [mintingCollectionsCount]);
 
   const collectionsContainerRef = useRef(null);

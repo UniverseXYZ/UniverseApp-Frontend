@@ -3,7 +3,6 @@ import './PendingNFTs.scss';
 import PropTypes from 'prop-types';
 import Blockies from 'react-blockies';
 import mp3Icon from '../../../../assets/images/mp3-icon.png';
-import { useMyNftsContext } from '../../../../contexts/MyNFTsContext';
 import { useAuthContext } from '../../../../contexts/AuthContext';
 import { SpinningLoader } from '../misc/SpinningLoader';
 import PendingAccordion from '../pendingAccordion/PendingAccordion';

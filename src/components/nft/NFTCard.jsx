@@ -4,7 +4,6 @@ import React, { useState } from 'react';
 import './NFTCard.scss';
 import { Link, useHistory, useLocation } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import uuid from 'react-uuid';
 import videoIcon from '../../assets/images/marketplace/video-icon.svg';
 import audioIcon from '../../assets/images/marketplace/audio-icon.svg';
 import mp3Icon from '../../assets/images/mp3-icon.png';
@@ -161,7 +160,7 @@ const NFTCard = React.memo(
                     )
                   }
                   aria-hidden="true"
-                  key={uuid()}
+                  key={nft.id}
                 >
                   {!nft.artworkType.endsWith('mpeg') &&
                     !nft.artworkType.endsWith('mp4') &&

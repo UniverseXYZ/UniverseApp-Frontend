@@ -2,7 +2,6 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import './RarityList.scss';
-import uuid from 'react-uuid';
 import PolymorphCard from './PolymorphCard';
 import ItemsPerPageDropdown from '../../pagination/ItemsPerPageDropdown';
 import Pagination from '../../pagination/Pagionation';
@@ -78,7 +77,6 @@ const List = ({
       setShowClearALL(false);
     }
   }, [categories]);
-
   return (
     <div className="rarity--charts--list">
       <CategoriesFilter
@@ -95,11 +93,11 @@ const List = ({
         <div className="selected--filters">
           {showClearALL && <div className="result">{results.length} results</div>}
           {categories.map((item, index) => (
-            <>
+            <React.Fragment key={item.id}>
               {item.traits.map(
                 (trait, idx) =>
                   trait.checked && (
-                    <button type="button" className="light-border-button">
+                    <button type="button" className="light-border-button" key={trait.name}>
                       {trait.name}
                       <img
                         className="close"
@@ -111,7 +109,7 @@ const List = ({
                     </button>
                   )
               )}
-            </>
+            </React.Fragment>
           ))}
           {showClearALL && (
             <button type="button" className="clear--all" onClick={() => handleClearAll()}>
@@ -126,7 +124,7 @@ const List = ({
         ) : results.length ? (
           <div className="grid">
             {sliceData.map((item, i) => (
-              <PolymorphCard key={uuid()} item={item} index={offset + i + 1} />
+              <PolymorphCard key={item.id} item={item} index={offset + i + 1} />
             ))}
             {isLastPage ? <RarityChartsLoader number={emptySlots} /> : <></>}
           </div>

@@ -44,7 +44,6 @@ const NFTsTab = React.memo(({ showMintPrompt, username, artistAddress }) => {
   const [perPage, setPerPage] = useState(8);
   const [page, setPage] = useState(0);
 
-  // TODO: Change endpoint to get user's nfts
   const getMyCollections = async () => {
     if (artistAddress) {
       try {
@@ -62,8 +61,8 @@ const NFTsTab = React.memo(({ showMintPrompt, username, artistAddress }) => {
   }, [artistAddress]);
 
   useEffect(() => {
-    if (results.nfts) {
-      setUserPageNftsCount(results.pagination.totalCount);
+    if (results.pagination) {
+      setUserPageNftsCount(results.pagination.totalCount || 0);
       setShownNFTs(results);
       setIsSearching(false);
     }

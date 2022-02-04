@@ -2,12 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import './RarityCharsLoader.scss';
 import './RarityCharts.scss';
-import uuid from 'react-uuid';
 import lobsterLoadingBg from '../../assets/images/lobby-lobsters/img_placeholder.png';
 
 const LobsterRarityChartsLoader = React.memo(({ number }) =>
-  [...Array(number)].map(() => (
-    <div key={uuid()} className="card" style={{ cursor: 'default' }}>
+  [...Array(number)].map((n) => (
+    <div key={n} className="card" style={{ cursor: 'default' }}>
       <div className="card--header">
         <div className="card--number">#???</div>
         <div className="card--price">Rarity Score: ???</div>
