@@ -10,13 +10,15 @@
     background: $white;
     border-radius: 12px;
     border: 1px solid rgba(0, 0, 0, 0.1);
-    padding: 12px;
     grid-gap: 18px;
     &.past {
       .my--bids--image {
-        filter: grayscale(1);
-        .date--border--div {
-          background-image: unset !important;
+        .full--width {
+          opacity: 0.6;
+        }
+        .date {
+          width: 209px;
+          background: rgba(255, 0, 0, 0.5);
         }
       }
     }
@@ -26,15 +28,21 @@
       position: relative;
       width: 100%;
       height: 311px;
-      border-radius: 6px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      border-radius: 12px 12px 0px 0px;
+      .full--width {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
       &.show--avatar {
-        background-image: url("../../../assets/images/artist_card_bg.png");
-        background-position: center;
-        background-size: cover;
-        background-repeat: no-repeat;
+        .full--width {
+          background-image: url("../../../assets/images/artist_card_bg.png");
+          background-position: center;
+          background-size: cover;
+          background-repeat: no-repeat;
+        }
         img.original {
           display: none;
         }
@@ -58,8 +66,6 @@
       }
       &.timeLeft {
         .date {
-          height: 46px;
-
           .date--border--div {
             position: absolute;
             width: calc(100% + 8px);
@@ -123,6 +129,7 @@
     }
 
     .my--bids--details {
+      padding: 0 12px 12px;
       .title {
         display: flex;
         justify-content: space-between;

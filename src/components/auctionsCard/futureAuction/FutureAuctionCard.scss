@@ -10,9 +10,9 @@
     border: 1px solid rgba(0, 0, 0, 0.1);
     box-sizing: border-box;
     border-radius: 12px;
-    padding: 12px;
 
     .title {
+      padding-left: 14px;
       h1 {
         font-family: $sharpGroteskSemiBoldFont;
         font-style: normal;
@@ -29,6 +29,7 @@
         font-style: normal;
         font-weight: bold;
         font-size: 12px;
+        color: $black;
 
         img {
           width: 30px;
@@ -59,7 +60,7 @@
     .auction__img {
       position: relative;
       margin-bottom: 18px;
-      border-radius: 6px;
+      border-radius: 12px 12px 0px 0px;
       height: 300px;
       min-width: 200px;
       display: flex;
@@ -134,7 +135,7 @@
       border: 1px solid #f0f0f0;
       box-sizing: border-box;
       border-radius: 6px;
-      margin-top: 18px;
+      margin: 18px 14px 14px;
       padding: 5px 27px 5px 16px;
 
       &__box {

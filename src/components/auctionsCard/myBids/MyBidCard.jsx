@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { format } from 'date-fns';
 import { useHistory } from 'react-router-dom';
 import './MyBidCard.scss';
 import { isBeforeNow } from '../../../utils/dates';
@@ -19,21 +20,32 @@ const MyBidCard = ({ bid }) => {
         onClick={() => history.push(auctionPagelink)}
         className={`my--bids--image timeLeft ${bid.auction.promoImageUrl ? '' : 'show--avatar'}`}
       >
-        {bid.auction.promoImageUrl ? (
-          <img className="original" src={bid.auction.promoImageUrl} alt={bid.auction.name} />
-        ) : (
-          <img
-            className="artist--image"
-            src={bid.auction.creator.profileImageUrl}
-            alt={bid.auction.creator.displayName}
-          />
-        )}
+        <div className="full--width">
+          {bid.auction.promoImageUrl ? (
+            <img className="original" src={bid.auction.promoImageUrl} alt={bid.auction.name} />
+          ) : (
+            <img
+              className="artist--image"
+              src={bid.auction.creator.profileImageUrl}
+              alt={bid.auction.creator.displayName}
+            />
+          )}
+        </div>
         <div className="date">
-          <div className="date--border--div" />
-          <label>{isBeforeNow(bid.auction.endDate) ? 'Ended on' : 'Time left'}</label>
-          <span>
-            <AuctionsTabsCountdown activeAuction={bid.auction} showLabel={false} />
-          </span>
+          {!isBeforeNow(bid.auction.endDate) ? (
+            <>
+              <div className="date--border--div" />
+              <label>Time left</label>
+              <span>
+                <AuctionsTabsCountdown activeAuction={bid.auction} showLabel={false} />
+              </span>
+            </>
+          ) : (
+            <>
+              <label>Ended on</label>
+              <span>{format(new Date(bid.auction.endDate), "MMMM dd, yyyy 'at' h:mm aaaa")}</span>
+            </>
+          )}
         </div>
       </div>
       <div className="my--bids--details">
@@ -48,7 +60,8 @@ const MyBidCard = ({ bid }) => {
           onClick={() => history.push(`./${bid.auction.creator.universePageUrl}`)}
         >
           <img src={bid.auction.creator.profileImageUrl} alt={bid.auction.creator.displayName} />
-          <span>by {bid.auction.creator.displayName}</span>
+          <span>by</span>
+          {bid.auction.creator.displayName}
         </div>
         <div className="my--bid--section">
           <div className="caption">My bid</div>
@@ -69,6 +82,14 @@ const MyBidCard = ({ bid }) => {
             <p>{bid.numberOfWinners}</p>
           </div>
           <div>
+            <label>NFTs Per Winner:</label>
+            {bid.maxNfts !== bid.minNfts ? (
+              <p>{`${bid.maxNfts}-${bid.minNfts}`}</p>
+            ) : (
+              <p>{bid.maxNfts}</p>
+            )}
+          </div>
+          <div>
             <label>Highest Winning Bid:</label>
             <p>
               <img src={ethIcon} alt="eth" />
@@ -78,14 +99,6 @@ const MyBidCard = ({ bid }) => {
                 {ethPriceUsd ? (bid.highestBid * ethPriceUsd).toFixed(2) : bid.highestBid}
               </span>
             </p>
-          </div>
-          <div>
-            <label>NFTs Per Winner:</label>
-            {bid.maxNfts !== bid.minNfts ? (
-              <p>{`${bid.maxNfts}-${bid.minNfts}`}</p>
-            ) : (
-              <p>{bid.maxNfts}</p>
-            )}
           </div>
           <div>
             <label>Lowest Winning Bid:</label>
