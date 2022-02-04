@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import 'react-color-palette/lib/css/styles.css';
 import arrowDown from '../../assets/images/arrow-down.svg';
 
-const CustomColorPicker = ({ index, onChange, onColor }) => {
+export const CustomColorPicker = React.memo(({ index, onChange, onColor }) => {
   const defaultColor = '#EABD16';
   const [color, setColor] = useColor('hex', onColor || defaultColor);
   const [hidePicker, setHidePicker] = useState(true);
@@ -35,7 +35,7 @@ const CustomColorPicker = ({ index, onChange, onColor }) => {
     return () => {
       document.removeEventListener('click', handleClickOutside, true);
     };
-  });
+  }, []);
 
   return (
     <div className="pick__color__div" ref={ref}>
@@ -48,6 +48,8 @@ const CustomColorPicker = ({ index, onChange, onColor }) => {
         hidden={hidePicker}
         className="custom__color__picker"
         onClick={handleClick}
+        onMouseUp={handleClick}
+        onMouseLeave={handleClick}
         aria-hidden="true"
       >
         <ColorPicker width={286} height={238} color={color} onChange={setColor} hideHSB hideRGB />
@@ -61,7 +63,7 @@ const CustomColorPicker = ({ index, onChange, onColor }) => {
       </div>
     </div>
   );
-};
+});
 
 CustomColorPicker.propTypes = {
   index: PropTypes.number.isRequired,

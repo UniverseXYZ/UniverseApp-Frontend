@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import Button from '../button/Button.jsx';
 import cloudIcon from '../../assets/images/ion_cloud.svg';
 import defaultImage from '../../assets/images/default-img.svg';
-import CustomColorPicker from './CustomColorPicker.jsx';
+import { CustomColorPicker } from './CustomColorPicker.jsx';
 import { useAuctionContext } from '../../contexts/AuctionContext.jsx';
 import { auctionPageTierImageErrorMessage } from '../../utils/helpers.js';
 import { getImageDimensions } from '../../utils/helpers/pureFunctions/auctions';
