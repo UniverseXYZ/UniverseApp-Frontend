@@ -18,6 +18,7 @@ export const useSearchCollection = (address) => {
   const [inputText, setInputText] = useState('');
   const [apiPage, setApiPage] = useState(0);
   const [results, setResults] = useState([]);
+  const [notFound, setNotFound] = useState(false);
   const [isLastPage, setIsLastPage] = useState(false);
   const [loadedPages, setLoadedPages] = useState([]);
 
@@ -26,6 +27,7 @@ export const useSearchCollection = (address) => {
       signal: abortSignal,
     });
     if (result.status !== 200) {
+      setNotFound(true);
       throw new Error(`bad status = ${result.status}`);
     }
     const json = await result.json();
@@ -85,5 +87,6 @@ export const useSearchCollection = (address) => {
     setIsLastPage,
     loadedPages,
     setLoadedPages,
+    notFound,
   };
 };

@@ -36,6 +36,7 @@ const Collection = () => {
     setApiPage,
     search: { loading },
     results,
+    notFound,
     isLastPage,
     setIsLastPage,
     loadedPages,
@@ -100,7 +101,7 @@ const Collection = () => {
     scrollToNftContainer();
   }, [page, perPage]);
 
-  return !collectionData ? (
+  return !collectionData && !notFound ? (
     <div className="loader-wrapper">
       <CollectionPageLoader />
     </div>
