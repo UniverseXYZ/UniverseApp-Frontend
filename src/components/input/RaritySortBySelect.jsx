@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef, useContext } from 'react';
 import PropTypes from 'prop-types';
-import uuid from 'react-uuid';
 import arrowDown from '../../assets/images/browse-nft-arrow-down.svg';
 
 import './SortBySelect.scss';
@@ -63,7 +62,7 @@ const SortBySelect = (props) => {
             {sortData.map((item, index) => (
               <div
                 className="dropdown--item"
-                key={uuid()}
+                key={item}
                 aria-hidden="true"
                 onClick={() => handleOptionChange(item)}
                 style={{ display: hideFirstOption && index === 0 ? 'none' : 'block' }}

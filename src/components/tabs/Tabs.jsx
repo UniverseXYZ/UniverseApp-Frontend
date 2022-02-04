@@ -1,4 +1,3 @@
-import uuid from 'react-uuid';
 import React from 'react';
 import PropTypes from 'prop-types';
 import './Tabs.scss';
@@ -10,7 +9,7 @@ const Tabs = ({ items, scrollContainer }) => (
         {items.map((tab, index) =>
           tab.name !== 'Hidden' && tab.name !== 'Liked' ? (
             <li
-              key={uuid()}
+              key={tab.name}
               className={tab.active ? 'active' : ''}
               aria-hidden="true"
               onClick={() => tab.handler && tab.handler(index, tab.name)}
@@ -28,7 +27,7 @@ const Tabs = ({ items, scrollContainer }) => (
             </li>
           ) : tab.length ? (
             <li
-              key={uuid()}
+              key={tab.name}
               className={tab.active ? 'active' : ''}
               aria-hidden="true"
               onClick={() => tab.handler && tab.handler(index, tab.name)}
