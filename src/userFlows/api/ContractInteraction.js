@@ -42,31 +42,48 @@ export async function sendMintRequest(requiredContracts, tokenURIsAndRoyaltiesOb
     return;
   }
 
-  const coreContractId = 0;
-  const firstChunk = 0;
-  const contract = Object.values(requiredContracts)[coreContractId];
-  const mintingData = Object.values(tokenURIsAndRoyaltiesObject)[coreContractId][firstChunk];
+  try {
+    // Here we have only one transaction --> we don't need to track minted count
+    // The transaction is either rejected/failed or successful
+    const coreContractId = 0;
+    const firstChunk = 0;
+    const contract = Object.values(requiredContracts)[coreContractId];
+    const mintingData = Object.values(tokenURIsAndRoyaltiesObject)[coreContractId][firstChunk];
 
-  const mintTransaction = await contract.mint(
-    helpers.address,
-    mintingData.token,
-    mintingData.royalties
-  );
+    const mintTransaction = await contract.mint(
+      helpers.address,
+      mintingData.token,
+      mintingData.royalties
+    );
 
-  if (helpers.setActiveTxHashes)
-    helpers.setActiveTxHashes([...helpers.activeTxHashes, mintTransaction.hash]);
+    if (helpers.setActiveTxHashes)
+      helpers.setActiveTxHashes([...helpers.activeTxHashes, mintTransaction.hash]);
 
-  const mintReceipt = await mintTransaction.wait();
+    const mintReceipt = await mintTransaction.wait();
 
-  if (!mintReceipt.status) console.error('satus code:', mintReceipt.status);
+    if (!mintReceipt.status) console.error('status code:', mintReceipt.status);
 
-  return [
-    {
-      transaction: mintTransaction,
-      tokens: mintingData.token,
-      mintingIds: [mintingData.mintingId],
-    },
-  ];
+    return [
+      {
+        transaction: mintTransaction,
+        tokens: mintingData.token,
+        mintingIds: [mintingData.mintingId],
+        status: mintReceipt.status,
+      },
+    ];
+  } catch (err) {
+    // This means user rejected the transaction
+    if (err?.code === 4001) {
+      // This status is used below to show error
+      return [
+        {
+          status: 2,
+        },
+      ];
+    }
+    // This status means the tx failed
+    return [{ status: 0 }];
+  }
 }
 
 /**
@@ -99,33 +116,40 @@ export async function sendBatchMintRequest(
       tokenURIsAndRoyaltiesObject[collectionId]
     );
     const mints = tokensChunks.map(async (tokenChunk, i) => {
-      const mintingIdChunk = mintingIdChunks[i];
-      const txn = await sendTransactions({
-        address: helpers.address,
-        tokens: tokenChunk,
-        royalties: royaltiesChunks[i],
-        contract: requiredContracts[collectionId],
-      });
-      return {
-        transaction: txn,
-        tokens: tokenChunk,
-        mintingIds: mintingIdChunk,
-      };
+      try {
+        const mintingIdChunk = mintingIdChunks[i];
+        const txn = await sendTransactions({
+          address: helpers.address,
+          tokens: tokenChunk,
+          royalties: royaltiesChunks[i],
+          contract: requiredContracts[collectionId],
+        });
+
+        helpers.setActiveTxHashes((txHashes) => [...txHashes, txn.hash]);
+
+        const mintReceipt = await txn.wait();
+
+        return {
+          transaction: txn,
+          tokens: tokenChunk,
+          mintingIds: mintingIdChunk,
+          status: mintReceipt.status,
+        };
+      } catch (err) {
+        // This means user rejected the transaction
+        if (err?.code === 4001) {
+          // This status is used below to show error
+          return {
+            status: 2,
+          };
+        }
+        // This status means the tx failed
+        return { status: 0 };
+      }
     });
     txPromises.push(...mints);
   });
 
   const contractData = await Promise.all(txPromises);
-  const txHashes = contractData.map((res) => res.transaction.hash);
-  helpers.setActiveTxHashes(txHashes);
   return contractData;
-
-  // const txResponse = await Promise.all(txPromises);
-
-  // txResponse.forEach((res) => {
-  //   txHashesArray.push(res.hash);
-  //   mintPromises.push(res);
-  // });
-
-  // await Promise.all(mintPromises);
 }

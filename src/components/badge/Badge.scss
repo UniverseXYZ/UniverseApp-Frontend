@@ -2,6 +2,8 @@
 @import "../../assets/scss/_mixins";
 
 .badge {
+  position: relative;
+  top: -3px;
   background: linear-gradient(135deg, #bceb00 15.57%, #00eaea 84.88%);
   border-radius: 4px;
   margin-left: 4px;

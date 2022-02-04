@@ -1,181 +1,81 @@
-import React, { useContext, useEffect, useState, useRef } from 'react';
+/* eslint-disable no-plusplus */
+/* eslint-disable no-return-assign */
+import React, { useEffect, useState, useRef } from 'react';
 import Popup from 'reactjs-popup';
-import { useLocation, useHistory } from 'react-router-dom';
-import uuid from 'react-uuid';
+import { useHistory } from 'react-router-dom';
 import './MyNFTs.scss';
-import { number } from 'prop-types';
+import { Contract, utils } from 'ethers';
 import Wallet from './Wallet.jsx';
 import SavedNFTs from './SavedNFTs.jsx';
 import UniverseNFTs from './UniverseNFTs.jsx';
-import Button from '../button/Button';
-import AppContext from '../../ContextAPI';
 import LoadingPopup from '../popups/LoadingPopup.jsx';
 import CongratsPopup from '../popups/CongratsPopup.jsx';
-import arrow from '../../assets/images/arrow.svg';
-import union from '../../assets/images/Union.svg';
-import bubbleIcon from '../../assets/images/text-bubble.png';
-import tabArrow from '../../assets/images/tab-arrow.svg';
 import DeployedCollections from './DeployedCollections.jsx';
-import { handleTabRightScrolling, handleTabLeftScrolling } from '../../utils/scrollingHandlers';
-import { UNIVERSE_NFTS } from '../../utils/fixtures/NFTsUniverseDummyData';
 import Tabs from '../tabs/Tabs';
-import EmptyTabs from '../tabs/EmptyTabs';
 import HiddenNFTs from './HiddenNFTs';
 import plusIcon from '../../assets/images/plus.svg';
 import NFTsActivity from './NFTsActivity';
 import LikedNFTs from './LikedNFTs';
-import { MintSavedNftsFlow } from '../../userFlows/MintSavedNftsFlow';
 import { useThemeContext } from '../../contexts/ThemeContext';
 import { useMyNftsContext } from '../../contexts/MyNFTsContext';
 import { useAuthContext } from '../../contexts/AuthContext';
 import { useLobsterContext } from '../../contexts/LobsterContext';
 import { usePolymorphContext } from '../../contexts/PolymorphContext';
 import { useErrorContext } from '../../contexts/ErrorContext';
-
-import { getMyNfts, getSavedNfts } from '../../utils/api/mintNFT';
+import { sendBatchMintRequest, sendMintRequest } from '../../userFlows/api/ContractInteraction';
+import { createMintingNFT, getMetaForSavedNft } from '../../utils/api/mintNFT';
+import { formatRoyaltiesForMinting } from '../../utils/helpers/contractInteraction';
 
 const MyNFTs = () => {
+  const tabs = ['Wallet', 'Collections', 'Saved NFTs', 'Universe NFTs'];
+  const history = useHistory();
+  const createButtonRef = useRef(null);
+
+  // Context hooks
   const {
-    savedNfts,
-    savedCollections,
-    setSavedNfts,
-    savedNFTsID,
-    setSavedNFTsID,
-    setActiveView,
-    myNFTs,
-    setMyNFTs,
-    selectedNft,
     myNFTsSelectedTabIndex,
     setMyNFTsSelectedTabIndex,
-    collectionsIdAddressMapping,
     activeTxHashes,
     setActiveTxHashes,
-    mintingNftsCount,
-    setMintingNftsCount,
-    myMintableCollections,
+    nftSummary,
+    fetchNftSummary,
   } = useMyNftsContext();
 
   const { userLobsters } = useLobsterContext();
   const { userPolymorphs } = usePolymorphContext();
 
-  const { deployedCollections, universeERC721CoreContract, contracts, signer, address } =
-    useAuthContext();
+  const { universeERC721CoreContract, contracts, signer, address } = useAuthContext();
 
   const { setShowError, setErrorTitle, setErrorBody } = useErrorContext();
 
   const { setDarkMode } = useThemeContext();
-  const [selectedNFTIds, setSelectedNFTIds] = useState([]);
+
+  const scrollContainer = useRef(null);
+
+  // State hooks
   const [showloading, setShowLoading] = useState(false);
   const [showCongrats, setShowCongrats] = useState(false);
   const [showCongratsMintedSavedForLater, setShowCongratsMintedSavedForLater] = useState(false);
-  const [distinctCollections, setDisinctCollections] = useState([
-    ...new Map(
-      [...deployedCollections, ...myMintableCollections].map((item) => [item.id, item])
-    ).values(),
-  ]);
-
-  useEffect(() => {
-    const newDistinct = [
-      ...new Map(
-        [...deployedCollections, ...myMintableCollections].map((item) => [item.id, item])
-      ).values(),
-    ];
-    setDisinctCollections(newDistinct);
-  }, [deployedCollections, myMintableCollections]);
-
-  const tabs = [
-    'Wallet',
-    'Collections',
-    'Saved NFTs',
-    'Universe NFTs',
-    // 'Hidden',
-    // 'Liked',
-    // 'Activity',
-  ];
-  const emptyTabs = ['Wallet', 'Collections'];
-  const [filteredNFTs, setFilteredNFTs] = useState([]);
-  const location = useLocation();
-  const isCreatingAction = location.pathname === '/select-nfts';
-  const history = useHistory();
-  const ref = useRef(null);
-  const ref2 = useRef(null);
-  const refMobile = useRef(null);
   const [isDropdownOpened, setIsDropdownOpened] = useState(false);
 
+  // NEW
+  const [savedNfts, setSavedNfts] = useState([]);
+  const [selectedSavedNfts, setSelectedSavedNfts] = useState([]);
+
+  const [triggerRefetch, setTriggerRefetch] = useState(false);
+
   const handleClickOutside = (event) => {
-    if (ref2.current && !ref2.current.contains(event.target)) {
+    if (createButtonRef.current && !createButtonRef.current.contains(event.target)) {
       setIsDropdownOpened(false);
     }
   };
+
   useEffect(() => {
     document.addEventListener('click', handleClickOutside, true);
     return () => {
       document.removeEventListener('click', handleClickOutside, true);
     };
-  });
-
-  const checkSelectedSavedNfts = () => {
-    const res = savedNfts.filter((nft) => nft.selected);
-
-    return !res.length;
-  };
-
-  useEffect(() => {
-    function handleResize() {
-      if (document.querySelector('.tab__right__arrow')) {
-        if (window.innerWidth < 660) {
-          document.querySelector('.tab__right__arrow').style.display = 'flex';
-        } else {
-          document.querySelector('.tab__right__arrow').style.display = 'none';
-          document.querySelector('.tab__left__arrow').style.display = 'none';
-        }
-      }
-    }
-    window.addEventListener('resize', handleResize);
-    handleResize();
-
-    return () => window.removeEventListener('resize', handleResize);
   }, []);
-
-  const handleMintSelected = async () => {
-    setShowLoading(true);
-    try {
-      const selectedNfts = savedNfts.filter((nft) => nft.selected);
-      const mintingFlowContext = {
-        collectionsIdAddressMapping,
-        universeERC721CoreContract,
-        contracts,
-        signer,
-        address,
-        activeTxHashes,
-        setActiveTxHashes,
-      };
-
-      await MintSavedNftsFlow({
-        nfts: selectedNfts,
-        helpers: mintingFlowContext,
-      });
-
-      const serverProcessTime = 5000; // The BE needs some time to catch the transaction
-      setTimeout(async () => {
-        const [mintedNFTS, savedNFTS] = await Promise.all([getMyNfts(), getSavedNfts()]);
-        setMyNFTs(mintedNFTS || []);
-        setSavedNfts(savedNFTS || []);
-
-        setMintingNftsCount(mintingNftsCount + selectedNfts.length);
-        setShowLoading(false);
-        setShowCongratsMintedSavedForLater(true);
-      }, serverProcessTime);
-    } catch (e) {
-      console.error(e, 'Error !');
-      setShowLoading(false);
-      if (e.code === 4001) {
-        setErrorTitle('Failed to mint selected NFTs');
-        setErrorBody('User denied transaction signature');
-      }
-      setShowError(true);
-    }
-  };
 
   useEffect(() => {
     if (!showloading) setActiveTxHashes([]);
@@ -190,57 +90,173 @@ const MyNFTs = () => {
   }, []);
 
   useEffect(() => {
-    setFilteredNFTs(myNFTs);
+    fetchNftSummary();
   }, []);
 
-  const existsNFTs = () =>
-    myNFTs.length ||
-    deployedCollections.length ||
-    savedNfts.length ||
-    savedCollections.length ||
-    userPolymorphs.length ||
-    userLobsters.length;
+  const handleMintSelected = async () => {
+    setShowLoading(true);
+    setActiveTxHashes([]);
+    try {
+      const nftCollections = selectedSavedNfts.map((nft) => nft.collection);
+      const mapping = {};
+      nftCollections.forEach((collection) => {
+        mapping[collection.id] = collection.address;
+      });
+
+      const mintingFlowContext = {
+        collectionsIdAddressMapping: mapping,
+        universeERC721CoreContract,
+        contracts,
+        signer,
+        address,
+        activeTxHashes,
+        setActiveTxHashes,
+      };
+
+      const requiredContracts = {};
+
+      selectedSavedNfts.forEach((nft) => {
+        const contractAddress = mintingFlowContext.collectionsIdAddressMapping[nft.collectionId];
+        requiredContracts[nft.collectionId] = requiredContracts[nft.collectionId] || {};
+
+        if (!contractAddress) {
+          requiredContracts[nft.collectionId] = mintingFlowContext.universeERC721CoreContract;
+        } else {
+          requiredContracts[nft.collectionId] = new Contract(
+            contractAddress,
+            mintingFlowContext.contracts.UniverseERC721.abi,
+            mintingFlowContext.signer
+          );
+        }
+      });
+
+      const formatNfts = selectedSavedNfts.map((nft) => ({
+        collectionId: nft.collectionId ? nft.collectionId : 0,
+        royalties: nft.royalties ? formatRoyaltiesForMinting(nft.royalties) : [],
+        id: nft.id,
+        numberOfEditions: nft.numberOfEditions,
+        name: nft.name,
+        description: nft.description,
+      }));
+
+      const tokenURIsPromises = formatNfts.map(async (nft) => {
+        const meta = await getMetaForSavedNft(nft.id);
+        return { ...meta, nftId: nft.id };
+      });
+      const tokenURIs = await Promise.all(tokenURIsPromises);
+
+      if (!tokenURIs.length) {
+        console.error('server error. cannot get meta data');
+        setShowError(true);
+        return;
+      }
+
+      const nftsAttachedTokenUri = formatNfts.map((nft) => {
+        const tokenData = tokenURIs.find((data) => data.nftId === nft.id);
+
+        return {
+          ...nft,
+          tokenUri: tokenData.tokenUris,
+          mintingId: tokenData.mintingNft.id,
+        };
+      });
+
+      const tokenURIsAndRoyaltiesObject = {};
+
+      nftsAttachedTokenUri.forEach((nft) => {
+        if (!tokenURIsAndRoyaltiesObject[nft.collectionId])
+          tokenURIsAndRoyaltiesObject[nft.collectionId] = [];
+
+        nft.tokenUri.forEach((token) => {
+          tokenURIsAndRoyaltiesObject[nft.collectionId].push({
+            token,
+            royalties: nft.royalties,
+            mintingId: nft.mintingId,
+          });
+        });
+      });
+
+      const isSingle =
+        nftsAttachedTokenUri.length === 1 && nftsAttachedTokenUri[0].tokenUri.length === 1;
+
+      const txDataArray = isSingle
+        ? await sendMintRequest(requiredContracts, tokenURIsAndRoyaltiesObject, mintingFlowContext)
+        : await sendBatchMintRequest(
+            requiredContracts,
+            tokenURIsAndRoyaltiesObject,
+            mintingFlowContext
+          );
+
+      const totalMintedMapping = {};
+      const mintingNftsPromises = txDataArray.map(async (data) => {
+        const { transaction, mintingIds, status, tokens } = data;
+        // transaction is undefined if tx has failed/was rejected by the user
+        if (transaction) {
+          const txHash = transaction.hash;
+          const uniqueMintingIds = mintingIds.filter((c, index) => mintingIds.indexOf(c) === index);
+
+          // Count the actual minted count and update using createMintingNFT()
+          mintingIds.forEach((id) => {
+            if (totalMintedMapping[id]) {
+              totalMintedMapping[id] += 1;
+            } else {
+              totalMintedMapping[id] = 1;
+            }
+          });
+
+          const mints = uniqueMintingIds.map((id) =>
+            createMintingNFT(txHash, id, totalMintedMapping[id])
+          );
+          await Promise.all(mints);
+        }
+      });
+
+      await Promise.all(mintingNftsPromises);
+
+      if (!txDataArray.some((data) => data.status !== 2)) {
+        setShowLoading(false);
+        return;
+      }
+
+      const hasSuccessfulTransaction = txDataArray.some((data) => data.status === 1);
+
+      if (hasSuccessfulTransaction) {
+        setShowLoading(false);
+        setShowCongratsMintedSavedForLater(true);
+        setTriggerRefetch(true);
+        fetchNftSummary();
+      } else {
+        setShowLoading(false);
+        setShowError(true);
+      }
+    } catch (e) {
+      console.error(e, 'Error !');
+      setShowLoading(false);
+      if (e.code === 4001) {
+        setErrorTitle('Failed to mint selected NFTs');
+        setErrorBody('User denied transaction signature');
+      }
+      setShowError(true);
+    }
+  };
 
   const renderTabsWrapper = () => (
     <Tabs
+      scrollContainer={scrollContainer}
       items={tabs.map((tab, index) => ({
         name: tab,
         active: myNFTsSelectedTabIndex === index,
         handler: setMyNFTsSelectedTabIndex.bind(this, index),
         length:
-          index === 0 && myNFTs.filter((nft) => !nft?.hidden).length > 0
-            ? myNFTs.filter((nft) => !nft?.hidden).length
-            : index === 1 && distinctCollections.length > 0
-            ? distinctCollections.length
-            : index === 2 && savedNfts.length > 0
-            ? savedNfts.length
-            : index === 3 && (userLobsters.length || userPolymorphs.length)
-            ? userLobsters.length + userPolymorphs.length
-            : index === 4 && myNFTs.filter((nft) => nft.hidden).length > 0,
-        // ? myNFTs.filter((nft) => nft.hidden).length
-        // : index === 5 && myNFTs.filter((nft) => nft.likers.length).length > 0
-        // ? myNFTs.filter((nft) => nft.likers.length).length
-        // : null,
-      }))}
-    />
-  );
-
-  const renderEmptyTabsWrapper = () => (
-    <EmptyTabs
-      items={tabs.map((tab, index) => ({
-        name: tab,
-        active: myNFTsSelectedTabIndex === index,
-        handler: setMyNFTsSelectedTabIndex.bind(this, index),
-        length:
-          index === 0 && myNFTs.filter((nft) => !nft?.hidden).length > 0
-            ? myNFTs.filter((nft) => !nft?.hidden).length
-            : index === 1 && deployedCollections.length > 0
-            ? deployedCollections.length
-            : index === 2 && savedNfts.length > 0
-            ? savedNfts.length
-            : index === 3 && (userLobsters.length || userPolymorphs.length)
-            ? userLobsters.length + userPolymorphs.length
-            : index === 4 && myNFTs.filter((nft) => nft.hidden).length > 0,
+          index === 0
+            ? nftSummary?.nfts || '0'
+            : index === 1
+            ? nftSummary?.collections || '0'
+            : index === 2
+            ? nftSummary?.savedNfts || '0'
+            : index === 3
+            ? (userLobsters.length || 0) + (userPolymorphs.length || 0) || '0'
+            : null,
       }))}
     />
   );
@@ -269,44 +285,23 @@ const MyNFTs = () => {
 
   const renderIfNFTsExist = () => (
     <>
-      {isCreatingAction ? (
-        <div className="select-nfts">
-          <div
-            className="back-rew"
-            onClick={() => {
-              history.push('/reward-tiers');
-            }}
-            aria-hidden="true"
-          >
-            <img src={arrow} alt="back" />
-            <span>Create reward tier</span>
-          </div>
-
-          <div className="mynfts__page__header" style={{ marginTop: '20px' }}>
-            <h1 className="title">Select NFTs</h1>
-            <div className="create__mint__btns">
-              {myNFTsSelectedTabIndex === 2 && (
+      <div className="mynfts__page__gradient">
+        <div className="container mynfts__page__header">
+          <h1 className="title">My NFTs</h1>
+          <div className="create__mint__btns">
+            {myNFTsSelectedTabIndex === 2 && (
+              <>
                 <button
                   type="button"
                   className="mint__btn"
                   onClick={handleMintSelected}
-                  disabled={checkSelectedSavedNfts()}
+                  disabled={!selectedSavedNfts.length}
                 >
                   Mint selected
                 </button>
-              )}
-              {myNFTsSelectedTabIndex === 3 && (
                 <button
                   type="button"
-                  className="light-border-button"
-                  onClick={() => history.push('/polymorph-rarity')}
-                >
-                  Polymorph rarity chart
-                </button>
-              )}
-              {myNFTsSelectedTabIndex === 1 ? (
-                <Button
-                  ref={ref}
+                  ref={createButtonRef}
                   className={`create--nft--dropdown  ${
                     isDropdownOpened ? 'opened' : ''
                   } light-button`}
@@ -321,148 +316,11 @@ const MyNFTs = () => {
                         <li
                           aria-hidden="true"
                           onClick={() =>
-                            history.push('/my-nfts/create', { tabIndex: 1, nftType: 'single' })
-                          }
-                        >
-                          NFT
-                        </li>
-                        <li
-                          aria-hidden="true"
-                          onClick={() =>
-                            history.push('/my-nfts/create', { tabIndex: 1, nftType: 'collection' })
-                          }
-                        >
-                          Collection
-                        </li>
-                      </ul>
-                    </div>
-                  )}
-                </Button>
-              ) : (
-                <Button
-                  ref={ref}
-                  className={`create--nft--dropdown  ${
-                    isDropdownOpened ? 'opened' : ''
-                  } light-button`}
-                  onClick={() => setIsDropdownOpened(!isDropdownOpened)}
-                  aria-hidden="true"
-                >
-                  Create
-                  <img src={plusIcon} alt="icon" />
-                  {isDropdownOpened && (
-                    <div className="sort__share__dropdown">
-                      <ul>
-                        <li
-                          aria-hidden="true"
-                          onClick={() =>
-                            history.push('/my-nfts/create', { tabIndex: 1, nftType: 'single' })
-                          }
-                        >
-                          NFT
-                        </li>
-                        <li
-                          aria-hidden="true"
-                          onClick={() =>
-                            history.push('/my-nfts/create', { tabIndex: 1, nftType: 'collection' })
-                          }
-                        >
-                          Collection
-                        </li>
-                      </ul>
-                    </div>
-                  )}
-                </Button>
-              )}
-            </div>
-          </div>
-        </div>
-      ) : (
-        <div className="mynfts__page__gradient">
-          <div className="container mynfts__page__header">
-            <h1 className="title">My NFTs</h1>
-            <div className="create__mint__btns">
-              {myNFTsSelectedTabIndex === 2 && (
-                <>
-                  <button
-                    type="button"
-                    className="mint__btn"
-                    onClick={handleMintSelected}
-                    disabled={checkSelectedSavedNfts()}
-                  >
-                    Mint selected
-                  </button>
-                  <button
-                    type="button"
-                    ref={ref2}
-                    className={`create--nft--dropdown  ${
-                      isDropdownOpened ? 'opened' : ''
-                    } light-button`}
-                    onClick={() => setIsDropdownOpened(!isDropdownOpened)}
-                    aria-hidden="true"
-                  >
-                    Create
-                    <img src={plusIcon} alt="icon" />
-                    {isDropdownOpened && (
-                      <div className="sort__share__dropdown">
-                        <ul>
-                          <li
-                            aria-hidden="true"
-                            onClick={() =>
-                              history.push('/my-nfts/create', {
-                                tabIndex: 1,
-                                nftType: 'single',
-                                backPath: 'myNFTs',
-                              })
-                            }
-                          >
-                            NFT
-                          </li>
-                          <li
-                            aria-hidden="true"
-                            onClick={() =>
-                              history.push('/my-nfts/create', {
-                                tabIndex: 1,
-                                nftType: 'collection',
-                                backPath: 'myNFTs',
-                              })
-                            }
-                          >
-                            Collection
-                          </li>
-                        </ul>
-                      </div>
-                    )}
-                  </button>
-                </>
-              )}
-              {myNFTsSelectedTabIndex === 3 && (
-                <button
-                  type="button"
-                  className="light-border-button light--button--mobile"
-                  onClick={() => history.push('/polymorph-rarity')}
-                >
-                  Polymorph rarity chart
-                </button>
-              )}
-              {myNFTsSelectedTabIndex !== 2 && (
-                <button
-                  type="button"
-                  ref={ref2}
-                  className={`create--nft--dropdown  ${
-                    isDropdownOpened ? 'opened' : ''
-                  } light-button light--button--mobile`}
-                  onClick={() => setIsDropdownOpened(!isDropdownOpened)}
-                  aria-hidden="true"
-                >
-                  Create
-                  <img src={plusIcon} alt="icon" />
-                  {isDropdownOpened && (
-                    <div className="sort__share__dropdown">
-                      <ul>
-                        <li
-                          aria-hidden="true"
-                          onClick={() =>
-                            history.push('/my-nfts/create', { tabIndex: 1, nftType: 'single' })
+                            history.push('/my-nfts/create', {
+                              tabIndex: 1,
+                              nftType: 'single',
+                              backPath: 'myNFTs',
+                            })
                           }
                         >
                           NFT
@@ -473,6 +331,7 @@ const MyNFTs = () => {
                             history.push('/my-nfts/create', {
                               tabIndex: 1,
                               nftType: 'collection',
+                              backPath: 'myNFTs',
                             })
                           }
                         >
@@ -482,25 +341,74 @@ const MyNFTs = () => {
                     </div>
                   )}
                 </button>
-              )}
-            </div>
+              </>
+            )}
+            {myNFTsSelectedTabIndex === 3 && (
+              <button
+                type="button"
+                className="light-border-button light--button--mobile"
+                onClick={() => history.push('/polymorph-rarity')}
+              >
+                Polymorph rarity chart
+              </button>
+            )}
+            {myNFTsSelectedTabIndex !== 2 && (
+              <button
+                type="button"
+                ref={createButtonRef}
+                className={`create--nft--dropdown  ${
+                  isDropdownOpened ? 'opened' : ''
+                } light-button light--button--mobile`}
+                onClick={() => setIsDropdownOpened(!isDropdownOpened)}
+                aria-hidden="true"
+              >
+                Create
+                <img src={plusIcon} alt="icon" />
+                {isDropdownOpened && (
+                  <div className="sort__share__dropdown">
+                    <ul>
+                      <li
+                        aria-hidden="true"
+                        onClick={() =>
+                          history.push('/my-nfts/create', { tabIndex: 1, nftType: 'single' })
+                        }
+                      >
+                        NFT
+                      </li>
+                      <li
+                        aria-hidden="true"
+                        onClick={() =>
+                          history.push('/my-nfts/create', {
+                            tabIndex: 1,
+                            nftType: 'collection',
+                          })
+                        }
+                      >
+                        Collection
+                      </li>
+                    </ul>
+                  </div>
+                )}
+              </button>
+            )}
           </div>
-          {renderTabsWrapper()}
         </div>
-      )}
+        {renderTabsWrapper()}
+      </div>
 
       <div className="container mynfts__page__body">
-        {myNFTsSelectedTabIndex === 0 && (
-          <Wallet
-            filteredNFTs={filteredNFTs}
-            setFilteredNFTs={setFilteredNFTs}
-            selectedNFTIds={selectedNFTIds}
-            setSelectedNFTIds={setSelectedNFTIds}
+        {myNFTsSelectedTabIndex === 0 && <Wallet scrollContainer={scrollContainer} />}
+        {myNFTsSelectedTabIndex === 1 && <DeployedCollections scrollContainer={scrollContainer} />}
+        {myNFTsSelectedTabIndex === 2 && (
+          <SavedNFTs
+            selectedSavedNfts={selectedSavedNfts}
+            setSelectedSavedNfts={setSelectedSavedNfts}
+            triggerRefetch={triggerRefetch}
+            setTriggerRefetch={setTriggerRefetch}
+            scrollContainer={scrollContainer}
           />
         )}
-        {myNFTsSelectedTabIndex === 1 && <DeployedCollections />}
-        {myNFTsSelectedTabIndex === 2 && <SavedNFTs />}
-        {myNFTsSelectedTabIndex === 3 && <UniverseNFTs />}
+        {myNFTsSelectedTabIndex === 3 && <UniverseNFTs scrollContainer={scrollContainer} />}
         {myNFTsSelectedTabIndex === 4 && <HiddenNFTs />}
         {myNFTsSelectedTabIndex === 5 && <LikedNFTs />}
         {myNFTsSelectedTabIndex === 6 && <NFTsActivity />}
@@ -508,159 +416,9 @@ const MyNFTs = () => {
     </>
   );
 
-  // const renderIfNFTsNotExist = () =>
-  //   isCreatingAction ? (
-  //     <div className="container select-nfts">
-  //       <div
-  //         className="back-rew"
-  //         onClick={() => {
-  //           history.push('/reward-tiers');
-  //         }}
-  //         aria-hidden="true"
-  //       >
-  //         <img src={arrow} alt="back" />
-  //         <span>Create reward tier</span>
-  //       </div>
-  //       <div>
-  //         <div className="head-part">
-  //           <h2 className="tier-title">Select NFTs</h2>
-  //         </div>
-  //         <div className="space-tier-div">
-  //           {selectedNft.length > 0 ? '' : <p>No NFTs found in your wallet</p>}
-  //         </div>
-  //         <div className="create-rew-tier select-ntfs" onClick={handleOpen} aria-hidden="true">
-  //           <div className="plus-icon">
-  //             <img src={union} alt="create" />
-  //           </div>
-  //           <div className="create-rew-text">
-  //             <p>Create NFT</p>
-  //           </div>
-  //         </div>
-  //       </div>
-  //     </div>
-  //   ) : (
-  //     <>
-  //       <div className="mynfts__page__gradient">
-  //         <div className="container mynfts__page__header">
-  //           <h1 className="title">My NFTs</h1>
-  //         </div>
-  //         {renderEmptyTabsWrapper()}
-  //       </div>
-  //       <div className="container mynfts__page__body">
-  //         {myNFTsSelectedTabIndex === 0 && (
-  //           <>
-  //             <div className="empty__nfts">
-  //               <div className="tabs-empty">
-  //                 <div className="image-bubble">
-  //                   <img src={bubbleIcon} alt="bubble-icon" />
-  //                 </div>
-  //                 <h3>No NFTs found</h3>
-  //                 <p>
-  //                   Create NFTs or NFT collections with our platform by clicking the button below
-  //                 </p>
-  //                 <button
-  //                   type="button"
-  //                   ref={ref2}
-  //                   className={`create--nft--dropdown  ${
-  //                     isDropdownOpened ? 'opened' : ''
-  //                   } light-button`}
-  //                   onClick={() => setIsDropdownOpened(!isDropdownOpened)}
-  //                   aria-hidden="true"
-  //                 >
-  //                   Create
-  //                   <img src={plusIcon} alt="icon" />
-  //                   {isDropdownOpened && (
-  //                     <div className="sort__share__dropdown">
-  //                       <ul>
-  //                         <li
-  //                           aria-hidden="true"
-  //                           onClick={() =>
-  //                             history.push('/my-nfts/create', { tabIndex: 1, nftType: 'single' })
-  //                           }
-  //                         >
-  //                           NFT
-  //                         </li>
-  //                         <li
-  //                           aria-hidden="true"
-  //                           onClick={() =>
-  //                             history.push('/my-nfts/create', {
-  //                               tabIndex: 1,
-  //                               nftType: 'collection',
-  //                             })
-  //                           }
-  //                         >
-  //                           Collection
-  //                         </li>
-  //                       </ul>
-  //                     </div>
-  //                   )}
-  //                 </button>
-  //               </div>
-  //             </div>
-  //           </>
-  //         )}
-  //         {myNFTsSelectedTabIndex === 1 && (
-  //           <>
-  //             <div className="empty__nfts">
-  //               <div className="tabs-empty">
-  //                 <div className="image-bubble">
-  //                   <img src={bubbleIcon} alt="bubble-icon" />
-  //                 </div>
-  //                 <h3>No collections found</h3>
-  //                 <p>
-  //                   Create NFTs or NFT collections with our platform by clicking the button below
-  //                 </p>
-  //                 <button
-  //                   type="button"
-  //                   ref={ref2}
-  //                   className={`create--nft--dropdown  ${
-  //                     isDropdownOpened ? 'opened' : ''
-  //                   } light-button`}
-  //                   onClick={() => setIsDropdownOpened(!isDropdownOpened)}
-  //                   aria-hidden="true"
-  //                 >
-  //                   Create
-  //                   <img src={plusIcon} alt="icon" />
-  //                   {isDropdownOpened && (
-  //                     <div className="sort__share__dropdown">
-  //                       <ul>
-  //                         <li
-  //                           aria-hidden="true"
-  //                           onClick={() =>
-  //                             history.push('/my-nfts/create', { tabIndex: 1, nftType: 'single' })
-  //                           }
-  //                         >
-  //                           NFT
-  //                         </li>
-  //                         <li
-  //                           aria-hidden="true"
-  //                           onClick={() =>
-  //                             history.push('/my-nfts/create', {
-  //                               tabIndex: 1,
-  //                               nftType: 'collection',
-  //                             })
-  //                           }
-  //                         >
-  //                           Collection
-  //                         </li>
-  //                       </ul>
-  //                     </div>
-  //                   )}
-  //                 </button>
-  //               </div>
-  //             </div>
-  //           </>
-  //         )}
-  //       </div>
-  //     </>
-  //   );
-
   return (
     <>
-      <div className="mynfts__page">
-        {/* {existsNFTs() ? renderIfNFTsExist() : renderIfNFTsNotExist()} */}
-        {renderIfNFTsExist()}
-      </div>
+      <div className="mynfts__page">{renderIfNFTsExist()}</div>
       {renderPopups()}
     </>
   );

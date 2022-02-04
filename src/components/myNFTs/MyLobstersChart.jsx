@@ -11,8 +11,8 @@ import CollectionDropdown from './CollectionDropdown';
 import { useThemeContext } from '../../contexts/ThemeContext';
 import { useLobsterContext } from '../../contexts/LobsterContext';
 
-const MyLobstersChart = ({ isDropdownOpened, setIsDropdownOpened }) => {
-  const { userLobsters } = useLobsterContext();
+const MyLobstersChart = ({ isDropdownOpened, setIsDropdownOpened, scrollContainer }) => {
+  const { userLobstersWithMetadata, loadLobsterMetadata } = useLobsterContext();
   const { setDarkMode } = useThemeContext();
   const [offset, setOffset] = useState(0);
   const [perPage, setPerPage] = useState(8);
@@ -20,13 +20,20 @@ const MyLobstersChart = ({ isDropdownOpened, setIsDropdownOpened }) => {
   const [sortField, setSortField] = useState('id');
   const [sortDir, setSortDir] = useState('asc');
   const [categories, setCategories] = useState(categoriesArray);
-  const [filteredLobsters, setFilteredLobsters] = useState(userLobsters);
+  const [filteredLobsters, setFilteredLobsters] = useState(userLobstersWithMetadata);
   const [categoriesIndexes, setCategoriesIndexes] = useState([]);
   const [page, setPage] = useState(0);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    loadLobsterMetadata();
+    setLoading(false);
     setDarkMode(true);
   }, []);
+
+  useEffect(() => {
+    setFilteredLobsters(userLobstersWithMetadata);
+  }, [userLobstersWithMetadata]);
 
   const resetPagination = () => {
     setPage(0);
@@ -34,7 +41,7 @@ const MyLobstersChart = ({ isDropdownOpened, setIsDropdownOpened }) => {
   };
 
   useEffect(() => {
-    const filtered = userLobsters
+    const filtered = userLobstersWithMetadata
       .filter((lobster) => lobster.id.includes(searchText))
       .sort((a, b) => {
         let sort = -1;
@@ -67,6 +74,16 @@ const MyLobstersChart = ({ isDropdownOpened, setIsDropdownOpened }) => {
     setFilter(newFilter);
   };
 
+  const scrollToNftContainer = () => {
+    if (scrollContainer && scrollContainer.current) {
+      scrollContainer.current.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+  };
+
+  useEffect(() => {
+    scrollToNftContainer();
+  }, [perPage, page]);
+
   return (
     <div className="lobster-rarity--charts--page--container">
       <LobsterRarityFilters
@@ -97,6 +114,7 @@ const MyLobstersChart = ({ isDropdownOpened, setIsDropdownOpened }) => {
         setOffset={setOffset}
         page={page}
         setPage={setPage}
+        loading={loading}
       />
     </div>
   );
@@ -104,5 +122,6 @@ const MyLobstersChart = ({ isDropdownOpened, setIsDropdownOpened }) => {
 MyLobstersChart.propTypes = {
   isDropdownOpened: PropTypes.bool.isRequired,
   setIsDropdownOpened: PropTypes.func.isRequired,
+  scrollContainer: PropTypes.oneOfType([PropTypes.object]).isRequired,
 };
 export default MyLobstersChart;

@@ -1,7 +1,6 @@
 /* eslint-disable array-callback-return */
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import uuid from 'react-uuid';
 import PolymorphCard from './PolymorphCard.jsx';
 import CategoriesFilter from './CategoriesFilter.jsx';
 import closeIcon from '../../../assets/images/close-menu.svg';
@@ -102,7 +101,7 @@ const UniverseNFTsList = ({
         </div>
         <div className="grid">
           {sliceData.map((item) => (
-            <PolymorphCard key={uuid()} item={item} />
+            <PolymorphCard key={item.id} item={item} />
           ))}
         </div>
         {data.length ? (

@@ -11,8 +11,8 @@ import { useMyNftsContext } from '../../contexts/MyNFTsContext';
 import LobsterRarityFilters from '../rarityCharts/filters/LobsterRarityFilters';
 import MyRarityList from '../rarityCharts/list/MyRarityList';
 
-const MyPolymorphsChart = ({ isDropdownOpened, setIsDropdownOpened }) => {
-  const { setMyUniverseNFTsActiverPage } = useMyNftsContext();
+const MyPolymorphsChart = ({ isDropdownOpened, setIsDropdownOpened, scrollContainer }) => {
+  const { setMyUniverseNFTsActiverPage, myUniverseNFTsActiverPage } = useMyNftsContext();
   const { setDarkMode } = useThemeContext();
   const [offset, setOffset] = useState(0);
   const [perPage, setPerPage] = useState(9);
@@ -35,11 +35,6 @@ const MyPolymorphsChart = ({ isDropdownOpened, setIsDropdownOpened }) => {
   const [categories, setCategories] = useState(categoriesArray);
   const [categoriesIndexes, setCategoriesIndexes] = useState([]);
 
-  const resetPagination = () => {
-    setMyUniverseNFTsActiverPage(0);
-    setOffset(0);
-  };
-
   const handleCategoryFilterChange = (idx, traitIdx) => {
     const newCategories = [...categories];
     const attribute = newCategories[idx];
@@ -55,6 +50,22 @@ const MyPolymorphsChart = ({ isDropdownOpened, setIsDropdownOpened }) => {
       newFilter = filter.filter((f) => f[1] !== trait.name);
     }
     setFilter(newFilter);
+  };
+
+  const scrollToNftContainer = () => {
+    if (scrollContainer && scrollContainer.current) {
+      scrollContainer.current.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+  };
+
+  useEffect(() => {
+    scrollToNftContainer();
+  }, [apiPage, perPage, categories, myUniverseNFTsActiverPage]);
+
+  const resetPagination = () => {
+    setMyUniverseNFTsActiverPage(0);
+    setOffset(0);
+    scrollToNftContainer();
   };
 
   return (
@@ -108,5 +119,6 @@ const MyPolymorphsChart = ({ isDropdownOpened, setIsDropdownOpened }) => {
 MyPolymorphsChart.propTypes = {
   isDropdownOpened: PropTypes.bool.isRequired,
   setIsDropdownOpened: PropTypes.func.isRequired,
+  scrollContainer: PropTypes.oneOfType([PropTypes.object]).isRequired,
 };
 export default MyPolymorphsChart;

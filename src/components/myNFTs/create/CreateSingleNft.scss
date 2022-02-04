@@ -475,6 +475,7 @@
               width: 40px;
               height: 40px;
               border-radius: 50%;
+              object-fit: cover;
             }
           }
 
@@ -970,6 +971,33 @@
             line-height: 150%;
             color: rgba(0, 0, 0, 0.6);
           }
+        }
+      }
+      .single-nft-properties-header {
+        .properties-info-text {
+          display: none;
+        }
+        img:hover + .properties-info-text {
+          display: block;
+        }
+      }
+      .royalities {
+        .royalities-info-text {
+          display: none;
+        }
+        img:hover + .royalities-info-text {
+          display: block;
+        }
+      }
+      .other-wallet {
+        .other-wallet-info-text {
+          display: none;
+        }
+        img:hover + .other-wallet-info-text {
+          display: block;
+        }
+        .property-address {
+          width: 100%;
         }
       }
     }

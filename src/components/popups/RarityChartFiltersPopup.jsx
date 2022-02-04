@@ -1,6 +1,5 @@
 import React, { useCallback, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import uuid from 'react-uuid';
 import closeIcon from '../../assets/images/close-menu.svg';
 import arrowIcon from '../../assets/images/browse-nft-arrow-down.svg';
 import Button from '../button/Button';
@@ -117,7 +116,7 @@ const RarityChartFiltersPopup = ({
         <div className="categories--filters">
           <h2>Categories</h2>
           {categories.map((item, index) => (
-            <div className="each--category" key={uuid()}>
+            <div className="each--category" key={item.id}>
               <div
                 className={`dropdown ${categoriesIndexes.includes(index) ? 'open' : ''}`}
                 aria-hidden="true"
@@ -130,7 +129,7 @@ const RarityChartFiltersPopup = ({
               {categoriesIndexes.includes(index) && (
                 <div className="traits">
                   {item.traits.map((trait, traitIndex) => (
-                    <div className="trait" key={uuid()}>
+                    <div className="trait" key={trait.name}>
                       <input
                         id={trait.name.toLowerCase().replaceAll(' ', '--')}
                         type="checkbox"

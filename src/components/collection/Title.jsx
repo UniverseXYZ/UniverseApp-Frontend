@@ -1,9 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { getEtherscanContractUrl } from '../../utils/helpers';
+import currencyIcon from '../../assets/images/eth-icon-new.svg';
 
 const Title = ({ selectedCollection, nftsCount, ownersCount }) => {
   const NFTSCount = nftsCount >= 1000 ? `${nftsCount / 1000}K` : nftsCount;
+
+  const shortenCollectionAddress = () =>
+    `${selectedCollection.address.substring(0, 13)}...${selectedCollection.address.substring(
+      27,
+      selectedCollection.address.length
+    )}`;
 
   return (
     <div className="collection__info">
@@ -18,20 +25,22 @@ const Title = ({ selectedCollection, nftsCount, ownersCount }) => {
         }}
         aria-hidden
       >
-        {selectedCollection.address}
+        {shortenCollectionAddress()}
       </h2>
       <div className="item_info">
         <div className="bordered">
           <h1>{NFTSCount}</h1>
           <span>items</span>
         </div>
-        <div className="bordered">
-          {ownersCount ? (
-            <>
-              <h1>{ownersCount}</h1>
-              <span>owners</span>
-            </>
-          ) : null}
+        <div className="bordered" style={{ height: '100%' }}>
+          {/* <h1>{ownersCount}</h1>
+          <span>owners</span> */}
+        </div>
+        <div>
+          {/* <h1>
+            <img src={currencyIcon} alt="Currency" />0
+          </h1>
+          <span>volume traded</span> */}
         </div>
       </div>
     </div>

@@ -28,6 +28,7 @@ import {
   getMyNfts,
   createMintingNFT,
   getMyMintingNfts,
+  getMyMintableCollections,
 } from '../../../utils/api/mintNFT';
 import {
   parseRoyalties,
@@ -41,6 +42,7 @@ import { useMyNftsContext } from '../../../contexts/MyNFTsContext';
 import { useAuthContext } from '../../../contexts/AuthContext';
 import { useErrorContext } from '../../../contexts/ErrorContext';
 import CollectionChoice from './CollectionChoice';
+import universeIcon from '../../../assets/images/universe-img.svg';
 
 const MAX_FIELD_CHARS_LENGTH = {
   name: 32,
@@ -64,28 +66,13 @@ const MAX_ROYALTY_PERCENT = 20;
 const COLLECTIONS_PER_ROW = 4;
 
 const MINTING_LOADING_TEXT =
-  'The transaction is in progress. Keep this window opened. Navigating away from the page will reset the curent progress.';
+  'The transaction is in progress. Keep this window opened. Navigating away from the page will reset the current progress.';
 const SAVING_FOR_LATER_LOADING_TEXT =
-  'You nft is being saved for later minting. Keep this window opened. Navigating away from the page will reset the curent progress.';
+  'You nft is being saved for later minting. Keep this window opened. Navigating away from the page will reset the current progress.';
 const INVALID_ADDRESS_TEXT = 'Please enter valid address or ENS';
 
 const SingleNFTForm = () => {
-  const {
-    savedNfts,
-    setSavedNfts,
-    savedNFTsID,
-    setSavedNFTsID,
-    myNFTs,
-    setMyNFTs,
-    setMyMintingNFTs,
-    activeTxHashes,
-    setActiveTxHashes,
-    mintingNftsCount,
-    setMintingNftsCount,
-    universeCollection,
-    setMyNFTsSelectedTabIndex,
-    myMintableCollections,
-  } = useMyNftsContext();
+  const { setActiveTxHashes, setMyNFTsSelectedTabIndex } = useMyNftsContext();
 
   const {
     deployedCollections,
@@ -137,6 +124,8 @@ const SingleNFTForm = () => {
     })
   );
 
+  const [universeCollection, setUniverseCollection] = useState(null);
+
   const [royaltyValidAddress, setRoyaltyValidAddress] = useState(true);
   const [propertiesIndexes, setPropertiesMapIndexes] = useState({});
   const [selectedCollection, setSelectedCollection] = useState(
@@ -150,10 +139,29 @@ const SingleNFTForm = () => {
   const [showPrompt, setShowPrompt] = useState(false);
   const [border, setBorder] = useState(false);
   const [loadingText, setLoadingText] = useState(MINTING_LOADING_TEXT);
+  const [mintableCollections, setMintableCollections] = useState([]);
 
   useEffect(() => {
     setSelectedCollection(location.state?.collection || universeCollection);
   }, [universeCollection]);
+
+  useEffect(() => {
+    (async () => {
+      const mintableColls = await getMyMintableCollections();
+      setMintableCollections(mintableColls.collections);
+
+      const universeColl = mintableColls.collections.filter(
+        (coll) =>
+          coll.address.toLowerCase() ===
+          process.env.REACT_APP_UNIVERSE_ERC_721_ADDRESS.toLowerCase()
+      )[0];
+      if (!universeColl) {
+        alert('Failed to load Universe Singularity Collection');
+      } else {
+        setUniverseCollection({ ...universeColl, coverUrl: universeIcon });
+      }
+    })();
+  }, []);
 
   const hasAddressError = (royalty, index) => {
     if (royalty && royaltiesMapIndexes[royalty]) {
@@ -342,6 +350,9 @@ const SingleNFTForm = () => {
 
   const propertyChangesValue = (index, value) => {
     const newProperties = [...properties];
+    if (!newProperties[index].errors) {
+      newProperties[index].errors = { name: '', value: '' };
+    }
     newProperties[index].value = value;
     newProperties[index].errors.value = !value ? '“Property value” is not allowed to be empty' : '';
     setProperties(newProperties);
@@ -459,9 +470,9 @@ const SingleNFTForm = () => {
           : universeERC721CoreContract;
 
       // Update saved NFT data, before getting the TokenURI
-      if (savedNFTsID) {
+      if (location.state && location.state.savedNft && location.state.savedNft.id) {
         // Attach the needed data to identify the NFT and its Collection
-        data.id = savedNFTsID;
+        data.id = location.state.savedNft.id;
 
         let result = await updateSavedForLaterNft(data);
 
@@ -480,8 +491,8 @@ const SingleNFTForm = () => {
         }
       }
 
-      const mintInfo = savedNFTsID
-        ? await getMetaForSavedNft(savedNFTsID)
+      const mintInfo = location.state.savedNft?.id
+        ? await getMetaForSavedNft(location.state.savedNft.id)
         : await getTokenURI(data);
 
       // Prepare the data for the smart contract
@@ -535,18 +546,8 @@ const SingleNFTForm = () => {
       const hasSuccessfulTransaction = txResults.some((status) => status === 1);
 
       if (hasSuccessfulTransaction) {
-        const [myNfts, mintingNfts, savedNFTS] = await Promise.all([
-          getMyNfts(),
-          getMyMintingNfts(),
-          getSavedNfts(),
-        ]);
-        setMyNFTs(myNfts || []);
-        setMyMintingNFTs(mintingNfts || []);
-        setSavedNfts(savedNFTS || []);
-
-        setMintingNftsCount(mintingNftsCount + 1);
         setShowLoadingPopup(false);
-        if (savedNFTsID) {
+        if (location.state.savedNft?.id) {
           setShowCongratsMintedSavedForLater(true);
         } else {
           setShowCongratsPopup(true);
@@ -599,9 +600,6 @@ const SingleNFTForm = () => {
       console.error('server error. cant get meta data');
     }
 
-    const savedNFTS = await getSavedNfts();
-    setSavedNfts(savedNFTS || []);
-
     setShowLoadingPopup(false);
     setLoadingText(MINTING_LOADING_TEXT);
     setShowCongratsPopupOnSaveForLaterClick(true);
@@ -639,7 +637,7 @@ const SingleNFTForm = () => {
       editions,
       propertiesParsed,
       royaltiesParsed,
-      id: savedNFTsID,
+      id: location.state.savedNft?.id,
       collectionId: selectedCollection?.id,
     };
 
@@ -658,8 +656,8 @@ const SingleNFTForm = () => {
       return;
     }
 
-    const savedNFTS = await getSavedNfts();
-    setSavedNfts(savedNFTS || []);
+    // const savedNFTS = await getSavedNfts();
+    // setSavedNfts(savedNFTS || []);
     setShowLoadingPopup(false);
     setLoadingText(MINTING_LOADING_TEXT);
     setShowCongratsPopupOnSaveForLaterClick(true);
@@ -710,7 +708,7 @@ const SingleNFTForm = () => {
   useEffect(async () => {
     if (saveForLateClick) {
       if (!errors.name && !errors.edition && !errors.previewImage) {
-        if (!savedNFTsID) {
+        if (!location.state.savedNft?.id) {
           onSaveNftForLaterMinting();
         } else {
           onEditSavedNft();
@@ -727,36 +725,28 @@ const SingleNFTForm = () => {
 
   useEffect(() => {
     // This means it's editing an saved nft
-    if (savedNFTsID) {
-      const res = savedNfts.filter((item) => item.id === savedNFTsID)[0];
-      if (res) {
-        const parsedProperties = res.properties
-          ? parsePropertiesForFrontEnd(res.properties)
-          : [{ name: '', value: '', errors: { name: '', value: '' } }];
-        setName(res.name);
-        setDescription(res.description);
-        setEditions(res.numberOfEditions);
-        setPreviewImage(res.url);
-        setRoyaltyAddress(res.royalties);
-        setRoyaltyAddress(res.royalties || [{ name: '', value: '' }]);
-        setProperties(parsedProperties);
-        if (parsedProperties.length) {
-          setPropertyCheck(true);
-        }
-        if (res.collectionId) {
-          const getCollection = myMintableCollections.filter(
-            (col) => col.id === res.collectionId
-          )[0];
-          if (getCollection) {
-            setSelectedCollection(getCollection);
-          }
+    if (location.state.savedNft) {
+      const res = location.state.savedNft;
+      const parsedProperties = res.properties
+        ? parsePropertiesForFrontEnd(res.properties)
+        : [{ name: '', value: '', errors: { name: '', value: '' } }];
+      setName(res.name);
+      setDescription(res.description);
+      setEditions(res.numberOfEditions);
+      setPreviewImage(res.url);
+      setRoyaltyAddress(res.royalties);
+      setRoyaltyAddress(res.royalties || [{ name: '', value: '' }]);
+      setProperties(parsedProperties);
+      if (parsedProperties.length && parsedProperties[0].name) {
+        setPropertyCheck(true);
+      }
+      if (res.collectionId) {
+        const getCollection = mintableCollections.filter((col) => col.id === res.collectionId)[0];
+        if (getCollection) {
+          setSelectedCollection(getCollection);
         }
       }
     }
-
-    return function resetSavedNFTsID() {
-      setSavedNFTsID(null);
-    };
   }, []);
 
   useEffect(() => {
@@ -769,21 +759,22 @@ const SingleNFTForm = () => {
 
   useEffect(() => {
     // reset state in order to hide the errors if the toggle is not checked
-    if (!propertyCheck) {
-      setProperties([{ name: '', value: '', errors: { name: '', value: '' } }]);
-    }
-
-    if (!royalities) {
-      setRoyaltyAddress([{ address, amount: '10' }]);
-      setRoyaltiesMapIndexes(
-        Object.defineProperty({}, `${address}`, {
-          value: [0],
-          writable: true,
-          configurable: true,
-          enumerable: true,
-        })
-      );
-      setRoyaltyValidAddress(true);
+    if (!location.state.savedNft) {
+      if (!propertyCheck) {
+        setProperties([{ name: '', value: '', errors: { name: '', value: '' } }]);
+      }
+      if (!royalities) {
+        setRoyaltyAddress([{ address, amount: '10' }]);
+        setRoyaltiesMapIndexes(
+          Object.defineProperty({}, `${address}`, {
+            value: [0],
+            writable: true,
+            configurable: true,
+            enumerable: true,
+          })
+        );
+        setRoyaltyValidAddress(true);
+      }
     }
   }, [propertyCheck, royalities]);
 
@@ -1010,12 +1001,12 @@ const SingleNFTForm = () => {
           </div>
           <div
             className={`banner ${
-              myMintableCollections.length >= COLLECTIONS_PER_ROW ? 'scroll-box' : ''
+              mintableCollections.length >= COLLECTIONS_PER_ROW ? 'scroll-box' : ''
             } single-nft-choose-collection`}
           >
             <h4>Choose collection</h4>
             <div className="choose__collection">
-              {myMintableCollections.sort(coreCollectionFirst).map((col) => (
+              {mintableCollections.sort(coreCollectionFirst).map((col) => (
                 <CollectionChoice
                   key={col.id}
                   selectedCollection={selectedCollection}
@@ -1311,7 +1302,7 @@ const SingleNFTForm = () => {
             )
           )}
           <div className="single-nft-buttons">
-            {!savedNFTsID ? (
+            {!location.state.savedNft?.id ? (
               <>
                 <Button
                   className="light-border-button"

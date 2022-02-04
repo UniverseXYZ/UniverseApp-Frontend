@@ -75,10 +75,8 @@ const CollectionSortingFilters = ({
       subtitle: 'Synthetix Network Token',
     },
   ];
-  const { deployedCollections } = useAuthContext();
   const [selectedButtons, setSelectedButtons] = useState([...saleTypeButtons]);
   const [searchByCollections, setSearchByCollections] = useState('');
-  const [collections, setCollections] = useState(deployedCollections);
   const [creators, setCreators] = useState(PLACEHOLDER_MARKETPLACE_USERS);
   const [searchByCreators, setSearchByCreators] = useState('');
 

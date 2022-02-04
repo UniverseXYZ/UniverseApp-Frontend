@@ -1,5 +1,5 @@
-@import '../../assets/scss/variables';
-@import '../../assets/scss/mixins';
+@import "../../assets/scss/variables";
+@import "../../assets/scss/mixins";
 
 .pagination__container {
   display: flex;
@@ -124,5 +124,11 @@
   }
   @include md {
     justify-content: center;
+  }
+}
+
+.load--more--btn {
+  button {
+    width: 100%;
   }
 }

@@ -211,7 +211,9 @@ const Footer = () => {
       <div className="footer__bottom">
         <div className="footer__bottom__container">
           <div className="powered-by">
-            <span className="op-sourced">Universe.xyz © 2021. Open-sourced.</span>
+            <span className="op-sourced">
+              Universe.xyz © {new Date().getFullYear()}. Open-sourced.
+            </span>
             <span
               aria-hidden="true"
               onClick={() =>

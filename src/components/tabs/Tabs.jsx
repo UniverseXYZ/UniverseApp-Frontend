@@ -1,26 +1,15 @@
-import uuid from 'react-uuid';
 import React from 'react';
 import PropTypes from 'prop-types';
-import { handleTabLeftScrolling, handleTabRightScrolling } from '../../utils/scrollingHandlers';
-import tabArrow from '../../assets/images/tab-arrow.svg';
 import './Tabs.scss';
 
-const Tabs = ({ items }) => (
+const Tabs = ({ items, scrollContainer }) => (
   <div className="container tabs__wrapper">
-    <div className="tab__left__arrow">
-      <img
-        onClick={handleTabLeftScrolling}
-        aria-hidden="true"
-        src={tabArrow}
-        alt="Tab left arrow"
-      />
-    </div>
-    <div className="tabs">
+    <div className="tabs" ref={scrollContainer}>
       <ul className="tab_items">
         {items.map((tab, index) =>
           tab.name !== 'Hidden' && tab.name !== 'Liked' ? (
             <li
-              key={uuid()}
+              key={tab.name}
               className={tab.active ? 'active' : ''}
               aria-hidden="true"
               onClick={() => tab.handler && tab.handler(index, tab.name)}
@@ -32,13 +21,13 @@ const Tabs = ({ items }) => (
                 </div>
               ) : (
                 <>
-                  {tab.name} {tab.length && `(${tab.length})`}
+                  {tab.name} {tab.length && <span>{tab.length}</span>}
                 </>
               )}
             </li>
           ) : tab.length ? (
             <li
-              key={uuid()}
+              key={tab.name}
               className={tab.active ? 'active' : ''}
               aria-hidden="true"
               onClick={() => tab.handler && tab.handler(index, tab.name)}
@@ -50,7 +39,7 @@ const Tabs = ({ items }) => (
                 </div>
               ) : (
                 <>
-                  {tab.name} {tab.length && `(${tab.length})`}
+                  {tab.name} {tab.length && <span>{tab.length}</span>}
                 </>
               )}
             </li>
@@ -59,14 +48,6 @@ const Tabs = ({ items }) => (
           )
         )}
       </ul>
-    </div>
-    <div className="tab__right__arrow">
-      <img
-        onClick={handleTabRightScrolling}
-        aria-hidden="true"
-        src={tabArrow}
-        alt="Tab right arrow"
-      />
     </div>
   </div>
 );
@@ -80,6 +61,7 @@ Tabs.propTypes = {
       label: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     })
   ).isRequired,
+  scrollContainer: PropTypes.oneOfType([PropTypes.object]).isRequired,
 };
 
 export default Tabs;

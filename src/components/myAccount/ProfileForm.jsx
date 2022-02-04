@@ -4,7 +4,7 @@ import Social from './Social';
 import Button from '../button/Button.jsx';
 import Input from '../input/Input.jsx';
 import defaultImage from '../../assets/images/default-img.svg';
-import infoIcon from '../../assets/images/icon.svg';
+import { ReactComponent as InfoIcon } from '../../assets/images/info-icon.svg';
 import warningIcon from '../../assets/images/Exclamation.svg';
 import errorIcon from '../../assets/images/red-msg.svg';
 import { useAuthContext } from '../../contexts/AuthContext';
@@ -114,7 +114,7 @@ const ProfileForm = ({
   }, [accountImage]);
 
   return (
-    <div className="account-grid-container container">
+    <div className="account-grid-container">
       <div className="account-grid-name1">
         <div className="account-picture">
           <div
@@ -174,11 +174,14 @@ const ProfileForm = ({
             <p className="error__text">&quot;Display name&quot; is not allowed to be empty</p>
           )}
           {accountNameExists && <p className="error__text">Sorry this user name is taken</p>}
-          <h5 onMouseEnter={() => setHideIcon(true)} onMouseLeave={() => setHideIcon(false)}>
+          <h5>
             <span>
               Universe page address
               <div className="universe__page__address">
-                <img src={infoIcon} alt="Info Icon" />
+                <InfoIcon
+                  onMouseEnter={() => setHideIcon(true)}
+                  onMouseLeave={() => setHideIcon(false)}
+                />
                 {hideIcon && (
                   <div className="info-text1">
                     <p>
@@ -321,7 +324,7 @@ ProfileForm.propTypes = {
   setInstagramLink: PropTypes.func,
   saveChanges: PropTypes.func,
   cancelChanges: PropTypes.func,
-  fetchedUserData: PropTypes.string,
+  fetchedUserData: PropTypes.oneOfType([PropTypes.object]),
 };
 
 ProfileForm.defaultProps = {
@@ -340,7 +343,7 @@ ProfileForm.defaultProps = {
   setInstagramLink: () => {},
   saveChanges: () => {},
   cancelChanges: () => {},
-  fetchedUserData: '',
+  fetchedUserData: {},
 };
 
 export default ProfileForm;

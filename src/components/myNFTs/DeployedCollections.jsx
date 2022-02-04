@@ -1,39 +1,25 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
-import uuid from 'react-uuid';
-import bubbleIcon from '../../assets/images/text-bubble.png';
-import plusIcon from '../../assets/images/plus.svg';
-import { useAuthContext } from '../../contexts/AuthContext';
-import SimplePagination from '../pagination/SimplePaginations';
-import ItemsPerPageDropdown from '../pagination/ItemsPerPageDropdown';
+import PropTypes from 'prop-types';
 import { getCollectionBackgroundColor } from '../../utils/helpers';
 import PendingCollections from './pendingDropdown/pendingCollections/PendingCollections';
 import universeIcon from '../../assets/images/universe-img.svg';
 import { useMyNftsContext } from '../../contexts/MyNFTsContext';
 import { shortenEthereumAddress } from '../../utils/helpers/format';
+import { useSearchMyCollections } from '../../utils/hooks/useMyCollectionsPageDebouncer';
+import CollectionCardSkeleton from '../skeletons/collectionCardSkeleton/CollectionCardSkeleton';
+import NoCollectionsFound from './NoCollectionsFound';
+import ApiPagination from '../pagination/ApiPagination';
+import ApiItemsPerPageDropdown from '../pagination/ApiItemsPerPageDropdown';
+import { getMyMintingCollectionsCount, getMyMintingCollections } from '../../utils/api/mintNFT';
 
 const CORE_COLLECTION_ADDRESS = process.env.REACT_APP_UNIVERSE_ERC_721_ADDRESS;
 
-const DeployedCollections = () => {
-  const { deployedCollections } = useAuthContext();
-  const { myMintableCollections } = useMyNftsContext();
-  const history = useHistory();
-  const ref2 = useRef(null);
-  const [isDropdownOpened, setIsDropdownOpened] = useState(false);
-  const [offset, setOffset] = useState(0);
-  const [page, setPage] = useState(0);
-  const [perPage, setPerPage] = useState(8);
-  const [distinctCollections, setDisinctCollections] = useState([
-    ...new Map(
-      [...deployedCollections, ...myMintableCollections].map((item) => [item.id, item])
-    ).values(),
-  ]);
+const pollingInterval = 1000;
 
-  const handleClickOutside = (event) => {
-    if (ref2.current && !ref2.current.contains(event.target)) {
-      setIsDropdownOpened(false);
-    }
-  };
+const DeployedCollections = ({ scrollContainer }) => {
+  const history = useHistory();
+  const { fetchNftSummary } = useMyNftsContext();
 
   const coreCollectionFirst = (a, b) => {
     if (a.address === CORE_COLLECTION_ADDRESS) {
@@ -43,34 +29,112 @@ const DeployedCollections = () => {
     return 1;
   };
 
+  const [perPage, setPerPage] = useState(8);
+  const [offset, setOffset] = useState(0);
+  const [page, setPage] = useState(0);
+  const [isSearching, setIsSearching] = useState(true);
+  const [collectionData, setCollectionData] = useState(null);
+  const [collPoll, setCollPoll] = useState(null);
+  const collPollRef = useRef(null);
+
+  // Update ref so that the cleanup function works
   useEffect(() => {
-    document.addEventListener('click', handleClickOutside, true);
-    return () => {
-      document.removeEventListener('click', handleClickOutside, true);
-    };
-  });
+    collPollRef.current = collPoll;
+  }, [collPoll]);
+
+  const {
+    apiPage,
+    setApiPage,
+    search,
+    results,
+    isLastPage,
+    setIsLastPage,
+    loadedPages,
+    setLoadedPages,
+    mintingCollectionsCount,
+    setMintingCollectionsCount,
+    mintingCollections,
+    setMintingCollections,
+  } = useSearchMyCollections();
 
   useEffect(() => {
-    const newDistinct = [
-      ...new Map(
-        [...deployedCollections, ...myMintableCollections].map((item) => [item.id, item])
-      ).values(),
-    ];
-    setDisinctCollections(newDistinct);
-  }, [deployedCollections, myMintableCollections]);
+    if (results?.collections) {
+      setCollectionData(results);
+      setIsSearching(false);
+    }
+  }, [results]);
+
+  const changePerPage = (newPerPage) => {
+    if (newPerPage < collectionData?.collections?.length) {
+      setPage(0);
+      setOffset(0);
+    } else {
+      const newPage = Math.ceil(offset / newPerPage);
+      setPage(newPage);
+    }
+    setPerPage(newPerPage);
+  };
+
+  useEffect(() => {
+    if (mintingCollectionsCount && !collPollRef.current) {
+      setCollPoll(
+        setInterval(async () => {
+          const apiMintingCount = await getMyMintingCollectionsCount();
+          if (apiMintingCount !== mintingCollectionsCount) {
+            const currentlyMinting = await getMyMintingCollections();
+            setMintingCollections(currentlyMinting.collections);
+            setMintingCollectionsCount(currentlyMinting?.collections?.length || 0);
+            fetchNftSummary();
+            if (
+              !currentlyMinting?.collections?.length ||
+              currentlyMinting?.collections?.length === 0
+            ) {
+              clearInterval(collPollRef.current);
+            }
+          }
+        }, pollingInterval)
+      );
+    } else if (!mintingCollectionsCount && collPollRef.current) {
+      clearInterval(collPollRef.current);
+    }
+
+    return () => {
+      clearInterval(collPollRef.current);
+    };
+  }, [mintingCollectionsCount]);
+
+  const collectionsContainerRef = useRef(null);
+
+  const scrollToCollectionsContainer = () => {
+    if (scrollContainer && scrollContainer.current) {
+      scrollContainer.current.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+  };
+
+  useEffect(() => {
+    scrollToCollectionsContainer();
+  }, [page, perPage]);
+
   return (
-    <div className="tab__saved__collections">
-      <PendingCollections />
-      {distinctCollections.length ? (
+    <div className="tab__saved__collections" ref={collectionsContainerRef}>
+      <PendingCollections myMintingCollections={mintingCollections} />
+      {isSearching ? (
+        <div className="saved__collections__lists">
+          <CollectionCardSkeleton />
+          <CollectionCardSkeleton />
+          <CollectionCardSkeleton />
+          <CollectionCardSkeleton />
+        </div>
+      ) : collectionData?.collections && collectionData?.collections.length ? (
         <>
           <div className="saved__collections__lists">
-            {distinctCollections
+            {collectionData?.collections
               .sort(coreCollectionFirst)
               .slice(offset, offset + perPage)
               .map((collection, index) => (
                 <div
                   className="saved__collection__box"
-                  key={uuid()}
+                  key={collection.id}
                   aria-hidden="true"
                   onClick={() =>
                     history.push(`/collection/${collection.address}`, {
@@ -139,69 +203,45 @@ const DeployedCollections = () => {
                 </div>
               ))}
           </div>
+          {isLastPage && (
+            <>
+              <CollectionCardSkeleton />
+              <CollectionCardSkeleton />
+              <CollectionCardSkeleton />
+              <CollectionCardSkeleton />
+            </>
+          )}
+
           <div className="pagination__container">
-            <SimplePagination
-              data={distinctCollections}
+            <ApiPagination
+              data={collectionData?.collections}
               perPage={perPage}
               setOffset={setOffset}
-              setPage={setPage}
+              setApiPage={setApiPage}
+              apiPage={apiPage}
+              setIsLastPage={setIsLastPage}
               page={page}
+              setPage={setPage}
+              loadedPages={loadedPages}
+              setLoadedPages={setLoadedPages}
+              pagination={collectionData?.pagination}
             />
-            <ItemsPerPageDropdown
+            <ApiItemsPerPageDropdown
               perPage={perPage}
-              setPerPage={setPerPage}
               itemsPerPage={[8, 16, 32]}
               offset={offset}
               page={page}
-              setPage={setPage}
+              changePerPage={changePerPage}
             />
           </div>
         </>
       ) : (
-        <div className="empty__nfts">
-          <div className="tabs-empty">
-            <div className="image-bubble">
-              <img src={bubbleIcon} alt="bubble-icon" />
-            </div>
-            <h3>No collections found</h3>
-            <p>Create NFTs or NFT collections with our platform by clicking the button below</p>
-            <button
-              type="button"
-              ref={ref2}
-              className={`create--nft--dropdown  ${isDropdownOpened ? 'opened' : ''} light-button`}
-              onClick={() => setIsDropdownOpened(!isDropdownOpened)}
-              aria-hidden="true"
-            >
-              Create
-              <img src={plusIcon} alt="icon" />
-              {isDropdownOpened && (
-                <div className="sort__share__dropdown">
-                  <ul>
-                    <li
-                      aria-hidden="true"
-                      onClick={() =>
-                        history.push('/my-nfts/create', { tabIndex: 1, nftType: 'single' })
-                      }
-                    >
-                      NFT
-                    </li>
-                    <li
-                      aria-hidden="true"
-                      onClick={() =>
-                        history.push('/my-nfts/create', { tabIndex: 1, nftType: 'collection' })
-                      }
-                    >
-                      Collection
-                    </li>
-                  </ul>
-                </div>
-              )}
-            </button>
-          </div>
-        </div>
+        <NoCollectionsFound />
       )}
     </div>
   );
 };
-
+DeployedCollections.propTypes = {
+  scrollContainer: PropTypes.oneOfType([PropTypes.object]).isRequired,
+};
 export default DeployedCollections;

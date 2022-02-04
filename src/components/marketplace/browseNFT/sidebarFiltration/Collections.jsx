@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Animated } from 'react-animated-css';
-import uuid from 'react-uuid';
 import searchIcon from '../../../../assets/images/search-gray.svg';
 import collectionIcon from '../../../../assets/images/marketplace/collections.svg';
 import { getCollectionBackgroundColor } from '../../../../utils/helpers';
@@ -68,10 +67,11 @@ const Collections = ({
           </div>
           {collections
             .filter((item) => item.name.toLowerCase().includes(searchByCollections.toLowerCase()))
+            .sort((a, b) => b.nftCount - a.nftCount)
             .map((col, index) => (
               <div
                 className="collections--list"
-                key={uuid()}
+                key={col.id}
                 onClick={() => handleSelect(col, index)}
                 aria-hidden="true"
               >
@@ -102,7 +102,9 @@ const Collections = ({
                 ) : (
                   <img className="sell__collection" src={col.coverUrl} alt={col.name} />
                 )}
-                <p>{col.name || shortenEthereumAddress(col.address)}</p>
+                <p>
+                  {col.name || shortenEthereumAddress(col.address)} ({col.nftCount})
+                </p>
               </div>
             ))}
         </div>

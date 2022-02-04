@@ -2,7 +2,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import './RarityLobsterList.scss';
-import uuid from 'react-uuid';
 import ItemsPerPageDropdown from '../../pagination/ItemsPerPageDropdown';
 import '../../../containers/rarityCharts/RarityCharsLoader.scss';
 import '../../../containers/rarityCharts/RarityCharts.scss';
@@ -33,7 +32,7 @@ const LobsterRarityList = ({
           ) : data.length ? (
             <div className="grid">
               {sliceData.map((item, i) => (
-                <LobsterCard key={uuid()} item={item} index={offset + i + 1} />
+                <LobsterCard key={item.id} item={item} index={offset + i + 1} />
               ))}
             </div>
           ) : (

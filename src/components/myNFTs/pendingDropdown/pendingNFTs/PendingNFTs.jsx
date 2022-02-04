@@ -1,22 +1,27 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useState, useEffect } from 'react';
 import './PendingNFTs.scss';
+import PropTypes from 'prop-types';
 import Blockies from 'react-blockies';
 import mp3Icon from '../../../../assets/images/mp3-icon.png';
-import { useMyNftsContext } from '../../../../contexts/MyNFTsContext';
 import { useAuthContext } from '../../../../contexts/AuthContext';
 import { SpinningLoader } from '../misc/SpinningLoader';
 import PendingAccordion from '../pendingAccordion/PendingAccordion';
 import universeIcon from '../../../../assets/images/universe-img.svg';
 import { formatAddress } from '../../../../utils/helpers/format';
 
-const PendingNFTs = () => {
-  const { myMintingNFTs } = useMyNftsContext();
+const PendingNFTs = ({ mintingNfts }) => {
   const { loggedInArtist, address } = useAuthContext();
+
+  const [user, setUser] = useState(loggedInArtist);
+
+  useEffect(() => {
+    setUser(loggedInArtist);
+  }, [loggedInArtist]);
 
   const generateLink = (addr) => `${process.env.REACT_APP_ETHERSCAN_URL}/tx/${addr}`;
   const renderMintingNfts = useMemo(
     () =>
-      myMintingNFTs.map((nft) => (
+      mintingNfts.map((nft) => (
         <div
           onClick={() => window.open(generateLink(nft.txHashes[0]), '_blank').focus()}
           className="nft__card"
@@ -44,11 +49,10 @@ const PendingNFTs = () => {
 
           <div className="nft__card__header">
             <div className="three__images">
-              {loggedInArtist &&
-              (loggedInArtist.avatar ||
-                (loggedInArtist.profileImageUrl && loggedInArtist.profileImageUrl.length > 48)) ? (
+              {user &&
+              (user.avatar || (user.profileImageUrl && user.profileImageUrl.length > 48)) ? (
                 <div className="creator--details">
-                  <img src={loggedInArtist.avatar} alt="first" />
+                  <img src={user.avatar} alt="first" />
                 </div>
               ) : (
                 <div className="creator--details">
@@ -65,11 +69,10 @@ const PendingNFTs = () => {
                 )}
               </div>
 
-              {loggedInArtist &&
-              (loggedInArtist.avatar ||
-                (loggedInArtist.profileImageUrl && loggedInArtist.profileImageUrl.length > 48)) ? (
+              {user &&
+              (user.avatar || (user.profileImageUrl && user.profileImageUrl.length > 48)) ? (
                 <div className="owner--details">
-                  <img src={loggedInArtist?.avatar} alt="last" />
+                  <img src={user?.avatar} alt="last" />
                 </div>
               ) : (
                 <div className="owner--details">
@@ -103,11 +106,11 @@ const PendingNFTs = () => {
           </div>
         </div>
       )),
-    [myMintingNFTs.length]
+    [mintingNfts.length]
   );
 
-  return myMintingNFTs.length ? (
-    <PendingAccordion title="Pending NFTs" dataLength={myMintingNFTs.length}>
+  return mintingNfts.length ? (
+    <PendingAccordion title="Pending NFTs" dataLength={mintingNfts.length}>
       {renderMintingNfts}
     </PendingAccordion>
   ) : (
@@ -115,4 +118,7 @@ const PendingNFTs = () => {
   );
 };
 
+PendingNFTs.propTypes = {
+  mintingNfts: PropTypes.oneOfType([PropTypes.array]).isRequired,
+};
 export default PendingNFTs;

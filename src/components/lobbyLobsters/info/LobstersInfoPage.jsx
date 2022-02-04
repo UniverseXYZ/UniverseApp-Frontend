@@ -1,6 +1,5 @@
 import React, { useEffect, useState, useContext, useMemo } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
-import uuid from 'react-uuid';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import backArrow from '../../../assets/images/go-back-arrow.svg';
 import Tabs from '../../tabs/Tabs';
@@ -82,7 +81,7 @@ const LobsterInfoPage = () => {
         attributes.map((attributeProps) => {
           const chance = traitsMap[attributeProps.trait.toUpperCase()];
           attributeProps.chance = chance;
-          return <LobsterTrait key={uuid()} traitData={attributeProps} />;
+          return <LobsterTrait key={attributeProps.trait} traitData={attributeProps} />;
         })
       ) : (
         <></>
