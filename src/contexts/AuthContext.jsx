@@ -103,7 +103,7 @@ const AuthContextProvider = ({ children }) => {
     );
 
     setWeb3Provider(provider);
-    setAddress(accounts[0] || '');
+    setAddress(accounts.length ? accounts[0].toLowerCase() : '');
     setSigner(signerResult);
     setYourBalance(utils.formatEther(balance));
     setYourEnsDomain(ensDomain);
@@ -142,7 +142,7 @@ const AuthContextProvider = ({ children }) => {
 
     // await ethereum.request({ method: 'eth_requestAccounts' });
     const provider = new providers.Web3Provider(ethereum);
-    const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
+    const accounts = await provider.listAccounts();
     const network = await provider.getNetwork();
 
     if (network.chainId !== +process.env.REACT_APP_NETWORK_CHAIN_ID) {
@@ -192,7 +192,7 @@ const AuthContextProvider = ({ children }) => {
 
       const web3ProviderWrapper = new providers.Web3Provider(provider);
       const network = await web3ProviderWrapper.getNetwork();
-      const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
+      const accounts = await web3ProviderWrapper.listAccounts();
 
       if (network.chainId !== +process.env.REACT_APP_NETWORK_CHAIN_ID) {
         await provider.disconnect();
@@ -254,7 +254,15 @@ const AuthContextProvider = ({ children }) => {
         if (!hasSigned) {
           const chanllenge = uuid();
           const challengeResult = await setChallenge(chanllenge);
-          const signedMessage = await signer?.signMessage(chanllenge);
+          const data = utils.toUtf8Bytes(chanllenge);
+
+          // we need to use this way of signature, otherwise wrong signer is returned on the BE
+          // see issue here https://github.com/ethers-io/ethers.js/issues/491#issuecomment-483899968 for more info
+          const signedMessage = await web3Provider.send('personal_sign', [
+            utils.hexlify(data),
+            address.toLowerCase(),
+          ]);
+
           const authInfo = await userAuthenticate({
             address,
             signedMessage,
@@ -270,6 +278,9 @@ const AuthContextProvider = ({ children }) => {
             localStorage.setItem('user_address', address);
           } else {
             setIsAuthenticated(false);
+            setErrorBody('Please try again in a few minutes.');
+            setErrorTitle('Failed to authenticate');
+            setShowError(true);
           }
         } else {
           // THE USER ALREADY HAS SIGNED
