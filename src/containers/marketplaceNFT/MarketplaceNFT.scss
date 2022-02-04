@@ -1,5 +1,13 @@
 @import "../../assets/scss/variables";
 @import "../../assets/scss/mixins";
+
+.marketplace--nft--page1 {
+  background-image: url("../../assets/images/minting_page_bg.jpg");
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
 .marketplace--nft--page {
   svg {
     height: 600px;
@@ -348,11 +356,13 @@
     padding-bottom: 60px;
     overflow-y: auto;
     max-height: 720px;
+    background: rgba(255, 255, 255, 0.6);
     .Marketplace--name {
       padding-left: 40px;
       padding-right: 40px;
       display: flex;
       align-items: center;
+      justify-content: space-between;
       .nft--sorting {
         position: relative;
         min-height: 50px;
@@ -558,8 +568,6 @@
           padding: 7px;
         }
       }
-      display: flex;
-      justify-content: space-between;
       > h1 {
         font-family: $sharpGroteskSemiBoldFont;
         font-size: 26px;
@@ -568,6 +576,10 @@
         line-height: 36px;
         letter-spacing: 0px;
         text-align: left;
+        color: transparent;
+        background: black;
+        -webkit-background-clip: text;
+        text-shadow: 2px 2px 5px rgba(255, 255, 255, 0.3);
         @include sm {
           font-size: 16px;
         }
@@ -1152,7 +1164,7 @@
 }
 .collection {
   padding: 80px 40px;
-  background: linear-gradient(127.59deg, #f2f3fb -1.33%, #fcf9f4 91.03%);
+  background: rgba(0, 0, 0, 0.05);
   .collection--container {
     max-width: 1110px;
     margin: 0 auto;
@@ -1168,6 +1180,10 @@
       line-height: 36px;
       letter-spacing: 0px;
       text-align: center;
+      color: transparent;
+      background: black;
+      -webkit-background-clip: text;
+      text-shadow: 2px 2px 5px rgba(255, 255, 255, 0.3);
       @include lg {
         font-size: 20px;
       }
@@ -1203,6 +1219,7 @@
   align-items: center;
   padding-top: 40px;
   button {
+    box-shadow: 2px 1000px 1px #e7e9ec inset;
     @include sm {
       width: 100%;
     }
