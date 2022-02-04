@@ -744,7 +744,6 @@ const SingleNFTForm = () => {
       if (parsedProperties.length && parsedProperties[0].name) {
         setPropertyCheck(true);
       }
-      console.log(1);
       if (res.collectionId) {
         const getCollection = mintableCollections.filter((col) => col.id === res.collectionId)[0];
         if (getCollection) {
