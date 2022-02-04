@@ -9,6 +9,7 @@ const PolymorphContext = createContext(null);
 
 const PolymorphContextProvider = ({ children }) => {
   const [userPolymorphs, setUserPolymorphs] = useState([]);
+  const [userPolymorphWithMetadata, setUserPolymorphsWithMetadata] = useState([]);
   const [userPolymorphsLoaded, setUserPolymorphsLoaded] = useState(false);
   const { address } = useAuthContext();
 
@@ -16,17 +17,30 @@ const PolymorphContextProvider = ({ children }) => {
     setUserPolymorphsLoaded(false);
 
     const polymorphs = await queryPolymorphsGraph(transferPolymorphs(newAddress));
+    const userNftIds = polymorphs?.transferEntities.map((nft) => ({
+      tokenId: nft.tokenId,
+      id: parseInt(nft.id, 16),
+    }));
 
-    const userNftIds = polymorphs?.transferEntities?.map((nft) => nft.tokenId);
+    setUserPolymorphs(userNftIds || []);
+    setUserPolymorphsLoaded(true);
+  };
+
+  // This is a new function for loading the metadata of the polymorphs
+  // This previously was inside fetchUserPolymorphsTheGraph
+  // but polymorph metadata isn't used anywhere currently so I'm splitting
+  // the function into two pieces so we don't make unnecessary calls to the cloud function
+  // and we can load the metadata on demand when needed
+  const loadMetadata = async () => {
+    const userNftIds = userPolymorphs.map((nft) => nft.tokenId);
     const metadataURIs = userNftIds?.map(
       (id) => `${process.env.REACT_APP_POLYMORPHS_IMAGES_URL}${id}`
     );
     const nftMetadataObjects = await fetchTokensMetadataJson(metadataURIs);
     const polymorphNFTs = convertPolymorphObjects(nftMetadataObjects);
     if (polymorphNFTs) {
-      setUserPolymorphs(polymorphNFTs);
+      setUserPolymorphsWithMetadata(polymorphNFTs);
     }
-    setUserPolymorphsLoaded(true);
   };
 
   useEffect(() => {
@@ -41,7 +55,7 @@ const PolymorphContextProvider = ({ children }) => {
         setUserPolymorphs,
         userPolymorphsLoaded,
         setUserPolymorphsLoaded,
-        fetchUserPolymorphsTheGraph,
+        userPolymorphWithMetadata,
       }}
     >
       {children}

@@ -6,10 +6,11 @@ import ActiveAuctionsTab from './activeAuctions/ActiveAuctionsTab.jsx';
 import FutureAuctionsTab from './futureAuctions/FutureAuctionsTab.jsx';
 import PastAuctionsTab from './pastAuctions/PastAuctionsTab.jsx';
 import { handleTabLeftScrolling, handleTabRightScrolling } from '../../../utils/scrollingHandlers';
+import { useMyNftsContext } from '../../../contexts/MyNFTsContext.jsx';
 
-const Tabs = ({ nfts }) => {
+const Tabs = ({ username, artistAddress }) => {
   const [selectedTabIndex, setSelectedTabIndex] = useState(0);
-
+  const { userPageNftsCount, setUserPageNftsCount } = useMyNftsContext();
   useEffect(() => {
     function handleResize() {
       if (window.innerWidth < 600) {
@@ -24,6 +25,8 @@ const Tabs = ({ nfts }) => {
 
     return () => window.removeEventListener('resize', handleResize);
   }, []);
+
+  useEffect(() => setUserPageNftsCount(0), []);
 
   return (
     <div className="tabs__section">
@@ -44,7 +47,7 @@ const Tabs = ({ nfts }) => {
                 onClick={() => setSelectedTabIndex(0)}
                 className={selectedTabIndex === 0 ? 'active' : ''}
               >
-                {`NFTs (${nfts.length})`}
+                {`NFTs (${userPageNftsCount})`}
               </button>
               {/* <button
                 type="button"
@@ -79,7 +82,9 @@ const Tabs = ({ nfts }) => {
           </div>
         </div>
         <div className="tab__content">
-          {selectedTabIndex === 0 && <NFTsTab showMintPrompt={false} nftData={nfts} />}
+          {selectedTabIndex === 0 && (
+            <NFTsTab showMintPrompt={false} username={username} artistAddress={artistAddress} />
+          )}
           {selectedTabIndex === 1 && <ActiveAuctionsTab showMintPrompt={false} />}
           {selectedTabIndex === 2 && <FutureAuctionsTab showMintPrompt={false} />}
           {selectedTabIndex === 3 && <PastAuctionsTab showMintPrompt={false} />}
@@ -90,7 +95,8 @@ const Tabs = ({ nfts }) => {
 };
 
 Tabs.propTypes = {
-  nfts: PropTypes.oneOfType([PropTypes.array]).isRequired,
+  username: PropTypes.string.isRequired,
+  artistAddress: PropTypes.string.isRequired,
 };
 
 export default Tabs;

@@ -88,26 +88,6 @@ const ApiCollectionSearchFilters = ({ searchText, search, resetPagination }) => 
           )}
           Filters
         </div>
-        {showFilters && (
-          <CollectionSortingFilters
-            saleTypeButtons={saleTypeButtons}
-            setSaleTypeButtons={setSaleTypeButtons}
-            selectedPrice={selectedPrice}
-            setSelectedPrice={setSelectedPrice}
-            sliderValue={sliderValue}
-            setSliderValue={setSliderValue}
-            selectedTokenIndex={selectedTokenIndex}
-            setSelectedTokenIndex={setSelectedTokenIndex}
-            selectedCollections={selectedCollections}
-            setSelectedCollections={setSelectedCollections}
-            savedCollections={savedCollections}
-            setSavedCollections={setSavedCollections}
-            selectedCreators={selectedCreators}
-            setSelectedCreators={setSelectedCreators}
-            savedCreators={savedCreators}
-            setSavedCreators={setSavedCreators}
-          />
-        )}
         {saleTypeButtons.filter((item) => item.selected === true).length > 0 ||
         selectedPrice ||
         savedCollections.length > 0 ||

@@ -1,12 +1,11 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import './PendingCollections.scss';
+import PropTypes from 'prop-types';
 import { useMyNftsContext } from '../../../../contexts/MyNFTsContext';
 import { SpinningLoader } from '../misc/SpinningLoader';
 import PendingAccordion from '../pendingAccordion/PendingAccordion';
 
-const PendingCollections = () => {
-  const { myMintingCollections } = useMyNftsContext();
-
+const PendingCollections = ({ myMintingCollections }) => {
   const renderMintingCollections = useMemo(
     () =>
       myMintingCollections.map((coll) => (
@@ -48,4 +47,7 @@ const PendingCollections = () => {
   );
 };
 
+PendingCollections.propTypes = {
+  myMintingCollections: PropTypes.oneOfType([PropTypes.array]).isRequired,
+};
 export default PendingCollections;

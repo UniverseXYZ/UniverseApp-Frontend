@@ -119,7 +119,7 @@ const List = ({
             </button>
           )}
         </div>
-        {loading && !isLastPage && results.length ? (
+        {loading && !isLastPage ? (
           <div className="grid">
             <RarityChartsLoader number={9} />
           </div>

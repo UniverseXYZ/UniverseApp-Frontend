@@ -1,108 +1,181 @@
 import React, { useState, useEffect, useRef } from 'react';
-import PropTypes from 'prop-types';
-import { useHistory } from 'react-router-dom';
-import ItemsPerPageDropdown from '../pagination/ItemsPerPageDropdown.jsx';
 import '../pagination/Pagination.scss';
-import bubbleIcon from '../../assets/images/text-bubble.png';
 import '../marketplace/browseNFT/NFTsList.scss';
-import plusIcon from '../../assets/images/plus.svg';
+import PropTypes from 'prop-types';
 import NFTCard from '../nft/NFTCard';
-import SearchFilters from '../nft/SearchFilters';
-import { useMyNftsContext } from '../../contexts/MyNFTsContext';
-import SimplePagination from '../pagination/SimplePaginations';
 import PendingNFTs from './pendingDropdown/pendingNFTs/PendingNFTs';
 import NftCardSkeleton from '../skeletons/nftCardSkeleton/NftCardSkeleton';
+import { useSearchMyNfts } from '../../utils/hooks/useMyNftsPageDebouncer.js';
+import ApiSearchFilters from '../nft/ApiSearchFilters.jsx';
+import ApiPagination from '../pagination/ApiPagination.jsx';
+import ApiItemsPerPageDropdown from '../pagination/ApiItemsPerPageDropdown.jsx';
+import { CollectionPageLoader } from '../../containers/collection/CollectionPageLoader.jsx';
+import NoNftsFound from './NoNftsFound.jsx';
+import {
+  getMyMintedCollections,
+  getMyMintingNfts,
+  getMyMintingNftsCount,
+} from '../../utils/api/mintNFT';
+import { useMyNftsContext } from '../../contexts/MyNFTsContext';
 
-const Wallet = React.memo(() => {
-  const [isDropdownOpened, setIsDropdownOpened] = useState(false);
-
-  const { myNFTs, myNftsLoading, myMintingNFTs } = useMyNftsContext();
-
-  const [shownNFTs, setShownNFTs] = useState(myNFTs);
-  const [offset, setOffset] = useState(0);
+const Wallet = React.memo(({ scrollContainer }) => {
   const [perPage, setPerPage] = useState(8);
-  const [page, setPage] = useState(8);
+  const [offset, setOffset] = useState(0);
+  const [page, setPage] = useState(0);
 
-  const ref = useRef(null);
-  const ref2 = useRef(null);
-  const refMobile = useRef(null);
-
-  const history = useHistory();
+  const [shownNFTs, setShownNFTs] = useState([]);
+  const [isSearching, setIsSearching] = useState(false);
+  const [allCollections, setAllCollections] = useState([]);
+  const { fetchNftSummary } = useMyNftsContext();
 
   useEffect(() => {
     setOffset(0);
   }, [perPage]);
 
-  // We need this otherwise after updating my nfts with
-  // the newly minted ones from the polling mechanism
-  // the component won't rerender and show the new ones
-  useEffect(() => {
-    setShownNFTs(myNFTs);
-  }, [myNFTs]);
+  const {
+    inputText,
+    setInputText,
+    apiPage,
+    setApiPage,
+    results,
+    isLastPage,
+    setIsLastPage,
+    loadedPages,
+    setLoadedPages,
+    collections,
+    setCollections,
+    mintingNfts,
+    setMintingNfts,
+    mintingNftsCount,
+    setMintingNftsCount,
+  } = useSearchMyNfts();
 
-  const handleClickOutside = (event) => {
-    if (!event.target.classList.contains('target')) {
-      if (
-        ref.current &&
-        !ref.current.contains(event.target) &&
-        refMobile.current &&
-        !refMobile.current.contains(event.target)
-      ) {
-        setIsDropdownOpened(false);
-      }
-    }
-
-    if (ref2.current && !ref2.current.contains(event.target)) {
-      setIsDropdownOpened(false);
+  const getMyCollections = async () => {
+    try {
+      const all = await getMyMintedCollections(0, 1000);
+      setAllCollections(all.collections);
+    } catch (err) {
+      console.log(err);
     }
   };
 
   useEffect(() => {
-    document.addEventListener('click', handleClickOutside, true);
-    return () => {
-      document.removeEventListener('click', handleClickOutside, true);
-    };
-  });
+    // Load all collections for the user
+    getMyCollections();
+  }, []);
+
+  useEffect(() => {
+    if (results.nfts) {
+      setShownNFTs(results);
+      setIsSearching(false);
+    }
+  }, [results]);
+
+  const resetPagination = () => {
+    setOffset(0);
+    setPage(0);
+    setApiPage(0);
+    setIsSearching(true);
+  };
+
+  useEffect(() => {
+    resetPagination();
+  }, [collections]);
+
+  let nftPollInterval = null;
+  const pollingInterval = 10000;
+
+  useEffect(() => {
+    if (mintingNftsCount && !nftPollInterval) {
+      nftPollInterval = setInterval(async () => {
+        const nftCount = await getMyMintingNftsCount();
+        if (nftCount !== mintingNftsCount) {
+          const nfts = await getMyMintingNfts();
+          setMintingNftsCount(nfts.mintingNfts.length);
+          setMintingNfts(nfts.mintingNfts);
+          fetchNftSummary();
+          if (!nfts?.length || nfts.length === 0) {
+            clearInterval(nftPollInterval);
+          }
+        }
+      }, pollingInterval);
+    } else if (!mintingNftsCount && nftPollInterval) {
+      clearInterval(nftPollInterval);
+    }
+  }, [mintingNftsCount]);
+
+  const changePerPage = (newPerPage) => {
+    if (newPerPage < shownNFTs?.nfts.length) {
+      setPage(0);
+      setOffset(0);
+    } else {
+      const newPage = Math.ceil(offset / newPerPage);
+      setPage(newPage);
+    }
+    setPerPage(newPerPage);
+  };
+
+  const scrollToNftContainer = () => {
+    if (scrollContainer && scrollContainer.current) {
+      scrollContainer.current.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+  };
+
+  useEffect(() => {
+    scrollToNftContainer();
+  }, [page, perPage]);
 
   return (
     <div className="tab__wallet">
-      {myNftsLoading ? (
+      <ApiSearchFilters
+        searchText={inputText}
+        search={setInputText}
+        resetPagination={resetPagination}
+        selectedCollections={collections}
+        setSelectedCollections={setCollections}
+        allCollections={allCollections}
+      />
+
+      {isSearching ? (
         <div className="nfts__lists">
           <NftCardSkeleton />
           <NftCardSkeleton />
           <NftCardSkeleton />
           <NftCardSkeleton />
         </div>
-      ) : myMintingNFTs.length || (myNFTs.length && myNFTs.filter((nft) => !nft.hidden).length) ? (
+      ) : shownNFTs?.nfts && shownNFTs?.nfts.length ? (
         <>
-          <SearchFilters data={myNFTs} setData={setShownNFTs} setOffset={setOffset} />
-          <PendingNFTs />
-          {shownNFTs.length ? (
+          <PendingNFTs mintingNfts={mintingNfts} />
+          {shownNFTs?.nfts && shownNFTs?.nfts.length ? (
             <>
               <div className="nfts__lists">
-                {shownNFTs
-                  .slice(offset, offset + perPage)
-                  .filter((nft) => !nft.hidden)
-                  .map((nft) => (
-                    <NFTCard key={nft.id} nft={nft} />
-                  ))}
+                {shownNFTs?.nfts.slice(offset, offset + perPage).map((nft) => (
+                  <NFTCard key={nft.id} nft={nft} />
+                ))}
               </div>
 
+              {isLastPage && <CollectionPageLoader />}
+
               <div className="pagination__container">
-                <SimplePagination
-                  data={shownNFTs}
+                <ApiPagination
+                  data={shownNFTs?.nfts}
                   perPage={perPage}
                   setOffset={setOffset}
-                  setPage={setPage}
+                  setApiPage={setApiPage}
+                  apiPage={apiPage}
+                  setIsLastPage={setIsLastPage}
                   page={page}
+                  setPage={setPage}
+                  loadedPages={loadedPages}
+                  setLoadedPages={setLoadedPages}
+                  pagination={shownNFTs?.pagination}
                 />
-                <ItemsPerPageDropdown
+                <ApiItemsPerPageDropdown
                   perPage={perPage}
-                  setPerPage={setPerPage}
                   itemsPerPage={[8, 16, 32]}
                   offset={offset}
                   page={page}
-                  setPage={setPage}
+                  changePerPage={changePerPage}
                 />
               </div>
             </>
@@ -111,54 +184,13 @@ const Wallet = React.memo(() => {
           )}
         </>
       ) : (
-        <div className="empty__nfts">
-          <div className="tabs-empty">
-            <div className="image-bubble">
-              <img src={bubbleIcon} alt="bubble-icon" />
-            </div>
-            <h3>No NFTs found</h3>
-            <h3 style={{ marginTop: 6 }}>
-              If you&apos;re signing in for the first time, it may take a bit before your nfts are
-              synced
-            </h3>
-            <p>Create NFTs or NFT collections with our platform by clicking the button below</p>
-            <button
-              type="button"
-              ref={ref2}
-              className={`create--nft--dropdown  ${isDropdownOpened ? 'opened' : ''} light-button`}
-              onClick={() => setIsDropdownOpened(!isDropdownOpened)}
-              aria-hidden="true"
-            >
-              Create
-              <img src={plusIcon} alt="icon" />
-              {isDropdownOpened && (
-                <div className="sort__share__dropdown">
-                  <ul>
-                    <li
-                      aria-hidden="true"
-                      onClick={() =>
-                        history.push('/my-nfts/create', { tabIndex: 1, nftType: 'single' })
-                      }
-                    >
-                      NFT
-                    </li>
-                    <li
-                      aria-hidden="true"
-                      onClick={() =>
-                        history.push('/my-nfts/create', { tabIndex: 1, nftType: 'collection' })
-                      }
-                    >
-                      Collection
-                    </li>
-                  </ul>
-                </div>
-              )}
-            </button>
-          </div>
-        </div>
+        <NoNftsFound />
       )}
     </div>
   );
 });
 
+Wallet.propTypes = {
+  scrollContainer: PropTypes.oneOfType([PropTypes.object]).isRequired,
+};
 export default Wallet;

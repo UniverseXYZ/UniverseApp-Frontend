@@ -25,7 +25,8 @@ import {
 import { useMyNftsContext } from '../../../contexts/MyNFTsContext.jsx';
 import { useAuthContext } from '../../../contexts/AuthContext.jsx';
 import { useErrorContext } from '../../../contexts/ErrorContext';
-import Contracts from '../../../contracts/contracts.json';
+import RevenueSplits from '../revenueSplits/RevenueSplits.jsx';
+import SocialConnections from '../socialConnections/SocialConnections.jsx';
 
 const MAX_FIELD_CHARS_LENGTH = {
   name: 32,
@@ -35,9 +36,6 @@ const MAX_FIELD_CHARS_LENGTH = {
 
 const NFTCollectionForm = ({ showCollectible, setShowCollectible }) => {
   const {
-    savedNfts,
-    savedCollectionID,
-    setSavedCollectionID,
     myNFTs,
     setMyNFTs,
     collectionMintingTxHash,
@@ -70,8 +68,6 @@ const NFTCollectionForm = ({ showCollectible, setShowCollectible }) => {
   const [border, setBorder] = useState(false);
   const [showLoading, setShowLoading] = useState(false);
   const [showCongrats, setShowCongrats] = useState(false);
-  const [trasnactionLink, setTransactionLink] = useState('');
-
   const [errors, setErrors] = useState({
     coverImage: '',
     collectionName: '',
@@ -79,6 +75,14 @@ const NFTCollectionForm = ({ showCollectible, setShowCollectible }) => {
     collectible: '',
     shorturl: '',
   });
+  const [showRevenueSplits, setShowRevenueSplits] = useState(true);
+  const [revenueSplits, setRevenueSplits] = useState([{ walletAddress: '', amount: '10' }]);
+  const [revenueSplitsValidAddress, setRevenueSplitsValidAddress] = useState(true);
+  const [siteLink, setSiteLink] = useState('');
+  const [discordLink, setDiscordLink] = useState('');
+  const [instagramLink, setInstagramLink] = useState('');
+  const [mediumLink, setMediumLink] = useState('');
+  const [telegramLink, setTelegramLink] = useState('');
 
   const validateFile = (file) => {
     setMintNowClick(false);
@@ -146,7 +150,10 @@ const NFTCollectionForm = ({ showCollectible, setShowCollectible }) => {
       const existsInMyNfts = myNFTs.length
         ? myNFTs.filter((nft) => nft.collectionName?.toLowerCase() === collectionName.toLowerCase())
         : [];
-      if ((collectionNameExists.length || existsInMyNfts.length) && !savedCollectionID) {
+      if (
+        (collectionNameExists.length || existsInMyNfts.length) &&
+        !location.state?.collection?.id
+      ) {
         setErrors({
           ...errors,
           collectionName: '“Collection name” already exists',
@@ -175,14 +182,24 @@ const NFTCollectionForm = ({ showCollectible, setShowCollectible }) => {
         symbol: tokenName,
         description,
         tokenName,
+        siteLink,
+        discordLink,
+        instagramLink,
+        mediumLink,
+        telegramLink,
       };
 
       let res;
       // If is editing
-      if (savedCollectionID) {
+      if (location.state?.collection?.id) {
         res = await editCollection({
-          id: savedCollectionID,
+          id: location.state?.collection?.id,
           description,
+          siteLink,
+          discordLink,
+          instagramLink,
+          mediumLink,
+          telegramLink,
         });
 
         if (res.message) {
@@ -190,17 +207,8 @@ const NFTCollectionForm = ({ showCollectible, setShowCollectible }) => {
         } else {
           const updateCoverImage = typeof coverImage === 'object';
           if (updateCoverImage) {
-            res = await editCollectionImage(coverImage, savedCollectionID);
+            res = await editCollectionImage(coverImage, location.state?.collection?.id);
           }
-
-          /* eslint-disable no-param-reassign */
-          const updatedCollections = myMintableCollections.map((col) => {
-            if (col.id === savedCollectionID) {
-              return res;
-            }
-            return col;
-          });
-          setMyMintableCollections(updatedCollections);
         }
       } else {
         // Create the collection
@@ -215,20 +223,6 @@ const NFTCollectionForm = ({ showCollectible, setShowCollectible }) => {
 
         const [save, tx] = await Promise.all([saveRequestPromise, txReqPromise]);
         res = await attachTxHashToCollection(tx.hash, save.id);
-
-        // We need to wait for server process time, otherwise the new collection is not retunred imediatly
-        // const serverProcessTime = 5000; // ms
-        // await sleep(serverProcessTime);
-        // get the new collections and update the state
-        const mintedCollectionsRequest = await getMyMintedCollections();
-        if (!mintedCollectionsRequest.message) {
-          setDeployedCollections(mintedCollectionsRequest.collections);
-        }
-        const mintingCollectionsRequest = await getMyMintingCollections();
-        if (!mintingCollectionsRequest.message) {
-          setMyMintingCollections(mintingCollectionsRequest.collections);
-        }
-        setMintingCollectionsCount(mintingCollectionsCount + 1);
       }
 
       setShowLoading(false);
@@ -267,13 +261,6 @@ const NFTCollectionForm = ({ showCollectible, setShowCollectible }) => {
     setBorder(false);
   };
 
-  useEffect(
-    () => () => {
-      setSavedCollectionID(null);
-    },
-    []
-  );
-
   useEffect(() => {
     if (!showLoading) setActiveTxHashes([]);
   }, [showLoading]);
@@ -303,25 +290,28 @@ const NFTCollectionForm = ({ showCollectible, setShowCollectible }) => {
   });
 
   useEffect(() => {
-    if (mintNowClick) {
-      if (!errors.collectionName && !errors.tokenName && !errors.coverImage) {
-        onMintCollection();
-      }
+    if (mintNowClick && !errors.collectionName && !errors.tokenName && !errors.coverImage) {
+      onMintCollection();
     }
   }, [errors]);
 
   useEffect(() => {
     // It means we have opened a collection for EDIT
-    if (savedCollectionID) {
-      const res = myMintableCollections.filter((item) => item.id === savedCollectionID)[0];
+    if (location.state?.collection?.id) {
+      const res = location.state?.collection;
       setCollectionName(res.name);
       // An already deployed collection should have a coverUrl
       setCoverImage(res.coverUrl);
       setTokenName(res.symbol);
       setDescription(res.description);
+      setSiteLink(res.siteLink);
+      setDiscordLink(res.discordLink);
+      setMediumLink(res.mediumLink);
+      setInstagramLink(res.instagramLink);
+      setTelegramLink(res.telegramLink);
       setBgImage(res.bgImage || null);
     }
-  }, [collectionNFTs]);
+  }, [location.state?.collection]);
 
   const imageSrc = useMemo(
     () =>
@@ -335,13 +325,13 @@ const NFTCollectionForm = ({ showCollectible, setShowCollectible }) => {
   return !showCollectible ? (
     <div className="nft--collection--settings--page">
       <RouterPrompt
-        when={!!showPrompt && !!savedCollectionID}
+        when={!!showPrompt && !!location.state?.collection?.id}
         onOK={() => true}
-        editing={!!savedCollectionID}
+        editing={!!location.state?.collection?.id}
       />
       <Popup closeOnDocumentClick={false} open={showLoading}>
         <LoadingPopup
-          text="The transaction is in progress. Keep this window opened. Navigating away from the page will reset the curent progress."
+          text="The transaction is in progress. Keep this window opened. Navigating away from the page will reset the current progress."
           onClose={() => setShowLoading(false)}
           contractInteraction
         />
@@ -354,14 +344,13 @@ const NFTCollectionForm = ({ showCollectible, setShowCollectible }) => {
             setTokenName('');
             setCollectionName('');
             setCoverImage(null);
-            setSavedCollectionID(null);
             setMyNFTsSelectedTabIndex(1);
           }}
           backButtonText="Go to my Collections"
           message="NFT collection was successfully created/updated and should be displayed in your wallet shortly"
         />
       </Popup>
-      <div className="image--name--token">
+      <div className={`image--name--token${location.state?.collection?.id ? ' align-center' : ''}`}>
         <div className="collection--cover--image">
           <div
             className={`dropzone collection--cover--image--circle
@@ -416,44 +405,25 @@ const NFTCollectionForm = ({ showCollectible, setShowCollectible }) => {
           <input type="file" ref={inputFile} onChange={(e) => validateFile(e.target.files[0])} />
         </div>
         <div className="collection--name--and--token">
-          <div className={`collection--name ${savedCollectionID ? 'inactive' : ''}`}>
-            {savedCollectionID ? (
-              <Input
-                label="Collection name"
-                error={errors.collectionName}
-                placeholder="Enter the collection name"
-                value={collectionName}
-                disabled
-              />
-            ) : (
-              <Input
-                label="Collection name"
-                error={errors.collectionName}
-                placeholder="Enter the collection name"
-                onChange={(e) => {
-                  if (e.target.value.length > MAX_FIELD_CHARS_LENGTH.name) return;
-                  handleCollectionName(e.target.value);
-                  setShowPrompt(true);
-                }}
-                value={collectionName}
-                hoverBoxShadowGradient
-              />
-            )}
+          <div className="collection--name">
+            <Input
+              label="Collection name"
+              error={errors.collectionName}
+              placeholder="Enter the collection name"
+              onChange={(e) => {
+                if (e.target.value.length > MAX_FIELD_CHARS_LENGTH.name) return;
+                handleCollectionName(e.target.value);
+                setShowPrompt(true);
+              }}
+              value={collectionName}
+              hoverBoxShadowGradient
+            />
             <p className="input-max-chars">
               {collectionName?.length}/{MAX_FIELD_CHARS_LENGTH.name}
             </p>
-            <p className="warning">Collection name cannot be changed in future</p>
           </div>
-          <div className={`collection--token ${savedCollectionID ? 'inactive' : ''}`}>
-            {savedCollectionID ? (
-              <Input
-                label="Token name"
-                error={errors.tokenName}
-                placeholder="$ART"
-                value={tokenName}
-                disabled
-              />
-            ) : (
+          {!location.state?.collection?.id ? (
+            <div className="collection--token">
               <Input
                 label="Token name"
                 error={errors.tokenName}
@@ -466,13 +436,16 @@ const NFTCollectionForm = ({ showCollectible, setShowCollectible }) => {
                 value={tokenName}
                 hoverBoxShadowGradient
               />
-            )}
-
-            <p className="input-max-chars">
-              {tokenName?.length}/{MAX_FIELD_CHARS_LENGTH.token}
-            </p>
-            {!errors.tokenName && <p className="warning">Token name cannot be changed in future</p>}
-          </div>
+              <p className="input-max-chars">
+                {tokenName?.length}/{MAX_FIELD_CHARS_LENGTH.token}
+              </p>
+              {!errors.tokenName && (
+                <p className="warning">Token name cannot be changed in future</p>
+              )}
+            </div>
+          ) : (
+            <></>
+          )}
         </div>
       </div>
       <div className="collection--description">
@@ -495,6 +468,27 @@ const NFTCollectionForm = ({ showCollectible, setShowCollectible }) => {
           {description ? description.length : 0}/{MAX_FIELD_CHARS_LENGTH.description}
         </p>
       </div>
+      <RevenueSplits
+        showRevenueSplits={showRevenueSplits}
+        setShowRevenueSplits={setShowRevenueSplits}
+        revenueSplits={revenueSplits}
+        setRevenueSplits={setRevenueSplits}
+        revenueSplitsValidAddress={revenueSplitsValidAddress}
+        setRevenueSplitsValidAddress={setRevenueSplitsValidAddress}
+        disabled
+      />
+      <SocialConnections
+        siteLink={siteLink}
+        setSiteLink={setSiteLink}
+        discordLink={discordLink}
+        setDiscordLink={setDiscordLink}
+        instagramLink={instagramLink}
+        setInstagramLink={setInstagramLink}
+        mediumLink={mediumLink}
+        setMediumLink={setMediumLink}
+        telegramLink={telegramLink}
+        setTelegramLink={setTelegramLink}
+      />
       <div className="collection--nfts">
         {(errors.collectionName || errors.tokenName) && (
           <div className="collection--final--error">
@@ -507,7 +501,7 @@ const NFTCollectionForm = ({ showCollectible, setShowCollectible }) => {
         )}
       </div>
       <div className="create--collection--btn">
-        {!savedCollectionID ? (
+        {!location.state?.collection?.id ? (
           <Button
             className="light-button"
             onClick={handleMinting}

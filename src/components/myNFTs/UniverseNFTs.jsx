@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import '../pagination/Pagination.scss';
 import './UniverseNFTs.scss';
+import PropTypes from 'prop-types';
 import MyPolymorphsChart from './MyPolymorphsChart';
 import MyLobstersChart from './MyLobstersChart';
 import { useMyNftsContext } from '../../contexts/MyNFTsContext';
 
-const UniverseNFTs = () => {
+const UniverseNFTs = ({ scrollContainer }) => {
   const { collectionFilter, setCollectionFilter, polymorphsFilter, lobstersFilter } =
     useMyNftsContext();
 
@@ -21,6 +22,7 @@ const UniverseNFTs = () => {
         <MyPolymorphsChart
           isDropdownOpened={isDropdownOpened}
           setIsDropdownOpened={setIsDropdownOpened}
+          scrollContainer={scrollContainer}
         />
       );
     }
@@ -29,6 +31,7 @@ const UniverseNFTs = () => {
         <MyLobstersChart
           isDropdownOpened={isDropdownOpened}
           setIsDropdownOpened={setIsDropdownOpened}
+          scrollContainer={scrollContainer}
         />
       );
     }
@@ -41,5 +44,8 @@ const UniverseNFTs = () => {
       <div className="tab__wallet">{renderMyNFTsNew()}</div>
     </div>
   );
+};
+UniverseNFTs.propTypes = {
+  scrollContainer: PropTypes.oneOfType([PropTypes.object]).isRequired,
 };
 export default UniverseNFTs;

@@ -1,5 +1,6 @@
 import React, { useMemo } from 'react';
 import './PendingNFTs.scss';
+import PropTypes from 'prop-types';
 import Blockies from 'react-blockies';
 import mp3Icon from '../../../../assets/images/mp3-icon.png';
 import { useMyNftsContext } from '../../../../contexts/MyNFTsContext';
@@ -9,14 +10,13 @@ import PendingAccordion from '../pendingAccordion/PendingAccordion';
 import universeIcon from '../../../../assets/images/universe-img.svg';
 import { formatAddress } from '../../../../utils/helpers/format';
 
-const PendingNFTs = () => {
-  const { myMintingNFTs } = useMyNftsContext();
+const PendingNFTs = ({ mintingNfts }) => {
   const { loggedInArtist, address } = useAuthContext();
 
   const generateLink = (addr) => `${process.env.REACT_APP_ETHERSCAN_URL}/tx/${addr}`;
   const renderMintingNfts = useMemo(
     () =>
-      myMintingNFTs.map((nft) => (
+      mintingNfts.map((nft) => (
         <div
           onClick={() => window.open(generateLink(nft.txHashes[0]), '_blank').focus()}
           className="nft__card"
@@ -103,11 +103,11 @@ const PendingNFTs = () => {
           </div>
         </div>
       )),
-    [myMintingNFTs.length]
+    [mintingNfts.length]
   );
 
-  return myMintingNFTs.length ? (
-    <PendingAccordion title="Pending NFTs" dataLength={myMintingNFTs.length}>
+  return mintingNfts.length ? (
+    <PendingAccordion title="Pending NFTs" dataLength={mintingNfts.length}>
       {renderMintingNfts}
     </PendingAccordion>
   ) : (
@@ -115,4 +115,7 @@ const PendingNFTs = () => {
   );
 };
 
+PendingNFTs.propTypes = {
+  mintingNfts: PropTypes.oneOfType([PropTypes.array]).isRequired,
+};
 export default PendingNFTs;

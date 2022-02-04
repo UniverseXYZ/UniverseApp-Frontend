@@ -9,12 +9,15 @@ const GET_MY_MINTING_NFTS_COUNT_URL = `${process.env.REACT_APP_API_BASE_URL}/api
 const GENERATE_TOKEN_URI_URL = `${process.env.REACT_APP_API_BASE_URL}/api/nfts/token-uri`;
 const CREATE_COLLECTION_URL = `${process.env.REACT_APP_API_BASE_URL}/api/nfts/minting-collections`;
 const GET_MY_MINTED_COLLECTIONS = `${process.env.REACT_APP_API_BASE_URL}/api/nfts/collections/my-collections`;
+const GET_USER_COLLECTIONS = (address) =>
+  `${process.env.REACT_APP_API_BASE_URL}/api/nfts/collections/${address}`;
 const GET_MY_MINTING_COLLECTIONS = `${process.env.REACT_APP_API_BASE_URL}/api/pages/my-collections/pending`;
 const GET_MY_MINTING_COLLECTIONS_COUNT = `${process.env.REACT_APP_API_BASE_URL}/api/pages/my-collections/pending/count`;
 const GET_SPECIFIC_COLLECTION = `${process.env.REACT_APP_API_BASE_URL}/api/pages/collection`;
 const EDIT_COLLECTION_URL = `${process.env.REACT_APP_API_BASE_URL}/api/collections`;
 const GET_NFT_INFO = `${process.env.REACT_APP_API_BASE_URL}/api/pages/nft`;
 const CREATE_MINTING_NFT = `${process.env.REACT_APP_API_BASE_URL}/api/minting-nfts`;
+const GET_NFT_SUMMARY = `${process.env.REACT_APP_API_BASE_URL}/api/pages/my-nfts/summary`;
 
 const EDIT_COLLECTION_COVER_URL = (id) =>
   `${process.env.REACT_APP_API_BASE_URL}/api/collections/${id}/cover-image`;
@@ -147,7 +150,7 @@ export const getMyMintingNfts = async () => {
   }
   const result = await request.text().then((data) => JSON.parse(data));
 
-  return result.mintingNfts;
+  return result;
 };
 
 export const getMyMintingNftsCount = async () => {
@@ -286,7 +289,17 @@ export const getTokenURI = async ({
 };
 
 export const saveCollection = async (data) => {
-  const { file, name, symbol, description } = data;
+  const {
+    file,
+    name,
+    symbol,
+    description,
+    siteLink,
+    discordLink,
+    instagramLink,
+    mediumLink,
+    telegramLink,
+  } = data;
 
   const formData = new FormData();
   if (file) formData.append('file', file, file.name);
@@ -294,6 +307,21 @@ export const saveCollection = async (data) => {
   formData.append('symbol', symbol);
   if (description) {
     formData.append('description', description);
+  }
+  if (siteLink) {
+    formData.append('siteLink', siteLink);
+  }
+  if (discordLink) {
+    formData.append('discordLink', discordLink);
+  }
+  if (instagramLink) {
+    formData.append('instagramLink', instagramLink);
+  }
+  if (mediumLink) {
+    formData.append('mediumLink', mediumLink);
+  }
+  if (telegramLink) {
+    formData.append('telegramLink', telegramLink);
   }
 
   const requestUrl = CREATE_COLLECTION_URL;
@@ -404,6 +432,17 @@ export const getMyMintedCollections = async () => {
   return result;
 };
 
+export const getUserCollections = async (address) => {
+  const requestOptions = {
+    method: 'GET',
+  };
+  const url = GET_USER_COLLECTIONS(address);
+  const request = await fetch(url, requestOptions);
+  const result = await request.text().then((res) => JSON.parse(res));
+
+  return result;
+};
+
 export const getMyMintingCollections = async () => {
   const requestOptions = {
     method: 'GET',
@@ -465,6 +504,11 @@ export const editCollection = async (data) => {
     },
     body: JSON.stringify({
       description: data.description || '',
+      siteLink: data.siteLink || '',
+      discordLink: data.discordLink || '',
+      instagramLink: data.instagramLink || '',
+      mediumLink: data.mediumLink || '',
+      telegramLink: data.telegramLink || '',
     }),
   };
 
@@ -548,7 +592,7 @@ export const createMintingNFT = async (txHash, nftId, actualMintedCount) => {
     },
     body: JSON.stringify({
       txHash,
-      numberOfEditions: actualMintedCount,
+      numberOfEditions: actualMintedCount || 0,
     }),
   });
 
@@ -556,4 +600,32 @@ export const createMintingNFT = async (txHash, nftId, actualMintedCount) => {
   // const result = await request.text().then((data) => JSON.parse(data));
   // console.log(result);
   // return result;
+};
+
+export const getNftSummary = async () => {
+  const request = await fetch(GET_NFT_SUMMARY, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${localStorage.getItem('xyz_access_token')}`,
+    },
+  });
+
+  const result = await request.text().then((data) => JSON.parse(data));
+  return result;
+};
+
+export const getMyCollections = async (offset, limit) => {
+  const endpoint = `${process.env.REACT_APP_API_BASE_URL}/api/pages/my-nfts/collections?offset=${offset}&limit=${limit}`;
+
+  const request = await fetch(endpoint, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${localStorage.getItem('xyz_access_token')}`,
+    },
+  });
+
+  const result = await request.text().then((data) => JSON.parse(data));
+  return result;
 };

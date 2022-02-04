@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useHistory } from 'react-router-dom';
 import Popup from 'reactjs-popup';
+import PropTypes from 'prop-types';
 import checkIcon from '../../assets/images/Completed.svg';
 import editIcon from '../../assets/images/edit.svg';
 import removeIcon from '../../assets/images/remove.svg';
@@ -13,9 +14,24 @@ import { useMyNftsContext } from '../../contexts/MyNFTsContext';
 import SimplePagination from '../pagination/SimplePaginations';
 import ItemsPerPageDropdown from '../pagination/ItemsPerPageDropdown';
 import LoadingImage from '../general/LoadingImage';
+import NoSavedNftsFound from './NoSavedNftsFound';
+import { useSearchSavedNfts } from '../../utils/hooks/useSavedNftsDebouncer.js';
+import ApiPagination from '../pagination/ApiPagination';
+import ApiItemsPerPageDropdown from '../pagination/ApiItemsPerPageDropdown';
+import NftCardSkeleton from '../skeletons/nftCardSkeleton/NftCardSkeleton';
+import { getCollectionBackgroundColor } from '../../utils/helpers';
+import { shortenEthereumAddress } from '../../utils/helpers/format';
+import universeIcon from '../../assets/images/universe-img.svg';
 
-const SavedNFTs = () => {
-  const { savedNfts, setSavedNfts, setActiveView, setSavedNFTsID } = useMyNftsContext();
+const SavedNFTs = ({
+  setSelectedSavedNfts,
+  selectedSavedNfts,
+  triggerRefetch,
+  setTriggerRefetch,
+  scrollContainer,
+}) => {
+  const { setSavedNfts } = useMyNftsContext();
+
   const [selectAllIsChecked, setSelectAllIsChecked] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
   const [dropdownID, setDropdownID] = useState(0);
@@ -26,11 +42,44 @@ const SavedNFTs = () => {
   const ref = useRef(null);
   const history = useHistory();
 
-  const handleSavedNfts = (index) => {
-    const newSavedNfts = [...savedNfts];
-    newSavedNfts[index].selected = !newSavedNfts[index].selected;
+  const [savedNftData, setSavedNftData] = useState(null);
+  const [isSearching, setIsSearching] = useState(true);
 
-    setSavedNfts(newSavedNfts);
+  const {
+    apiPage,
+    setApiPage,
+    search: { loading },
+    results,
+    isLastPage,
+    setIsLastPage,
+    loadedPages,
+    setLoadedPages,
+  } = useSearchSavedNfts(triggerRefetch, setTriggerRefetch);
+
+  useEffect(() => {
+    if (results.nfts) {
+      setSavedNftData(results);
+      setIsSearching(false);
+    }
+  }, [results]);
+
+  const handleSavedNfts = (index) => {
+    const newSavedNfts = [...savedNftData?.nfts] || [];
+    newSavedNfts[index].selected = !newSavedNfts[index].selected;
+    if (newSavedNfts[index].selected) {
+      // Add to selected nfts
+      setSelectedSavedNfts((savedNfts) => [...savedNfts, newSavedNfts[index]]);
+    } else {
+      // Remove from selected nfts
+      const newSelected = [...selectedSavedNfts];
+      newSelected.splice(newSelected.map((nft) => nft.id).indexOf(newSavedNfts[index].id), 1);
+      setSelectedSavedNfts(newSelected);
+    }
+
+    setSavedNfts((old) => ({
+      ...old,
+      nfts: newSavedNfts,
+    }));
   };
 
   const toggleSelection = () => {
@@ -41,17 +90,22 @@ const SavedNFTs = () => {
     }
     setSelectAllIsChecked(!selectAllIsChecked);
 
-    const newSavedNfts = [...savedNfts];
+    const newSavedNfts = [...savedNftData?.nfts];
     if (localStorage.localChecked === 'true') {
       newSavedNfts.forEach((nft) => {
         nft.selected = true;
       });
+      setSelectedSavedNfts(newSavedNfts);
     } else {
       newSavedNfts.forEach((nft) => {
         nft.selected = false;
       });
+      setSelectedSavedNfts([]);
     }
-    setSavedNfts(newSavedNfts);
+    setSavedNfts((old) => ({
+      ...old,
+      nfts: newSavedNfts,
+    }));
   };
 
   const handleClickOutside = (event) => {
@@ -69,7 +123,7 @@ const SavedNFTs = () => {
   };
 
   useEffect(() => {
-    const res = savedNfts.filter((nft) => !nft.selected);
+    const res = (savedNftData?.nfts || []).filter((nft) => !nft.selected);
     if (res.length) {
       setSelectAllIsChecked(false);
       localStorage.localChecked = 'false';
@@ -77,7 +131,7 @@ const SavedNFTs = () => {
       setSelectAllIsChecked(true);
       localStorage.localChecked = 'true';
     }
-  }, [savedNfts]);
+  }, [savedNftData]);
 
   useEffect(() => {
     document.addEventListener('click', handleClickOutside, true);
@@ -88,14 +142,44 @@ const SavedNFTs = () => {
 
   const handleEdit = (id) => {
     // document.body.classList.add('no__scroll');
-    setSavedNFTsID(id);
-    setActiveView('single');
-    history.push('/my-nfts/create', { tabIndex: 1, nftType: 'single' });
+    history.push('/my-nfts/create', {
+      tabIndex: 1,
+      nftType: 'single',
+      savedNft: savedNftData.nfts.find((nft) => nft.id === id),
+    });
   };
+
+  const changePerPage = (newPerPage) => {
+    if (newPerPage < savedNftData?.nfts.length) {
+      setPage(0);
+      setOffset(0);
+    } else {
+      const newPage = Math.ceil(offset / newPerPage);
+      setPage(newPage);
+    }
+    setPerPage(newPerPage);
+  };
+
+  const scrollToNftContainer = () => {
+    if (scrollContainer && scrollContainer.current) {
+      scrollContainer.current.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+  };
+
+  useEffect(() => {
+    scrollToNftContainer();
+  }, [page, perPage]);
 
   return (
     <div className="tab__saved__nfts">
-      {savedNfts.length ? (
+      {isSearching ? (
+        <div className="saved__nfts__lists">
+          <NftCardSkeleton />
+          <NftCardSkeleton />
+          <NftCardSkeleton />
+          <NftCardSkeleton />
+        </div>
+      ) : savedNftData?.nfts && savedNftData?.nfts.length ? (
         <>
           <div className="custom__checkbox">
             <label htmlFor="toggleSelection">
@@ -111,7 +195,7 @@ const SavedNFTs = () => {
           </div>
 
           <div className="saved__nfts__lists">
-            {savedNfts.slice(offset, offset + perPage).map((nft, index) => (
+            {savedNftData?.nfts?.slice(offset, offset + perPage).map((nft, index) => (
               <div className={`saved__nft__box ${nft.selected ? 'selected' : ''}`} key={nft.id}>
                 <div
                   className="saved__nft__box__image"
@@ -180,8 +264,7 @@ const SavedNFTs = () => {
                             <RemovePopup
                               close={close}
                               nftID={nft.id}
-                              removedItemName={nft.name}
-                              removeFrom="saved"
+                              setTriggerRefetch={setTriggerRefetch}
                             />
                           )}
                         </Popup>
@@ -193,91 +276,81 @@ const SavedNFTs = () => {
                   <div className="collection__details">
                     {nft.collection && (
                       <>
-                        {typeof nft.collection.avatar === 'string' &&
-                        nft.collection.avatar.startsWith('#') ? (
+                        {nft.collection.address ===
+                        process.env.REACT_APP_UNIVERSE_ERC_721_ADDRESS.toLowerCase() ? (
+                          <img src={universeIcon} alt={nft.collection.name} />
+                        ) : !nft.collection.coverUrl ? (
                           <div
-                            className="random__bg__color"
-                            style={{ backgroundColor: nft.collection.avatar }}
+                            className="random--bg--color"
+                            style={{
+                              backgroundColor: getCollectionBackgroundColor(nft.collection),
+                            }}
                           >
                             {nft.collection.name.charAt(0)}
                           </div>
                         ) : (
-                          <img
-                            src={URL.createObjectURL(nft.collection.avatar)}
-                            alt={nft.collection.name}
-                          />
+                          <img src={nft.collection.coverUrl} alt={nft.collection.name} />
                         )}
-                        <span>{nft.collection.name}</span>
+                        <span>
+                          {nft.collection.name || shortenEthereumAddress(nft.collection.address)}
+                        </span>
                       </>
                     )}
                   </div>
-                  {nft.tokenIds && nft.tokenIds.length > 1 ? (
-                    <div className="collection__count">
-                      {`x${nft.tokenIds.length}`}
-                      <div
-                        className="generatedEditions"
-                        style={{
-                          gridTemplateColumns: `repeat(${Math.ceil(
-                            nft.tokenIds.length / 10
-                          )}, auto)`,
-                        }}
-                      >
-                        {nft.tokenIds.map((edition) => (
-                          <div key={edition.id.split('-')[0]}>{`#${edition.id.split('-')[0]}`}</div>
-                        ))}
-                      </div>
-                    </div>
-                  ) : (
-                    <p className="collection__count">{`#${0}`}</p>
+                  {nft.numberOfEditions >= 1 && (
+                    <div className="collection__count">{`x${nft.numberOfEditions}`}</div>
                   )}
                 </div>
-                {nft.tokenIds && nft.tokenIds.length > 1 && (
+                {nft.numberOfEditions === 2 ? (
+                  <>
+                    <div className="saved__nft__box__highlight__one" />
+                  </>
+                ) : nft.numberOfEditions > 2 ? (
                   <>
                     <div className="saved__nft__box__highlight__one" />
                     <div className="saved__nft__box__highlight__two" />
                   </>
+                ) : (
+                  <></>
                 )}
                 <span className="tooltiptext">Complete editing this NFT</span>
               </div>
             ))}
           </div>
           <div className="pagination__container">
-            <SimplePagination
-              data={savedNfts}
+            <ApiPagination
+              data={savedNftData?.nfts}
               perPage={perPage}
               setOffset={setOffset}
-              setPage={setPage}
+              setApiPage={setApiPage}
+              apiPage={apiPage}
+              setIsLastPage={setIsLastPage}
               page={page}
+              setPage={setPage}
+              loadedPages={loadedPages}
+              setLoadedPages={setLoadedPages}
+              pagination={savedNftData?.pagination}
             />
-            <ItemsPerPageDropdown
+            <ApiItemsPerPageDropdown
               perPage={perPage}
-              setPerPage={setPerPage}
               itemsPerPage={[8, 16, 32]}
               offset={offset}
               page={page}
-              setPage={setPage}
+              changePerPage={changePerPage}
             />
           </div>
         </>
       ) : (
-        <div className="empty__nfts">
-          <div className="tabs-empty">
-            <div className="image-bubble">
-              <img src={bubbleIcon} alt="bubble-icon" />
-            </div>
-            <h3>No saved NFTs found</h3>
-            <p>Create NFTs or NFT collections with our platform by clicking the button below</p>
-            <Button
-              className="light-button"
-              onClick={() => history.push('/my-nfts/create', { tabIndex: 1, nftType: 'single' })}
-            >
-              Create NFT
-            </Button>
-          </div>
-        </div>
+        <NoSavedNftsFound />
       )}
     </div>
   );
 };
-
+SavedNFTs.propTypes = {
+  setSelectedSavedNfts: PropTypes.func.isRequired,
+  selectedSavedNfts: PropTypes.oneOfType([PropTypes.array]).isRequired,
+  triggerRefetch: PropTypes.bool.isRequired,
+  setTriggerRefetch: PropTypes.func.isRequired,
+  scrollContainer: PropTypes.oneOfType([PropTypes.object]).isRequired,
+};
 export default SavedNFTs;

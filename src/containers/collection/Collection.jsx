@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState, useRef } from 'react';
-import { useHistory, useLocation, useParams } from 'react-router-dom';
+import { useHistory, useParams, useLocation } from 'react-router-dom';
 import NotFound from '../../components/notFound/NotFound.jsx';
 import './Collection.scss';
 import Cover from '../../components/collection/Cover.jsx';
@@ -10,27 +10,24 @@ import Button from '../../components/button/Button.jsx';
 import pencilIcon from '../../assets/images/edit.svg';
 import NFTCard from '../../components/nft/NFTCard.jsx';
 import bubbleIcon from '../../assets/images/text-bubble.png';
-import { getCollectionData } from '../../utils/api/mintNFT';
 import { useThemeContext } from '../../contexts/ThemeContext.jsx';
-import { useMyNftsContext } from '../../contexts/MyNFTsContext.jsx';
 import { useAuthContext } from '../../contexts/AuthContext.jsx';
 import '../../components/pagination/Pagination.scss';
 import ApiPagination from '../../components/pagination/ApiPagination.jsx';
 import ApiCollectionSearchFilters from '../../components/nft/ApiCollectionSearchFilters.jsx';
 import { useSearchCollection } from '../../utils/hooks/useCollectionPageDebouncer.js';
-import RarityChartsLoader from '../rarityCharts/RarityChartsLoader.jsx';
-import { renderLoaders } from '../rarityCharts/renderLoaders.js';
 import { CollectionPageLoader } from './CollectionPageLoader.jsx';
 import ApiItemsPerPageDropdown from '../../components/pagination/ApiItemsPerPageDropdown.jsx';
+import SocialLinks from '../../components/collection/SocialLinks.jsx';
 
 const Collection = () => {
-  const { setSavedCollectionID } = useMyNftsContext();
   const { address } = useAuthContext();
   const { setDarkMode } = useThemeContext();
   const { collectionAddress } = useParams();
-  const location = useLocation();
   const history = useHistory();
   const ref = useRef(null);
+
+  const location = useLocation();
 
   const {
     inputText,
@@ -68,13 +65,16 @@ const Collection = () => {
   }, [results]);
 
   const handleEdit = (id) => {
-    setSavedCollectionID(id);
-    history.push('/my-nfts/create', { tabIndex: 1, nftType: 'collection' });
+    history.push('/my-nfts/create', {
+      tabIndex: 1,
+      nftType: 'collection',
+      collection: collectionData?.collection,
+    });
   };
 
   const scrollToNftContainer = () => {
     if (nftsContainerRef && nftsContainerRef.current) {
-      nftsContainerRef.current.scrollIntoView({ behavior: 'smooth' });
+      nftsContainerRef.current.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     }
   };
 
@@ -109,16 +109,14 @@ const Collection = () => {
       <Cover selectedCollection={collectionData.collection} />
 
       <div className="collection__details__section">
-        <div className="collection__details__container">
-          <Avatar selectedCollection={collectionData.collection} />
-          <Title
-            selectedCollection={collectionData.collection}
-            saved={location.state?.saved}
-            nftsCount={collectionData?.pagination?.totalCount}
-            ownersCount={ownersCount}
-          />
-        </div>
-        <Description selectedCollection={collectionData.collection} />
+        <SocialLinks
+          instagramLink={collectionData.collection.instagramLink || ''}
+          siteLink={collectionData.collection.siteLink || ''}
+          mediumLink={collectionData.collection.mediumLink || ''}
+          discordLink={collectionData.collection.discordLink || ''}
+          telegramLink={collectionData.collection.telegramLink || ''}
+          twitterLink=""
+        />
         {address === collectionData?.collection?.owner ? (
           <div className="collection__edit">
             <Button
@@ -132,6 +130,32 @@ const Collection = () => {
         ) : (
           <></>
         )}
+        <div className="collection__details__container">
+          <Avatar selectedCollection={collectionData.collection} />
+          <Title
+            selectedCollection={collectionData.collection}
+            saved={location.state?.saved}
+            nftsCount={collectionData?.pagination?.totalCount}
+            ownersCount={ownersCount}
+          />
+          <Description selectedCollection={collectionData.collection} />
+        </div>
+        <div className="social--and--edit--on--mobile">
+          <SocialLinks />
+          {address !== collectionData?.collection?.owner ? (
+            <div className="collection__edit">
+              <Button
+                className="light-border-button"
+                onClick={() => handleEdit(collectionData.collection.id)}
+              >
+                <span>Edit</span>
+                <img src={pencilIcon} alt="Edit Icon" />
+              </Button>
+            </div>
+          ) : (
+            <></>
+          )}
+        </div>
         <div className="collection--nfts--container">
           <ApiCollectionSearchFilters
             searchText={inputText}
@@ -199,7 +223,7 @@ const Collection = () => {
                   } light-button`}
                   onClick={() =>
                     history.push('/my-nfts/create', {
-                      collection: collectionData.collection,
+                      collectionId: collectionData.collection,
                       tabIndex: 1,
                       nftType: 'single',
                     })
