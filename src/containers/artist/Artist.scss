@@ -2,6 +2,11 @@
 @import "../../assets/scss/mixins";
 
 .artist__page {
+  background-image: url("../../assets/images/minting_page_bg.jpg");
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
   .artist__personal__logo {
     position: fixed;
     top: 12px;
@@ -29,13 +34,7 @@
   .artist__details__section {
     position: relative;
     padding: 60px 60px;
-    background: radial-gradient(
-      95.11% 95.11% at 36.64% 4.89%,
-      rgba(#f0e939, 0.05) 0%,
-      rgba(#feb0fe, 0.05) 49.86%,
-      rgba(#42a4ff, 0.05) 100%
-    );
-    background-blend-mode: screen, normal;
+    background: rgba(0, 0, 0, 0.03);
 
     &__container {
       display: flex;
@@ -93,7 +92,10 @@
           font-weight: 600;
           font-size: 32px;
           line-height: 140%;
-          color: $black;
+          color: transparent;
+          background: $black;
+          -webkit-background-clip: text;
+          text-shadow: 2px 2px 5px rgba(255, 255, 255, 0.3);
           @include lg {
             font-size: 26px;
           }
@@ -277,6 +279,8 @@
         margin-bottom: 30px;
         .tabs {
           overflow-x: auto;
+          min-height: 40px;
+          border-bottom: 1px solid rgba(0, 0, 0, 0.1);
           .tab_items {
             display: flex;
             justify-content: flex-start;
@@ -291,13 +295,29 @@
               font-size: 16px;
               line-height: 20px;
               color: rgba(0, 0, 0, 0.4);
-              padding-bottom: 10px;
+              padding-bottom: 11px;
               padding-top: 7px;
               background-color: transparent;
               margin-right: 40px;
+              span {
+                background: rgba(0, 0, 0, 0.1);
+                border-radius: 4px;
+                padding: 2px 4px;
+                font-family: $spaceGroteskFont;
+                font-style: normal;
+                font-weight: bold;
+                font-size: 10px;
+                line-height: 13px;
+                color: rgba(0, 0, 0, 0.3);
+                margin-left: 8px;
+              }
               &.active {
                 color: $black;
                 border-bottom: 1px solid $black;
+                span {
+                  background: $black;
+                  color: $white;
+                }
               }
             }
           }
@@ -1329,6 +1349,11 @@
           }
           @include sm {
             grid-template-columns: 1fr;
+          }
+        }
+        .load--more--btn {
+          button {
+            box-shadow: 2px 1000px 1px #f1f1f5 inset;
           }
         }
       }
