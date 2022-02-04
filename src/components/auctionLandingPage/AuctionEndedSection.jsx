@@ -12,6 +12,8 @@ import infoIcon from '../../assets/images/icon.svg';
 import bidIcon from '../../assets/images/bid_icon.svg';
 import { shortenEthereumAddress } from '../../utils/helpers/format';
 import { getRewardTierSpanStyles } from '../../utils/helpers';
+import CongratsSection from './CongratsSection';
+import WarningSection from './WarningSection';
 
 const AuctionEndedSection = ({
   currentBid,
@@ -146,132 +148,248 @@ const AuctionEndedSection = ({
 
   const { depositedNfts } = onAuction.auction;
 
+  // Find the Auctioneer Winning Slot, if any
+  const auctioneerSlot = winningSlot?.slotIndex ? slotsInfo[winningSlot.slotIndex] : null;
+
+  // Find out if the slot has been captured
+  const { revenueCaptured: auctioneerSlotRevenueCaptured } = auctioneerSlot || {};
+  const hasRevenue = Object.values(slotsInfo).some((slot) => slot.revenueCaptured);
+
+  const auctioneerBidWon = isAuctionner && isWinningBid;
+  const hasNFTsToClaim =
+    mySlot?.revenueCaptured &&
+    mySlot?.totalDepositedNfts?.toNumber() > mySlot?.totalWithdrawnNfts?.toNumber();
+
   return isAuctionner ? (
     <div className="auction__details__box__top__bidders">
-      <div className="auction__details__box__top__bidders__header">
-        <h2 className="title">Top 5 bidders</h2>
-        <button type="button" className="view__all__bids" onClick={() => setShowBidRankings(true)}>
-          View all bids
-        </button>
-      </div>
-      <div className="auction__details__box__top__bidders__content">
-        <div className="five__bidders">
-          {bidders.slice(0, 5).map((bidder, index) => (
-            <div className="bidder" key={bidder.id}>
-              <div className="name">
-                <b>{`${index + 1}.`}</b>
-                {bidder.user.displayName
-                  ? bidder.user.displayName
-                  : shortenEthereumAddress(bidder.user.address)}
+      {/* Tested with 3 different auctions
+        1. Auctioneer has made a bid and has won a slot, another user has also bid and won the second(last) slot
+        2. Auctioneer has made a bid and has won a slot (the only one)
+        3. Auctioneer has made an auction and another user has won the slot (the only one)
+      */}
 
-                {rewardTiersSlots[index] ? (
-                  <span style={getRewardTierSpanStyles(rewardTiersSlots[index])}>
-                    {rewardTiersSlots[index].name}
+      {/* The Auctioneer has Bid in his own auction and has a winning Bid */}
+      {isWinningBid ? (
+        // 1. If the Bid is winning show Congrats & Warning message
+        // 2. If the Auctioneer has released the rewards for his winning slot, we must show Congrats & claim btn & view rankings btn
+        // 3. If the auctioneer has claimed its NFTs, show Success & view rankings btn
+        // 4. If All of the rewards has been released we should hide release rewards btn
+        // 5. If All rewards are released and funds are claimed we should show only the Success
+        <>
+          {/* Congrats Text must change based on the statusеs
+            1. Auctioneer has won a slot but not captured slot revenue
+            2. Auctioneer has won a slot, has captured revenue but has not claimed NFTs
+            3. Auctioneer has won a slot, has captured revenue and has claimed NFTs
+            4. Auctioneer has won a slot, has captured revenue, has claimed nfts and has claimed Funds
+          */}
+          <CongratsSection
+            text={
+              <>
+                {auctioneerBidWon && !auctioneerSlotRevenueCaptured ? (
+                  <span>
+                    Your bid won the <b>{winningSlot?.name}</b> tier. You can claim your NFTs after
+                    your rewards are released
+                  </span>
+                ) : auctioneerBidWon && auctioneerSlotRevenueCaptured && hasNFTsToClaim ? (
+                  <span>
+                    Your bid won the <b>{winningSlot?.name}</b> tier. You can claim your NFTs by
+                    clicking the button below
+                  </span>
+                ) : auctioneerBidWon && auctioneerSlotRevenueCaptured && !hasNFTsToClaim ? (
+                  <span>
+                    You have already claimed your NFTs. If you want more NFTs to claim - go to other
+                    auctions and bid.
                   </span>
                 ) : (
-                  <></>
+                  <span>You have already claimed all your funds and NFTs.</span>
                 )}
-              </div>
-              <div className="bid-container">
-                <div className="bid">
-                  <img src={currencyIcon} alt="Currency" />
-                  <b>{bidder.amount}</b>
-                  <span>~${Math.round(bidder.amount * ethPrice)}</span>
+              </>
+            }
+            heading={
+              <>
+                {/* Auctioneer has won a slot, has captured revenue and has claimed NFTs, so .. show Success! */}
+                {auctioneerBidWon && auctioneerSlotRevenueCaptured && !hasNFTsToClaim ? (
+                  <span>Success!</span>
+                ) : (
+                  <span>Congratulations!</span>
+                )}
+              </>
+            }
+          />
+
+          {/* Warning should be only shown if the rewards are not released (slot revenue has not been captured to any slot) */}
+          {!hasRevenue ? <WarningSection mySlot={mySlot} /> : null}
+
+          <div className="view-rankings-btn-container">
+            {/* If the Auctioneer has won a slot and the slot revenue has been captured show the claim button */}
+            {hasNFTsToClaim && (
+              <Button className="light-button" onClick={handleClaimNfts}>
+                Claim NFTs
+              </Button>
+            )}
+
+            <button
+              type="button"
+              className="light-border-button"
+              onClick={() => setShowBidRankings(true)}
+            >
+              View rankings
+            </button>
+          </div>
+        </>
+      ) : !isWinningBid && currentBid ? (
+        //  The Auctioneer has Bid in his own auction and has a Lost
+        // 1. Unfortunately heading & withdraw btn & view rankings btn
+        // 2. If the Auctioneer has withdrawn hide the withdraw btn
+        // 3. If All of the rewards has been released we should hide release rewards btn
+        // 5. If All rewards are released and funds are claimed we should show only the Success
+        <>
+          <p>auctioneer has bid and lost in his own auction</p>
+          <p>The aucitoneer has withdrawn his bid {currentBid.withdrawn}</p>
+        </>
+      ) : (
+        <>
+          <div className="auction__details__box__top__bidders__header">
+            <h2 className="title">Top 5 bidders</h2>
+            <button
+              type="button"
+              className="view__all__bids"
+              onClick={() => setShowBidRankings(true)}
+            >
+              View all bids
+            </button>
+          </div>
+
+          <div className="auction__details__box__top__bidders__content">
+            <div className="five__bidders">
+              {bidders.slice(0, 5).map((bidder, index) => (
+                <div className="bidder" key={bidder.id}>
+                  <div className="name">
+                    <b>{`${index + 1}.`}</b>
+                    {bidder.user.displayName
+                      ? bidder.user.displayName
+                      : shortenEthereumAddress(bidder.user.address)}
+
+                    {rewardTiersSlots[index] ? (
+                      <span style={getRewardTierSpanStyles(rewardTiersSlots[index])}>
+                        {rewardTiersSlots[index].name}
+                      </span>
+                    ) : (
+                      <></>
+                    )}
+                  </div>
+                  <div className="bid-container">
+                    <div className="bid">
+                      <img src={currencyIcon} alt="Currency" />
+                      <b>{bidder.amount}</b>
+                      <span>~${Math.round(bidder.amount * ethPrice)}</span>
+                    </div>
+                  </div>
                 </div>
-              </div>
+              ))}
             </div>
-          ))}
-        </div>
-      </div>
+          </div>
+        </>
+      )}
+
       <div className="footer">
         <div className="funds-and-balance">
-          <div className="unreleased-funds" style={{ borderRight: '1px solid rgba(0,0,0,10%)' }}>
-            <div className="head">
-              <span>Unreleased funds</span>
-              <span
-                onMouseOver={() => setShowUnreleasedFundsTooltip(true)}
-                onFocus={() => setShowUnreleasedFundsTooltip(true)}
-                onMouseLeave={() => setShowUnreleasedFundsTooltip(false)}
-                onBlur={() => setShowUnreleasedFundsTooltip(false)}
-              >
-                <img src={infoIcon} alt="Info Icon" />
-              </span>
-              {showUnreleasedFundsTooltip && (
-                <div className="info-text1">
-                  <p>
-                    For the auctioneer to be able to collect their winnings and for the users to be
-                    able to claim their NFTs the rewards need to be released first.
-                  </p>
-                </div>
-              )}
-            </div>
-            <div className="balance-body">
-              <span className="value-section">
-                <img src={bidIcon} alt="unreleased funds" />
-                <span className="value">
-                  {unreleasedFunds}
-                  <span className="dollar-val">~${Math.round(unreleasedFunds * ethPrice)}</span>
+          {/* If the Auction slots have been captured, hide the Release Rewards Button Section */}
+          {!Object.values(slotsInfo).some((slot) => !slot.revenueCaptured) ||
+          !depositedNfts ? null : (
+            <div className="unreleased-funds" style={{ borderRight: '1px solid rgba(0,0,0,10%)' }}>
+              <div className="head">
+                <span>Unreleased funds</span>
+                <span
+                  onMouseOver={() => setShowUnreleasedFundsTooltip(true)}
+                  onFocus={() => setShowUnreleasedFundsTooltip(true)}
+                  onMouseLeave={() => setShowUnreleasedFundsTooltip(false)}
+                  onBlur={() => setShowUnreleasedFundsTooltip(false)}
+                >
+                  <img src={infoIcon} alt="Info Icon" />
                 </span>
-              </span>
-              <Button
-                disabled={
-                  !Object.values(slotsInfo).some((slot) => !slot.revenueCaptured) || !depositedNfts
-                }
-                style={{ width: 180 }}
-                className="light-button"
-                onClick={() =>
-                  history.push('/release-rewards', {
-                    auctionData: onAuction,
-                    myBid: currentBid,
-                    view: isAuctionner ? 'Auctioneer' : 'Bidder',
-                    bidders,
-                    rewardTiersSlots,
-                    winningSlot,
-                    slotsInfo,
-                    mySlot,
-                    mySlotIndex,
-                    backButtonText: onAuction.auction.headline,
-                  })
-                }
-              >
-                Release rewards
-              </Button>
-            </div>
-          </div>
-          <div className="available-balance" style={{ marginLeft: 50 }}>
-            <div className="head">
-              <span>Available balance</span>
-              <span
-                onMouseOver={() => setShowClaimableFundsTooltip(true)}
-                onFocus={() => setShowClaimableFundsTooltip(true)}
-                onMouseLeave={() => setShowClaimableFundsTooltip(false)}
-                onBlur={() => setShowClaimableFundsTooltip(false)}
-              >
-                <img src={infoIcon} alt="Info Icon" />
-              </span>
-              {showClaimableFundsTooltip && (
-                <div className="info-text2">
-                  <p>This is the released reward amount availble for claiming</p>
-                </div>
-              )}
-            </div>
-            <div className="balance-body">
-              <span className="value-section">
-                <img src={bidIcon} alt="unreleased funds" />
-                <span className="value">
-                  {claimableFunds}
-                  <span className="dollar-val">~${Math.round(claimableFunds * ethPrice)}</span>
+                {showUnreleasedFundsTooltip && (
+                  <div className="info-text1">
+                    <p>
+                      For the auctioneer to be able to collect their winnings and for the users to
+                      be able to claim their NFTs the rewards need to be released first.
+                    </p>
+                  </div>
+                )}
+              </div>
+              <div className="balance-body">
+                <span className="value-section">
+                  <img src={bidIcon} alt="unreleased funds" />
+                  <span className="value">
+                    {unreleasedFunds}
+                    <span className="dollar-val">~${Math.round(unreleasedFunds * ethPrice)}</span>
+                  </span>
                 </span>
-              </span>
-              <Button
-                className="light-button"
-                disabled={!+claimableFunds}
-                onClick={handleClaimFunds}
-              >
-                Claim funds
-              </Button>
+                <Button
+                  disabled={
+                    !Object.values(slotsInfo).some((slot) => !slot.revenueCaptured) ||
+                    !depositedNfts
+                  }
+                  style={{ width: 180 }}
+                  className="light-button"
+                  onClick={() =>
+                    history.push('/release-rewards', {
+                      auctionData: onAuction,
+                      myBid: currentBid,
+                      view: isAuctionner ? 'Auctioneer' : 'Bidder',
+                      bidders,
+                      rewardTiersSlots,
+                      winningSlot,
+                      slotsInfo,
+                      mySlot,
+                      mySlotIndex,
+                      backButtonText: onAuction.auction.headline,
+                    })
+                  }
+                >
+                  Release rewards
+                </Button>
+              </div>
             </div>
-          </div>
+          )}
+
+          {/* If the Auction has no claimable funds or unreleasedFunds hide the Claim Funds Button Section */}
+          {Number(claimableFunds) > 0 || Number(unreleasedFunds) > 0 ? (
+            <div className="available-balance" style={{ marginLeft: 50 }}>
+              <div className="head">
+                <span>Available balance</span>
+                <span
+                  onMouseOver={() => setShowClaimableFundsTooltip(true)}
+                  onFocus={() => setShowClaimableFundsTooltip(true)}
+                  onMouseLeave={() => setShowClaimableFundsTooltip(false)}
+                  onBlur={() => setShowClaimableFundsTooltip(false)}
+                >
+                  <img src={infoIcon} alt="Info Icon" />
+                </span>
+                {showClaimableFundsTooltip && (
+                  <div className="info-text2">
+                    <p>This is the released reward amount availble for claiming</p>
+                  </div>
+                )}
+              </div>
+              <div className="balance-body">
+                <span className="value-section">
+                  <img src={bidIcon} alt="unreleased funds" />
+                  <span className="value">
+                    {claimableFunds}
+                    <span className="dollar-val">~${Math.round(claimableFunds * ethPrice)}</span>
+                  </span>
+                </span>
+                <Button
+                  className="light-button"
+                  disabled={!+claimableFunds}
+                  onClick={handleClaimFunds}
+                >
+                  Claim funds
+                </Button>
+              </div>
+            </div>
+          ) : null}
         </div>
       </div>
     </div>

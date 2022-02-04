@@ -1,0 +1,31 @@
+@import "../../../assets/scss/variables";
+@import "../../../assets/scss/mixins";
+
+.warning_content {
+  padding: 0px 30px;
+  .warning__div {
+    display: flex;
+    background: #fdfcf9;
+    border: 1px solid #e4b613;
+    box-sizing: border-box;
+    border-radius: 12px;
+    padding: 20px;
+    margin-top: 20px;
+    img {
+        margin-right: 10px;
+        height: fit-content;
+    }
+
+    p {
+        font-family: $spaceGroteskFont;
+        font-style: normal;
+        font-weight: 600;
+        font-size: 14px;
+        line-height: 160%;
+        color: #e4b613;
+    }
+  }
+  @include sm {
+    padding: 40px 30px;
+  }
+}
