@@ -1773,11 +1773,11 @@
   margin-top: 30px;
 
   .hasClaimableFunds {
+    border-right: 1px solid rgba(0, 0, 0, 0.1);
   }
 
   .noClaimableFunds {
     width: 100%;
-    border-right: 1px solid rgba(0,0,0,10%);
     .balance-body {
       justify-content: space-between;
     }

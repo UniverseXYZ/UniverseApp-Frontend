@@ -199,14 +199,18 @@ const AuctionEndedSection = ({
                 ) : auctioneerBidWon &&
                   auctioneerSlotRevenueCaptured &&
                   !hasNFTsToClaim &&
-                  !allSlotsCaptured ? (
+                  (!allSlotsCaptured || hasClaimableFunds) ? (
                   <span>
                     You have already claimed your NFTs. If you want more NFTs to claim - go to other
                     auctions and bid.
                   </span>
-                ) : (
+                ) : auctioneerBidWon &&
+                  auctioneerSlotRevenueCaptured &&
+                  !hasNFTsToClaim &&
+                  allSlotsCaptured &&
+                  !hasClaimableFunds ? (
                   <span>You have already claimed all your funds and NFTs.</span>
-                )}
+                ) : null}
               </>
             }
             heading={
