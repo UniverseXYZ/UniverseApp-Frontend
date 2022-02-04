@@ -157,6 +157,12 @@ const AuctionDetails = ({
                 currencyIcon={currencyIcon}
                 collections={onAuction.collections}
                 setShowCancelBidPopup={setShowCancelBidPopup}
+                unreleasedFunds={unreleasedFunds}
+                onAuction={onAuction}
+                winningSlot={winningSlot}
+                slotsInfo={slotsInfo}
+                mySlot={mySlot}
+                mySlotIndex={mySlotIndex}
               />
             ) : (
               <AuctionEndedSection

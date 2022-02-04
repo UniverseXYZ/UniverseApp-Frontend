@@ -1,12 +1,16 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { BigNumber } from 'bignumber.js';
+import { useHistory } from 'react-router';
 import cancelIcon from '../../assets/images/activity-icons/cancel-bid.svg';
 import videoIcon from '../../assets/images/video-icon.svg';
 import universeIcon from '../../assets/images/universe-img.svg';
 import arrowDownIcon from '../../assets/images/arrow-down.svg';
 import { shortenEthereumAddress } from '../../utils/helpers/format.js';
 import { getCollectionBackgroundColor } from '../../utils/helpers';
+import Button from '../button/Button';
+import bidIcon from '../../assets/images/bid_icon.svg';
+import { useAuthContext } from '../../contexts/AuthContext';
 
 const TopBidders = ({
   bidders,
@@ -22,8 +26,18 @@ const TopBidders = ({
   currencyIcon,
   collections,
   setShowCancelBidPopup,
+  unreleasedFunds,
+  onAuction,
+  winningSlot,
+  slotsInfo,
+  mySlot,
+  mySlotIndex,
 }) => {
   const [openSlots, setOpenSlots] = useState([]);
+  const history = useHistory();
+  const { address } = useAuthContext();
+  const [isAuctionner, setIsAuctioneer] = useState(address === onAuction.artist.address);
+  const allSlotsCaptured = !Object.values(slotsInfo).some((slot) => !slot.revenueCaptured);
 
   const toggleOpenSlot = (slotIndex) => {
     const isSlotOpened = openSlots.indexOf(slotIndex) >= 0;
@@ -178,7 +192,44 @@ const TopBidders = ({
         </div>
       </div>
       {selectedAuctionEnded ? (
-        <></>
+        <>
+          {!allSlotsCaptured && (
+            <div className="available-balance">
+              <div
+                className="balance-body"
+                style={{ justifyContent: 'space-between', padding: '20px 40px' }}
+              >
+                <span className="value-section">
+                  <img src={bidIcon} alt="unreleased funds" />
+                  <span className="value">
+                    {unreleasedFunds}
+                    <span className="dollar-val">~${Math.round(unreleasedFunds * ethPrice)}</span>
+                  </span>
+                </span>
+                <Button
+                  style={{ width: 180 }}
+                  className="light-button"
+                  onClick={() =>
+                    history.push('/release-rewards', {
+                      auctionData: onAuction,
+                      myBid: currentBid,
+                      view: isAuctionner ? 'Auctioneer' : 'Bidder',
+                      bidders,
+                      rewardTiersSlots,
+                      winningSlot,
+                      slotsInfo,
+                      mySlot,
+                      mySlotIndex,
+                      backButtonText: onAuction.auction.headline,
+                    })
+                  }
+                >
+                  Release rewards
+                </Button>
+              </div>
+            </div>
+          )}
+        </>
       ) : (
         <div className="auction__details__box__top__bidders__footer">
           <div className="your__bid">
@@ -238,6 +289,12 @@ TopBidders.propTypes = {
   currencyIcon: PropTypes.string,
   collections: PropTypes.oneOfType([PropTypes.array]).isRequired,
   setShowCancelBidPopup: PropTypes.func.isRequired,
+  unreleasedFunds: PropTypes.func.isRequired,
+  onAuction: PropTypes.oneOfType([PropTypes.object]).isRequired,
+  winningSlot: PropTypes.number.isRequired,
+  slotsInfo: PropTypes.oneOfType([PropTypes.array]).isRequired,
+  mySlot: PropTypes.oneOfType([PropTypes.object]).isRequired,
+  mySlotIndex: PropTypes.number.isRequired,
 };
 TopBidders.defaultProps = {
   currentBid: null,
