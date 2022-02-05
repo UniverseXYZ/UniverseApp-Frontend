@@ -29,7 +29,7 @@ export const NFTCancelListingPopup = ({ order, isOpen, onClose, }: INFTCancelLis
   }, [order, onClose]);
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose}>
+    <Modal isOpen={isOpen} onClose={onClose} isCentered>
       <ModalOverlay />
       <ModalContent maxW={'480px'}>
         <ModalCloseButton />

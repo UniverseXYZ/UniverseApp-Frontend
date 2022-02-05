@@ -14,6 +14,7 @@ import { NFTCheckoutPopup } from '../nft-checkout-popup';
 import { NFTPlaceABidPopup } from '../nft-place-a-bid-popup';
 import { NFTMakeAnOfferPopup } from '../nft-make-an-offer-popup';
 import { NFTCancelListingPopup } from '../nft-cancel-listing-popup';
+import { NFTChangeListingPricePopup } from '../nft-change-listing-price-popup';
 
 interface INFTBuySectionProps {
   order?: IOrder;
@@ -35,6 +36,7 @@ export const NFTBuySection = ({ order, onMeasureChange }: INFTBuySectionProps) =
   const [isPlaceABidPopupOpened, setIsPlaceABidPopupOpened] = useState(false);
   const [isMakeAnOfferPopupOpened, setIsMakeAnOfferPopupOpened] = useState(false);
   const [isCancelListingPopupOpened, setIsCancelListingPopupOpened] = useState(false);
+  const [isChangeListingPricePopupOpened, setIsChangeListingPricePopupOpened] = useState(false);
 
   return (
     <Box {...styles.WrapperStyle} ref={ref}>
@@ -91,7 +93,7 @@ export const NFTBuySection = ({ order, onMeasureChange }: INFTBuySectionProps) =
           <>
             <HighestBid />
             <SimpleGrid columns={2} spacingX={'12px'}>
-              <Button boxShadow={'lg'} _focus={{ boxShadow: 'lg' }}>Lower Price</Button>
+              <Button boxShadow={'lg'} _focus={{ boxShadow: 'lg' }} onClick={() => setIsChangeListingPricePopupOpened(true)}>Lower Price</Button>
               <Button variant={'outline'} onClick={() => setIsCancelListingPopupOpened(true)}>Cancel listing</Button>
             </SimpleGrid>
           </>
@@ -100,7 +102,7 @@ export const NFTBuySection = ({ order, onMeasureChange }: INFTBuySectionProps) =
           <>
             <HighestBid />
             <SimpleGrid columns={2} spacingX={'12px'}>
-              <Button boxShadow={'lg'}>Change price</Button>
+              <Button boxShadow={'lg'} onClick={() => setIsChangeListingPricePopupOpened(true)}>Change price</Button>
               <Button variant={'outline'} onClick={() => setIsCancelListingPopupOpened(true)}>Cancel listing</Button>
             </SimpleGrid>
           </>
@@ -108,7 +110,7 @@ export const NFTBuySection = ({ order, onMeasureChange }: INFTBuySectionProps) =
         {buyNFTSection.index === 7 && (
           <>
             <SimpleGrid columns={2} spacingX={'12px'}>
-              <Button boxShadow={'lg'}>Change price</Button>
+              <Button boxShadow={'lg'} onClick={() => setIsChangeListingPricePopupOpened(true)}>Change price</Button>
               <Button variant={'outline'} onClick={() => setIsCancelListingPopupOpened(true)}>Cancel listing</Button>
             </SimpleGrid>
             <Text {...styles.ContentFeeLabelStyle} textAlign={'center'} mt={'12px'}>
@@ -135,6 +137,11 @@ export const NFTBuySection = ({ order, onMeasureChange }: INFTBuySectionProps) =
         order={order}
         isOpen={isCancelListingPopupOpened}
         onClose={() => setIsCancelListingPopupOpened(false)}
+      />
+      <NFTChangeListingPricePopup
+        order={order}
+        isOpen={isChangeListingPricePopupOpened}
+        onClose={() => setIsChangeListingPricePopupOpened(false)}
       />
     </Box>
   );
