@@ -234,14 +234,14 @@ export const SellPage = () => {
         <Container maxW={'var(--container-max-width)'} pb={'0 !important'}>
           <Box px={{ base: '20px', md: '60px', xl: 0 }}>
             <Link
-              href={'/v2/marketplace/browse'}
+              href={`/v2/nft/${locationState.nft}/${locationState.tokenId}`}
               mb={'20px'}
               fontFamily={'Space Grotesk'}
               fontWeight={500}
               _hover={{ textDecoration: 'none' }}
             >
               <Image src={arrow} display="inline" mr="10px" position="relative" top="-2px" />
-              NFT name
+              {nft?.name ?? locationState.nft}
             </Link>
 
             <Heading as="h1" mb={'50px'}>Sell NFT</Heading>

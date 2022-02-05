@@ -33,7 +33,7 @@ import { NFTLike } from '../../../../components/nft-item/components';
 export const NFTInfo = () => {
   const router = useHistory();
 
-  const { NFT, isLoading } = useNFTPageData();
+  const { NFT, isLoading, order } = useNFTPageData();
 
   const [buySectionMeasure, setBuySectionMeasure] = useState<UseMeasureRect>();
 
@@ -153,7 +153,11 @@ export const NFTInfo = () => {
                     </TabPanels>
                   </Tabs>
                 </Box>
-                <NFTBuySection onMeasureChange={(measure) => setBuySectionMeasure(measure)} />
+                <NFTBuySection
+                  NFT={NFT}
+                  order={order}
+                  onMeasureChange={(measure) => setBuySectionMeasure(measure)}
+                />
               </Box>
             </Box>
             {NFT.moreFromCollection && (
