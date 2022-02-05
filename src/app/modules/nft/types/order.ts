@@ -1,11 +1,13 @@
+import { OrderAssetClass } from '../enums';
+
 export interface IERC721AssetType {
-  assetClass: 'ERC721';
+  assetClass: OrderAssetClass.ERC721;
   contract: string;
   tokenId: string;
 }
 
 export interface IERC721BundleAssetType {
-  assetClass: 'ERC721_BUNDLE';
+  assetClass: OrderAssetClass.ERC721_BUNDLE;
   contracts: string[];
   tokenIds: Array<Array<string>>;
   bundleName: string;

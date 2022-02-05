@@ -1,10 +1,8 @@
 import React, { createContext, useContext } from 'react';
 import { useQuery } from 'react-query';
-import axios from 'axios';
 
-import { INFT, IOrder, IOrderBackend, IUser } from '../../types';
-import { GetNFTApi } from '../../api';
-import { mapBackendOrder } from '../../helpers';
+import { INFT, IOrder, IUser } from '../../types';
+import { GetNFTApi, GetOrderByHashApi } from '../../api';
 
 export interface IBundlePageContext {
   isLoading: boolean;
@@ -25,14 +23,14 @@ export interface IBundlePageProviderProps {
 
 export const BundlePageProvider = ({ hash, children }: IBundlePageProviderProps) => {
 
-  const { data, isLoading } = useQuery<{ order: IOrder, NFTs: INFT[] }>(['bundle', hash], async () => {
-    const orderResponse = await axios.get<IOrderBackend>(`${process.env.REACT_APP_MARKETPLACE_BACKEND}/v1/orders/${hash}`);
+  const { data: order, isLoading: isLoadingOrder } = useQuery<IOrder>(['order', hash], async () => {
+    return await GetOrderByHashApi(hash);
+  });
 
-    const order = mapBackendOrder(orderResponse.data);
-
+  const { data: NFTs, isLoading: isLoadingNFTs } = useQuery<INFT[]>(['order', hash, 'NFTs'], async () => {
     const NFTsPromises = [];
 
-    switch (order.make.assetType.assetClass) {
+    switch (order?.make.assetType.assetClass) {
       case 'ERC721':
         NFTsPromises.push(GetNFTApi(order.make.assetType.contract as string, order.make.assetType.tokenId as string));
         break;
@@ -49,23 +47,21 @@ export const BundlePageProvider = ({ hash, children }: IBundlePageProviderProps)
         break;
     }
 
-    const NFTs = await Promise.all(NFTsPromises);
+    return await Promise.all(NFTsPromises);
+  }, { enabled: !!order?.id })
 
-    return { order, NFTs };
-  });
-
-  const owner = data?.NFTs[0].owner as IUser;
-  const moreFromCollection = data?.NFTs[0].moreFromCollection?.map((NFT) => {
-    NFT.collection = data?.NFTs[0].collection;
+  const owner = NFTs ? NFTs[0].owner : {};
+  const moreFromCollection = NFTs ? NFTs[0].moreFromCollection?.map((NFT) => {
+    NFT.collection = NFTs[0].collection;
     return NFT;
-  });
+  }) : [];
 
   const value: IBundlePageContext = {
-    isLoading,
-    owner,
     moreFromCollection,
-    order: data?.order as IOrder,
-    NFTs: data?.NFTs as INFT[],
+    isLoading: isLoadingOrder || isLoadingNFTs,
+    order: order || {} as IOrder,
+    NFTs: NFTs || [],
+    owner: owner as IUser,
   };
 
   return (
