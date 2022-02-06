@@ -56,13 +56,13 @@ export const NFTInfo = () => {
             <Box>
               <Box {...styles.NFTAssetContainerStyle}>
                 {isNFTAssetImage(NFT.artworkType) &&
-                  <NFTAssetImage image={NFT.originalUrl} />
+                  <NFTAssetImage image={NFT.originalUrl || NFT.optimizedUrl} />
                 }
                 {isNFTAssetVideo(NFT.artworkType) &&
-                  <NFTAssetVideo video={NFT.originalUrl} />
+                  <NFTAssetVideo video={NFT.originalUrl || NFT.optimizedUrl} />
                 }
                 {isNFTAssetAudio(NFT.artworkType) &&
-                  <NFTAssetAudio audio={NFT.originalUrl} />
+                  <NFTAssetAudio audio={NFT.originalUrl || NFT.optimizedUrl} />
                 }
               </Box>
               <Box {...styles.NFTDetailsContainerStyle}>
@@ -93,7 +93,8 @@ export const NFTInfo = () => {
                   </Text>
 
                   <Flex mb={'24px'}>
-                    {Bindings.map((binding, i) => (
+                    {/*TODO: improve section in favor to NFTPageRelation */}
+                    {Bindings.map((binding, i) => !binding.getValue(NFT) ? null : (
                       <Link key={i} href={binding.getLink(NFT)} sx={{
                         _hover: {
                           textDecoration: 'none !important',

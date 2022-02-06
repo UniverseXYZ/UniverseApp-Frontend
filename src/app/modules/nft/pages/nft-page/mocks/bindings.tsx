@@ -71,7 +71,7 @@ export const Bindings = [
       />
       ) : (
         <Box style={{ borderRadius: '50%', overflow: 'hidden'}}>
-          <Blockies seed={nft.creator?.address} size={9} scale={4} />
+          <Blockies seed={nft.owner?.address} size={9} scale={4} />
         </Box>
     ),
     getValue: (nft: INFT) => nft.owner?.displayName || nft.owner?.address,

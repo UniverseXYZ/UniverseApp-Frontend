@@ -1,11 +1,12 @@
 import { Box, BoxProps } from '@chakra-ui/react';
-import React, { useCallback, useRef } from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 import Lottie from 'react-lottie';
 import { useAudio } from 'react-use';
 
 import { LottieOptions } from './constants';
 import * as styles from './styles';
 import { useAudioAnimation } from './hooks';
+import { NFTAssetFullscreen } from '../nft-asset-full-screen';
 
 interface INFTAssetAudioProps extends BoxProps {
   audio: string;
@@ -13,6 +14,8 @@ interface INFTAssetAudioProps extends BoxProps {
 
 export const NFTAssetAudio = ({ audio: audioUrl, ...rest }: INFTAssetAudioProps) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+
+  const [fullscreen, setFullscreen] = useState(false);
 
   const [audio, state, controls] = useAudio({
     src: audioUrl,
@@ -27,20 +30,47 @@ export const NFTAssetAudio = ({ audio: audioUrl, ...rest }: INFTAssetAudioProps)
     state.playing ? controls.pause() : controls.play();
   }, [state]);
 
-  return (
+  return !fullscreen ? (
     <Box {...styles.WrapperStyle} {...rest}>
       <canvas ref={canvasRef} width="32" height="32" style={{ width: '100%', height: '100%'}} />
-      <Box {...styles.AudioAnimationContainerStyle} onClick={toggleAudio}>
+      <Box
+        {...styles.AudioAnimationContainerStyle}
+        sx={{
+          '> div': {
+            cursor: 'zoom-in',
+          }
+        }}
+        onClick={() => {
+          setFullscreen(true);
+          setTimeout(() => controls.seek(state.time));
+        }}
+      >
         <Lottie isPaused={!state.playing} options={LottieOptions} />
       </Box>
-      <Box
-        sx={{
-          position: 'absolute',
-          bottom: '20px',
-          left: '50%',
-          transform: 'translateX(-50%)',
-        }}
-      >{audio}</Box>
+      <Box {...styles.AudioPlayerContainerStyle}>{audio}</Box>
     </Box>
-  )
+  ) : (
+    <NFTAssetFullscreen isOpen={fullscreen}>
+      <Box h={'100vh'} w={'100vw'}>
+        <canvas ref={canvasRef} width="32" height="32" style={{ width: '100%', height: '100%'}} />
+        <Box
+          {...styles.AudioAnimationContainerStyle}
+          sx={{
+            '> div': {
+              cursor: 'zoom-out',
+              h: '100vh !important',
+              w: '100vw !important',
+            }
+          }}
+          onClick={() => {
+            setFullscreen(false);
+            setTimeout(() => controls.seek(state.time));
+          }}
+        >
+          <Lottie isPaused={!state.playing} options={LottieOptions} />
+        </Box>
+        <Box {...styles.AudioPlayerContainerStyle}>{audio}</Box>
+      </Box>
+    </NFTAssetFullscreen>
+  );
 }
