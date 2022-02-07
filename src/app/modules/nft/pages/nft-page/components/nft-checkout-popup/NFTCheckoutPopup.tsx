@@ -16,20 +16,20 @@ import {
 } from '@chakra-ui/react';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useHistory } from 'react-router-dom';
+import { utils } from 'ethers';
+
+import WarningSVGIcon from '../../../../../../../assets/images/yellowIcon.svg';
+import ArrowSVGIcon from '../../../../../../../assets/images/arrow.svg';
+import WalletImage from '../../../../../../../assets/images/v2/wallet.png';
+import AudioNFTPreviewImage from '../../../../../../../assets/images/v2/audio-nft-preview.png';
 
 import { useAuthContext } from '../../../../../../../contexts/AuthContext';
 import { Checkbox, InputShadow, TokenIcon } from '../../../../../../components';
 import { NFTType } from './components';
 import { CheckoutState } from './enums';
 import * as styles from './styles';
-
-import WarningSVGIcon from '../../../../../../../assets/images/yellowIcon.svg';
-import ArrowSVGIcon from '../../../../../../../assets/images/arrow.svg';
-import WalletImage from '../../../../../../../assets/images/v2/wallet.png';
-import AudioNFTPreviewImage from '../../../../../../../assets/images/v2/audio-nft-preview.png';
 import { INFT, IOrder } from '../../../../types';
 import { isNFTAssetAudio, isNFTAssetImage, isNFTAssetVideo } from '../../../../helpers';
-import { utils } from 'ethers';
 import { TOKENS_MAP } from '../../../../../../constants';
 import { TokenTicker } from '../../../../../../enums';
 
