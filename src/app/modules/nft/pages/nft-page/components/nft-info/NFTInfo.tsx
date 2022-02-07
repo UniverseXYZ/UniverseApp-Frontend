@@ -43,6 +43,11 @@ export const NFTInfo = () => {
     }
   }, [NFT?.moreFromCollection]);
 
+  const showMetadata = [
+    process.env.REACT_APP_POLYMORPHS_CONTRACT_ADDRESS,
+    process.env.REACT_APP_LOBSTERS_CONTRACT_ADDRESS
+  ].includes(NFT?.collection?.address ?? '');
+
   return (
     <>
       {isLoading
@@ -142,7 +147,7 @@ export const NFTInfo = () => {
                   <Tabs>
                     <LineTabList>
                       <Tab>Properties</Tab>
-                      <Tab>Metadata</Tab>
+                      {showMetadata && <Tab>Metadata</Tab>}
                       <Tab>Owners</Tab>
                       <Tab>Bids</Tab>
                       <Tab>Offers</Tab>
@@ -151,7 +156,7 @@ export const NFTInfo = () => {
 
                     <TabPanels sx={{ '> div' : { px: 0, pb: 0, pt: '30px', }}}>
                       <TabPanel><TabProperties properties={NFT.properties || []} /></TabPanel>
-                      <TabPanel><TabMetadata /></TabPanel>
+                      {showMetadata && <TabPanel><TabMetadata /></TabPanel>}
                       <TabPanel><TabOwners /></TabPanel>
                       <TabPanel><TabBids /></TabPanel>
                       <TabPanel><TabOffers /></TabPanel>
