@@ -9,10 +9,19 @@ import {
   ModalOverlay,
   Text,
 } from '@chakra-ui/react';
-import React, { useCallback } from 'react';
+import React, { useCallback, useMemo } from 'react';
+import { useMutation } from 'react-query';
+import axios from 'axios';
+import { Contract, utils } from 'ethers';
 
 import * as styles from './styles';
-import { IOrder } from '../../../../types';
+import { IERC721AssetType, IOrder } from '../../../../types';
+
+import Contracts from '../../../../../../../contracts/contracts.json';
+import { useAuthContext } from '../../../../../../../contexts/AuthContext';
+
+// @ts-ignore
+const { contracts: contractsData } = Contracts[process.env.REACT_APP_NETWORK_CHAIN_ID];
 
 interface INFTCancelListingPopupProps {
   order?: IOrder;
@@ -22,11 +31,31 @@ interface INFTCancelListingPopupProps {
 
 export const NFTCancelListingPopup = ({ order, isOpen, onClose, }: INFTCancelListingPopupProps) => {
 
-  // TODO
-  const handleCancelListing = useCallback(() => {
-    console.log('handleCancelListing', order);
+  const { signer } = useAuthContext();
+
+  const contract = useMemo(
+    () => new Contract(`${process.env.REACT_APP_MARKETPLACE_CONTRACT}`, contractsData.Marketplace.abi, signer),
+    [order, signer]
+  );
+
+  const encodeDataMutation = useMutation((data: any) => {
+    return axios.post(`${process.env.REACT_APP_MARKETPLACE_BACKEND}/v1/orders/encoder/order`, data);
+  });
+
+  const handleCancelListing = useCallback(async () => {
+    const { data: encodedOrder } = (await encodeDataMutation.mutateAsync({
+      ...order,
+      salt: +`${order?.salt}`,
+      start: +`${order?.start}`,
+      end: +`${order?.end}`,
+    }));
+
+    const cancelResponse = await contract.cancel(encodedOrder);
+
+    console.log('cancelResponse', cancelResponse);
+
     onClose();
-  }, [order, onClose]);
+  }, [contract, order, onClose]);
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} isCentered>

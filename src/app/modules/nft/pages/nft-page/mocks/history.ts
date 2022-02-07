@@ -17,7 +17,7 @@ export const History: Array<{
     },
     addedAt: new Date(),
     price: 0.05,
-    transactionId: '0x6Fc96E8C1DE8CC166dD5CDD647Fcc384a89AA4CE',
+    transactionId: `${process.env.REACT_APP_MARKETPLACE_CONTRACT}`,
   },
   {
     type: HistoryType.BOUGHT,
@@ -26,7 +26,7 @@ export const History: Array<{
     },
     addedAt: new Date(new Date().setDate(new Date().getDate() - 1)),
     price: 0.05,
-    transactionId: '0x6Fc96E8C1DE8CC166dD5CDD647Fcc384a89AA4CE',
+    transactionId: `${process.env.REACT_APP_MARKETPLACE_CONTRACT}`,
   },
   {
     type: HistoryType.MINTED,
@@ -35,7 +35,7 @@ export const History: Array<{
     },
     addedAt: new Date(new Date().setDate(new Date().getDate() - 1)),
     price: 0.05,
-    transactionId: '0x6Fc96E8C1DE8CC166dD5CDD647Fcc384a89AA4CE',
+    transactionId: `${process.env.REACT_APP_MARKETPLACE_CONTRACT}`,
   },
   {
     type: HistoryType.PUT_ON_SALE,
@@ -44,7 +44,7 @@ export const History: Array<{
     },
     addedAt: new Date(new Date().setDate(new Date().getDate() - 1)),
     price: 0.05,
-    transactionId: '0x6Fc96E8C1DE8CC166dD5CDD647Fcc384a89AA4CE',
+    transactionId: `${process.env.REACT_APP_MARKETPLACE_CONTRACT}`,
   },
   {
     type: HistoryType.LISTED,
@@ -53,7 +53,7 @@ export const History: Array<{
     },
     addedAt: new Date(new Date().setDate(new Date().getDate() - 1)),
     price: 0.05,
-    transactionId: '0x6Fc96E8C1DE8CC166dD5CDD647Fcc384a89AA4CE',
+    transactionId: `${process.env.REACT_APP_MARKETPLACE_CONTRACT}`,
   },
   {
     type: HistoryType.OFFER,
@@ -63,6 +63,6 @@ export const History: Array<{
     addedAt: new Date(new Date().setDate(new Date().getDate() - 3)),
     expiredAt: new Date(new Date().setDate(new Date().getDate() - 1)),
     price: 0.05,
-    transactionId: '0x6Fc96E8C1DE8CC166dD5CDD647Fcc384a89AA4CE',
+    transactionId: `${process.env.REACT_APP_MARKETPLACE_CONTRACT}`,
   },
 ];

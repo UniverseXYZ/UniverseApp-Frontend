@@ -142,7 +142,7 @@ export const SellPage = () => {
         response,
         address,
         `${network.chainId}`,
-        '0x6Fc96E8C1DE8CC166dD5CDD647Fcc384a89AA4CE' // TODO: move to .env
+        `${process.env.REACT_APP_MARKETPLACE_CONTRACT}`
       );
 
       const createOrderResponse = (await createOrderMutation.mutateAsync({ ...data, signature })).data;

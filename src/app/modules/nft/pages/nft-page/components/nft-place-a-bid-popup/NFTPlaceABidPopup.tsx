@@ -127,7 +127,7 @@ export const NFTPlaceABidPopup = ({ order, isOpen, onClose, }: INFTPlaceABidPopu
       //   response,
       //   address,
       //   `${network.chainId}`,
-      //   '0x6Fc96E8C1DE8CC166dD5CDD647Fcc384a89AA4CE' // TODO: move to .env
+      //   `${process.env.REACT_APP_MARKETPLACE_CONTRACT}`
       // );
       //
       // const createOrderResponse = (await createOfferMutation.mutateAsync({ ...offerData, signature })).data;
