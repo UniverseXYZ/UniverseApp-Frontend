@@ -271,7 +271,7 @@ const PolymorphScramblePage = () => {
             </div>
           )}
           {isOwner ? (
-            <Button className="light-button" onClick={showScrambleOptions}>
+            <Button className="light-button" onClick={showScrambleOptions} disabled>
               Scramble options
             </Button>
           ) : null}
