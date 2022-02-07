@@ -6,6 +6,7 @@ import { useLocation } from 'react-router-dom';
 import { Contract, utils } from 'ethers';
 import { DebounceInput } from 'react-debounce-input';
 import './CreateSingleNft.scss';
+import PropTypes from 'prop-types';
 import Button from '../../button/Button.jsx';
 import Input from '../../input/Input.jsx';
 import LoadingPopup from '../../popups/LoadingPopup.jsx';
@@ -71,7 +72,7 @@ const SAVING_FOR_LATER_LOADING_TEXT =
   'You nft is being saved for later minting. Keep this window opened. Navigating away from the page will reset the current progress.';
 const INVALID_ADDRESS_TEXT = 'Please enter valid address or ENS';
 
-const SingleNFTForm = () => {
+const SingleNFTForm = ({ scrollToTop }) => {
   const { setActiveTxHashes, setMyNFTsSelectedTabIndex } = useMyNftsContext();
 
   const {
@@ -142,8 +143,25 @@ const SingleNFTForm = () => {
   const [mintableCollections, setMintableCollections] = useState([]);
 
   useEffect(() => {
-    setSelectedCollection(location.state?.collection || universeCollection);
-  }, [universeCollection]);
+    if (location.state.savedNft && location.state.savedNft.collectionId) {
+      const nft = location.state.savedNft;
+      const savedNftCollection = mintableCollections.filter(
+        (col) => col.id === nft.collectionId
+      )[0];
+      if (savedNftCollection) {
+        setSelectedCollection(savedNftCollection);
+      }
+    } else {
+      setSelectedCollection(location.state?.collection || universeCollection);
+    }
+  }, [universeCollection, mintableCollections]);
+
+  // On page refresh populate royalty address if null
+  useEffect(() => {
+    if (!location.state.savedNft) {
+      setRoyaltyAddress([{ address, amount: '10' }]);
+    }
+  }, [address]);
 
   useEffect(() => {
     (async () => {
@@ -740,12 +758,6 @@ const SingleNFTForm = () => {
       if (parsedProperties.length && parsedProperties[0].name) {
         setPropertyCheck(true);
       }
-      if (res.collectionId) {
-        const getCollection = mintableCollections.filter((col) => col.id === res.collectionId)[0];
-        if (getCollection) {
-          setSelectedCollection(getCollection);
-        }
-      }
     }
   }, []);
 
@@ -815,6 +827,7 @@ const SingleNFTForm = () => {
             onClose={() => {
               setMyNFTsSelectedTabIndex(0);
               setShowCongratsPopup(false);
+              scrollToTop();
             }}
             message="NFT was successfully created and should be displayed in your wallet shortly"
           />
@@ -822,16 +835,23 @@ const SingleNFTForm = () => {
         <Popup open={showCongratsPopupOnSaveForLaterClick} closeOnDocumentClick={false}>
           <CongratsPopup
             showCreateMore={showCreateMoreButton}
-            onClose={() => setShowCongratsPopupOnSaveForLaterClick(false)}
+            onClose={() => {
+              setMyNFTsSelectedTabIndex(2);
+              setShowCongratsPopupOnSaveForLaterClick(false);
+              scrollToTop();
+            }}
             message="NFT was successfully saved for later"
+            backButtonText="Go to Saved NFTs"
           />
         </Popup>
         <Popup open={showCongratsMintedSavedForLater} closeOnDocumentClick={false}>
           <CongratsPopup
             showCreateMore={showCreateMoreButton}
+            backButtonText="Go to Saved NFTs"
             onClose={() => {
-              setMyNFTsSelectedTabIndex(0);
+              setMyNFTsSelectedTabIndex(2);
               setShowCongratsMintedSavedForLater(false);
+              scrollToTop();
             }}
             message="Saved for later NFT was successfully minted and should be displayed in your wallet shortly"
           />
@@ -1367,4 +1387,7 @@ const SingleNFTForm = () => {
   );
 };
 
+SingleNFTForm.propTypes = {
+  scrollToTop: PropTypes.func.isRequired,
+};
 export default SingleNFTForm;

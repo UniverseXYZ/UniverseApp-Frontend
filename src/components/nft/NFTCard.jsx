@@ -16,6 +16,7 @@ import PendingPrevArrow from '../myNFTs/pendingDropdown/misc/PendingPrevArrow';
 import PendingNextArrow from '../myNFTs/pendingDropdown/misc/PendingNextArrow';
 import NftEditions from './NftEditions';
 import SVGImageLoader from '../marketplaceNFT/InlineSVG';
+import BrokenNFT from '../marketplaceNFT/BrokenNFT';
 
 const NFTCard = React.memo(
   ({ nft, canSelect, collectionAddress, selectedNFTsIds, setSelectedNFTsIds }) => {
@@ -47,13 +48,17 @@ const NFTCard = React.memo(
     };
 
     const showNftImage = () => {
-      if (!nft.thumbnail_url.endsWith('.svg')) {
-        return (
-          <LoadingImage className="nft--image" alt={nft.name} src={nft.thumbnail_url} showSpinner />
-        );
+      if (!nft.thumbnail_url) {
+        return <BrokenNFT />;
       }
 
-      return <SVGImageLoader svgUrl={nft.thumbnail_url} />;
+      if (nft.thumbnail_url.endsWith('.svg')) {
+        return <SVGImageLoader svgUrl={nft.thumbnail_url} />;
+      }
+
+      return (
+        <LoadingImage className="nft--image" alt={nft.name} src={nft.thumbnail_url} showSpinner />
+      );
     };
 
     return (

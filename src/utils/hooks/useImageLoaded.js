@@ -1,8 +1,9 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
+import useStateIfMounted from './useStateIfMounted';
 
 export const useImageLoaded = () => {
-  const [loaded, setLoaded] = useState(false);
-  const [errored, setErrored] = useState(false);
+  const [loaded, setLoaded] = useStateIfMounted(false);
+  const [errored, setErrored] = useStateIfMounted(false);
 
   const ref = useRef();
 

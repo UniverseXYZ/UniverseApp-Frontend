@@ -34,7 +34,7 @@ const MAX_FIELD_CHARS_LENGTH = {
   token: 10,
 };
 
-const NFTCollectionForm = ({ showCollectible, setShowCollectible }) => {
+const NFTCollectionForm = ({ showCollectible, setShowCollectible, scrollToTop }) => {
   const {
     myNFTs,
     setMyNFTs,
@@ -345,6 +345,7 @@ const NFTCollectionForm = ({ showCollectible, setShowCollectible }) => {
             setCollectionName('');
             setCoverImage(null);
             setMyNFTsSelectedTabIndex(1);
+            scrollToTop();
           }}
           backButtonText="Go to my Collections"
           message="NFT collection was successfully created/updated and should be displayed in your wallet shortly"
@@ -541,6 +542,7 @@ const NFTCollectionForm = ({ showCollectible, setShowCollectible }) => {
 NFTCollectionForm.propTypes = {
   showCollectible: PropTypes.bool.isRequired,
   setShowCollectible: PropTypes.func.isRequired,
+  scrollToTop: PropTypes.func.isRequired,
 };
 
 export default NFTCollectionForm;

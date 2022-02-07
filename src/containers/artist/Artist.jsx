@@ -16,7 +16,6 @@ const Artist = () => {
   const { artistUsername } = useParams();
   const [artist, setArtist] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [artistNFTs, setArtistNFTs] = useState([]);
   const [notFound, setNotFound] = useState(false);
   const [artistAddress, setArtistAddress] = useState('');
 

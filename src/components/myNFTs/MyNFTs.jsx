@@ -25,6 +25,7 @@ import { useErrorContext } from '../../contexts/ErrorContext';
 import { sendBatchMintRequest, sendMintRequest } from '../../userFlows/api/ContractInteraction';
 import { createMintingNFT, getMetaForSavedNft } from '../../utils/api/mintNFT';
 import { formatRoyaltiesForMinting } from '../../utils/helpers/contractInteraction';
+import useStateIfMounted from '../../utils/hooks/useStateIfMounted';
 
 const MyNFTs = () => {
   const tabs = ['Wallet', 'Collections', 'Saved NFTs', 'Universe NFTs'];
@@ -53,16 +54,15 @@ const MyNFTs = () => {
   const scrollContainer = useRef(null);
 
   // State hooks
-  const [showloading, setShowLoading] = useState(false);
-  const [showCongrats, setShowCongrats] = useState(false);
-  const [showCongratsMintedSavedForLater, setShowCongratsMintedSavedForLater] = useState(false);
-  const [isDropdownOpened, setIsDropdownOpened] = useState(false);
+  const [showloading, setShowLoading] = useStateIfMounted(false);
+  const [showCongratsMintedSavedForLater, setShowCongratsMintedSavedForLater] =
+    useStateIfMounted(false);
+  const [isDropdownOpened, setIsDropdownOpened] = useStateIfMounted(false);
 
   // NEW
-  const [savedNfts, setSavedNfts] = useState([]);
-  const [selectedSavedNfts, setSelectedSavedNfts] = useState([]);
+  const [selectedSavedNfts, setSelectedSavedNfts] = useStateIfMounted([]);
 
-  const [triggerRefetch, setTriggerRefetch] = useState(false);
+  const [triggerRefetch, setTriggerRefetch] = useStateIfMounted(false);
 
   const handleClickOutside = (event) => {
     if (createButtonRef.current && !createButtonRef.current.contains(event.target)) {
@@ -188,7 +188,7 @@ const MyNFTs = () => {
           );
 
       const totalMintedMapping = {};
-      const mintingNftsPromises = txDataArray.map(async (data) => {
+      const mintingNftsPromises = txDataArray.map(async (data, i) => {
         const { transaction, mintingIds, status, tokens } = data;
         // transaction is undefined if tx has failed/was rejected by the user
         if (transaction) {
@@ -204,9 +204,19 @@ const MyNFTs = () => {
             }
           });
 
-          const mints = uniqueMintingIds.map((id) =>
-            createMintingNFT(txHash, id, totalMintedMapping[id])
-          );
+          const mints = uniqueMintingIds.map((id) => {
+            // Check if the count of the id in the mapping will increase
+            const moreToGo = txDataArray
+              .slice(i + 1)
+              .some((tx) => tx.mintingIds && tx.mintingIds.includes(id));
+
+            // Do not update minted count in BE if there's more to go
+            if (moreToGo) {
+              return createMintingNFT(txHash, id, 0);
+            }
+            return createMintingNFT(txHash, id, totalMintedMapping[id]);
+          });
+
           await Promise.all(mints);
         }
       });
@@ -270,13 +280,13 @@ const MyNFTs = () => {
           contractInteraction
         />
       </Popup>
-      <Popup closeOnDocumentClick={false} open={showCongrats}>
-        <CongratsPopup onClose={() => setShowCongrats(false)} />
-      </Popup>
       <Popup open={showCongratsMintedSavedForLater} closeOnDocumentClick={false}>
         <CongratsPopup
           showCreateMore
-          onClose={() => setShowCongratsMintedSavedForLater(false)}
+          onClose={() => {
+            setMyNFTsSelectedTabIndex(0);
+            setShowCongratsMintedSavedForLater(false);
+          }}
           message="Saved for later NFT was successfully minted and should be displayed in your wallet shortly"
         />
       </Popup>

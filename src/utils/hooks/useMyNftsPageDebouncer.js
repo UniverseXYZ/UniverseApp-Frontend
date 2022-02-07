@@ -3,6 +3,7 @@ import AwesomeDebouncePromise from 'awesome-debounce-promise';
 import useConstant from 'use-constant';
 import { useAsyncAbortable } from 'react-async-hook';
 import { getMyMintingNfts } from '../api/mintNFT';
+import useStateIfMounted from './useStateIfMounted';
 
 const buildMyNftsEndpointUrl = (offset, perPage, text, collections) => {
   let endpoint = `${process.env.REACT_APP_API_BASE_URL}/api/pages/my-nfts?offset=${offset}&limit=${perPage}`;
@@ -21,14 +22,14 @@ export const useSearchMyNfts = () => {
   const debounceInterval = 500;
   // Must be > 32 because we need at least 2 pages in order for the continuous load to work
   const perPage = 33;
-  const [inputText, setInputText] = useState('');
-  const [apiPage, setApiPage] = useState(0);
-  const [results, setResults] = useState([]);
-  const [isLastPage, setIsLastPage] = useState(false);
-  const [loadedPages, setLoadedPages] = useState([]);
-  const [collections, setCollections] = useState([]);
-  const [mintingNfts, setMintingNfts] = useState([]);
-  const [mintingNftsCount, setMintingNftsCount] = useState(0);
+  const [inputText, setInputText] = useStateIfMounted('');
+  const [apiPage, setApiPage] = useStateIfMounted(0);
+  const [results, setResults] = useStateIfMounted([]);
+  const [isLastPage, setIsLastPage] = useStateIfMounted(false);
+  const [loadedPages, setLoadedPages] = useStateIfMounted([]);
+  const [collections, setCollections] = useStateIfMounted([]);
+  const [mintingNfts, setMintingNfts] = useStateIfMounted([]);
+  const [mintingNftsCount, setMintingNftsCount] = useStateIfMounted(0);
 
   const serachMyNfts = async (endpoint, abortSignal) => {
     const result = await fetch(endpoint, {
@@ -61,7 +62,6 @@ export const useSearchMyNfts = () => {
     setResults((old) => {
       const concatedNfts = [...old.nfts, ...json.nfts];
       json.nfts = concatedNfts;
-      console.log(json);
       return json;
     });
     setIsLastPage(false);

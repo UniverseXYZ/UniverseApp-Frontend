@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import AwesomeDebouncePromise from 'awesome-debounce-promise';
 import useConstant from 'use-constant';
 import { useAsyncAbortable } from 'react-async-hook';
+import useStateIfMounted from './useStateIfMounted';
 
 const buildCollectionPageUrl = (address, offset, perPage, text) => {
   let endpoint = `${process.env.REACT_APP_API_BASE_URL}/api/pages/collection/${address}?offset=${offset}&limit=${perPage}`;
@@ -15,17 +16,19 @@ export const useSearchCollection = (address) => {
   const debounceInterval = 500;
   // Must be > 32 because we need at least 2 pages in order for the continuous load to work
   const perPage = 33;
-  const [inputText, setInputText] = useState('');
-  const [apiPage, setApiPage] = useState(0);
-  const [results, setResults] = useState([]);
-  const [isLastPage, setIsLastPage] = useState(false);
-  const [loadedPages, setLoadedPages] = useState([]);
+  const [inputText, setInputText] = useStateIfMounted('');
+  const [apiPage, setApiPage] = useStateIfMounted(0);
+  const [results, setResults] = useStateIfMounted([]);
+  const [isLastPage, setIsLastPage] = useStateIfMounted(false);
+  const [loadedPages, setLoadedPages] = useStateIfMounted([]);
+  const [notFound, setNotFound] = useStateIfMounted(false);
 
   const searchCollectionNfts = async (endpoint, abortSignal) => {
     const result = await fetch(endpoint, {
       signal: abortSignal,
     });
     if (result.status !== 200) {
+      setNotFound(true);
       throw new Error(`bad status = ${result.status}`);
     }
     const json = await result.json();
@@ -44,7 +47,6 @@ export const useSearchCollection = (address) => {
     setResults((old) => {
       const concatedNfts = [...old.nfts, ...json.nfts];
       json.nfts = concatedNfts;
-      console.log(json);
       return json;
     });
     setIsLastPage(false);
@@ -85,5 +87,6 @@ export const useSearchCollection = (address) => {
     setIsLastPage,
     loadedPages,
     setLoadedPages,
+    notFound,
   };
 };

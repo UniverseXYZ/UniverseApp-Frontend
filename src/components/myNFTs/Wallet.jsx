@@ -102,7 +102,7 @@ const Wallet = React.memo(({ scrollContainer }) => {
             setMintingNftsCount(nfts.mintingNfts.length);
             setMintingNfts(nfts.mintingNfts);
             fetchNftSummary();
-            if (!nfts?.length || nfts.length === 0) {
+            if (!nfts?.mintingNfts?.length || nfts?.mintingNfts?.length === 0) {
               clearInterval(pollRef.current);
             }
           }
