@@ -70,11 +70,6 @@ export const NFTCheckoutPopup = ({ NFT, NFTs, order, isOpen, onClose }: INFTChec
     setState(CheckoutState.CHECKOUT);
   }, []);
 
-  const assetUrl = useMemo(() => (isNFTAudio
-    ? AudioNFTPreviewImage
-    : 'https://storage.googleapis.com/lobster-images/05020905000503.jpg'
-  ), [isNFTAudio]);
-
   const previewNFT = useMemo(() => {
     return NFT || (NFTs as INFT[])[0];
   }, [NFT, NFTs]);
@@ -83,7 +78,11 @@ export const NFTCheckoutPopup = ({ NFT, NFTs, order, isOpen, onClose }: INFTChec
     setState(CheckoutState.CHECKOUT);
     setAgree(false);
     setAgreeBundle(!NFTs);
-  }, [isOpen, NFTs])
+  }, [isOpen, NFTs]);
+
+  if (!order) {
+    return null;
+  }
 
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
