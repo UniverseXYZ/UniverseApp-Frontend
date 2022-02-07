@@ -142,7 +142,7 @@ const AuthContextProvider = ({ children }) => {
 
     // await ethereum.request({ method: 'eth_requestAccounts' });
     const provider = new providers.Web3Provider(ethereum);
-    const accounts = await provider.listAccounts();
+    const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
     const network = await provider.getNetwork();
 
     if (network.chainId !== +process.env.REACT_APP_NETWORK_CHAIN_ID) {
