@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import './CreateNFT.scss';
 import { useHistory, useLocation } from 'react-router-dom';
 import arrow from '../../../assets/images/arrow.svg';
@@ -13,6 +13,14 @@ const CreateNFT = () => {
   const [selectedNFTType, setSelectedNFTType] = useState('');
   const [backPath, setBackPath] = useState('');
   const [showCollectible, setShowCollectible] = useState(false);
+
+  const scrollContainer = useRef(null);
+
+  const scrollToTop = () => {
+    if (scrollContainer && scrollContainer.current) {
+      scrollContainer.current.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+  };
 
   const goToCollectionPage = () => {
     if (location.state && location.state.collection) {
@@ -38,7 +46,12 @@ const CreateNFT = () => {
             <span>{location.state?.collection?.name}</span>
           </div>
         ) : (
-          <div className="back-btn" onClick={() => history.goBack()} aria-hidden="true">
+          <div
+            className="back-btn"
+            onClick={() => history.goBack()}
+            aria-hidden="true"
+            ref={scrollContainer}
+          >
             <img src={arrow} alt="back" />
             <span>Go Back</span>
           </div>
@@ -61,11 +74,14 @@ const CreateNFT = () => {
           <h1 className="page--title">Edit collection</h1>
         )}
         <div className="tab__content">
-          {selectedTabIndex === 1 && selectedNFTType === 'single' && <SingleNFTForm />}
+          {selectedTabIndex === 1 && selectedNFTType === 'single' && (
+            <SingleNFTForm scrollToTop={scrollToTop} />
+          )}
           {selectedTabIndex === 1 && selectedNFTType === 'collection' && (
             <NFTCollectionForm
               showCollectible={showCollectible}
               setShowCollectible={setShowCollectible}
+              scrollToTop={scrollToTop}
             />
           )}
         </div>
