@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import NFTsTab from './nfts/NFTsTab.jsx';
 import tabArrow from '../../../assets/images/tab-arrow.svg';
@@ -13,7 +13,12 @@ const Tabs = ({ username, artistAddress }) => {
   const { userPageNftsCount, setUserPageNftsCount } = useMyNftsContext();
 
   useEffect(() => setUserPageNftsCount(0), []);
-
+  const scrollContainer = useRef();
+  const scrollToTop = () => {
+    if (scrollContainer && scrollContainer.current) {
+      scrollContainer.current.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+  };
   return (
     <div className="tabs__section">
       <div className="tabs__section__container">
@@ -26,7 +31,7 @@ const Tabs = ({ username, artistAddress }) => {
               alt="Tab left arrow"
             />
           </div> */}
-          <div className="tabs">
+          <div className="tabs" ref={scrollContainer}>
             <div className="tab_items">
               <button
                 type="button"
@@ -73,7 +78,12 @@ const Tabs = ({ username, artistAddress }) => {
         </div>
         <div className="tab__content">
           {selectedTabIndex === 0 && (
-            <NFTsTab showMintPrompt={false} username={username} artistAddress={artistAddress} />
+            <NFTsTab
+              showMintPrompt={false}
+              username={username}
+              artistAddress={artistAddress}
+              scrollToTop={scrollToTop}
+            />
           )}
           {selectedTabIndex === 1 && <ActiveAuctionsTab showMintPrompt={false} />}
           {selectedTabIndex === 2 && <FutureAuctionsTab showMintPrompt={false} />}

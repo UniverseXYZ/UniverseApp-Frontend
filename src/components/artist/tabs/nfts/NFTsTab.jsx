@@ -14,7 +14,7 @@ import { useSearchUserNfts } from '../../../../utils/hooks/useUserProfilePageDeb
 import { CollectionPageLoader } from '../../../../containers/collection/CollectionPageLoader';
 import { useMyNftsContext } from '../../../../contexts/MyNFTsContext';
 
-const NFTsTab = React.memo(({ showMintPrompt, username, artistAddress }) => {
+const NFTsTab = React.memo(({ showMintPrompt, username, artistAddress, scrollToTop }) => {
   const ref = useRef(null);
   const [isDropdownOpened, setIsDropdownOpened] = useState(false);
   const history = useHistory();
@@ -89,6 +89,11 @@ const NFTsTab = React.memo(({ showMintPrompt, username, artistAddress }) => {
     }
     setPerPage(newPerPage);
   };
+
+  useEffect(() => {
+    scrollToTop();
+  }, [page, perPage]);
+
   return (
     <>
       <ApiSearchFilters
@@ -203,6 +208,7 @@ NFTsTab.propTypes = {
   showMintPrompt: PropTypes.bool,
   username: PropTypes.string.isRequired,
   artistAddress: PropTypes.string.isRequired,
+  scrollToTop: PropTypes.func.isRequired,
 };
 
 NFTsTab.defaultProps = {
