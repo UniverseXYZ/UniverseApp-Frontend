@@ -49,7 +49,6 @@ export const useSearchSavedNfts = (triggerRefetch, setTriggerRefetch) => {
     setResults((old) => {
       const concatedNfts = [...old.nfts, ...json.nfts];
       json.nfts = concatedNfts;
-      console.log(json);
       return json;
     });
     setIsLastPage(false);

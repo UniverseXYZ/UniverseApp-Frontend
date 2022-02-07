@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import AwesomeDebouncePromise from 'awesome-debounce-promise';
 import useConstant from 'use-constant';
 import { useAsyncAbortable } from 'react-async-hook';
+import useStateIfMounted from './useStateIfMounted';
 
 const buildRarityUrl = (
   page = 1,

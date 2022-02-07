@@ -4,6 +4,7 @@ import useConstant from 'use-constant';
 import { useAsyncAbortable } from 'react-async-hook';
 import AppContext from '../../ContextAPI';
 import { usePolymorphContext } from '../../contexts/PolymorphContext';
+import useStateIfMounted from './useStateIfMounted';
 
 const buildRarityUrl = (
   page = 1,
