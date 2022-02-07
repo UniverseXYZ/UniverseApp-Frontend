@@ -22,6 +22,7 @@ import NftCardSkeleton from '../skeletons/nftCardSkeleton/NftCardSkeleton';
 import { getCollectionBackgroundColor } from '../../utils/helpers';
 import { shortenEthereumAddress } from '../../utils/helpers/format';
 import universeIcon from '../../assets/images/universe-img.svg';
+import { removeSavedNft } from '../../utils/api/mintNFT';
 
 const SavedNFTs = ({
   setSelectedSavedNfts,
@@ -30,7 +31,7 @@ const SavedNFTs = ({
   setTriggerRefetch,
   scrollContainer,
 }) => {
-  const { setSavedNfts } = useMyNftsContext();
+  const { setSavedNfts, fetchNftSummary } = useMyNftsContext();
 
   const [selectAllIsChecked, setSelectAllIsChecked] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
@@ -166,6 +167,27 @@ const SavedNFTs = ({
     }
   };
 
+  const handleRemove = async (id) => {
+    const result = await removeSavedNft(id);
+
+    if (!result.ok || result.status !== 200) {
+      console.error(`Cannot delete NFT with id: ${id}`);
+      return;
+    }
+
+    const newSavedNfts = [...savedNftData?.nfts] || [];
+    const nftIndex = newSavedNfts.map((nft) => nft.id).indexOf(id);
+
+    if (newSavedNfts[nftIndex].selected) {
+      // Remove from selected nfts
+      const newSelected = [...selectedSavedNfts];
+      newSelected.splice(newSelected.map((nft) => nft.id).indexOf(newSavedNfts[nftIndex].id), 1);
+      setSelectedSavedNfts(newSelected);
+    }
+    fetchNftSummary();
+    setTriggerRefetch(true);
+  };
+
   useEffect(() => {
     scrollToNftContainer();
   }, [page, perPage]);
@@ -264,7 +286,8 @@ const SavedNFTs = ({
                             <RemovePopup
                               close={close}
                               nftID={nft.id}
-                              setTriggerRefetch={setTriggerRefetch}
+                              removedItemName={nft.name}
+                              handleRemove={handleRemove}
                             />
                           )}
                         </Popup>

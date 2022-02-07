@@ -3,6 +3,7 @@ import AwesomeDebouncePromise from 'awesome-debounce-promise';
 import useConstant from 'use-constant';
 import { useAsyncAbortable } from 'react-async-hook';
 import { getMyMintingCollections } from '../api/mintNFT';
+import useStateIfMounted from './useStateIfMounted';
 
 const buildCollectionPageUrl = (offset, perPage) => {
   const endpoint = `${process.env.REACT_APP_API_BASE_URL}/api/pages/my-nfts/collections?offset=${offset}&limit=${perPage}`;
@@ -13,12 +14,12 @@ export const useSearchMyCollections = () => {
   const debounceInterval = 500;
   // Must be > 32 because we need at least 2 pages in order for the continuous load to work
   const perPage = 33;
-  const [apiPage, setApiPage] = useState(0);
-  const [results, setResults] = useState([]);
-  const [isLastPage, setIsLastPage] = useState(false);
-  const [loadedPages, setLoadedPages] = useState([]);
-  const [mintingCollectionsCount, setMintingCollectionsCount] = useState(0);
-  const [mintingCollections, setMintingCollections] = useState([]);
+  const [apiPage, setApiPage] = useStateIfMounted(0);
+  const [results, setResults] = useStateIfMounted([]);
+  const [isLastPage, setIsLastPage] = useStateIfMounted(false);
+  const [loadedPages, setLoadedPages] = useStateIfMounted([]);
+  const [mintingCollectionsCount, setMintingCollectionsCount] = useStateIfMounted(0);
+  const [mintingCollections, setMintingCollections] = useStateIfMounted([]);
 
   const searchCollections = async (endpoint, abortSignal) => {
     const result = await fetch(endpoint, {

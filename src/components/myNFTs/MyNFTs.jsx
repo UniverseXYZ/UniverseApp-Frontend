@@ -25,6 +25,7 @@ import { useErrorContext } from '../../contexts/ErrorContext';
 import { sendBatchMintRequest, sendMintRequest } from '../../userFlows/api/ContractInteraction';
 import { createMintingNFT, getMetaForSavedNft } from '../../utils/api/mintNFT';
 import { formatRoyaltiesForMinting } from '../../utils/helpers/contractInteraction';
+import useStateIfMounted from '../../utils/hooks/useStateIfMounted';
 
 const MyNFTs = () => {
   const tabs = ['Wallet', 'Collections', 'Saved NFTs', 'Universe NFTs'];
@@ -53,15 +54,15 @@ const MyNFTs = () => {
   const scrollContainer = useRef(null);
 
   // State hooks
-  const [showloading, setShowLoading] = useState(false);
-  const [showCongratsMintedSavedForLater, setShowCongratsMintedSavedForLater] = useState(false);
-  const [isDropdownOpened, setIsDropdownOpened] = useState(false);
+  const [showloading, setShowLoading] = useStateIfMounted(false);
+  const [showCongratsMintedSavedForLater, setShowCongratsMintedSavedForLater] =
+    useStateIfMounted(false);
+  const [isDropdownOpened, setIsDropdownOpened] = useStateIfMounted(false);
 
   // NEW
-  const [savedNfts, setSavedNfts] = useState([]);
-  const [selectedSavedNfts, setSelectedSavedNfts] = useState([]);
+  const [selectedSavedNfts, setSelectedSavedNfts] = useStateIfMounted([]);
 
-  const [triggerRefetch, setTriggerRefetch] = useState(false);
+  const [triggerRefetch, setTriggerRefetch] = useStateIfMounted(false);
 
   const handleClickOutside = (event) => {
     if (createButtonRef.current && !createButtonRef.current.contains(event.target)) {

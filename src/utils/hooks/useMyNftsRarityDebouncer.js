@@ -78,13 +78,13 @@ export const useSearchPolymorphs = () => {
   const { userPolymorphs } = usePolymorphContext();
 
   const perPage = 100;
-  const [inputText, setInputText] = useState('');
-  const [apiPage, setApiPage] = useState(1);
-  const [sortField, setSortField] = useState('rarityscore');
-  const [sortDir, setSortDir] = useState('desc');
-  const [filter, setFilter] = useState([]);
-  const [results, setResults] = useState([]);
-  const [isLastPage, setIsLastPage] = useState(false);
+  const [inputText, setInputText] = useStateIfMounted('');
+  const [apiPage, setApiPage] = useStateIfMounted(1);
+  const [sortField, setSortField] = useStateIfMounted('rarityscore');
+  const [sortDir, setSortDir] = useStateIfMounted('desc');
+  const [filter, setFilter] = useStateIfMounted([]);
+  const [results, setResults] = useStateIfMounted([]);
+  const [isLastPage, setIsLastPage] = useStateIfMounted(false);
 
   const searchPolymorphsRarity = async (endpoint, abortSignal) => {
     const result = await fetch(endpoint, {

@@ -15,12 +15,12 @@ export const useSearchCollection = (address) => {
   const debounceInterval = 500;
   // Must be > 32 because we need at least 2 pages in order for the continuous load to work
   const perPage = 33;
-  const [inputText, setInputText] = useState('');
-  const [apiPage, setApiPage] = useState(0);
-  const [results, setResults] = useState([]);
-  const [notFound, setNotFound] = useState(false);
-  const [isLastPage, setIsLastPage] = useState(false);
-  const [loadedPages, setLoadedPages] = useState([]);
+  const [inputText, setInputText] = useStateIfMounted('');
+  const [apiPage, setApiPage] = useStateIfMounted(0);
+  const [results, setResults] = useStateIfMounted([]);
+  const [isLastPage, setIsLastPage] = useStateIfMounted(false);
+  const [loadedPages, setLoadedPages] = useStateIfMounted([]);
+  const [notFound, setNotFound] = useStateIfMounted(false);
 
   const searchCollectionNfts = async (endpoint, abortSignal) => {
     const result = await fetch(endpoint, {
