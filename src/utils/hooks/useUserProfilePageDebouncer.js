@@ -3,6 +3,7 @@ import AwesomeDebouncePromise from 'awesome-debounce-promise';
 import useConstant from 'use-constant';
 import { useAsyncAbortable } from 'react-async-hook';
 import { getMyMintingNfts } from '../api/mintNFT';
+import useStateIfMounted from './useStateIfMounted';
 
 const buildUserNftsEnpointUrl = (username, offset, perPage, text, collections) => {
   let endpoint = `${process.env.REACT_APP_API_BASE_URL}/api/pages/user-profile/${username}/nfts?offset=${offset}&limit=${perPage}`;
@@ -59,7 +60,6 @@ export const useSearchUserNfts = (username) => {
     setResults((old) => {
       const concatedNfts = [...old.nfts, ...json.nfts];
       json.nfts = concatedNfts;
-      console.log(json);
       return json;
     });
     setIsLastPage(false);

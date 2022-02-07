@@ -50,9 +50,8 @@ export const useSearchMyCollections = () => {
     }
     const json = await result.json();
     setResults((old) => {
-      const concatedNfts = [...old.nfts, ...json.nfts];
-      json.nfts = concatedNfts;
-      console.log(json);
+      const concatedNfts = [...old.collections, ...json.collections];
+      json.collections = concatedNfts;
       return json;
     });
     setIsLastPage(false);

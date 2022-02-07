@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import AwesomeDebouncePromise from 'awesome-debounce-promise';
 import useConstant from 'use-constant';
 import { useAsyncAbortable } from 'react-async-hook';
+import useStateIfMounted from './useStateIfMounted';
 
 const buildCollectionPageUrl = (address, offset, perPage, text) => {
   let endpoint = `${process.env.REACT_APP_API_BASE_URL}/api/pages/collection/${address}?offset=${offset}&limit=${perPage}`;
@@ -46,7 +47,6 @@ export const useSearchCollection = (address) => {
     setResults((old) => {
       const concatedNfts = [...old.nfts, ...json.nfts];
       json.nfts = concatedNfts;
-      console.log(json);
       return json;
     });
     setIsLastPage(false);

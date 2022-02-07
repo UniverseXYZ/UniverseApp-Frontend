@@ -12,6 +12,7 @@ import NoCollectionsFound from './NoCollectionsFound';
 import ApiPagination from '../pagination/ApiPagination';
 import ApiItemsPerPageDropdown from '../pagination/ApiItemsPerPageDropdown';
 import { getMyMintingCollectionsCount, getMyMintingCollections } from '../../utils/api/mintNFT';
+import { CollectionPageLoader } from '../../containers/collection/CollectionPageLoader';
 
 const CORE_COLLECTION_ADDRESS = process.env.REACT_APP_UNIVERSE_ERC_721_ADDRESS;
 
@@ -205,10 +206,7 @@ const DeployedCollections = ({ scrollContainer }) => {
           </div>
           {isLastPage && (
             <>
-              <CollectionCardSkeleton />
-              <CollectionCardSkeleton />
-              <CollectionCardSkeleton />
-              <CollectionCardSkeleton />
+              <CollectionPageLoader />
             </>
           )}
 
