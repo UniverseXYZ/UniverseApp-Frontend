@@ -27,13 +27,17 @@ import WarningSVGIcon from '../../../../../../../assets/images/yellowIcon.svg';
 import ArrowSVGIcon from '../../../../../../../assets/images/arrow.svg';
 import WalletImage from '../../../../../../../assets/images/v2/wallet.png';
 import AudioNFTPreviewImage from '../../../../../../../assets/images/v2/audio-nft-preview.png';
+import { INFT } from '../../../../types';
+import { isNFTAssetAudio, isNFTAssetImage, isNFTAssetVideo } from '../../../../helpers';
 
 interface INFTCheckoutPopupProps {
+  NFT?: INFT;
+  NFTs?: INFT[];
   isOpen: boolean;
   onClose: () => void;
 }
 
-export const NFTCheckoutPopup = ({ isOpen, onClose }: INFTCheckoutPopupProps) => {
+export const NFTCheckoutPopup = ({ NFT, NFTs, isOpen, onClose }: INFTCheckoutPopupProps) => {
   const router = useHistory();
 
   const { address } = useAuthContext();
@@ -43,9 +47,8 @@ export const NFTCheckoutPopup = ({ isOpen, onClose }: INFTCheckoutPopupProps) =>
   const [state, setState] = useState<CheckoutState>(CheckoutState.CHECKOUT);
   const [agree, setAgree] = useState(false);
   const [reviewedByUniverse, setReviewedByUniverse] = useState(false);
-  const [isNFTBundle] = useState(true);
   const [isNFTAudio] = useState(false);
-  const [agreeBundle, setAgreeBundle] = useState(!isNFTBundle);
+  const [agreeBundle, setAgreeBundle] = useState(false);
 
   const handleCheckoutClick = useCallback(() => {
     setState(CheckoutState.CONGRATULATIONS);
@@ -68,11 +71,15 @@ export const NFTCheckoutPopup = ({ isOpen, onClose }: INFTCheckoutPopupProps) =>
     : 'https://storage.googleapis.com/lobster-images/05020905000503.jpg'
   ), [isNFTAudio]);
 
+  const previewNFT = useMemo(() => {
+    return NFT || (NFTs as INFT[])[0];
+  }, [NFT, NFTs]);
+
   useEffect(() => {
     setState(CheckoutState.CHECKOUT);
     setAgree(false);
-    setAgreeBundle(!isNFTBundle);
-  }, [isOpen, isNFTBundle])
+    setAgreeBundle(!NFTs);
+  }, [isOpen, NFTs])
 
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
@@ -98,8 +105,12 @@ export const NFTCheckoutPopup = ({ isOpen, onClose }: INFTCheckoutPopupProps) =>
 
               <Flex {...styles.NFTContainerStyle}>
                 <Box pos={'relative'}>
-                  <Image src={assetUrl} {...styles.AssetStyle} />
-                  {isNFTBundle && (<NFTType type={'bundle'} count={4} />)}
+                  <Box {...styles.AssetStyle}>
+                    {isNFTAssetImage(previewNFT.artworkType) && <Image src={previewNFT.thumbnailUrl} />}
+                    {isNFTAssetVideo(previewNFT.artworkType) && <video src={previewNFT.thumbnailUrl} />}
+                    {isNFTAssetAudio(previewNFT.artworkType) && <Image src={AudioNFTPreviewImage} />}
+                  </Box>
+                  {!!NFTs && (<NFTType type={'bundle'} count={NFTs.length} />)}
                 </Box>
                 <Box flex={1} p={'20px'}>
                   <Text>NFT name</Text>
@@ -125,7 +136,7 @@ export const NFTCheckoutPopup = ({ isOpen, onClose }: INFTCheckoutPopupProps) =>
                 </Box>
               </Flex>
 
-              {isNFTBundle && (
+              {!!NFTs && (
                 <Checkbox mb={'20px'} size={'lg'} isChecked={agreeBundle} onChange={(e) => setAgreeBundle(e.target.checked)}>
                   <Text fontSize={'12px'} fontWeight={400}>
                     By checking this box, I acknowledge that this bundle contains an item that has now been reviewed or approved by Universe.
@@ -150,7 +161,12 @@ export const NFTCheckoutPopup = ({ isOpen, onClose }: INFTCheckoutPopupProps) =>
               <Heading {...styles.TitleStyle} mb={'10px'}>Congratulations!</Heading>
               <Text color={'rgba(0, 0, 0, 0.6)'} textAlign={'center'}>You have successfully bought the NFT</Text>
 
-              <Image src={assetUrl} {...styles.AssetCongratsStyle} />
+              <Box {...styles.AssetCongratsStyle}>
+                {isNFTAssetImage(previewNFT.artworkType) && <Image src={previewNFT.thumbnailUrl} />}
+                {isNFTAssetVideo(previewNFT.artworkType) && <video src={previewNFT.thumbnailUrl} />}
+                {isNFTAssetAudio(previewNFT.artworkType) && <Image src={AudioNFTPreviewImage} />}
+                {!!NFTs && (<NFTType type={'bundle'} count={NFTs.length} />)}
+              </Box>
 
               <Box {...styles.ButtonsContainerStyle}>
                 <Button boxShadow={'lg'} onClick={handleMyNFTsClick}>My NFTs</Button>

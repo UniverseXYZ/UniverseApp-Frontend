@@ -20,11 +20,12 @@ import { BuyNFTSectionState } from './enums';
 
 interface INFTBuySectionProps {
   NFT?: INFT;
+  NFTs?: INFT[];
   order?: IOrder;
   onMeasureChange?: (measure: UseMeasureRect) => void;
 }
 
-export const NFTBuySection = ({ NFT, order, onMeasureChange }: INFTBuySectionProps) => {
+export const NFTBuySection = ({ NFT, NFTs, order, onMeasureChange }: INFTBuySectionProps) => {
   const [ref, measure] = useMeasure<HTMLDivElement>();
 
   const router = useHistory();
@@ -156,6 +157,8 @@ export const NFTBuySection = ({ NFT, order, onMeasureChange }: INFTBuySectionPro
         )}
       </Box>
       <NFTCheckoutPopup
+        NFT={NFT}
+        NFTs={NFTs}
         isOpen={isCheckoutPopupOpened}
         onClose={() => setIsCheckoutPopupOpened(false)}
       />

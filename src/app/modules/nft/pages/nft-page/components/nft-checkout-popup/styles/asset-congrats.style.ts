@@ -1,9 +1,17 @@
-import { ImageProps } from '@chakra-ui/react';
+import { BoxProps } from '@chakra-ui/react';
 
-export const AssetCongratsStyle: ImageProps = {
-  borderRadius: '6px',
-  h: '295px',
+export const AssetCongratsStyle: BoxProps = {
+  display: 'table',
   my: '30px',
   mx: 'auto',
-  w: '295px',
+  pos: 'relative',
+
+  sx: {
+    'img, video': {
+      borderRadius: '6px',
+      objectFit: 'cover',
+      h: '295px',
+      w: '295px',
+    }
+  }
 };
