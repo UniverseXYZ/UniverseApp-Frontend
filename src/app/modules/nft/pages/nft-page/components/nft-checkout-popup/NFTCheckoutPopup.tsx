@@ -18,8 +18,8 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 
 import { useAuthContext } from '../../../../../../../contexts/AuthContext';
-import { Checkbox, InputShadow } from '../../../../../../components';
-import { EthIcon, NFTType } from './components';
+import { Checkbox, InputShadow, TokenIcon } from '../../../../../../components';
+import { NFTType } from './components';
 import { CheckoutState } from './enums';
 import * as styles from './styles';
 
@@ -27,17 +27,21 @@ import WarningSVGIcon from '../../../../../../../assets/images/yellowIcon.svg';
 import ArrowSVGIcon from '../../../../../../../assets/images/arrow.svg';
 import WalletImage from '../../../../../../../assets/images/v2/wallet.png';
 import AudioNFTPreviewImage from '../../../../../../../assets/images/v2/audio-nft-preview.png';
-import { INFT } from '../../../../types';
+import { INFT, IOrder } from '../../../../types';
 import { isNFTAssetAudio, isNFTAssetImage, isNFTAssetVideo } from '../../../../helpers';
+import { utils } from 'ethers';
+import { TOKENS_MAP } from '../../../../../../constants';
+import { TokenTicker } from '../../../../../../enums';
 
 interface INFTCheckoutPopupProps {
   NFT?: INFT;
   NFTs?: INFT[];
+  order: IOrder;
   isOpen: boolean;
   onClose: () => void;
 }
 
-export const NFTCheckoutPopup = ({ NFT, NFTs, isOpen, onClose }: INFTCheckoutPopupProps) => {
+export const NFTCheckoutPopup = ({ NFT, NFTs, order, isOpen, onClose }: INFTCheckoutPopupProps) => {
   const router = useHistory();
 
   const { address } = useAuthContext();
@@ -118,8 +122,8 @@ export const NFTCheckoutPopup = ({ NFT, NFTs, isOpen, onClose }: INFTCheckoutPop
                 </Box>
                 <Box {...styles.PriceContainerStyle}>
                   <Text fontSize={'14px'}>
-                    <EthIcon w={'10px'} />
-                    0.5
+                    <TokenIcon ticker={order?.take.assetType.assetClass as TokenTicker} display={'inline'} size={20} mr={'6px'} mt={'-3px'} />
+                    {utils.formatUnits(order.take.value, `${TOKENS_MAP[order?.take.assetType.assetClass as TokenTicker].decimals}`)}
                   </Text>
                   <Text {...styles.PriceUSDStyle}>$1 408.39</Text>
                 </Box>
@@ -129,8 +133,8 @@ export const NFTCheckoutPopup = ({ NFT, NFTs, isOpen, onClose }: INFTCheckoutPop
                 <Text>Total</Text>
                 <Box {...styles.PriceContainerStyle}>
                   <Text fontSize={'18px'}>
-                    <EthIcon w={'12px'} />
-                    0.5
+                    <TokenIcon ticker={order?.take.assetType.assetClass as TokenTicker} display={'inline'} size={24} mr={'6px'} mt={'-3px'} />
+                    {utils.formatUnits(order.take.value, `${TOKENS_MAP[order?.take.assetType.assetClass as TokenTicker].decimals}`)}
                   </Text>
                   <Text {...styles.PriceUSDStyle}>$208.39</Text>
                 </Box>
