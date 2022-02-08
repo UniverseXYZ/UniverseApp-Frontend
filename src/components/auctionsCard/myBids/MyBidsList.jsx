@@ -11,11 +11,10 @@ import { useErrorContext } from '../../../contexts/ErrorContext';
 import ErrorPopup from '../../popups/ErrorPopup';
 import { useAuthContext } from '../../../contexts/AuthContext';
 
-const MyBidsList = () => {
+const MyBidsList = ({ myBids, setMyBids }) => {
   const { address } = useAuthContext();
   const [loading, setLoading] = useState(true);
   const [notFound, setNotFound] = useState(false);
-  const [myBids, setMyBids] = useState([]);
   const { showError, setShowError, setErrorTitle, setErrorBody } = useErrorContext();
 
   useEffect(async () => {
@@ -70,6 +69,11 @@ const MyBidsList = () => {
       {showError && <ErrorPopup />}
     </>
   );
+};
+
+MyBidsList.propTypes = {
+  myBids: PropTypes.oneOfType([PropTypes.array]).isRequired,
+  setMyBids: PropTypes.func.isRequired,
 };
 
 export default MyBidsList;

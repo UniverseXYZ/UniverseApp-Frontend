@@ -3,10 +3,8 @@ import { useHistory } from 'react-router-dom';
 import uuid from 'react-uuid';
 import { Helmet } from 'react-helmet';
 import Popup from 'reactjs-popup';
-import tabArrow from '../../assets/images/tab-arrow.svg';
 import FutureAuctions from './FutureAuctions.jsx';
 import ActiveAuctions from './ActiveAuctions.jsx';
-import { handleTabLeftScrolling, handleTabRightScrolling } from '../../utils/scrollingHandlers';
 import { useAuctionContext } from '../../contexts/AuctionContext';
 import { useAuthContext } from '../../contexts/AuthContext';
 import { useMyNftsContext } from '../../contexts/MyNFTsContext';
@@ -21,6 +19,7 @@ const MyAuction = () => {
   const { myAuctions, setMyAuctions, setAuction, selectedTabIndex, setSelectedTabIndex, auction } =
     useAuctionContext();
   const { loggedInArtist } = useAuthContext();
+  const [myBids, setMyBids] = useState([]);
   const defaultLoadingText =
     'The transaction is in progress. Keep this window opened. Navigating away from the page will reset the curent progress.';
   const [loadingText, setLoadingText] = useState(defaultLoadingText);
@@ -94,14 +93,6 @@ const MyAuction = () => {
           )}
         </div>
         <div className="container tabs__wrapper">
-          <div className="tab__left__arrow">
-            <img
-              onClick={handleTabLeftScrolling}
-              src={tabArrow}
-              alt="Tab left arrow"
-              aria-hidden="true"
-            />
-          </div>
           <ul className="tabs">
             {tabTitles.map((title, index) => (
               <li
@@ -111,24 +102,28 @@ const MyAuction = () => {
                 aria-hidden="true"
               >
                 {title}
-                {index === 3 && greenCircle && (
+                {/* {index === 3 && greenCircle && (
                   <img src={circle} alt="notification-circle" className="notification-circle" />
-                )}
+                )} */}
+                <span>
+                  {title === 'My bids'
+                    ? myBids.length
+                    : title === 'Active auctions'
+                    ? myAuctions.filter(
+                        (item) =>
+                          item.launch && isBeforeNow(item.startDate) && isAfterNow(item.endDate)
+                      ).length
+                    : title === 'Draft auctions'
+                    ? myAuctions.filter((item) => !item.launch).length
+                    : myAuctions.filter((item) => item.launch && isBeforeNow(item.endDate)).length}
+                </span>
               </li>
             ))}
           </ul>
-          <div className="tab__right__arrow">
-            <img
-              onClick={handleTabRightScrolling}
-              src={tabArrow}
-              alt="Tab right arrow"
-              aria-hidden="true"
-            />
-          </div>
         </div>
       </div>
       <div className="container">
-        {selectedTabIndex === tabs.MyBids && <MyBidsList />}
+        {selectedTabIndex === tabs.MyBids && <MyBidsList myBids={myBids} setMyBids={setMyBids} />}
 
         {selectedTabIndex === tabs.ActiveAuctions && <ActiveAuctions />}
 
