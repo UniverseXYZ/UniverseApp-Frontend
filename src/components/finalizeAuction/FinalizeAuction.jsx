@@ -25,6 +25,7 @@ import GoBackPopup from './GoBackPopup';
 import { useErrorContext } from '../../contexts/ErrorContext';
 import { useSocketContext } from '../../contexts/SocketContext';
 import { TX_STATUSES } from '../../utils/helpers/constants';
+import { setErrors } from '../../utils/helpers/contractsErrorHandler';
 
 const FinalizeAuction = () => {
   const defaultLoadingText = 'The transaction is in progress...';
@@ -328,21 +329,6 @@ const FinalizeAuction = () => {
     }
   }, []);
 
-  const setErrors = (err, contractError) => {
-    if (contractError) {
-      setErrorTitle('Transaction failed');
-    } else {
-      setErrorTitle('Error occurred');
-    }
-
-    if (err?.code === 4001) {
-      setErrorBody('User denied transaction signature');
-    } else if (err.error?.message) {
-      setErrorBody(err.error?.message);
-    }
-    setShowError(true);
-  };
-
   const handleCreateAuction = async () => {
     try {
       let numberOfSlots = 0;
@@ -394,9 +380,13 @@ const FinalizeAuction = () => {
         setErrors();
       }
     } catch (err) {
+      console.error(err);
+      setShowError(true);
       setShowLoading(false);
       setActiveTxHashes([]);
-      setErrors(err);
+      const { title, body } = setErrors(err);
+      setErrorTitle(title);
+      setErrorBody(body);
     }
   };
 
@@ -444,11 +434,13 @@ const FinalizeAuction = () => {
         setErrors();
       }
     } catch (err) {
+      console.error(err);
+      setShowError(true);
       setShowLoading(false);
       setActiveTxHashes([]);
-      setErrors(err);
-
-      console.error(err);
+      const { title, body } = setErrors(err);
+      setErrorTitle(title);
+      setErrorBody(body);
     }
   };
 
@@ -498,6 +490,7 @@ const FinalizeAuction = () => {
           const txReceipt = await tx.wait();
           return txReceipt.status;
         } catch (err) {
+          // TODO: handle this case
           // This means user rejected the transaction
           if (err?.code === 4001) {
             // This status is used below to show error
@@ -546,9 +539,12 @@ const FinalizeAuction = () => {
       }
     } catch (error) {
       console.error(error);
+      setShowError(true);
       setShowLoading(false);
       setActiveTxHashes([]);
-      setErrors(error);
+      const { title, body } = setErrors(error);
+      setErrorTitle(title);
+      setErrorBody(body);
     }
   };
 
