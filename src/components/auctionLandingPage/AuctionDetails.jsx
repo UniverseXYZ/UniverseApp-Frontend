@@ -85,10 +85,10 @@ const AuctionDetails = ({
         border: `1px solid ${rewardTier.color}`,
       };
     }
-    // TODO: Discuss default colors
+    // The default color will be returned from the API in the future, so this default object is just in case something goes wrong
     return {
-      color: '#bcbcbc',
-      border: '1px solid #bcbcbc',
+      color: '#EABD16',
+      border: '1px solid #EABD16',
     };
   };
 

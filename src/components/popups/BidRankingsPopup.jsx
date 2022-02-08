@@ -19,9 +19,6 @@ const BidRankingsPopup = ({
   currencyIcon,
   collections,
 }) => {
-  console.log(rewardTiersSlots);
-  console.log(rewardTiers);
-
   const displayBidderName = (bidder) => {
     if (bidder.user.displayName) {
       return bidder.user.displayName;
