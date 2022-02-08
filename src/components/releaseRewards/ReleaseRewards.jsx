@@ -199,8 +199,16 @@ const ReleaseRewards = () => {
       }));
       if (auctionSDK && auction?.auction?.onChainId) {
         const info = await auctionSDK.getAuctionSlotsInfo(auction?.auction?.onChainId);
-        const batchCaptureTxs = createBatchCaptureRevenueTxsFinalised(rewardTiersSlots, bids, info);
-        const singleCaptureTxs = createSingleCaptureRevenueTxs(rewardTiersSlots, bids, info);
+        const batchCaptureTxs = createBatchCaptureRevenueTxsFinalised(
+          locationState?.rewardTiersSlots,
+          bids,
+          info
+        );
+        const singleCaptureTxs = createSingleCaptureRevenueTxs(
+          locationState?.rewardTiersSlots,
+          bids,
+          info
+        );
         setBatchCaptureRevenueTxs(batchCaptureTxs);
         setSingleCaptureRevenueTxs(singleCaptureTxs);
         setSlotsInfo(info);
