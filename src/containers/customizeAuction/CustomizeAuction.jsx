@@ -436,99 +436,101 @@ const CustomizeAuction = () => {
   };
 
   return (
-    <div className="customize__auction">
-      <RouterPrompt when={showPrompt} onOK={() => true} editing={customizeAuctionState} />
-      <div className="container">
-        <div
-          className="back-rew"
-          onClick={() => {
-            history.push('/my-auctions');
-          }}
-          aria-hidden="true"
-        >
-          <img src={arrow} alt="back" />
-          <span>My auctions</span>
-        </div>
-        <div className="customize__auction_title">
-          <h2>Customize auction landing page</h2>
-          <Button className="light-button" onClick={handlePreview} disabled={disableSave}>
-            Preview
-          </Button>
-        </div>
-        <DomainAndBranding
-          auctionLinkError={auctionLinkError}
-          setAuctionLinkError={setAuctionLinkError}
-          blurToggleButtonDisabled={blurToggleButtonDisabled}
-          invalidPromoImage={invalidPromoImage}
-          setInvalidPromoImage={setInvalidPromoImage}
-          invalidBackgroundImage={invalidBackgroundImage}
-          setInvalidBackgroundImage={setInvalidBackgroundImage}
-          values={domainAndBranding}
-          onChange={setDomainAndBranding}
-          editButtonClick={editButtonClick}
-          setEditButtonClick={setEditButtonClick}
-        />
-        <RewardTiersAuction
-          invalidImageIds={invalidTierImageIds}
-          setInvalidImageIds={setInvalidTierImageIds}
-          values={rewardTiersAuction}
-          onChange={setRewardTiersAuction}
-          editButtonClick={editButtonClick}
-          setEditButtonClick={setEditButtonClick}
-        />
-        <AboutArtistAuction
-          accountName={accountName}
-          setAccountName={handleAccountName}
-          accountPage={accountPage}
-          setAccountPage={handleAccountLink}
-          accountImage={accountImage}
-          setAccountImage={setAccountImage}
-          about={about}
-          setAbout={setAbout}
-          twitterLink={twitterLink}
-          setTwitterLink={setTwitterLink}
-          instagramLink={instagramLink}
-          setInstagramLink={setInstagramLink}
-          editProfileButtonClick={editProfileButtonClick}
-          accountNameExists={accountNameExists}
-          accountPageExists={accountPageExists}
-        />
-        <div className="customize__auction__warning">
-          <img src={warningIcon} alt="Warning" />
-          <p>
-            Your landing page will be automatically published after you successfully complete all
-            transactions on the Finalize auction step.
-          </p>
-        </div>
-        {disableSave ? (
-          <div className="customize__auction__error">
-            <img alt="Error" src={errorIcon} />
+    <div className="customize__auction__page">
+      <div className="customize__auction__wrapper">
+        <RouterPrompt when={showPrompt} onOK={() => true} editing={customizeAuctionState} />
+        <div className="customize__auction__container">
+          <div
+            className="back-rew"
+            onClick={() => {
+              history.push('/my-auctions');
+            }}
+            aria-hidden="true"
+          >
+            <img src={arrow} alt="back" />
+            <span>My auctions</span>
+          </div>
+          <div className="customize__auction_title">
+            <h2>Customize auction landing page</h2>
+            <Button className="light-button" onClick={handlePreview} disabled={disableSave}>
+              Preview
+            </Button>
+          </div>
+          <DomainAndBranding
+            auctionLinkError={auctionLinkError}
+            setAuctionLinkError={setAuctionLinkError}
+            blurToggleButtonDisabled={blurToggleButtonDisabled}
+            invalidPromoImage={invalidPromoImage}
+            setInvalidPromoImage={setInvalidPromoImage}
+            invalidBackgroundImage={invalidBackgroundImage}
+            setInvalidBackgroundImage={setInvalidBackgroundImage}
+            values={domainAndBranding}
+            onChange={setDomainAndBranding}
+            editButtonClick={editButtonClick}
+            setEditButtonClick={setEditButtonClick}
+          />
+          <RewardTiersAuction
+            invalidImageIds={invalidTierImageIds}
+            setInvalidImageIds={setInvalidTierImageIds}
+            values={rewardTiersAuction}
+            onChange={setRewardTiersAuction}
+            editButtonClick={editButtonClick}
+            setEditButtonClick={setEditButtonClick}
+          />
+          <AboutArtistAuction
+            accountName={accountName}
+            setAccountName={handleAccountName}
+            accountPage={accountPage}
+            setAccountPage={handleAccountLink}
+            accountImage={accountImage}
+            setAccountImage={setAccountImage}
+            about={about}
+            setAbout={setAbout}
+            twitterLink={twitterLink}
+            setTwitterLink={setTwitterLink}
+            instagramLink={instagramLink}
+            setInstagramLink={setInstagramLink}
+            editProfileButtonClick={editProfileButtonClick}
+            accountNameExists={accountNameExists}
+            accountPageExists={accountPageExists}
+          />
+          <div className="customize__auction__warning">
+            <img src={warningIcon} alt="Warning" />
             <p>
-              Something went wrong. Please fix the errors in the field above and try again. The
-              buttons will be enabled after information has been entered into the fields.
+              Your landing page will be automatically published after you successfully complete all
+              transactions on the Finalize auction step.
             </p>
           </div>
-        ) : null}
-        <div className="customize-buttons">
-          <Button
-            className="light-border-button"
-            onClick={handleSavePreview}
-            disabled={disableSave}
-          >
-            Save and preview
-          </Button>
-          <Button className="light-button" disabled={disableSave} onClick={handleSave}>
-            Save and close
-          </Button>
+          {disableSave ? (
+            <div className="customize__auction__error">
+              <img alt="Error" src={errorIcon} />
+              <p>
+                Something went wrong. Please fix the errors in the field above and try again. The
+                buttons will be enabled after information has been entered into the fields.
+              </p>
+            </div>
+          ) : null}
+          <div className="customize-buttons">
+            <Button
+              className="light-border-button"
+              onClick={handleSavePreview}
+              disabled={disableSave}
+            >
+              Save and preview
+            </Button>
+            <Button className="light-button" disabled={disableSave} onClick={handleSave}>
+              Save and close
+            </Button>
+          </div>
         </div>
+        {showError && <ErrorPopup />}
+        <Popup open={successPopup} closeOnDocumentClick={false}>
+          <CongratsLandingPagePopup onClose={() => setSuccessPopup(false)} />
+        </Popup>
+        <Popup closeOnDocumentClick={false} open={loading}>
+          <LoadingPopup text="Saving your changes" onClose={() => setLoading(false)} />
+        </Popup>
       </div>
-      {showError && <ErrorPopup />}
-      <Popup open={successPopup} closeOnDocumentClick={false}>
-        <CongratsLandingPagePopup onClose={() => setSuccessPopup(false)} />
-      </Popup>
-      <Popup closeOnDocumentClick={false} open={loading}>
-        <LoadingPopup text="Saving your changes" onClose={() => setLoading(false)} />
-      </Popup>
     </div>
   );
 };
