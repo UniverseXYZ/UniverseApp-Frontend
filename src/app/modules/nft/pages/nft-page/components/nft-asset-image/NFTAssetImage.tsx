@@ -5,7 +5,6 @@ import { NFTAssetFullscreen } from '../nft-asset-full-screen';
 const ImageStyle: ImageProps = {
   borderRadius: '12px',
   objectFit: 'cover',
-  cursor: 'zoom-in',
   maxH: '600px',
   maxW: '600px',
   h: 'calc(100vh - 84px - 120px)',
@@ -14,14 +13,21 @@ const ImageStyle: ImageProps = {
 
 interface INFTAssetImageProps extends ImageProps {
   image: string;
+  allowFullscreen?: boolean;
 }
 
-export const NFTAssetImage = ({ image, ...rest }: INFTAssetImageProps) => {
+export const NFTAssetImage = ({ image, allowFullscreen = true, ...rest }: INFTAssetImageProps) => {
   const [fullscreen, setFullscreen] = useState(false);
 
   return (
     <>
-      <Image src={image} {...ImageStyle} onClick={() => setFullscreen(true)} {...rest} />
+      <Image
+        src={image}
+        {...ImageStyle}
+        cursor={allowFullscreen ? 'zoom-in' : 'default'}
+        onClick={() => allowFullscreen && setFullscreen(true)}
+        {...rest}
+      />
       <NFTAssetFullscreen isOpen={fullscreen}>
         <Image
           src={image}

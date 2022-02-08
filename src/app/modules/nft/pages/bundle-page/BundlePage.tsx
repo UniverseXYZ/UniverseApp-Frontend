@@ -123,7 +123,7 @@ export const BundlePageContent = () => {
                 readMoreText="Read more"
                 readLessText="Read less"
               >
-                {(order.make.assetType as IERC721BundleAssetType).bundleDescription}
+                {(order.make.assetType as IERC721BundleAssetType).bundleDescription || ''}
               </ReactReadMoreReadLess>
             </Text>
 

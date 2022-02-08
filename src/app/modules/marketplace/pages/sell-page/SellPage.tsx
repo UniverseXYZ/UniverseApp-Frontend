@@ -266,8 +266,8 @@ export const SellPage = () => {
                 <TabPanel name={settingsTabName}>
                   { amountType && sellMethod && nft && <SettingsTab />}
                 </TabPanel>
-                <TabPanel name="Summary">
-                  {nft && <SummaryTab />}
+                <TabPanel name='Summary'>
+                  {nft && activeTab === 3 && <SummaryTab />}
                 </TabPanel>
               </TabPanels>
             </Tabs>

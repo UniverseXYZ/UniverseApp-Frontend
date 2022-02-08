@@ -188,10 +188,6 @@ export const SelectNFTs = ({}: ISelectNFTsProps) => {
     ]);
   }, [nfts]);
 
-  const handleNFTAuctionTimeOut = useCallback((index) => {
-    setNfts(nfts.filter((nft, i) => i !== index));
-  }, [nfts]);
-
   const handleCheckNFT = useCallback((nft, selectedEditions: Array<string | number>) => {
     const NFTKey = [nft.id, nft.collection.address].join(':');
 
@@ -338,7 +334,7 @@ export const SelectNFTs = ({}: ISelectNFTsProps) => {
                     </NFTItemEditionsLabel>)
                 }
                 onClick={isMultipleEditions
-                  ? undefined
+                  ? () => {}
                   : () => handleCheckNFT(nft, !!selectedEditions.length ? [] : [nft.tokenId])
                 }
               />

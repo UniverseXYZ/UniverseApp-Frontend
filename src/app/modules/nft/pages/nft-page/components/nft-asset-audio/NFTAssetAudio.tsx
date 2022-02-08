@@ -10,9 +10,10 @@ import { NFTAssetFullscreen } from '../nft-asset-full-screen';
 
 interface INFTAssetAudioProps extends BoxProps {
   audio: string;
+  allowFullscreen?: boolean;
 }
 
-export const NFTAssetAudio = ({ audio: audioUrl, ...rest }: INFTAssetAudioProps) => {
+export const NFTAssetAudio = ({ audio: audioUrl, allowFullscreen = true, ...rest }: INFTAssetAudioProps) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   const [fullscreen, setFullscreen] = useState(false);
@@ -37,12 +38,14 @@ export const NFTAssetAudio = ({ audio: audioUrl, ...rest }: INFTAssetAudioProps)
         {...styles.AudioAnimationContainerStyle}
         sx={{
           '> div': {
-            cursor: 'zoom-in',
+            cursor: allowFullscreen ? 'zoom-in' : 'default',
           }
         }}
         onClick={() => {
-          setFullscreen(true);
-          setTimeout(() => controls.seek(state.time));
+          if (allowFullscreen) {
+            setFullscreen(true);
+            setTimeout(() => controls.seek(state.time));
+          }
         }}
       >
         <Lottie isPaused={!state.playing} options={LottieOptions} />

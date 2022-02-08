@@ -1,79 +1,51 @@
 import { Box, Button, Center, Flex, Heading, Image, Text } from '@chakra-ui/react';
-import { SystemStyleObject } from '@chakra-ui/styled-system';
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { Navigation } from 'swiper';
+import { Swiper, SwiperSlide } from 'swiper/react/swiper-react';
+import { useMountedState, useUpdate } from 'react-use';
+
+import 'swiper/swiper-bundle.min.css';
+import 'swiper/swiper.min.css';
+
+import arrowLeftIcon from '../../../../../../../../assets/images/marketplace/bundles-left-arrow.svg';
+import arrowRightIcon from '../../../../../../../../assets/images/marketplace/bundles-right-arrow.svg';
+import BundleWhiteIcon from '../../../../../../../../assets/images/marketplace/v2/bundle-white.svg';
 
 import { Status, Status as PostingPopupStatus } from './compoents/posting-popup/enums';
 import { useMarketplaceSellData } from '../../../hooks';
-import { GreyBox } from '../../grey-box';
 import { Fee, PostingPopup } from './compoents';
 import { fees, totalFee } from './constants';
 import { SellMethod } from '../../../enums';
 import { IFixedListingForm } from '../../../types';
 import { TokenTicker } from '../../../../../../../enums';
 import { TokenIcon } from '../../../../../../../components';
-import { isNFTAssetAudio, isNFTAssetImage, isNFTAssetVideo } from '../../../../../../nft';
+import {
+  isNFTAssetAudio,
+  isNFTAssetImage,
+  isNFTAssetVideo,
+  mapBackendNft,
+  mapBackendUser,
+} from '../../../../../../nft';
 import { NFTAssetAudio, NFTAssetImage, NFTAssetVideo } from '../../../../../../nft/pages/nft-page/components';
-
-const styles: Record<string, SystemStyleObject> = {
-  mainContainer: {
-    '--image-size': {
-      base: '100%',
-      lg: '290px',
-      xl: '390px',
-    },
-    '--image-margin-right': {
-      base: '0',
-      lg: '60px',
-    },
-    borderRadius: '12px',
-    boxShadow: '0 10px 36px rgba(136, 120, 172, 0.14)',
-    mb: '40px',
-    fontSize: '14px',
-    flexDir: {
-      base: 'column',
-      lg: 'row',
-    },
-    padding: {
-      base: '20px',
-      md: '50px'
-    },
-    h4: {
-      fontFamily: 'Space Grotesk',
-      fontSize: '18px',
-      mb: '6px'
-    },
-  },
-  imageContainer: {
-    mr: 'var(--image-margin-right)',
-    mb: {
-      base: '30px',
-      md: '40px',
-      lg: 0
-    },
-  },
-  textContainer: {
-    width: 'calc(100% - var(--image-size) - var(--image-margin-right))',
-    img: {
-      display: 'inline',
-      ml: 2,
-      mr: 1,
-    },
-  },
-  greyBox: {
-    p: '28px 30px',
-    mb: '30px',
-    color: '#00000066',
-    '> div': {
-      _last: {
-        color: 'black',
-        fontWeight: 'bold',
-      },
-    },
-  }
-};
+import * as styles from './styles';
+import { INFT, INFTBackend } from '../../../../../../nft/types';
+import { useMyNftsContext } from '../../../../../../../../contexts/MyNFTsContext';
+import { useAuthContext } from '../../../../../../../../contexts/AuthContext';
 
 export const SummaryTab = () => {
-  const { nft, isPosted, form, sellMethod, goBack } = useMarketplaceSellData();
+  const prevRef = useRef(null);
+  const nextRef = useRef(null);
+
+  const { myNFTs } = useMyNftsContext() as any;
+  const { loggedInArtist } = useAuthContext();
+
+  const [activeIndex, setActiveIndex] = useState(0);
+
+  const { nft, isPosted, form, sellMethod, amountType, goBack } = useMarketplaceSellData();
+
+  const update = useUpdate();
+
+  const isMounted = useMountedState();
 
   const [postingPopupStatus, setPostingPopupStatus] = useState<PostingPopupStatus>(PostingPopupStatus.HIDDEN);
 
@@ -96,27 +68,180 @@ export const SummaryTab = () => {
     return parseFloat((price - (price * totalFee / 100)).toFixed(5));
   }, [form.values, price]);
 
+  const NFTsForPreview = useMemo<INFT[]>(() => {
+    const selectedIds = [`${nft.id}`, ...form.values.bundleSelectedNFTs.map((key) => key.split(':')[0])];
+
+    return selectedIds.reduce<INFT[]>((acc, id) => {
+      const _myNFT = (myNFTs as INFTBackend[]).find((_myNFT) => `${_myNFT.id}` === id);
+
+      if (_myNFT) {
+        const myNFT = mapBackendNft(_myNFT);
+        myNFT.owner = mapBackendUser(loggedInArtist);
+        acc.push(myNFT);
+      }
+
+      return acc;
+    }, []);
+  }, [myNFTs, nft, form.values]);
+
   useEffect(() => {
     if (isPosted) {
       setPostingPopupStatus(Status.SUCCESS);
     }
   }, [isPosted]);
 
+  useEffect(() => {
+    update();
+  }, [])
+
   return (
     <>
-      <Flex sx={styles.mainContainer}>
-        <Box sx={styles.imageContainer}>
-          {isNFTAssetImage(nft.artworkType) &&
-            <NFTAssetImage image={nft.originalUrl} h={'var(--image-size)'} w={'var(--image-size)'} />
-          }
-          {isNFTAssetVideo(nft.artworkType) &&
-            <NFTAssetVideo video={nft.originalUrl} h={'var(--image-size)'} w={'var(--image-size)'} />
-          }
-          {isNFTAssetAudio(nft.artworkType) &&
-            <NFTAssetAudio audio={nft.originalUrl} h={'var(--image-size)'} w={'var(--image-size)'} />
-          }
+      <Flex {...styles.MainContainerStyle}>
+        <Box {...styles.ImageContainerStyle}>
+          {amountType === 'single' && (
+            <>
+              {isNFTAssetImage(nft.artworkType) &&
+                <NFTAssetImage
+                  image={nft.originalUrl}
+                  h={'var(--image-size)'}
+                  w={'var(--image-size)'}
+                  allowFullscreen={false}
+                />
+              }
+              {isNFTAssetVideo(nft.artworkType) &&
+                <NFTAssetVideo
+                  video={nft.originalUrl}
+                  h={'var(--image-size)'}
+                  w={'var(--image-size)'}
+                />
+              }
+              {isNFTAssetAudio(nft.artworkType) &&
+                <NFTAssetAudio
+                  audio={nft.originalUrl}
+                  h={'var(--image-size)'}
+                  w={'var(--image-size)'}
+                  allowFullscreen={false}
+                />
+              }
+            </>
+          )}
+
+          {/*TODO: refactor styles*/}
+          {amountType === 'bundle' && (
+            <Box w={'var(--image-size)'} sx={{
+              pos: 'relative',
+              '[data-swiper-button]': {
+                background: 'white',
+                border: 0,
+                borderRadius: '50%',
+                height: '30px',
+                minW: 'auto',
+                padding: 0,
+                position: 'absolute',
+                top: 'calc(50% - 15px)',
+                width: '30px',
+                zIndex: 10,
+
+                _disabled: {
+                  display: 'none',
+                },
+                _before: {
+                  border: '1px solid',
+                  borderColor: 'rgba(0, 0, 0, 0.1)',
+                  borderRadius: 'inherit',
+                  position: 'absolute',
+                  content: '" "',
+                  top: 0,
+                  left: 0,
+                  height: '100%',
+                  width: '100%',
+                  zIndex: -1,
+                },
+                _hover: {
+                  _before: {
+                    backgroundImage: 'linear-gradient(175deg,#bceb00,#00eaea)',
+                    backgroundOrigin: 'border-box',
+                    borderColor: 'transparent',
+                    boxShadow: 'inset 2px 1000px 1px white',
+                  },
+                },
+                _focus: {
+                  boxShadow: 'none',
+                  _before: {
+                    backgroundImage: 'linear-gradient(175deg,#bceb00,#00eaea)',
+                    backgroundOrigin: 'border-box',
+                    borderColor: 'transparent',
+                    boxShadow: 'inset 2px 1000px 1px white',
+                  },
+                },
+              }
+            }}>
+              <Box sx={{
+                bg: 'rgba(0, 0, 0, 0.5)',
+                border: '1px solid rgba(255, 255, 255, 0.2)',
+                borderRadius: '8px',
+                backdropFilter: 'blur(4px)',
+                color: 'white',
+                fontSize: '14px',
+                fontWeight: 500,
+                pos: 'absolute',
+                padding: '7px 14px',
+                top: '15px',
+                left: '15px',
+                zIndex: 3,
+              }}>
+                <Image src={BundleWhiteIcon} w={'20px'} display={'inline-block'} mr={'6px'} mt={'-3px'} />
+                {activeIndex + 1} of {NFTsForPreview.length}
+              </Box>
+              <Button ref={prevRef} variant={'simpleOutline'} data-swiper-button left={'15px'}>
+                <Image src={arrowLeftIcon} width={'9px'} />
+              </Button>
+              <Button ref={nextRef} variant={'simpleOutline'} data-swiper-button right={'15px'}>
+                <Image src={arrowRightIcon} width={'9px'} />
+              </Button>
+              {prevRef?.current && nextRef?.current && (
+                <Swiper
+                  modules={[Navigation]}
+                  navigation={{
+                    prevEl: prevRef.current,
+                    nextEl: nextRef.current,
+                  }}
+                  loop={true}
+                  onRealIndexChange={(s) => setActiveIndex(s.realIndex)}
+                >
+                  {NFTsForPreview.map((_NFT, i) => (
+                    <SwiperSlide key={i}>
+                      {isNFTAssetImage(_NFT.artworkType) &&
+                        <NFTAssetImage
+                          image={_NFT.originalUrl}
+                          h={'var(--image-size)'}
+                          w={'var(--image-size)'}
+                          allowFullscreen={false}
+                        />
+                      }
+                      {isNFTAssetVideo(_NFT.artworkType) &&
+                        <NFTAssetVideo
+                          video={_NFT.originalUrl}
+                          h={'var(--image-size)'}
+                          w={'var(--image-size)'}
+                        />
+                      }
+                      {isNFTAssetAudio(_NFT.artworkType) &&
+                        <NFTAssetAudio
+                          audio={_NFT.originalUrl}
+                          h={'var(--image-size)'}
+                          w={'var(--image-size)'}
+                          allowFullscreen={false}
+                        />
+                      }
+                    </SwiperSlide>
+                  ))}
+                </Swiper>
+              )}
+            </Box>
+          )}
         </Box>
-        <Flex sx={styles.textContainer}>
+        <Flex {...styles.TextContainerStyle}>
           <Center flexDir={'column'} alignItems={'flex-start'} w={'100%'}>
             <Heading as={'h4'}>Listing</Heading>
             <Text mb={'30px'}>
@@ -130,11 +255,11 @@ export const SummaryTab = () => {
               Listing is free! At the time of the sale, the following fees will be deducted.
             </Text>
 
-            <GreyBox sx={styles.greyBox}>
+            <Box layerStyle={'grey'} {...styles.FeesContainerStyle}>
               <Fee name={'To Universe'} amount={fees.universe} />
               <Fee name={'To creator'} amount={fees.creator} />
               <Fee name={'Total'} amount={totalFee} />
-            </GreyBox>
+            </Box>
 
             <Heading as={'h4'} mb={'0 !important'}>
               You will receive:
