@@ -185,7 +185,11 @@
       font-size: 16px;
       padding-top: 1px;
       line-height: 130%;
-      color: #000000;
+      color: transparent;
+      background: black;
+      -webkit-background-clip: text;
+      text-shadow: 2px 2px 5px rgba(255, 255, 255, 0.3);
+
       @include sm {
         font-size: 12px;
         padding-top: 4px;
@@ -455,6 +459,7 @@
     margin-top: 40px;
     .light-border-button {
       margin-right: 15px;
+      box-shadow: 2px 1000px 1px #f4f8fa inset;
       @include sm {
         margin-right: 0%;
         margin-bottom: 20px;

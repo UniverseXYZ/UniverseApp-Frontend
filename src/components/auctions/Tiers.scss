@@ -36,8 +36,11 @@
     font-weight: 600;
     font-size: 32px;
     line-height: 130%;
-    color: $black;
     margin-bottom: 16px;
+    color: transparent;
+    background: black;
+    -webkit-background-clip: text;
+    text-shadow: 2px 2px 5px rgba(255, 255, 255, 0.3);
 
     @include sm {
       font-size: 26px;
@@ -94,7 +97,7 @@
   }
 }
 .create-rew-tier {
-  background: linear-gradient($white, $white) padding-box, linear-gradient(to right, #bceb00, #00eaea) border-box;
+  background: linear-gradient(#f5f4f9, #f5f4f9) padding-box, linear-gradient(to right, #bceb00, #00eaea) border-box;
   border: 1px solid transparent;
   border-radius: 12px;
   cursor: pointer;
@@ -347,6 +350,7 @@
   margin-bottom: 80px;
   margin-top: 40px;
   .light-border-button {
+    box-shadow: 2px 1000px 1px #f4f8fa inset;
     margin-right: 15px;
     @include sm {
       margin-right: 0%;

@@ -21,10 +21,10 @@
   .view-tier {
     margin-bottom: 12px;
     border-radius: 10px;
-    background: rgba(0, 0, 0, 0.02);
-    border: 1px solid rgba(0, 0, 0, 0.1);
     box-sizing: border-box;
     padding: 26px 30px;
+    background: linear-gradient(0deg, $white, $white);
+    box-shadow: 0px 10px 36px rgba(136, 120, 172, 0.14);
     .auction-header {
       display: flex;
       justify-content: space-between;
@@ -456,7 +456,10 @@
       font-weight: 600;
       font-size: 16px;
       line-height: 130%;
-      color: $black;
+      color: transparent;
+      background: black;
+      -webkit-background-clip: text;
+      text-shadow: 2px 2px 5px rgba(255, 255, 255, 0.3);
     }
     button.edit-auction-settings {
       font-family: $spaceGroteskFont;
@@ -549,7 +552,10 @@
       font-weight: 600;
       font-size: 16px;
       line-height: 130%;
-      color: $black;
+      color: transparent;
+      background: black;
+      -webkit-background-clip: text;
+      text-shadow: 2px 2px 5px rgba(255, 255, 255, 0.3);
     }
     button.edit-reward-tiers {
       font-family: $spaceGroteskFont;
