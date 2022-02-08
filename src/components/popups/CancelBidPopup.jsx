@@ -6,12 +6,15 @@ import closeIcon from '../../assets/images/close-menu.svg';
 import { useAuthContext } from '../../contexts/AuthContext';
 import LoadingPopup from './LoadingPopup.jsx';
 import { useMyNftsContext } from '../../contexts/MyNFTsContext.jsx';
+import { useErrorContext } from '../../contexts/ErrorContext';
+import { setErrors } from '../../utils/helpers/contractsErrorHandler';
 
 const CancelBidPopup = ({ auction, close }) => {
   const [showLoading, setShowLoading] = useState(false);
 
   const { setActiveTxHashes } = useMyNftsContext();
   const { universeAuctionHouseContract } = useAuthContext();
+  const { setShowError, setErrorTitle, setErrorBody } = useErrorContext();
 
   /**
    * This method will trigger Smart Contract interaction event which will be catched by the BE and
@@ -29,10 +32,13 @@ const CancelBidPopup = ({ auction, close }) => {
       setActiveTxHashes([bidTx.hash]);
       await bidTx.wait();
     } catch (err) {
+      console.error(err);
+      setShowError(true);
       setShowLoading(false);
       setActiveTxHashes([]);
-      console.log(err);
-      // setError(err.error?.message);
+      const { title, body } = setErrors(err);
+      setErrorTitle(title);
+      setErrorBody(body);
     }
   };
 
