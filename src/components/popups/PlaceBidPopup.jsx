@@ -177,7 +177,7 @@ const PlaceBidPopup = ({
 
       if (approveTxReceipt.status === 1) {
         setAllowance(+yourBid);
-        setShowLoading(true);
+        setShowLoading(false);
         setActiveTxHashes([]);
       }
     } catch (err) {
