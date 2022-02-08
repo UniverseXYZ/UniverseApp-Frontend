@@ -29,10 +29,10 @@ const StartDateCalendar = React.forwardRef(
     const [currentMonth, setCurrentMonth] = useState([]);
     const [minDateTimeError, setMinDateTimeError] = useState(false);
     const [minHours, setMinHours] = useState(
-      new Date().getHours() + 1 < 10 ? `0${new Date().getHours() + 1}` : new Date().getHours() + 1
+      new Date().getHours() + 1 < 9 ? `0${new Date().getHours() + 1}` : new Date().getHours() + 1
     );
     const [minMins, setMinMins] = useState(
-      new Date().getMinutes() + 1 < 10
+      new Date().getMinutes() + 1 < 9
         ? `0${new Date().getMinutes() + 1}`
         : new Date().getMinutes() + 1
     );
@@ -229,9 +229,9 @@ const StartDateCalendar = React.forwardRef(
           ...prevState,
           hours: new Date().getHours() === 24 ? 1 : new Date().getHours() + 1,
           minutes:
-            new Date().getMinutes() < 10
+            new Date().getMinutes() < 9
               ? `0${new Date().getMinutes() + 1}`
-              : new Date().getMinutes(),
+              : new Date().getMinutes() + 1,
         }));
       }
     }, []);
