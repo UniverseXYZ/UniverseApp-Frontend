@@ -432,7 +432,11 @@ const ReleaseRewards = () => {
         />
       </Popup>
       <Popup closeOnDocumentClick={false} open={showLoading}>
-        <LoadingPopup text={loadingText} onClose={() => setShowLoading(false)} />
+        <LoadingPopup
+          text={loadingText}
+          onClose={() => setShowLoading(false)}
+          contractInteraction
+        />
       </Popup>
     </div>
   );
