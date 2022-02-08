@@ -5,6 +5,7 @@ import ActiveAuctionsList from '../../../../auctionsCard/activeAuction/ActiveAuc
 import ItemsPerPageDropdown from '../../../../pagination/ItemsPerPageDropdown.jsx';
 import leftArrow from '../../../../../assets/images/left-arrow.svg';
 import rightArrow from '../../../../../assets/images/right-arrow.svg';
+import NoAuctionsFound from '../../../../auctions/NoAuctionsFound.jsx';
 
 const LeftArrow = () => <img src={leftArrow} alt="left arrow" />;
 const RightArrow = () => <img src={rightArrow} alt="right arrow" />;
@@ -19,7 +20,7 @@ const ActiveAuctionsTab = ({
   forcePage,
   removeAuction,
 }) => (
-  <div className="active__auctions__tab">
+  <div className="active__auctions__tab auction__page">
     {auctions.length ? (
       <>
         <ActiveAuctionsList data={auctions} loading={loading} removeAuction={removeAuction} />
@@ -42,9 +43,10 @@ const ActiveAuctionsTab = ({
         </div>
       </>
     ) : (
-      <div className="empty__nfts">
-        <h3>No active auctions found</h3>
-      </div>
+      <NoAuctionsFound
+        title="No active auctions found"
+        desc="Create auction by clicking the button below"
+      />
     )}
   </div>
 );

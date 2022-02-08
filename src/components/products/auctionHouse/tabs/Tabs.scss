@@ -5,6 +5,19 @@
   position: relative;
   padding: 0px 60px 80px;
   margin-top: -50px;
+  .auction__house__tabs__bg {
+    position: absolute;
+    left: 0;
+    top: 50px;
+    width: 100%;
+    height: 100%;
+    background-image: url("../../../../assets/images/minting_page_bg.jpg");
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    z-index: -1;
+  }
 
   &__container {
     max-width: 1110px;
@@ -149,7 +162,8 @@
           color: rgba(0, 0, 0, 0.6);
         }
       }
-      .active__auctions__filters, .future__auctions__filters {
+      .active__auctions__filters,
+      .future__auctions__filters {
         margin-bottom: 40px;
         &__fields {
           display: grid;
