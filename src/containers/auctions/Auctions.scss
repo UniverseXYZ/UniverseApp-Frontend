@@ -168,9 +168,11 @@
       }
     }
     button.set_up {
-      display: block;
       margin: 0 auto;
       display: flex;
+      svg {
+        margin-left: 10px;
+      }
       // @include sm {
       //   width: 100%;
       // }

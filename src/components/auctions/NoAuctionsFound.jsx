@@ -5,7 +5,7 @@ import { useAuthContext } from '../../contexts/AuthContext';
 import { useAuctionContext } from '../../contexts/AuctionContext';
 import bubleIcon from '../../assets/images/text-bubble.png';
 import Exclamation from '../../assets/images/Exclamation.svg';
-import plusIcon from '../../assets/images/plus.svg';
+import { ReactComponent as PlusIcon } from '../../assets/images/plus.svg';
 
 const NoAuctionsFound = ({ title, desc, btnText, btnAction, checkUserDetails }) => {
   const { loggedInArtist } = useAuthContext();
@@ -43,6 +43,7 @@ const NoAuctionsFound = ({ title, desc, btnText, btnAction, checkUserDetails }) 
         disabled={checkUserDetails && (!loggedInArtist.name || !loggedInArtist.avatar)}
       >
         {btnText}
+        <PlusIcon />
       </button>
     </div>
   );

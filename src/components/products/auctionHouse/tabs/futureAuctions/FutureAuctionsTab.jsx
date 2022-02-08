@@ -5,6 +5,7 @@ import FutureAuctionsList from '../../../../auctionsCard/futureAuction/FutureAuc
 import ItemsPerPageDropdown from '../../../../pagination/ItemsPerPageDropdown.jsx';
 import leftArrow from '../../../../../assets/images/left-arrow.svg';
 import rightArrow from '../../../../../assets/images/right-arrow.svg';
+import NoAuctionsFound from '../../../../auctions/NoAuctionsFound.jsx';
 
 const LeftArrow = () => <img src={leftArrow} alt="left arrow" />;
 const RightArrow = () => <img src={rightArrow} alt="right arrow" />;
@@ -19,7 +20,7 @@ const FutureAuctionsTab = ({
   forcePage,
   removeAuction,
 }) => (
-  <div className="future__auctions__tab">
+  <div className="future__auctions__tab auction__page">
     {auctions.length ? (
       <>
         <FutureAuctionsList data={auctions} loading={loading} removeAuction={removeAuction} />
@@ -42,9 +43,10 @@ const FutureAuctionsTab = ({
         </div>
       </>
     ) : (
-      <div className="empty__nfts">
-        <h3>No future auctions found</h3>
-      </div>
+      <NoAuctionsFound
+        title="No future auctions found"
+        desc="Create auction by clicking the button below"
+      />
     )}
   </div>
 );
