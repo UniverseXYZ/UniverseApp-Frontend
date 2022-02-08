@@ -551,142 +551,145 @@ const FinalizeAuction = () => {
   return !auction ? (
     <></>
   ) : (
-    <div className="finalize__auction">
-      <div className="finalize container">
-        <div
-          className="back-rew"
-          aria-hidden="true"
-          onClick={() => {
-            if (!auction.onChain || !auction.depositedNfts) {
-              setShowGoBackPopup(true);
-            } else {
-              history.push('/my-auctions');
-            }
-          }}
-        >
-          <img src={arrow} alt="back" />
-          <span>My auctions</span>
+    <div className="finalize__auction__page">
+      <div className="finalize__auction__wrapper">
+        <div className="finalize">
+          <div
+            className="back-rew"
+            aria-hidden="true"
+            onClick={() => {
+              if (!auction.onChain || !auction.depositedNfts) {
+                setShowGoBackPopup(true);
+              } else {
+                history.push('/my-auctions');
+              }
+            }}
+          >
+            <img src={arrow} alt="back" />
+            <span>My auctions</span>
+          </div>
           <h1 className="set-text">Finalize auction</h1>
-        </div>
-        <p className="description">
-          The auction landing page will be automatically published after you successfully complete
-          all transitions below
-        </p>
-        <div className="finalize__auction__body">
-          <div className="create__auction">
-            <div className="step">
-              <div className="circle">
-                {completedAuctionCreationStep ? (
-                  <img src={doneIcon} alt="Done" />
-                ) : (
-                  <img src={emptyMark} alt="Empty mark" />
-                )}
-              </div>
-              <div className={`line ${completedAuctionCreationStep ? 'colored' : ''}`} />
-            </div>
-            <div className="create__auction__body">
-              <h2>Create auction</h2>
-              <p className="auction__description">
-                Proceed with the transaction to create the auction instance on the blockchain
-              </p>
-              {!completedAuctionCreationStep ? (
-                <div className="warning__div">
-                  <img src={warningIcon} alt="Warning" />
-                  <p>
-                    You will not be able to make any changes to the auction settings if you proceed
-                  </p>
+          <p className="description">
+            The auction landing page will be automatically published after you successfully complete
+            all transitions below
+          </p>
+          <div className="finalize__auction__body">
+            <div className="create__auction">
+              <div className="step">
+                <div className="circle">
+                  {completedAuctionCreationStep ? (
+                    <img src={doneIcon} alt="Done" />
+                  ) : (
+                    <img src={emptyMark} alt="Empty mark" />
+                  )}
                 </div>
-              ) : (
-                <></>
-              )}
-              {completedAuctionCreationStep ? (
-                <Button
-                  style={{ marginLeft: 0 }}
-                  onClick={handleCancelAuction}
-                  className="light-border-button attention-button"
-                >
-                  Cancel
-                </Button>
-              ) : (
-                <Button
-                  disabled={approvedTxs.length}
-                  className="light-button"
-                  onClick={handleCreateAuction}
-                >
-                  Proceed
-                </Button>
-              )}
-            </div>
-          </div>
-
-          <div className="create__auction">
-            <div className="step">
-              <div className="circle">
-                {!completedCollectionsStep ? (
-                  <img alt="Empty mark" src={emptyMark} />
-                ) : completedCollectionsStep ? (
-                  <img alt="Completed" src={doneIcon} />
-                ) : (
-                  <img alt="Empty white" src={emptyWhite} />
-                )}
+                <div className={`line ${completedAuctionCreationStep ? 'colored' : ''}`} />
               </div>
-              <div className={`line ${completedCollectionsStep ? 'colored' : ''}`} />
-            </div>
-            <div className="create__auction__body">
-              <h2>Set approvals</h2>
-              <p className="auction__description">
-                Approve NFTs for depositing into the auction contract
-              </p>
-              {!completedCollectionsStep ? (
-                <div className="warning__div">
-                  <img src={warningIcon} alt="Warning" />
-                  <p>
-                    Depending on the gas fee cost, you may need to have a significant amount of ETH
-                    to proceed
-                  </p>
-                </div>
-              ) : (
-                <></>
-              )}
-              <div className="collections">
-                {collections.length ? (
-                  collections.map((collection, index) => (
-                    <ApproveCollection
-                      key={collection.id}
-                      collection={collection}
-                      approveCollection={handleApproveCollection}
-                      isApproved={
-                        !!approvedCollections.find(
-                          (collAddress) => collAddress === collection.address
-                        )
-                      }
-                      isApproving={
-                        !!approvingCollections.find(
-                          (collAddress) => collAddress === collection.address
-                        )
-                      }
-                      auctionOnChainId={auction.onChainId}
-                    />
-                  ))
-                ) : (
-                  <div className="empty__nfts">
-                    <h3>No Collections found</h3>
+              <div className="create__auction__body">
+                <h2>Create auction</h2>
+                <p className="auction__description">
+                  Proceed with the transaction to create the auction instance on the blockchain
+                </p>
+                {!completedAuctionCreationStep ? (
+                  <div className="warning__div">
+                    <img src={warningIcon} alt="Warning" />
+                    <p>
+                      You will not be able to make any changes to the auction settings if you
+                      proceed
+                    </p>
                   </div>
+                ) : (
+                  <></>
+                )}
+                {completedAuctionCreationStep ? (
+                  <Button
+                    style={{ marginLeft: 0 }}
+                    onClick={handleCancelAuction}
+                    className="light-border-button attention-button"
+                  >
+                    Cancel
+                  </Button>
+                ) : (
+                  <Button
+                    disabled={approvedTxs.length}
+                    className="light-button"
+                    onClick={handleCreateAuction}
+                  >
+                    Proceed
+                  </Button>
                 )}
               </div>
             </div>
-          </div>
 
-          <DepositNftsSection
-            transactions={transactions}
-            handleDepositTier={handleDepositTier}
-            handleWithdraw={handleWithdraw}
-            completedDepositStep={completedDepositStep}
-            completedCollectionsStep={completedCollectionsStep}
-            approvedTxs={approvedTxs}
-            isCanceledAuction={auction.canceled}
-            completedAuctionCreationStep={completedAuctionCreationStep}
-          />
+            <div className="create__auction">
+              <div className="step">
+                <div className="circle">
+                  {!completedCollectionsStep ? (
+                    <img alt="Empty mark" src={emptyMark} />
+                  ) : completedCollectionsStep ? (
+                    <img alt="Completed" src={doneIcon} />
+                  ) : (
+                    <img alt="Empty white" src={emptyWhite} />
+                  )}
+                </div>
+                <div className={`line ${completedCollectionsStep ? 'colored' : ''}`} />
+              </div>
+              <div className="create__auction__body">
+                <h2>Set approvals</h2>
+                <p className="auction__description">
+                  Approve NFTs for depositing into the auction contract
+                </p>
+                {!completedCollectionsStep ? (
+                  <div className="warning__div">
+                    <img src={warningIcon} alt="Warning" />
+                    <p>
+                      Depending on the gas fee cost, you may need to have a significant amount of
+                      ETH to proceed
+                    </p>
+                  </div>
+                ) : (
+                  <></>
+                )}
+                <div className="collections">
+                  {collections.length ? (
+                    collections.map((collection, index) => (
+                      <ApproveCollection
+                        key={collection.id}
+                        collection={collection}
+                        approveCollection={handleApproveCollection}
+                        isApproved={
+                          !!approvedCollections.find(
+                            (collAddress) => collAddress === collection.address
+                          )
+                        }
+                        isApproving={
+                          !!approvingCollections.find(
+                            (collAddress) => collAddress === collection.address
+                          )
+                        }
+                        auctionOnChainId={auction.onChainId}
+                      />
+                    ))
+                  ) : (
+                    <div className="empty__nfts">
+                      <h3>No Collections found</h3>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            <DepositNftsSection
+              transactions={transactions}
+              handleDepositTier={handleDepositTier}
+              handleWithdraw={handleWithdraw}
+              completedDepositStep={completedDepositStep}
+              completedCollectionsStep={completedCollectionsStep}
+              approvedTxs={approvedTxs}
+              isCanceledAuction={auction.canceled}
+              completedAuctionCreationStep={completedAuctionCreationStep}
+            />
+          </div>
         </div>
       </div>
       <Popup open={showLoading} closeOnDocumentClick={false}>
