@@ -82,7 +82,9 @@ const BidRankingsPopup = ({
                   <div className="header">
                     <div className="bidder">
                       <span className="index">{`${index + 1}. `}</span>
-                      <span>{bidder ? displayBidderName(bidder) : 'No bidder yet'}</span>
+                      <span className="bidder--address">
+                        {bidder ? displayBidderName(bidder) : 'No bidder yet'}
+                      </span>
                       <span
                         className="tier"
                         style={getRewardTierSpanStyles(rewardTiersSlots[index])}

@@ -574,6 +574,12 @@
               &:nth-child(5) {
                 border-bottom: none;
               }
+              .bidder--address {
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                max-width: 125px;
+              }
               .name {
                 display: flex;
                 align-items: center;
@@ -593,6 +599,10 @@
                   display: flex;
                   align-items: center;
                   span {
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    max-width: 125px;
                     margin-left: 5px;
                     font-family: $spaceGroteskFont;
                     font-style: normal;
@@ -640,6 +650,10 @@
                   color: rgba(0, 0, 0, 0.6);
                   b {
                     color: $black;
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    max-width: 100px;
                   }
                   span {
                     font-size: 10px;
