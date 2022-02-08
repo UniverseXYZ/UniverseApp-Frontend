@@ -17,19 +17,15 @@ const ApproveCollection = ({
   <div className="collection__div" key={collection.address}>
     {collection.address === process.env.REACT_APP_UNIVERSE_ERC_721_ADDRESS.toLowerCase() ? (
       <img src={universeIcon} alt={collection?.name} />
-    ) : collection.bgImage ? (
-      <img src={URL.createObjectURL(collection.bgImage)} alt={collection?.name} />
-    ) : !collection.previewImage ? (
-      <div
-        className="random__bg__color"
-        style={{ backgroundColor: getCollectionBackgroundColor(collection) }}
-      />
+    ) : collection.coverUrl ? (
+      <img src={collection.coverUrl} alt={collection?.name} />
     ) : (
-      <img
-        className="blur"
-        src={URL.createObjectURL(collection.previewImage)}
-        alt={collection?.name}
-      />
+      !collection.coverUrl && (
+        <div
+          className="random__bg__color"
+          style={{ backgroundColor: getCollectionBackgroundColor(collection) }}
+        />
+      )
     )}
     <div>
       <h3>{collection.name}</h3>

@@ -73,9 +73,11 @@ const TopBidders = ({
                   <div className="name">
                     <b>{`${index + 1}.`}</b>
                     <div>
-                      {bidder.user.displayName
-                        ? bidder.user.displayName
-                        : shortenEthereumAddress(bidder.user.address)}
+                      <p className="bidder--address">
+                        {bidder.user.displayName
+                          ? bidder.user.displayName
+                          : shortenEthereumAddress(bidder.user.address)}
+                      </p>
                       {rewardTiersSlots[index] ? (
                         <span style={getRewardTierSpanStyles(rewardTiersSlots[index])}>
                           {rewardTiersSlots[index].name}

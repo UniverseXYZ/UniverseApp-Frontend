@@ -316,7 +316,7 @@
           white-space: nowrap;
           overflow: hidden;
           text-overflow: ellipsis;
-          max-width: 100px;
+          max-width: 150px;
           font-family: $spaceGroteskFont;
           font-style: normal;
           font-weight: bold;
@@ -373,6 +373,12 @@
               font-size: 10px;
               color: $black;
             }
+            .bidder--address {
+              white-space: nowrap;
+              overflow: hidden;
+              text-overflow: ellipsis;
+              max-width: 100px;
+            }
             .tier {
               white-space: nowrap;
               overflow: hidden;
@@ -401,6 +407,10 @@
             line-height: 22px;
             color: rgba(0, 0, 0, 0.6);
             b {
+              white-space: nowrap;
+              overflow: hidden;
+              text-overflow: ellipsis;
+              max-width: 100px;
               color: $black;
             }
             span {
