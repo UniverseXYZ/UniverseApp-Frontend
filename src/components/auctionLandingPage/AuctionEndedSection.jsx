@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Animated } from 'react-animated-css';
 import { useHistory } from 'react-router';
 import PropTypes from 'prop-types';
-import { utils, BigNumber } from 'ethers';
 import warningIcon from '../../assets/images/Exclamation.svg';
 import smallCongratsIcon from '../../assets/images/congrats-small.png';
 import { useAuthContext } from '../../contexts/AuthContext';
+import { useErrorContext } from '../../contexts/ErrorContext';
 import Button from '../button/Button';
 import { useMyNftsContext } from '../../contexts/MyNFTsContext';
 import infoIcon from '../../assets/images/icon.svg';
@@ -15,12 +15,11 @@ import { getRewardTierSpanStyles } from '../../utils/helpers';
 import CongratsSection from './CongratsSection';
 import WarningSection from './WarningSection';
 import UnfortunatelySection from './UnfortunatelySection';
+import { setErrors } from '../../utils/helpers/contractsErrorHandler';
 
 const AuctionEndedSection = ({
   currentBid,
-  setCurrentBid,
   bidders,
-  numberOfWinners,
   rewardTiersSlots,
   setShowBidRankings,
   onAuction,
@@ -32,9 +31,7 @@ const AuctionEndedSection = ({
   currencyIcon,
   isWinningBid,
   mySlot,
-  setMySlot,
   mySlotIndex,
-  setMySlotIndex,
   slotsToWithdraw,
   setSlotsToWithdraw,
   claimableFunds,
@@ -46,6 +43,7 @@ const AuctionEndedSection = ({
 
   const { address, universeAuctionHouseContract } = useAuthContext();
   const { setActiveTxHashes, activeTxHashes } = useMyNftsContext();
+  const { setShowError, setErrorTitle, setErrorBody } = useErrorContext();
 
   const [isAuctionner, setIsAuctioneer] = useState(address === onAuction.artist.address);
 
@@ -68,8 +66,13 @@ const AuctionEndedSection = ({
         setLoadingText(verifyLoadingText);
       }
     } catch (err) {
+      console.error(err);
+      setShowError(true);
       setShowLoading(false);
       setActiveTxHashes([]);
+      const { title, body } = setErrors(err);
+      setErrorTitle(title);
+      setErrorBody(body);
     }
   };
 
@@ -87,10 +90,13 @@ const AuctionEndedSection = ({
         setLoadingText(verifyLoadingText);
       }
     } catch (err) {
+      console.error(err);
+      setShowError(true);
       setShowLoading(false);
       setActiveTxHashes([]);
-
-      console.log(err);
+      const { title, body } = setErrors(err);
+      setErrorTitle(title);
+      setErrorBody(body);
     }
   };
 
@@ -120,9 +126,13 @@ const AuctionEndedSection = ({
       setShowLoading(false);
       setActiveTxHashes([]);
     } catch (err) {
-      console.log(err);
-      setActiveTxHashes([]);
+      console.error(err);
+      setShowError(true);
       setShowLoading(false);
+      setActiveTxHashes([]);
+      const { title, body } = setErrors(err);
+      setErrorTitle(title);
+      setErrorBody(body);
     }
   };
 
@@ -141,9 +151,13 @@ const AuctionEndedSection = ({
         setLoadingText(verifyLoadingText);
       }
     } catch (err) {
+      console.error(err);
+      setShowError(true);
       setShowLoading(false);
       setActiveTxHashes([]);
-      console.log(err);
+      const { title, body } = setErrors(err);
+      setErrorTitle(title);
+      setErrorBody(body);
     }
   };
 
@@ -558,8 +572,6 @@ const AuctionEndedSection = ({
 };
 AuctionEndedSection.propTypes = {
   currentBid: PropTypes.oneOfType([PropTypes.object]).isRequired,
-  setCurrentBid: PropTypes.func.isRequired,
-  numberOfWinners: PropTypes.number.isRequired,
   setShowBidRankings: PropTypes.func.isRequired,
   onAuction: PropTypes.oneOfType([PropTypes.object]).isRequired,
   winningSlot: PropTypes.number.isRequired,
@@ -572,9 +584,7 @@ AuctionEndedSection.propTypes = {
   isWinningBid: PropTypes.bool.isRequired,
   setLoadingText: PropTypes.func.isRequired,
   mySlot: PropTypes.oneOfType([PropTypes.object]).isRequired,
-  setMySlot: PropTypes.func.isRequired,
   mySlotIndex: PropTypes.number.isRequired,
-  setMySlotIndex: PropTypes.func.isRequired,
   slotsToWithdraw: PropTypes.oneOfType([PropTypes.array]).isRequired,
   setSlotsToWithdraw: PropTypes.func.isRequired,
   claimableFunds: PropTypes.func.isRequired,

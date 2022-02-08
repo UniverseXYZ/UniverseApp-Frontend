@@ -16,12 +16,15 @@ import { useAuthContext } from '../../contexts/AuthContext';
 import { useMyNftsContext } from '../../contexts/MyNFTsContext';
 import PastAuctionActionSection from './PastAuctionActionSection';
 import { createRewardsTiersSlots } from '../../utils/helpers';
+import { useErrorContext } from '../../contexts/ErrorContext';
+import { setErrors } from '../../utils/helpers/contractsErrorHandler';
 
 const PastAuctionsCard = ({ auction, setShowLoadingModal, setLoadingText }) => {
   const history = useHistory();
 
   const { loggedInArtist, ethPrice, universeAuctionHouseContract, address } = useAuthContext();
   const { setActiveTxHashes } = useMyNftsContext();
+  const { setShowError, setErrorTitle, setErrorBody } = useErrorContext();
 
   const [copiedUrl, setCopiedUrl] = useState(false);
   const [showMore, setShowMore] = useState(false);
@@ -150,9 +153,13 @@ const PastAuctionsCard = ({ auction, setShowLoadingModal, setLoadingText }) => {
         setLoadingText(verifyClaimLoadingText);
       }
     } catch (err) {
+      console.error(err);
+      setShowError(true);
       setShowLoadingModal(false);
       setActiveTxHashes([]);
-      console.log(err);
+      const { title, body } = setErrors(err);
+      setErrorTitle(title);
+      setErrorBody(body);
     }
   };
 

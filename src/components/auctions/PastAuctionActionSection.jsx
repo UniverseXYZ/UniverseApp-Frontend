@@ -4,10 +4,12 @@ import { useHistory } from 'react-router-dom';
 import { utils } from 'ethers';
 import { useAuthContext } from '../../contexts/AuthContext';
 import { useAuctionContext } from '../../contexts/AuctionContext';
+import { useErrorContext } from '../../contexts/ErrorContext';
 import bubleIcon from '../../assets/images/text-bubble.png';
 import Exclamation from '../../assets/images/Exclamation.svg';
 import plusIcon from '../../assets/images/plus.svg';
 import { useMyNftsContext } from '../../contexts/MyNFTsContext';
+import { setErrors } from '../../utils/helpers/contractsErrorHandler';
 
 const PastAuctionActionSection = ({
   auction,
@@ -19,6 +21,7 @@ const PastAuctionActionSection = ({
   const history = useHistory();
 
   const { loggedInArtist, universeAuctionHouseContract, address } = useAuthContext();
+  const { setShowError, setErrorTitle, setErrorBody } = useErrorContext();
   const { setAuction } = useAuctionContext();
   const { activeTxHashes, setActiveTxHashes } = useMyNftsContext();
   const [canWithdrawNfts, setCanWithdrawNfts] = useState(false);
@@ -79,9 +82,13 @@ const PastAuctionActionSection = ({
       setShowLoading(false);
       setActiveTxHashes([]);
     } catch (err) {
-      console.log(err);
-      setActiveTxHashes([]);
+      console.error(err);
+      setShowError(true);
       setShowLoading(false);
+      setActiveTxHashes([]);
+      const { title, body } = setErrors(err);
+      setErrorTitle(title);
+      setErrorBody(body);
     }
   };
 

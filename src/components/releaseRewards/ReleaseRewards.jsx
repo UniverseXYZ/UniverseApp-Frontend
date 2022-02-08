@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './ReleaseRewards.scss';
 import { useHistory, useLocation } from 'react-router';
 import Popup from 'reactjs-popup';
-import { utils, BigNumber } from 'ethers';
+import { utils } from 'ethers';
 import Button from '../button/Button.jsx';
 import arrow from '../../assets/images/arrow.svg';
 import completedCheckmark from '../../assets/images/completedCheckmark.svg';
@@ -21,6 +21,8 @@ import BidderView from './BidderView';
 import LoadingPopup from '../popups/LoadingPopup';
 import { useMyNftsContext } from '../../contexts/MyNFTsContext';
 import { useSocketContext } from '../../contexts/SocketContext';
+import { useErrorContext } from '../../contexts/ErrorContext';
+import { setErrors } from '../../utils/helpers/contractsErrorHandler';
 
 const ReleaseRewards = () => {
   const defaultLoadingText = 'The transaction is being processed.';
@@ -32,6 +34,7 @@ const ReleaseRewards = () => {
   const history = useHistory();
   const { setActiveTxHashes } = useMyNftsContext();
   const { auctionEvents, subscribeTo, unsubscribeFrom } = useSocketContext();
+  const { setShowError, setErrorTitle, setErrorBody } = useErrorContext();
 
   const [hideInfo, setHideInfo] = useState(false);
   const [showSlots, setShowSlots] = useState(false);
@@ -177,9 +180,13 @@ const ReleaseRewards = () => {
         setLoadingText(verificationLoadingText);
       }
     } catch (err) {
-      setActiveTxHashes([]);
+      console.error(err);
+      setShowError(true);
       setShowLoading(false);
-      console.log(err);
+      setActiveTxHashes([]);
+      const { title, body } = setErrors(err);
+      setErrorTitle(title);
+      setErrorBody(body);
     }
   };
 
@@ -214,9 +221,13 @@ const ReleaseRewards = () => {
         setSlotsInfo(info);
       }
     } catch (err) {
-      setActiveTxHashes([]);
+      console.error(err);
+      setShowError(true);
       setShowLoading(false);
-      console.log(err);
+      setActiveTxHashes([]);
+      const { title, body } = setErrors(err);
+      setErrorTitle(title);
+      setErrorBody(body);
     }
   };
 
@@ -241,8 +252,13 @@ const ReleaseRewards = () => {
         setMySlot({ ...mySlot, totalWithdrawnNfts: mySlot.totalDepositedNfts });
       }
     } catch (err) {
+      console.error(err);
+      setShowError(true);
       setShowLoading(false);
       setActiveTxHashes([]);
+      const { title, body } = setErrors(err);
+      setErrorTitle(title);
+      setErrorBody(body);
     }
   };
 

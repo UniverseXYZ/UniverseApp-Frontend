@@ -11,6 +11,8 @@ import Input from '../input/Input.jsx';
 import { useAuthContext } from '../../contexts/AuthContext';
 import { useMyNftsContext } from '../../contexts/MyNFTsContext';
 import { getERC20Contract } from '../../utils/helpers/pureFunctions/auctions';
+import { SC_ERROR_CODES } from '../../utils/helpers/constants';
+import { getContractErrorCode } from '../../utils/helpers/contractsErrorHandler';
 
 const PlaceBidPopup = ({
   onClose,
@@ -35,6 +37,7 @@ const PlaceBidPopup = ({
   const [minBid, setMinBid] = useState(0);
   const [myBidSlotIndex, setMyBidSlotIndex] = useState(-1);
   const [error, setError] = useState('');
+  const [_errorCode, setErrorCode] = useState('');
   const [allowance, setAllowance] = useState(0);
   const [balance, setBalance] = useState(0);
 
@@ -159,7 +162,20 @@ const PlaceBidPopup = ({
       setShowLoading(false);
       setActiveTxHashes([]);
       console.log(err);
-      setError(err.error?.message);
+      // case if the user denies the transaction
+      if (err?.code === 4001) {
+        setError('Transaction failed');
+        setErrorCode('User denied transaction signature');
+        return;
+      }
+
+      // client side error case
+      const errorCode = getContractErrorCode(err?.error?.message);
+      // eslint-disable-next-line no-prototype-builtins
+      if (errorCode && SC_ERROR_CODES.hasOwnProperty(errorCode)) {
+        setError(SC_ERROR_CODES[errorCode]);
+        setErrorCode(`Executuion reverted. Error code: ${errorCode}`);
+      }
     }
   };
 
@@ -367,6 +383,7 @@ const PlaceBidPopup = ({
         {error ? (
           <Animated animationIn="fadeInUp">
             <p className="errors">{error}</p>
+            <p className="errors">{_errorCode}</p>
           </Animated>
         ) : (
           <></>
