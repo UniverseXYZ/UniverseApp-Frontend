@@ -92,6 +92,7 @@ const Tabs = () => {
 
   return (
     <div className="auction__house__tabs__section">
+      <div className="auction__house__tabs__bg" />
       <div className="auction__house__tabs__section__container">
         <div className="tabs">
           <button
