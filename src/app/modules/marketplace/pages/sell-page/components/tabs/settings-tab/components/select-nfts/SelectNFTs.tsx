@@ -18,6 +18,9 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Swiper, SwiperSlide } from 'swiper/react/swiper-react';
 import { FreeMode, Navigation } from 'swiper';
 
+import 'swiper/swiper-bundle.min.css';
+import 'swiper/swiper.min.css';
+
 import searchIcon from '../../../../../../../../../../assets/images/search-gray.svg';
 import filtersIcon from '../../../../../../../../../../assets/images/marketplace/filters2.svg';
 import arrowLeftIcon from '../../../../../../../../../../assets/images/marketplace/bundles-left-arrow.svg';
@@ -414,6 +417,7 @@ export const SelectNFTs = ({}: ISelectNFTsProps) => {
                 },
               }
             }}>
+              {/*TODO: replace by SwiperArrowButton*/}
               <Button ref={prevRef} variant={'simpleOutline'} data-swiper-button left={'-15px'}>
                 <Image src={arrowLeftIcon} width={'9px'} />
               </Button>
