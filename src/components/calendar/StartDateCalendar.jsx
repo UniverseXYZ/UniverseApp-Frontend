@@ -229,9 +229,9 @@ const StartDateCalendar = React.forwardRef(
           ...prevState,
           hours: new Date().getHours() === 24 ? 1 : new Date().getHours() + 1,
           minutes:
-            new Date().getMinutes() < 10
+            new Date().getMinutes() < 9
               ? `0${new Date().getMinutes() + 1}`
-              : new Date().getMinutes(),
+              : new Date().getMinutes() + 1,
         }));
       }
     }, []);
