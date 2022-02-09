@@ -461,111 +461,107 @@ const AuctionEndedSection = ({
       </div>
     </div>
   ) : !isWinningBid ? (
-    <Animated animationIn="zoomIn">
-      <div className="ended__result">
-        <div className="content">
-          <h2 className="title">Unfortunately, your bid didn’t win</h2>
-          <p className="desc">
-            {currentBid.withdrawn
-              ? 'You have withdrawn your bid.'
-              : 'You are able to withdraw your funds by clicking the Withdraw button below. You can still buy individual NFTs from other sellers on NFT marketplaces.'}
-          </p>
-        </div>
-        <div className="footer">
-          {!bidWithdrawn && (
-            <Button
-              disabled={!currentBid || currentBid.withdrawn}
-              onClick={withdrawBid}
-              className="light-button"
-            >
-              Withdraw
-            </Button>
-          )}
-
-          <button
-            type="button"
-            className="light-border-button"
-            onClick={() => setShowBidRankings(true)}
+    <Animated animationIn="zoomIn" className="ended__result">
+      <div className="content">
+        <h2 className="title">Unfortunately, your bid didn’t win</h2>
+        <p className="desc">
+          {currentBid.withdrawn
+            ? 'You have withdrawn your bid.'
+            : 'You are able to withdraw your funds by clicking the Withdraw button below. You can still buy individual NFTs from other sellers on NFT marketplaces.'}
+        </p>
+      </div>
+      <div className="footer">
+        {!bidWithdrawn && (
+          <Button
+            disabled={!currentBid || currentBid.withdrawn}
+            onClick={withdrawBid}
+            className="light-button"
           >
-            View rankings
-          </button>
-        </div>
+            Withdraw
+          </Button>
+        )}
+
+        <button
+          type="button"
+          className="light-border-button"
+          onClick={() => setShowBidRankings(true)}
+        >
+          View rankings
+        </button>
       </div>
     </Animated>
   ) : (
-    <Animated animationIn="zoomIn">
-      <div className="ended__result">
-        <div className="content">
-          <CongratsSection
-            text={
-              <>
-                {!mySlot ? (
-                  <span>
-                    Your bid won the <b>{winningSlot?.name}</b> tier. You can claim your NFTs after
-                    your rewards are released
-                  </span>
-                ) : hasNFTsToClaim ? (
-                  <span>
-                    Your bid won the <b>{winningSlot?.name}</b> tier. You can claim your NFTs by
-                    clicking the button below
-                  </span>
-                ) : (
-                  <span>
-                    You have already claimed your NFTs. If you want more NFTs to claim – go to other
-                    auctions and bid.
-                  </span>
-                )}
-              </>
+    <Animated animationIn="zoomIn" className="ended__result">
+      <div className="content">
+        <CongratsSection
+          text={
+            <>
+              {!mySlot ? (
+                <span>
+                  Your bid won the <b>{winningSlot?.name}</b> tier. You can claim your NFTs after
+                  your rewards are released
+                </span>
+              ) : hasNFTsToClaim ? (
+                <span>
+                  Your bid won the <b>{winningSlot?.name}</b> tier. You can claim your NFTs by
+                  clicking the button below
+                </span>
+              ) : (
+                <span>
+                  You have already claimed your NFTs. If you want more NFTs to claim – go to other
+                  auctions and bid.
+                </span>
+              )}
+            </>
+          }
+          heading={
+            <>
+              <span>Congratulations!</span>
+            </>
+          }
+        />
+
+        {/* Warning should be only shown if the rewards are not released (slot revenue has not been captured to any slot) */}
+        {!hasRevenue ? <WarningSection mySlot={mySlot} /> : null}
+      </div>
+
+      <div className="footer user_footer">
+        {!allSlotsCaptured && (
+          <Button
+            disabled={!depositedNfts}
+            className="light-button"
+            onClick={() =>
+              history.push('/release-rewards', {
+                auctionData: onAuction,
+                myBid: currentBid,
+                view: isAuctionner ? 'Auctioneer' : 'Bidder',
+                bidders,
+                rewardTiersSlots,
+                winningSlot,
+                slotsInfo,
+                mySlot,
+                mySlotIndex,
+                backButtonText: onAuction.auction.headline,
+              })
             }
-            heading={
-              <>
-                <span>Congratulations!</span>
-              </>
-            }
-          />
-
-          {/* Warning should be only shown if the rewards are not released (slot revenue has not been captured to any slot) */}
-          {!hasRevenue ? <WarningSection mySlot={mySlot} /> : null}
-        </div>
-
-        <div className="footer user_footer">
-          {!allSlotsCaptured && (
-            <Button
-              disabled={!depositedNfts}
-              className="light-button"
-              onClick={() =>
-                history.push('/release-rewards', {
-                  auctionData: onAuction,
-                  myBid: currentBid,
-                  view: isAuctionner ? 'Auctioneer' : 'Bidder',
-                  bidders,
-                  rewardTiersSlots,
-                  winningSlot,
-                  slotsInfo,
-                  mySlot,
-                  mySlotIndex,
-                  backButtonText: onAuction.auction.headline,
-                })
-              }
-            >
-              Release rewards
-            </Button>
-          )}
-
-          {hasNFTsToClaim && (
-            <Button className="light-button" onClick={handleClaimNfts}>
-              Claim NFTs
-            </Button>
-          )}
-
-          <button
-            type="button"
-            className="light-border-button"
-            onClick={() => setShowBidRankings(true)}
           >
-            View rankings
-          </button>
-        </div>
+            Release rewards
+          </Button>
+        )}
+
+        {hasNFTsToClaim && (
+          <Button className="light-button" onClick={handleClaimNfts}>
+            Claim NFTs
+          </Button>
+        )}
+
+        <button
+          type="button"
+          className="light-border-button"
+          onClick={() => setShowBidRankings(true)}
+        >
+          View rankings
+        </button>
       </div>
     </Animated>
   );
