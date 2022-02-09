@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import './Calendar.scss';
 import uuid from 'react-uuid';
-import { format } from 'date-fns';
 import arrow from '../../assets/images/arrow.svg';
 import closeIcon from '../../assets/images/cross.svg';
 import Button from '../button/Button.jsx';
@@ -29,8 +28,14 @@ const StartDateCalendar = React.forwardRef(
     const UTCHoursFromNow = getTimezoneOffset() / -60;
     const [currentMonth, setCurrentMonth] = useState([]);
     const [minDateTimeError, setMinDateTimeError] = useState(false);
-    const [minHours] = useState(parseInt(format(new Date(), 'k'), 10) + 1);
-    const [minMins] = useState(parseInt(format(new Date(), 'm'), 10) + 1);
+    const [minHours, setMinHours] = useState(
+      new Date().getHours() + 1 < 10 ? `0${new Date().getHours() + 1}` : new Date().getHours() + 1
+    );
+    const [minMins, setMinMins] = useState(
+      new Date().getMinutes() + 1 < 10
+        ? `0${new Date().getMinutes() + 1}`
+        : new Date().getMinutes() + 1
+    );
     const [selectedDate, setSelectedDate] = useState({
       year: values.startDate ? Number(values.startDate.toString().split(' ')[3]) : d.getFullYear(),
       month: values.startDate
