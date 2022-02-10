@@ -472,7 +472,7 @@ const Create = () => {
       </div>
       <span className="hr-line" />
       <div className="selectNftPart container">
-        <h1>Select NFTs</h1>
+        <h1>Select NFTs for the Winner #{selectedWinner + 1}</h1>
         <p>
           You can only select minted NFTs from your wallet. If you want to create NFTs, go to&nbsp;
           <Link to="/my-nfts" target="_blank">

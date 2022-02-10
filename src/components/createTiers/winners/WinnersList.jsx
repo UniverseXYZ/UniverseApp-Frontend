@@ -76,45 +76,24 @@ const WinnersList = ({
         winnersData.length > maxWinnersShown ? ' isSlider' : ' notSlider'
       }`}
     >
-      {winnersData.length > maxWinnersShown ? (
-        <Slider {...sliderSettings}>
-          {winnersData.map((data, i) => {
-            const winnerNumber = i + 1;
-            return (
-              <WinnerCard
-                data={data}
-                setWinnersData={setWinnersData}
-                winnerNumber={winnerNumber}
-                index={i}
-                selectedWinner={selectedWinner}
-                setSelectedWinner={setSelectedWinner}
-                showReservePrice={showReservePrice}
-                setReservedPrice={handleReservePriceChange}
-                currencyImg={currencyImg}
-              />
-            );
-          })}
-        </Slider>
-      ) : (
-        <>
-          {winnersData.map((data, i) => {
-            const winnerNumber = i + 1;
-            return (
-              <WinnerCard
-                data={data}
-                setWinnersData={setWinnersData}
-                winnerNumber={winnerNumber}
-                index={i}
-                selectedWinner={selectedWinner}
-                setSelectedWinner={setSelectedWinner}
-                showReservePrice={showReservePrice}
-                setReservedPrice={handleReservePriceChange}
-                currencyImg={currencyImg}
-              />
-            );
-          })}
-        </>
-      )}
+      <>
+        {winnersData.map((data, i) => {
+          const winnerNumber = i + 1;
+          return (
+            <WinnerCard
+              data={data}
+              setWinnersData={setWinnersData}
+              winnerNumber={winnerNumber}
+              index={data}
+              selectedWinner={selectedWinner}
+              setSelectedWinner={setSelectedWinner}
+              showReservePrice={showReservePrice}
+              setReservedPrice={handleReservePriceChange}
+              currencyImg={currencyImg}
+            />
+          );
+        })}
+      </>
     </div>
   );
 };

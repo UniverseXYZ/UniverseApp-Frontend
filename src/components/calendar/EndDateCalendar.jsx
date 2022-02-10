@@ -176,6 +176,14 @@ const EndDateCalendar = React.forwardRef(
             year: selectedDate.year,
           }));
         }
+        if (day > new Date().getDate()) {
+          setMinDateTimeError(false);
+        } else if (
+          Number(endDateTemp.hours) < minHours ||
+          (Number(endDateTemp.hours) === minHours && Number(endDateTemp.minutes) < minMins)
+        ) {
+          setMinDateTimeError(true);
+        }
       }
     };
 
