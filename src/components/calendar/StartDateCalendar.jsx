@@ -157,6 +157,14 @@ const StartDateCalendar = React.forwardRef(
             year: selectedDate.year,
           }));
         }
+        if (day > new Date().getDate()) {
+          setMinDateTimeError(false);
+        } else if (
+          Number(startDateTemp.hours) < minHours ||
+          (Number(startDateTemp.hours) === minHours && Number(startDateTemp.minutes) < minMins)
+        ) {
+          setMinDateTimeError(true);
+        }
       }
     };
 

@@ -2,60 +2,27 @@
 @import "../../../assets/scss/mixins";
 
 .winner__lists {
-  &.notSlider {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  grid-gap: 30px;
+
+  @include xl {
+    overflow-y: hidden;
+    overflow-x: auto;
+  }
+
+  @include md {
     display: grid;
-    grid-template-columns: repeat(6, 1fr);
-    grid-gap: 30px;
-    @include xl {
-      overflow-y: hidden;
-      overflow-x: auto;
-    }
+    grid-template-columns: repeat(3, 1fr);
+    grid-gap: 15px;
   }
-  button.slick-arrow {
-    visibility: hidden;
-  }
-  &.isSlider {
-    button.slick-arrow {
-      visibility: visible;
-      background: linear-gradient($white, $white) padding-box, linear-gradient(to right, #bceb00, #00eaea) border-box;
-      border: 1px solid transparent;
-      height: 42px;
-      width: 42px;
-      border-radius: 50%;
 
-      &::before {
-        display: none;
-      }
-
-      &.slick-prev {
-        position: absolute;
-        left: -18px;
-        z-index: 1;
-      }
-      &.slick-next {
-        position: absolute;
-        right: -18px;
-        z-index: 1;
-      }
-      &.slick-disabled {
-        visibility: hidden;
-      }
-
-      @include md {
-        visibility: hidden !important;
-      }
-    }
-    .slick-list {
-      overflow: unset;
-      overflow-x: clip;
-      @include md {
-        margin: 0 -20px;
-      }
-    }
+  @include sm {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-gap: 25px;
   }
-  .slick-slide {
-    margin: 0 15px;
-  }
+
   .winner-box {
     position: relative;
     width: 160px;
