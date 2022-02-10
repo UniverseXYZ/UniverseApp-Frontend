@@ -52,7 +52,7 @@ export const NftItem = (
     >
       <LinkBox>
         <LinkOverlay
-          href={!onClick ? `/v2/nft/${NFT.collection?.address}/${NFT.tokenId}`: 'javascript: void(0);'}
+          href={!onClick ? `/nft/${NFT.collection?.address}/${NFT.tokenId}`: 'javascript: void(0);'}
           display={'contents'}
         >
           {renderHeader === null ? null :

@@ -3,7 +3,7 @@ import axios from 'axios';
 import { utils } from 'ethers';
 import { useFormik } from 'formik';
 import React, { useCallback, useEffect, useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 import { useMutation, useQuery } from 'react-query';
 import * as Yup from 'yup';
 
@@ -23,7 +23,7 @@ import {
 import { SelectAmountTab, SelectMethodType, SettingsTab, SummaryTab, TabPanel } from './components';
 import { SellAmountType, SellMethod, SellPageTabs } from './enums';
 import { IMarketplaceSellContextData, ISellForm } from './types';
-import { getLocationSearchObj, sign } from '../../../../helpers';
+import { sign } from '../../../../helpers';
 import { useAuthContext } from '../../../../../contexts/AuthContext';
 import { TOKENS_MAP } from '../../../../constants';
 import { TokenTicker } from '../../../../enums';
@@ -47,6 +47,8 @@ const getValidationSchema = (amountType?: SellAmountType, sellMethod?: SellMetho
 
 export const SellPage = () => {
   const history = useHistory();
+  const params = useParams<{ collectionAddress: string; tokenId: string; }>();
+
   const { signer, web3Provider } = useAuthContext() as any;
 
   const encodeDataMutation = useMutation((data: any) => {
@@ -57,9 +59,10 @@ export const SellPage = () => {
     return axios.post(`${process.env.REACT_APP_MARKETPLACE_BACKEND}/v1/orders/order`, data);
   });
 
-  const [locationState] = useState(getLocationSearchObj(history.location.search) as { nft: string; tokenId: string; });
-
-  const { data: nft } = useQuery(['sell-nft', locationState.nft, locationState.tokenId], () => GetNFTApi(locationState.nft, locationState.tokenId));
+  const { data: nft } = useQuery(
+    ['sell-nft', params.collectionAddress, params.tokenId],
+    () => GetNFTApi(params.collectionAddress, params.tokenId)
+  );
 
   const getSaltMutation = useMutation(GetSaltApi);
 
@@ -83,7 +86,7 @@ export const SellPage = () => {
         assetType: {
           assetClass: nft?.standard,
           contract: nft?.collection?.address,
-          tokenId: +locationState.tokenId,
+          tokenId: +params.tokenId,
         },
         value: '1',
       };
@@ -102,7 +105,7 @@ export const SellPage = () => {
 
           acc[1][i].push(NFTTokenId);
           return acc;
-        }, [[(nft?.collection?.address ?? '')], [[locationState.tokenId]]]);
+        }, [[(nft?.collection?.address ?? '')], [[params.tokenId]]]);
 
         make.assetType = {
           assetClass: 'ERC721_BUNDLE',
@@ -240,14 +243,14 @@ export const SellPage = () => {
         <Container maxW={'var(--container-max-width)'} pb={'0 !important'}>
           <Box px={{ base: '20px', md: '60px', xl: 0 }}>
             <Link
-              href={`/v2/nft/${locationState.nft}/${locationState.tokenId}`}
+              href={`/nft/${params.collectionAddress}/${params.tokenId}`}
               mb={'20px'}
               fontFamily={'Space Grotesk'}
               fontWeight={500}
               _hover={{ textDecoration: 'none' }}
             >
               <Image src={arrow} display="inline" mr="10px" position="relative" top="-2px" />
-              {nft?.name ?? locationState.nft}
+              {nft?.name ?? params.collectionAddress}
             </Link>
 
             <Heading as="h1" mb={'50px'}>Sell NFT</Heading>
