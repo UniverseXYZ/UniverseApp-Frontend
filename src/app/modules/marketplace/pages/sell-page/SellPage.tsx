@@ -29,6 +29,7 @@ import { TOKENS_MAP } from '../../../../constants';
 import { TokenTicker } from '../../../../enums';
 import { GetNFTApi } from '../../../nft/api';
 import { INFT } from '../../../nft/types';
+import { GetSaltApi } from '../../../../api';
 
 const getValidationSchema = (amountType?: SellAmountType, sellMethod?: SellMethod) => {
   switch (sellMethod) {
@@ -60,9 +61,7 @@ export const SellPage = () => {
 
   const { data: nft } = useQuery(['sell-nft', locationState.nft, locationState.tokenId], () => GetNFTApi(locationState.nft, locationState.tokenId));
 
-  const getSaltMutation = useMutation((address: string) => {
-    return axios.get(`${process.env.REACT_APP_MARKETPLACE_BACKEND}/v1/orders/salt/${address}`);
-  });
+  const getSaltMutation = useMutation(GetSaltApi);
 
   const { setDarkMode } = useThemeContext() as any;
   const [activeTab, setActiveTab] = useState<SellPageTabs>(SellPageTabs.SELL_AMOUNT);

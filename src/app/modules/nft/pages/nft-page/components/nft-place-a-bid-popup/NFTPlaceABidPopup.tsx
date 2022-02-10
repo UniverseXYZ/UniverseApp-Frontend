@@ -40,6 +40,7 @@ import { sign } from '../../../../../../helpers';
 
 import ArrowIcon from '../../../../../../../assets/images/arrow-down.svg';
 import SuccessIcon from '../../../../../../../assets/images/bid-submitted.png';
+import { GetSaltApi } from '../../../../../../api';
 
 export enum PlaceABidState {
   FORM,
@@ -76,9 +77,7 @@ export const NFTPlaceABidPopup = ({ order, isOpen, onClose, }: INFTPlaceABidPopu
     return axios.post(`${process.env.REACT_APP_MARKETPLACE_BACKEND}/v1/orders/order`, data);
   });
 
-  const getSaltMutation = useMutation((address: string) => {
-    return axios.get(`${process.env.REACT_APP_MARKETPLACE_BACKEND}/v1/orders/salt/${address}`);
-  });
+  const getSaltMutation = useMutation(GetSaltApi);
 
   const formik = useFormik({
     initialValues: {
