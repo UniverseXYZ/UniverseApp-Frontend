@@ -508,7 +508,7 @@ const AuctionSettings = () => {
                   </Popup>
                 </div>
                 <span className="auction-ext">
-                  Ending auction extension timer: 3 minutes
+                  Ending auction extension timer: 5 minutes
                   <img
                     src={infoIcon}
                     alt="Info Icon"
@@ -520,8 +520,8 @@ const AuctionSettings = () => {
                   {hideIcon1 && (
                     <div className="info-text">
                       <p>
-                        Any bid in the last 3 minutes of an auction will extend the auction for an
-                        additional 3 minutes.
+                        Any bid in the last 5 minutes of an auction will extend the auction for an
+                        additional 5 minutes.
                       </p>
                     </div>
                   )}

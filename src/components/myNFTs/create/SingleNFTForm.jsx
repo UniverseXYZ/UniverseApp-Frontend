@@ -64,9 +64,9 @@ const MAX_ROYALTY_PERCENT = 20;
 const COLLECTIONS_PER_ROW = 4;
 
 const MINTING_LOADING_TEXT =
-  'The transaction is in progress. Keep this window opened. Navigating away from the page will reset the curent progress.';
+  'The transaction is in progress. Keep this window opened. Navigating away from the page will reset the current progress.';
 const SAVING_FOR_LATER_LOADING_TEXT =
-  'You nft is being saved for later minting. Keep this window opened. Navigating away from the page will reset the curent progress.';
+  'You nft is being saved for later minting. Keep this window opened. Navigating away from the page will reset the current progress.';
 const INVALID_ADDRESS_TEXT = 'Please enter valid address or ENS';
 
 const SingleNFTForm = () => {

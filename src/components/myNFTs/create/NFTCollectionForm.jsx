@@ -341,7 +341,7 @@ const NFTCollectionForm = ({ showCollectible, setShowCollectible }) => {
       />
       <Popup closeOnDocumentClick={false} open={showLoading}>
         <LoadingPopup
-          text="The transaction is in progress. Keep this window opened. Navigating away from the page will reset the curent progress."
+          text="The transaction is in progress. Keep this window opened. Navigating away from the page will reset the current progress."
           onClose={() => setShowLoading(false)}
           contractInteraction
         />

@@ -61,7 +61,7 @@ const UniverseAuctionDetails = ({ auction }) => {
                 <h2 className="sub__title">Auction length</h2>
               </div>
               <p className="sub__desc">
-                {`This auction ${durationText} will be extended 3 minutes after every bid with 3 minutes left on the auction.
+                {`This auction ${durationText} will be extended 5 minutes after every bid with 5 minutes left on the auction.
                 This gives everyone ample time to place a bid and have a fair chance at the auction.`}
               </p>
             </div>
