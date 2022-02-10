@@ -189,7 +189,7 @@ const AuctionLandingPage = () => {
    * @param {Object} param1.bids Object containing bids information (bidsCount, highestBid, lowestBid, totalBids)
    * @returns void
    */
-  const handleBidSubmittedEvent = (err, { user, amount, userProfile, bids }) => {
+  const handleBidSubmittedEvent = (err, { id, user, amount, userProfile, bids }) => {
     if (err) return;
     const isYourEvent = user.toLowerCase() === addressRef.current.toLowerCase();
 
@@ -208,6 +208,7 @@ const AuctionLandingPage = () => {
           ...userProfile,
           address: user,
         },
+        id,
       });
     }
 
