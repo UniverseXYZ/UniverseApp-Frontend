@@ -21,6 +21,8 @@ import AuctionReviewTier from './AuctionReviewTier';
 const AuctionReview = () => {
   const { auction, bidtype, options, myAuctions, setMyAuctions } = useAuctionContext();
   const { setShowError, setErrorTitle, setErrorBody } = useErrorContext();
+  const defaultLoadingText =
+    'Keep this window opened. Navigating away from the page will reset the curent progress.';
   const UTCHoursFromNow = getTimezoneOffset() / -60;
   const location = useLocation();
   const history = useHistory();
@@ -99,7 +101,7 @@ const AuctionReview = () => {
   return (
     <div className="container auction-reward">
       <Popup closeOnDocumentClick={false} open={showLoading}>
-        <LoadingPopup />
+        <LoadingPopup text={defaultLoadingText} />
       </Popup>
       <Popup closeOnDocumentClick={false} open={showCongrats}>
         <CongratsAuctionPopup onClose={handleAuctionPopupSuccess} />
