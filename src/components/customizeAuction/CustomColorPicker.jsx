@@ -5,6 +5,7 @@ import 'react-color-palette/lib/css/styles.css';
 import arrowDown from '../../assets/images/arrow-down.svg';
 
 export const CustomColorPicker = React.memo(({ index, onChange, onColor }) => {
+  // if for some reason the API does not return a color value
   const defaultColor = '#EABD16';
   const [color, setColor] = useColor('hex', onColor || defaultColor);
   const [hidePicker, setHidePicker] = useState(true);
