@@ -27,7 +27,7 @@ import { isBeforeNow } from '../../utils/dates';
 
 const AuctionLandingPage = () => {
   const defaultLoadingText =
-    'The transaction is in progress. Keep this window opened. Navigating away from the page will reset the curent progress.';
+    'The transaction is in progress. Keep this window opened. Navigating away from the page will reset the current progress.';
   const locationState = useLocation().state;
   const { setActiveTxHashes, activeTxHashes } = useMyNftsContext();
   const { myAuctions } = useAuctionContext();

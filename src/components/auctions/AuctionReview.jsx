@@ -22,7 +22,7 @@ const AuctionReview = () => {
   const { auction, bidtype, options, myAuctions, setMyAuctions } = useAuctionContext();
   const { setShowError, setErrorTitle, setErrorBody } = useErrorContext();
   const defaultLoadingText =
-    'Keep this window opened. Navigating away from the page will reset the curent progress.';
+    'Keep this window opened. Navigating away from the page will reset the current progress.';
   const UTCHoursFromNow = getTimezoneOffset() / -60;
   const location = useLocation();
   const history = useHistory();
@@ -153,7 +153,7 @@ const AuctionReview = () => {
                 {endDate} UTC{UTCHoursFromNow > 0 ? `+${UTCHoursFromNow}` : UTCHoursFromNow}
               </span>
               <span className="auction-ext">
-                Ending auction extension timer: 3 minutes
+                Ending auction extension timer: 5 minutes
                 <img
                   src={infoIcon}
                   alt="Info Icon"
@@ -165,8 +165,8 @@ const AuctionReview = () => {
                 {hideIcon && (
                   <div className="info-text">
                     <p>
-                      Any bid in the last 3 minutes of an auction will extend the auction for an
-                      additional 3 minutes.
+                      Any bid in the last 5 minutes of an auction will extend the auction for an
+                      additional 5 minutes.
                     </p>
                   </div>
                 )}

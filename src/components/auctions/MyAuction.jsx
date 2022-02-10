@@ -21,7 +21,7 @@ const MyAuction = () => {
   const { loggedInArtist } = useAuthContext();
   const [myBids, setMyBids] = useState([]);
   const defaultLoadingText =
-    'The transaction is in progress. Keep this window opened. Navigating away from the page will reset the curent progress.';
+    'The transaction is in progress. Keep this window opened. Navigating away from the page will reset the current progress.';
   const [loadingText, setLoadingText] = useState(defaultLoadingText);
 
   const tabTitles = ['My bids', 'Active auctions', 'Draft auctions', 'Past auctions'];
