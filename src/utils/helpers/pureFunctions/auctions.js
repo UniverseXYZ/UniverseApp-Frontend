@@ -5,30 +5,34 @@ import ERC20ABI from '../../../contracts/ERC20.json';
 export const getERC20Contract = (erc20Address, signer) =>
   new Contract(erc20Address, ERC20ABI, signer);
 
-export const createRequestObject = ({ auction, bidtype, options }) => {
+export const createRequestObject = ({ auctionCopy, bidtype, options }) => {
   const requestObject = {
-    name: auction.name,
-    startingBid: auction.startingBid,
-    startDate: auction.startDate.toISOString ? auction.startDate.toISOString() : auction.startDate,
-    endDate: auction.endDate.toISOString ? auction.endDate.toISOString() : auction.endDate,
-    id: auction.id || null,
+    name: auctionCopy.name,
+    startingBid: auctionCopy.startingBid,
+    startDate: auctionCopy.startDate.toISOString
+      ? auctionCopy.startDate.toISOString()
+      : auctionCopy.startDate,
+    endDate: auctionCopy.endDate.toISOString
+      ? auctionCopy.endDate.toISOString()
+      : auctionCopy.endDate,
+    id: auctionCopy.id || null,
     tokenAddress: null,
     tokenSymbol: null,
     tokenDecimals: null,
     royaltySplits: null,
     tiers: null,
-    removed: auction.removed,
+    removed: auctionCopy.removed,
   };
 
   return {
-    auction,
+    auctionCopy,
     bidtype,
     requestObject,
     options,
   };
 };
 
-export const attachTokenData = ({ auction, bidtype, requestObject, options }) => {
+export const attachTokenData = ({ auctionCopy, bidtype, requestObject, options }) => {
   const bidtypeObject = getBidTypeByValue(bidtype, options);
   const bidtypeData = {
     tokenAddress: bidtypeObject.address,
@@ -37,7 +41,7 @@ export const attachTokenData = ({ auction, bidtype, requestObject, options }) =>
   };
 
   return {
-    auction,
+    auctionCopy,
     requestObject: {
       ...requestObject,
       ...bidtypeData,
@@ -45,8 +49,8 @@ export const attachTokenData = ({ auction, bidtype, requestObject, options }) =>
   };
 };
 
-export const parseNumbers = ({ auction, requestObject }) => {
-  const royaltiesParsed = (auction.royaltySplits || []).map((r) => ({
+export const parseNumbers = ({ auctionCopy, requestObject }) => {
+  const royaltiesParsed = (auctionCopy.royaltySplits || []).map((r) => ({
     address: r.address,
     percentAmount: +r.percentAmount,
   }));
@@ -58,7 +62,7 @@ export const parseNumbers = ({ auction, requestObject }) => {
   };
 
   return {
-    auction,
+    auctionCopy,
     requestObject: {
       ...requestObject,
       ...numbersParsedObject,
@@ -66,12 +70,11 @@ export const parseNumbers = ({ auction, requestObject }) => {
   };
 };
 
-export const attachTierNftsIds = ({ auction, requestObject }) => {
+export const attachTierNftsIds = ({ auctionCopy, requestObject }) => {
   const tiersArray = [];
-
   // We should prepare all rewardTiers slots indexes for the BE in sequence 1,2,3,4,5 etc..
   let slotIndex = 1;
-  auction.rewardTiers.forEach((t) => {
+  auctionCopy.rewardTiers.forEach((t) => {
     // Update the slot index only if the tier is not removed
     const updatedSlotIndexes = t.nftSlots.map((slot) => {
       const slotCopy = { ...slot };
@@ -98,7 +101,7 @@ export const attachTierNftsIds = ({ auction, requestObject }) => {
   });
 
   return {
-    auction,
+    auctionCopy,
     requestObject: {
       ...requestObject,
       rewardTiers: tiersArray,
