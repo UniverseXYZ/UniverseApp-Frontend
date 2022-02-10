@@ -28,6 +28,7 @@ import { CollectionPageLoader } from '../../../../../../../containers/collection
 import NotFound from '../../../../../../../components/notFound/NotFound';
 import * as styles from '../../styles';
 import { NFTLike } from '../../../../components/nft-item/components';
+import { NFTTransferPopup } from '../nft-transfer-popup/NFTTransferPopup';
 
 // TODO: hide metadata tab for not Polymorph NFT type
 export const NFTInfo = () => {
@@ -36,6 +37,7 @@ export const NFTInfo = () => {
   const { NFT, isLoading, order } = useNFTPageData();
 
   const [buySectionMeasure, setBuySectionMeasure] = useState<UseMeasureRect>();
+  const [isTransferOpened, setIsTransferOpened] = useState(false);
 
   const handleClickViewCollection = useCallback(() => {
     if (NFT.moreFromCollection && NFT.moreFromCollection[0].collection) {
@@ -86,6 +88,7 @@ export const NFTInfo = () => {
                         showSell={!order}
                         showBurn={false}
                         showRemove={false}
+                        onTransfer={() => setIsTransferOpened(true)}
                       />
                     </Box>
                   </Flex>
@@ -193,6 +196,7 @@ export const NFTInfo = () => {
                 <Button {...styles.MoreNFTsButtonStyle} onClick={handleClickViewCollection}>View collection</Button>
               </Box>
             )}
+            <NFTTransferPopup NFT={NFT} isOpen={isTransferOpened} onClose={() => setIsTransferOpened(false)} />
           </>
         )
       : (<NotFound />)}
