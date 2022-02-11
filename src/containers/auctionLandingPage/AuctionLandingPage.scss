@@ -44,6 +44,17 @@
           }
         }
       }
+      .preview--auction__exit--mobile {
+        display: none;
+         @include sm {
+          display: block;
+        }
+      }
+      .preview--auction__exit {
+        @include sm {
+          display: none;
+        }
+      }
     }
     @include lg {
       padding: 30px 20px 0;

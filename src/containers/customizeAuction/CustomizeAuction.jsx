@@ -142,6 +142,7 @@ const CustomizeAuction = () => {
       setPreviewMode(false);
       history.push(`${loggedInArtist.universePageAddress}/${domainAndBranding.link}`, {
         previewMode: true,
+        savePreview: true,
       });
     } else {
       setPreviewMode(false);

@@ -53,7 +53,6 @@ const AuctionLandingPage = () => {
   const [showSuccessfulBid, setShowSuccessfulBid] = useState(false);
   const [showCancelBidPopup, setShowCancelBidPopup] = useState(false);
   const [selectedAuctionEnded, setSelectedAuctionEnded] = useState(false);
-  const [exitPreviewModeText, setExitPreviewModeText] = useState('Exit preview mode');
 
   // Auction ended section
   const [mySlot, setMySlot] = useState(null);
@@ -470,19 +469,13 @@ const AuctionLandingPage = () => {
 
   const bidsHidden = isBeforeNow(auction?.auction?.endDate);
 
-  useEffect(() => {
-    function handleResize() {
-      if (window.innerWidth < 576) {
-        setExitPreviewModeText('Exit');
-      } else {
-        setExitPreviewModeText('Exit preview mode');
-      }
+  const exitPreview = () => {
+    if (locationState?.savePreview) {
+      history.push('/my-auctions');
+    } else {
+      history.goBack();
     }
-    window.addEventListener('resize', handleResize);
-    handleResize();
-
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
+  };
 
   return auction ? (
     <div className="auction__landing__page">
@@ -494,8 +487,9 @@ const AuctionLandingPage = () => {
               Preview mode
             </div>
             <div>
-              <button type="button" onClick={() => history.goBack()}>
-                {exitPreviewModeText}
+              <button type="button" onClick={exitPreview}>
+                <span className="preview--auction__exit">Exit preview mode</span>
+                <span className="preview--auction__exit--mobile">Exit</span>
               </button>
             </div>
           </div>
