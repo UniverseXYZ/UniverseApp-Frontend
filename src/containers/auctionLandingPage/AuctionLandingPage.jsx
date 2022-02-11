@@ -174,7 +174,7 @@ const AuctionLandingPage = () => {
   };
 
   useEffect(() => {
-    if (selectedAuctionEnded) {
+    if (selectedAuctionEnded && universeAuctionHouseContract) {
       getAuctionRevenue();
     }
   }, [selectedAuctionEnded]);
