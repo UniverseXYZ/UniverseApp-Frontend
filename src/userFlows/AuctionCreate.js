@@ -18,26 +18,26 @@ import {
  * @param data.helpers.universeERC721FactoryContract
  * @returns {Object} collection: { ...collection, transactionHash, from, id }
  */
-export async function AuctionCreate({ auction, bidtype, options }) {
+export async function AuctionCreate({ auctionCopy, bidtype, options }) {
   const res = await asyncPipe(
     createRequestObject,
     attachTokenData,
     parseNumbers,
     attachTierNftsIds,
     sendCreateAuctionRequest
-  )({ auction, bidtype, options });
+  )({ auctionCopy, bidtype, options });
 
   return res;
 }
 
-export async function AuctionUpdate({ auction, bidtype, options }) {
+export async function AuctionUpdate({ auctionCopy, bidtype, options }) {
   const res = await asyncPipe(
     createRequestObject,
     attachTokenData,
     parseNumbers,
     attachTierNftsIds,
     sendUpdateAuctionRequest
-  )({ auction, bidtype, options });
+  )({ auctionCopy, bidtype, options });
 
   return res;
 }
