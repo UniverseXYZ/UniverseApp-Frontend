@@ -100,7 +100,7 @@ const AuctionLandingPage = () => {
         setCurrentBid(currBidder);
 
         const currBidderIndex = bidders
-          .map((bidder) => bidder.user.address.toLowerCase())
+          .map((bidder) => bidder.user?.address.toLowerCase())
           .indexOf(address.toLowerCase());
         if (currBidderIndex <= rewardTiersSlots.length - 1) {
           setIsWinningBid(true);
