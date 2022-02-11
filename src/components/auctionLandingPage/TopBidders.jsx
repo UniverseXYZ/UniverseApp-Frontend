@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { BigNumber } from 'bignumber.js';
 import { useHistory } from 'react-router';
@@ -34,10 +34,20 @@ const TopBidders = ({
   mySlotIndex,
 }) => {
   const [openSlots, setOpenSlots] = useState([]);
+  const [bidderInTheListText, setBidderInTheListText] = useState('');
   const history = useHistory();
   const { address } = useAuthContext();
-  const [isAuctionner, setIsAuctioneer] = useState(address === onAuction.artist.address);
+  const [isAuctionner] = useState(address === onAuction.artist.address);
   const allSlotsCaptured = !Object.values(slotsInfo).some((slot) => !slot.revenueCaptured);
+
+  useEffect(() => {
+    if (bidders && currentBid) {
+      const bidderInTheList = `(#${
+        bidders.findIndex((x) => x.id === currentBid.id) + 1
+      } in the list)`;
+      setBidderInTheListText(bidderInTheList);
+    }
+  }, [bidders, currentBid]);
 
   const toggleOpenSlot = (slotIndex) => {
     const isSlotOpened = openSlots.indexOf(slotIndex) >= 0;
@@ -242,7 +252,7 @@ const TopBidders = ({
                   <img src={currencyIcon} alt="Currency" />
                   {new BigNumber(currentBid.amount).toFixed()}
                 </b>
-                {`(#${bidders.findIndex((x) => x.id === currentBid.id) + 1} in the list)`}
+                {bidderInTheListText}
               </span>
             ) : (
               <span className="no__bids">You haven&apos;t placed any bids</span>
