@@ -135,10 +135,14 @@ const CustomizeAuction = () => {
     );
     if (action === PREVIEW_ACTION) {
       setPreviewMode(true);
-      history.push(`${loggedInArtist.universePageAddress}/${domainAndBranding.link}`);
+      history.push(`${loggedInArtist.universePageAddress}/${domainAndBranding.link}`, {
+        previewMode: true,
+      });
     } else if (action === SAVE_PREVIEW_ACTION) {
       setPreviewMode(false);
-      history.push(`${loggedInArtist.universePageAddress}/${domainAndBranding.link}`);
+      history.push(`${loggedInArtist.universePageAddress}/${domainAndBranding.link}`, {
+        previewMode: true,
+      });
     } else {
       setPreviewMode(false);
       setSuccessPopup(true);

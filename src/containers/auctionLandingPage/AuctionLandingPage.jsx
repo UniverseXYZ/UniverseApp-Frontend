@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext, useRef } from 'react';
-import { useLocation, useParams } from 'react-router-dom';
+import { useLocation, useParams, useHistory } from 'react-router-dom';
 import './AuctionLandingPage.scss';
 import Popup from 'reactjs-popup';
 import BigNumber from 'bignumber.js';
@@ -24,11 +24,13 @@ import { LandingPageLoader } from '../../components/auctionLandingPage/LandingPa
 import SuccessBidPopup from '../../components/popups/SuccessBidPopup';
 import { createRewardsTiersSlots } from '../../utils/helpers';
 import { isBeforeNow } from '../../utils/dates';
+import { ReactComponent as InfoIcon } from '../../assets/images/info-icon.svg';
 
 const AuctionLandingPage = () => {
   const defaultLoadingText =
     'The transaction is in progress. Keep this window opened. Navigating away from the page will reset the current progress.';
   const locationState = useLocation().state;
+  const history = useHistory();
   const { setActiveTxHashes, activeTxHashes } = useMyNftsContext();
   const { myAuctions } = useAuctionContext();
   const { auctionEvents, subscribeTo, unsubscribeFrom } = useSocketContext();
@@ -51,6 +53,7 @@ const AuctionLandingPage = () => {
   const [showSuccessfulBid, setShowSuccessfulBid] = useState(false);
   const [showCancelBidPopup, setShowCancelBidPopup] = useState(false);
   const [selectedAuctionEnded, setSelectedAuctionEnded] = useState(false);
+  const [exitPreviewModeText, setExitPreviewModeText] = useState('Exit preview mode');
 
   // Auction ended section
   const [mySlot, setMySlot] = useState(null);
@@ -467,8 +470,39 @@ const AuctionLandingPage = () => {
 
   const bidsHidden = isBeforeNow(auction?.auction?.endDate);
 
+  useEffect(() => {
+    function handleResize() {
+      if (window.innerWidth < 576) {
+        setExitPreviewModeText('Exit');
+      } else {
+        setExitPreviewModeText('Exit preview mode');
+      }
+    }
+    window.addEventListener('resize', handleResize);
+    handleResize();
+
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   return auction ? (
     <div className="auction__landing__page">
+      {locationState && locationState.previewMode ? (
+        <div className="preview--auction--container">
+          <div className="preview--auction">
+            <div>
+              <InfoIcon />
+              Preview mode
+            </div>
+            <div>
+              <button type="button" onClick={() => history.goBack()}>
+                {exitPreviewModeText}
+              </button>
+            </div>
+          </div>
+        </div>
+      ) : (
+        <></>
+      )}
       <AuctionDetails
         onAuction={auction}
         bidders={bidders}

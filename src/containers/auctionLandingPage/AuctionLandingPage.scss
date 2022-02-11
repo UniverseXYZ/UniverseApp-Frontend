@@ -2,6 +2,53 @@
 @import "../../assets/scss/mixins";
 
 .auction__landing__page {
+  .preview--auction--container {
+    padding: 30px 60px 0;
+    .preview--auction {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      max-width: 1110px;
+      margin: 0 auto;
+      background: rgba(0, 0, 0, 0.6);
+      border-radius: 12px;
+      padding: 20px 30px;
+      div {
+        &:nth-child(1) {
+          display: flex;
+          align-items: center;
+          font-family: $sharpGroteskBoldFont;
+          font-style: normal;
+          font-weight: 600;
+          font-size: 12px;
+          line-height: 130%;
+          color: $white;
+          svg {
+            margin-right: 11px;
+            path {
+              fill: $white;
+              fill-opacity: 1;
+            }
+          }
+        }
+        &:nth-child(2) {
+          button {
+            background: none;
+            font-family: $spaceGroteskFont;
+            font-style: normal;
+            font-weight: 500;
+            font-size: 14px;
+            line-height: 140%;
+            text-decoration-line: underline;
+            color: $white;
+          }
+        }
+      }
+    }
+    @include lg {
+      padding: 30px 20px 0;
+    }
+  }
   .artist__personal__logo {
     position: fixed;
     top: 12px;
@@ -28,7 +75,7 @@
   }
   .auction__details__section {
     position: relative;
-    padding: 30px 60px 110px;
+    padding: 40px 60px 110px;
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
@@ -154,6 +201,7 @@
       margin: 0 auto;
 
       .slick-slider {
+        margin-bottom: 40px;
         @include md {
           display: none;
         }
@@ -279,7 +327,6 @@
         display: grid;
         grid-template-columns: 1fr 1fr;
         grid-gap: 16px;
-        padding-top: 80px;
 
         &__image {
           grid-column: 1/2;
