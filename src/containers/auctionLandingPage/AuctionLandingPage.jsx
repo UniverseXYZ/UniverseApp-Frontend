@@ -174,6 +174,12 @@ const AuctionLandingPage = () => {
   };
 
   useEffect(() => {
+    if (selectedAuctionEnded) {
+      getAuctionRevenue();
+    }
+  }, [selectedAuctionEnded]);
+
+  useEffect(() => {
     if (universeAuctionHouseContract && Object.values(slotsInfo).length) {
       getAuctionRevenue();
     }
