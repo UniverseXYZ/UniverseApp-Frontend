@@ -123,11 +123,10 @@ const MintingAuctionsSection = () => {
             </p>
             <Button
               className="light-button"
-              disabled
-              // onClick={() => history.push('/my-auctions')}
+              onClick={() => history.push('/products/auction-house')}
               style={{ marginBottom: '60px' }}
             >
-              Coming soon
+              Go to Auctions
               <img src={arrowLeft} alt="arrow-back" />
             </Button>
           </AnimatedOnScroll>
