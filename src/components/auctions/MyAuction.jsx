@@ -24,7 +24,7 @@ const MyAuction = () => {
     'The transaction is in progress. Keep this window opened. Navigating away from the page will reset the current progress.';
   const [loadingText, setLoadingText] = useState(defaultLoadingText);
 
-  const tabTitles = ['My bids', 'Active auctions', 'Draft auctions', 'Past auctions'];
+  const tabTitles = ['My bids', 'Active auctions', 'Future auctions', 'Past auctions'];
   const tabs = { MyBids: 0, ActiveAuctions: 1, FutureAuctions: 2, PastAuctions: 3 };
 
   const [showButton, setShowButton] = useState(true);
@@ -113,7 +113,7 @@ const MyAuction = () => {
                         (item) =>
                           item.launch && isBeforeNow(item.startDate) && isAfterNow(item.endDate)
                       ).length
-                    : title === 'Draft auctions'
+                    : title === 'Future auctions'
                     ? myAuctions.filter((item) => !item.launch).length
                     : myAuctions.filter((item) => item.launch && isBeforeNow(item.endDate)).length}
                 </span>
