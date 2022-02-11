@@ -68,13 +68,13 @@ const AuctionReview = () => {
       });
       if (isEditingAuction.length) {
         try {
-          res = await AuctionUpdate({ auctionCopy, bidtype, options });
+          res = await AuctionUpdate({ auction: auctionCopy, bidtype, options });
         } catch (error) {
           console.error(error);
         }
       } else {
         try {
-          res = await AuctionCreate({ auctionCopy, bidtype, options });
+          res = await AuctionCreate({ auction: auctionCopy, bidtype, options });
         } catch (error) {
           console.error(error);
         }
