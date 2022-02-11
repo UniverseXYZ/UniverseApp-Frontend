@@ -68,7 +68,6 @@ export const parseNumbers = ({ auction, requestObject }) => {
 
 export const attachTierNftsIds = ({ auction, requestObject }) => {
   const tiersArray = [];
-
   // We should prepare all rewardTiers slots indexes for the BE in sequence 1,2,3,4,5 etc..
   let slotIndex = 1;
   auction.rewardTiers.forEach((t) => {

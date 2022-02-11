@@ -60,15 +60,21 @@ const AuctionReview = () => {
     if (auction && auction?.rewardTiers?.length) {
       setShowLoading(true);
       let res;
+      const auctionCopy = JSON.parse(JSON.stringify(auction));
+      auctionCopy.rewardTiers.forEach((rewardTier) => {
+        rewardTier.nftSlots.forEach((slot) => {
+          delete slot.nftsData;
+        });
+      });
       if (isEditingAuction.length) {
         try {
-          res = await AuctionUpdate({ auction, bidtype, options });
+          res = await AuctionUpdate({ auction: auctionCopy, bidtype, options });
         } catch (error) {
           console.error(error);
         }
       } else {
         try {
-          res = await AuctionCreate({ auction, bidtype, options });
+          res = await AuctionCreate({ auction: auctionCopy, bidtype, options });
         } catch (error) {
           console.error(error);
         }
