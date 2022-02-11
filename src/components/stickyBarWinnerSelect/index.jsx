@@ -51,7 +51,7 @@ const ValueContainer = (props) => {
       <components.ValueContainer className="value-container" {...props}>
         <label className="option">
           <img src={WinnerIcon} alt="winner icon" />
-          <span className="label-and-value">
+          <span style={{ color: 'red' }} className="label-and-value">
             {values.label}
             <span className="nfts-count">{values.nftsCount} NFTs</span>
           </span>
