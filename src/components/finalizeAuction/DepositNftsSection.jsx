@@ -3,19 +3,22 @@ import PropTypes from 'prop-types';
 import Button from '../button/Button';
 import emptyMark from '../../assets/images/emptyMark.svg';
 import emptyWhite from '../../assets/images/emptyWhite.svg';
+import warningIcon from '../../assets/images/Exclamation.svg';
+import LoadingImage from '../general/LoadingImage';
+import SVGImageLoader from '../marketplaceNFT/InlineSVG';
+import videoIcon from '../../assets/images/video-icon.svg';
+import doneIcon from '../../assets/images/Completed.svg';
 
 const DepositNftsSection = ({
   transactions,
   handleDepositTier,
   completedCollectionsStep,
+  completedAuctionCreationStep,
   completedDepositStep,
-  approvedTxCount,
   approvedTxs,
   handleWithdraw,
   isCanceledAuction,
 }) => {
-  console.log(transactions);
-
   // Maybe count this in transaction config
   const getTotalTxNftsCount = () => {
     let totalCount = 0;
@@ -39,16 +42,18 @@ const DepositNftsSection = ({
     slotArray.filter((item, i, ar) => ar.indexOf(item) === i).length;
 
   const showActionButton = (txIndex) => {
+    // 1. Aution hasn't been canceled
     if (!isCanceledAuction) {
       if (approvedTxs.indexOf(txIndex) < 0) {
-        const isDisabled =
+        // Only one button must be enabled at a time starting from tx index 0
+        const depositButtonDisabled =
           txIndex === 0
-            ? !(completedCollectionsStep && approvedTxCount === 0)
+            ? !(completedCollectionsStep && approvedTxs.length === 0)
             : !(completedCollectionsStep && approvedTxs.indexOf(txIndex - 1) >= 0);
 
         return (
           <Button
-            disabled={isDisabled}
+            disabled={depositButtonDisabled}
             className="light-button"
             onClick={() => handleDepositTier(txIndex)}
           >
@@ -56,21 +61,38 @@ const DepositNftsSection = ({
           </Button>
         );
       }
+
+      // Withdraw button must be disabled if auction isn't canceled
       return (
-        <Button className="light-border-button" onClick={() => handleWithdraw(txIndex)}>
+        <Button className="light-border-button" disabled onClick={() => handleWithdraw(txIndex)}>
           Withdraw
         </Button>
       );
     }
+
+    // 2. Auction is canceled && we some deposited txs
     if (approvedTxs.indexOf(txIndex) >= 0) {
+      // We need to withdraw starting from the beginning because the SC function always withdraw the first nfts deposited
+      const withdrawButtonDisabled = approvedTxs.length && approvedTxs[0] !== txIndex;
       return (
-        <Button className="light-border-button" onClick={() => handleWithdraw(txIndex)}>
+        <Button
+          className="light-border-button"
+          disabled={withdrawButtonDisabled}
+          onClick={() => handleWithdraw(txIndex)}
+        >
           Withdraw
         </Button>
       );
     }
-    return <></>;
+
+    // 3. Auction is canceled && we don't have any deposited txs
+    return (
+      <Button disabled className="light-button">
+        Deposit
+      </Button>
+    );
   };
+
   // TODO: Show loading
   return !transactions ? (
     <></>
@@ -78,7 +100,9 @@ const DepositNftsSection = ({
     <div className="create__auction">
       <div className="step">
         <div className="circle">
-          {completedCollectionsStep ? (
+          {completedDepositStep ? (
+            <img alt="Completed" src={doneIcon} />
+          ) : completedCollectionsStep ? (
             <img alt="Empty mark" src={emptyMark} />
           ) : (
             <img alt="Empty white" src={emptyWhite} />
@@ -90,6 +114,16 @@ const DepositNftsSection = ({
         <p className="auction__description">
           Deposit {getTotalTxNftsCount()} NFTs to the auction contract
         </p>
+        {(!isCanceledAuction && approvedTxs.length) ||
+        (isCanceledAuction && completedAuctionCreationStep && !approvedTxs.length) ? (
+          <div className="warning__div">
+            <img src={warningIcon} alt="Warning" />
+            <p>You need to cancel the auction before you can withdraw you NFTs</p>
+          </div>
+        ) : (
+          <></>
+        )}
+
         {transactions.displayNfts.map((slotNfts, txIndex) => (
           // eslint-disable-next-line react/no-array-index-key
           <div className="transaction" key={txIndex}>
@@ -106,19 +140,44 @@ const DepositNftsSection = ({
                 </div>
               </div>
               <div className="transaction__body">
-                {slotNfts.map((nft) => (
-                  <div>
-                    <div className="transaction__image" key={nft.id}>
-                      {nft.count > 1 ? <div className="first" /> : <></>}
-                      {nft.count > 2 ? <div className="second" /> : <></>}
+                {slotNfts.map((nft) => {
+                  const { artworkType, url, count, nftName } = nft;
+                  const nftIsImage =
+                    artworkType === 'png' ||
+                    artworkType === 'jpg' ||
+                    artworkType === 'jpeg' ||
+                    artworkType === 'mpeg' ||
+                    artworkType === 'webp';
 
-                      <div className="image-main">
-                        <img src={nft.thumbnail_url} alt={nft.name} />
+                  return (
+                    <div key={nft.id}>
+                      <div className="transaction__image">
+                        {count > 1 ? <div className="first" /> : <></>}
+                        {count > 2 ? <div className="second" /> : <></>}
+
+                        <div className="image-main">
+                          {artworkType === 'mp4' && (
+                            <video
+                              className="preview-video"
+                              onMouseOver={(event) => event.target.play()}
+                              onFocus={(event) => event.target.play()}
+                              onMouseOut={(event) => event.target.pause()}
+                              onBlur={(event) => event.target.pause()}
+                            >
+                              <source src={url} type="video/mp4" />
+                              <track kind="captions" />
+                              Your browser does not support the video tag.
+                            </video>
+                          )}
+                          {nftIsImage && <img className="preview-image" src={url} alt={nftName} />}
+                          {artworkType === 'mp4' && (
+                            <img className="video-icon" src={videoIcon} alt="Video Icon" />
+                          )}
+                        </div>
                       </div>
                     </div>
-                    {/* <>{nft.count > 3 ? <span>+{nft.count - 3}</span> : <></>}</> */}
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             </div>
             <div className="deposit__button">{showActionButton(txIndex)}</div>
@@ -130,14 +189,20 @@ const DepositNftsSection = ({
 };
 
 DepositNftsSection.propTypes = {
-  transactions: PropTypes.oneOfType([PropTypes.object]).isRequired,
+  transactions: PropTypes.oneOfType([PropTypes.object]),
   handleDepositTier: PropTypes.func.isRequired,
   handleWithdraw: PropTypes.func.isRequired,
-  completedDepositStep: PropTypes.bool.isRequired,
-  completedCollectionsStep: PropTypes.bool.isRequired,
+  completedAuctionCreationStep: PropTypes.bool,
+  completedCollectionsStep: PropTypes.bool,
+  completedDepositStep: PropTypes.bool,
   isCanceledAuction: PropTypes.bool.isRequired,
-  approvedTxCount: PropTypes.number.isRequired,
   approvedTxs: PropTypes.oneOfType([PropTypes.array]).isRequired,
 };
 
+DepositNftsSection.defaultProps = {
+  transactions: null,
+  completedAuctionCreationStep: null,
+  completedCollectionsStep: null,
+  completedDepositStep: null,
+};
 export default DepositNftsSection;

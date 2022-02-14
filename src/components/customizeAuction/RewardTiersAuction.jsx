@@ -5,16 +5,19 @@ import PropTypes from 'prop-types';
 import Button from '../button/Button.jsx';
 import cloudIcon from '../../assets/images/ion_cloud.svg';
 import defaultImage from '../../assets/images/default-img.svg';
-import CustomColorPicker from './CustomColorPicker.jsx';
+import { CustomColorPicker } from './CustomColorPicker.jsx';
 import { useAuctionContext } from '../../contexts/AuctionContext.jsx';
 import { auctionPageTierImageErrorMessage } from '../../utils/helpers.js';
 import { getImageDimensions } from '../../utils/helpers/pureFunctions/auctions';
+import closeIcon from '../../assets/images/close-menu.svg';
 
 const TIER_IMAGE_DIMENSIONS = {
   width: 800,
   height: 800,
 };
 
+const TIER_IMAGE_MAX_SIZE_MB = 3;
+const MB_IN_BYTES = 1000000;
 const RewardTiersAuction = ({
   values,
   onChange,
@@ -30,7 +33,7 @@ const RewardTiersAuction = ({
     onChange((prevValues) =>
       prevValues.map((tier) => {
         if (tier.id === tierId && event.target.value.length <= 600) {
-          return { ...tier, description: event.target.value };
+          return { ...tier, description: event.target.value, touched: true };
         }
         return tier;
       })
@@ -66,8 +69,14 @@ const RewardTiersAuction = ({
   };
 
   const validateFile = async (file, tierId) => {
+    if (!file) {
+      // remove the image and display the preview image
+      handleUploadImage(file, tierId);
+      return;
+    }
     const fileValid =
-      (file.type === 'image/jpeg' || file.type === 'image/png') && file.size / 1048576 < 30;
+      (file.type === 'image/jpeg' || file.type === 'image/png') &&
+      file.size / MB_IN_BYTES < TIER_IMAGE_MAX_SIZE_MB;
 
     getImageDimensions(file, ({ width, height }) => {
       let dimensionsValid = false;
@@ -75,10 +84,9 @@ const RewardTiersAuction = ({
         dimensionsValid = true;
       }
       handleImageError(tierId, fileValid, dimensionsValid);
+      // upload the image even if it is incorrect,so the user can remove it and upload a proper one or not upload an image at all
+      handleUploadImage(file, tierId);
     });
-
-    // always show an image preview, so the user is able to remove an incorrect image
-    handleUploadImage(file, tierId);
   };
 
   const onDrop = (e, tierId) => {
@@ -105,7 +113,8 @@ const RewardTiersAuction = ({
             image = URL.createObjectURL(tier.imageUrl);
           }
           const description = tier.description || '';
-
+          const isDescriptionValid =
+            (description && tier.touched !== undefined) || tier.touched === undefined;
           const imageErrorId = invalidImageIds.find((id) => id === tier.id);
           let uploadImageContainerClasses = 'upload__image';
           let errorMessage = false;
@@ -162,7 +171,7 @@ const RewardTiersAuction = ({
                     </p>
                   </div>
                   <textarea
-                    className={editButtonClick && !description ? 'inp error-inp' : 'inp'}
+                    className={!isDescriptionValid ? 'inp error-inp' : 'inp'}
                     placeholder="Enter the description"
                     // eslint-disable-next-line react/prop-types
                     value={values[i].description}
@@ -204,7 +213,21 @@ const RewardTiersAuction = ({
                         <h6>Preview</h6>
                         <div className="preview-div">
                           {image ? (
-                            <img src={image} className="preview__image" alt="Platinum" />
+                            <>
+                              <img src={image} className="preview__image" alt="Platinum" />
+                              <img
+                                className="close"
+                                src={closeIcon}
+                                alt="Close"
+                                aria-hidden="true"
+                                onClick={(e) => {
+                                  validateFile(null, tier.id);
+                                  setInvalidImageIds(
+                                    invalidImageIds.filter((id) => id !== tier.id)
+                                  );
+                                }}
+                              />
+                            </>
                           ) : (
                             <img
                               className="default__upload__image"

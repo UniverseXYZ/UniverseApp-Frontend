@@ -1,35 +1,100 @@
+import { utils } from 'ethers';
+
 // TODO: Get this from smart contract nftSlotLimit
 const maxNftsPerTx = 100;
 
-export const createBatchCaptureRevenueTxs = (rewardTiers) => {
+export const createSingleCaptureRevenueTxs = (rewardTiersSlots, bidders, slotsInfo) => {
   const txs = [];
-  let startSlot = 1;
-  let endSlot = 0;
-  // Iterate over all reward tiers
+
+  rewardTiersSlots.forEach((tier, index) => {
+    const bidder = bidders[index];
+    const slotKeys = Object.keys(slotsInfo);
+    const slotValues = Object.values(slotsInfo);
+
+    let slotInfo = null;
+    let slotIndex = 0;
+
+    slotValues.forEach((slot, i) => {
+      if (bidder?.user.address && slot.winner === utils.getAddress(bidder.user.address)) {
+        slotInfo = slot;
+        slotIndex = slotKeys[i];
+      }
+    });
+
+    if (slotIndex === 0) {
+      slotIndex = tier.nfts[0].slot;
+      slotInfo = slotValues[slotIndex - 1];
+    }
+
+    const txObj = {
+      bidder,
+      tier,
+      slotInfo,
+      startSlot: slotIndex,
+      endSlot: slotIndex,
+    };
+    txs.push(txObj);
+  });
+
+  return txs;
+};
+
+export const createBatchCaptureRevenueTxsFinalised = (rewardTiersSlots, bidders, slotsInfo) => {
+  const singleCaptureTxs = createSingleCaptureRevenueTxs(rewardTiersSlots, bidders, slotsInfo).sort(
+    (a, b) => a.startSlot - b.startSlot
+  );
+
+  singleCaptureTxs.forEach((tx, txIndex) => {
+    if (tx.slotInfo?.revenueCaptured) {
+      singleCaptureTxs[txIndex] = [];
+    }
+  });
+
+  const txs = [];
+
   let txObject = {
-    startSlot,
-    endSlot,
+    startSlot: 0,
+    endSlot: 0,
     totalNfts: 0,
     tiers: [],
+    revenueCaptured: false,
   };
 
-  rewardTiers.forEach((tier) => {
-    // Keep track of nfts count
-    if (txObject.totalNfts + tier.nfts.length > maxNftsPerTx) {
-      // Append current transaction info to final transactions and create a new tx array
+  singleCaptureTxs.forEach((tx, txIndex) => {
+    // If we get to an already captured slot or exceed the maxNftsPerTxLimit
+    // We push the current txs
+    if (!tx.slotInfo) {
+      if (txObject.totalNfts) {
+        txs.push(txObject);
+        txObject = {
+          startSlot: 0,
+          endSlot: 0,
+          totalNfts: 0,
+          tiers: [],
+          revenueCaptured: false,
+        };
+      }
+      return;
+    }
+
+    if (txObject.totalNfts + tx.tier.nfts.length > maxNftsPerTx) {
       txs.push(txObject);
-      startSlot = endSlot;
       txObject = {
-        startSlot,
-        endSlot,
+        startSlot: 0,
+        endSlot: 0,
         totalNfts: 0,
         tiers: [],
+        revenueCaptured: tx.revenueCaptured,
       };
     }
-    endSlot += tier.numberOfWinners;
-    txObject.endSlot = endSlot;
-    txObject.totalNfts += tier.nfts.length;
-    txObject.tiers = [...txObject.tiers, tier];
+
+    if (txObject.startSlot === 0) {
+      txObject.startSlot = tx.startSlot;
+    }
+    txObject.endSlot = tx.endSlot;
+    txObject.totalNfts += tx.tier.nfts.length;
+    // Avoid duplicate tiers
+    txObject.tiers = [...txObject.tiers, tx.tier];
   });
 
   // Push any remaining transactions
@@ -39,17 +104,35 @@ export const createBatchCaptureRevenueTxs = (rewardTiers) => {
   return txs;
 };
 
-export const createSingleCaptureRevenueTxs = (rewardTiersSlots, bidders) => {
+export const createBatchCaptureRevenueTxsNotFinalised = (rewardTiersSlots) => {
   const txs = [];
 
+  let txObject = {
+    startSlot: 0,
+    endSlot: 0,
+    totalNfts: 0,
+    tiers: [],
+    revenueCaptured: false,
+  };
+
   rewardTiersSlots.forEach((tier, index) => {
-    const bidder = bidders[index];
-    const txObj = {
-      bidder,
-      tier,
-    };
-    txs.push(txObj);
+    if (txObject.totalNfts + tier.nfts.length > maxNftsPerTx) {
+      txs.push(txObject);
+      txObject = {
+        totalNfts: 0,
+        tiers: [],
+        revenueCaptured: false,
+      };
+    }
+
+    txObject.totalNfts += tier.nfts.length;
+    // Avoid duplicate tiers
+    txObject.tiers = [...txObject.tiers, tier];
   });
 
+  // Push any remaining transactions
+  if (txObject.tiers.length) {
+    txs.push(txObject);
+  }
   return txs;
 };

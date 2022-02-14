@@ -1,4 +1,4 @@
-import React, { createContext, useState, useEffect, useContext } from 'react';
+import React, { createContext, useState, useEffect, useContext, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { Contract, providers, utils } from 'ethers';
 import uuid from 'react-uuid';
@@ -10,6 +10,7 @@ import { CONNECTORS_NAMES } from '../utils/dictionary';
 import { getProfileInfo, setChallenge, userAuthenticate } from '../utils/api/profile';
 import { mapUserData } from '../utils/helpers';
 import { useErrorContext } from './ErrorContext';
+import AuctionSDK from '../contractsSDKs/AuctionSDK';
 
 const AuthContext = createContext(null);
 
@@ -47,12 +48,24 @@ const AuthContextProvider = ({ children }) => {
   const [contracts, setContracts] = useState(false);
   const [deployedCollections, setDeployedCollections] = useState([]);
   const [universeAuctionHouseContract, setUniverseAuctionHouseContract] = useState(null);
+
+  const [showWalletPopup, setshowWalletPopup] = useState(false);
+  const [selectedWallet, setSelectedWallet] = useState('');
+
+  const [showInstallWalletPopup, setShowInstallWalletPopup] = useState(false);
+  const [installed, setInstalled] = useState(false);
+
+  const [auctionSDK, setAuctionSDK] = useState(null);
   const history = useHistory();
   // Getters
   const getEthPriceData = async (balance) => {
-    const ethUsdPice = await getEthPriceCoingecko();
-    setUsdEthBalance(ethUsdPice?.market_data?.current_price?.usd * balance);
-    setEthPrice(ethUsdPice);
+    try {
+      const ethUsdPice = await getEthPriceCoingecko();
+      setUsdEthBalance((ethUsdPice?.market_data?.current_price?.usd || 0) * balance);
+      setEthPrice(ethUsdPice);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   useEffect(() => {
@@ -69,7 +82,27 @@ const AuthContextProvider = ({ children }) => {
   };
 
   // Authentication and Web3
-  const web3AuthenticationProccess = async (provider, network, accounts) => {
+  const web3AuthenticationProccess = async (
+    providerToUse = null,
+    networkToUse = null,
+    accounts
+    // eslint-disable-next-line consistent-return
+  ) => {
+    let provider = providerToUse;
+    if (!provider) {
+      // IF no explicit provider, use MetaMask
+      const { ethereum } = window;
+      provider = new providers.Web3Provider(ethereum);
+    }
+
+    let network = networkToUse;
+    if (!network) {
+      network = await provider.getNetwork();
+    }
+
+    if (network.chainId !== +process.env.REACT_APP_NETWORK_CHAIN_ID) {
+      return setShowWrongNetworkPopup(true);
+    }
     const balance = await provider.getBalance(accounts[0]);
     const ensDomain = await provider.lookupAddress(accounts[0]);
     const signerResult = provider.getSigner(accounts[0]).connectUnchecked();
@@ -94,6 +127,9 @@ const AuthContextProvider = ({ children }) => {
       contractsData.UniverseAuctionHouse.abi,
       signerResult
     );
+
+    const auctionAPI = new AuctionSDK(auctionHouseContract);
+    setAuctionSDK(auctionAPI);
 
     const polymContract = contractsData.PolymorphWithGeneChanger;
 
@@ -147,46 +183,43 @@ const AuthContextProvider = ({ children }) => {
     setLobsterContract(null);
   };
 
+  const handleAccountsChanged = useCallback(async ([account]) => {
+    // IF ACCOUNT CHANGES, CLEAR TOKEN AND ADDRESS FROM LOCAL STORAGE
+    clearStorageAuthData();
+    if (account) {
+      history.push('/');
+      await resetConnectionState();
+      web3AuthenticationProccess(null, null, [account]);
+    } else {
+      resetConnectionState();
+    }
+  }, []);
+
   const connectWithMetaMask = async () => {
     const { ethereum } = window;
 
-    // await ethereum.request({ method: 'eth_requestAccounts' });
-    const provider = new providers.Web3Provider(ethereum);
-    const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
-    const network = await provider.getNetwork();
+    if (ethereum) {
+      const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
+      await web3AuthenticationProccess(null, null, accounts);
 
-    if (network.chainId !== +process.env.REACT_APP_NETWORK_CHAIN_ID) {
-      setShowWrongNetworkPopup(true);
-    } else {
-      await web3AuthenticationProccess(provider, network, accounts);
-    }
+      setProviderName(() => {
+        const name = CONNECTORS_NAMES.MetaMask;
+        localStorage.setItem('providerName', name);
+        return name;
+      });
 
-    setProviderName(() => {
-      const name = CONNECTORS_NAMES.MetaMask;
-      localStorage.setItem('providerName', name);
-      return name;
-    });
+      ethereum.removeListener('accountsChanged', handleAccountsChanged);
+      ethereum.on('accountsChanged', handleAccountsChanged);
 
-    ethereum.on('accountsChanged', async ([account]) => {
-      // IF ACCOUNT CHANGES, CLEAR TOKEN AND ADDRESS FROM LOCAL STORAGE
-      clearStorageAuthData();
-      if (account) {
-        // await connectWithMetaMask();
-        history.push('/');
-        web3AuthenticationProccess(provider, network, [account]);
-      } else {
+      ethereum.on('chainChanged', async (networkId) => {
+        clearStorageAuthData();
+        window.location.reload();
+      });
+
+      ethereum.on('disconnect', async (error) => {
         resetConnectionState();
-      }
-    });
-
-    ethereum.on('chainChanged', async (networkId) => {
-      clearStorageAuthData();
-      window.location.reload();
-    });
-
-    ethereum.on('disconnect', async (error) => {
-      resetConnectionState();
-    });
+      });
+    }
   };
 
   const connectWithWalletConnect = async () => {
@@ -247,6 +280,9 @@ const AuthContextProvider = ({ children }) => {
   };
 
   useEffect(() => {
+    if (window.ethereum) {
+      setInstalled(true);
+    }
     if (
       !(providerName === CONNECTORS_NAMES.WalletConnect && !localStorage.getItem('walletconnect'))
     ) {
@@ -258,9 +294,9 @@ const AuthContextProvider = ({ children }) => {
   const signMessage = async () => {
     try {
       if (signer) {
-        const sameUser = address === localStorage.getItem('user_address');
+        const addressToSign = (await signer.getAddress()).toLowerCase();
+        const sameUser = addressToSign === localStorage.getItem('user_address');
         const hasSigned = sameUser && localStorage.getItem('xyz_access_token');
-
         if (!hasSigned) {
           const chanllenge = uuid();
           const challengeResult = await setChallenge(chanllenge);
@@ -274,7 +310,7 @@ const AuthContextProvider = ({ children }) => {
           ]);
 
           const authInfo = await userAuthenticate({
-            address,
+            address: addressToSign,
             signedMessage,
             uuid: challengeResult?.uuid,
           });
@@ -282,10 +318,13 @@ const AuthContextProvider = ({ children }) => {
           if (!authInfo.error) {
             // Save xyz_access_token into the local storage for later API requests usage
             localStorage.setItem('xyz_access_token', authInfo.token);
-            localStorage.setItem('user_address', address);
+            localStorage.setItem('user_address', addressToSign);
 
             setIsAuthenticated(true);
+            setIsWalletConnected(true);
+            setAddress(addressToSign);
             setLoggedInArtist(mapUserData(authInfo.user));
+            setshowWalletPopup(false);
           } else {
             setIsAuthenticated(false);
             setErrorBody('Please try again in a few minutes.');
@@ -294,11 +333,14 @@ const AuthContextProvider = ({ children }) => {
           }
         } else {
           // THE USER ALREADY HAS SIGNED
-          const userInfo = await getProfileInfo(address);
+          setIsAuthenticated(true);
+          setIsWalletConnected(true);
+          setAddress(addressToSign);
 
-          if (!userInfo.error) {
-            setIsAuthenticated(true);
-            setIsWalletConnected(true);
+          const userInfo = await getProfileInfo(addressToSign);
+
+          if (userInfo && !userInfo.error) {
+            setshowWalletPopup(false);
 
             setLoggedInArtist({
               id: userInfo.id,
@@ -325,6 +367,20 @@ const AuthContextProvider = ({ children }) => {
       setIsWalletConnected(false);
       setIsAuthenticated(false);
       console.error(err);
+    }
+  };
+
+  const handleConnectWallet = async (wallet) => {
+    // Here need to check if selected wallet is installed in browser
+    setSelectedWallet(wallet);
+    if (wallet === CONNECTORS_NAMES.MetaMask) {
+      if (installed) {
+        await connectWithMetaMask();
+      } else {
+        setShowInstallWalletPopup(true);
+      }
+    } else if (wallet === CONNECTORS_NAMES.WalletConnect) {
+      await connectWithWalletConnect();
     }
   };
 
@@ -380,6 +436,16 @@ const AuthContextProvider = ({ children }) => {
         connectWeb3,
         connectWithWalletConnect,
         universeAuctionHouseContract,
+        showInstallWalletPopup,
+        setShowInstallWalletPopup,
+        handleConnectWallet,
+        showWalletPopup,
+        setshowWalletPopup,
+        selectedWallet,
+        setSelectedWallet,
+        installed,
+        setInstalled,
+        auctionSDK,
       }}
     >
       {children}

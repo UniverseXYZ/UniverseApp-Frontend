@@ -2,6 +2,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import './index.scss';
 import PropTypes from 'prop-types';
 import Select, { components } from 'react-select';
+import { FixedSizeList as List } from 'react-window';
 import { handleClickOutside } from '../../utils/helpers';
 
 const Option = (props) => {
@@ -54,17 +55,32 @@ Placeholder.defaultProps = {
 };
 
 const MenuList = (props) => {
-  const { children } = props;
+  const { children, maxHeight, getValue, options } = props;
+  const height = 30;
+  const [value] = getValue();
+  const initialOffset = options.indexOf(value) * height;
+
   return (
-    <components.MenuList {...props}>
+    <>
       <span className="choose-edition">Choose edition number</span>
-      <div>{children}</div>
-    </components.MenuList>
+      <List
+        className="list"
+        height={maxHeight}
+        itemCount={children.length}
+        itemSize={height}
+        initialScrollOffset={initialOffset}
+      >
+        {({ index, style }) => <div style={style}>{children[index]}</div>}
+      </List>
+    </>
   );
 };
 
 MenuList.propTypes = {
   children: PropTypes.node.isRequired,
+  maxHeight: PropTypes.number.isRequired,
+  getValue: PropTypes.func.isRequired,
+  options: PropTypes.oneOfType([PropTypes.array]).isRequired,
 };
 
 const styles = {
@@ -75,13 +91,13 @@ const styles = {
     fontStyle: 'normal',
     fontWeight: 'normal',
     fontSize: '16px',
+    width: 'fit-content',
   }),
   container: (defaultStyles) => ({
     ...defaultStyles,
-    // position: 'unset',
-    minWidth: '135px',
+    width: '95px',
     background:
-      'linear-gradient(#ffffff, #ffffff) padding-box, linear-gradient(to right, #bceb00, #00eaea) border-box',
+      'linear-gradient(#ffffff, #ffffff) padding-box, linear-gradient(135deg, #bceb00, #00eaea) border-box',
     boxShadow: '0px 10px 20px rgb(136 120 172 / 20%)',
     border: '1px solid transparent',
     borderRadius: '15px',
@@ -90,13 +106,15 @@ const styles = {
   }),
   menu: (defaultStyles) => ({
     ...defaultStyles,
-    width: '160%',
+    width: '225px',
     position: 'absolute',
     right: '3%',
-    top: '90%',
+    top: '80%',
   }),
-  indicatorsContainer: (defaultStyles) => ({
-    ...defaultStyles,
+  indicatorsContainer: () => ({
+    '& > div': {
+      padding: 0,
+    },
   }),
   input: (defaultStyles) => ({
     ...defaultStyles,
@@ -124,15 +142,20 @@ const styles = {
     flexGrow: '0',
     padding: '0 8px 2px 0',
     cursor: 'pointer',
+    minHeight: 'initial',
+    width: '100%',
   }),
   valueContainer: (base, state) => ({
     ...base,
+    padding: '0 0 0 8px',
+    display: 'grid',
   }),
   dropdownIndicator: (base, state) => ({
     ...base,
     color: '#000000',
     transform: state.selectProps.menuIsOpen ? 'rotate(-180deg)' : 'rotate(0)',
     transition: '250ms',
+    width: '14px',
   }),
   option: (base, state) => ({
     ...base,
@@ -161,19 +184,6 @@ const styles = {
     },
     '& i::after': {
       borderColor: '#000 !important',
-    },
-  }),
-  menuList: (base) => ({
-    ...base,
-    background: '#fff',
-    '& .choose-edition': {
-      fontWeight: 'bold',
-      fontSize: '14px',
-      fontFamily: 'Space Grotesk',
-      marginLeft: '5%',
-      display: 'flex',
-      alignItems: 'center',
-      height: '54px',
     },
   }),
 };

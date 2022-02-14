@@ -2,9 +2,11 @@ import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import './Calendar.scss';
 import uuid from 'react-uuid';
+import { parseDateForDatePicker } from './utils';
 import arrow from '../../assets/images/arrow.svg';
 import closeIcon from '../../assets/images/cross.svg';
 import Button from '../button/Button.jsx';
+import { getTimezoneOffset } from '../../utils/dates';
 
 const EndDateCalendar = React.forwardRef(
   (
@@ -13,10 +15,17 @@ const EndDateCalendar = React.forwardRef(
   ) => {
     const d = new Date();
     const weekNames = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
+    const UTCHoursFromNow = getTimezoneOffset() / -60;
     const [currentMonth, setCurrentMonth] = useState([]);
     const [minDateTimeError, setMinDateTimeError] = useState(false);
-    const [minHours, setMinHours] = useState(new Date().getHours() + 1);
-    const [minMins, setMinMins] = useState(new Date().getMinutes() + 1);
+    const [minHours, setMinHours] = useState(
+      new Date().getHours() + 1 < 9 ? `0${new Date().getHours() + 1}` : new Date().getHours() + 1
+    );
+    const [minMins, setMinMins] = useState(
+      new Date().getMinutes() + 1 < 9
+        ? `0${new Date().getMinutes() + 1}`
+        : new Date().getMinutes() + 1
+    );
     const [selectedDate, setSelectedDate] = useState({
       year: values.endDate ? Number(values.endDate.toString().split(' ')[3]) : d.getFullYear(),
       month: values.endDate
@@ -167,21 +176,20 @@ const EndDateCalendar = React.forwardRef(
             year: selectedDate.year,
           }));
         }
+        if (day > new Date().getDate()) {
+          setMinDateTimeError(false);
+        } else if (
+          Number(endDateTemp.hours) < minHours ||
+          (Number(endDateTemp.hours) === minHours && Number(endDateTemp.minutes) < minMins)
+        ) {
+          setMinDateTimeError(true);
+        }
       }
     };
 
     const handleCancelClick = () => {
       if (!values.endDate) {
-        setEndDateTemp({
-          month: monthNames[d.getMonth()],
-          day: d.getDate(),
-          year: d.getFullYear(),
-          hours: new Date().getHours(),
-          minutes:
-            new Date().getMinutes() < 10 ? `0${new Date().getMinutes()}` : new Date().getMinutes(),
-          timezone: 'GMT +04:00',
-          format: 'AM',
-        });
+        setEndDateTemp(parseDateForDatePicker(d));
       } else {
         setEndDateTemp({
           month: values.endDate.toString().split(' ')[1],
@@ -229,15 +237,25 @@ const EndDateCalendar = React.forwardRef(
               ? 1
               : new Date(values.startDate).getHours() + 1,
           minutes:
-            new Date().getMinutes() < 10
+            new Date().getMinutes() < 9
               ? `0${new Date().getMinutes() + 1}`
-              : new Date().getMinutes(),
+              : new Date().getMinutes() + 1,
         }));
       } else if (!values.endDate) {
         setEndDateTemp((prevState) => ({
           ...prevState,
-          hours: new Date().getHours() === 24 ? 1 : new Date().getHours() + 1,
-          minutes: new Date().getMinutes() === 59 ? 1 : new Date().getMinutes() + 1,
+          hours:
+            new Date().getHours() === 24
+              ? `01`
+              : new Date().getHours() < 9
+              ? `0${new Date().getHours() + 1}`
+              : new Date().getHours() + 1,
+          minutes:
+            new Date().getMinutes() === 59
+              ? `01`
+              : new Date().getMinutes() < 9
+              ? `0${new Date().getMinutes() + 1}`
+              : new Date().getMinutes() + 1,
         }));
       }
     }, []);
@@ -253,19 +271,6 @@ const EndDateCalendar = React.forwardRef(
       }
       createDaysArray();
     }, [selectedDate]);
-
-    const handleClickOutside = (event) => {
-      if (ref.current && !ref.current.contains(event.target)) {
-        onClose();
-      }
-    };
-
-    useEffect(() => {
-      document.addEventListener('click', handleClickOutside, true);
-      return () => {
-        document.removeEventListener('click', handleClickOutside, true);
-      };
-    });
 
     return (
       <div className="calendar" ref={ref}>
@@ -356,7 +361,9 @@ const EndDateCalendar = React.forwardRef(
             <div className="timezone">
               <div className="label">Select time</div>
               <div className="selected__timezone" aria-hidden="true">
-                Your time zone is UTC+3
+                {`Your time zone is UTC${
+                  UTCHoursFromNow > 0 ? `+${UTCHoursFromNow}` : UTCHoursFromNow
+                }`}
               </div>
             </div>
             <div className="time">

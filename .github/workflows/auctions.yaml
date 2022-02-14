@@ -1,0 +1,153 @@
+name: Auctions Environment
+on:
+  push:
+    branches:
+    - auctions
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: Notify Slack
+      if: success()
+      id: slack
+      env:
+        SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+      uses: voxmedia/github-action-slack-notify-build@v1
+      with:
+        channel: infra-ci-kekdao
+        status: BUILD STARTED
+        color: warning
+
+    - name: Setup Nodejs
+      uses: actions/setup-node@v1
+      with:
+        node-version: '12.x'
+
+    - name: Cache dependencies
+      id: node-cache
+      uses: actions/cache@v2
+      with:
+        path: |
+          **/node_modules
+        key: ${{ runner.os }}-${{ hashFiles('**/package-lock.json') }}
+
+    - name: Install dependencies
+      run: yarn install
+      env:
+        CI: false
+
+    - name: Build
+      run: yarn build
+      env:
+        REACT_APP_API_BASE_URL: "https://auctions.api.universe.xyz"
+        REACT_APP_NETWORK_CHAIN_ID: 4
+        REACT_APP_NETWORK_NAME: "Rinkeby"
+        REACT_APP_BATCH_MINTING_CHUNK_SIZE: 40
+        REACT_APP_POLYMORPHS_GRAPH_URL: "https://api.thegraph.com/subgraphs/name/vikinatora/rarity-rinkeby"
+        REACT_APP_LOBSTERS_GRAPH_URL: "https://api.thegraph.com/subgraphs/name/vikinatora/lobster-rarity"
+        REACT_APP_POLYMORPHS_CONTRACT_ADDRESS: "0xF3641531e55DB83A39a6d505DfDecA614812F7a0"
+        REACT_APP_LOBSTERS_CONTRACT_ADDRESS: "0x06CBD34025776BA264Ae14D5e0dDa91369F24fB8"
+        REACT_APP_RARITY_METADATA_URL: "https://us-central1-polymorphmetadata.cloudfunctions.net/rarity-rinkeby"
+        REACT_APP_POLYMORPHS_IMAGES_URL: "https://us-central1-polymorphmetadata.cloudfunctions.net/images-function-rinkeby?id="
+        REACT_APP_LOBSTER_IMAGES_URL: "https://us-central1-polymorphmetadata.cloudfunctions.net/lobster-images-function-ropsten?id="
+        REACT_APP_ETHERSCAN_URL: "https://rinkeby.etherscan.io"
+        REACT_APP_UNIVERSE_ERC_721_ADDRESS: "0x5a322b56ed080c559da183b69aa720d19690eaf2"
+        REACT_APP_UNIVERSE_ERC_721_FACTORY_ADDRESS: "0xbdfff8b0306fd7af337c4842350625f50fd2be3a"
+        REACT_APP_UNIVERSE_AUCTION_HOUSE_ADDRESS: "0x1753aca48fa1933e7cf3525652953873c63363ba"
+        
+    - name: Save artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: frontend
+        path: build
+
+    - name: Notify Slack success
+      if: success()
+      env:
+        SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+      uses: voxmedia/github-action-slack-notify-build@v1
+      with:
+        message_id: ${{ steps.slack.outputs.message_id }}
+        channel: infra-ci-kekdao
+        status: BUILD SUCCESSFUL
+        color: good
+
+    - name: Notify Slack failure
+      if: failure()
+      env:
+        SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+      uses: voxmedia/github-action-slack-notify-build@v1
+      with:
+        message_id: ${{ steps.slack.outputs.message_id }}
+        channel: infra-ci-kekdao
+        status: BUILD FAILED
+        color: danger
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+    - name: Notify Slack
+      if: success()
+      id: slack
+      env:
+        SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+      uses: voxmedia/github-action-slack-notify-build@v1
+      with:
+        channel: infra-ci-kekdao
+        status: DEPLOYMENT STARTED
+        color: warning
+
+    - name: Get artifacts
+      uses: actions/download-artifact@v2
+      with:
+        name: frontend
+
+    - name: Configure AWS credetials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: us-east-1
+
+    - name: Deploy static site to S3
+      run: ls -l && aws s3 sync . s3://auctions-auctionsdevuniversexyz-origin --delete
+
+    - name: Invalidate CloudFront cache
+      run: |
+        #!/usr/bin/env bash
+        set -eou pipefail
+
+        CF_DIST_ID=$(aws cloudfront list-distributions --query "DistributionList.Items[?Aliases.Items!=null] | [?contains(Aliases.Items, 'auctions.dev.universe.xyz')].Id | [0]" | tr -d \")
+        echo "Clearing cache for ${CF_DIST_ID}..."
+        CF_INVALIDATION_ID=$(aws cloudfront create-invalidation --distribution-id ${CF_DIST_ID} --paths "/*" | jq -r '.Invalidation.Id')
+        while [ $(aws cloudfront get-invalidation --distribution-id ${CF_DIST_ID} --id ${CF_INVALIDATION_ID} | jq -r '.Invalidation.Status') != "Completed" ]; do
+          echo "CF_DIST_ID=${CF_DIST_ID} CF_INVALIDATION_ID=${CF_INVALIDATION_ID}: Waiting for CloudFront cache invalidation to complete..."
+          sleep 5
+        done
+
+    - name: Notify Slack success
+      if: success()
+      env:
+        SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+      uses: voxmedia/github-action-slack-notify-build@v1
+      with:
+        message_id: ${{ steps.slack.outputs.message_id }}
+        channel: infra-ci-kekdao
+        status: DEPLOYMENT SUCCESSFUL
+        color: good
+
+    - name: Notify Slack failure
+      if: failure()
+      env:
+        SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+      uses: voxmedia/github-action-slack-notify-build@v1
+      with:
+        message_id: ${{ steps.slack.outputs.message_id }}
+        channel: infra-ci-kekdao
+        status: DEPLOYMENT FAILED
+        color: danger

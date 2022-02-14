@@ -33,9 +33,11 @@ const ActiveAuctions = ({ mainAuction }) => {
 
   return (
     <Slider {...sliderSettings}>
-      {mainAuction?.moreActiveAuctions?.map((auction) => (
-        <ActiveAuctionCard key={auction.id} auction={auction} mainAuction={mainAuction} />
-      ))}
+      {mainAuction?.moreActiveAuctions
+        ?.filter((auction) => auction.onChain)
+        .map((auction) => (
+          <ActiveAuctionCard key={auction.id} auction={auction} mainAuction={mainAuction} />
+        ))}
     </Slider>
   );
 };

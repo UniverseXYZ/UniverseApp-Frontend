@@ -1,11 +1,29 @@
-@import '../../assets/scss/variables';
-@import '../../assets/scss/_mixins';
+@import "../../assets/scss/variables";
+@import "../../assets/scss/_mixins";
 
-.customize__auction {
-  background-image: url('../../assets/images/set-up-auction-desktop.png');
-  background-size: 100% 200px;
+.customize__auction__page {
+  background-image: url("../../assets/images/minting_page_bg.jpg");
+  background-position: center;
+  background-size: cover;
   background-repeat: no-repeat;
-  background-position-y: 80px;
+  background-attachment: fixed;
+  .customize__auction__wrapper {
+    background-image: url("../../assets/images/set-up-auction-desktop.png");
+    background-size: 100% 200px;
+    background-repeat: no-repeat;
+    padding: 40px 60px 80px;
+    @include lg {
+      background-image: url("../../assets//images/set-up-auction-tablet.png");
+    }
+    @include sm {
+      padding: 40px 20px 80px;
+      background-image: url("../../assets/images/set-up-auction-mobile.png");
+    }
+  }
+  .customize__auction__container {
+    max-width: 1110px;
+    margin: 0 auto;
+  }
   .customize__auction_title {
     display: flex;
     justify-content: space-between;
@@ -18,6 +36,10 @@
       font-style: normal;
       font-size: 32px;
       line-height: 140%;
+      color: transparent;
+      background: black;
+      -webkit-background-clip: text;
+      text-shadow: 2px 2px 5px rgba(255, 255, 255, 0.3);
 
       @include sm {
         font-size: 26px;
@@ -43,6 +65,10 @@
       font-size: 26px;
       line-height: 140%;
       letter-spacing: 0.2px;
+      color: transparent;
+      background: black;
+      -webkit-background-clip: text;
+      text-shadow: 2px 2px 5px rgba(255, 255, 255, 0.3);
 
       @include lg {
         font-size: 20px;
@@ -279,7 +305,7 @@
             margin-bottom: 21px;
 
             &.light-border-button {
-              box-shadow: 2px 1000px 1px #f7f9f8 inset;
+              box-shadow: 2px 1000px 1px #f5f0f6 inset;
             }
           }
 
@@ -460,7 +486,7 @@
               margin-bottom: 21px;
 
               &.light-border-button {
-                box-shadow: 2px 1000px 1px #f7f9f8 inset;
+                box-shadow: 2px 1000px 1px #edf0f3 inset;
               }
             }
             .remove {
@@ -554,6 +580,10 @@
       letter-spacing: 0.2px;
       margin-top: 60px;
       margin-bottom: 40px;
+      color: transparent;
+      background: black;
+      -webkit-background-clip: text;
+      text-shadow: 2px 2px 5px rgba(255, 255, 255, 0.3);
 
       @include lg {
         font-size: 20px;
@@ -577,8 +607,13 @@
         .tier__title {
           display: flex;
           align-items: center;
+          width: 80%;
 
           h4 {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 50%;
             font-family: $sharpGroteskSemiBoldFont;
             font-weight: 600;
             font-size: 16px;
@@ -766,7 +801,7 @@
               button {
                 margin-top: 16px;
                 &.light-border-button {
-                  box-shadow: 2px 1000px 1px #f7f9f8 inset;
+                  box-shadow: 2px 1000px 1px #e8e7eb inset;
                 }
               }
             }
@@ -787,6 +822,7 @@
                 border-radius: 10px;
                 width: 217px;
                 height: 217px;
+                position: relative;
 
                 .preview__image {
                   width: 100%;
@@ -817,6 +853,18 @@
                 margin-top: 20px;
               }
             }
+
+            .close {
+              position: absolute;
+              background: $white;
+              border-radius: 50%;
+              width: 26px;
+              height: 26px;
+              top: -13px;
+              right: -13px;
+              padding: 5px;
+              cursor: pointer;
+            }
             @include sm {
               display: block;
               height: fit-content;
@@ -839,6 +887,10 @@
 
         .account-grid-name1 {
           justify-content: space-between;
+
+          .light-border-button {
+            box-shadow: 2px 1000px 1px #f8f3f9 inset;
+          }
 
           .account-grid-name-editing {
             .intup-l {
@@ -948,6 +1000,10 @@
         font-size: 26px;
         line-height: 140%;
         letter-spacing: 0.2px;
+        color: transparent;
+        background: black;
+        -webkit-background-clip: text;
+        text-shadow: 2px 2px 5px rgba(255, 255, 255, 0.3);
 
         @include lg {
           font-size: 20px;
@@ -1052,6 +1108,7 @@
     justify-content: flex-end;
     .light-border-button {
       margin-right: 20px;
+      box-shadow: 2px 1000px 1px #f4f8fb inset;
       @include sm {
         margin-right: 0px;
         margin-bottom: 20px;
@@ -1060,13 +1117,8 @@
 
     @include sm {
       display: grid;
+      grid-template-columns: 1fr;
     }
-  }
-  @include lg {
-    background-image: url('../../assets//images/set-up-auction-tablet.png');
-  }
-  @include sm {
-    background-image: url('../../assets/images/set-up-auction-mobile.png');
   }
 }
 
@@ -1104,7 +1156,7 @@
       box-sizing: border-box;
     }
     &:before {
-      content: '';
+      content: "";
       padding-left: 10px;
       background: linear-gradient(135deg, #bceb00 15.57%, #00eaea 84.88%);
       color: #fff;
@@ -1119,7 +1171,7 @@
     }
   }
   &-inner:after {
-    content: '';
+    content: "";
     padding-right: 10px;
     background-color: rgba(0, 0, 0, 0.1);
   }
@@ -1239,6 +1291,7 @@
 
   @include sm {
     right: unset;
-    left: 0%;
+    left: 50%;
+    transform: translateX(-50%);
   }
 }

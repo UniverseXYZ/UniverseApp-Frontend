@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
+import BigNumber from 'bignumber.js';
 import closeIcon from '../../assets/images/close-menu.svg';
-import currencyETHIcon from '../../assets/images/currency-eth.svg';
 import arrowDownIcon from '../../assets/images/arrow-down.svg';
 import nftImage from '../../assets/images/marketplace/nfts/nft1.png';
 import { shortenEthereumAddress } from '../../utils/helpers/format';
+import videoIcon from '../../assets/images/video-icon.svg';
+import universeIcon from '../../assets/images/universe-img.svg';
+import { getCollectionBackgroundColor } from '../../utils/helpers';
 
 const BidRankingsPopup = ({
   onClose,
@@ -13,18 +16,32 @@ const BidRankingsPopup = ({
   rewardTiers,
   getRewardTierSpanStyles,
   ethPrice,
+  currencyIcon,
+  collections,
 }) => {
-  console.log(rewardTiersSlots);
-  console.log(rewardTiers);
-
   const displayBidderName = (bidder) => {
     if (bidder.user.displayName) {
       return bidder.user.displayName;
     }
-
     return shortenEthereumAddress(bidder.user.address);
   };
-  const [openedBidderID, setOpenedBidderID] = useState(0);
+
+  const [openSlots, setOpenSlots] = useState([]);
+
+  const toggleOpenSlot = (slotIndex) => {
+    const isSlotOpened = openSlots.indexOf(slotIndex) >= 0;
+    if (isSlotOpened) {
+      const newSlots = [...openSlots];
+      const indexOfSlot = newSlots.indexOf(slotIndex);
+      newSlots.splice(indexOfSlot, 1);
+      setOpenSlots(newSlots);
+    } else {
+      const newSlots = [...openSlots];
+      newSlots.push(slotIndex);
+      setOpenSlots(newSlots);
+    }
+  };
+
   return (
     <div className="bid__rankings__popup">
       <img
@@ -39,48 +56,58 @@ const BidRankingsPopup = ({
         <div className="reward__tiers">
           <div className="label">Reward tiers:</div>
           <div className="tiers">
-            {rewardTiers.map((tier) => (
-              <span style={getRewardTierSpanStyles(tier)}>{tier.name}</span>
-            ))}
+            {rewardTiers
+              .sort((a, b) => a.tierPosition - b.tierPosition)
+              .map((tier) => (
+                <span key={tier.id} style={getRewardTierSpanStyles(tier)}>
+                  {tier.name}
+                </span>
+              ))}
           </div>
         </div>
         <div className="bids__list">
-          {rewardTiers.map((tier) => (
-            <div
-              style={{ border: `border: 1px solid ${tier.color ? tier.color : '#bcbcbc'};` }}
-              className="bid__list"
-            >
-              {onBidders.map((bidder, index) => (
-                <div className="each--bid" key={bidder.id}>
+          {rewardTiersSlots.map((tier, index) => {
+            const bidder = onBidders[index];
+            const isSlotOpened = openSlots.indexOf(index) >= 0;
+            const bigNumberAmount = new BigNumber(bidder?.amount);
+            const usdAmount = bigNumberAmount.multipliedBy(ethPrice).toFixed(2);
+
+            return (
+              <div
+                style={{ border: `border: 1px solid ${tier.color ? tier.color : '#bcbcbc'}` }}
+                className="bid__list"
+                key={tier.slotIndex}
+              >
+                <div className="each--bid">
                   <div className="header">
                     <div className="bidder">
                       <span className="index">{`${index + 1}. `}</span>
-                      <span>{displayBidderName(bidder)}</span>
-                      {rewardTiersSlots[index] ? (
-                        <span
-                          className="tier"
-                          style={getRewardTierSpanStyles(rewardTiersSlots[index])}
-                        >
-                          {rewardTiersSlots[index].name}
-                        </span>
+                      <span className="bidder--address">
+                        {bidder ? displayBidderName(bidder) : 'No bidder yet'}
+                      </span>
+                      <span
+                        className="tier"
+                        style={getRewardTierSpanStyles(rewardTiersSlots[index])}
+                      >
+                        {rewardTiersSlots[index].name}
+                      </span>
+                    </div>
+                    <div className="bid">
+                      {bidder && bidder.amount ? (
+                        <>
+                          <img src={currencyIcon} alt="Currency" />
+                          <b>{bigNumberAmount.toFixed()}</b>
+                          <span>~${usdAmount}</span>
+                        </>
                       ) : (
                         <></>
                       )}
                     </div>
-                    <div className="bid">
-                      <img src={currencyETHIcon} alt="Currency" />
-                      <b>{bidder.amount}</b>
-                      <span>~${Math.round(bidder.amount * ethPrice)}</span>
-                    </div>
                     {rewardTiersSlots[index] ? (
                       <div
-                        className={`arrow ${openedBidderID === bidder.id ? 'opened' : ''}`}
+                        className={`arrow ${isSlotOpened ? 'opened' : ''}`}
                         aria-hidden="true"
-                        onClick={() =>
-                          openedBidderID === bidder.id
-                            ? setOpenedBidderID(0)
-                            : setOpenedBidderID(bidder.id)
-                        }
+                        onClick={() => toggleOpenSlot(index)}
                       >
                         <img src={arrowDownIcon} alt="Arrow down" />
                       </div>
@@ -88,155 +115,92 @@ const BidRankingsPopup = ({
                       <></>
                     )}
                   </div>
-                  {openedBidderID === bidder.id ? (
-                    tier.nfts.map((nft) => (
-                      <div className="nfts">
-                        <div className="each--nft">
-                          <div className="tooltiptext">
-                            <div>
-                              <label>Name:</label>
-                              <p>{nft.name}</p>
+                  {isSlotOpened ? (
+                    <div className="nfts">
+                      {tier.nfts.map((nft) => {
+                        const collection = collections.find((c) => c.id === nft.collectionId);
+                        const nftUrl = `${window.location.origin}/nft/${collection.address}/${nft.tokenId}`;
+                        const { artworkType } = nft;
+                        const nftIsImage =
+                          artworkType === 'png' ||
+                          artworkType === 'jpg' ||
+                          artworkType === 'jpeg' ||
+                          artworkType === 'mpeg' ||
+                          artworkType === 'gif' ||
+                          artworkType === 'webp';
+
+                        return (
+                          <div className="each--nft" key={nft.id}>
+                            <div className="tooltiptext">
+                              <div>
+                                <label>Name:</label>
+                                <p>{nft.name}</p>
+                              </div>
+                              <div>
+                                <label>Token ID:</label>
+                                <p>#{nft.tokenId}</p>
+                              </div>
+                              <div>
+                                <label>Collection:</label>
+                                <p>
+                                  {collection.address ===
+                                  process.env.REACT_APP_UNIVERSE_ERC_721_ADDRESS.toLowerCase() ? (
+                                    <img src={universeIcon} alt={collection.name} />
+                                  ) : !collection.coverUrl ? (
+                                    <div
+                                      className="random--bg--color"
+                                      style={{
+                                        backgroundColor: getCollectionBackgroundColor(collection),
+                                      }}
+                                    >
+                                      {collection.name.charAt(0)}
+                                    </div>
+                                  ) : (
+                                    <img src={collection.coverUrl} alt={collection.name} />
+                                  )}
+                                  {collection.name}
+                                </p>
+                              </div>
                             </div>
-                            <div>
-                              <label>Token ID:</label>
-                              <p>#{nft.tokenId}</p>
-                            </div>
-                            <div>
-                              <label>Collection:</label>
-                              <p>
-                                <img src={nftImage} alt="collection" />
-                                CryptoKitties
-                              </p>
-                            </div>
+
+                            {nft.artworkType === 'mp4' && (
+                              <video
+                                aria-hidden
+                                onClick={() => window.open(nftUrl, '_blank')}
+                                className="preview-video"
+                                onMouseOver={(event) => event.target.play()}
+                                onFocus={(event) => event.target.play()}
+                                onMouseOut={(event) => event.target.pause()}
+                                onBlur={(event) => event.target.pause()}
+                              >
+                                <source src={nft.thumbnail_url} type="video/mp4" />
+                                <track kind="captions" />
+                                Your browser does not support the video tag.
+                              </video>
+                            )}
+                            {nftIsImage && (
+                              <img
+                                aria-hidden
+                                onClick={() => window.open(nftUrl, '_blank')}
+                                className="preview-image"
+                                src={nft.thumbnail_url}
+                                alt={nft.name}
+                              />
+                            )}
+                            {artworkType === 'mp4' && (
+                              <img className="video-icon" src={videoIcon} alt="Video Icon" />
+                            )}
                           </div>
-                          <img src={nft.thumbnail_url} alt="nft" />
-                        </div>
-                      </div>
-                    ))
+                        );
+                      })}
+                    </div>
                   ) : (
                     <></>
                   )}
                 </div>
-              ))}
-            </div>
-          ))}
-
-          {/* <div className="gold">
-            {onBidders.map(
-              (bidder, index) =>
-                bidder.rewardTier === 'Gold' && (
-                  <div className="each--bid" key={bidder.id}>
-                    <div className="header">
-                      <div className="bidder">
-                        <span className="index">{`${index + 1}. `}</span>
-                        <span title={bidder.name}>{`${bidder.name.substring(0, 6)}...`}</span>
-                        <span style={{ color: '#ddbc45', borderColor: '#ddbc45' }} className="tier">
-                          {bidder.rewardTier}
-                        </span>
-                      </div>
-                      <div className="bid">
-                        <img src={currencyETHIcon} alt="Currency" />
-                        <b>{bidder.bid}</b>
-                        <span>~$48,580</span>
-                      </div>
-                      <div
-                        className={`arrow ${openedBidderID === bidder.id ? 'opened' : ''}`}
-                        aria-hidden="true"
-                        onClick={() =>
-                          openedBidderID === bidder.id
-                            ? setOpenedBidderID(null)
-                            : setOpenedBidderID(bidder.id)
-                        }
-                      >
-                        <img src={arrowDownIcon} alt="Arrow down" />
-                      </div>
-                    </div>
-                    {openedBidderID === bidder.id && (
-                      <div className="nfts">
-                        <div className="each--nft">
-                          <div className="tooltiptext">
-                            <div>
-                              <label>Name:</label>
-                              <p>Joan Jet</p>
-                            </div>
-                            <div>
-                              <label>Token ID:</label>
-                              <p>#01111</p>
-                            </div>
-                            <div>
-                              <label>Collection:</label>
-                              <p>
-                                <img src={nftImage} alt="collection" />
-                                CryptoKitties
-                              </p>
-                            </div>
-                          </div>
-                          <img src={nftImage} alt="nft" />
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                )
-            )}
-          </div>
-          <div className="silver">
-            {onBidders.map(
-              (bidder, index) =>
-                bidder.rewardTier === 'Silver' && (
-                  <div className="each--bid" key={bidder.id}>
-                    <div className="header">
-                      <div className="bidder">
-                        <span className="index">{`${index + 1}. `}</span>
-                        <span title={bidder.name}>{`${bidder.name.substring(0, 6)}...`}</span>
-                        <span style={{ color: '#bcbcbc', borderColor: '#bcbcbc' }} className="tier">
-                          {bidder.rewardTier}
-                        </span>
-                      </div>
-                      <div className="bid">
-                        <img src={currencyETHIcon} alt="Currency" />
-                        <b>{bidder.bid}</b>
-                        <span>~$48,580</span>
-                      </div>
-                      <div
-                        className={`arrow ${openedBidderID === bidder.id ? 'opened' : ''}`}
-                        aria-hidden="true"
-                        onClick={() =>
-                          openedBidderID === bidder.id
-                            ? setOpenedBidderID(null)
-                            : setOpenedBidderID(bidder.id)
-                        }
-                      >
-                        <img src={arrowDownIcon} alt="Arrow down" />
-                      </div>
-                    </div>
-                    {openedBidderID === bidder.id && (
-                      <div className="nfts">
-                        <div className="each--nft">
-                          <div className="tooltiptext">
-                            <div>
-                              <label>Name:</label>
-                              <p>Joan Jet</p>
-                            </div>
-                            <div>
-                              <label>Token ID:</label>
-                              <p>#01111</p>
-                            </div>
-                            <div>
-                              <label>Collection:</label>
-                              <p>
-                                <img src={nftImage} alt="collection" />
-                                CryptoKitties
-                              </p>
-                            </div>
-                          </div>
-                          <img src={nftImage} alt="nft" />
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                )
-            )}
-          </div> */}
+              </div>
+            );
+          })}
         </div>
       </div>
     </div>
@@ -250,6 +214,12 @@ BidRankingsPopup.propTypes = {
   rewardTiers: PropTypes.oneOfType([PropTypes.array]).isRequired,
   getRewardTierSpanStyles: PropTypes.func.isRequired,
   ethPrice: PropTypes.number.isRequired,
+  currencyIcon: PropTypes.string,
+  collections: PropTypes.oneOfType([PropTypes.array]).isRequired,
+};
+
+BidRankingsPopup.defaultProps = {
+  currencyIcon: '',
 };
 
 export default BidRankingsPopup;

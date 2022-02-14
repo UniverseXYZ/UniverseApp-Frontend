@@ -87,3 +87,42 @@
   opacity: 0.2;
   pointer-events: none;
 }
+
+.react-select-wrapper {
+  .choose-edition {
+    font-weight: bold;
+    font-size: 14px;
+    font-family: 'Space Grotesk';
+    display: flex;
+    align-items: center;
+    height: 54px;
+    padding: 10px;
+    background: white;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    box-shadow: 0px 10px 20px rgba(136, 120, 172, 0.2);
+  }
+  .list {
+    background: #fff !important;
+    max-height: 150px !important;
+    height: auto !important;
+    box-shadow: 0px 10px 20px rgba(136, 120, 172, 0.2);
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+  }
+  div[id*="listbox"] {
+    border-radius: 10px
+  }
+
+  .option {
+    i {
+      min-width: 16px;
+    }
+    label {
+      text-overflow: ellipsis;
+      max-width: 90%;
+      white-space: nowrap;
+      overflow: hidden;
+    }
+  }
+}

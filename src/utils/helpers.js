@@ -87,14 +87,11 @@ export const getEtherscanContractUrl = (address) =>
 export const getEtherscanTxUrl = (txHash) => `${process.env.REACT_APP_ETHERSCAN_URL}/tx/${txHash}`;
 
 export const auctionPageTierImageErrorMessage =
-  'File format must be PNG or JPEG (Max Size: 30mb) and at least 800X800px ';
-
+  'File format must be PNG or JPEG (Max Size: 3mb) and at least 800X800px ';
 export const auctionPageBackgroundImageErrorMessage =
-  'File format must be PNG or JPEG (Max Size: 30mb) and at least 1280X720px ';
-
+  'File format must be PNG or JPEG (Max Size: 1mb) and at least 1280X720px ';
 export const auctionPagePromoImageErrorMessage =
-  'File format must be PNG or JPEG (Max Size: 30mb) and at least 1080X1080px ';
-
+  'File format must be PNG or JPEG (Max Size: 3mb) and at least 1080X1080px ';
 export const whitepaperUrl = 'https://github.com/UniverseXYZ/UniverseXYZ-Whitepaper';
 
 export const getRewardTierSpanStyles = (rewardTier) => {
@@ -109,4 +106,28 @@ export const getRewardTierSpanStyles = (rewardTier) => {
     color: '#bcbcbc',
     border: '1px solid #bcbcbc',
   };
+};
+
+export const createRewardsTiersSlots = (rewardTiers, biddersInfo = []) => {
+  const tierSlots = [];
+  let slotIndexCounter = 1;
+  rewardTiers
+    .sort((a, b) => a.tierPosition - b.tierPosition)
+    .forEach((rewardTier) => {
+      for (let i = 0; i < rewardTier.numberOfWinners; i += 1) {
+        // eslint-disable-next-line no-loop-func
+        const nfts = rewardTier.nfts.filter((t) => t.slot === slotIndexCounter);
+        tierSlots.push({
+          ...rewardTier,
+          nfts,
+          winner: biddersInfo[i]?.user?.address || null,
+          slotIndex: slotIndexCounter,
+          // eslint-disable-next-line no-loop-func
+          minimumBid: rewardTier.slots.find((s) => s.index === slotIndexCounter)?.minimumBid,
+        });
+        slotIndexCounter += 1;
+      }
+    });
+
+  return tierSlots;
 };

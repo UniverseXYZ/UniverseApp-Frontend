@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import './Artist.scss';
 import { utils } from 'ethers';
 import Skeleton from 'react-loading-skeleton';
+import { Helmet } from 'react-helmet';
 import ArtistDetails from '../../components/artist/ArtistDetails.jsx';
 import ArtistPageTabs from '../../components/artist/tabs/Tabs.jsx';
 import NotFound from '../../components/notFound/NotFound.jsx';
@@ -21,10 +22,6 @@ const Artist = () => {
 
   useEffect(() => {
     setDarkMode(false);
-    document.title = `Universe Minting - Artist - ${artist?.name}`;
-    return () => {
-      document.title = 'Universe Minting';
-    };
   }, [artist]);
 
   useEffect(() => {
@@ -82,17 +79,22 @@ const Artist = () => {
   ) : notFound ? (
     <NotFound />
   ) : (
-    <div className="artist__page">
-      <ArtistDetails artistAddress={artistUsername} onArtist={artist} loading={loading} />
-      <ArtistPageTabs username={artistUsername} artistAddress={artistAddress} />
-      {artist && artist.personalLogo ? (
-        <div className="artist__personal__logo">
-          <img src={artist.personalLogo} alt="Artist personal logo" />
-        </div>
-      ) : (
-        <></>
-      )}
-    </div>
+    <>
+      <Helmet>
+        <title>Universe Artist {artist?.name}</title>
+      </Helmet>
+      <div className="artist__page">
+        <ArtistDetails artistAddress={artistUsername} onArtist={artist} loading={loading} />
+        <ArtistPageTabs artistId={artist.id || 0} nfts={artistNFTs} />
+        {artist && artist.personalLogo ? (
+          <div className="artist__personal__logo">
+            <img src={artist.personalLogo} alt="Artist personal logo" />
+          </div>
+        ) : (
+          <></>
+        )}
+      </div>
+    </>
   );
 };
 

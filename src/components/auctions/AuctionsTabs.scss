@@ -147,12 +147,6 @@
             border-width: 5px;
             border-style: solid;
             border-color: black transparent transparent transparent;
-            @include md {
-              left: 86%;
-            }
-          }
-          @include md {
-            right: -5px;
           }
         }
         &:hover {
@@ -376,6 +370,23 @@
             width: 225px;
           }
         }
+        .hz-line2 {
+          position: absolute;
+          left: 20px;
+          top: 10px;
+          height: 0px;
+          z-index: 5;
+          border: 1px solid rgba(0, 0, 0, 0.1);
+          width: 390px;
+
+          @include xl {
+            width: 306px;
+          }
+
+          @include lg {
+            width: 230px;
+          }
+        }
       }
       button {
         &.light-border-button {
@@ -401,6 +412,25 @@
 
           @include lg {
             width: 230px;
+          }
+        }
+        .hz-line1 {
+          position: absolute;
+          left: 20px;
+          top: 10px;
+          height: 0px;
+          z-index: 1;
+          background: linear-gradient($white, $white) padding-box,
+            linear-gradient(to right, #bceb01, #9ceb28) border-box;
+          border: 1px solid transparent;
+          width: 400px;
+
+          @include xl {
+            width: 303px;
+          }
+
+          @include lg {
+            width: 225px;
           }
         }
       }
@@ -522,6 +552,10 @@
         margin-bottom: 15px;
 
         h3 {
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          max-width: 250px;
           font-family: $sharpGroteskMediumFont;
           font-weight: 600;
           font-size: 14px;
@@ -593,6 +627,12 @@
                 color: $white;
               }
             }
+            .preview-video {
+              width: 100%;
+              height: 100%;
+              object-fit: cover;
+              border-radius: 5px;
+            }
             img {
               z-index: 9999;
               min-width: 100%;
@@ -627,8 +667,12 @@
     }
     button {
       margin-top: 20px;
-      &.light-border-button {
-        box-shadow: 2px 1000px 1px #fafafa inset;
+      &.light-border-button.red {
+        border: 1px solid #ff4949;
+        color: #ff4949;
+      }
+      .del--icon {
+        margin-left: 10px;
       }
       @include sm {
         width: 100%;
@@ -764,9 +808,6 @@
       border-radius: 0px 9px 9px 0px;
       transform: matrix(-1, 0, 0, 1, 0, 0);
     }
-  }
-  .past-auction {
-    padding-bottom: 0;
   }
   .auction-header {
     .auctionIcon {
@@ -915,11 +956,14 @@
     }
     @include md {
       grid-template-columns: repeat(2, 1fr);
+      grid-gap: 12px;
     }
   }
   .funds-and-balance {
+    padding: 0;
     padding-bottom: 30px;
     > div {
+      width: 100%;
       border: 2px solid transparent;
       border-radius: 10px;
       padding: 40px 60px;

@@ -20,6 +20,7 @@ import { useThemeContext } from '../../contexts/ThemeContext';
 
 const newTabData = [
   {
+    id: 1,
     labelText: 'Auction settings',
     icon: SettingIcon,
     iconActive: SettingIconActive,
@@ -28,6 +29,7 @@ const newTabData = [
     content: <AuctionSettings />,
   },
   {
+    id: 2,
     labelText: 'Reward tiers',
     icon: RewardIcon,
     iconActive: RewardIconActive,
@@ -36,6 +38,7 @@ const newTabData = [
     content: <RewardTiers />,
   },
   {
+    id: 3,
     labelText: 'Review auction',
     icon: ReviewIcon,
     iconActive: ReviewIconActive,
@@ -47,7 +50,6 @@ const newTabData = [
 
 const SetupAuction = () => {
   const { setDarkMode } = useThemeContext();
-  // const { auctionSetupState } = useAuctionContext();
   const history = useHistory();
   const location = useLocation();
 
@@ -59,8 +61,6 @@ const SetupAuction = () => {
 
   return (
     <div className="auction-setup">
-      {/* // TODO:: The router prompt is causing rerenders, making the Settings.jsx to lose state Investigate */}
-      {/* <RouterPrompt when onOK={handleOK} editing={auctionSetupState} /> */}
       <div className="setup--auction--welcome--section">
         <div className="setup">
           <div

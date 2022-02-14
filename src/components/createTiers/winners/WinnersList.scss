@@ -1,0 +1,184 @@
+@import "../../../assets/scss/variables";
+@import "../../../assets/scss/mixins";
+
+.winner__lists {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  grid-gap: 30px;
+
+  @include xl {
+    overflow-y: hidden;
+    overflow-x: auto;
+  }
+
+  @include md {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-gap: 15px;
+  }
+
+  @include sm {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-gap: 25px;
+  }
+
+  .winner-box {
+    position: relative;
+    width: 160px;
+    min-height: 123px;
+    background: $white;
+    border: 2px solid rgba(0, 0, 0, 0.1);
+    box-sizing: border-box;
+    border-radius: 10px;
+    text-align: center;
+    padding: 12px;
+    svg.arrow {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      bottom: -62px;
+      z-index: 1;
+      cursor: default;
+    }
+    svg.winner--icon {
+      margin: 15px auto;
+    }
+    p {
+      font-family: $sharpGroteskMediumFont;
+      font-style: normal;
+      font-weight: 600;
+      font-size: 12px;
+      line-height: 130%;
+      align-items: center;
+      text-align: center;
+      color: $black;
+      margin-bottom: 9px;
+    }
+    span {
+      display: block;
+      font-family: $spaceGroteskFont;
+      font-style: normal;
+      font-weight: bold;
+      font-size: 10px;
+      line-height: 150%;
+      align-items: center;
+      text-align: center;
+      color: $black;
+    }
+    .reserve--price {
+      margin-top: 20px;
+      text-align: left;
+      label {
+        font-family: $spaceGroteskFont;
+        font-style: normal;
+        font-weight: bold;
+        font-size: 10px;
+        line-height: 150%;
+        color: $black;
+        opacity: 0.4;
+      }
+      &--field {
+        position: relative;
+        margin-top: 2px;
+        img.eth--icon {
+          position: absolute;
+          top: 11px;
+          left: 11px;
+          z-index: 11;
+          width: 16px;
+          height: 16px;
+        }
+        .intup-l {
+          input {
+            width: 100%;
+            padding: 12px;
+            min-height: 38px;
+            height: 38px;
+            text-indent: 20px;
+            font-size: 14px;
+          }
+          input::-webkit-outer-spin-button,
+          input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+          }
+          .box--shadow--effect--block {
+            opacity: 0;
+            z-index: 1;
+            min-height: 44px;
+            width: calc(100% + 6px);
+            left: -3px;
+            top: -3px;
+            bottom: -3px;
+          }
+        }
+      }
+      .reserve--price--error {
+        position: absolute;
+        top: 11px;
+        right: 11px;
+        z-index: 11;
+        cursor: pointer;
+        &:hover {
+          .tooltip {
+            visibility: visible;
+          }
+        }
+        .tooltip {
+          visibility: hidden;
+          font-family: $spaceGroteskFont;
+          font-style: normal;
+          font-weight: normal;
+          font-size: 12px;
+          line-height: 150%;
+          color: #ff4949;
+          padding: 16px;
+          background: $white;
+          box-shadow: 0px 10px 20px rgba(136, 120, 172, 0.2);
+          border-radius: 12px;
+          width: 178px;
+          position: absolute;
+          bottom: 28px;
+          left: 50%;
+          transform: translateX(-50%);
+        }
+      }
+    }
+    .box--shadow--effect--block {
+      position: absolute;
+      width: calc(100% + 10px);
+      min-height: 56px;
+      z-index: -9;
+      left: -5px;
+      right: 0;
+      top: -4px;
+      bottom: -4px;
+      margin: auto;
+      border-radius: 12px;
+      opacity: 0;
+      background-image: linear-gradient(101deg, #bceb00, #00eaea);
+      background-origin: border-box;
+      box-shadow: 4px 1000px 1px $white inset;
+      border: 4px solid transparent;
+      transition: 0.2s;
+    }
+    &:hover {
+      cursor: pointer;
+      border-radius: 10px;
+      .box--shadow--effect--block {
+        opacity: 0.2;
+      }
+    }
+    &.selected {
+      background: linear-gradient($white, $white) padding-box, linear-gradient(135deg, #bceb00, #00eaea) border-box;
+      border: 1px solid transparent;
+      .box--shadow--effect--block {
+        opacity: 0.2;
+      }
+    }
+    @include sm {
+      width: 140px;
+    }
+  }
+}

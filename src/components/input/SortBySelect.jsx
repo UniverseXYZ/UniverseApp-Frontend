@@ -6,29 +6,17 @@ import './SortBySelect.scss';
 
 const SortBySelect = (props) => {
   const {
-    data,
-    sortData,
     className,
-    onChange,
-    defaultValue,
-    getData,
-    getDesc,
-    desc,
     hideFirstOption,
     disableOptions,
     setSelectedTypeIndex,
+    sortData,
+    sort,
+    setSort,
   } = props;
-  const [sortValue, setSortValue] = useState(defaultValue);
+
   const [showDropdown, setShowDropdown] = useState(false);
   const ref = useRef(null);
-
-  useEffect(() => {
-    onChange(sortValue);
-    if (data?.length) {
-      const sortedData = desc ? data.sort((a, b) => b.id - a.id) : data.sort((a, b) => a.id - b.id);
-      getData([...sortedData]);
-    }
-  }, [sortValue]);
 
   const handleClickOutside = (event) => {
     if (ref.current && !ref.current.contains(event.target)) {
@@ -57,7 +45,7 @@ const SortBySelect = (props) => {
         onClick={() => setShowDropdown(!showDropdown)}
         ref={ref}
       >
-        <span>{sortValue}</span>
+        <span>{sort}</span>
         <img src={arrowDown} alt="Arrow down" className={showDropdown ? 'rotate' : ''} />
         {showDropdown && (
           <div className="dropdown--items">
@@ -68,7 +56,7 @@ const SortBySelect = (props) => {
                 aria-hidden="true"
                 onClick={() => {
                   if (!disableOptions[index]) {
-                    setSortValue(item);
+                    setSort(item);
                     setSelectedTypeIndex(index);
                   }
                 }}
@@ -86,39 +74,17 @@ const SortBySelect = (props) => {
 };
 
 SortBySelect.propTypes = {
-  data: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.number,
-    })
-  ).isRequired,
-  sortData: PropTypes.arrayOf(PropTypes.string),
+  sortData: PropTypes.arrayOf(PropTypes.string).isRequired,
   className: PropTypes.string,
-  onChange: PropTypes.func,
-  defaultValue: PropTypes.string,
-  getData: PropTypes.func,
-  getDesc: PropTypes.func,
-  desc: PropTypes.bool,
+  sort: PropTypes.string.isRequired,
   hideFirstOption: PropTypes.bool,
   disableOptions: PropTypes.oneOfType([PropTypes.array]),
   setSelectedTypeIndex: PropTypes.func,
+  setSort: PropTypes.func.isRequired,
 };
 
 SortBySelect.defaultProps = {
-  sortData: [
-    'ending son',
-    'lowest price first',
-    'highest price first',
-    'recently listed',
-    'recently created',
-    'recently sold',
-    'most liked',
-  ],
   className: '',
-  onChange: () => {},
-  defaultValue: 'Sort by',
-  getData: () => {},
-  getDesc: () => {},
-  desc: false,
   hideFirstOption: false,
   disableOptions: [],
   setSelectedTypeIndex: () => {},

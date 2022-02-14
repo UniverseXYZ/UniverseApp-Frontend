@@ -51,10 +51,21 @@ import ErrorPopup from './components/popups/ErrorPopup';
 import { useErrorContext } from './contexts/ErrorContext';
 import Minting from './components/products/minting/Minting';
 import ReleaseRewards from './components/releaseRewards/ReleaseRewards';
+import SelectWalletPopup from './components/popups/SelectWalletPopup';
 
 const App = () => {
   const location = useLocation();
-  const { showWrongNetworkPopup, setShowWrongNetworkPopup } = useAuthContext();
+  const {
+    showWrongNetworkPopup,
+    setShowWrongNetworkPopup,
+    handleConnectWallet,
+    showInstallWalletPopup,
+    setShowInstallWalletPopup,
+    selectedWallet,
+    setSelectedWallet,
+    showWalletPopup,
+    setshowWalletPopup,
+  } = useAuthContext();
   const { showError, closeError } = useErrorContext();
 
   useEffect(() => {
@@ -135,7 +146,7 @@ const App = () => {
                 <AuthenticatedRoute exact path="/my-profile">
                   <MyProfile />
                 </AuthenticatedRoute>
-                <AuthenticatedRoute path="/setup-auction">
+                <AuthenticatedRoute requireProfile path="/setup-auction">
                   <SetupAuction />
                 </AuthenticatedRoute>
                 <Route exact path="/products/auction-house">
@@ -190,6 +201,16 @@ const App = () => {
               </Popup>
               <Popup closeOnDocumentClick={false} open={showError}>
                 <ErrorPopup close={closeError} />
+              </Popup>
+              <Popup closeOnDocumentClick={false} open={showWalletPopup}>
+                <SelectWalletPopup
+                  close={() => setshowWalletPopup(false)}
+                  handleConnectWallet={handleConnectWallet}
+                  showInstallWalletPopup={showInstallWalletPopup}
+                  setShowInstallWalletPopup={setShowInstallWalletPopup}
+                  selectedWallet={selectedWallet}
+                  setSelectedWallet={setSelectedWallet}
+                />
               </Popup>
             </MarketplaceContextProvider>
           </AuctionContextProvider>

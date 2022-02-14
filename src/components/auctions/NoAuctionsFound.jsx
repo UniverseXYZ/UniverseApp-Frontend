@@ -5,9 +5,9 @@ import { useAuthContext } from '../../contexts/AuthContext';
 import { useAuctionContext } from '../../contexts/AuctionContext';
 import bubleIcon from '../../assets/images/text-bubble.png';
 import Exclamation from '../../assets/images/Exclamation.svg';
-import plusIcon from '../../assets/images/plus.svg';
+import { ReactComponent as PlusIcon } from '../../assets/images/plus.svg';
 
-const NoAuctionsFound = ({ title, desc, btnText, btnAction }) => {
+const NoAuctionsFound = ({ title, desc, btnText, btnAction, checkUserDetails }) => {
   const { loggedInArtist } = useAuthContext();
   const { setAuction } = useAuctionContext();
 
@@ -16,12 +16,15 @@ const NoAuctionsFound = ({ title, desc, btnText, btnAction }) => {
     <div className="empty__auction">
       <img src={bubleIcon} alt="Buble" />
       <h3>{title}</h3>
-      {!loggedInArtist.name || !loggedInArtist.avatar ? (
+      {checkUserDetails && (!loggedInArtist.name || !loggedInArtist.avatar) ? (
         <div className="warning__div">
           <img src={Exclamation} alt="Warning" />
           <p>
             Please, fill out the profile details before you set up an auction.{' '}
-            <button type="button" onClick={() => history.push('/my-account')}>
+            <button
+              type="button"
+              onClick={() => history.push('/my-account', { redirect: 'setup-auction' })}
+            >
               Go to my profile
             </button>
             .
@@ -37,10 +40,10 @@ const NoAuctionsFound = ({ title, desc, btnText, btnAction }) => {
           setAuction({ rewardTiers: [] });
           history.push(btnAction);
         }}
-        disabled={!loggedInArtist.name || !loggedInArtist.avatar}
+        disabled={checkUserDetails && (!loggedInArtist.name || !loggedInArtist.avatar)}
       >
         {btnText}
-        <img src={plusIcon} alt="icon" style={{ marginLeft: '12px' }} />
+        <PlusIcon />
       </button>
     </div>
   );
@@ -51,12 +54,14 @@ NoAuctionsFound.propTypes = {
   desc: PropTypes.string,
   btnText: PropTypes.string,
   btnAction: PropTypes.string,
+  checkUserDetails: PropTypes.bool,
 };
 
 NoAuctionsFound.defaultProps = {
   desc: 'Create your first auction by clicking the button below',
   btnText: 'Set up auction',
   btnAction: '/setup-auction',
+  checkUserDetails: true,
 };
 
 export default NoAuctionsFound;

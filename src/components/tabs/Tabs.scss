@@ -28,9 +28,11 @@
     right: 0;
     justify-content: flex-end;
     pointer-events: none;
-
     img {
       pointer-events: all;
+    }
+    @media (max-width: 600px) {
+      display: flex;
     }
   }
 

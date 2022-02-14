@@ -1,32 +1,45 @@
-import React, { useEffect, useState, useContext } from 'react';
-import { useHistory, useLocation, useParams } from 'react-router-dom';
-import uuid from 'react-uuid';
+import React, { useEffect, useState, useContext, useRef } from 'react';
+import { useLocation, useParams, useHistory } from 'react-router-dom';
 import './AuctionLandingPage.scss';
 import Popup from 'reactjs-popup';
-// import useSocketIO, { ReadyState } from 'react-use-websocket';
+import BigNumber from 'bignumber.js';
+import { BigNumber as EBigNumber, utils } from 'ethers';
 import AuctionDetails from '../../components/auctionLandingPage/AuctionDetails.jsx';
 import UniverseAuctionDetails from '../../components/auctionLandingPage/UniverseAuctionDetails.jsx';
 import RewardTiers from '../../components/auctionLandingPage/RewardTiers.jsx';
 import AuctionOwnerDetails from '../../components/auctionLandingPage/AuctionOwnerDetails.jsx';
 import PlaceBid from '../../components/auctionLandingPage/PlaceBid.jsx';
-import AppContext from '../../ContextAPI';
 import NotFound from '../../components/notFound/NotFound.jsx';
-import { useThemeContext } from '../../contexts/ThemeContext';
-import { useAuctionContext } from '../../contexts/AuctionContext';
 import { getAuctionLandingPage } from '../../utils/api/auctions';
 import PlaceBidPopup from '../../components/popups/PlaceBidPopup';
 import LoadingPopup from '../../components/popups/LoadingPopup';
+import CancelBidPopup from '../../components/popups/CancelBidPopup';
+
 import { getEthPriceCoingecko } from '../../utils/api/etherscan';
+import { useAuctionContext } from '../../contexts/AuctionContext';
 import { useAuthContext } from '../../contexts/AuthContext';
+import { useSocketContext } from '../../contexts/SocketContext';
+import { useMyNftsContext } from '../../contexts/MyNFTsContext';
 import { LandingPageLoader } from '../../components/auctionLandingPage/LandingPageLoader';
+import SuccessBidPopup from '../../components/popups/SuccessBidPopup';
+import { createRewardsTiersSlots } from '../../utils/helpers';
+import { isBeforeNow } from '../../utils/dates';
+import { ReactComponent as InfoIcon } from '../../assets/images/info-icon.svg';
 
 const AuctionLandingPage = () => {
+  const defaultLoadingText =
+    'The transaction is in progress. Keep this window opened. Navigating away from the page will reset the current progress.';
   const locationState = useLocation().state;
+  const history = useHistory();
+  const { setActiveTxHashes, activeTxHashes } = useMyNftsContext();
+  const { myAuctions } = useAuctionContext();
+  const { auctionEvents, subscribeTo, unsubscribeFrom } = useSocketContext();
+  const { universeAuctionHouseContract, yourBalance, setYourBalance } = useAuthContext();
   // TODO: Disable bidding buttons until the auction is started or is canceled
   const { artistUsername, auctionName } = useParams();
-  const { address } = useAuthContext();
+  const { loggedInArtist, setLoggedInArtist, address } = useAuthContext();
   const [auction, setAuction] = useState(null);
-  const [bidders, setBidders] = useState(null);
+  const [bidders, setBidders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showBidPopup, setShowBidPopup] = useState(false);
   const [showLoading, setShowLoading] = useState(false);
@@ -35,42 +48,372 @@ const AuctionLandingPage = () => {
   const [currentBid, setCurrentBid] = useState(null);
   const [isWinningBid, setIsWinningBid] = useState(false);
   const [winningSlot, setWinningSlot] = useState(-1);
+  const [slotsInfo, setSlotsInfo] = useState({});
+  const [loadingText, setLoadingText] = useState(defaultLoadingText);
+  const [showSuccessfulBid, setShowSuccessfulBid] = useState(false);
+  const [showCancelBidPopup, setShowCancelBidPopup] = useState(false);
+  const [selectedAuctionEnded, setSelectedAuctionEnded] = useState(false);
+
+  // Auction ended section
+  const [mySlot, setMySlot] = useState(null);
+  const [mySlotIndex, setMySlotIndex] = useState(-1);
+  const [slotsToWithdraw, setSlotsToWithdraw] = useState([]);
+  const [claimableFunds, setClaimableFunds] = useState(0);
+  const [unreleasedFunds, setUnreleasedFunds] = useState(0);
+
+  // useRef is used to access latest state inside socket event callbacks
+  // More info why this is used here (https://github.com/facebook/react/issues/16975)
+  // Start of useRef section
+
+  const mySlotRef = useRef(mySlot);
+  const addressRef = useRef(address);
+  const biddersRef = useRef(bidders);
+  const auctionRef = useRef(auction);
+  const yourBalanceRef = useRef(yourBalance);
 
   useEffect(() => {
-    if (bidders) {
-      const currBidder = bidders.find((bidder) => bidder.user.address === address);
+    addressRef.current = address;
+  }, [address]);
+
+  useEffect(() => {
+    mySlotRef.current = mySlot;
+  }, [mySlot]);
+
+  useEffect(() => {
+    biddersRef.current = bidders;
+  }, [bidders]);
+
+  useEffect(() => {
+    auctionRef.current = auction;
+  }, [auction]);
+
+  useEffect(() => {
+    yourBalanceRef.current = yourBalance;
+  }, [yourBalance]);
+
+  // End of useRef section
+
+  useEffect(() => {
+    if (bidders.length) {
+      const currBidder = bidders.find(
+        (bidder) => bidder?.user?.address?.toLowerCase() === address.toLowerCase()
+      );
       if (currBidder) {
         setCurrentBid(currBidder);
-        console.log('Current bidder:');
-        console.log(currBidder);
 
-        const currBidderIndex = bidders.map((bidder) => bidder.user.address).indexOf(address);
+        const currBidderIndex = bidders
+          .map((bidder) => bidder.user?.address.toLowerCase())
+          .indexOf(address.toLowerCase());
         if (currBidderIndex <= rewardTiersSlots.length - 1) {
           setIsWinningBid(true);
           setWinningSlot(currBidderIndex);
         }
-        console.log('is winning bid:');
-        console.log(currBidderIndex <= rewardTiersSlots.length - 1);
       }
-      console.log('Bidders:');
-      console.log(bidders);
+    } else {
+      // We need to reset the currentBid, upon updating the bidders even though there might not be any
+      setCurrentBid(null);
+      setIsWinningBid(false);
+      setWinningSlot(-1);
     }
   }, [bidders, address, rewardTiersSlots]);
 
-  const getAuctionData = async () => {
-    const auctionInfo =
-      locationState?.auction || (await getAuctionLandingPage(artistUsername, auctionName));
-    if (!auctionInfo.error) {
-      console.log(auctionInfo);
+  useEffect(async () => {
+    // eslint-disable-next-line no-restricted-syntax
+    for (const [slotIndex, slotInfo] of Object.entries(slotsInfo)) {
+      if (address && slotInfo.winner === utils.getAddress(address)) {
+        setMySlot(slotInfo);
+        setMySlotIndex(slotIndex);
+        break;
+      } else if (
+        slotInfo.winner === '0x0000000000000000000000000000000000000000' &&
+        slotInfo.revenueCaptured &&
+        slotInfo.totalWithdrawnNfts.toNumber() !== slotInfo.totalDepositedNfts.toNumber()
+      ) {
+        setSlotsToWithdraw([...slotsToWithdraw, +slotIndex]);
+      }
+    }
+  }, [slotsInfo]);
 
-      const tierSlots = [];
-      auctionInfo.rewardTiers.forEach((rewardTiers) => {
-        for (let i = 0; i < rewardTiers.numberOfWinners; i += 1) {
-          tierSlots.push(rewardTiers);
-        }
+  const getAuctionRevenue = async () => {
+    // 1. Claimable funds
+    const revenueToClaim = await universeAuctionHouseContract.auctionsRevenue(
+      auction.auction.onChainId
+    );
+
+    const toClaim = utils.formatEther(revenueToClaim);
+    setClaimableFunds(toClaim);
+
+    // 2. Unreleased funds
+    const areAllSlotsCaptured =
+      auction.auction.finalised &&
+      !auction.rewardTiers
+        .map((r) => r.slots)
+        .flat()
+        .some((s) => !s.capturedRevenue);
+
+    if (!auction.auction.finalised) {
+      // If auction isn't finalised We need to calcuate the total amount of winning bids from the bids
+
+      // We take the first N bids and sum them, N = number of slots from contract
+      const totalBids = auction.bidders
+        .slice(0, Object.values(slotsInfo).length)
+        .reduce((acc, bid) => acc.plus(bid.amount), new BigNumber('0'));
+
+      setUnreleasedFunds(totalBids.toFixed());
+    } else if (!areAllSlotsCaptured) {
+      // If auction is finalised we can use the data from the contract
+      const totalBids = Object.values(slotsInfo).reduce(
+        (acc, slot) => acc.add(slot.winningBidAmount),
+        EBigNumber.from('0')
+      );
+
+      const unreleased =
+        utils.formatEther(totalBids.sub(revenueToClaim)) - Number(auction.auction.revenueClaimed);
+
+      setUnreleasedFunds(unreleased);
+    }
+    // If all slots are captured we unreleased funds are 0
+  };
+
+  useEffect(() => {
+    if (selectedAuctionEnded && universeAuctionHouseContract) {
+      getAuctionRevenue();
+    }
+  }, [selectedAuctionEnded]);
+
+  useEffect(() => {
+    if (universeAuctionHouseContract && Object.values(slotsInfo).length) {
+      getAuctionRevenue();
+    }
+  }, [universeAuctionHouseContract, slotsInfo, address]);
+
+  /**
+   * This method gets invoked upon receiving a bid subbmited event from the BE socket connection
+   * @param {Object} err
+   * @param {Object} param1
+   * @param {String} param1.user the Address of the user who submitted the event
+   * @param {String} param1.amount the amount of the bid
+   * @param {Object} param1.userProfile Object containing user information
+   * @param {Object} param1.bids Object containing bids information (bidsCount, highestBid, lowestBid, totalBids)
+   * @returns void
+   */
+  const handleBidSubmittedEvent = (err, { id, user, amount, userProfile, bids }) => {
+    if (err) return;
+    const isYourEvent = user.toLowerCase() === addressRef.current.toLowerCase();
+
+    // 1. Update bidders
+    const newBidders = [...biddersRef.current];
+    const existingBidderIndex = newBidders
+      .map((bidder) => bidder.user.address.toLowerCase())
+      .indexOf(user.toLowerCase());
+
+    if (existingBidderIndex >= 0) {
+      newBidders[existingBidderIndex].amount = amount;
+    } else {
+      newBidders.push({
+        amount,
+        user: {
+          ...userProfile,
+          address: user,
+        },
+        id,
       });
-      setBidders(auctionInfo.bidders);
+    }
+
+    newBidders.sort((a, b) => new BigNumber(b.amount).minus(a.amount).toNumber());
+    setBidders(newBidders);
+
+    // 2. Update user's balance
+    const shouldUpdateBalance =
+      isYourEvent && auctionRef.current.auction.tokenSymbol.toLowerCase() === 'eth';
+
+    if (shouldUpdateBalance) {
+      const newBalance = new BigNumber(yourBalanceRef.current).minus(amount);
+      setYourBalance(newBalance);
+    }
+
+    // 3. Update reward tier slots
+    const tierSlots = createRewardsTiersSlots(auctionRef.current.rewardTiers, newBidders);
+    setRewardTiersSlots(tierSlots);
+
+    // 4. Update isWinningBid
+    const currBidderIndex = newBidders
+      .map((bidder) => bidder.user.address)
+      .indexOf(addressRef.current);
+
+    const hasWin = currBidderIndex <= rewardTiersSlots.length - 1;
+    if (hasWin) {
+      setIsWinningBid(true);
+      setWinningSlot(currBidderIndex);
+    } else {
+      setIsWinningBid(false);
+      setWinningSlot(-1);
+    }
+
+    // 5. Close loading and show success modal
+    if (isYourEvent) {
+      setShowLoading(false);
+      setLoadingText(defaultLoadingText);
+      setShowBidPopup(false);
+      setShowSuccessfulBid(true);
+    }
+  };
+
+  /**
+   * This method gets invoked upon receiving a bid withdrawn event from the BE socket connection
+   * @param {Object} err
+   * @param {Object} param1
+   * @param {String} param1.user the Address of the user who submitted the event
+   * @param {String} param1.amount the amount of the bid
+   * @param {Object} param1.userProfile Object containing user information
+   * @param {Boolean} param1.withdrawn
+   * @returns void
+   */
+  const handleBidWithdrawnEvent = (err, { user, amount, userProfile, withdrawn }) => {
+    const isYourEvent = user.toLowerCase() === addressRef.current.toLowerCase();
+
+    // 1. Update bidders
+    const newBidders = [...biddersRef.current];
+    const existingBidderIndex = newBidders.map((bidder) => bidder.user.address).indexOf(user);
+    if (existingBidderIndex >= 0) {
+      newBidders.splice(existingBidderIndex, 1);
+      newBidders.sort((a, b) => new BigNumber(b.amount).minus(a.amount).toNumber());
+      setBidders(newBidders);
+    }
+
+    // 2. Update balance
+    const shouldUpdateBalance =
+      isYourEvent && auctionRef.current.auction.tokenSymbol.toLowerCase() === 'eth';
+    if (shouldUpdateBalance) {
+      const newBalance = parseFloat(yourBalanceRef.current) + parseFloat(amount);
+      setYourBalance(newBalance);
+    }
+
+    // 3. Update current bid
+    if (isYourEvent) {
+      if (withdrawn) {
+        setCurrentBid((currBid) => ({ ...currBid, withdrawn }));
+      } else {
+        setCurrentBid(null);
+      }
+      setShowLoading(false);
+      setShowCancelBidPopup(false);
+    }
+  };
+
+  const handleERC721ClaimedEvent = (err, { claimer, slotIndex }) => {
+    const isYourEvent = claimer.toLowerCase() === addressRef.current.toLowerCase();
+
+    if (isYourEvent) {
+      setMySlot({ ...mySlotRef.current, totalWithdrawnNfts: mySlotRef.current.totalDepositedNfts });
+      setShowLoading(false);
+      setActiveTxHashes([]);
+    }
+  };
+
+  const handleAuctionWithdrawnRevenueEvent = (err, { totalRevenue, recipient }) => {
+    const isYourEvent = recipient.toLowerCase() === addressRef.current.toLowerCase();
+
+    if (isYourEvent) {
+      setClaimableFunds(0);
+      setShowLoading(false);
+      setActiveTxHashes([]);
+    }
+  };
+
+  const handeAuctionExtendedEvent = (err, { endDate }) => {
+    if (err) return;
+
+    setAuction((upToDate) => ({
+      ...upToDate,
+      auction: { ...upToDate.auction, endDate },
+    }));
+  };
+
+  useEffect(() => {
+    if (auction?.auction?.id) {
+      // Ready & Tested
+      subscribeTo({
+        auctionId: auction.auction.id,
+        eventName: auctionEvents.BID_SUBMITTED,
+        cb: handleBidSubmittedEvent,
+      });
+
+      // Ready & Tested
+      subscribeTo({
+        auctionId: auction.auction.id,
+        eventName: auctionEvents.BID_WITHDRAWN,
+        cb: handleBidWithdrawnEvent,
+      });
+
+      // Ready & Tested
+      subscribeTo({
+        auctionId: auction.auction.id,
+        eventName: auctionEvents.CLAIMED_NFT,
+        cb: handleERC721ClaimedEvent,
+      });
+
+      // Ready & Tested
+      subscribeTo({
+        auctionId: auction.auction.id,
+        eventName: auctionEvents.WITHDRAWN_REVENUE,
+        cb: handleAuctionWithdrawnRevenueEvent,
+      });
+
+      subscribeTo({
+        auctionId: auction.auction.id,
+        eventName: auctionEvents.EXTENDED,
+        cb: handeAuctionExtendedEvent,
+      });
+    }
+  }, [auction?.auction?.id]);
+
+  const mockAuctionPreviewData = (auctionData) => {
+    const { name, avatar, universePageAddress } = loggedInArtist;
+    const updatedLoggedInArtist = {
+      ...loggedInArtist,
+      displayName: name,
+      profileImageUrl: avatar,
+      universePageUrl: universePageAddress,
+    };
+    setLoggedInArtist(updatedLoggedInArtist);
+    auctionData.bidders = [];
+
+    const auctionMockedData = {
+      auction: auctionData,
+      rewardTiers: auctionData.rewardTiers,
+      collections: auctionData.collections,
+      artist: updatedLoggedInArtist,
+      bidders: [],
+    };
+
+    return auctionMockedData;
+  };
+
+  const getAuctionData = async () => {
+    const auctionPreview = myAuctions.filter((auc) => auc.link === auctionName)[0];
+    let auctionInfo = null;
+    if (auctionPreview) {
+      auctionInfo = mockAuctionPreviewData(auctionPreview);
+    } else {
+      try {
+        auctionInfo = await getAuctionLandingPage(artistUsername, auctionName);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+
+    if (!auctionInfo.error) {
+      const tierSlots = createRewardsTiersSlots(auctionInfo.rewardTiers, auctionInfo.bidders);
       setRewardTiersSlots(tierSlots);
+
+      // Parse Bidders amount to float
+      const newBidders = auctionInfo?.bidders?.map((b) => {
+        const updated = { ...b };
+        updated.amount = parseFloat(updated.amount);
+        return updated;
+      });
+      setBidders(newBidders);
       setAuction(auctionInfo);
       setLoading(false);
     } else {
@@ -79,8 +422,12 @@ const AuctionLandingPage = () => {
   };
 
   const getEthPrice = async () => {
-    const price = await getEthPriceCoingecko();
-    setEthPrice(price?.market_data?.current_price?.usd);
+    try {
+      const price = await getEthPriceCoingecko();
+      setEthPrice(price?.market_data?.current_price?.usd || 0);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   useEffect(() => {
@@ -88,12 +435,71 @@ const AuctionLandingPage = () => {
     getEthPrice();
   }, [artistUsername, auctionName]);
 
+  // eslint-disable-next-line consistent-return
+  useEffect(() => {
+    if (auction?.auction?.id) {
+      return () => {
+        unsubscribeFrom({
+          auctionId: auction.auction.id,
+        });
+      };
+    }
+  }, [auction?.auction?.id]);
+
+  const getAuctionSlotsInfo = async () => {
+    if (universeAuctionHouseContract && auction && auction.auction?.onChainId) {
+      // TODO: query smart contract to check for captured slots
+      const onChainAuction = await universeAuctionHouseContract.auctions(auction.auction.onChainId);
+
+      const auctionSlotsInfo = {};
+      for (let i = 1; i <= onChainAuction.numberOfSlots; i += 1) {
+        // eslint-disable-next-line no-await-in-loop
+        const slotInfo = await universeAuctionHouseContract.getSlotInfo(
+          auction.auction.onChainId,
+          i
+        );
+        auctionSlotsInfo[i] = slotInfo;
+      }
+      setSlotsInfo(auctionSlotsInfo);
+    }
+  };
+  useEffect(() => {
+    getAuctionSlotsInfo();
+  }, [universeAuctionHouseContract, auction]);
+
+  const bidsHidden = isBeforeNow(auction?.auction?.endDate);
+
+  const exitPreview = () => {
+    if (locationState?.savePreview) {
+      history.push('/my-auctions');
+    } else {
+      history.goBack();
+    }
+  };
+
   return auction ? (
     <div className="auction__landing__page">
+      {locationState && locationState.previewMode ? (
+        <div className="preview--auction--container">
+          <div className="preview--auction">
+            <div>
+              <InfoIcon />
+              Preview mode
+            </div>
+            <div>
+              <button type="button" onClick={exitPreview}>
+                <span className="preview--auction__exit">Exit preview mode</span>
+                <span className="preview--auction__exit--mobile">Exit</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      ) : (
+        <></>
+      )}
       <AuctionDetails
         onAuction={auction}
         bidders={bidders}
-        setBidders={setBidders}
         setShowBidPopup={setShowBidPopup}
         rewardTiersSlots={rewardTiersSlots}
         ethPrice={ethPrice}
@@ -102,16 +508,33 @@ const AuctionLandingPage = () => {
         loading={loading}
         isWinningBid={isWinningBid}
         winningSlot={rewardTiersSlots[winningSlot]}
+        slotsInfo={slotsInfo}
+        setShowLoading={setShowLoading}
+        setLoadingText={setLoadingText}
+        showCancelBidPopup={showCancelBidPopup}
+        setShowCancelBidPopup={setShowCancelBidPopup}
+        selectedAuctionEnded={selectedAuctionEnded}
+        setSelectedAuctionEnded={setSelectedAuctionEnded}
+        mySlot={mySlot}
+        setMySlot={setMySlot}
+        mySlotIndex={mySlotIndex}
+        setMySlotIndex={setMySlotIndex}
+        slotsToWithdraw={slotsToWithdraw}
+        setSlotsToWithdraw={setSlotsToWithdraw}
+        claimableFunds={claimableFunds}
+        unreleasedFunds={unreleasedFunds}
       />
-      <UniverseAuctionDetails />
+      <UniverseAuctionDetails auction={auction} />
       <RewardTiers auction={auction} />
       <AuctionOwnerDetails artist={auction.artist} />
-      <PlaceBid
-        auction={auction}
-        bidders={bidders}
-        setBidders={setBidders}
-        setShowBidPopup={setShowBidPopup}
-      />
+      {!bidsHidden && (
+        <PlaceBid
+          auction={auction}
+          bidders={bidders}
+          setBidders={setBidders}
+          setShowBidPopup={setShowBidPopup}
+        />
+      )}
       {auction.artist && auction.artist.personalLogo ? (
         <div className="artist__personal__logo">
           <div>
@@ -132,14 +555,25 @@ const AuctionLandingPage = () => {
           onSetBidders={setBidders}
           currentBid={currentBid}
           setCurrentBid={setCurrentBid}
+          setLoadingText={setLoadingText}
         />
       </Popup>
       <Popup open={showLoading} closeOnDocumentClick={false}>
         <LoadingPopup
-          text="The transaction is in progress. Keep this window opened. Navigating away from the page will reset the curent progress."
+          text={loadingText}
           onClose={() => setShowLoading(false)}
           contractInteraction
         />
+      </Popup>
+      <Popup open={showSuccessfulBid} closeOnDocumentClick={false}>
+        <SuccessBidPopup
+          onClose={() => setShowSuccessfulBid(false)}
+          auctionHeadline={auction.auction?.headline || ''}
+          artistName={auction.artist?.displayName}
+        />
+      </Popup>
+      <Popup open={showCancelBidPopup} closeOnDocumentClick={false}>
+        <CancelBidPopup close={() => setShowCancelBidPopup(false)} auction={auction} />
       </Popup>
     </div>
   ) : loading ? (

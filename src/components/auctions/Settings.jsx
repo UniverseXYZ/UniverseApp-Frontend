@@ -1,10 +1,11 @@
 import { useLocation, useHistory } from 'react-router-dom';
 import React, { useEffect, useState, useRef } from 'react';
+import { DebounceInput } from 'react-debounce-input';
 import 'react-datepicker/dist/react-datepicker.css';
+import { utils } from 'ethers';
 import Popup from 'reactjs-popup';
 import uuid from 'react-uuid';
 import './AuctionSettings.scss';
-import EthereumAddress from 'ethereum-address';
 import { formatISO } from 'date-fns';
 import callendarIcon from '../../assets/images/calendar.svg';
 import delateIcon from '../../assets/images/RemoveBtn.svg';
@@ -18,10 +19,14 @@ import addIcon from '../../assets/images/Add.svg';
 import StartDateCalendar from '../calendar/StartDateCalendar.jsx';
 import EndDateCalendar from '../calendar/EndDateCalendar.jsx';
 import { useAuctionContext } from '../../contexts/AuctionContext';
+import { parseDateForDatePicker } from '../calendar/utils';
+import { useAuthContext } from '../../contexts/AuthContext';
 
 const MAX_FIELD_CHARS_LENGTH = {
   name: 100,
 };
+
+const INVALID_ADDRESS_TEXT = 'Please enter valid address or ENS';
 
 const AuctionSettings = () => {
   const monthNames = [
@@ -41,8 +46,7 @@ const AuctionSettings = () => {
   const [hideIcon, setHideIcon] = useState(false);
   const location = useLocation();
   const history = useHistory();
-  const { auction, setAuction, bidtype, setBidtype, options, setAuctionSetupState } =
-    useAuctionContext();
+  const { auction, setAuction, bidtype, setBidtype, options } = useAuctionContext();
   const [hideIcon1, setHideIcon1] = useState(false);
   const [royaltyValidAddress, setRoyaltyValidAddress] = useState(true);
   const [minBid, setMinBId] = useState(false);
@@ -51,36 +55,31 @@ const AuctionSettings = () => {
   const startDateRef = useRef(null);
   const endDateRef = useRef(null);
   const [dropDown, setDropDown] = useState('');
-
+  const { web3Provider } = useAuthContext();
   const [isValidFields, setIsValidFields] = useState({
     name: true,
-    startingBid: true,
     startDate: true,
     endDate: true,
     royalty: true,
   });
 
   const [bidValues, setBidValues] = useState([]);
+  const [isBidTokenOpened, setIsBidTokenOpened] = useState(false);
+  const [isStartDateOpened, setIsStartDateOpened] = useState(false);
+  const [isEndDateOpened, setIsEndDateOpened] = useState(false);
   const isEditingAuction = location.state !== undefined;
-
-  const [properties, setProperties] = useState(
-    auction && auction.properties ? [...auction.properties] : [{ address: '', amount: '' }]
+  const [royaltyAddress, setRoyaltyAddress] = useState(
+    auction && auction.royaltySplits ? [...auction.royaltySplits] : [{ address: '', amount: '' }]
   );
-
-  const hasRoyalties = properties[0].address.length > 0;
+  const [royaltiesMapIndexes, setRoyaltiesMapIndexes] = useState({});
+  const hasRoyalties =
+    royaltyAddress && royaltyAddress.length && royaltyAddress[0].address.length > 0;
   const [royalities, useRoyalities] = useState(hasRoyalties);
   const parseDate = (dateString) => {
     const date = dateString ? new Date(dateString) : new Date();
 
-    return {
-      month: monthNames[date.getMonth()],
-      day: date.getDate(),
-      year: date.getFullYear(),
-      hours: date.getHours(),
-      minutes: date.getMinutes() < 10 ? `0${date.getMinutes()}` : date.getMinutes(),
-      timezone: 'GMT +04:00', // // TODO:: this shoud be dynamic ?
-      format: 'AM',
-    };
+    const formatedDate = parseDateForDatePicker(date);
+    return formatedDate;
   };
 
   const startDate =
@@ -92,46 +91,39 @@ const AuctionSettings = () => {
   const [endDateTemp, setEndDateTemp] = useState({ ...endDate });
 
   const [values, setValues] = useState({
-    name: auction && auction.name ? auction.name : '',
-    startingBid: auction && auction.startingBid ? auction.startingBid : '',
+    name: auction.name ? auction.name : '',
     startDate: auction.startDate ? auction.startDate : '',
     endDate: auction.endDate ? auction.endDate : '',
   });
+  const [bidToken, setBidToken] = useState(null);
+  const [bidTypeLocal, setBidTypeLocal] = useState(bidtype);
+  const setToken = (key) => {
+    const token = options.find((element) => element.value === key);
+    setBidTypeLocal(key);
+    setBidToken(token);
+  };
 
   useEffect(() => {
-    if (
-      values.name ||
-      values.startingBid ||
-      values.startDate ||
-      values.endDate ||
-      properties[0].address ||
-      properties[0].amount ||
-      properties[1]
-    ) {
-      setAuctionSetupState(true);
-    }
-  }, [values, properties]);
-
-  const bid = options.find((element) => element.value === bidtype);
+    setToken(bidtype);
+  }, []);
 
   const handleAddAuction = () => {
     setTimeout(() => {
       setIsValidFields((prevValues) => ({
         ...prevValues,
-        startingBid: values.startingBid.trim().length !== 0,
         startDate: values.startDate.length !== 0,
         endDate: values.endDate.length !== 0,
         name: values.name.trim().length !== 0,
-        properties: royalities ? properties : [{ address: '', amount: '' }],
+        royaltySplits: royalities ? royaltyAddress : [{ address: '', amount: '' }],
       }));
     }, 2000);
 
     let auctionFieldsValid = false;
     let bidFieldsValid = false;
-    setProperties(royalities ? properties : [{ address: '', amount: '' }]);
+    setRoyaltyAddress(royalities ? royaltyAddress : [{ address: '', amount: '' }]);
 
-    if (values.name && values.startingBid && values.startDate && values.endDate) {
-      if (isValidFields.startingBid && isValidFields.startDate && isValidFields.endDate) {
+    if (values.name && values.startDate && values.endDate) {
+      if (isValidFields.startDate && isValidFields.endDate) {
         auctionFieldsValid = true;
       }
     }
@@ -160,26 +152,26 @@ const AuctionSettings = () => {
           id: uuid(),
           launch: false,
           name: values.name,
-          startingBid: values.startingBid,
           startDate: formatISO(values.startDate),
           endDate: formatISO(values.endDate),
           rewardTiers: minBid
             ? prevValue.rewardTiers.map((tier, idx) => ({ ...tier, minBid: bidValues[idx] }))
             : prevValue.rewardTiers,
-          properties: royalities ? properties : null,
+          royaltySplits: royalities ? royaltyAddress : null,
         }));
+        setBidtype(bidTypeLocal);
       } else {
         setAuction((prevValue) => ({
           ...prevValue,
           name: values.name,
-          startingBid: values.startingBid,
           startDate: formatISO(values.startDate),
           endDate: formatISO(values.endDate),
-          properties: royalities ? properties : null,
+          royaltySplits: royalities ? royaltyAddress : null,
           rewardTiers: minBid
             ? prevValue.rewardTiers.map((tier) => ({ ...tier, minBid: bidValues[tier.id] }))
             : prevValue.rewardTiers,
         }));
+        setBidtype(bidTypeLocal);
       }
       history.push({
         pathname: '/setup-auction/reward-tiers',
@@ -188,30 +180,77 @@ const AuctionSettings = () => {
     }
   };
 
+  const hasAddressError = (royalty, index) => {
+    if (royalty && royaltiesMapIndexes[royalty]) {
+      const isRepeated = royaltiesMapIndexes[royalty].length > 1;
+      if (!isRepeated) return '';
+      const firstAppearenceIndex = royaltiesMapIndexes[royalty][0];
+      if (index !== firstAppearenceIndex) return 'Duplicated address';
+    }
+    return '';
+  };
+
   const handleOnChange = (event) => {
     setValues((prevValues) => ({ ...prevValues, [event.target.id]: event.target.value }));
   };
 
   const addProperty = () => {
-    const prevProperties = [...properties];
+    const prevProperties = [...royaltyAddress];
     const temp = { address: '', percentAmount: '' };
     prevProperties.push(temp);
-    setProperties(prevProperties);
+    setRoyaltyAddress(prevProperties);
   };
 
-  const propertyChangesAddress = (index, val) => {
-    const prevProperties = [...properties];
-    prevProperties[index].address = val;
-    setProperties(prevProperties);
+  const propertyChangesAddress = async (index, val) => {
+    const prevProperties = [...royaltyAddress];
+
+    try {
+      const ens = await web3Provider.resolveName(val);
+      const ensToAddress = utils.isAddress(ens);
+      prevProperties[index].address = ensToAddress ? ens.toLowerCase() : val;
+      prevProperties[index].error = !ensToAddress ? INVALID_ADDRESS_TEXT : '';
+    } catch (e) {
+      prevProperties[index].address = val.toLowerCase();
+      prevProperties[index].error = !utils.isAddress(val) ? INVALID_ADDRESS_TEXT : '';
+    }
+
+    const addressErrors = prevProperties.filter((prop) => prop.error);
+    const lastAddress = prevProperties[index].address;
+
+    const newRoyaltyMapIndexes = { ...royaltiesMapIndexes };
+    // eslint-disable-next-line no-restricted-syntax
+    for (const r in newRoyaltyMapIndexes) {
+      if (newRoyaltyMapIndexes[r].includes(index)) {
+        if (newRoyaltyMapIndexes[r].length > 1) {
+          newRoyaltyMapIndexes[r].splice(newRoyaltyMapIndexes[r].indexOf(index), 1);
+        } else {
+          delete newRoyaltyMapIndexes[r];
+        }
+      }
+    }
+
+    if (newRoyaltyMapIndexes[lastAddress] && newRoyaltyMapIndexes[lastAddress].includes(index)) {
+      if (newRoyaltyMapIndexes.length === 1) {
+        delete newRoyaltyMapIndexes[lastAddress];
+      } else {
+        newRoyaltyMapIndexes[lastAddress].splice(newRoyaltyMapIndexes[r].indexOf(index), 1);
+      }
+    }
+    const value = prevProperties[index].address;
+    if (newRoyaltyMapIndexes[value] && !newRoyaltyMapIndexes[value].includes(index)) {
+      newRoyaltyMapIndexes[value].push(index);
+    } else {
+      newRoyaltyMapIndexes[value] = [];
+      newRoyaltyMapIndexes[value].push(index);
+    }
+
+    setRoyaltiesMapIndexes(newRoyaltyMapIndexes);
+    setRoyaltyAddress(prevProperties);
+    setRoyaltyValidAddress(!addressErrors.length);
   };
 
   const propertyChangesAmount = (index, val, inp) => {
-    if (val) {
-      inp.classList.add('withsign');
-    } else {
-      inp.classList.remove('withsign');
-    }
-    const newProperties = properties.map((property, propertyIndex) => {
+    const newProperties = royaltyAddress.map((property, propertyIndex) => {
       if (propertyIndex === index) {
         return {
           ...property,
@@ -225,21 +264,28 @@ const AuctionSettings = () => {
       0
     );
     if (result <= 100 && val >= 0) {
-      setProperties(newProperties);
+      setRoyaltyAddress(newProperties);
     }
   };
 
-  const removeProperty = (index) => {
-    const temp = [...properties];
-    temp.splice(index, 1);
-    setProperties(temp);
+  const removeRoyaltyAddress = (index) => {
+    const temp = [...royaltyAddress];
+    const removed = temp.splice(index, 1)[0];
+    setRoyaltyAddress(temp);
+
+    const tempIndexes = { ...royaltiesMapIndexes };
+    const occuranceArray = tempIndexes[removed.address];
+    if (occuranceArray) occuranceArray?.pop();
+    setRoyaltiesMapIndexes(tempIndexes);
+
+    const addressErrors = temp.filter((prop) => prop.error && prop.error !== '');
+    setRoyaltyValidAddress(!addressErrors.length);
   };
 
   useEffect(() => {
     if (isEditingAuction) {
       setValues({
         name: auction.name,
-        startingBid: auction.startingBid,
         startDate: auction.startDate ? new Date(auction.startDate) : '',
         endDate: auction.endDate ? new Date(auction.endDate) : '',
       });
@@ -247,23 +293,41 @@ const AuctionSettings = () => {
   }, []);
 
   useEffect(() => {
-    const notValidAddress = properties.find(
-      (el) => el.address.trim().length !== 0 && EthereumAddress.isAddress(el.address) === false
-    );
-    if (notValidAddress) {
-      setRoyaltyValidAddress(false);
-    } else {
-      setRoyaltyValidAddress(true);
+    if (isEditingAuction && royaltyAddress.length > 0) {
+      const royaltiesMapIndexesValues = {};
+
+      royaltyAddress.forEach((element, index) => {
+        royaltiesMapIndexesValues[element.address] = [index];
+      });
+      setRoyaltiesMapIndexes(royaltiesMapIndexesValues);
     }
-  }, [handleAddAuction]);
+  }, []);
+
+  const continueButtonDisabled =
+    !values.startDate ||
+    !values.endDate ||
+    !values.name ||
+    (royalities &&
+      royaltyAddress.find(
+        (el, i) =>
+          el.address.trim().length === 0 ||
+          !utils.isAddress(el.address) ||
+          !+el.percentAmount ||
+          hasAddressError(el.address, i)
+      ));
+
+  let disableClickOutsideClass = '';
+  if (isBidTokenOpened || isStartDateOpened || isEndDateOpened) {
+    disableClickOutsideClass = 'disabled-click-outside';
+  }
 
   return (
-    <div className="auction-settings container">
+    <div className={`${disableClickOutsideClass} auction-settings container`}>
       <div>
         <div className="head-part">
           <h2 className="tier-title">Auction settings</h2>
           <p className="tier-description">
-            Start setting up your auction with filling out the name, starting bid and schedule.
+            Start setting up your auction with filling out the name, bid token and schedule.
           </p>
         </div>
         <div className="setting-form">
@@ -284,37 +348,41 @@ const AuctionSettings = () => {
                   }
                 />
                 <p className="input-max-chars">
-                  Characters: {values.name && values.name.length}/{MAX_FIELD_CHARS_LENGTH.name}
+                  Characters: {values.name.length}/{MAX_FIELD_CHARS_LENGTH.name}
                 </p>
               </div>
               <div className="starting-bid">
-                <Input
-                  id="startingBid"
-                  type="number"
-                  onChange={(e) => {
-                    if (e.target.value && Number(e.target.value) < 0) e.target.value = '';
-                    handleOnChange(e);
-                  }}
-                  label="Starting bid"
-                  value={values.startingBid}
-                  hoverBoxShadowGradient
-                  error={isValidFields.startingBid ? undefined : '"Starting bid" is required!'}
-                />
-
+                <div className="title--section">
+                  <h1>Bid token (ERC-20)</h1>
+                </div>
                 <div className="drop-down">
                   <Popup
                     nested
-                    handleEdit
                     closeOnDocumentClick={false}
-                    trigger={
-                      <button type="button" className={dropDown}>
-                        {bid.img && <img src={bid.img} alt="icon" />}
-                        <span className="button-name">{bid.name}</span>
-                        <img src={arrowDown} alt="arrow" />
-                      </button>
-                    }
+                    trigger={(opened) => {
+                      if (opened) {
+                        setIsBidTokenOpened(true);
+                      } else {
+                        setIsBidTokenOpened(false);
+                      }
+                      return (
+                        <button type="button" className={dropDown}>
+                          <div className="left--section">
+                            {bidToken?.img && (
+                              <img src={bidToken.img} className="token-logo" alt="icon" />
+                            )}
+                            <span className="button-name">{bidToken?.name}</span>
+                          </div>
+                          <div className="right--section">
+                            <img src={arrowDown} alt="arrow" />
+                          </div>
+                        </button>
+                      );
+                    }}
                   >
-                    {(close) => <SelectToken onClose={close} />}
+                    {(close) => (
+                      <SelectToken options={options} setBidToken={setToken} onClose={close} />
+                    )}
                   </Popup>
                 </div>
               </div>
@@ -324,44 +392,56 @@ const AuctionSettings = () => {
                 <div style={{ position: 'relative' }}>
                   <Popup
                     closeOnDocumentClick={false}
-                    trigger={
-                      <div>
-                        <Input
-                          type="text"
-                          readOnly
-                          id="startDate"
-                          label="Start date"
-                          autoComplete="off"
-                          hoverBoxShadowGradient
-                          value={`${startDateTemp.month} ${startDateTemp.day}, ${startDateTemp.year}, ${startDateTemp.hours} ${startDateTemp.minutes}`}
-                          error={isValidFields.startDate ? undefined : 'Start date is required!'}
-                        />
-                        {values.startDate && (
-                          <p className="date--input--value">
-                            <b>
-                              {`${startDateTemp.month} ${startDateTemp.day}, ${startDateTemp.year}, `}
-                            </b>
-                            {`${startDateTemp.hours}:${startDateTemp.minutes}
-                              ${startDateTemp.timezone?.toString().split(' ')[0]}`}
-                          </p>
-                        )}
-                        <img
-                          aria-hidden="true"
-                          className="callendar__image"
-                          src={callendarIcon}
-                          alt="Callendar"
-                        />
-                      </div>
-                    }
+                    trigger={(opened) => {
+                      if (opened) {
+                        setIsStartDateOpened(true);
+                      } else {
+                        setIsStartDateOpened(false);
+                      }
+                      return (
+                        <div>
+                          <Input
+                            type="text"
+                            readOnly
+                            id="startDate"
+                            label="Start date"
+                            autoComplete="off"
+                            hoverBoxShadowGradient
+                            value={`${startDateTemp.month} ${startDateTemp.day}, ${startDateTemp.year}, ${startDateTemp.hours} ${startDateTemp.minutes}`}
+                            error={isValidFields.startDate ? undefined : 'Start date is required!'}
+                          />
+                          {values.startDate && (
+                            <p className="date--input--value">
+                              <b>
+                                {`${startDateTemp.month} ${startDateTemp.day}, ${startDateTemp.year}, `}
+                              </b>
+                              {`${startDateTemp.hours}:${startDateTemp.minutes}
+                              ${startDateTemp.timezone
+                                ?.toString()
+                                .split(' ')[0]
+                                .replace('GMT', 'UTC')}`}
+                            </p>
+                          )}
+                          <img
+                            aria-hidden="true"
+                            className="callendar__image"
+                            src={callendarIcon}
+                            alt="Callendar"
+                          />
+                        </div>
+                      );
+                    }}
                   >
                     {(close) => (
                       <StartDateCalendar
+                        auction={auction}
                         ref={startDateRef}
                         monthNames={monthNames}
                         values={values}
                         setValues={setValues}
                         startDateTemp={startDateTemp}
                         setStartDateTemp={setStartDateTemp}
+                        setEndDateTemp={setEndDateTemp}
                         onClose={close}
                       />
                     )}
@@ -372,36 +452,46 @@ const AuctionSettings = () => {
                 <div style={{ position: 'relative' }}>
                   <Popup
                     closeOnDocumentClick={false}
-                    trigger={
-                      <div>
-                        <Input
-                          type="text"
-                          readOnly
-                          onClick={() => setShowEndDate(true)}
-                          id="endDate"
-                          label="End date"
-                          autoComplete="off"
-                          hoverBoxShadowGradient
-                          value={`${endDateTemp.month} ${endDateTemp.day}, ${endDateTemp.year}, ${endDateTemp.hours} ${endDateTemp.minutes}`}
-                          error={isValidFields.endDate ? undefined : 'End date is required!'}
-                        />
-                        {values.endDate && (
-                          <p className="date--input--value">
-                            <b>
-                              {`${endDateTemp.month} ${endDateTemp.day}, ${endDateTemp.year}, `}
-                            </b>
-                            {`${endDateTemp.hours}:${endDateTemp.minutes}
-                              ${endDateTemp.timezone?.toString().split(' ')[0]}`}
-                          </p>
-                        )}
-                        <img
-                          aria-hidden="true"
-                          className="callendar__image"
-                          src={callendarIcon}
-                          alt="Callendar"
-                        />
-                      </div>
-                    }
+                    trigger={(opened) => {
+                      if (opened) {
+                        setIsEndDateOpened(true);
+                      } else {
+                        setIsEndDateOpened(false);
+                      }
+                      return (
+                        <div>
+                          <Input
+                            type="text"
+                            readOnly
+                            onClick={() => setShowEndDate(true)}
+                            id="endDate"
+                            label="End date"
+                            autoComplete="off"
+                            hoverBoxShadowGradient
+                            value={`${endDateTemp.month} ${endDateTemp.day}, ${endDateTemp.year}, ${endDateTemp.hours} ${endDateTemp.minutes}`}
+                            error={isValidFields.endDate ? undefined : 'End date is required!'}
+                          />
+                          {values.endDate && (
+                            <p className="date--input--value">
+                              <b>
+                                {`${endDateTemp.month} ${endDateTemp.day}, ${endDateTemp.year}, `}
+                              </b>
+                              {`${endDateTemp.hours}:${endDateTemp.minutes}
+                              ${endDateTemp.timezone
+                                ?.toString()
+                                .split(' ')[0]
+                                .replace('GMT', 'UTC')}`}
+                            </p>
+                          )}
+                          <img
+                            aria-hidden="true"
+                            className="callendar__image"
+                            src={callendarIcon}
+                            alt="Callendar"
+                          />
+                        </div>
+                      );
+                    }}
                   >
                     {(close) => (
                       <EndDateCalendar
@@ -418,7 +508,7 @@ const AuctionSettings = () => {
                   </Popup>
                 </div>
                 <span className="auction-ext">
-                  Ending auction extension timer: 3 minutes
+                  Ending auction extension timer: 5 minutes
                   <img
                     src={infoIcon}
                     alt="Info Icon"
@@ -430,8 +520,8 @@ const AuctionSettings = () => {
                   {hideIcon1 && (
                     <div className="info-text">
                       <p>
-                        Any bid in the last 3 minutes of an auction will extend the auction for an
-                        additional 3 minutes.
+                        Any bid in the last 5 minutes of an auction will extend the auction for an
+                        additional 5 minutes.
                       </p>
                     </div>
                   )}
@@ -470,52 +560,61 @@ const AuctionSettings = () => {
         </div>
         {royalities && (
           <div className="royalty-form">
-            {properties.map((elm, i) => (
-              // eslint-disable-next-line react/no-array-index-key
-              <div className="properties" key={i}>
-                <div className="property-name">
-                  <Input
-                    id="address"
-                    label="Wallet address"
-                    placeholder="0x89205A3A3b2A69De6Dbf7f01ED13B2108B2c43e7"
-                    className="address-inp"
-                    value={elm.address}
-                    hoverBoxShadowGradient
-                    onChange={(e) => propertyChangesAddress(i, e.target.value)}
-                  />
-                </div>
-                <div className="property-value">
-                  <span className="percent-sign">%</span>
-                  <Input
-                    id="amount"
-                    type="number"
-                    label="Percent amount"
-                    pattern="\d*"
-                    placeholder="5%"
-                    className="amount-inp"
-                    value={elm.percentAmount}
-                    hoverBoxShadowGradient
-                    onChange={(e) => propertyChangesAmount(i, e.target.value, e.target)}
-                  />
-                </div>
-                <img
-                  src={delateIcon}
-                  alt="Delete"
-                  className="remove-img"
-                  onClick={() => removeProperty(i)}
-                  aria-hidden="true"
-                />
-                <Button
-                  className="light-border-button remove-btn"
-                  onClick={() => removeProperty(i)}
-                >
-                  <img src={delIcon} alt="Delete" aria-hidden="true" />
-                  Remove
-                </Button>
-              </div>
-            ))}
+            {royaltyAddress.map((elm, i) => {
+              const error = elm.error || hasAddressError(elm.address, i);
 
-            {properties.length < 5 && (
+              return (
+                // eslint-disable-next-line react/no-array-index-key
+                <div className="properties" key={i}>
+                  <div className="property-name">
+                    <label className="inp-label">Wallet address</label>
+                    <DebounceInput
+                      debounceTimeout={150}
+                      id="address"
+                      placeholder="0x89205A3A3b2A69De6Dbf7f01ED13B2108B2c43e7"
+                      className={`${error ? 'error-inp inp' : 'inp'}`}
+                      value={elm.address}
+                      hoverBoxShadowGradient
+                      onChange={(e) => propertyChangesAddress(i, e.target.value)}
+                    />
+                    {error && <p className="error-message">{error}</p>}
+                  </div>
+                  <div className="property-value">
+                    <Input
+                      id="amount"
+                      label="Percent amount"
+                      pattern="\d*"
+                      placeholder="5"
+                      className="amount-inp withsign"
+                      value={elm.percentAmount}
+                      hoverBoxShadowGradient
+                      onChange={(e) => propertyChangesAmount(i, e.target.value, e.target)}
+                    />
+                    <span className="percent-sign">%</span>
+                  </div>
+                  {i > 0 && (
+                    <>
+                      <img
+                        src={delateIcon}
+                        alt="Delete"
+                        className="remove-img"
+                        onClick={() => removeRoyaltyAddress(i)}
+                        aria-hidden="true"
+                      />
+                      <Button
+                        className="light-border-button remove-btn"
+                        onClick={() => removeRoyaltyAddress(i)}
+                      >
+                        <img src={delIcon} alt="Delete" aria-hidden="true" />
+                        Remove
+                      </Button>
+                    </>
+                  )}
+                </div>
+              );
+            })}
+
+            {royaltyAddress.length < 5 && (
               <div className="property-add" onClick={() => addProperty()} aria-hidden="true">
                 <h5>
                   <img src={addIcon} alt="Add" />
@@ -526,15 +625,11 @@ const AuctionSettings = () => {
           </div>
         )}
       </div>
-      {!isValidFields.startingBid ||
-      !isValidFields.startDate ||
-      !isValidFields.endDate ||
-      errorArray.length > 0 ? (
+      {!isValidFields.startDate || !isValidFields.endDate || errorArray.length > 0 ? (
         <div className="last-error">
           Something went wrong. Please, fix the errors in the fields above and try again
         </div>
       ) : (
-        isValidFields.startingBid &&
         isValidFields.startDate &&
         isValidFields.endDate &&
         !royaltyValidAddress && (
@@ -545,7 +640,11 @@ const AuctionSettings = () => {
         <Button className="light-border-button" onClick={() => history.push('/my-auctions')}>
           Back
         </Button>
-        <Button className="light-button" onClick={handleAddAuction}>
+        <Button
+          disabled={continueButtonDisabled}
+          className="light-button"
+          onClick={handleAddAuction}
+        >
           Continue
         </Button>
       </div>

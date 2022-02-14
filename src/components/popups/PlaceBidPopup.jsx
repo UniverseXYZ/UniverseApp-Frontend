@@ -1,63 +1,108 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Animated } from 'react-animated-css';
-import uuid from 'react-uuid';
-import { utils } from 'ethers';
+import { BigNumber, utils } from 'ethers';
+import { BigNumber as bigNumber } from 'bignumber.js';
 import closeIcon from '../../assets/images/close-menu.svg';
 import currencyIcon from '../../assets/images/currency-eth.svg';
 import infoIcon from '../../assets/images/icon.svg';
-import bidSubmittedIcon from '../../assets/images/bid-submitted.png';
 import Button from '../button/Button.jsx';
 import Input from '../input/Input.jsx';
 import { useAuthContext } from '../../contexts/AuthContext';
 import { useMyNftsContext } from '../../contexts/MyNFTsContext';
-import { placeAuctionBid } from '../../utils/api/auctions';
+import { getERC20Contract } from '../../utils/helpers/pureFunctions/auctions';
+import { SC_ERROR_CODES } from '../../utils/helpers/constants';
+import { getContractErrorCode } from '../../utils/helpers/contractsErrorHandler';
 
 const PlaceBidPopup = ({
   onClose,
   auction,
   artistName,
   onBidders,
-  onSetBidders,
   rewardTiers,
   setShowLoading,
   currentBid,
-  setCurrentBid,
+  setLoadingText,
 }) => {
   const floatNumberRegex = /([0-9]*[.])?[0-9]+/;
-  const { yourBalance, setYourBalance, universeAuctionHouseContract, address, loggedInArtist } =
+  const verifyBidLoadingText = 'Your bid tx is being verified. This will take a few seconds.';
+  const { yourBalance, universeAuctionHouseContract, address, loggedInArtist, signer } =
     useAuthContext();
   const { setActiveTxHashes } = useMyNftsContext();
-  console.log(loggedInArtist);
   const [yourBid, setYourBid] = useState('');
   const [showServiceFeeInfo, setShowServiceFeeInfo] = useState(false);
   const [showTotalBidAmountInfo, setShowTotalBidAmountInfo] = useState(false);
   const [showBidEligibleInfo, setShowBidEligibleInfo] = useState(false);
-  const [showSuccess, setShowSuccess] = useState(false);
   const [rewardTier, setRewardTier] = useState(null);
+  const [minBid, setMinBid] = useState(0);
+  const [myBidSlotIndex, setMyBidSlotIndex] = useState(-1);
   const [error, setError] = useState('');
+  const [_errorCode, setErrorCode] = useState('');
+  const [allowance, setAllowance] = useState(0);
+  const [balance, setBalance] = useState(0);
 
+  const setERC20Info = async () => {
+    if (
+      auction.tokenSymbol.toLowerCase() !== 'eth' &&
+      signer &&
+      universeAuctionHouseContract &&
+      address
+    ) {
+      const erc20Contract = getERC20Contract(auction.tokenAddress, signer);
+      const erc20Allowance = await erc20Contract.allowance(
+        address,
+        universeAuctionHouseContract.address
+      );
+      const erc20Balance = await erc20Contract.balanceOf(address);
+
+      setAllowance(+utils.formatEther(erc20Allowance));
+      setBalance(+utils.formatEther(erc20Balance));
+    } else {
+      setBalance(yourBalance);
+      setAllowance(yourBalance);
+    }
+  };
+  useEffect(() => {
+    setERC20Info();
+  }, [signer, universeAuctionHouseContract, address]);
+
+  /**
+   *
+   * @param {*} val -> string
+   * @returns void
+   */
   const handleInputChange = (val) => {
+    const safeVal = bigNumber(val).toFixed();
+    const maxCharsLength = 20;
+    // return if value is less than 1 wei as on opensea
+    // val is used here instead of safeVal in order to check the length
+    if (val.length > maxCharsLength) return;
+    // val is set here in order to avoid NaN value in the UI
     setYourBid(val);
-    if (val && !val.match(floatNumberRegex)) {
+    if (safeVal && !safeVal.match(floatNumberRegex)) {
       setError('Invalid bid');
     } else {
       setError('');
       // TODO: Compute eligible reward tier based on other bids
-      const rankedBids = [...onBidders, { amount: +val }]
-        .map((bid) => bid.amount)
-        .sort((a, b) => b - a);
-      console.log(rankedBids);
-      const myBidIndex = rankedBids.indexOf(+val);
-      console.log(myBidIndex);
-      console.log(rewardTiers);
+      const rankedBids = [...onBidders, { amount: safeVal }]
+        .map((bid) => bid.amount.toString())
+        .sort((a, b) => {
+          const safeA = bigNumber(a);
+          const safeB = bigNumber(b);
+          return safeB.minus(safeA);
+        });
+
+      const myBidIdx = rankedBids.indexOf(safeVal);
 
       let rewardSlotCounter = 0;
       let hasFound = false;
       rewardTiers.forEach((tier) => {
         rewardSlotCounter += tier.numberOfWinners;
-        if (myBidIndex <= rewardSlotCounter) {
+        if (myBidIdx < rewardSlotCounter && !hasFound) {
           setRewardTier(tier);
+          const slot = tier.slots.find((s) => s.index === myBidIdx + 1);
+          setMyBidSlotIndex(myBidIdx + 1);
+          setMinBid(slot?.minimumBid);
           hasFound = true;
         }
       });
@@ -68,39 +113,7 @@ const PlaceBidPopup = ({
     }
   };
 
-  const saveBidToBE = async () => {
-    setShowLoading(true);
-
-    const placeBidResult = await placeAuctionBid({
-      auctionId: auction.id,
-      amount: parseFloat(yourBid),
-    });
-
-    console.log(placeBidResult);
-    setShowLoading(false);
-    setShowSuccess(true);
-  };
-
-  const updateBids = () => {
-    const newBidders = [...onBidders];
-    const existingBidderIndex = newBidders.map((bidder) => bidder.user.address).indexOf(address);
-    if (existingBidderIndex >= 0) {
-      newBidders[existingBidderIndex].amount = +newBidders[existingBidderIndex].amount + +yourBid;
-    } else {
-      newBidders.push({
-        amount: +yourBid,
-        user: {
-          id: loggedInArtist.id,
-          displayName: loggedInArtist.name,
-          address,
-        },
-      });
-    }
-    newBidders.sort((a, b) => b.amount - a.amount);
-    onSetBidders(newBidders);
-  };
-
-  const handlePlaceBidClick = async () => {
+  const handlePlaceBid = async () => {
     if (!yourBid) {
       setError('"Your bid" field is required.');
       return;
@@ -111,13 +124,13 @@ const PlaceBidPopup = ({
       return;
     }
 
-    if (parseFloat(yourBid) > yourBalance) {
+    if (parseFloat(yourBid) > balance) {
       setError('Not enough funds');
       return;
     }
 
-    if (parseFloat(yourBid) < parseFloat(auction.startingBid)) {
-      setError('Bid must be greater or equal to the starting bid');
+    if (parseFloat(yourBid) < minBid) {
+      setError(`Bid must be greater or equal to the reserve value for the slot: ${minBid}`);
       return;
     }
     setError('');
@@ -139,15 +152,50 @@ const PlaceBidPopup = ({
       setActiveTxHashes([bidTx.hash]);
       const txReceipt = await bidTx.wait();
       if (txReceipt.status === 1) {
-        // This is temp until the scraper handles bids
-        await saveBidToBE();
-        updateBids();
-        setShowSuccess(true);
-        setYourBalance(parseFloat(yourBalance) - parseFloat(yourBid));
+        setLoadingText(verifyBidLoadingText);
+        setBalance(parseFloat(balance) - parseFloat(yourBid));
+      } else {
+        setShowLoading(false);
+        setError('Error encountered during contract execution');
+      }
+    } catch (err) {
+      setShowLoading(false);
+      setActiveTxHashes([]);
+      console.log(err);
+      // case if the user denies the transaction
+      if (err?.code === 4001) {
+        setError('Transaction failed');
+        setErrorCode('User denied transaction signature');
+        return;
+      }
+
+      // client side error case
+      const errorCode = getContractErrorCode(err?.error?.message);
+      // eslint-disable-next-line no-prototype-builtins
+      if (errorCode && SC_ERROR_CODES.hasOwnProperty(errorCode)) {
+        setError(SC_ERROR_CODES[errorCode]);
+        setErrorCode(`Executuion reverted. Error code: ${errorCode}`);
+      }
+    }
+  };
+
+  const handleIncreaseAllowance = async () => {
+    try {
+      const erc20Contract = getERC20Contract(auction.tokenAddress, signer);
+      const approveTx = await erc20Contract.approve(
+        universeAuctionHouseContract.address,
+        BigNumber.from(utils.parseEther(yourBid))
+      );
+
+      setShowLoading(true);
+      setActiveTxHashes([approveTx.hash]);
+      const approveTxReceipt = await approveTx.wait();
+
+      if (approveTxReceipt.status === 1) {
+        setAllowance(+yourBid);
         setShowLoading(false);
         setActiveTxHashes([]);
       }
-      // await saveBidToBE();
     } catch (err) {
       setShowLoading(false);
       setActiveTxHashes([]);
@@ -155,6 +203,31 @@ const PlaceBidPopup = ({
       setError(err.error?.message);
     }
   };
+
+  const calculateTotalBid = () => {
+    const yourBidSafe = bigNumber(yourBid || '0');
+    const currentBidAmmountSafe = bigNumber(currentBid?.amount || '0');
+    const total = yourBidSafe.plus(currentBidAmmountSafe).toFixed();
+    return total;
+  };
+
+  const totalBid = calculateTotalBid();
+
+  useEffect(
+    () => () => {
+      setYourBid('');
+      setShowServiceFeeInfo(false);
+      setShowTotalBidAmountInfo(false);
+      setShowBidEligibleInfo(false);
+      setRewardTier(null);
+      setMinBid(0);
+      setMyBidSlotIndex(-1);
+      setError('');
+      setAllowance(0);
+      setBalance(0);
+    },
+    []
+  );
 
   return (
     <div className="place__bid__popup">
@@ -165,48 +238,79 @@ const PlaceBidPopup = ({
         alt="Close"
         aria-hidden="true"
       />
-      {!showSuccess ? (
-        <>
-          <h1 className="title">Place a bid</h1>
-          <p className="desc">
-            You are about to place a bid <br /> for <b>{auction.headline}</b> by <b>{artistName}</b>
-          </p>
-          <div className="bid__form">
-            <span>Your bid</span>
-            <Input
-              id="your-bid"
-              type="text"
-              placeholder="Enter your bid amount"
-              value={yourBid}
-              onChange={(e) => handleInputChange(e.target.value)}
-              hoverBoxShadowGradient
-            />
-            <div className="currency">
-              <img src={currencyIcon} alt="Currency ETH" />
-              <span>ETH</span>
+      <>
+        <h1 className="title">Place a bid</h1>
+        <p className="desc">
+          You are about to place a bid <br /> for <b>{auction.headline}</b> by <b>{artistName}</b>
+        </p>
+        <div className="bid__form">
+          <span>Your bid</span>
+          <Input
+            id="your-bid"
+            type="text"
+            placeholder="Enter your bid amount"
+            value={yourBid}
+            onChange={(e) => handleInputChange(e.target.value)}
+            hoverBoxShadowGradient
+          />
+          <div className="currency">
+            <img src={currencyIcon} alt="Currency ETH" />
+            <span>ETH</span>
+          </div>
+        </div>
+        {rewardTier ? (
+          <div
+            className="info"
+            onMouseEnter={() => setShowBidEligibleInfo(true)}
+            onMouseLeave={() => setShowBidEligibleInfo(false)}
+          >
+            Your bid is eligible to win slot {myBidSlotIndex} of{' '}
+            <span
+              className="tier__name"
+              style={{
+                color: rewardTier.color ? rewardTier.color : '#80CCDF',
+              }}
+            >
+              {rewardTier.name}
+            </span>
+            <div className="bid__eligible">
+              <img src={infoIcon} alt="Info" />
+              {showBidEligibleInfo ? (
+                <Animated animationIn="zoomIn" style={{ position: 'relative', zIndex: 111 }}>
+                  <div className="bid__eligible__info">
+                    This is just an estimate that is made based on the current bids and does not
+                    guarantee you are going to win
+                  </div>
+                </Animated>
+              ) : (
+                <></>
+              )}
             </div>
           </div>
-          {rewardTier ? (
+        ) : (
+          <></>
+        )}
+        <div className="total">
+          <div className="total_row">
+            <div className="label">Your balance</div>
+            <div className="value">{`${balance.toString().substring(0, 5)} ${
+              auction.tokenSymbol
+            }`}</div>
+          </div>
+          <div className="total_row">
             <div
-              className="info"
-              onMouseEnter={() => setShowBidEligibleInfo(true)}
-              onMouseLeave={() => setShowBidEligibleInfo(false)}
+              className="label"
+              onMouseEnter={() => setShowServiceFeeInfo(true)}
+              onMouseLeave={() => setShowServiceFeeInfo(false)}
             >
-              Your bid is eligible to win a{' '}
-              <span
-                style={{
-                  color: rewardTier.color ? rewardTier.color : '#80CCDF',
-                }}
-              >
-                {rewardTier.name}
-              </span>
-              <div className="bid__eligible">
+              <span>Service fee</span>
+              <div className="service__fee">
                 <img src={infoIcon} alt="Info" />
-                {showBidEligibleInfo ? (
+                {showServiceFeeInfo ? (
                   <Animated animationIn="zoomIn" style={{ position: 'relative', zIndex: 111 }}>
-                    <div className="bid__eligible__info">
-                      This is just an estimate that is made based on the current bids and does not
-                      guarantee you are going to win
+                    <div className="service__fee__info">
+                      We are decentralization maxis and our goal is to empower the creators and
+                      community to create, buy and sell digital art in a feeless way.
                     </div>
                   </Animated>
                 ) : (
@@ -214,100 +318,77 @@ const PlaceBidPopup = ({
                 )}
               </div>
             </div>
-          ) : (
-            <></>
-          )}
-          <div className="total">
-            <div className="total_row">
-              <div className="label">Your balance</div>
-              <div className="value">{`${yourBalance.toString().substring(0, 5)} ETH`}</div>
-            </div>
-            <div className="total_row">
-              <div
-                className="label"
-                onMouseEnter={() => setShowServiceFeeInfo(true)}
-                onMouseLeave={() => setShowServiceFeeInfo(false)}
-              >
-                <span>Service fee</span>
-                <div className="service__fee">
-                  <img src={infoIcon} alt="Info" />
-                  {showServiceFeeInfo ? (
-                    <Animated animationIn="zoomIn" style={{ position: 'relative', zIndex: 111 }}>
-                      <div className="service__fee__info">
-                        We are decentralization maxis and our goal is to empower the creators and
-                        community to create, buy and sell digital art in a feeless way.
-                      </div>
-                    </Animated>
-                  ) : (
-                    <></>
-                  )}
-                </div>
-              </div>
-              <div className="value">No fees, boom!</div>
-            </div>
-            <div className="total_row">
-              <div
-                className="label"
-                onMouseEnter={() => setShowTotalBidAmountInfo(true)}
-                onMouseLeave={() => setShowTotalBidAmountInfo(false)}
-              >
-                <span>Final bid amount</span>
-                <div className="total__bid__amount">
-                  <img src={infoIcon} alt="Info" />
-                  {showTotalBidAmountInfo ? (
-                    <Animated animationIn="zoomIn" style={{ position: 'relative', zIndex: 111 }}>
-                      <div className="total__bid__amount__info">
-                        Keep in mind that your funds will be used only if your bid wins a certain
-                        tier. If you don&apos;t win, you will be able to withdraw your funds by
-                        clicking the withdraw button that will become active after the auction ends.
-                      </div>
-                    </Animated>
-                  ) : (
-                    <></>
-                  )}
-                </div>
-              </div>
-              <div className="value">{`${yourBid || 0} ETH`}</div>
-            </div>
-            <div className="total_row">
-              <div className="label">
-                <span>Total bid</span>
-              </div>
-              <div className="value">{`${+yourBid + (+currentBid?.amount || 0)} ETH`}</div>
-            </div>
+            <div className="value">No fees, boom!</div>
           </div>
-          <div className="place__bid__btn">
-            <Button className="light-button w-100" onClick={handlePlaceBidClick} disabled={!!error}>
+          <div className="total_row">
+            <div
+              className="label"
+              onMouseEnter={() => setShowTotalBidAmountInfo(true)}
+              onMouseLeave={() => setShowTotalBidAmountInfo(false)}
+            >
+              <span>Final bid amount</span>
+              <div className="total__bid__amount">
+                <img src={infoIcon} alt="Info" />
+                {showTotalBidAmountInfo ? (
+                  <Animated animationIn="zoomIn" style={{ position: 'relative', zIndex: 111 }}>
+                    <div className="total__bid__amount__info">
+                      Keep in mind that your funds will be used only if your bid wins a certain
+                      tier. If you don&apos;t win, you will be able to withdraw your funds by
+                      clicking the withdraw button that will become active after the auction ends.
+                    </div>
+                  </Animated>
+                ) : (
+                  <></>
+                )}
+              </div>
+            </div>
+            <div className="value">{`${yourBid || 0} ${auction.tokenSymbol}`}</div>
+          </div>
+          <div className="total_row">
+            <div className="label">Total bid</div>
+            <div className="value">{`${totalBid} ${auction.tokenSymbol}`}</div>
+          </div>
+        </div>
+        <div className="place__bid__btn">
+          {auction.tokenSymbol.toLowerCase() !== 'eth' ? (
+            <>
+              <Button
+                style={{ marginBottom: 20 }}
+                className="light-button w-100"
+                onClick={handleIncreaseAllowance}
+                disabled={+yourBid <= allowance}
+              >
+                Approve {auction.tokenSymbol}
+              </Button>
+
+              <Button
+                className="light-button w-100"
+                onClick={handlePlaceBid}
+                disabled={+yourBid > allowance || !+yourBid || !!error}
+              >
+                Place a bid
+              </Button>
+            </>
+          ) : (
+            // The disabled requirement is different if you bid in ETH
+            <Button
+              className="light-button w-100"
+              onClick={handlePlaceBid}
+              disabled={!+yourBid || !!error}
+            >
               Place a bid
             </Button>
-          </div>
-          {error ? (
-            <Animated animationIn="fadeInUp">
-              <p className="errors">{error}</p>
-            </Animated>
-          ) : (
-            <></>
           )}
-        </>
-      ) : (
-        <>
-          <Animated animationIn="zoomIn">
-            <div className="congrats__icon">
-              <img src={bidSubmittedIcon} alt="Bid Submitted" />
-            </div>
-            <h1 className="congrats__title">Congratulations!</h1>
-            <p className="congrats__desc">
-              Your bid for <b>{auction.headline}</b> by <b>{artistName}</b> was successfully
-              submitted
-            </p>
-            <div className="congrats__close">
-              <Button className="light-button" onClick={onClose}>
-                Close
-              </Button>
-            </div>
+        </div>
+        {error ? (
+          <Animated animationIn="fadeInUp">
+            <p className="errors">{error}</p>
+            <p className="errors">{_errorCode}</p>
           </Animated>
-        </>
-      )}
+        ) : (
+          <></>
+        )}
+      </>
     </div>
   );
 };
@@ -317,11 +398,10 @@ PlaceBidPopup.propTypes = {
   artistName: PropTypes.string.isRequired,
   onBidders: PropTypes.oneOfType([PropTypes.array]).isRequired,
   rewardTiers: PropTypes.oneOfType([PropTypes.array]).isRequired,
-  onSetBidders: PropTypes.func.isRequired,
   auction: PropTypes.oneOfType([PropTypes.object]).isRequired,
   setShowLoading: PropTypes.func.isRequired,
   currentBid: PropTypes.oneOfType([PropTypes.object]),
-  setCurrentBid: PropTypes.func.isRequired,
+  setLoadingText: PropTypes.func.isRequired,
 };
 
 PlaceBidPopup.defaultProps = {

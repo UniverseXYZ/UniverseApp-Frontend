@@ -2,22 +2,10 @@
 @import '../../assets/scss/_mixins';
 
 .carousel.img-div {
-    display: unset;
-    margin-top: 16px;
-    display: block;
-    max-width: 920px;
-    height: 100%;
-    margin-top: unset;
     .slick-slide{
-        width: unset!important;
-        margin-right: 14px;
+        width: auto!important;
       }
-      .slick-dots{
-        display: none!important;
-      }
-      .slick-list{
-          padding-top: 24px;
-      }
+
       .slick-arrow {
         background: $white;
         border: 1px solid rgba(0, 0, 0, 0.1);
@@ -26,10 +14,10 @@
         box-sizing: border-box;
         box-shadow: 0px 10px 36px rgba(136, 120, 172, 0.14);
         border-radius: 50%;
-        top: 60px;
+
         &:hover {
           background: linear-gradient($white, $white) padding-box,
-            linear-gradient(to right, #bceb00, #00eaea) border-box;
+          linear-gradient(to right, #bceb00, #00eaea) border-box;
           border: 1px solid transparent;
         }
 
@@ -37,7 +25,7 @@
          color: rgba(0, 0, 0, 1);
          position: absolute;
         }
-        
+
         &.slick-prev {
           position: absolute;
           left: -18px;
@@ -61,5 +49,5 @@
             right: 16px;
           }
         }
-      }  
+      }
 }

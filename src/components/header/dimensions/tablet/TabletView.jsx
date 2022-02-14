@@ -59,11 +59,6 @@ const TabletView = (props) => {
     isWalletConnected,
     setIsWalletConnected,
     ethereumAddress,
-    handleConnectWallet,
-    showInstallWalletPopup,
-    setShowInstallWalletPopup,
-    selectedWallet,
-    setSelectedWallet,
     showMenu,
     setShowMenu,
     showSearch,
@@ -76,9 +71,9 @@ const TabletView = (props) => {
     usdEthBalance,
     resetConnectionState,
     loggedInArtist,
+    setshowWalletPopup,
   } = useAuthContext();
 
-  const { editProfileButtonClick } = useAuctionContext();
   const [isAccountDropdownOpened, setIsAccountDropdownOpened] = useState(false);
   const [copied, setCopied] = useState(false);
   const [searchFocus, setSearchFocus] = useState(false);
@@ -141,6 +136,13 @@ const TabletView = (props) => {
     setIsAccountDropdownOpened(!isAccountDropdownOpened);
     setShowMenu(false);
   };
+
+  // This will close the menu when authentication is successful
+  useEffect(() => {
+    if (ethereumAddress) {
+      setShowMenu(false);
+    }
+  }, [ethereumAddress]);
 
   return (
     <div className="tablet__nav">
@@ -433,20 +435,6 @@ const TabletView = (props) => {
                     onClick={() => {
                       history.push('/my-account');
                       setIsAccountDropdownOpened(false);
-                      // if (
-                      //   loggedInArtist.name &&
-                      //   loggedInArtist.universePageAddress &&
-                      //   loggedInArtist.avatar &&
-                      //   loggedInArtist.about &&
-                      //   editProfileButtonClick
-                      // ) {
-                      //   history.push(`/${loggedInArtist.universePageAddress}`, {
-                      //     id: loggedInArtist.id,
-                      //   });
-                      // } else {
-                      //   history.push('/my-account');
-                      // }
-                      // setIsAccountDropdownOpened(!isAccountDropdownOpened);
                     }}
                   >
                     <img src={myProfileIcon} alt="My Profile" />
@@ -492,11 +480,7 @@ const TabletView = (props) => {
         </div>
       )}
       <button type="button" className="hamburger" onClick={() => setShowMenu(!showMenu)}>
-        {!showMenu ? (
-          <img src={hamburgerIcon} alt="Hamburger" />
-        ) : (
-          <img src={closeIcon} alt="Close" />
-        )}
+        {!showMenu ? <img src={hamburgerIcon} alt="Menu" /> : <img src={closeIcon} alt="Close" />}
       </button>
       {showMenu && (
         <>
@@ -518,15 +502,14 @@ const TabletView = (props) => {
                   <div>
                     <button
                       type="button"
-                      className="disable"
                       onClick={() => {
-                        // setShowMenu(false);
-                        // history.push('/products/auction-house');
+                        setShowMenu(false);
+                        history.push('/products/auction-house');
                       }}
                     >
                       <img src={auctionHouseIcon} alt="Auction House" />
                       <span>Auction house</span>
-                      <span className="tooltiptext">Coming soon</span>
+                      {/* <span className="tooltiptext">Coming soon</span> */}
                     </button>
                   </div>
                   <div>
@@ -710,21 +693,9 @@ const TabletView = (props) => {
                 {/* <Popup trigger={<button type="button">Join newsletter</button>}>
                   {(close) => <SubscribePopup close={close} />}
                 </Popup> */}
-                <Popup
-                  closeOnDocumentClick={false}
-                  trigger={<button type="button">Sign in</button>}
-                >
-                  {(close) => (
-                    <SelectWalletPopup
-                      close={close}
-                      handleConnectWallet={handleConnectWallet}
-                      showInstallWalletPopup={showInstallWalletPopup}
-                      setShowInstallWalletPopup={setShowInstallWalletPopup}
-                      selectedWallet={selectedWallet}
-                      setSelectedWallet={setSelectedWallet}
-                    />
-                  )}
-                </Popup>
+                <button type="button" onClick={() => setshowWalletPopup(true)}>
+                  Sign in
+                </button>
               </li>
             )}
           </ul>
@@ -738,11 +709,6 @@ TabletView.propTypes = {
   isWalletConnected: PropTypes.bool.isRequired,
   setIsWalletConnected: PropTypes.func.isRequired,
   ethereumAddress: PropTypes.string.isRequired,
-  handleConnectWallet: PropTypes.func.isRequired,
-  showInstallWalletPopup: PropTypes.bool.isRequired,
-  setShowInstallWalletPopup: PropTypes.func.isRequired,
-  selectedWallet: PropTypes.string.isRequired,
-  setSelectedWallet: PropTypes.func.isRequired,
   showMenu: PropTypes.bool.isRequired,
   setShowMenu: PropTypes.func.isRequired,
   showSearch: PropTypes.bool.isRequired,

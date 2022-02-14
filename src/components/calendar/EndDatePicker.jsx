@@ -6,6 +6,7 @@ import Input from '../input/Input';
 import callendarIcon from '../../assets/images/calendar.svg';
 import './EndDatePicker.scss';
 import './Calendar.scss';
+import { parseDateForDatePicker } from './utils';
 
 const EndDatePicker = (props) => {
   const { value, onChange, title, error } = props;
@@ -27,23 +28,10 @@ const EndDatePicker = (props) => {
   const [values, setValues] = useState({ endDate: value, startDate: '' });
   const [showEndDate, setShowEndDate] = useState(false);
   const endDateRef = useRef(null);
-  const [endDateTemp, setEndDateTemp] = useState({
-    month: monthNames[d.getMonth()],
-    day: d.getDate(),
-    year: d.getFullYear(),
-    hours: new Date().getHours(),
-    minutes: new Date().getMinutes() < 10 ? `0${new Date().getMinutes()}` : new Date().getMinutes(),
-    timezone: 'GMT +04:00',
-    format: 'AM',
-  });
+  const [endDateTemp, setEndDateTemp] = useState(parseDateForDatePicker(d));
   const formatDate = (date) => {
-    const dat = new Date(date);
-    const month = monthNames[dat.getMonth()];
-    const day = dat.getDate();
-    const year = dat.getFullYear();
-    const hours = dat.getHours();
-    const minute = dat.getMinutes();
-    return `${month} ${day}, ${year}, ${hours}:${minute} ${endDateTemp.timezone}`;
+    const { month, day, year, hours, minutes } = parseDateForDatePicker(date);
+    return `${month} ${day}, ${year}, ${hours}:${minutes} ${endDateTemp.timezone}`;
   };
 
   useEffect(() => {

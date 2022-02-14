@@ -7,39 +7,39 @@
   align-items: center;
   justify-content: center;
   background-color: $black;
-  min-height: 420px;
+  min-height: 440px;
   padding: 0 60px;
-
-  .ellipse-l {
-    position: absolute;
-    top: 20px;
-    left: 0px;
-    @include sm {
-      height: 200px;
-    }
-  }
-
-  .ellipse-r {
-    position: absolute;
-    bottom: 0px;
-    right: 0px;
-    transform: rotate(180deg);
-    @include sm {
-      height: 200px;
-      bottom: 20px;
-    }
-  }
+  background-image: url("../../../assets/images/auction-house-bg-desktop.png");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
 
   &__container {
     max-width: 1110px;
     margin: 0 auto;
     overflow: hidden;
 
+    h2.subtitle {
+      font-family: $spaceGroteskFont;
+      font-style: normal;
+      font-weight: 500;
+      font-size: 12px;
+      line-height: 140%;
+      text-align: center;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: $white;
+      margin-bottom: 23px;
+      @include sm {
+        margin-bottom: 10px;
+      }
+    }
+
     h1.title {
       font-family: $sharpGroteskSemiBoldFont;
       font-style: normal;
       font-weight: 600;
-      font-size: 36px;
+      font-size: 48px;
       line-height: 120%;
       text-align: center;
       color: $white;
@@ -56,17 +56,41 @@
       font-family: $spaceGroteskFont;
       font-style: normal;
       font-weight: normal;
-      font-size: 18px;
+      font-size: 16px;
       line-height: 150%;
       text-align: center;
       color: rgba(255, 255, 255, 0.6);
-      margin-top: 20px;
+      margin: 12px auto 38px;
+      max-width: 460px;
       @include md {
-        font-size: 16px;
         max-width: 307px;
-        margin: 20px auto 0;
       }
     }
+    .setup--auction--btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      button {
+        display: flex;
+        box-shadow: 2px 1000px 1px $black inset;
+        color: $white;
+        &:hover {
+          box-shadow: 2px 1000px 1px rgba(0, 0, 0, 0.9) inset !important;
+        }
+        svg {
+          margin-left: 12px;
+          path {
+            stroke: $white;
+          }
+        }
+      }
+    }
+    @include sm {
+      margin: -50px auto 0;
+    }
+  }
+  @include lg {
+    background-image: url("../../../assets/images/auction-house-bg-tablet.png");
   }
   @include sm {
     padding: 0px 20px;

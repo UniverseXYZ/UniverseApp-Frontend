@@ -1,35 +1,34 @@
 import React, { useState, useEffect } from 'react';
-import { DragDropContext, Droppable } from 'react-beautiful-dnd';
-import uuid from 'react-uuid';
 import Input from '../input/Input.jsx';
 import '../pagination/Pagination.scss';
 import Pagination from '../pagination/Pagionation.jsx';
 import searchIconGray from '../../assets/images/search-gray.svg';
-import { isAfterNow, isBeforeNow } from '../../utils/dates';
 import ActiveAuctionsTabsCard from '../auctionsCard/ActiveAuctionsTabsCard.jsx';
-import { useAuthContext } from '../../contexts/AuthContext';
 import NoAuctionsFound from './NoAuctionsFound';
 import { getActiveAuctions } from '../../utils/api/auctions';
 import ActiveAndPastCardSkeleton from './skeleton/ActiveAndPastCardSkeleton';
 import SortBySelect from '../input/SortBySelect';
+import { useErrorContext } from '../../contexts/ErrorContext';
 
 const ActiveAuctions = () => {
+  const sortOptions = ['Newest', 'Oldest'];
+  const perPage = 10;
+  const { showError, setShowError, setErrorTitle, setErrorBody } = useErrorContext();
   const [notFound, setNotFound] = useState(false);
-  const [loading, setLoading] = useState(true);
-  const { ethPrice, loggedInArtist } = useAuthContext();
+  const [loading, setLoading] = useState(false);
   const [activeAuctions, setActiveAuctions] = useState([]);
-  const [shownActionId, setShownActionId] = useState(null);
-  const [copied, setCopied] = useState({
-    state: false,
-    index: null,
-  });
   const [offset, setOffset] = useState(0);
-  const [perPage, setPerPage] = useState(10);
   const [searchByName, setSearchByName] = useState('');
+  const [sortOption, setSortOption] = useState(sortOptions[0]);
 
   useEffect(async () => {
     try {
       const response = await getActiveAuctions();
+      if (response.error) {
+        setErrorTitle('Unexpected error');
+        setErrorBody(response.message);
+        setShowError(true);
+      }
       if (!response.auctions?.length) {
         setNotFound(true);
         setLoading(false);
@@ -42,62 +41,25 @@ const ActiveAuctions = () => {
     }
   }, []);
 
-  useEffect(async () => {
-    try {
-      const response = await getActiveAuctions();
-      if (!response.auctions?.length) {
-        setNotFound(true);
-        setLoading(false);
-      } else {
-        setActiveAuctions(response.auctions);
-        setLoading(false);
-      }
-    } catch (error) {
-      console.error(error);
+  useEffect(() => {
+    const newFilteredAuctions = activeAuctions.filter((auction) =>
+      auction.name.toLowerCase().includes(searchByName.toLowerCase())
+    );
+    if (sortOption === 'Newest') {
+      newFilteredAuctions.sort((a, b) => new Date(b.startDate) - new Date(a.startDate));
+    } else if (sortOption === 'Oldest') {
+      newFilteredAuctions.sort((a, b) => new Date(a.startDate) - new Date(b.startDate));
     }
-  });
+    setActiveAuctions(newFilteredAuctions);
+  }, [sortOption]);
 
   const handleSearch = (value) => {
     setSearchByName(value);
   };
 
-  const onDragEnd = (result) => {
-    const { destination, source } = result;
-
-    if (!destination) {
-      return;
-    }
-
-    if (destination.droppableId === source.droppableId && destination.index === source.index) {
-      return;
-    }
-
-    const newAuctions = activeAuctions;
-    const draggingAuction = newAuctions.splice(source.index, 1);
-    newAuctions.splice(destination.index, 0, draggingAuction[0]);
-
-    setActiveAuctions(newAuctions);
-  };
-
-  const getTotalNFTSperAuction = (auction) => {
-    let nftsCount = 0;
-    auction?.rewardTiers?.forEach((tier) => {
-      nftsCount += tier.numberOfWinners * tier.nftsPerWinner;
-    });
-    return nftsCount;
-  };
-
-  useEffect(() => {
-    window['__react-beautiful-dnd-disable-dev-warnings'] = true;
-  }, []);
-
-  const handleAuctionExpand = (name) => {
-    const canExpandAuction = !name || name !== shownActionId;
-    if (canExpandAuction) {
-      setShownActionId(name);
-    } else {
-      setShownActionId(null);
-    }
+  const removeAuction = (auctionToRemoveId) => {
+    const updatedAuctions = activeAuctions.filter((auction) => auction.id !== auctionToRemoveId);
+    setActiveAuctions(updatedAuctions);
   };
 
   return (
@@ -117,36 +79,34 @@ const ActiveAuctions = () => {
         </div>
         <SortBySelect
           id="sort--select"
-          defaultValue="Sort by"
-          sortData={['Sort by', 'Newest', 'Oldest']}
-          hideFirstOption
+          sort={sortOption}
+          sortData={sortOptions}
+          setSort={setSortOption}
         />
       </div>
       {!loading ? (
-        <DragDropContext onDragEnd={onDragEnd}>
-          <Droppable droppableId="droppableId">
-            {(provided) => (
-              <div key={uuid()} ref={provided.innerRef} {...provided.droppableProps}>
-                {activeAuctions
-                  .slice(offset, offset + perPage)
-                  .filter((item) => item.name.toLowerCase().includes(searchByName.toLowerCase()))
-                  .filter((item) => item && isBeforeNow(item.startDate) && isAfterNow(item.endDate))
-                  .map((activeAuction, index) => (
-                    <ActiveAuctionsTabsCard activeAuction={activeAuction} index={index} />
-                  ))}
-
-                {provided.placeholder}
-              </div>
-            )}
-          </Droppable>
-        </DragDropContext>
+        <div>
+          {activeAuctions
+            .slice(offset, offset + perPage)
+            .filter((item) => item.name.toLowerCase().includes(searchByName.toLowerCase()))
+            .map((activeAuction, index) => (
+              <ActiveAuctionsTabsCard
+                activeAuction={activeAuction}
+                setActiveAuctions={setActiveAuctions}
+                index={index}
+                removeAuction={removeAuction}
+              />
+            ))}
+        </div>
       ) : (
         <ActiveAndPastCardSkeleton />
       )}
       {notFound && <NoAuctionsFound title="No active auctions found" />}
-      <div className="pagination__container">
-        <Pagination data={activeAuctions} perPage={perPage} setOffset={setOffset} />
-      </div>
+      {activeAuctions?.length ? (
+        <div className="pagination__container">
+          <Pagination data={activeAuctions} perPage={perPage} setOffset={setOffset} />
+        </div>
+      ) : null}
     </div>
   );
 };

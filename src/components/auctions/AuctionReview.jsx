@@ -1,21 +1,11 @@
-/* eslint-disable no-debugger */
-/* eslint-disable no-cond-assign */
 import React, { useState, useEffect } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
 import Popup from 'reactjs-popup';
 import './AuctionReview.scss';
 import './Tiers.scss';
-import uuid from 'react-uuid';
 import { format } from 'date-fns';
 import infoIcon from '../../assets/images/icon.svg';
-import mp3Icon from '../../assets/images/mp3-icon.png';
-import ethIcon from '../../assets/images/bid_icon.svg';
-import daiIcon from '../../assets/images/dai_icon.svg';
-import usdcIcon from '../../assets/images/usdc_icon.svg';
-import bondIcon from '../../assets/images/bond_icon.svg';
-import snxIcon from '../../assets/images/snx.svg';
 import yellowIcon from '../../assets/images/yellowIcon.svg';
-import videoIcon from '../../assets/images/video-icon.svg';
 import pencil from '../../assets/images/pencil.svg';
 import Button from '../button/Button.jsx';
 import CongratsAuctionPopup from '../popups/CongratsAuctionPopup.jsx';
@@ -24,57 +14,83 @@ import { AuctionCreate, AuctionUpdate } from '../../userFlows/AuctionCreate';
 import { getFutureAuctions } from '../../utils/api/auctions';
 import { useAuctionContext } from '../../contexts/AuctionContext';
 import { useErrorContext } from '../../contexts/ErrorContext';
+import { getBidTypeByValue } from '../../utils/fixtures/BidOptions.js';
+import { getTimezoneOffset } from '../../utils/dates';
+import AuctionReviewTier from './AuctionReviewTier';
 
 const AuctionReview = () => {
   const { auction, bidtype, options, myAuctions, setMyAuctions } = useAuctionContext();
   const { setShowError, setErrorTitle, setErrorBody } = useErrorContext();
-
+  const defaultLoadingText =
+    'Keep this window opened. Navigating away from the page will reset the current progress.';
+  const UTCHoursFromNow = getTimezoneOffset() / -60;
   const location = useLocation();
   const history = useHistory();
   const [hideIcon, setHideIcon] = useState(false);
   const [bidicon, setBidicon] = useState(null);
   const isEditingAuction = myAuctions.filter((a) => a.id === auction.id);
+  const [tierOptions, setTierOption] = useState([]);
+  const [showLoading, setShowLoading] = useState(false);
+  const [showCongrats, setShowCongrats] = useState(false);
+  useEffect(() => {
+    const newTierOptions = [];
+    auction.rewardTiers
+      .filter((t) => !t.removed)
+      .forEach((tier) => {
+        const newTiers = tier.nftSlots.map((t) => ({
+          value: t.slot,
+          label: `Winner #${t.slot + 1}`,
+          nftsCount: t.nftIds.length,
+        }));
+        newTierOptions.push(newTiers);
+      });
+    setTierOption(newTierOptions);
+  }, []);
 
   useEffect(() => {
-    if (bidtype === 'eth') {
-      setBidicon(ethIcon);
-    }
-    if (bidtype === 'dai') {
-      setBidicon(daiIcon);
-    }
-    if (bidtype === 'usdc') {
-      setBidicon(usdcIcon);
-    }
-    if (bidtype === 'bond') {
-      setBidicon(bondIcon);
-    }
-    if (bidtype === 'snx') {
-      setBidicon(snxIcon);
+    if (!auction.id) {
+      history.push('./my-auctions');
+    } else {
+      const bidIcon = getBidTypeByValue(bidtype, options).img;
+      setBidicon(bidIcon);
     }
   }, []);
 
   const handleSetAuction = async () => {
     if (auction && auction?.rewardTiers?.length) {
-      document.getElementById('loading-hidden-btn').click();
-      const popupRoot = document.getElementById('popup-root');
-      if (popupRoot) popupRoot.remove();
-
+      setShowLoading(true);
       let res;
+      const auctionCopy = JSON.parse(JSON.stringify(auction));
+      auctionCopy.rewardTiers.forEach((rewardTier) => {
+        rewardTier.nftSlots.forEach((slot) => {
+          delete slot.nftsData;
+        });
+      });
       if (isEditingAuction.length) {
-        res = await AuctionUpdate({ auction, bidtype, options });
+        try {
+          res = await AuctionUpdate({ auction: auctionCopy, bidtype, options });
+        } catch (error) {
+          console.error(error);
+        }
       } else {
-        res = await AuctionCreate({ auction, bidtype, options });
+        try {
+          res = await AuctionCreate({ auction: auctionCopy, bidtype, options });
+        } catch (error) {
+          console.error(error);
+        }
       }
 
+      setShowLoading(false);
       if (res?.id) {
-        document.getElementById('congrats-hidden-btn').click();
-      } else if (res.error) {
-        document.getElementById('congrats-hidden-btn').click();
+        setShowCongrats(true);
+      } else if (res?.error || res?.statusCode >= 500) {
+        // document.getElementById('congrats-hidden-btn').click();
         const errorMsg =
-          res?.errors[0]?.message || 'An error occured, please check the network tab !';
+          (res?.errors?.length && res.errors[0]?.message) ||
+          'Failed to update/create auction, please try again in few minutes!';
 
         setShowError(true);
-        setErrorTitle('Failed to update/create auction !');
+        setErrorTitle('An error occured!');
         setErrorBody(errorMsg);
       }
     }
@@ -90,29 +106,11 @@ const AuctionReview = () => {
 
   return (
     <div className="container auction-reward">
-      <Popup
-        trigger={
-          <button
-            type="button"
-            id="loading-hidden-btn"
-            aria-label="hidden"
-            style={{ display: 'none' }}
-          />
-        }
-      >
-        {(close) => <LoadingPopup onClose={close} />}
+      <Popup closeOnDocumentClick={false} open={showLoading}>
+        <LoadingPopup text={defaultLoadingText} />
       </Popup>
-      <Popup
-        trigger={
-          <button
-            type="button"
-            id="congrats-hidden-btn"
-            aria-label="hidden"
-            style={{ display: 'none' }}
-          />
-        }
-      >
-        {(close) => <CongratsAuctionPopup onClose={handleAuctionPopupSuccess} />}
+      <Popup closeOnDocumentClick={false} open={showCongrats}>
+        <CongratsAuctionPopup onClose={handleAuctionPopupSuccess} />
       </Popup>
       <div>
         <div className="head-part">
@@ -122,74 +120,70 @@ const AuctionReview = () => {
 
         <div className="auction-settings-head">
           <h2 className="auction-settings-title">Auction settings</h2>
-          {auction.name && auction.startingBid && auction.startDate && auction.endDate && (
-            <button
-              type="button"
-              className="edit-auction-settings"
-              onClick={() => {
-                history.push('/setup-auction/auction-settings', auction.id);
-              }}
-            >
-              Edit <img src={pencil} alt="edit-icon" />
-            </button>
-          )}
+          <button
+            type="button"
+            className="edit-auction-settings"
+            onClick={() => {
+              history.push('/setup-auction/auction-settings', auction.id);
+            }}
+          >
+            Edit <img src={pencil} alt="edit-icon" />
+          </button>
         </div>
-        {auction.name && auction.startingBid && auction.startDate && auction.endDate && (
-          <div className="auction-inf">
-            <div className="name-bid">
-              <div className="tName">
-                <p>Auction name</p>
-                <span>{auction.name}</span>
-              </div>
-              <div className="startDate">
-                <p>Start date</p>
-                <span>{startDate} EST</span>
-              </div>
+        <div className="auction-inf">
+          <div className="name-bid">
+            <div className="tName">
+              <p>Auction name</p>
+              <span>{auction.name}</span>
             </div>
-            <div className="date-part">
-              <div className="bid-part">
-                <div className="bidToken">
-                  <p>Bid token (ERC-20)</p>
-                  <span className="bidtype">
-                    {bidicon && <img src={bidicon} alt="icon" />}
-                    {bidtype}
-                  </span>
-                </div>
-                <div className="startingBid">
-                  <p>Starting bid</p>
-                  <span>{auction.startingBid}</span>
-                </div>
-              </div>
-              <div className="endDate">
-                <p>End date</p>
-                <span>{endDate} EST</span>
-                <span className="auction-ext">
-                  Ending auction extension timer: 3 minutes
-                  <img
-                    src={infoIcon}
-                    alt="Info Icon"
-                    onMouseOver={() => setHideIcon(true)}
-                    onFocus={() => setHideIcon(true)}
-                    onMouseLeave={() => setHideIcon(false)}
-                    onBlur={() => setHideIcon(false)}
-                  />
-                  {hideIcon && (
-                    <div className="info-text">
-                      <p>
-                        Any bid in the last 3 minutes of an auction will extend the auction for an
-                        additional 3 minutes.
-                      </p>
-                    </div>
-                  )}
+            <div className="startDate">
+              <p>Start date</p>
+              <span>
+                {startDate} UTC{UTCHoursFromNow > 0 ? `+${UTCHoursFromNow}` : UTCHoursFromNow}
+              </span>
+            </div>
+          </div>
+          <div className="date-part">
+            <div className="bid-part">
+              <div className="bidToken">
+                <p>Bid token (ERC-20)</p>
+                <span className="bidtype">
+                  {bidicon && <img src={bidicon} alt="icon" />}
+                  {bidtype}
                 </span>
               </div>
             </div>
+            <div className="endDate">
+              <p>End date</p>
+              <span>
+                {endDate} UTC{UTCHoursFromNow > 0 ? `+${UTCHoursFromNow}` : UTCHoursFromNow}
+              </span>
+              <span className="auction-ext">
+                Ending auction extension timer: 5 minutes
+                <img
+                  src={infoIcon}
+                  alt="Info Icon"
+                  onMouseOver={() => setHideIcon(true)}
+                  onFocus={() => setHideIcon(true)}
+                  onMouseLeave={() => setHideIcon(false)}
+                  onBlur={() => setHideIcon(false)}
+                />
+                {hideIcon && (
+                  <div className="info-text">
+                    <p>
+                      Any bid in the last 5 minutes of an auction will extend the auction for an
+                      additional 5 minutes.
+                    </p>
+                  </div>
+                )}
+              </span>
+            </div>
           </div>
-        )}
+        </div>
 
-        {auction.properties &&
-          auction.properties.length &&
-          auction.properties
+        {auction.royaltySplits &&
+          auction.royaltySplits.length &&
+          auction.royaltySplits
             .map((item) => item.address !== '' && item.percentAmount !== '')
             .find((element) => element) && (
             <div className="royalty-settings-head">
@@ -197,20 +191,14 @@ const AuctionReview = () => {
             </div>
           )}
 
-        {auction.properties && auction.properties.length && (
+        {auction.royaltySplits && auction.royaltySplits.length && (
           <div className="royalty-inf">
-            {auction.properties.map(
+            {auction.royaltySplits.map(
               (item) =>
                 item.address &&
                 item.percentAmount && (
                   <div key={item.address} className="royalty">
-                    <p className="show--on--desktop">{item.address}</p>
-                    <p className="hide--on--desktop">
-                      {`${item.address.substring(0, 13)}...${item.address.substring(
-                        27,
-                        item.address.length
-                      )}`}
-                    </p>
+                    <p>{item.address}</p>
                     <span>{item.percentAmount}%</span>
                   </div>
                 )
@@ -232,136 +220,21 @@ const AuctionReview = () => {
         </div>
         {auction?.rewardTiers
           ?.filter((t) => !t.removed)
-          .map((tier) => {
-            const allTierNFTs = tier.nftSlots.reduce((res, curr) => {
-              const nfts = curr.nftsData;
-
-              res.push(...nfts);
-              return res;
-            }, []);
-
-            const onlyUniqueNFTs = allTierNFTs.reduce((res, curr) => {
-              const { url, artworkType, nftName, collectioName, collectionAddress, collectionUrl } =
-                curr;
-              res[url] = res[url] || {
-                url,
-                count: 0,
-                artworkType: '',
-                nftName: '',
-                collectioName: '',
-                collectionAddress: '',
-                collectionUrl: '',
-              };
-
-              res[url].count += 1;
-              res[url].artworkType = artworkType;
-              res[url].collectioName = collectioName;
-              res[url].collectionAddress = collectionAddress;
-              res[url].collectionUrl = collectionUrl;
-              res[url].nftName = nftName;
-              return res;
-            }, {});
-
-            return (
-              <div key={tier.id} className="view-tier">
-                <div className="auction-header">
-                  <div className="img_head">
-                    <div className="img_head_title">
-                      <h3>{tier.name}</h3>
-                    </div>
-                    <div className="winners__edit__btn">
-                      <div className="winners">
-                        <div className="tier-perwinners">
-                          <h4>
-                            NFTs per winner:&nbsp;
-                            <b>
-                              {tier.customNFTsPerWinner || tier.nftsPerWinner === 0
-                                ? 'custom'
-                                : tier.nftsPerWinner}
-                            </b>
-                          </h4>
-                        </div>
-                        <div className="tier-winners">
-                          <h4>
-                            Winners:&nbsp;<b>{tier.winners || tier.numberOfWinners}</b>
-                          </h4>
-                        </div>
-                        <div className="tier-minbid">
-                          <h4>
-                            Total NFTs:&nbsp;
-                            <b>{allTierNFTs.length}</b>
-                          </h4>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div className="auctions-tier">
-                  <div className="auction-reward">
-                    {Object.keys(onlyUniqueNFTs).map((key) => {
-                      const {
-                        artworkType,
-                        url,
-                        count,
-                        nftName,
-                        collectioName,
-                        collectionAddress,
-                        collectionUrl,
-                      } = onlyUniqueNFTs[key];
-                      const nftIsImage =
-                        artworkType === 'png' ||
-                        artworkType === 'jpg' ||
-                        artworkType === 'jpeg' ||
-                        artworkType === 'mpeg' ||
-                        artworkType === 'webp';
-
-                      return (
-                        <div className="auction-reward__box" key={uuid()}>
-                          <div className="auction-reward__box__image">
-                            {artworkType === 'mp4' && (
-                              <video
-                                onMouseOver={(event) => event.target.play()}
-                                onFocus={(event) => event.target.play()}
-                                onMouseOut={(event) => event.target.pause()}
-                                onBlur={(event) => event.target.pause()}
-                              >
-                                <source src={url} type="video/mp4" />
-                                <track kind="captions" />
-                                Your browser does not support the video tag.
-                              </video>
-                            )}
-                            {artworkType === 'mpeg' && (
-                              <img className="preview-image" src={mp3Icon} alt={nftName} />
-                            )}
-                            {nftIsImage && (
-                              <img className="preview-image" src={url} alt={nftName} />
-                            )}
-                            {artworkType === 'mp4' && (
-                              <img className="video__icon" src={videoIcon} alt="Video Icon" />
-                            )}
-                          </div>
-                          {count > 1 && (
-                            <>
-                              <div className="auction-reward__box__highlight__one" />
-                              <div className="auction-reward__box__highlight__two" />
-                            </>
-                          )}
-                        </div>
-                      );
-                    })}
-                  </div>
-                </div>
-              </div>
-            );
-          })}
+          .map((tier, index) => (
+            <AuctionReviewTier
+              tier={tier}
+              tierOptions={tierOptions[index]}
+              bidToken={bidtype.toUpperCase()}
+            />
+          ))}
       </div>
       <div className="message">
         <span>
           <img src={yellowIcon} alt="icon" />
         </span>
         <h1>
-          Creating an auction doesn’t launch it. You will be able to mint all the NFTs and set up a
-          landing page to host your launch. Once you launch anyone can start bidding.
+          Creating an auction doesn’t launch it. You will be able to deposit all the NFTs and set up
+          a landing page to host your launch. Once you launch anyone can start bidding.
         </h1>
       </div>
       <div className="btn-div">

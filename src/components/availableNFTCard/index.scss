@@ -97,7 +97,7 @@ div.collection__count {
   }
 
   &.selected, &.has-selected-editions {
-    background: linear-gradient($white, $white) padding-box, linear-gradient(to right, #bceb00, #00eaea) border-box;
+    background: linear-gradient($white, $white) padding-box, linear-gradient(to right, #bceb00, #00eaea) border-box !important;
     border: 2px solid transparent;
 
     .nft__box__highlight__one {
@@ -548,5 +548,28 @@ div.collection__count {
     width: calc(100% - 24px);
     height: 4px;
     left: 12px;
+  }
+}
+
+.nft--card--footer.availability-cards {
+  .name--and--price {
+    align-items: center;
+  }
+  .random--bg--color {
+    height: 20px;
+    width: 20px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: $sharpGroteskMediumFont;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 12px;
+    text-transform: uppercase;
+    color: $black;
+  }
+  svg {
+    height: auto;
   }
 }

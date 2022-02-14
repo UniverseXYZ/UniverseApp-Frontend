@@ -100,6 +100,10 @@ export const sendSaveCollectionRequest = async ({ collection, helpers }) => {
 //
 
 export const sendCreateAuctionRequest = async ({ requestObject }) => {
+  // Remvoe the locally deleted reward tiers from the Create Auction request
+  const rewardTiers = requestObject.rewardTiers.filter((t) => !t.removed);
+  requestObject.rewardTiers = rewardTiers;
+
   const res = await createAuction(requestObject);
   return res;
 };
@@ -108,55 +112,31 @@ export const sendUpdateAuctionRequest = async ({ requestObject }) => {
   const res = await editAuction(requestObject);
 
   const auctionId = requestObject.id;
-  const newTiers = requestObject.rewardTiers.filter(
-    (tier) => typeof tier.id === 'string' && tier.id.startsWith('new-tier')
+  const newTiers = requestObject.rewardTiers.filter((tier) => !tier.removed);
+  const removeTiers = requestObject.rewardTiers.filter(
+    (tier) => !(typeof tier.id === 'string' && tier.id.startsWith('new-tier'))
   );
-  const updateTiers = requestObject.rewardTiers.filter(
-    (tier) =>
-      tier.id && !tier.removed && !(typeof tier.id === 'string' && tier.id.startsWith('new-tier'))
-  );
+  let error = null;
 
-  const removeTiers = requestObject.rewardTiers.filter((t) => t.removed);
-
-  const removeRewardTiersPromises = removeTiers.map(async (tier) => {
+  // eslint-disable-next-line no-restricted-syntax
+  for (const tier of removeTiers) {
     const { id } = tier;
-    return removeRewardTier(id);
-  });
+    const r = await removeRewardTier(id);
+    if (r.error) {
+      error = r.error;
+      break;
+    }
+  }
 
-  const removedTiers = await Promise.all(removeRewardTiersPromises);
-  const hasRemoveError = removedTiers.filter((el) => el.error);
-
-  if (hasRemoveError.length) {
+  if (error) {
     return {
       error: true,
-      errors: hasRemoveError,
+      errors: error,
     };
   }
 
-  const updateRewardTiersPromises = updateTiers.map(async (tier) => {
-    const { name, numberOfWinners, nftsPerWinner, minimumBid, nftSlots, id } = tier;
-    const minBid = parseFloat(minimumBid);
-    const requestTier = {
-      name,
-      numberOfWinners,
-      nftsPerWinner,
-      minimumBid: minBid,
-      nftSlots,
-    };
-    return editRewardTier(requestTier, id);
-  });
-
-  const updatedTiers = await Promise.all(updateRewardTiersPromises);
-  const hasUpdateError = updatedTiers.filter((el) => el.error);
-
-  if (hasUpdateError.length) {
-    return {
-      error: true,
-      errors: hasUpdateError,
-    };
-  }
-
-  const addRewardTiersPromises = newTiers.map(async (tier) => {
+  // eslint-disable-next-line no-restricted-syntax
+  for (const tier of newTiers) {
     const { name, numberOfWinners, nftsPerWinner, minimumBid, nftSlots } = tier;
     const minBid = parseFloat(minimumBid);
     const requestTier = {
@@ -171,18 +151,18 @@ export const sendUpdateAuctionRequest = async ({ requestObject }) => {
       auctionId,
       rewardTier: requestTier,
     };
-    return addRewardTier(body);
-  });
-
-  const addedTiers = await Promise.all(addRewardTiersPromises);
-  const hasAddError = addedTiers.filter((el) => el.error);
-
-  if (hasAddError.length) {
-    return {
-      error: true,
-      errors: hasAddError,
-    };
+    const r = await addRewardTier(body);
+    if (r.error) {
+      error = r.error;
+      break;
+    }
   }
 
+  if (error) {
+    return {
+      error: true,
+      errors: error,
+    };
+  }
   return res;
 };

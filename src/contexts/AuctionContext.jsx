@@ -7,7 +7,7 @@ import { useAuthContext } from './AuthContext';
 const AuctionContext = createContext(null);
 
 const AuctionContextProvider = ({ children }) => {
-  const bidExtendTime = 3;
+  const bidExtendTime = 5;
   const { isAuthenticated } = useAuthContext();
 
   const [myAuctions, setMyAuctions] = useState([]);
@@ -18,20 +18,10 @@ const AuctionContextProvider = ({ children }) => {
   const [bidtype, setBidtype] = useState('eth');
   const [options, setOptions] = useState(BidOptions);
   const [sortName, setSortName] = useState('Sort by');
-  const [editProfileButtonClick, setEditProfileButtonClick] = useState(false);
   const [selectedTokenIndex, setSelectedTokenIndex] = useState(0);
-  const [auctionSetupState, setAuctionSetupState] = useState(false);
   const [selectedTabIndex, setSelectedTabIndex] = useState(0);
   const [availableNFTs, setAvailableNFTs] = useState([]);
-
-  useEffect(async () => {
-    if (isAuthenticated) {
-      const futureAuctionResponse = await getFutureAuctions();
-      setMyAuctions(futureAuctionResponse?.auctions || []);
-    } else {
-      setMyAuctions([]);
-    }
-  }, [isAuthenticated]);
+  const [previewMode, setPreviewMode] = useState(false);
 
   return (
     <AuctionContext.Provider
@@ -52,18 +42,16 @@ const AuctionContextProvider = ({ children }) => {
         setOptions,
         sortName,
         setSortName,
-        editProfileButtonClick,
-        setEditProfileButtonClick,
         selectedTokenIndex,
         setSelectedTokenIndex,
-        auctionSetupState,
-        setAuctionSetupState,
         selectedTabIndex,
         setSelectedTabIndex,
         availableNFTs,
         setAvailableNFTs,
         getAvailableNFTs,
         bidExtendTime,
+        previewMode,
+        setPreviewMode,
       }}
     >
       {children}

@@ -9,26 +9,34 @@ import { getMyBids } from '../../../utils/api/auctions';
 import NoAuctionsFound from '../../auctions/NoAuctionsFound';
 import { useErrorContext } from '../../../contexts/ErrorContext';
 import ErrorPopup from '../../popups/ErrorPopup';
+import { useAuthContext } from '../../../contexts/AuthContext';
 
-const MyBidsList = () => {
+const MyBidsList = ({ myBids, setMyBids }) => {
+  const { address } = useAuthContext();
   const [loading, setLoading] = useState(true);
   const [notFound, setNotFound] = useState(false);
-  const [myBids, setMyBids] = useState([]);
-  const { showError, setShowError } = useErrorContext();
+  const { showError, setShowError, setErrorTitle, setErrorBody } = useErrorContext();
 
   useEffect(async () => {
-    try {
-      const response = await getMyBids();
-      if (!response.bids?.length) {
-        setNotFound(true);
-      } else {
-        setMyBids(response.bids);
+    if (address) {
+      try {
+        const response = await getMyBids(address);
+        if (response.error) {
+          setErrorTitle('Unexpected error');
+          setErrorBody(response.message);
+          setShowError(true);
+        }
+        if (!response.bids?.length) {
+          setNotFound(true);
+        } else {
+          setMyBids(response.bids);
+        }
+        setLoading(false);
+      } catch (error) {
+        setShowError(true);
       }
-      setLoading(false);
-    } catch (error) {
-      setShowError(true);
     }
-  }, []);
+  }, [address]);
 
   return (
     <>
@@ -54,12 +62,18 @@ const MyBidsList = () => {
             desc="Explore the auctions by clicking the button below"
             btnText="Auction house"
             btnAction="/products/auction-house"
+            checkUserDetails={false}
           />
         </div>
       )}
       {showError && <ErrorPopup />}
     </>
   );
+};
+
+MyBidsList.propTypes = {
+  myBids: PropTypes.oneOfType([PropTypes.array]).isRequired,
+  setMyBids: PropTypes.func.isRequired,
 };
 
 export default MyBidsList;

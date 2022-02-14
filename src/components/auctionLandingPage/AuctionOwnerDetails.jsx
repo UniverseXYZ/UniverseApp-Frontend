@@ -36,20 +36,24 @@ const AuctionOwnerDetails = ({ artist }) => {
               <h1 className="title">{`About ${artist.displayName}`}</h1>
               <p className="desc">{artist.about}</p>
               <div className="social__links">
-                <a
-                  href={`https://www.instagram.com/${artist?.instagramLink || ''}`}
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  <img src={instagramIcon} alt="Instagram" />
-                </a>
-                <a
-                  href={`https://twitter.com/${artist?.twitterLink || ''}`}
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  <img src={twitterIcon} alt="Twitter" />
-                </a>
+                {artist.instagramUser && (
+                  <a
+                    href={`https://www.instagram.com/${artist?.instagramUser || ''}`}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    <img src={instagramIcon} alt="Instagram" />
+                  </a>
+                )}
+                {artist.twitterUser && (
+                  <a
+                    href={`https://twitter.com/${artist?.twitterUser || ''}`}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    <img src={twitterIcon} alt="Twitter" />
+                  </a>
+                )}
               </div>
             </div>
           </div>

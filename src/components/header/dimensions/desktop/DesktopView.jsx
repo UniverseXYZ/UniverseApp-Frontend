@@ -38,16 +38,7 @@ import { useAuthContext } from '../../../../contexts/AuthContext';
 import Badge from '../../../badge/Badge';
 import { whitepaperUrl } from '../../../../utils/helpers';
 
-const DesktopView = ({
-  isWalletConnected,
-  setIsWalletConnected,
-  ethereumAddress,
-  handleConnectWallet,
-  showInstallWalletPopup,
-  setShowInstallWalletPopup,
-  selectedWallet,
-  setSelectedWallet,
-}) => {
+const DesktopView = ({ isWalletConnected, setIsWalletConnected, ethereumAddress }) => {
   const [isAccountDropdownOpened, setIsAccountDropdownOpened] = useState(false);
   const [isMintingDropdownOpened, setIsMintingDropdownOpened] = useState(false);
   const [isPolymorphsDropdownOpened, setIsPolymorphsDropdownOpened] = useState(false);
@@ -63,6 +54,7 @@ const DesktopView = ({
     usdEthBalance,
     resetConnectionState,
     loggedInArtist,
+    setshowWalletPopup,
   } = useAuthContext();
 
   return (
@@ -88,15 +80,14 @@ const DesktopView = ({
               </button>
               <button
                 type="button"
-                className="disable"
                 onClick={() => {
-                  // history.push('/products/auction-house');
-                  // setIsMintingDropdownOpened(false);
+                  history.push('/products/auction-house');
+                  setIsMintingDropdownOpened(false);
                 }}
               >
                 <img src={auctionHouseIcon} alt="Auction House" />
                 <span>Auction house</span>
-                <span className="tooltiptext">Coming soon</span>
+                {/* <span className="tooltiptext">Coming soon</span> */}
               </button>
               <button
                 type="button"
@@ -437,25 +428,9 @@ const DesktopView = ({
           </li>
         ) : (
           <li>
-            <Popup
-              closeOnDocumentClick={false}
-              trigger={
-                <button type="button" className="sign__in">
-                  Sign In
-                </button>
-              }
-            >
-              {(close) => (
-                <SelectWalletPopup
-                  close={close}
-                  handleConnectWallet={handleConnectWallet}
-                  showInstallWalletPopup={showInstallWalletPopup}
-                  setShowInstallWalletPopup={setShowInstallWalletPopup}
-                  selectedWallet={selectedWallet}
-                  setSelectedWallet={setSelectedWallet}
-                />
-              )}
-            </Popup>
+            <button type="button" className="sign__in" onClick={() => setshowWalletPopup(true)}>
+              Sign In
+            </button>
           </li>
         )}
       </ul>
@@ -467,11 +442,6 @@ DesktopView.propTypes = {
   isWalletConnected: PropTypes.bool.isRequired,
   setIsWalletConnected: PropTypes.func.isRequired,
   ethereumAddress: PropTypes.string.isRequired,
-  handleConnectWallet: PropTypes.func.isRequired,
-  showInstallWalletPopup: PropTypes.bool.isRequired,
-  setShowInstallWalletPopup: PropTypes.func.isRequired,
-  selectedWallet: PropTypes.string.isRequired,
-  setSelectedWallet: PropTypes.func.isRequired,
 };
 
 export default DesktopView;

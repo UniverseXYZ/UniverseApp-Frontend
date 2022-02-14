@@ -1,5 +1,9 @@
+import { Contract } from 'ethers';
 import { getBidTypeByValue } from '../../fixtures/BidOptions';
-import { parseRoyalties } from '../contractInteraction';
+import ERC20ABI from '../../../contracts/ERC20.json';
+
+export const getERC20Contract = (erc20Address, signer) =>
+  new Contract(erc20Address, ERC20ABI, signer);
 
 export const createRequestObject = ({ auction, bidtype, options }) => {
   const requestObject = {
@@ -42,8 +46,11 @@ export const attachTokenData = ({ auction, bidtype, requestObject, options }) =>
 };
 
 export const parseNumbers = ({ auction, requestObject }) => {
-  const propertyNameForAmount = 'percentAmount';
-  const royaltiesParsed = parseRoyalties(auction.properties, propertyNameForAmount);
+  const royaltiesParsed = (auction.royaltySplits || []).map((r) => ({
+    address: r.address,
+    percentAmount: +r.percentAmount,
+  }));
+
   const numbersParsedObject = {
     royaltySplits: royaltiesParsed,
     startingBid: parseFloat(requestObject.startingBid),
@@ -61,21 +68,26 @@ export const parseNumbers = ({ auction, requestObject }) => {
 
 export const attachTierNftsIds = ({ auction, requestObject }) => {
   const tiersArray = [];
-
   // We should prepare all rewardTiers slots indexes for the BE in sequence 1,2,3,4,5 etc..
   let slotIndex = 1;
   auction.rewardTiers.forEach((t) => {
+    // Update the slot index only if the tier is not removed
     const updatedSlotIndexes = t.nftSlots.map((slot) => {
       const slotCopy = { ...slot };
-      slotCopy.slot = slotIndex;
-      slotIndex += 1;
+      slotCopy.minimumBid = Number(slotCopy.minimumBid);
+
+      if (!t.removed) {
+        slotCopy.slot = slotIndex;
+        slotIndex += 1;
+      }
+
       return slotCopy;
     });
+
     const tierObject = {
       name: t.name,
       numberOfWinners: t.winners || t.numberOfWinners,
       nftsPerWinner: t.nftsPerWinner,
-      minimumBid: t.minBidValue || 0.1,
       nftSlots: updatedSlotIndexes,
       id: t.id,
       removed: t.removed,

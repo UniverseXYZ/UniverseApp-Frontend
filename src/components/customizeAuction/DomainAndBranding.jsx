@@ -1,5 +1,6 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { Animated } from 'react-animated-css';
+import { DebounceInput } from 'react-debounce-input';
 import PropTypes from 'prop-types';
 import Button from '../button/Button.jsx';
 import Input from '../input/Input.jsx';
@@ -7,14 +8,17 @@ import infoIcon from '../../assets/images/icon.svg';
 import cloudIcon from '../../assets/images/ion_cloud.svg';
 import defaultImage from '../../assets/images/default-img.svg';
 import backgroundDef from '../../assets/images/background.svg';
-import backgroundTransparent from '../../assets/images/background1.svg';
+import ErrorPopup from '../popups/ErrorPopup';
 import closeIcon from '../../assets/images/close-menu.svg';
 import { useAuthContext } from '../../contexts/AuthContext.jsx';
+import { useErrorContext } from '../../contexts/ErrorContext.jsx';
 import {
   auctionPageBackgroundImageErrorMessage,
   auctionPagePromoImageErrorMessage,
+  sanitizeUrlString,
 } from '../../utils/helpers.js';
 import { getImageDimensions } from '../../utils/helpers/pureFunctions/auctions';
+import { getAuctionByLink } from '../../utils/api/auctions';
 
 const PROMO_IMAGE = 'promo-image';
 const BACKGROUND_IMAGE = 'background-image';
@@ -36,25 +40,36 @@ const MIN_BACKGROUND_IMAGE_SIZE = {
   width: 1280,
   height: 720,
 };
+const PROMO_IMAGE_MAX_SIZE_MB = 3;
+const BACKGROUND_IMAGE_MAX_SIZE_MB = 1;
+const MB_IN_BYTES = 1048576;
+
+const PAGE_LINK_ERRORS = {
+  empty: '"Auction website link" is not allowed to be empty',
+  existing: 'Auction link already exists',
+  notAllowed: 'Only english letters are allowed',
+};
 
 const DomainAndBranding = ({
   values,
   onChange,
   editButtonClick,
-  setEditButtonClick,
+  auctionLinkError,
+  setAuctionLinkError,
   invalidPromoImage,
   invalidBackgroundImage,
   setInvalidPromoImage,
   setInvalidBackgroundImage,
+  blurToggleButtonDisabled,
 }) => {
   const { loggedInArtist } = useAuthContext();
+  const { showError, setShowError } = useErrorContext();
   const [promoInfo, setPromoInfo] = useState(false);
   const [blurInfo, setBlurInfo] = useState(false);
   const [auctionLink, setAuctionLink] = useState(values.link);
 
   const inputPromo = useRef(null);
   const inputBackground = useRef(null);
-  const [validLink, setValidLink] = useState(true);
   const [validHeadline, setValidHeadline] = useState(true);
   const [backgroundImage, setBackgroundImage] = useState(null);
   const [promoImageError, setPromoImageError] = useState(false);
@@ -73,14 +88,44 @@ const DomainAndBranding = ({
     }
   }, [values?.backgroundImage]);
 
-  const handleLink = (e) => {
-    setAuctionLink(e.target.value.replace(' ', '-'));
-    onChange((prevValues) => ({
-      ...prevValues,
-      link: e.target.value,
-      status: e.target.value.length > 0 ? 'filled' : 'empty',
-    }));
-    setValidLink(e.target.value.trim().length !== 0);
+  const handleLink = async (e) => {
+    const { value } = e.target;
+    const { empty, existing, notAllowed } = PAGE_LINK_ERRORS;
+    const validValueRegEx = /^$|^([a-zA-Z0-9-]+)$/;
+    const validChars = validValueRegEx.test(value);
+
+    if (!value) {
+      setAuctionLinkError(empty);
+      return;
+    }
+
+    if (validChars) {
+      const link = sanitizeUrlString(value);
+      setAuctionLink(link);
+      onChange((prevValues) => ({
+        ...prevValues,
+        link,
+        status: value.length > 0 ? 'filled' : 'empty',
+      }));
+
+      if (link) {
+        try {
+          const isAuctionLinkAvailable = await getAuctionByLink(link);
+
+          if (isAuctionLinkAvailable) {
+            setAuctionLinkError('');
+            return;
+          }
+          setAuctionLinkError(existing);
+          return;
+        } catch (error) {
+          setShowError(true);
+        }
+      }
+      setAuctionLinkError('');
+    } else {
+      setAuctionLinkError(notAllowed);
+    }
   };
 
   const handleHeadline = (e) => {
@@ -114,9 +159,10 @@ const DomainAndBranding = ({
     }
   };
 
-  const validateFile = (file, imageType) => {
+  const validateFile = (file, imageType, maxSize) => {
     const fileValid =
-      (file.type === 'image/jpeg' || file.type === 'image/png') && file.size / 1048576 < 30;
+      (file.type === 'image/jpeg' || file.type === 'image/png') &&
+      file.size / MB_IN_BYTES < maxSize;
     const reader = new FileReader();
 
     getImageDimensions(file, ({ width, height }) => {
@@ -136,49 +182,54 @@ const DomainAndBranding = ({
       handleImageError(imageType, fileValid, dimensionsValid);
     });
 
-    // always show an image preview, so the user is able to remove an incorrect image
     handleImageError(imageType, fileValid, file);
-    if (fileValid) {
-      // Read the contents of Image File.
-      reader.readAsDataURL(file);
-      reader.onload = function onload(e) {
-        const image = new Image();
-        image.src = e.target.result;
-        image.onload = function onloade() {
-          const { height, width } = this;
-          if (imageType === PROMO_IMAGE) {
-            if (height < MIN_PROMO_IMAGE_SIZE.height || width < MIN_PROMO_IMAGE_SIZE.width) {
-              setPromoImageError(true);
-            } else {
-              setPromoImageError(false);
-              uploadFile(file, imageType);
-            }
-          } else if (imageType === BACKGROUND_IMAGE) {
-            if (
-              height < MIN_BACKGROUND_IMAGE_SIZE.height ||
-              width < MIN_BACKGROUND_IMAGE_SIZE.width
-            ) {
-              setBackgroundImageError(true);
-            } else {
-              setBackgroundImageError(false);
-              uploadFile(file, imageType);
-            }
+
+    // upload the image even if it is incorrect,so the user can remove it and upload a proper one or not upload an image at all
+    // Read the contents of Image File.
+    reader.readAsDataURL(file);
+    reader.onload = function onload(e) {
+      const image = new Image();
+      image.src = e.target.result;
+      image.onload = function onloade() {
+        const { height, width } = this;
+        if (imageType === PROMO_IMAGE) {
+          if (height < MIN_PROMO_IMAGE_SIZE.height || width < MIN_PROMO_IMAGE_SIZE.width) {
+            uploadFile(file, imageType);
+            setPromoImageError(true);
+          } else {
+            setPromoImageError(false);
+            uploadFile(file, imageType);
           }
-        };
+        } else if (imageType === BACKGROUND_IMAGE) {
+          if (
+            height < MIN_BACKGROUND_IMAGE_SIZE.height ||
+            width < MIN_BACKGROUND_IMAGE_SIZE.width
+          ) {
+            uploadFile(file, imageType);
+            setBackgroundImageError(true);
+          } else {
+            setBackgroundImageError(false);
+            uploadFile(file, imageType);
+          }
+        }
       };
-    }
+    };
   };
 
-  const onDrop = (e, imageType) => {
+  const onDrop = (e, imageType, maxSize) => {
     e.preventDefault();
     const {
       dataTransfer: { files },
     } = e;
-    validateFile(files[0], imageType);
+    validateFile(files[0], imageType, maxSize);
   };
 
   const onDragOver = (e) => {
     e.preventDefault();
+  };
+
+  const onInputClick = (event) => {
+    event.target.value = '';
   };
 
   const promoImageSrc =
@@ -222,12 +273,7 @@ const DomainAndBranding = ({
             <h5>Auction link</h5>
             <div
               className={
-                (editButtonClick || !validLink) &&
-                (values.link ===
-                  `universe.xyz/${loggedInArtist.universePageAddress
-                    .split(' ')[0]
-                    .toLowerCase()}/` ||
-                  auctionLink.length === 0)
+                auctionLinkError
                   ? 'auction--link--div error-inp'
                   : `auction--link--div ${inputStyle}`
               }
@@ -235,7 +281,8 @@ const DomainAndBranding = ({
               <span>
                 universe.xyz/{loggedInArtist.universePageAddress.split(' ')[0].toLowerCase()}/
               </span>
-              <input
+              <DebounceInput
+                debounceTimeout={1000}
                 type="text"
                 placeholder="auctionname"
                 value={auctionLink}
@@ -244,14 +291,7 @@ const DomainAndBranding = ({
                 onChange={(e) => handleLink(e)}
               />
             </div>
-            {(editButtonClick || !validLink) &&
-              (values.link ===
-                `universe.xyz/${loggedInArtist.universePageAddress.split(' ')[0].toLowerCase()}/` ||
-                auctionLink.length === 0) && (
-                <p className="error__text">
-                  &quot;Auction website link&quot; is not allowed to be empty
-                </p>
-              )}
+            {auctionLinkError && <p className="error__text">{auctionLinkError}</p>}
           </div>
         </div>
 
@@ -259,7 +299,7 @@ const DomainAndBranding = ({
           <div className="upload__promo">
             <div
               className="dropzone"
-              onDrop={(e) => onDrop(e, PROMO_IMAGE)}
+              onDrop={(e) => onDrop(e, PROMO_IMAGE, PROMO_IMAGE_MAX_SIZE_MB)}
               onDragOver={(e) => onDragOver(e)}
             >
               <div className="upload__promo__title">
@@ -300,7 +340,10 @@ const DomainAndBranding = ({
                   type="file"
                   className="inp-disable"
                   ref={inputPromo}
-                  onChange={(e) => validateFile(e.target.files[0], PROMO_IMAGE)}
+                  onClick={onInputClick}
+                  onChange={(e) =>
+                    validateFile(e.target.files[0], PROMO_IMAGE, PROMO_IMAGE_MAX_SIZE_MB)
+                  }
                 />
                 <div className="promo__preview">
                   <h6>Preview</h6>
@@ -313,9 +356,15 @@ const DomainAndBranding = ({
                           src={closeIcon}
                           alt="Close"
                           aria-hidden="true"
-                          onClick={() =>
-                            onChange((prevValues) => ({ ...prevValues, promoImage: null }))
-                          }
+                          onClick={() => {
+                            onChange((prevValues) => ({
+                              ...prevValues,
+                              promoImage: null,
+                              promoImageFile: null,
+                              promoImageUrl: null,
+                            }));
+                            setPromoImageError(false);
+                          }}
                         />
                       </>
                     ) : (
@@ -335,7 +384,7 @@ const DomainAndBranding = ({
           <div className="upload__background">
             <div
               className="dropzone"
-              onDrop={(e) => onDrop(e, BACKGROUND_IMAGE)}
+              onDrop={(e) => onDrop(e, BACKGROUND_IMAGE, BACKGROUND_IMAGE_MAX_SIZE_MB)}
               onDragOver={(e) => onDragOver(e)}
             >
               <div className="upload__background__title">
@@ -363,6 +412,7 @@ const DomainAndBranding = ({
                   )}
                   <div className="toggle-switch">
                     <input
+                      disabled={blurToggleButtonDisabled}
                       id="toggleSwitch"
                       type="checkbox"
                       className="toggle-switch-checkbox"
@@ -411,7 +461,10 @@ const DomainAndBranding = ({
                   type="file"
                   className="inp-disable"
                   ref={inputBackground}
-                  onChange={(e) => validateFile(e.target.files[0], BACKGROUND_IMAGE)}
+                  onClick={onInputClick}
+                  onChange={(e) =>
+                    validateFile(e.target.files[0], BACKGROUND_IMAGE, BACKGROUND_IMAGE_MAX_SIZE_MB)
+                  }
                 />
                 <div className="background__preview">
                   <h6>Preview</h6>
@@ -425,9 +478,16 @@ const DomainAndBranding = ({
                           src={closeIcon}
                           alt="Close"
                           aria-hidden="true"
-                          onClick={() =>
-                            onChange((prevValues) => ({ ...prevValues, backgroundImage: null }))
-                          }
+                          onClick={() => {
+                            onChange((prevValues) => ({
+                              ...prevValues,
+                              backgroundImage: null,
+                              backgroundImageFile: null,
+                              backgroundImageUrl: null,
+                              backgroundImageBlur: false,
+                            }));
+                            setBackgroundImageError(false);
+                          }}
                         />
                       </>
                     ) : (
@@ -450,6 +510,7 @@ const DomainAndBranding = ({
           </div>
         </div>
       </div>
+      {showError && <ErrorPopup />}
     </div>
   );
 };
@@ -457,12 +518,14 @@ const DomainAndBranding = ({
 DomainAndBranding.propTypes = {
   values: PropTypes.oneOfType([PropTypes.object]),
   onChange: PropTypes.func.isRequired,
+  auctionLinkError: PropTypes.string.isRequired,
+  setAuctionLinkError: PropTypes.func.isRequired,
   editButtonClick: PropTypes.bool,
-  setEditButtonClick: PropTypes.func,
   invalidPromoImage: PropTypes.bool.isRequired,
   invalidBackgroundImage: PropTypes.bool.isRequired,
   setInvalidPromoImage: PropTypes.func.isRequired,
   setInvalidBackgroundImage: PropTypes.func.isRequired,
+  blurToggleButtonDisabled: PropTypes.bool.isRequired,
 };
 
 DomainAndBranding.defaultProps = {
@@ -472,6 +535,5 @@ DomainAndBranding.defaultProps = {
     backgroundImageBlur: false,
   },
   editButtonClick: false,
-  setEditButtonClick: () => {},
 };
 export default DomainAndBranding;

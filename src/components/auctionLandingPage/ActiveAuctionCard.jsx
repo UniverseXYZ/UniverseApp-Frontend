@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { useHistory } from 'react-router';
 
+const MAX_HEADLINE_LENGTH = 20;
+
 const ActiveAuctionCard = ({ mainAuction, auction }) => {
   const history = useHistory();
   const [auctionEnded, setAuctionEnded] = useState(false);
@@ -49,7 +51,7 @@ const ActiveAuctionCard = ({ mainAuction, auction }) => {
         mainAuction.auction.id === auction.id ? 'selected' : ''
       }`}
       onClick={() => {
-        history.push(`/${mainAuction.artist.displayName}/${auction.link}`);
+        history.push(`/${mainAuction.artist.universePageUrl}/${auction.link}`);
       }}
       aria-hidden="true"
       style={{ width: 278 }}
@@ -68,8 +70,8 @@ const ActiveAuctionCard = ({ mainAuction, auction }) => {
         </div>
         <div className="carousel__auction__info">
           <h4 title={auction.headline}>
-            {auction.headline.length > 20
-              ? `${auction.headline.substring(0, 20)}...`
+            {auction.headline?.length > MAX_HEADLINE_LENGTH
+              ? `${auction.headline?.substring(0, MAX_HEADLINE_LENGTH)}...`
               : auction.headline}
           </h4>
           <p>{auctionEnded ? <span>Auction has ended</span> : parseCountdown()}</p>
