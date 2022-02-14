@@ -11,6 +11,7 @@ import videoIcon from '../../assets/images/video-icon.svg';
 const BidderView = ({
   auctionData,
   showSlots,
+  setShowSlots,
   singleCaptureRevenueTxs,
   handleCaptureRevenue,
   winningSlot,
@@ -34,6 +35,13 @@ const BidderView = ({
     singleCaptureRevenueTxs.length &&
     singleCaptureRevenueTxs.map((tx) => tx.bidder?.user?.address).indexOf(myBid?.user?.address);
   const myTx = singleCaptureRevenueTxs[myTxIndex];
+
+  useEffect(() => {
+    if (myTxIndex === -1) {
+      setShowSlots(true);
+    }
+  });
+
   return (
     <>
       {!showSlots && <h3>Your slot</h3>}
@@ -166,6 +174,7 @@ const BidderView = ({
 };
 BidderView.propTypes = {
   showSlots: PropTypes.func.isRequired,
+  setShowSlots: PropTypes.func.isRequired,
   singleCaptureRevenueTxs: PropTypes.oneOfType([PropTypes.array]).isRequired,
   handleCaptureRevenue: PropTypes.func.isRequired,
   winningSlot: PropTypes.PropTypes.oneOfType([PropTypes.object]).isRequired,
