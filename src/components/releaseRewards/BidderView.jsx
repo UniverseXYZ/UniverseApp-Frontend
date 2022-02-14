@@ -36,6 +36,7 @@ const BidderView = ({
     singleCaptureRevenueTxs.map((tx) => tx.bidder?.user?.address).indexOf(myBid?.user?.address);
   const myTx = singleCaptureRevenueTxs[myTxIndex];
 
+  // There is no second param, because it must be called every time the page is rendered
   useEffect(() => {
     if (myTxIndex === -1) {
       setShowSlots(true);
