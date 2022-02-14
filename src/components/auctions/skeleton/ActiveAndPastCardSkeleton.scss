@@ -1,0 +1,83 @@
+@import "../../../assets/scss/variables";
+@import "../../../assets/scss/_mixins";
+
+.active-past-auction-skeleton {
+  position: relative;
+  background: linear-gradient(0deg, #ffffff, #ffffff);
+  box-shadow: 0px 10px 36px rgba(136, 120, 172, 0.14);
+  border-radius: 10px;
+  box-sizing: border-box;
+  padding: 34px 30px;
+  margin-bottom: 24px;
+  cursor: default;
+  .mobile-button {
+    display: none;
+    padding: 30px 0;
+    @include sm {
+      display: block;
+    }
+  }
+  > span {
+    .active-left-border-effect {
+      position: absolute;
+      left: 0;
+      top: 0;
+      right: 0;
+      width: 9px;
+      height: 100%;
+    }
+  }
+  .auction-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    .img_head {
+      width: 312px;
+      height: 22px;
+      border-radius: 15px;
+      @include md {
+        width: 209px;
+      }
+    }
+    .launch-auction {
+      display: flex;
+      align-items: center;
+      .desktop-button {
+        @include sm {
+          display: none;
+        }
+      }
+      @include sm {
+        flex-direction: column-reverse;
+      }
+    }
+  }
+  .auctions-launch-dates {
+    display: flex;
+  }
+  .bid_info {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-gap: 20px;
+    text-align: center;
+    padding: 30px 0 0 !important;
+    .total-bids {
+      padding: 20px 0 20px 30px;
+      display: flex;
+      flex-direction: column;
+      text-align: justify;
+      grid-gap: 18px;
+      background: #ffffff;
+      border: 1px solid rgba(0, 0, 0, 0.1);
+      box-sizing: border-box;
+      border-radius: 10px;
+      @include sm {
+        padding: 14px;
+      }
+    }
+    @include sm {
+      grid-gap: 12px !important;
+    }
+  }
+}

@@ -44,8 +44,10 @@ const LobsterContextProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    setUserLobsters([]);
-    fetchUserLobstersTheGraph(address);
+    if (address) {
+      setUserLobsters([]);
+      fetchUserLobstersTheGraph(address);
+    }
   }, [address]);
 
   return (

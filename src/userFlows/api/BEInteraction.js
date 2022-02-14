@@ -7,7 +7,13 @@ import {
   saveCollection,
   attachTxHashToCollection,
 } from '../../utils/api/mintNFT';
-import { createAuction, editAuction } from '../../utils/api/auctions';
+import {
+  createAuction,
+  editAuction,
+  editRewardTier,
+  addRewardTier,
+  removeRewardTier,
+} from '../../utils/api/auctions';
 import { resolveAllPromises } from '../../utils/helpers/pureFunctions/minting';
 
 /**
@@ -100,5 +106,83 @@ export const sendCreateAuctionRequest = async ({ requestObject }) => {
 
 export const sendUpdateAuctionRequest = async ({ requestObject }) => {
   const res = await editAuction(requestObject);
+
+  const auctionId = requestObject.id;
+  const newTiers = requestObject.rewardTiers.filter(
+    (tier) => typeof tier.id === 'string' && tier.id.startsWith('new-tier')
+  );
+  const updateTiers = requestObject.rewardTiers.filter(
+    (tier) =>
+      tier.id && !tier.removed && !(typeof tier.id === 'string' && tier.id.startsWith('new-tier'))
+  );
+
+  const removeTiers = requestObject.rewardTiers.filter((t) => t.removed);
+
+  const removeRewardTiersPromises = removeTiers.map(async (tier) => {
+    const { id } = tier;
+    return removeRewardTier(id);
+  });
+
+  const removedTiers = await Promise.all(removeRewardTiersPromises);
+  const hasRemoveError = removedTiers.filter((el) => el.error);
+
+  if (hasRemoveError.length) {
+    return {
+      error: true,
+      errors: hasRemoveError,
+    };
+  }
+
+  const updateRewardTiersPromises = updateTiers.map(async (tier) => {
+    const { name, numberOfWinners, nftsPerWinner, minimumBid, nftSlots, id } = tier;
+    const minBid = parseFloat(minimumBid);
+    const requestTier = {
+      name,
+      numberOfWinners,
+      nftsPerWinner,
+      minimumBid: minBid,
+      nftSlots,
+    };
+    return editRewardTier(requestTier, id);
+  });
+
+  const updatedTiers = await Promise.all(updateRewardTiersPromises);
+  const hasUpdateError = updatedTiers.filter((el) => el.error);
+
+  if (hasUpdateError.length) {
+    return {
+      error: true,
+      errors: hasUpdateError,
+    };
+  }
+
+  const addRewardTiersPromises = newTiers.map(async (tier) => {
+    const { name, numberOfWinners, nftsPerWinner, minimumBid, nftSlots } = tier;
+    const minBid = parseFloat(minimumBid);
+    const requestTier = {
+      name,
+      numberOfWinners,
+      nftsPerWinner,
+      minimumBid: minBid,
+      nftSlots,
+    };
+
+    const body = {
+      auctionId,
+      rewardTier: requestTier,
+    };
+    return addRewardTier(body);
+  });
+
+  const addedTiers = await Promise.all(addRewardTiersPromises);
+  const hasAddError = addedTiers.filter((el) => el.error);
+
+  if (hasAddError.length) {
+    return {
+      error: true,
+      errors: hasAddError,
+    };
+  }
+
   return res;
 };

@@ -1,0 +1,238 @@
+@import "../../../assets/scss/variables";
+@import "../../../assets/scss/_mixins";
+
+.future-auction-skeleton {
+  position: relative;
+  background: linear-gradient(0deg, #ffffff, #ffffff);
+  box-shadow: 0px 10px 36px rgba(136, 120, 172, 0.14);
+  border-radius: 10px;
+  box-sizing: border-box;
+  padding: 34px 30px;
+  margin-bottom: 24px;
+  cursor: default;
+  .mobile-button {
+    display: none;
+    padding: 30px 0;
+    @include sm {
+      display: block;
+    }
+  }
+  > span {
+    .active-left-border-effect {
+      position: absolute;
+      left: 0;
+      top: 0;
+      right: 0;
+      width: 9px;
+      height: 100%;
+    }
+  }
+  .auction-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    .img_head {
+      width: 312px;
+      height: 22px;
+      border-radius: 15px;
+      @include md {
+        width: 209px;
+      }
+    }
+    .launch-auction {
+      display: flex;
+      align-items: center;
+      .desktop-button {
+        @include sm {
+          display: none;
+        }
+      }
+      @include sm {
+        flex-direction: column-reverse;
+      }
+    }
+  }
+  .auctions-launch-dates {
+    display: flex;
+  }
+  .auctions-steps-skeleton {
+    display: flex;
+    text-align: center;
+    justify-content: space-between;
+    margin: 30px 43px 0 73px;
+
+    h6 {
+      font-family: $spaceGroteskFont;
+      font-weight: 600;
+      font-size: 10px;
+      line-height: 150%;
+      color: rgba(0, 0, 0, 0.4);
+    }
+    h4 {
+      font-family: $spaceGroteskFont;
+      font-weight: 600;
+      font-size: 14px;
+      line-height: 150%;
+      color: $black;
+      margin-bottom: 2px;
+    }
+    .circle {
+      position: relative;
+      margin: auto;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      margin-bottom: 7px;
+      z-index: 10;
+
+      img {
+        width: 20px;
+        height: 20px;
+        object-fit: contain;
+      }
+    }
+    .step-1 {
+      > span {
+        display: block;
+      }
+      .circle {
+        .hz-line1 {
+          position: absolute;
+          left: 20px;
+          top: 10px;
+          height: 0px;
+          z-index: 1;
+          border: 1px solid transparent;
+          width: 400px;
+
+          @include xl {
+            width: 303px;
+          }
+
+          @include lg {
+            width: 225px;
+          }
+        }
+      }
+    }
+
+    .step-2 {
+      > span {
+        display: block;
+      }
+      .circle {
+        .hz-line2 {
+          position: absolute;
+          left: 20px;
+          top: 10px;
+          height: 0px;
+          z-index: 5;
+          border: 1px solid transparent;
+          width: 390px;
+
+          @include xl {
+            width: 306px;
+          }
+
+          @include lg {
+            width: 230px;
+          }
+        }
+      }
+    }
+    .step-3 {
+      > span {
+        display: block;
+      }
+    }
+    @include lg {
+      margin: 30px 18px 60px 33px;
+    }
+    @include md {
+      display: none;
+    }
+  }
+  .auction-steps-skeleton-mobile {
+    display: none;
+    margin-top: 30px;
+
+    .auction-steps-moves {
+      margin-right: 50px;
+      margin-top: 8px;
+
+      .circle {
+        height: 20px;
+        width: 20px;
+        border-radius: 50px;
+      }
+      .hz-line1 {
+        width: 0px;
+        height: 123px;
+        border: 1px solid transparent;
+        margin-left: 9px;
+      }
+      .hz-line2 {
+        width: 0px;
+        height: 123px;
+        border: 1px solid transparent;
+        margin-left: 9px;
+      }
+    }
+
+    .steps {
+      h6 {
+        font-family: $spaceGroteskFont;
+        font-weight: 600;
+        font-size: 10px;
+        line-height: 150%;
+        color: rgba(0, 0, 0, 0.4);
+      }
+      h4 {
+        font-family: $spaceGroteskFont;
+        font-weight: 600;
+        font-size: 16px;
+        line-height: 150%;
+        color: $black;
+        margin-bottom: 10px;
+      }
+      button {
+        @include md {
+          width: 255px;
+        }
+        @include sm {
+          width: 100%;
+        }
+      }
+
+      .step-1,
+      .step-2 {
+        > span {
+          display: block;
+        }
+        .skeleton-button {
+          margin-bottom: 40px;
+          width: 100%;
+          margin-top: 12px;
+        }
+      }
+      .step-3 {
+        > span {
+          display: block;
+        }
+        .skeleton-button {
+          margin-bottom: 20px;
+          width: 100%;
+          margin-top: 12px;
+        }
+      }
+
+      @include sm {
+        width: 100%;
+      }
+    }
+    @include md {
+      display: flex;
+    }
+  }
+}

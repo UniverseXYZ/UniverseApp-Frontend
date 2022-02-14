@@ -16,6 +16,7 @@ import ReviewIconActive from '../../assets/images/eye-review-disactive.svg';
 import NewTabs from '../tabs/NewTabs';
 import { RouterPrompt } from '../../utils/routerPrompt';
 import { useAuctionContext } from '../../contexts/AuctionContext';
+import { useThemeContext } from '../../contexts/ThemeContext';
 
 const newTabData = [
   {
@@ -45,10 +46,16 @@ const newTabData = [
 ];
 
 const SetupAuction = () => {
+  const { setDarkMode } = useThemeContext();
   // const { auctionSetupState } = useAuctionContext();
   const history = useHistory();
+  const location = useLocation();
 
   const handleOK = useCallback(() => true, []);
+
+  useEffect(() => {
+    setDarkMode(false);
+  }, []);
 
   return (
     <div className="auction-setup">
@@ -66,7 +73,9 @@ const SetupAuction = () => {
             <img src={arrow} alt="back" />
             <span>My auctions</span>
           </div>
-          <h1 className="set-text">Set up auction</h1>
+          <h1 className="set-text">
+            {location.state === 'edit' ? 'Edit auction' : 'Set up auction'}
+          </h1>
         </div>
       </div>
       <div className="setup--auction--content">

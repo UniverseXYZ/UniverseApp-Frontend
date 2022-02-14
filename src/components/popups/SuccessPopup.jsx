@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import moment from 'moment';
+import { format } from 'date-fns';
 import { useHistory } from 'react-router';
 import Button from '../button/Button.jsx';
 import closeIcon from '../../assets/images/cross.svg';
@@ -8,7 +8,7 @@ import submitted from '../../assets/images/bid-submitted.png';
 
 const SuccessPopup = ({ onClose, onAuction }) => {
   const history = useHistory();
-
+  const startDate = format(new Date(onAuction.startDate), 'MMMM dd, yyyy');
   return (
     <div className="success__popup">
       <img className="close" src={closeIcon} alt="Close" onClick={onClose} aria-hidden="true" />
@@ -17,7 +17,7 @@ const SuccessPopup = ({ onClose, onAuction }) => {
       <p>
         Your auction <span>{onAuction.name}</span> was successfully created and scheduled for launch
         on
-        <span> {moment(onAuction.startDate).format('MMMM DD, YYYY')}</span>
+        <span> {startDate}</span>
       </p>
       <div className="button__div">
         <Button

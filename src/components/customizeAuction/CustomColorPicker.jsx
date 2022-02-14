@@ -5,7 +5,8 @@ import 'react-color-palette/lib/css/styles.css';
 import arrowDown from '../../assets/images/arrow-down.svg';
 
 const CustomColorPicker = ({ index, onChange, onColor }) => {
-  const [color, setColor] = useColor('hex', '#EABD16');
+  const defaultColor = '#EABD16';
+  const [color, setColor] = useColor('hex', onColor || defaultColor);
   const [hidePicker, setHidePicker] = useState(true);
   const ref = useRef(null);
 
@@ -16,24 +17,18 @@ const CustomColorPicker = ({ index, onChange, onColor }) => {
   };
 
   const handleClick = () => {
-    onChange((prevValues) =>
-      prevValues.map((tier, idx) => {
+    onChange((prevValues) => {
+      const newValues = prevValues.map((tier, idx) => {
         if (idx === index) {
-          return { ...tier, color };
+          const newTier = { ...tier, color: color.hex };
+          return newTier;
         }
 
         return tier;
-      })
-    );
+      });
+      return newValues;
+    });
   };
-
-  useEffect(() => {
-    if (onColor) {
-      setColor(onColor);
-    } else {
-      onChange((prevValues) => prevValues.map((tier) => ({ ...tier, color })));
-    }
-  }, []);
 
   useEffect(() => {
     document.addEventListener('click', handleClickOutside, true);

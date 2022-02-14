@@ -11,17 +11,19 @@ const ErrorPopup = () => {
   const defaultBody = 'Unexpected error ocurred.\nPlease try again in a few minutes.';
 
   return (
-    <div className="wrong__network__popup">
-      <img
-        className="close__popup"
-        onClick={closeError}
-        src={closeIcon}
-        alt="Close"
-        aria-hidden="true"
-      />
-      <img src={wrongNetworkIcon} alt="Wrong Network" />
-      <h1 className="title">{errorTitle || defaulTtitle}</h1>
-      <p className="desc">{errorBody || defaultBody} </p>
+    <div className="modal">
+      <div className="wrong__network__popup">
+        <img
+          className="close__popup"
+          onClick={closeError}
+          src={closeIcon}
+          alt="Close"
+          aria-hidden="true"
+        />
+        <img src={wrongNetworkIcon} alt="Wrong Network" />
+        <h1 className="title">{errorTitle || defaulTtitle}</h1>
+        <p className="desc">{errorBody || defaultBody} </p>
+      </div>
     </div>
   );
 };

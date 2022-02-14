@@ -6,6 +6,7 @@ import ellipses from '../../assets/images/ellipses.svg';
 import heroVideo from '../../assets/images/hero_video.mp4';
 import Button from '../button/Button.jsx';
 import SubscribePopup from '../popups/SubscribePopup.jsx';
+import { whitepaperUrl } from '../../utils/helpers';
 
 const Welcome = () => {
   const [loaded, setLoaded] = useState(false);
@@ -39,10 +40,7 @@ const Welcome = () => {
           </AnimatedOnScroll>
           <AnimatedOnScroll animationIn="fadeIn" animationInDelay={600}>
             <div className="links">
-              <Button
-                className="light-button"
-                onClick={() => window.open('https://github.com/UniverseXYZ/UniverseXYZ-Whitepaper')}
-              >
+              <Button className="light-button" onClick={() => window.open(whitepaperUrl)}>
                 Whitepaper
               </Button>
               <Popup

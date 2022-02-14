@@ -1,0 +1,68 @@
+@import "../../../../assets/scss/variables";
+@import "../../../../assets/scss/mixins";
+
+.create__your__auction__section {
+  position: relative;
+  padding: 65px 60px;
+  background-image: url("../../../../assets/images/create-your-auction-bg-desktop.png");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  &__container {
+    max-width: 1110px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+
+    h1.title {
+      font-family: $sharpGroteskSemiBoldFont;
+      font-style: normal;
+      font-weight: 600;
+      font-size: 26px;
+      line-height: 140%;
+      color: $black;
+      margin-bottom: 12px;
+
+      @include sm {
+        text-align: center;
+      }
+    }
+    p.desc {
+      font-family: $spaceGroteskFont;
+      font-style: normal;
+      font-weight: normal;
+      font-size: 16px;
+      line-height: 150%;
+      color: $black;
+      margin-right: 24px;
+      margin-bottom: 24px;
+      @include sm {
+        text-align: center;
+      }
+    }
+    .setup__auction__btn {
+      button {
+        img {
+          margin-left: 12px;
+        }
+        @include sm {
+          width: 100%;
+        }
+      }
+      @include sm {
+        width: 100%;
+      }
+    }
+    @include sm {
+      justify-content: center;
+    }
+  }
+  @include lg {
+    background-image: url("../../../../assets/images/create-your-auction-bg-tablet.png");
+  }
+  @include sm {
+    padding: 65px 20px;
+    background-image: url("../../../../assets/images/create-your-auction-bg-mobile.png");
+  }
+}

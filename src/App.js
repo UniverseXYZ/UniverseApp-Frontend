@@ -12,7 +12,7 @@ import Artist from './containers/artist/Artist.jsx';
 import AuctionLandingPage from './containers/auctionLandingPage/AuctionLandingPage.jsx';
 import Homepage from './containers/homepage/Homepage.jsx';
 import About from './containers/products/about/About.jsx';
-import Marketplace from './containers/products/marketplace/Marketplace.jsx';
+import AuctionHouse from './containers/products/auctionHouse/AuctionHouse.jsx';
 import MyAccount from './containers/myAccount/MyAccount.jsx';
 import CustomizeAuction from './containers/customizeAuction/CustomizeAuction.jsx';
 import Team from './containers/team/Team.jsx';
@@ -50,6 +50,7 @@ import { useAuthContext } from './contexts/AuthContext';
 import ErrorPopup from './components/popups/ErrorPopup';
 import { useErrorContext } from './contexts/ErrorContext';
 import Minting from './components/products/minting/Minting';
+import ReleaseRewards from './components/releaseRewards/ReleaseRewards';
 
 const App = () => {
   const location = useLocation();
@@ -86,7 +87,7 @@ const App = () => {
                 <Route exact path="/polymorph-universe">
                   <PolymorphUniverse />
                 </Route>
-                {/* <Route exact path="/mint-polymorph">
+                <Route exact path="/mint-polymorph">
                   <MintPolymorph />
                 </Route>
                 <Route exact path="/burn-to-mint">
@@ -100,7 +101,7 @@ const App = () => {
                 </Route>
                 <Route exact path="/planets/kuapo">
                   <Planet3 />
-                </Route> */}
+                </Route>
                 <Route exact path="/polymorphs/:id">
                   <PolymorphScramblePage />
                 </Route>
@@ -110,21 +111,21 @@ const App = () => {
                 <Route exact path="/nft/:collectionAddress/:tokenId">
                   <MarketplaceNFT />
                 </Route>
-                {/* <Route exact path="/character-page">
+                <Route exact path="/character-page">
                   <CharacterPage />
-                </Route> */}
-                {/* <Route exact path="/marketplace">
+                </Route>
+                <Route exact path="/marketplace">
                   <BrowseNFT />
-                </Route> */}
-                {/* <Route exact path="/nft-marketplace/:steps">
+                </Route>
+                <Route exact path="/nft-marketplace/:steps">
                   <NFTMarketplace />
-                </Route> */}
-                {/* <Route exact path="/search">
+                </Route>
+                <Route exact path="/search">
                   <Search />
                 </Route>
                 <Route exact path="/core-drops">
                   <CharectersDrop />
-                </Route> */}
+                </Route>
                 <Route exact path="/lobby-lobsters">
                   <LobbyLobsters />
                 </Route>
@@ -134,15 +135,12 @@ const App = () => {
                 <AuthenticatedRoute exact path="/my-profile">
                   <MyProfile />
                 </AuthenticatedRoute>
-                {/* <AuthenticatedRoute path="/setup-auction">
+                <AuthenticatedRoute path="/setup-auction">
                   <SetupAuction />
                 </AuthenticatedRoute>
-                <Route exact path="/minting-and-auctions/marketplace/active-auctions">
-                  <Marketplace />
-                </Route> */}
-                {/* <Route exact path="/minting-and-auctions/marketplace/future-auctions">
-                  <Marketplace />
-                </Route> */}
+                <Route exact path="/products/auction-house">
+                  <AuctionHouse />
+                </Route>
                 <AuthenticatedRoute exact path="/my-nfts">
                   <MyNFTs />
                 </AuthenticatedRoute>
@@ -152,7 +150,7 @@ const App = () => {
                 <AuthenticatedRoute exact path="/my-account">
                   <MyAccount />
                 </AuthenticatedRoute>
-                {/* <AuthenticatedRoute exact path="/my-auctions">
+                <AuthenticatedRoute exact path="/my-auctions">
                   <Auctions />
                 </AuthenticatedRoute>
                 <AuthenticatedRoute exact path="/create-tiers">
@@ -167,18 +165,21 @@ const App = () => {
                 <AuthenticatedRoute exact path="/customize-auction-landing-page">
                   <CustomizeAuction />
                 </AuthenticatedRoute>
+                <AuthenticatedRoute exact path="/release-rewards">
+                  <ReleaseRewards />
+                </AuthenticatedRoute>
                 <AuthenticatedRoute exact path="/auction-review">
                   <AuctionReview />
-                </AuthenticatedRoute> */}
+                </AuthenticatedRoute>
                 <Route exact path="/:artistUsername">
                   <Artist />
                 </Route>
                 <Route exact path="/collection/:collectionAddress">
                   <Collection />
                 </Route>
-                {/* <Route exact path="/:artist/:auction">
+                <Route exact path="/:artistUsername/:auctionName">
                   <AuctionLandingPage />
-                </Route> */}
+                </Route>
                 <Route path="*">
                   <NotFound />
                 </Route>
