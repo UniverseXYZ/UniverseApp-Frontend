@@ -1,16 +1,36 @@
 @import "../../assets/scss/variables";
 @import "../../assets/scss/mixins";
 
-.background-part {
-  background-image: url("../../assets/images/tier-bg3.png");
+.create--reward--tiers--page {
+  background-image: url("../../assets/images/minting_page_bg.jpg");
+  background-position: center;
   background-size: cover;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+
+.background-part {
+  padding: 40px 0px 20px;
+  background-image: url("../../assets/images/tier-bg1.png");
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  .create-tiers {
+    max-width: 1110px;
+    margin: 0 auto;
+    @include xl {
+      padding: 0 20px;
+      max-width: 970px;
+    }
+    @include lg {
+      max-width: 750px;
+    }
+  }
   @include lg {
     background-image: url("../../assets/images/tier-bg2.png");
-    box-shadow: inset 0 -90px 90px -10px $white;
   }
   @include sm {
-    background-image: url("../../assets/images/tier-bg1.png");
-    box-shadow: unset;
+    background-image: url("../../assets/images/tier-bg3.png");
   }
 }
 
@@ -97,8 +117,12 @@
   }
 }
 .create-rew-tier {
-  background: linear-gradient(#f5f4f9, #f5f4f9) padding-box, linear-gradient(to right, #bceb00, #00eaea) border-box;
-  border: 1px solid transparent;
+  border-left: 1px solid #bceb00;
+  border-right: 1px solid #00eaea;
+  background-image: linear-gradient(135deg, #bceb00, #00eaea), linear-gradient(135deg, #bceb00, #00eaea);
+  background-size: 100% 1px;
+  background-position: 0 0, 0 100%;
+  background-repeat: no-repeat;
   border-radius: 12px;
   cursor: pointer;
   display: flex;
@@ -116,8 +140,9 @@
     height: 335px;
   }
   &:hover {
-    border: 2px solid;
-    border-image-source: linear-gradient(135deg, #bceb00 15.57%, #00eaea 84.88%);
+    border-left: 2px solid #bceb00;
+    border-right: 2px solid #00eaea;
+    background-size: 100% 2px;
   }
 }
 .select-ntfs {
@@ -396,8 +421,11 @@
     font-weight: 600;
     font-size: 26px;
     line-height: 140%;
-    color: $black;
     margin-bottom: 20px;
+    color: transparent;
+    background: black;
+    -webkit-background-clip: text;
+    text-shadow: 2px 2px 5px rgba(255, 255, 255, 0.3);
   }
   p {
     font-family: $spaceGroteskFont;

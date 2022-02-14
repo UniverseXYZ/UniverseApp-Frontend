@@ -402,9 +402,9 @@ const Create = () => {
   // TODO:: Update the follwoing text, based on the Limiations in the config
 
   return (
-    <>
+    <div className="create--reward--tiers--page">
       <div className="background-part">
-        <div className="container create-tiers">
+        <div className="create-tiers">
           <div
             className="back-rew"
             onClick={() => {
@@ -524,7 +524,7 @@ const Create = () => {
           disabled={canContinue}
         />
       </div>
-    </>
+    </div>
   );
 };
 export default Create;
