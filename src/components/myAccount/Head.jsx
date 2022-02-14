@@ -35,15 +35,6 @@ const Head = () => {
           personal settings.
         </p>
       </div>
-      <div className="button-section">
-        <Button className="light-border-button public-button" onClick={handlePublicPage}>
-          See public page
-        </Button>
-      </div>
-      <p>
-        You can set your preffered display name, create a branded profile URL and manage other
-        personal settings.
-      </p>
     </div>
   );
 };
