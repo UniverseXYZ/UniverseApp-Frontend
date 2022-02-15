@@ -1,5 +1,5 @@
-@import "../../../assets/scss/variables";
-@import "../../../assets/scss/_mixins";
+@import '../../../assets/scss/variables';
+@import '../../../assets/scss/_mixins';
 
 .single__nft {
   .mintNftCollection-div {
@@ -548,24 +548,10 @@
           letter-spacing: 0.2px;
           color: rgba(0, 0, 0, 0.7);
           margin-bottom: 10px;
-          display: flex;
-          align-items: center;
-          img {
-            margin-left: 3px;
-          }
-          svg {
-            margin-left: 6px;
-            path {
-              transition: 0.1s ease-in-out;
-            }
-          }
-          &:hover {
-            svg {
-              path {
-                fill-opacity: 1;
-              }
-            }
-          }
+        }
+        img {
+          margin-left: 7px;
+          margin-top: -7px;
         }
 
         .properties-info-text {
@@ -615,7 +601,7 @@
 
         .slider:before {
           position: absolute;
-          content: "";
+          content: '';
           height: 16px;
           width: 16px;
           left: 4px;
@@ -810,7 +796,8 @@
           }
         }
       }
-      .royalities {
+      .royalities,
+      .other-wallet {
         margin-top: 40px;
         .title {
           display: flex;
@@ -843,7 +830,8 @@
             display: flex;
             align-items: center;
           }
-          .royalities-info-text {
+          .royalities-info-text,
+          .other-wallet-info-text {
             position: absolute;
             background: $white;
             padding: 16px 16px 18px 16px;
@@ -862,7 +850,8 @@
             }
           }
           img {
-            margin-left: 6px;
+            margin-left: 7px;
+            margin-top: 3px;
           }
           .switch {
             position: absolute;
@@ -892,7 +881,7 @@
 
           .slider:before {
             position: absolute;
-            content: "";
+            content: '';
             height: 16px;
             width: 16px;
             left: 4px;
