@@ -15,7 +15,7 @@ const ActiveAuctions = () => {
   const perPage = 10;
   const { showError, setShowError, setErrorTitle, setErrorBody } = useErrorContext();
   const [notFound, setNotFound] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [activeAuctions, setActiveAuctions] = useState([]);
   const [offset, setOffset] = useState(0);
   const [searchByName, setSearchByName] = useState('');

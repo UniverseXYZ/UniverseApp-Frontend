@@ -12,6 +12,7 @@ import {
   getUserFutureAuctions,
   getUserPastAuctions,
 } from '../../../utils/api/auctions';
+import { useMyNftsContext } from '../../../contexts/MyNFTsContext.jsx';
 
 const Tabs = ({ artistId, username, artistAddress }) => {
   const { setShowError, setErrorTitle, setErrorBody } = useErrorContext();
@@ -131,21 +132,24 @@ const Tabs = ({ artistId, username, artistAddress }) => {
                 onClick={() => setSelectedTabIndex(1)}
                 className={selectedTabIndex === 1 ? 'active' : ''}
               >
-                {`Active auctions (${totalActiveCount})`}
+                Active auctions
+                <span>{totalActiveCount}</span>
               </button>
               <button
                 type="button"
                 onClick={() => setSelectedTabIndex(2)}
                 className={selectedTabIndex === 2 ? 'active' : ''}
               >
-                {`Future auctions (${totalFutureCount})`}
+                Future auctions
+                <span>{totalFutureCount}</span>
               </button>
               <button
                 type="button"
                 onClick={() => setSelectedTabIndex(3)}
                 className={selectedTabIndex === 3 ? 'active' : ''}
               >
-                {`Past auctions (${totalPastCount})`}
+                Past auctions
+                <span>{totalPastCount}</span>
               </button>
             </div>
           </div>

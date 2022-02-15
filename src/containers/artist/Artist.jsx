@@ -8,7 +8,7 @@ import ArtistDetails from '../../components/artist/ArtistDetails.jsx';
 import ArtistPageTabs from '../../components/artist/tabs/Tabs.jsx';
 import NotFound from '../../components/notFound/NotFound.jsx';
 import { useThemeContext } from '../../contexts/ThemeContext';
-import { getProfilePage } from '../../utils/api/profile';
+import { getProfileInfo, getProfilePage } from '../../utils/api/profile';
 import { mapUserData } from '../../utils/helpers';
 import { getUserNfts } from '../../utils/api/mintNFT';
 
@@ -27,22 +27,25 @@ const Artist = () => {
   useEffect(() => {
     const getInfo = async () => {
       try {
-        if (!utils.isAddress(artistUsername)) {
-          const artistInfo = await getProfilePage(artistUsername);
-          if (!artistInfo.error) {
-            const mappedArtist = mapUserData(artistInfo);
-            setArtist(mappedArtist);
-            setArtistAddress(artistInfo.address.toLowerCase());
-          } else {
-            setNotFound(true);
-          }
+        let artistInfo = null;
+
+        if (utils.isAddress(artistUsername)) {
+          artistInfo = await getProfileInfo(artistUsername.toLowerCase());
+        } else {
+          artistInfo = await getProfilePage(artistUsername);
+        }
+        if (artistInfo && !artistInfo.error) {
+          const mappedArtist = mapUserData(artistInfo);
+          setArtist(mappedArtist);
+          setArtistAddress(artistInfo.address.toLowerCase());
+        } else {
+          setNotFound(true);
         }
       } catch (err) {
         setNotFound(true);
         console.log(err);
       }
 
-      // TODO: Add more requests for past/active/future auction, append results to state
       setLoading(false);
     };
     getInfo();
@@ -81,11 +84,19 @@ const Artist = () => {
   ) : (
     <>
       <Helmet>
-        <title>Universe Artist {artist?.name}</title>
+        <title>Universe Artist {artist?.name || artistUsername.toLowerCase()}</title>
       </Helmet>
       <div className="artist__page">
-        <ArtistDetails artistAddress={artistUsername} onArtist={artist} loading={loading} />
-        <ArtistPageTabs artistId={artist.id || 0} nfts={artistNFTs} />
+        <ArtistDetails
+          artistAddress={artistUsername.toLowerCase()}
+          onArtist={artist}
+          loading={loading}
+        />
+        <ArtistPageTabs
+          artistId={artist ? artist.id : 0}
+          artistAddress={artistAddress || ''}
+          username={artistUsername.toLowerCase()}
+        />
         {artist && artist.personalLogo ? (
           <div className="artist__personal__logo">
             <img src={artist.personalLogo} alt="Artist personal logo" />
