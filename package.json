@@ -28,7 +28,6 @@
     "graphql": "^15.5.3",
     "history": "^5.0.0",
     "ignore-styles": "^5.0.1",
-    "node-sass": "^7.0.0",
     "nodemon": "^2.0.7",
     "prop-types": "^15.7.2",
     "randomcolor": "^0.6.2",
@@ -129,6 +128,7 @@
     "eslint-plugin-react-hooks": "^4.2.0",
     "husky": "0.14.3",
     "lint-staged": "^10.5.4",
-    "prettier": "^2.2.1"
+    "prettier": "^2.2.1",
+    "sass": "^1.49.7"
   }
 }
