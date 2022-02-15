@@ -417,7 +417,7 @@ const Create = () => {
           </div>
           <div>
             <div className="head-part">
-              <h2 className="tier-title">Create reward tier</h2>
+              <h3 className="tier-title h3">Create reward tier</h3>
               <p className="create-p">
                 Each reward tier can contain up to {TIER_SETTINGS_LIMITATION.MAX_WINNERS_COUNT}{' '}
                 winners and up to {TIER_SETTINGS_LIMITATION.MAX_WINNER_NFT_COUNT} NFTs for each

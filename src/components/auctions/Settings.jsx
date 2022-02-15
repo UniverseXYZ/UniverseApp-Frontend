@@ -325,7 +325,7 @@ const AuctionSettings = () => {
     <div className={`${disableClickOutsideClass} auction-settings container`}>
       <div>
         <div className="head-part">
-          <h2 className="tier-title">Auction settings</h2>
+          <h5 className="tier-title">Auction settings</h5>
           <p className="tier-description">
             Start setting up your auction with filling out the name, bid token and schedule.
           </p>

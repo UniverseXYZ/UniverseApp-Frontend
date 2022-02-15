@@ -54,7 +54,7 @@
     font-family: $sharpGroteskSemiBoldFont;
     font-style: normal;
     font-weight: 600;
-    font-size: 32px;
+    font-size: 20px;
     line-height: 130%;
     margin-bottom: 16px;
     color: transparent;
@@ -62,8 +62,14 @@
     -webkit-background-clip: text;
     text-shadow: 2px 2px 5px rgba(255, 255, 255, 0.3);
 
+    &.h3 {
+      font-size: 32px;
+      @include sm {
+        font-size: 26px;
+      }
+    }
     @include sm {
-      font-size: 26px;
+      font-size: 16px;
     }
   }
   p {
