@@ -114,7 +114,7 @@ const AuctionReview = () => {
       </Popup>
       <div>
         <div className="head-part">
-          <h2 className="tier-title">Review auction</h2>
+          <h5 className="tier-title">Review auction</h5>
           <p>Review the auction settings and reward tiers</p>
         </div>
 
