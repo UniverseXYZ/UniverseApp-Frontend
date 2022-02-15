@@ -4,11 +4,13 @@ import { useHistory } from 'react-router-dom';
 import { AnimatedOnScroll } from 'react-animated-css-onscroll';
 import Button from '../../button/Button';
 import { useAuctionContext } from '../../../contexts/AuctionContext';
+import { useAuthContext } from '../../../contexts/AuthContext';
 import { ReactComponent as PlusIcon } from '../../../assets/images/plus.svg';
 
 const Welcome = () => {
   const history = useHistory();
   const { setAuction } = useAuctionContext();
+  const { address, setshowWalletPopup, loggedInArtist } = useAuthContext();
 
   return (
     <div className="auction__house__welcome__section">
@@ -23,16 +25,38 @@ const Welcome = () => {
             auction.
           </p>
           <div className="setup--auction--btn">
-            <Button
-              className="light-border-button"
-              onClick={() => {
-                setAuction({ rewardTiers: [] });
-                history.push('/setup-auction');
-              }}
-            >
-              Set up auction
-              <PlusIcon />
-            </Button>
+            {!address ? (
+              <Button
+                className="light-border-button"
+                onClick={() => {
+                  setshowWalletPopup(true);
+                }}
+              >
+                Sign in
+              </Button>
+            ) : !loggedInArtist.universePageAddress ? (
+              <Button
+                className="light-border-button"
+                onClick={() => {
+                  history.push('/my-account', {
+                    redirect: 'setup-auction',
+                  });
+                }}
+              >
+                Set up profile
+              </Button>
+            ) : (
+              <Button
+                className="light-border-button"
+                onClick={() => {
+                  setAuction({ rewardTiers: [] });
+                  history.push('/setup-auction');
+                }}
+              >
+                Set up auction
+                <PlusIcon />
+              </Button>
+            )}
           </div>
         </AnimatedOnScroll>
       </div>
