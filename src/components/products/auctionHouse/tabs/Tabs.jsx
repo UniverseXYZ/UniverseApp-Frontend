@@ -18,7 +18,8 @@ const Tabs = () => {
   const { setShowError, setErrorTitle, setErrorBody } = useErrorContext();
   const [auctions, setAuctions] = useState([]);
   const [selectedTabIndex, setSelectedTabIndex] = useState(0);
-  const [loading, setLoading] = useState(false);
+  const [activeAuctionsLoading, setActiveAuctionsLoading] = useState(true);
+  const [futureAuctionsLoading, setFutureAuctionsLoading] = useState(true);
   const [perPage, setPerPage] = useState(12);
   const [pageCount, setPageCount] = useState(0);
   const [sortActive, setSortActive] = useState(ENDING.option);
@@ -26,7 +27,7 @@ const Tabs = () => {
   const [currentPage, setCurrentPage] = useState(0);
   const [searchValue, setSearchValue] = useState('');
 
-  const getAuctions = async (request, _offset, filter) => {
+  const getAuctions = async (request, _offset, filter, setLoading) => {
     // finally call the API
     setLoading(true);
     try {
@@ -54,19 +55,19 @@ const Tabs = () => {
     // determine the request and add parameters
     if (selectedTabIndex === 0) {
       if (sortActive === ENDING.option) {
-        getAuctions(getAllActiveAuctions, offset, ENDING.filter);
+        getAuctions(getAllActiveAuctions, offset, ENDING.filter, setActiveAuctionsLoading);
       } else if (sortActive === RECENT.option) {
-        getAuctions(getAllActiveAuctions, offset, RECENT.filter);
+        getAuctions(getAllActiveAuctions, offset, RECENT.filter, setActiveAuctionsLoading);
       } else if (sortActive === HIGHEST_BID.option) {
-        getAuctions(getAllActiveAuctions, offset, HIGHEST_BID.filter);
+        getAuctions(getAllActiveAuctions, offset, HIGHEST_BID.filter, setActiveAuctionsLoading);
       } else if (sortActive === LOWEST_BID.option) {
-        getAuctions(getAllActiveAuctions, offset, LOWEST_BID.filter);
+        getAuctions(getAllActiveAuctions, offset, LOWEST_BID.filter, setActiveAuctionsLoading);
       }
     } else if (selectedTabIndex === 1) {
       if (sortFuture === STARTING.option) {
-        getAuctions(getAllFutureAuctions, offset, STARTING.filter);
+        getAuctions(getAllFutureAuctions, offset, STARTING.filter, setFutureAuctionsLoading);
       } else if (sortFuture === RECENT.option) {
-        getAuctions(getAllFutureAuctions, offset, RECENT.filter);
+        getAuctions(getAllFutureAuctions, offset, RECENT.filter, setFutureAuctionsLoading);
       }
     }
   };
@@ -134,7 +135,7 @@ const Tabs = () => {
               />
               <ActiveAuctionsTab
                 auctions={auctions}
-                loading={loading}
+                loading={activeAuctionsLoading}
                 handlePageClick={handlePageClick}
                 pageCount={pageCount}
                 perPage={perPage}
@@ -155,7 +156,7 @@ const Tabs = () => {
               />
               <FutureAuctionsTab
                 auctions={auctions}
-                loading={loading}
+                loading={futureAuctionsLoading}
                 handlePageClick={handlePageClick}
                 pageCount={pageCount}
                 perPage={perPage}
