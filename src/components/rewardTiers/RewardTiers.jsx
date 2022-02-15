@@ -54,7 +54,7 @@ const RewardTiers = () => {
           <h5 className="tier-title">Reward tiers</h5>
           <p>
             Reward Tiers are the NFT bundles that users are bidding for to win. There can be up to{' '}
-            {AUCTION_SETTINGS_LIMITATION.TOTAL_WINNERS_COUNT} winners distrubted into the Auction
+            {AUCTION_SETTINGS_LIMITATION.TOTAL_WINNERS_COUNT} winners distributed into the Auction
             Tiers.
           </p>
         </div>
