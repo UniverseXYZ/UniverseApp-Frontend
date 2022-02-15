@@ -46,7 +46,7 @@
       }
       .preview--auction__exit--mobile {
         display: none;
-         @include sm {
+        @include sm {
           display: block;
         }
       }
@@ -749,8 +749,8 @@
 
           .nfts {
             display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            grid-gap: 13px;
+            grid-template-columns: repeat(5, 80px);
+            grid-gap: 15px;
             margin-top: 20px;
             margin-bottom: 20px;
             .each--nft {
