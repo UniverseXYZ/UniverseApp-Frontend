@@ -46,6 +46,32 @@
           opacity: 0;
           z-index: -1;
         }
+        .value-container-custom {
+          .value-container {
+            .option {
+              .label-and-value {
+                font-family: $sharpGroteskMediumFont;
+                font-style: normal;
+                font-weight: 600;
+                font-size: 11px;
+                line-height: 120%;
+                color: $black;
+                display: flex;
+                align-items: center;
+  
+                .nfts-count {
+                  font-family: $spaceGroteskFont;
+                  font-style: normal;
+                  font-weight: 600;
+                  font-size: 10px;
+                  line-height: 120%;
+                  color: $black;
+                  margin-left: 10px;
+                }
+              }
+            }
+          }
+        }
         .css-1n7v3ny-option {
           background-color: unset;
         }
