@@ -147,7 +147,6 @@ const styles = {
 
 const SelectComponent = (props) => {
   const { options, onChange, selectedWinner } = props;
-  const [render, setRender] = useState(false);
   const ref = useRef(null);
   const [isOpen, toggleIsOpen] = useState(false);
 
@@ -170,46 +169,36 @@ const SelectComponent = (props) => {
     };
   });
 
-  useEffect(() => {
-    const timeout = setTimeout(() => {
-      setRender(true);
-    }, 100);
-
-    return () => clearTimeout(timeout);
-  }, [render]);
-
-  // react-select library issue -> need to delay the render in order to resolve some styling issues
   return (
-    render && (
-      <div
-        className="react-select-wrapper"
-        ref={ref}
-        aria-hidden
-        role="button"
-        onClick={handleToggle}
-      >
-        <Select
-          options={options}
-          isOptionDisabled={(option) => option.isDisabled}
-          onChange={onChange}
-          styles={styles}
-          components={{
-            Option,
-            ValueContainer,
-            IndicatorSeparator: () => null,
-          }}
-          menuPlacement="auto"
-          defaultValue={options[0]}
-          value={options[selectedWinner]}
-          closeMenuOnSelect
-          hideSelectedOptions
-          isClearable={false}
-          getOptionValue={(option) => option}
-          menuIsOpen={isOpen}
-        />
-        <div className="box--shadow--effect--block" />
-      </div>
-    )
+    <div
+      className="react-select-wrapper"
+      ref={ref}
+      aria-hidden
+      role="button"
+      onClick={handleToggle}
+    >
+      <Select
+        classNamePrefix="select"
+        options={options}
+        isOptionDisabled={(option) => option.isDisabled}
+        onChange={onChange}
+        styles={styles}
+        components={{
+          Option,
+          ValueContainer,
+          IndicatorSeparator: () => null,
+        }}
+        menuPlacement="auto"
+        defaultValue={options[0]}
+        value={options[selectedWinner]}
+        closeMenuOnSelect
+        hideSelectedOptions
+        isClearable={false}
+        getOptionValue={(option) => option}
+        menuIsOpen={isOpen}
+      />
+      <div className="box--shadow--effect--block" />
+    </div>
   );
 };
 
