@@ -184,6 +184,44 @@
             }
           }
         }
+        .available-select {
+          .option {
+            padding: 12px;
+
+            label.option-items {
+              display: flex;
+              align-items: center;
+              img {
+                width: 16px;
+                height: 16px;
+                margin-right: 10px;
+              }
+              span.label-and-value {
+                font-family: $sharpGroteskMediumFont;
+                font-style: normal;
+                font-weight: 600;
+                font-size: 11px;
+                line-height: 120%;
+                color: $black;
+                display: flex;
+                align-items: center;
+                span.nfts-count {
+                  font-family: $spaceGroteskFont;
+                  font-style: normal;
+                  font-weight: 600;
+                  font-size: 10px;
+                  line-height: 120%;
+                  color: $black;
+                  margin-left: 10px;
+                }
+              }
+            }
+            &:hover {
+              background: rgba(0, 0, 0, 0.05);
+              border-radius: 6px;
+            }
+          }
+        }
       }
       @include lg {
         display: grid;
