@@ -135,7 +135,7 @@ const ProfileForm = ({
             />
           </div>
           <div className="account-picture-editing">
-            <p>We recomend an image of at least 400x400.</p>
+            <p>We recommend an image of at least 400x400.</p>
             {errors.previewImage && <p style={{ color: '#ff4949' }}>{errors.previewImage}</p>}
             <Button className="light-border-button" onClick={() => accountInput.current.click()}>
               Choose file

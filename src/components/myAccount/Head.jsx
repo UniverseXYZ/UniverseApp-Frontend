@@ -31,7 +31,7 @@ const Head = () => {
           </Button>
         </div>
         <p>
-          You can set your preffered display name, create a branded profile URL and manage other
+          You can set your preferred display name, create a branded profile URL and manage other
           personal settings.
         </p>
       </div>
