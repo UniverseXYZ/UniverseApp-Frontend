@@ -48,7 +48,15 @@
         }
         .value-container-custom {
           .value-container {
+            padding: 0%;
             .option {
+              display: flex;
+              align-items: center;
+              img {
+                width: 16px;
+                height: 16px;
+                margin-right: 10px;
+              }
               .label-and-value {
                 font-family: $sharpGroteskMediumFont;
                 font-style: normal;
