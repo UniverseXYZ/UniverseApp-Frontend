@@ -86,7 +86,7 @@ const UniverseAuctionDetails = ({ auction }) => {
                 <h2 className="sub__title">Placing bids</h2>
               </div>
               <p className="sub__desc">
-                Placing a bid is easy and seamless. Just connect your wallet and and follow the on
+                Placing a bid is easy and seamless. Just connect your wallet and follow the on
                 screen instructions to place a bid. You may have to place a few bids to win and this
                 may require a multiple gas fees.
               </p>
