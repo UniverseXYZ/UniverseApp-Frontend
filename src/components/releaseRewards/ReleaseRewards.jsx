@@ -324,6 +324,7 @@ const ReleaseRewards = () => {
     <BidderView
       auctionData={auction}
       showSlots={showSlots}
+      setShowSlots={setShowSlots}
       singleCaptureRevenueTxs={singleCaptureRevenueTxs}
       handleCaptureRevenue={handleCaptureRevenue}
       winningSlot={locationState?.winningSlot}
