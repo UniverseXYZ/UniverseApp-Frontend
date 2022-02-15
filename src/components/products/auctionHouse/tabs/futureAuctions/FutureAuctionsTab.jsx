@@ -6,6 +6,7 @@ import ItemsPerPageDropdown from '../../../../pagination/ItemsPerPageDropdown.js
 import leftArrow from '../../../../../assets/images/left-arrow.svg';
 import rightArrow from '../../../../../assets/images/right-arrow.svg';
 import NoAuctionsFound from '../../../../auctions/NoAuctionsFound.jsx';
+import AuctionsCardSkeleton from '../../../../auctionsCard/skeleton/AuctionsCardSkeleton.jsx';
 
 const LeftArrow = () => <img src={leftArrow} alt="left arrow" />;
 const RightArrow = () => <img src={rightArrow} alt="right arrow" />;
@@ -21,7 +22,13 @@ const FutureAuctionsTab = ({
   removeAuction,
 }) => (
   <div className="future__auctions__tab auction__page">
-    {auctions.length ? (
+    {loading ? (
+      <div className="future__auctions__list">
+        <AuctionsCardSkeleton variant="future" />
+        <AuctionsCardSkeleton variant="future" />
+        <AuctionsCardSkeleton variant="future" />
+      </div>
+    ) : auctions.length ? (
       <>
         <FutureAuctionsList data={auctions} loading={loading} removeAuction={removeAuction} />
         <div className="pagination__container">

@@ -2,10 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Animated } from 'react-animated-css';
 import './FutureAuctionCard.scss';
-import AuctionsCardSkeleton from '../skeleton/AuctionsCardSkeleton.jsx';
 import FutureAuctionCard from './FutureAuctionCard.jsx';
 
-const FutureAuctionsList = ({ data, loading, removeAuction }) => (
+const FutureAuctionsList = ({ data, removeAuction }) => (
   <div className="future__auctions__list">
     {data.map((auction) => {
       if (!auction.depositedNfts) {
@@ -13,11 +12,7 @@ const FutureAuctionsList = ({ data, loading, removeAuction }) => (
       }
       return (
         <Animated animationIn="fadeIn" key={auction.id}>
-          {loading ? (
-            <AuctionsCardSkeleton variant="future" />
-          ) : (
-            <FutureAuctionCard auction={auction} removeAuction={removeAuction} />
-          )}
+          <FutureAuctionCard auction={auction} removeAuction={removeAuction} />
         </Animated>
       );
     })}
@@ -26,7 +21,6 @@ const FutureAuctionsList = ({ data, loading, removeAuction }) => (
 
 FutureAuctionsList.propTypes = {
   data: PropTypes.oneOfType([PropTypes.array]).isRequired,
-  loading: PropTypes.bool.isRequired,
   removeAuction: PropTypes.func,
 };
 
