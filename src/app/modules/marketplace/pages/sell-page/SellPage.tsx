@@ -86,7 +86,7 @@ export const SellPage = () => {
         assetType: {
           assetClass: nft?.standard,
           contract: nft?.collection?.address,
-          tokenId: +params.tokenId,
+          tokenId: (+params.tokenId).toString(),
         },
         value: '1',
       };
@@ -134,7 +134,6 @@ export const SellPage = () => {
         salt: salt,
         start: 0,
         end: 0,
-        signature: '1', // TODO: remove
         data: {
           dataType: 'ORDER_DATA',
           revenueSplits: nft?.royalties.map((royalty: any) => ({
