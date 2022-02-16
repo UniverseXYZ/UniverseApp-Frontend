@@ -117,6 +117,13 @@
           }
           .carousel__auction {
             border: 1px solid rgba(255, 255, 255, 0.2);
+            height: 67px;
+            &:hover {
+              background-image: url("../../assets/images/auction-slider-gradient-border.svg");
+              background-position: center;
+              background-repeat: no-repeat;
+              background-size: cover;
+            }
           }
         }
         .auction__details__box {
@@ -282,6 +289,13 @@
           // @include xl {
           //   width: 258px;
           // }
+
+          &:hover {
+            background: linear-gradient($white, $white) padding-box,
+              linear-gradient(135deg, #bceb00, #00eaea) border-box;
+            border: 2px solid transparent !important;
+            height: 62px;
+          }
 
           &__image {
             height: 40px;
