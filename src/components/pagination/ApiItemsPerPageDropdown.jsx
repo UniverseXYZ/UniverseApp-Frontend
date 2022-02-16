@@ -23,7 +23,7 @@ const ApiItemsPerPageDropdown = ({ perPage, itemsPerPage, offset, page, changePe
         true
       );
     };
-  });
+  }, []);
 
   return (
     <div className="items__per__page">

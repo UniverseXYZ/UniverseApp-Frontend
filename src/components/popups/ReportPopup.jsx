@@ -24,7 +24,7 @@ const ReportPopup = React.forwardRef(({ onClose }, ref) => {
     return () => {
       document.removeEventListener('click', handleClickOutside, true);
     };
-  });
+  }, []);
   return (
     <div className="report__popup" ref={ref}>
       <img className="close" src={closeIcon} alt="Close" onClick={onClose} aria-hidden="true" />

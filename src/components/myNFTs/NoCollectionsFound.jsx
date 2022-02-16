@@ -19,7 +19,7 @@ const NoCollectionsFound = () => {
     return () => {
       document.removeEventListener('click', handleClickOutside, true);
     };
-  });
+  }, []);
 
   return (
     <div className="empty__nfts">

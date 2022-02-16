@@ -113,7 +113,7 @@ const SmallCalendar = ({
     return () => {
       document.removeEventListener('click', handleClickOutside, true);
     };
-  });
+  }, []);
 
   return (
     <div className="calendar__wrapper" ref={ref}>

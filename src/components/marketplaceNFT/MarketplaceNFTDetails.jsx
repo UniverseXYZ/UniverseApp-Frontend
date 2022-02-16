@@ -48,7 +48,7 @@ const MarketplaceNFTDetails = ({ data, onNFT }) => {
     return () => {
       document.removeEventListener('click', handleClickOutside, true);
     };
-  });
+  }, []);
 
   useEffect(() => {
     if (onNFT.id !== selectedNFT.id) {

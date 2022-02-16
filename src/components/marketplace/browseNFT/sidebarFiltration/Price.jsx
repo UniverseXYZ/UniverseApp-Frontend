@@ -88,7 +88,7 @@ const Price = ({ setSelectedPrice, selectedTokenIndex, setSelectedTokenIndex }) 
     return () => {
       document.removeEventListener('click', handleClickOutside, true);
     };
-  });
+  }, []);
 
   return (
     <div className="browse--nft--sidebar--filtration--item">

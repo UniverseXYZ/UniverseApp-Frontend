@@ -218,7 +218,7 @@ const SelectComponent = (props) => {
         true
       );
     };
-  });
+  }, []);
 
   return (
     <div
