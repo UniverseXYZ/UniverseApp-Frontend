@@ -20,10 +20,10 @@ const BidRankingsPopup = ({
   collections,
 }) => {
   const displayBidderName = (bidder) => {
-    if (bidder.user.displayName) {
-      return bidder.user.displayName;
+    if (bidder.user) {
+      return bidder.user.displayName || bidder.user.address;
     }
-    return shortenEthereumAddress(bidder.user.address);
+    return shortenEthereumAddress(bidder.bidder);
   };
 
   const [openSlots, setOpenSlots] = useState([]);
