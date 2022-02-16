@@ -95,14 +95,20 @@ const AuctionLandingPage = () => {
 
   useEffect(() => {
     if (bidders.length) {
-      const currBidder = bidders.find(
-        (bidder) => bidder?.user?.address?.toLowerCase() === address.toLowerCase()
+      const currBidder = bidders.find((bidder) =>
+        bidder.user
+          ? (bidder.user.address || '').toLowerCase() === address.toLowerCase()
+          : (bidder.bidder || '').toLowerCase() === address.toLowerCase()
       );
       if (currBidder) {
         setCurrentBid(currBidder);
 
         const currBidderIndex = bidders
-          .map((bidder) => bidder.user?.address.toLowerCase())
+          .map((bidder) =>
+            bidder.user
+              ? (bidder.user.address || '').toLowerCase()
+              : (bidder.bidder || '').toLowerCase()
+          )
           .indexOf(address.toLowerCase());
         if (currBidderIndex <= rewardTiersSlots.length - 1) {
           setIsWinningBid(true);
