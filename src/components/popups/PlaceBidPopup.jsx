@@ -56,7 +56,9 @@ const PlaceBidPopup = ({
       );
       const erc20Balance = await erc20Contract.balanceOf(address);
 
-      setAllowance(+utils.formatEther(erc20Allowance));
+      if (+utils.formatEther(erc20Allowance)) {
+        setAllowance(true);
+      }
       setBalance(+utils.formatEther(erc20Balance));
     } else {
       setBalance(yourBalance);
@@ -230,7 +232,7 @@ const PlaceBidPopup = ({
     []
   );
 
-  const allowanceDisabled = !universeAuctionHouseContract || allowance || !yourBid;
+  const allowanceDisabled = !universeAuctionHouseContract || allowance;
   const placeBidDisabled = +yourBid > allowance || !+yourBid || !!error;
 
   return (
