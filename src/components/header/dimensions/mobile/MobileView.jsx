@@ -658,11 +658,11 @@ const MobileView = (props) => {
                                 onClick={() => {
                                   history.push('/core-drops');
                                 }}
-                                // className="disable"
+                                className="disable"
                               >
                                 <img src={coreDropsIcon} alt="Core drops" />
                                 <span>OG planet drops</span>
-                                {/* <span className="tooltiptext">Coming soon</span> */}
+                                <span className="tooltiptext">Coming soon</span>
                               </button>
                             </div>
                           </>
@@ -670,61 +670,43 @@ const MobileView = (props) => {
                           <></>
                         )}
                       </div>
-                      {showNFTDrops ? (
-                        <>
-                          <div>
-                            <button
-                              type="button"
-                              onClick={() => {
-                                setShowMenu(false);
-                                history.push('/polymorphs');
-                              }}
-                            >
-                              <img src={polymorphsIcon} alt="Polymorphs" />
-                              <span>Polymorphs</span>
-                            </button>
-                          </div>
-                          <div>
-                            <button
-                              type="button"
-                              onClick={() => {
-                                history.push('/lobby-lobsters');
-                              }}
-                            >
-                              <img src={lobbyLobstersIcon} alt="Lobby Lobsters" />
-                              <span>Lobby Lobsters</span>
-                            </button>
-                          </div>
-                          <div>
-                            <button
-                              type="button"
-                              // onClick={() => {
-                              //   history.push('/core-drops');
-                              // }}
-                              className="disable"
-                            >
-                              <img src={coreDropsIcon} alt="Core drops" />
-                              <span>OG planet drops</span>
-                              <span className="tooltiptext">Coming soon</span>
-                            </button>
-                          </div>
-                        </>
-                      ) : (
-                        <></>
-                      )}
-                    </div>
-                    <div ref={rarityChartsRef}>
-                      <div
-                        className="head"
-                        aria-hidden="true"
-                        onClick={() => setShowRarityCharts(!showRarityCharts)}
-                      >
-                        <p className="title">Rarity charts</p>
-                        <img
-                          className={showRarityCharts ? 'rotate' : ''}
-                          src={arrowDown}
-                          alt="arrow"
-                        />
+                      <div ref={rarityChartsRef}>
+                        <div
+                          className="head"
+                          aria-hidden="true"
+                          onClick={() => setShowRarityCharts(!showRarityCharts)}
+                        >
+                          <p className="title">Rarity charts</p>
+                          <img
+                            className={showRarityCharts ? 'rotate' : ''}
+                            src={arrowDown}
+                            alt="arrow"
+                          />
+                        </div>
+                        {showRarityCharts ? (
+                          <>
+                            <div className="dropdown__body">
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  history.push('/polymorph-rarity');
+                                }}
+                              >
+                                <img src={navChartIcon} alt="Polymorphs" />
+                                <span>Polymorphs</span>
+                              </button>
+                              <button
+                                type="button"
+                                onClick={() => window.open('https://rarity.tools/lobby-lobsters')}
+                              >
+                                <img src={navChartIcon} alt="Lobby Lobsters" />
+                                <span>Lobby Lobsters</span>
+                              </button>
+                            </div>
+                          </>
+                        ) : (
+                          <></>
+                        )}
                       </div>
                       <div ref={infoRef}>
                         <div
