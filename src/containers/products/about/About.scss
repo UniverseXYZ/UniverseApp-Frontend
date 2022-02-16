@@ -311,6 +311,15 @@
                 text-align: left;
                 color: #00000099;
               }
+              .image-section {
+                margin-top: 40px;
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                grid-gap: 20px;
+                @include sm {
+                  grid-template-columns: 1fr;
+                }
+              }
               img {
                 margin-top: 40px;
               }
@@ -353,8 +362,14 @@
                   text-align: left;
                   color: #00000099;
                 }
-                img {
+                .image-section {
                   margin-top: 40px;
+                  display: grid;
+                  grid-template-columns: 1fr 1fr;
+                  grid-gap: 20px;
+                  @include sm {
+                    grid-template-columns: 1fr;
+                  }
                 }
                 @include md {
                   padding: 0px;

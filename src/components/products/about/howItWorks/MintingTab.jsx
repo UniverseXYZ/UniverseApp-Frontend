@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import NFTsingle from '../../../../assets/images/howItWork/NFTsingle.png';
-import NFTcollection from '../../../../assets/images/NFTcollection.png';
+import NFTcollection from '../../../../assets/images/howItWork/NFTcollection.png';
 import Button from '../../../button/Button';
-import minting from '../../../../assets/images/howItWork/AuctionMinting.png';
+import createNFT1 from '../../../../assets/images/howItWork/create-nft1.png';
+import createNFT2 from '../../../../assets/images/howItWork/create-nft2.png';
 import myNFTs from '../../../../assets/images/howItWork/myNFTs.png';
 
 const MintingTab = () => {
@@ -75,7 +76,14 @@ const MintingTab = () => {
               or anything that your creative mind can think of into an NFT. The possibilities are
               endless with art and the Universe.
             </p>
-            <img src={minting} alt="mint" />
+            <div className="image-section">
+              <div>
+                <img src={createNFT1} alt="createNFT1" />
+              </div>
+              <div>
+                <img src={createNFT2} alt="createNFT2" />
+              </div>
+            </div>
           </div>
         </div>
       </div>
