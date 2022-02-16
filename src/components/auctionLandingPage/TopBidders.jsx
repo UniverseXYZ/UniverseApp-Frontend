@@ -260,7 +260,12 @@ const TopBidders = ({
           </div>
           {canPlaceBids ? (
             <div className="place__bid">
-              <button onClick={() => setShowBidPopup(true)} type="button" className="light-button">
+              <button
+                onClick={() => setShowBidPopup(true)}
+                type="button"
+                className="light-button"
+                disabled={!address}
+              >
                 Place a bid
               </button>
               {currentBid && !isWinningBid ? ( // TODO: add is winning bid //
