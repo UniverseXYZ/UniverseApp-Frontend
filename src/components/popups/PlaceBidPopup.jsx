@@ -185,7 +185,7 @@ const PlaceBidPopup = ({
       const erc20Contract = getERC20Contract(auction.tokenAddress, signer);
       const approveTx = await erc20Contract.approve(
         universeAuctionHouseContract.address,
-        constants.MaxInt256
+        constants.MaxUint256
       );
 
       setShowLoading(true);
@@ -231,6 +231,7 @@ const PlaceBidPopup = ({
   );
 
   const allowanceDisabled = !universeAuctionHouseContract || allowance || !yourBid;
+  const placeBidDisabled = +yourBid > allowance || !+yourBid || !!error;
 
   return (
     <div className="place__bid__popup">
@@ -374,7 +375,7 @@ const PlaceBidPopup = ({
                 <Button
                   className="light-button w-100"
                   onClick={handlePlaceBid}
-                  disabled={+yourBid > allowance || !+yourBid || !!error}
+                  disabled={placeBidDisabled}
                 >
                   Place a bid
                 </Button>
