@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Animated } from 'react-animated-css';
-import { BigNumber, utils } from 'ethers';
+import { utils, constants } from 'ethers';
 import { BigNumber as bigNumber } from 'bignumber.js';
 import closeIcon from '../../assets/images/close-menu.svg';
 import currencyIcon from '../../assets/images/currency-eth.svg';
@@ -13,6 +13,7 @@ import { useMyNftsContext } from '../../contexts/MyNFTsContext';
 import { getERC20Contract } from '../../utils/helpers/pureFunctions/auctions';
 import { SC_ERROR_CODES } from '../../utils/helpers/constants';
 import { getContractErrorCode } from '../../utils/helpers/contractsErrorHandler';
+import warningIcon from '../../assets/images/Exclamation.svg';
 
 const PlaceBidPopup = ({
   onClose,
@@ -38,7 +39,7 @@ const PlaceBidPopup = ({
   const [myBidSlotIndex, setMyBidSlotIndex] = useState(-1);
   const [error, setError] = useState('');
   const [_errorCode, setErrorCode] = useState('');
-  const [allowance, setAllowance] = useState(0);
+  const [allowance, setAllowance] = useState(false);
   const [balance, setBalance] = useState(0);
 
   const setERC20Info = async () => {
@@ -59,7 +60,7 @@ const PlaceBidPopup = ({
       setBalance(+utils.formatEther(erc20Balance));
     } else {
       setBalance(yourBalance);
-      setAllowance(yourBalance);
+      setAllowance(true);
     }
   };
   useEffect(() => {
@@ -184,7 +185,7 @@ const PlaceBidPopup = ({
       const erc20Contract = getERC20Contract(auction.tokenAddress, signer);
       const approveTx = await erc20Contract.approve(
         universeAuctionHouseContract.address,
-        BigNumber.from(utils.parseEther(yourBid))
+        constants.MaxInt256
       );
 
       setShowLoading(true);
@@ -192,7 +193,7 @@ const PlaceBidPopup = ({
       const approveTxReceipt = await approveTx.wait();
 
       if (approveTxReceipt.status === 1) {
-        setAllowance(+yourBid);
+        setAllowance(true);
         setShowLoading(false);
         setActiveTxHashes([]);
       }
@@ -223,11 +224,13 @@ const PlaceBidPopup = ({
       setMinBid(0);
       setMyBidSlotIndex(-1);
       setError('');
-      setAllowance(0);
+      setAllowance(false);
       setBalance(0);
     },
     []
   );
+
+  const allowanceDisabled = !universeAuctionHouseContract || allowance || !yourBid;
 
   return (
     <div className="place__bid__popup">
@@ -351,24 +354,32 @@ const PlaceBidPopup = ({
         </div>
         <div className="place__bid__btn">
           {auction.tokenSymbol.toLowerCase() !== 'eth' ? (
-            <>
-              <Button
-                style={{ marginBottom: 20 }}
-                className="light-button w-100"
-                onClick={handleIncreaseAllowance}
-                disabled={+yourBid <= allowance}
-              >
-                Approve {auction.tokenSymbol}
-              </Button>
+            <div>
+              <div className="display-warning">
+                <img alt="" src={warningIcon} />
+                <p>
+                  To avoid rekt attacks based on ERC20 allowance exploit you have to set the
+                  allowance to max before placing a bid.
+                </p>
+              </div>
+              <div className="buttons">
+                <Button
+                  className="light-button w-100"
+                  onClick={handleIncreaseAllowance}
+                  disabled={allowanceDisabled}
+                >
+                  Max allowance
+                </Button>
 
-              <Button
-                className="light-button w-100"
-                onClick={handlePlaceBid}
-                disabled={+yourBid > allowance || !+yourBid || !!error}
-              >
-                Place a bid
-              </Button>
-            </>
+                <Button
+                  className="light-button w-100"
+                  onClick={handlePlaceBid}
+                  disabled={+yourBid > allowance || !+yourBid || !!error}
+                >
+                  Place a bid
+                </Button>
+              </div>
+            </div>
           ) : (
             // The disabled requirement is different if you bid in ETH
             <Button
