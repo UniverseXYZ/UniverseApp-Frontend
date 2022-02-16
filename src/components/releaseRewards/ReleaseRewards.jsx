@@ -347,95 +347,98 @@ const ReleaseRewards = () => {
   }
 
   return (
-    <div className="release__rewards">
-      <div className="release container">
-        <div
-          className="back-rew"
-          aria-hidden="true"
-          onClick={() => {
-            history.goBack();
-          }}
-        >
-          <img src={arrow} alt="back" />
-          <span>{locationState?.backButtonText}</span>
-          <h1 className="set-text">Release rewards</h1>
-        </div>
-        <p className="description">
-          Without this step, the auctioneer will not be able to collect his winnings and the bidders
-          will not be able to claim their NFTs
-        </p>
-        <div className="release__rewards__body">
-          <div className="release__finalize__auction">
-            <div className="step">
-              <div className="circle">
-                {auctionFinalised ? (
-                  <img src={doneIcon} alt="Done" />
-                ) : (
-                  <img src={emptyMark} alt="Empty mark" />
-                )}
-              </div>
-              <div className={`line ${auctionFinalised ? 'colored' : ''}`} />
-            </div>
-            <div className="release__auction__body">
-              <h2>Finalize auction</h2>
-              <p className="auction__description">
-                This function will check which slots have been won, assign the winners and the bid
-                amounts
-              </p>
-              <div className="proceed__button">
-                {auctionFinalised ? (
-                  <Button className="light-border-button" disabled>
-                    Completed <img src={completedCheckmark} alt="completed" />
-                  </Button>
-                ) : (
-                  <Button className="light-button" onClick={handleFinaliseAuction}>
-                    Proceed
-                  </Button>
-                )}
-              </div>
-            </div>
+    <div className="release__rewards__page">
+      <div className="release__rewards">
+        <div className="release">
+          <div
+            className="back-rew"
+            aria-hidden="true"
+            onClick={() => {
+              history.goBack();
+            }}
+          >
+            <img src={arrow} alt="back" />
+            <span>{locationState?.backButtonText}</span>
+            <h1 className="set-text">Release rewards</h1>
           </div>
-          <div className="release__finalize__auction">
-            <div className="step">
-              <div className="circle">
-                {!auctionFinalised || batchCaptureRevenueTxs.length ? (
-                  <img src={emptyMark} alt="Empty mark" />
-                ) : (
-                  <img src={doneIcon} alt="Done" />
-                )}
+          <p className="description">
+            Without this step, the auctioneer will not be able to collect his winnings and the
+            bidders will not be able to claim their NFTs
+          </p>
+          <div className="release__rewards__body">
+            <div className="release__finalize__auction">
+              <div className="step">
+                <div className="circle">
+                  {auctionFinalised ? (
+                    <img src={doneIcon} alt="Done" />
+                  ) : (
+                    <img src={emptyMark} alt="Empty mark" />
+                  )}
+                </div>
+                <div className={`line ${auctionFinalised ? 'colored' : ''}`} />
               </div>
-            </div>
-            <div className="release__auction__body">
-              <div className="capture__slot__revenue">
-                <h2>Capture slot revenue</h2>
-                <div
-                  className="show__all__slots"
-                  onMouseEnter={() => setHideInfo(true)}
-                  onMouseLeave={() => setHideInfo(false)}
-                >
-                  <p>Show all slots</p>
-                  <img src={infoIcon} alt="Info" />
-                  <label className="switch">
-                    <input
-                      type="checkbox"
-                      checked={showSlots}
-                      onChange={(e) => setShowSlots(e.target.checked)}
-                    />
-                    <span className="slider round" />
-                  </label>
-                  {hideInfo && (
-                    <div className="info-text">
-                      <p>
-                        Use this toggle if you want to pay gas fees for the specific user separately
-                      </p>
-                    </div>
+              <div className="release__auction__body">
+                <h2>Finalize auction</h2>
+                <p className="auction__description">
+                  This function will check which slots have been won, assign the winners and the bid
+                  amounts
+                </p>
+                <div className="proceed__button">
+                  {auctionFinalised ? (
+                    <Button className="light-border-button" disabled>
+                      Completed <img src={completedCheckmark} alt="completed" />
+                    </Button>
+                  ) : (
+                    <Button className="light-button" onClick={handleFinaliseAuction}>
+                      Proceed
+                    </Button>
                   )}
                 </div>
               </div>
-              <p className="auction__description">
-                Once the auction is finalized, the revenue for each slot should be captured.
-              </p>
-              {viewType}
+            </div>
+            <div className="release__finalize__auction">
+              <div className="step">
+                <div className="circle">
+                  {!auctionFinalised || batchCaptureRevenueTxs.length ? (
+                    <img src={emptyMark} alt="Empty mark" />
+                  ) : (
+                    <img src={doneIcon} alt="Done" />
+                  )}
+                </div>
+              </div>
+              <div className="release__auction__body">
+                <div className="capture__slot__revenue">
+                  <h2>Capture slot revenue</h2>
+                  <div
+                    className="show__all__slots"
+                    onMouseEnter={() => setHideInfo(true)}
+                    onMouseLeave={() => setHideInfo(false)}
+                  >
+                    <p>Show all slots</p>
+                    <img src={infoIcon} alt="Info" />
+                    <label className="switch">
+                      <input
+                        type="checkbox"
+                        checked={showSlots}
+                        onChange={(e) => setShowSlots(e.target.checked)}
+                      />
+                      <span className="slider round" />
+                    </label>
+                    {hideInfo && (
+                      <div className="info-text">
+                        <p>
+                          Use this toggle if you want to pay gas fees for the specific user
+                          separately
+                        </p>
+                      </div>
+                    )}
+                  </div>
+                </div>
+                <p className="auction__description">
+                  Once the auction is finalized, the revenue for each slot should be captured.
+                </p>
+                {viewType}
+              </div>
             </div>
           </div>
         </div>
