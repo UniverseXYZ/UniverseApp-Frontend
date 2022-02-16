@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import Button from '../../../button/Button';
-import setUpAuction from '../../../../assets/images/howItWork/setUpAuction.png';
-import myAuction from '../../../../assets/images/howItWork/myAuctions.png';
-import landingPage from '../../../../assets/images/howItWork/landingPage.png';
+import setupAuctionSettings from '../../../../assets/images/howItWork/setup-auction-settings.png';
+import setupAuctionRewardTiers from '../../../../assets/images/howItWork/setup-auction-reward-tiers.png';
+import activeAuctions from '../../../../assets/images/howItWork/active-auctions.png';
+import customizeAuction1 from '../../../../assets/images/howItWork/customize-auction1.png';
+import customizeAuction2 from '../../../../assets/images/howItWork/customize-auction2.png';
 
 const AuctionsTab = () => {
   const [isFirstAccordionOpened, setIsFirstAccordionOpened] = useState(true);
@@ -44,7 +46,14 @@ const AuctionsTab = () => {
               NFTs and Gold Tier gave you 7 song NFTs. You can do it like Justin or put different
               NFTs in every slot. It is completely customizable and up to you.
             </p>
-            <img src={setUpAuction} alt="auction" />
+            <div className="image-section">
+              <div>
+                <img src={setupAuctionSettings} alt="setupAuctionSettings" />
+              </div>
+              <div>
+                <img src={setupAuctionRewardTiers} alt="setupAuctionRewardTiers" />
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -67,7 +76,7 @@ const AuctionsTab = () => {
               had a blowout auction featuring this style. We wanted to create a user-friendly
               interface to allow anyone to easily launch a tiered-out auction.
             </p>
-            <img src={myAuction} alt="myAuction" />
+            <img src={activeAuctions} alt="myAuction" />
           </div>
         </div>
       </div>
@@ -90,7 +99,14 @@ const AuctionsTab = () => {
               auction landing page with a subdomain of your choosing. You can put your own logo,
               images, copy and we will handle all the hard coding work for you.
             </p>
-            <img src={landingPage} alt="landing" />
+            <div className="image-section">
+              <div>
+                <img src={customizeAuction1} alt="customizeAuction1" />
+              </div>
+              <div>
+                <img src={customizeAuction2} alt="customizeAuction2" />
+              </div>
+            </div>
           </div>
         </div>
       </div>
