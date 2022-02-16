@@ -31,7 +31,7 @@ const NFTs = ({ filteredNFTs }) => {
     return () => {
       document.removeEventListener('click', handleClickOutside, true);
     };
-  });
+  }, []);
 
   return (
     <div className="saved__nfts__lists">

@@ -33,7 +33,7 @@ const SocialLinks = ({
     return () => {
       document.removeEventListener('click', handleClickOutside, true);
     };
-  });
+  }, []);
 
   return (
     <div className="social--icons--wrapper">

@@ -77,7 +77,7 @@ const Header = ({ location }) => {
     return () => {
       document.removeEventListener('click', handleClickOutside, true);
     };
-  });
+  }, []);
 
   useEffect(() => {
     setShowMenu(false);

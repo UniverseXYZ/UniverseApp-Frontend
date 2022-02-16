@@ -221,7 +221,7 @@ const ApiSortingFilters = ({
     return () => {
       document.removeEventListener('click', handleClickOutside, true);
     };
-  });
+  }, []);
 
   return (
     <div className="sorting--filters--list">

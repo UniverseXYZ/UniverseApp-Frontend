@@ -29,7 +29,7 @@ const SortBySelect = (props) => {
     return () => {
       document.removeEventListener('click', handleClickOutside, true);
     };
-  });
+  }, []);
 
   return (
     <div

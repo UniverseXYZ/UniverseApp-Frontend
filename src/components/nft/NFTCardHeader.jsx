@@ -48,7 +48,7 @@ const NFTCardHeader = ({ nft, creator, owner, collection }) => {
     return () => {
       document.removeEventListener('click', handleClickOutside, true);
     };
-  });
+  }, []);
 
   const handleLikeClick = (id) => {
     const newNFTs = [...myNFTs];

@@ -248,7 +248,7 @@ const SortingFilters = ({
     return () => {
       document.removeEventListener('click', handleClickOutside, true);
     };
-  });
+  }, []);
 
   // TODO: Uncomment for marketplace
   return (

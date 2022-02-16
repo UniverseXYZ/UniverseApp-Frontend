@@ -216,7 +216,7 @@ const CollectionSortingFilters = ({
     return () => {
       document.removeEventListener('click', handleClickOutside, true);
     };
-  });
+  }, []);
   // TODO: Uncomment for marketplace
   return (
     <div className="sorting--filters--list">

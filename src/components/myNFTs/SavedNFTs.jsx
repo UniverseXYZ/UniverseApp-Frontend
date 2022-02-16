@@ -139,7 +139,7 @@ const SavedNFTs = ({
     return () => {
       document.removeEventListener('click', handleClickOutside, true);
     };
-  });
+  }, []);
 
   const handleEdit = (id) => {
     // document.body.classList.add('no__scroll');

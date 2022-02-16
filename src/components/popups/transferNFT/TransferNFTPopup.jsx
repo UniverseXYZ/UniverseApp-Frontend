@@ -55,7 +55,7 @@ const TransferNFTPopup = ({ close, nft }) => {
     return () => {
       document.removeEventListener('click', handleClickOutside, true);
     };
-  });
+  }, []);
 
   const [step, setStep] = useState(Steps.Form);
 

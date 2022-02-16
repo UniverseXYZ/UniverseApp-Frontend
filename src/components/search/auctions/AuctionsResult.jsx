@@ -28,7 +28,7 @@ const AuctionsResult = ({ query, data }) => {
     return () => {
       document.removeEventListener('click', handleClickOutside, true);
     };
-  });
+  }, []);
 
   return (
     <div className="auctions--search--result">

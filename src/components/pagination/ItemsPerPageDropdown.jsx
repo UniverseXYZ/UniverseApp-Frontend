@@ -23,7 +23,7 @@ const ItemsPerPageDropdown = ({ perPage, setPerPage, itemsPerPage, offset, page,
         true
       );
     };
-  });
+  }, []);
 
   const changePerPage = (newPerPage) => {
     const newPage = Math.floor(offset / newPerPage);
