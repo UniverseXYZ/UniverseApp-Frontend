@@ -1136,9 +1136,42 @@
       }
     }
   }
+  .display-warning {
+    display: flex;
+    padding: 20px 10px;
+    background: #fdfcf9;
+    border: 1px solid #e4b613;
+    border-radius: 12px;
+    margin-bottom: 30px;
+    p {
+      padding-left: 21px;
+      font-family: $spaceGroteskFont;
+      font-weight: 500;
+      font-size: 14px;
+      line-height: 160%;
+      color: #e4b613;
+    }
+    img {
+      align-self: flex-start;
+    }
+  }
   @include sm {
     width: 90%;
     padding: 30px;
+  }
+  .place__bid__btn .buttons {
+    display: flex;
+    justify-content: space-between;
+     @include sm {
+         flex-direction: column;
+      }
+    button {
+      flex-basis: 170px;
+       @include sm {
+          flex-basis: auto;
+          margin-bottom: 12px;
+      }
+    }
   }
 }
 .nft__popup {
