@@ -9,7 +9,7 @@ import { Fee, PostingPopup } from './compoents';
 import { fees, totalFee } from './constants';
 import { SellMethod } from '../../../enums';
 import { IFixedListingForm } from '../../../types';
-import { Tokens } from '../../../../../../../enums';
+import { TokenTicker } from '../../../../../../../enums';
 import { TokenIcon } from '../../../../../../../components';
 import { isNFTAssetAudio, isNFTAssetImage, isNFTAssetVideo } from '../../../../../../nft';
 import { NFTAssetAudio, NFTAssetImage, NFTAssetVideo } from '../../../../../../nft/pages/nft-page/components';
@@ -82,14 +82,14 @@ export const SummaryTab = () => {
     form.submitForm();
   }, [nft]);
 
-  const [price, ticker] = useMemo<[number, Tokens]>(() => {
+  const [price, ticker] = useMemo<[number, TokenTicker]>(() => {
     switch (sellMethod) {
       case SellMethod.FIXED: return [
         +(form.values as IFixedListingForm).price,
-        (form.values as IFixedListingForm).priceCurrency as Tokens, // TODO: remove as
+        (form.values as IFixedListingForm).priceCurrency as TokenTicker, // TODO: remove as
       ];
     }
-    return [0, Tokens.ETH];
+    return [0, TokenTicker.ETH];
   }, [form.values]);
 
   const totalPrice = useMemo(() => {

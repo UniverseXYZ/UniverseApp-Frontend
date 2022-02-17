@@ -26,7 +26,7 @@ import { IMarketplaceSellContextData, ISellForm } from './types';
 import { getLocationSearchObj, sign } from '../../../../helpers';
 import { useAuthContext } from '../../../../../contexts/AuthContext';
 import { TOKENS_MAP } from '../../../../constants';
-import { Tokens } from '../../../../enums';
+import { TokenTicker } from '../../../../enums';
 import { GetNFTApi } from '../../../nft/api';
 import { INFT } from '../../../nft/types';
 
@@ -120,7 +120,7 @@ export const SellPage = () => {
           },
           value: utils.parseUnits(
             `${values.price}`,
-            `${TOKENS_MAP[values.priceCurrency as Tokens].decimals}`
+            `${TOKENS_MAP[values.priceCurrency as TokenTicker].decimals}`
           ).toString(),
         },
         salt: 1,

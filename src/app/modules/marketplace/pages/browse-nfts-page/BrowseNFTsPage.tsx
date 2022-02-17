@@ -1,9 +1,11 @@
 import { Box, Button, Container, Flex, Heading, Link, SimpleGrid, Text } from '@chakra-ui/react';
 import { useFormik } from 'formik';
 import React, { useCallback, useRef, useState } from 'react';
-import { useInfiniteQuery, useMutation } from 'react-query';
+import { useInfiniteQuery } from 'react-query';
 import axios from 'axios';
 import { utils } from 'ethers';
+
+import BrowseNFTsIntroImage from './../../../../../assets/images/marketplace/v2/browse_nfts_intro.png';
 
 import {
   ArtistsFilter,
@@ -18,17 +20,14 @@ import {
 } from '../../components';
 import { SortNftsOptions } from '../../constants';
 import { BackToTopButton, Select } from '../../../../components';
-import { NftItem } from '../../../nft/components';
+import { NftItem, NFTItemContentWithPrice } from '../../../nft/components';
 import { IERC721AssetType, IERC721BundleAssetType, INFT, IOrder, IOrderBackend } from '../../../nft/types';
 import { useStickyHeader2 } from '../../../../hooks';
 import { coins } from '../../../../mocks';
 import { mapBackendOrder } from '../../../nft';
 import { ORDERS_PER_PAGE } from './constants';
 import { GetNFTApi } from '../../../nft/api';
-
-import BrowseNFTsIntroImage from './../../../../../assets/images/marketplace/v2/browse_nfts_intro.png';
-import { NFTItemContentWithPrice } from '../../../nft/components/nft-item/components';
-import { Tokens } from '../../../../enums';
+import { TokenTicker } from '../../../../enums';
 import { TOKENS_MAP } from '../../../../constants';
 
 export const BrowseNFTsPage = () => {
@@ -73,123 +72,6 @@ export const BrowseNFTsPage = () => {
     initialValues: [],
     onSubmit: () => {},
   });
-
-  const getNFTsDataMutation = useMutation((data: any) => {
-    return axios.post(`${process.env.REACT_APP_API_BASE_URL}/api/pages/nft`, data);
-  });
-
-  // const { data: ordersResult } = useQuery(['browse-nfts:orders', ordersPage], async () => {
-  //   const [data, total] = (await axios.get<[IOrderBackend[], number]>(
-  //     `${process.env.REACT_APP_MARKETPLACE_BACKEND}/v1/orders`,
-  //     {
-  //       params: {
-  //         page: ordersPage
-  //       }
-  //     }
-  //   )).data;
-  //
-  //   const orders = data.map((order) => mapBackendOrder(order));
-  //
-  //   // V1 --------------------------------------------------------------------------------------------------------------
-  //
-  //   // const NFTsRequestBody: Array<{ collection: string; tokenIds: number[]; }> = [];
-  //   //
-  //   // for (const order of orders) {
-  //   //   switch (order.make.assetType.assetClass) {
-  //   //     case 'ERC721':
-  //   //       NFTsRequestBody.push({
-  //   //         collection: order.make.assetType.contract ?? '',
-  //   //         tokenIds: [Number(order.make.assetType.tokenId)],
-  //   //       });
-  //   //       break;
-  //   //     case 'ERC721_BUNDLE':
-  //   //       order.make.assetType.contracts = order.make.assetType.contracts || [];
-  //   //       order.make.assetType.tokenIds = order.make.assetType.tokenIds || [];
-  //   //       for (let i = 0; i < order.make.assetType.contracts.length; i++) {
-  //   //         NFTsRequestBody.push({
-  //   //           collection: order.make.assetType.contracts[i],
-  //   //           tokenIds: order.make.assetType.tokenIds[i].map(Number),
-  //   //         });
-  //   //       }
-  //   //       break;
-  //   //   }
-  //   // }
-  //   //
-  //   // const NFTsData = (await getNFTsDataMutation.mutateAsync((NFTsRequestBody))).data;
-  //
-  //   // console.log('NFTsData', NFTsData);
-  //
-  //   // V2 --------------------------------------------------------------------------------------------------------------
-  //
-  //   const NFTsRequests: Array<any> = [];
-  //
-  //   for (const order of orders) {
-  //     switch (order.make.assetType.assetClass) {
-  //       case 'ERC721':
-  //         const assetType = order.make.assetType as IERC721AssetType;
-  //         NFTsRequests.push(GetNFTApi(assetType.contract, assetType.tokenId))
-  //         break;
-  //       case 'ERC721_BUNDLE':
-  //         const assetTypeBundle = order.make.assetType as IERC721BundleAssetType;
-  //         for (let i = 0; i < assetTypeBundle.contracts.length; i++) {
-  //           for (const tokenId of assetTypeBundle.tokenIds[i]) {
-  //             NFTsRequests.push(GetNFTApi(assetTypeBundle.contracts[i], tokenId))
-  //           }
-  //         }
-  //         break;
-  //     }
-  //   }
-  //
-  //   const NFTsMap = (await (Promise.allSettled(NFTsRequests))).reduce<Record<string, INFT>>((acc, response) => {
-  //     if (response.status !== 'fulfilled') {
-  //       return acc;
-  //     }
-  //
-  //     const NFT: INFT = response.value;
-  //
-  //     const key = `${NFT.collection?.address}:${NFT.tokenId}`;
-  //
-  //     acc[key] = NFT;
-  //
-  //     return acc;
-  //   }, {});
-  //
-  //   const result = orders.reduce<Array<{ order: IOrder; NFTs: INFT[]; }>>((acc, order) => {
-  //     const NFTsMapKeys = Object.keys(NFTsMap);
-  //
-  //     switch (order.make.assetType.assetClass) {
-  //       case 'ERC721':
-  //         const assetType = order.make.assetType as IERC721AssetType;
-  //         if (NFTsMapKeys.includes(`${assetType.contract}:${assetType.tokenId}`)) {
-  //           acc.push({ order, NFTs: [NFTsMap[`${assetType.contract}:${assetType.tokenId}`]] })
-  //         }
-  //         break;
-  //       case 'ERC721_BUNDLE':
-  //         const assetTypeBundle = order.make.assetType as IERC721BundleAssetType;
-  //         const NFTs = [];
-  //
-  //         for (let i = 0; i < assetTypeBundle.contracts.length; i++) {
-  //           for (const tokenId of assetTypeBundle.tokenIds[i]) {
-  //             NFTs.push(NFTsMap[`${assetTypeBundle.contracts[i]}:${tokenId}`]);
-  //           }
-  //         }
-  //
-  //         acc.push({ order, NFTs });
-  //
-  //         break;
-  //     }
-  //
-  //     return acc;
-  //   }, []);
-  //
-  //   return { total, data: result };
-  // }, {
-  //   retry: false,
-  //   keepPreviousData: true,
-  //   onSuccess: (result) => {
-  //     console.log('onSuccess 2:', result);
-  //   }
-  // });
 
   const { data: ordersResult, fetchNextPage, hasNextPage, isFetching } = useInfiniteQuery('browse-nfts:orders', async ({ pageParam = 1 }) => {
     const [data, total] = (await axios.get<[IOrderBackend[], number]>(
@@ -411,8 +293,8 @@ export const BrowseNFTsPage = () => {
                         creator={NFTs[0].creator}
                         collection={NFTs[0].collection}
                         owner={NFTs[0].owner}
-                        price={+utils.formatUnits(order.take.value, `${TOKENS_MAP[order.take.assetType.assetClass as Tokens].decimals}`)}
-                        priceToken={order.take.assetType.assetClass as Tokens}
+                        price={+utils.formatUnits(order.take.value, `${TOKENS_MAP[order.take.assetType.assetClass as TokenTicker].decimals}`)}
+                        priceToken={order.take.assetType.assetClass as TokenTicker}
                       />
                     )}
                   />

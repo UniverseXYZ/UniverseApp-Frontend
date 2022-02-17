@@ -35,7 +35,7 @@ import { Checkbox, Loading, TokenIcon } from '../../../../../../components';
 import { ETH_USD_RATE } from '../../../../../../mocks';
 import { IOrder } from '../../../../types';
 import { useAuthContext } from '../../../../../../../contexts/AuthContext';
-import { Tokens } from '../../../../../../enums';
+import { TokenTicker } from '../../../../../../enums';
 import { sign } from '../../../../../../helpers';
 
 import ArrowIcon from '../../../../../../../assets/images/arrow-down.svg';

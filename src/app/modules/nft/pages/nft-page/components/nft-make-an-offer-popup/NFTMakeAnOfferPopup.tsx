@@ -34,7 +34,7 @@ import { TOKENS, TOKENS_MAP } from '../../../../../../constants';
 import { Checkbox, DateTimePicker, Loading, TokenIcon } from '../../../../../../components';
 import { ETH_USD_RATE } from '../../../../../../mocks';
 import { IOrder } from '../../../../types';
-import { Tokens } from '../../../../../../enums';
+import { TokenTicker } from '../../../../../../enums';
 import { useAuthContext } from '../../../../../../../contexts/AuthContext';
 import { sign } from '../../../../../../helpers';
 
@@ -82,7 +82,7 @@ export const NFTMakeAnOfferPopup = ({ order, isOpen, onClose, }: INFTMakeAnOffer
     return axios.get(`${process.env.REACT_APP_MARKETPLACE_BACKEND}/v1/orders/salt/${address}`);
   });
 
-  const formik = useFormik<{ amount: string; token: Tokens, expireAt: Date | null; }>({
+  const formik = useFormik<{ amount: string; token: TokenTicker, expireAt: Date | null; }>({
     initialValues: {
       amount: '',
       token: TOKENS_MAP.WETH.ticker,
@@ -107,7 +107,7 @@ export const NFTMakeAnOfferPopup = ({ order, isOpen, onClose, }: INFTMakeAnOffer
           },
           value: utils.parseUnits(
             `${value.amount}`,
-            `${TOKENS_MAP[value.token as Tokens].decimals}`
+            `${TOKENS_MAP[value.token as TokenTicker].decimals}`
           ).toString(),
         },
         take: order?.make,

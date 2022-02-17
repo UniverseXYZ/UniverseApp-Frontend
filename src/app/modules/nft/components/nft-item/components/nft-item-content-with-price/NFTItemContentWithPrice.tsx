@@ -4,7 +4,7 @@ import React, { useMemo } from 'react';
 import { NFTItemRelation } from '../nft-item-relation';
 import { NFTRelationType } from '../../../../enums';
 import { ICollection, IUser } from '../../../../types';
-import { Tokens } from '../../../../../../enums';
+import { TokenTicker } from '../../../../../../enums';
 import { TokenIcon } from '../../../../../../components';
 import { TOKENS_MAP } from '../../../../../../constants';
 
@@ -14,11 +14,11 @@ export interface INFTItemContentWithPriceProps {
   collection?: ICollection;
   owner?: IUser;
   price: number;
-  priceToken: Tokens;
+  priceToken: TokenTicker;
   offerPrice?: number | string;
-  offerPriceToken?: Tokens;
+  offerPriceToken?: TokenTicker;
   lastPrice?: number | string;
-  lastPriceToken?: Tokens;
+  lastPriceToken?: TokenTicker;
 }
 
 export const NFTItemContentWithPrice = (
