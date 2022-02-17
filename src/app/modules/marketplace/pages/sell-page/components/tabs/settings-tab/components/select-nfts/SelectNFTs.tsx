@@ -27,7 +27,7 @@ import closeWhiteIcon from '../../../../../../../../../../assets/images/marketpl
 import { SortNftsOptions } from '../../../../../../../constants';
 import { InputShadow, Select } from '../../../../../../../../../components';
 import { NftItem } from '../../../../../../../../nft/components';
-import { INft } from '../../../../../../../../nft/types';
+import { INFT, INft } from '../../../../../../../../nft/types';
 import { SelectEditionsDropdown } from '../../../../select-editions-dropdown';
 import { useMarketplaceSellData } from '../../../../../hooks';
 import { useStickyFooter } from '../../../../../../../../../hooks';
@@ -316,7 +316,8 @@ export const SelectNFTs = ({}: ISelectNFTsProps) => {
             return (
               <NftItem
                 key={nft.id}
-                nft={nft as INft}
+                // @ts-ignore
+                nft={nft as INFT}
                 isSelected={!!selectedEditions.length}
                 selectedLabel={isMultipleEditions ? `${selectedEditions.length} / ${tokensNumber}` : undefined}
                 renderNFTAdditions={isMultipleEditions
@@ -328,7 +329,8 @@ export const SelectNFTs = ({}: ISelectNFTsProps) => {
                     />
                   )
                   : (
-                    <NFTItemEditionsLabel nft={nft as INft} mr={'6px'}>
+                    // @ts-ignore
+                    <NFTItemEditionsLabel nft={nft as INFT} mr={'6px'}>
                       {nft.tokenIds ? `#${nft.tokenIds[0]}` : ''}
                     </NFTItemEditionsLabel>)
                 }

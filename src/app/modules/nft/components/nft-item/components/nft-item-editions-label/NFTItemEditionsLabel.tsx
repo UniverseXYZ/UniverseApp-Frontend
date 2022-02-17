@@ -1,7 +1,7 @@
 import { Box, BoxProps, Text } from '@chakra-ui/react';
 import React from 'react';
 
-import { INft } from '../../../../types';
+import { INFT } from '../../../../types';
 
 const styles: BoxProps = {
   bg: 'rgba(0, 0, 0, 0.05)',
@@ -13,7 +13,7 @@ const styles: BoxProps = {
 }
 
 interface INFTItemEditionsLabelProps extends BoxProps {
-  nft: INft;
+  nft: INFT;
 }
 
 export const NFTItemEditionsLabel = ({ nft, children, ...rest }: INFTItemEditionsLabelProps) => {

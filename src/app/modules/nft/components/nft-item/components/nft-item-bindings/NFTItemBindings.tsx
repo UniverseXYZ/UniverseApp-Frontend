@@ -1,22 +1,11 @@
 import { Avatar, Box, BoxProps, Tooltip, TooltipProps } from '@chakra-ui/react';
 import React, { useMemo } from 'react';
+import { ICollection, IUser } from '../../../../types';
 
-// TODO: describe interface by real type
 interface INFTItemBindingsProps {
-  creator?: {
-    displayName: string;
-    profileImageUrl: string;
-  },
-  collection?: {
-    name: string;
-    coverUrl: string;
-  },
-  owner?: {
-    displayName: string;
-    profileImageUrl: string;
-    name?: string;
-    avatar?: string;
-  },
+  creator?: IUser;
+  collection?: ICollection;
+  owner?: IUser;
   wrapperProps?: BoxProps;
   tooltipProps?: TooltipProps;
 }
@@ -42,8 +31,8 @@ export const NFTItemBindings = ({ creator, collection, owner, wrapperProps, tool
     if (owner) {
       avatars.push({
         name: 'Owner',
-        value: owner.name || owner.displayName,
-        img: owner.avatar || owner.profileImageUrl,
+        value: owner.displayName,
+        img: owner.profileImageUrl,
       });
     }
 

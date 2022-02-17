@@ -9,7 +9,7 @@ import 'swiper/swiper.min.css';
 
 import arrowLeftIcon from '../../../../../../../assets/images/marketplace/bundles-left-arrow.svg';
 import arrowRightIcon from '../../../../../../../assets/images/marketplace/bundles-right-arrow.svg';
-import { INft } from '../../../../types';
+import { INFT } from '../../../../types';
 
 type IUseStyles = (width?: number | string) => {
   image: ImageProps;
@@ -62,7 +62,7 @@ const useStyles: IUseStyles = (width: string | number = 200) => {
 };
 
 interface INFTItemAssetProps {
-  nft: INft;
+  nft: INFT;
   showSwiper?: boolean;
   showSwiperPagination?: boolean;
 }
@@ -72,29 +72,35 @@ export const NFTItemAsset = ({ nft, showSwiper = true, showSwiperPagination = tr
 
   const styles = useStyles(width);
 
+  // return (
+  //   showSwiper && nft.assets ? (
+  //     <Box ref={ref} sx={styles.swiper}>
+  //       <Swiper
+  //         modules={[Navigation, Pagination]}
+  //         navigation={true}
+  //         pagination={showSwiperPagination && {
+  //           dynamicBullets: true,
+  //           clickable: true,
+  //         }}
+  //         loop={true}
+  //       >
+  //         {[nft.thumbnailUrl, ...nft.assets].map((asset, i) => (
+  //           <SwiperSlide key={i}>
+  //             <Image src={asset} alt={nft.name} {...styles.image} />
+  //           </SwiperSlide>
+  //         ))}
+  //       </Swiper>
+  //     </Box>
+  //   ) : (
+  //     <Box ref={ref}>
+  //       <Image src={nft.thumbnailUrl} alt={nft.name} {...styles.image} />
+  //     </Box>
+  //   )
+  // );
+
   return (
-    showSwiper && nft.assets ? (
-      <Box ref={ref} sx={styles.swiper}>
-        <Swiper
-          modules={[Navigation, Pagination]}
-          navigation={true}
-          pagination={showSwiperPagination && {
-            dynamicBullets: true,
-            clickable: true,
-          }}
-          loop={true}
-        >
-          {[nft.thumbnail_url, ...nft.assets].map((asset, i) => (
-            <SwiperSlide key={i}>
-              <Image src={asset} alt={nft.name} {...styles.image} />
-            </SwiperSlide>
-          ))}
-        </Swiper>
-      </Box>
-    ) : (
-      <Box ref={ref}>
-        <Image src={nft.thumbnail_url} alt={nft.name} {...styles.image} />
-      </Box>
-    )
+    <Box ref={ref}>
+      <Image src={nft.thumbnailUrl} alt={nft.name} {...styles.image} />
+    </Box>
   );
 };

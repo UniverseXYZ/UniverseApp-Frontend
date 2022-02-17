@@ -1,12 +1,16 @@
 import { Box, BoxProps, Text } from '@chakra-ui/react';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 
-import { INft } from '../../types';
+import { INFT, NFTArtworkType } from '../../types';
 import {
+  NFTItemAsset,
   NFTItemAssetAudioLabel,
   NFTItemAssetVideoLabel,
-  NFTItemAsset,
-  NFTItemAuctionTimer, NFTItemFooter, NFTItemPrice, NFTItemPriceInfo, NFTItemBindings,
+  NFTItemAuctionTimer,
+  NFTItemBindings,
+  NFTItemFooter,
+  NFTItemPrice,
+  NFTItemPriceInfo,
 } from './components';
 import { ItemWrapper } from '../../../../components';
 
@@ -56,7 +60,7 @@ const styles: IStyles = {
 };
 
 interface INftItemProps {
-  nft: INft;
+  nft: INFT;
   isSelected?: boolean;
   selectedLabel?: string;
 
@@ -73,7 +77,7 @@ interface INftItemProps {
   showAssetTypeLabels?: boolean;
   assetLabelContainerProps?: BoxProps;
 
-  onClick?: (nft: INft) => void;
+  onClick?: (nft: INFT) => void;
   onAuctionTimeOut?: () => void;
 }
 
@@ -107,13 +111,17 @@ export const NftItem = (
     onAuctionTimeOut && onAuctionTimeOut();
   }, [onAuctionTimeOut]);
 
-  useEffect(() => {
-    setShowAuctionTimer(nft.auctionExpDate && renderAuctionTime !== null);
-  }, [nft.auctionExpDate, renderAuctionTime]);
+  // TODO: auction
+  // useEffect(() => {
+  //   setShowAuctionTimer(nft.auctionExpDate && renderAuctionTime !== null);
+  // }, [nft.auctionExpDate, renderAuctionTime]);
+
+  const isAudio = false; // TODO: nft.artworkType === NFTArtworkType.MP3;
+  const isVideo = false; // TODO: nft.artworkType === NFTArtworkType.MP4;
 
   return (
     <ItemWrapper
-      isBundle={nft.tokenIds.length > 1}
+      isBundle={nft.numberOfEditions > 1}
       isSelected={isSelected}
       selectedLabel={selectedLabel}
       onClick={(e: React.MouseEvent<HTMLElement>) => {
@@ -133,34 +141,39 @@ export const NftItem = (
 
         <Box {...styles.assetLabelContainer} {...assetLabelContainerProps}>
           {renderAssetLabel || renderAssetLabel === null ? renderAssetLabel : (
-            <>
-              {showAssetTypeLabels && nft.isAudio && (<NFTItemAssetAudioLabel />)}
-              {showAssetTypeLabels && nft.isVideo && (<NFTItemAssetVideoLabel />)}
-            </>
+            showAssetTypeLabels && (
+              <>
+                {isAudio && (<NFTItemAssetAudioLabel />)}
+                {isVideo && (<NFTItemAssetVideoLabel />)}
+              </>
+            )
           )}
         </Box>
 
-        {showAuctionTimer && (
-          renderAuctionTime ? renderAuctionTime : (
-            <NFTItemAuctionTimer expDate={nft.auctionExpDate} onAuctionTimeOut={handleAuctionTimeOut}  />
-          )
-        )}
+        {/*TODO: auction*/}
+        {/*{showAuctionTimer && (*/}
+        {/*  renderAuctionTime ? renderAuctionTime : (*/}
+        {/*    <NFTItemAuctionTimer expDate={nft.auctionExpDate} onAuctionTimeOut={handleAuctionTimeOut}  />*/}
+        {/*  )*/}
+        {/*)}*/}
       </Box>
       <Box {...styles.NFTContent}>
         {renderContent || renderContent === null ? renderContent : (
           <>
             <Box {...styles.firstContentRow}>
               {renderNFTName || renderNFTName === null ? renderNFTName : <Text>{nft.name}</Text>}
-              {renderNFTPrice || renderNFTPrice === null ? renderNFTPrice : (nft.price && (
-                <NFTItemPrice price={nft.price} />
-              ))}
+              {/*TODO: provide price*/}
+              {/*{renderNFTPrice || renderNFTPrice === null ? renderNFTPrice : (nft.price && (*/}
+              {/*  <NFTItemPrice price={nft.price} />*/}
+              {/*))}*/}
             </Box>
 
             <Box {...styles.secondContentRow}>
               <NFTItemBindings creator={nft.creator} collection={nft.collection} owner={nft.owner} />
-              {renderNFTPriceInfo || renderNFTPriceInfo === null ? renderNFTPriceInfo : (
-                <NFTItemPriceInfo offerPrice={nft.offerPrice} lastPrice={nft.lastPrice} />
-              )}
+              {/*TODO: provide offer price*/}
+              {/*{renderNFTPriceInfo || renderNFTPriceInfo === null ? renderNFTPriceInfo : (*/}
+              {/*  <NFTItemPriceInfo offerPrice={nft.offerPrice} lastPrice={nft.lastPrice} />*/}
+              {/*)}*/}
             </Box>
           </>
         )}

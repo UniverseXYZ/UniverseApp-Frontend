@@ -1,25 +1,17 @@
 import React, { createContext, useContext } from 'react';
 import { useQuery } from 'react-query';
 import axios from 'axios';
-import { getNftData } from '../../../../../utils/api/mintNFT';
+
+import { INFT, IOrder, IOrderBackend, IUser } from '../../types';
+import { GetNFTApi } from '../../api';
+import { mapBackendOrder } from '../../helpers';
 
 export interface IBundlePageContext {
   isLoading: boolean;
-  order: any;
-  NFTs: any[];
-  owner: {
-    about: string;
-    address: string;
-    createdAt: string;
-    displayName: string;
-    id: number;
-    instagramUser: string;
-    logoImageUrl: string;
-    profileImageUrl: string;
-    twitterUser: string;
-    universePageUrl: string;
-  };
-  moreFromCollection: any[];
+  order: IOrder;
+  NFTs: INFT[];
+  owner: IUser;
+  moreFromCollection?: INFT[];
 }
 
 const BundlePageContext = createContext<IBundlePageContext>({} as IBundlePageContext);
@@ -33,32 +25,47 @@ export interface IBundlePageProviderProps {
 
 export const BundlePageProvider = ({ hash, children }: IBundlePageProviderProps) => {
 
-  const { data, isLoading } = useQuery(['bundle', hash], async () => {
-    const order = (await axios.get(`${process.env.REACT_APP_MARKETPLACE_BACKEND}/v1/orders/${hash}`)).data;
+  const { data, isLoading } = useQuery<{ order: IOrder, NFTs: INFT[] }>(['bundle', hash], async () => {
+    const orderResponse = await axios.get<IOrderBackend>(`${process.env.REACT_APP_MARKETPLACE_BACKEND}/v1/orders/${hash}`);
+
+    const order = mapBackendOrder(orderResponse.data);
 
     const NFTsPromises = [];
 
-    for (const contractIdx in order.make.assetType.contracts) {
-      for (const tokenId of order.make.assetType.tokenIds[contractIdx]) {
-        NFTsPromises.push(getNftData(order.make.assetType.contracts[contractIdx], tokenId));
-      }
+    switch (order.make.assetType.assetClass) {
+      case 'ERC721':
+        NFTsPromises.push(GetNFTApi(order.make.assetType.contract as string, order.make.assetType.tokenId as string));
+        break;
+      case 'ERC721_BUNDLE':
+        for (let i = 0; i < (order.make.assetType.contracts?.length ?? 0); i++) {
+          if (order.make.assetType.tokenIds?.length) {
+            for (const tokenId of order.make.assetType.tokenIds[i]) {
+              if (order.make.assetType.contracts?.length) {
+                NFTsPromises.push(GetNFTApi(order.make.assetType.contracts[i], tokenId));
+              }
+            }
+          }
+        }
+        break;
     }
 
     const NFTs = await Promise.all(NFTsPromises);
 
     return { order, NFTs };
-    // return (await axios.get(`${process.env.REACT_APP_MARKETPLACE_BACKEND}/v1/orders/${hash}`)).data;
   });
 
-  const owner = data?.NFTs[0].owner;
-  const moreFromCollection = data?.NFTs[0].moreFromCollection;
+  const owner = data?.NFTs[0].owner as IUser;
+  const moreFromCollection = data?.NFTs[0].moreFromCollection?.map((NFT) => {
+    NFT.collection = data?.NFTs[0].collection;
+    return NFT;
+  });
 
   const value: IBundlePageContext = {
     isLoading,
     owner,
     moreFromCollection,
-    order: data?.order,
-    NFTs: data?.NFTs as IBundlePageContext['NFTs'],
+    order: data?.order as IOrder,
+    NFTs: data?.NFTs as INFT[],
   };
 
   return (

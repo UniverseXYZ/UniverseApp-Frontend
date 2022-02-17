@@ -17,7 +17,7 @@ import {
 import { SortNftsOptions } from '../../constants';
 import { BackToTopButton, Select } from '../../../../components';
 import { NftItem } from '../../../nft/components';
-import { INft } from '../../../nft/types';
+import { INFT, INft } from '../../../nft/types';
 import { Nfts } from '../../mocks/nfts';
 import { useStickyHeader, useStickyHeader2 } from '../../../../hooks';
 import { coins } from '../../../../mocks';
@@ -206,7 +206,8 @@ export const BrowseNFTsPage = () => {
               return (
                 <NftItem
                   key={nft.id}
-                  nft={nft as INft}
+                  // @ts-ignore
+                  nft={nft as INFT}
                   onAuctionTimeOut={() => handleNFTAuctionTimeOut(i)}
                 />
               );

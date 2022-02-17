@@ -1,4 +1,5 @@
 import { INFT, INFTBackend } from '../types';
+import { mapBackendUser } from './map-backend-user';
 
 export function mapBackendNft(
   {
@@ -7,6 +8,8 @@ export function mapBackendNft(
     thumbnail_url,
     createdAt,
     updatedAt,
+    creator,
+    owner,
     ...NFT
   }: INFTBackend
 ): INFT {
@@ -17,5 +20,13 @@ export function mapBackendNft(
     thumbnailUrl: thumbnail_url,
     createdAt: new Date(createdAt),
     updatedAt: new Date(updatedAt),
+    creator: typeof creator === 'object' ? mapBackendUser(creator) : {
+      address: creator,
+      displayName: creator,
+    },
+    owner: typeof owner === 'object' ? mapBackendUser(owner) : {
+      address: owner,
+      displayName: owner,
+    },
   };
 }
