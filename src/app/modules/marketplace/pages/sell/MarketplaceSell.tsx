@@ -43,6 +43,8 @@ export const MarketplaceSell = () => {
       isScheduledForFutureTime: false,
       futureDate: '',
       buyerAddress: '',
+      minimumBid: '',
+      reservePrice: '',
     },
     onSubmit: values => {
       alert(JSON.stringify(values, null, 2));
