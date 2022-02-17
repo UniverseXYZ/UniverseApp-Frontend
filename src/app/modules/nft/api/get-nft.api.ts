@@ -12,7 +12,7 @@ interface IGetNFTResponse {
   tokenIds: string[];
 }
 
-export const GetNFTApi = async (collectionAddress: string, tokenId: string) => {
+export const GetNFTApi = async (collectionAddress: string, tokenId: string | number) => {
   const url = `${process.env.REACT_APP_API_BASE_URL}/api/pages/nft/${collectionAddress}/${tokenId}`;
 
   const { data } = await axios.get<IGetNFTResponse>(url);

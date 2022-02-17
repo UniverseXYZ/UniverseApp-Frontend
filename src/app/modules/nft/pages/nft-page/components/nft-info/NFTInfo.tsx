@@ -11,8 +11,10 @@ import {
   TabPanels,
   Tabs,
   Text,
+  TextProps,
+  LinkProps,
 } from '@chakra-ui/react';
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import ReadMoreAndLess from 'react-read-more-less';
 import { UseMeasureRect } from 'react-use/lib/useMeasure';
 import { useHistory } from 'react-router-dom';
@@ -27,8 +29,9 @@ import { TabBids, TabHistory, TabMetadata, TabOffers, TabOwners, TabProperties }
 import { CollectionPageLoader } from '../../../../../../../containers/collection/CollectionPageLoader';
 import NotFound from '../../../../../../../components/notFound/NotFound';
 import * as styles from '../../styles';
+import * as styles2 from './styles';
 import { NFTLike } from '../../../../components/nft-item/components';
-import { NFTTransferPopup } from '../nft-transfer-popup/NFTTransferPopup';
+import { NFTTransferPopup } from '../nft-transfer-popup';
 
 // TODO: hide metadata tab for not Polymorph NFT type
 export const NFTInfo = () => {
@@ -45,10 +48,20 @@ export const NFTInfo = () => {
     }
   }, [NFT?.moreFromCollection]);
 
+  const editions = useMemo<string[]>(() => NFT?.tokenIds ?? [], [NFT]);
+
+  const editionNumber = useMemo(() => {
+    return editions.findIndex((edition) => edition === NFT.tokenId) + 1;
+  }, [editions]);
+
   const showMetadata = [
     process.env.REACT_APP_POLYMORPHS_CONTRACT_ADDRESS,
     process.env.REACT_APP_LOBSTERS_CONTRACT_ADDRESS
   ].includes(NFT?.collection?.address ?? '');
+
+  useEffect(() => {
+    console.log('order', order);
+  }, [order]);
 
   return (
     <>
@@ -93,40 +106,16 @@ export const NFTInfo = () => {
                     </Box>
                   </Flex>
 
-                  <Text
-                    sx={{
-                      color: 'rgba(0, 0, 0, 0.6)',
-                      fontSize: '14px',
-                      fontWeight: 500,
-                      mb: '30px',
-                    }}
-                  >
+                  <Text {...styles2.EditionTextStyle}>
                     Edition&nbsp;
-                    {`${NFT.tokenIds ? NFT.tokenIds.length : 1}/${NFT.numberOfEditions || (NFT.tokenIds || [NFT.tokenId]).length}`}
+                    {`${editionNumber}/${NFT.numberOfEditions || editions.length}`}
                   </Text>
 
                   <Flex mb={'24px'}>
                     {/*TODO: improve section in favor to NFTPageRelation */}
                     {Bindings.map((binding, i) => !binding.getValue(NFT) ? null : (
-                      <Link key={i} href={binding.getLink(NFT)} sx={{
-                        _hover: {
-                          textDecoration: 'none !important',
-                          'div p:nth-of-type(2)': {
-                            textDecoration: 'underline',
-                          }
-                        },
-                        _notLast: {
-                          '> div > div': {
-                            _last: {
-                              pr: '20px'
-                            }
-                          },
-                        },
-                      }}>
-                        <Flex sx={{
-                          alignItems: 'center',
-                          flex: 1,
-                        }}>
+                      <Link key={i} href={binding.getLink(NFT)} {...styles2.BindingStyle}>
+                        <Flex alignItems={'center'} flex={1}>
                           {binding.getImage(NFT)}
                           <Box fontSize={'12px'} ml={'10px'} w={'110px'}>
                             <Text color={'rgba(0, 0, 0, 0.4)'} fontWeight={500}>{binding.name}</Text>

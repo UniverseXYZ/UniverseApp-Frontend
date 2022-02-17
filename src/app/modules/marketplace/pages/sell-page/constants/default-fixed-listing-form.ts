@@ -6,6 +6,8 @@ export const defaultFixedListingForm: IFixedListingForm = {
   bundleSelectedNFTs: [],
   price: '',
   priceCurrency: 'ETH',
+  startDate: null,
+  endDate: null,
   isPrivacy: false,
   buyerAddress: '',
 };

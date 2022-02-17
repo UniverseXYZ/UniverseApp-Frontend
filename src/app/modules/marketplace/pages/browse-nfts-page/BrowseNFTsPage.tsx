@@ -266,6 +266,7 @@ export const BrowseNFTsPage = () => {
                   || artistsFilterForm.dirty
                 ) && (
                   <Link onClick={handleClear} sx={{
+                    fontSize: '14px',
                     fontWeight: 500,
                     textDecoration: 'underline',
                     _hover: {

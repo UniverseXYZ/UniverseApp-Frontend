@@ -39,5 +39,8 @@ export const Popover = {
         },
       },
     },
+  },
+  defaultProps: {
+    variant: 'dropdown',
   }
 };

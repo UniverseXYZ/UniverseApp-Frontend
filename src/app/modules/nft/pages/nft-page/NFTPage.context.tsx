@@ -1,9 +1,8 @@
-import { FC, createContext, useContext, useEffect } from 'react';
+import { FC, createContext, useContext } from 'react';
 import { useQuery } from 'react-query';
 import { useParams } from 'react-router-dom';
 
 import { IERC721AssetType, INFT, IOrder } from '../../types';
-import { getNftData } from '../../../../../utils/api/mintNFT';
 import { GetNFTApi, GetOrdersApi } from '../../api';
 import { OrderAssetClass } from '../../enums';
 
@@ -39,7 +38,7 @@ const NFTPageProvider: FC = ({ children }) => {
     // TODO: remove in favor to passing param tokenId to request
     return orders.find((order) => {
       const assetType = order.make.assetType as IERC721AssetType;
-      return assetType.contract === collectionAddress && assetType.tokenId === tokenId && !order.cancelledTxHash;
+      return assetType.contract === collectionAddress && +assetType.tokenId === +tokenId && !order.cancelledTxHash;
     });
   }, { enabled: !!NFT?.id });
 

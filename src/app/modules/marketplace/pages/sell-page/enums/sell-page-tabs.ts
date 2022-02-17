@@ -1,6 +1,5 @@
 export enum SellPageTabs {
-  SELL_AMOUNT = 0,
-  SELL_METHOD = 1,
-  SETTINGS = 2,
-  SUMMARY = 3,
+  SELL_METHOD = 0,
+  SETTINGS = 1,
+  SUMMARY = 2,
 }

@@ -3,13 +3,13 @@ import { OrderAssetClass } from '../enums';
 export interface IERC721AssetType {
   assetClass: OrderAssetClass.ERC721;
   contract: string;
-  tokenId: string;
+  tokenId: number;
 }
 
 export interface IERC721BundleAssetType {
   assetClass: OrderAssetClass.ERC721_BUNDLE;
   contracts: string[];
-  tokenIds: Array<Array<string>>;
+  tokenIds: Array<Array<number>>;
   bundleName: string;
   bundleDescription: string;
 }
@@ -24,7 +24,7 @@ export interface IOrder {
       value: number;
     }>;
   };
-  end: string;
+  end: number;
   fill: string;
   hash: string;
   id: string;
@@ -36,10 +36,10 @@ export interface IOrder {
   makeStock: string;
   maker: string;
   matchedTxHash: null | string;
-  salt: string;
+  salt: number;
   side: number;
   signature: string;
-  start: string;
+  start: number;
   status: number;
   take: {
     assetType: {
@@ -52,7 +52,13 @@ export interface IOrder {
   updatedAt: Date;
 }
 
-export interface IOrderBackend extends Omit<IOrder, 'createdAt' | 'updatedAt'> {
+export interface IOrderBackend extends
+  Omit<IOrder,
+    'salt' | 'start' | 'end' | 'createdAt' | 'updatedAt'
+    > {
+  salt: string;
+  start: string;
+  end: string;
   createdAt: string;
   updatedAt: string;
 }

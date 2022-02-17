@@ -3,12 +3,13 @@ import axios from 'axios';
 import { utils } from 'ethers';
 import { useFormik } from 'formik';
 import React, { useCallback, useEffect, useState } from 'react';
-import { useHistory, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { useMutation, useQuery } from 'react-query';
 import * as Yup from 'yup';
 
 import bg from '../../../../../assets/images/marketplace/v2/bg.png';
 import arrow from '../../../../../assets/images/arrow.svg';
+import BGImage from './../../../../../assets/images/v2/stone_bg.jpg';
 
 import { useThemeContext } from '../../../../../contexts/ThemeContext';
 import {
@@ -20,16 +21,16 @@ import {
   settingsAmountTypeTitleText,
   settingsMethodsTitleText,
 } from './constants';
-import { SelectAmountTab, SelectMethodType, SettingsTab, SummaryTab, TabPanel } from './components';
+import { SelectMethodType, SettingsTab, SummaryTab, TabPanel } from './components';
 import { SellAmountType, SellMethod, SellPageTabs } from './enums';
 import { IMarketplaceSellContextData, ISellForm } from './types';
 import { sign } from '../../../../helpers';
 import { useAuthContext } from '../../../../../contexts/AuthContext';
-import { TOKENS_MAP } from '../../../../constants';
+import { TOKENS_MAP, ZERO_ADDRESS } from '../../../../constants';
 import { TokenTicker } from '../../../../enums';
 import { GetNFTApi } from '../../../nft/api';
 import { INFT } from '../../../nft/types';
-import { GetSaltApi } from '../../../../api';
+import { EncodeOrderApi, GetSaltApi, IEncodeOrderApiData } from '../../../../api';
 
 const getValidationSchema = (amountType?: SellAmountType, sellMethod?: SellMethod) => {
   switch (sellMethod) {
@@ -46,14 +47,11 @@ const getValidationSchema = (amountType?: SellAmountType, sellMethod?: SellMetho
 }
 
 export const SellPage = () => {
-  const history = useHistory();
   const params = useParams<{ collectionAddress: string; tokenId: string; }>();
 
   const { signer, web3Provider } = useAuthContext() as any;
 
-  const encodeDataMutation = useMutation((data: any) => {
-    return axios.post(`${process.env.REACT_APP_MARKETPLACE_BACKEND}/v1/orders/encoder/order`, data);
-  });
+  const encodeOrderMutation = useMutation(EncodeOrderApi);
 
   const createOrderMutation = useMutation((data: any) => {
     return axios.post(`${process.env.REACT_APP_MARKETPLACE_BACKEND}/v1/orders/order`, data);
@@ -67,8 +65,8 @@ export const SellPage = () => {
   const getSaltMutation = useMutation(GetSaltApi);
 
   const { setDarkMode } = useThemeContext() as any;
-  const [activeTab, setActiveTab] = useState<SellPageTabs>(SellPageTabs.SELL_AMOUNT);
-  const [amountType, setAmountType] = useState<SellAmountType>();
+  const [activeTab, setActiveTab] = useState<SellPageTabs>(SellPageTabs.SELL_METHOD);
+  const [amountType, setAmountType] = useState<SellAmountType>(SellAmountType.SINGLE); // TODO: add Bundle
   const [sellMethod, setSellMethod] = useState<SellMethod>();
   const [isPosted, setIsPosted] = useState<boolean>(false);
 
@@ -77,8 +75,8 @@ export const SellPage = () => {
     validateOnMount: true,
     validationSchema: getValidationSchema(amountType, sellMethod),
     onSubmit: async (values: any) => {
-      const address = await signer.getAddress();
       const network = await web3Provider.getNetwork();
+      const address = await signer.getAddress();
 
       const salt = (await getSaltMutation.mutateAsync(address)).data.salt;
 
@@ -86,7 +84,7 @@ export const SellPage = () => {
         assetType: {
           assetClass: nft?.standard,
           contract: nft?.collection?.address,
-          tokenId: (+params.tokenId).toString(),
+          tokenId: params.tokenId,
         },
         value: '1',
       };
@@ -116,12 +114,11 @@ export const SellPage = () => {
         };
       }
 
-      const data = {
-        type: 'UNIVERSE_V1',
+      const orderData: IEncodeOrderApiData = {
+        salt: salt,
         maker: address,
-        taker: values.buyerAddress || '0x0000000000000000000000000000000000000000',
         make,
-        // TODO: improve take.assetClass & take.value for Dutch & English auction
+        taker: values.buyerAddress || ZERO_ADDRESS,
         take: {
           assetType: {
             assetClass: values.priceCurrency,
@@ -131,29 +128,29 @@ export const SellPage = () => {
             `${TOKENS_MAP[values.priceCurrency as TokenTicker].decimals}`
           ).toString(),
         },
-        salt: salt,
-        start: 0,
-        end: 0,
+        type: 'UNIVERSE_V1',
+        start: values.startDate ? values.startDate.getTime() : 0,
+        end: values.endDate ? values.endDate.getTime() : 0,
         data: {
           dataType: 'ORDER_DATA',
           revenueSplits: nft?.royalties.map((royalty: any) => ({
-            account: royalty.address,
+            account: royalty.address as string,
             value: royalty.amount * 100,
-          }))
+          })) || []
         },
       };
 
-      const response = (await encodeDataMutation.mutateAsync(data)).data;
+      const { data: encodedOrder } = (await encodeOrderMutation.mutateAsync(orderData));
 
       const signature = await sign(
         web3Provider.provider,
-        response,
+        encodedOrder,
         address,
         `${network.chainId}`,
         `${process.env.REACT_APP_MARKETPLACE_CONTRACT}`
       );
 
-      const createOrderResponse = (await createOrderMutation.mutateAsync({ ...data, signature })).data;
+      const createOrderResponse = (await createOrderMutation.mutateAsync({ ...encodedOrder, signature })).data;
 
       console.log('createOrderResponse', createOrderResponse);
       setIsPosted(true);
@@ -186,28 +183,26 @@ export const SellPage = () => {
 
   const handleGoBack = useCallback(() => {
     const prevTabsMap: Partial<Record<SellPageTabs, SellPageTabs>> = {
-      [SellPageTabs.SELL_METHOD]: SellPageTabs.SELL_AMOUNT,
       [SellPageTabs.SETTINGS]: SellPageTabs.SELL_METHOD,
       [SellPageTabs.SUMMARY]: SellPageTabs.SETTINGS,
     };
 
     const prevTab = prevTabsMap[activeTab];
 
-    if (prevTab) {
+    if (prevTab !== undefined) {
       setActiveTab(prevTab);
     }
   }, [activeTab]);
 
   const handleContinue = useCallback(() => {
     const nextTabsMap: Partial<Record<SellPageTabs, SellPageTabs>> = {
-      [SellPageTabs.SELL_AMOUNT]: SellPageTabs.SELL_METHOD,
       [SellPageTabs.SELL_METHOD]: SellPageTabs.SETTINGS,
       [SellPageTabs.SETTINGS]: SellPageTabs.SUMMARY,
     };
 
     const nextTab = nextTabsMap[activeTab];
 
-    if (nextTab) {
+    if (nextTab !== undefined) {
       setActiveTab(nextTab);
     }
   }, [activeTab]);
@@ -232,55 +227,54 @@ export const SellPage = () => {
 
   return (
     <MarketplaceSellContext.Provider value={contextValue}>
-      <Box
-        bgImage={bg}
-        bgSize="contain"
-        bgRepeat="no-repeat"
-        w="100%"
-        sx={{ '--container-max-width': '1100px' }}
-      >
-        <Container maxW={'var(--container-max-width)'} pb={'0 !important'}>
-          <Box px={{ base: '20px', md: '60px', xl: 0 }}>
-            <Link
-              href={`/nft/${params.collectionAddress}/${params.tokenId}`}
-              mb={'20px'}
-              fontFamily={'Space Grotesk'}
-              fontWeight={500}
-              _hover={{ textDecoration: 'none' }}
-            >
-              <Image src={arrow} display="inline" mr="10px" position="relative" top="-2px" />
-              {nft?.name ?? params.collectionAddress}
-            </Link>
+      <Box sx={{ bg: `url(${BGImage}) center / cover` }}>
+        <Box
+          bgImage={bg}
+          bgSize="contain"
+          bgRepeat="no-repeat"
+          w="100%"
+          sx={{ '--container-max-width': '1100px' }}
+        >
+          <Container maxW={'var(--container-max-width)'} pb={'0 !important'}>
+            <Box px={{ base: '20px', md: '60px', xl: 0 }}>
+              <Link
+                href={`/nft/${params.collectionAddress}/${params.tokenId}`}
+                mb={'20px'}
+                fontFamily={'Space Grotesk'}
+                fontWeight={500}
+                _hover={{ textDecoration: 'none' }}
+              >
+                <Image src={arrow} display="inline" mr="10px" position="relative" top="-2px" />
+                {nft?.name ?? params.collectionAddress}
+              </Link>
 
-            <Heading as="h1" mb={'50px'}>Sell NFT</Heading>
+              <Heading as="h1" mb={'50px'}>Sell NFT</Heading>
 
-            <Tabs isFitted variant={'arrow'} index={activeTab} onChange={setActiveTab}>
-              <TabList overflowX={'scroll'}>
-                {sellPageTabs.map((tab, i) => (
-                  <Tab key={i} minW={'130px'} isDisabled={i > activeTab}>
-                    <Image src={activeTab === i ? tab.iconActive : tab.icon} />
-                    {tab.name}
-                  </Tab>
-                ))}
-              </TabList>
+              <Tabs isFitted variant={'arrow'} index={activeTab} onChange={setActiveTab}>
+                <TabList overflowX={'scroll'}>
+                  {sellPageTabs.map((tab, i) => (
+                    <Tab key={i} minW={'130px'} isDisabled={i > activeTab}>
+                      <Image src={activeTab === i ? tab.iconActive : tab.icon} />
+                      {tab.name}
+                    </Tab>
+                  ))}
+                </TabList>
 
-              <TabPanels>
-                <TabPanel name="Select the amount of items">
-                  <SelectAmountTab />
-                </TabPanel>
-                <TabPanel name="Select your sell method">
-                  <SelectMethodType />
-                </TabPanel>
-                <TabPanel name={settingsTabName}>
-                  { amountType && sellMethod && nft && <SettingsTab />}
-                </TabPanel>
-                <TabPanel name='Summary'>
-                  {nft && activeTab === 3 && <SummaryTab />}
-                </TabPanel>
-              </TabPanels>
-            </Tabs>
-          </Box>
-        </Container>
+                <TabPanels>
+                  <TabPanel name="Select your sell method">
+                    {activeTab === SellPageTabs.SELL_METHOD && <SelectMethodType />}
+                  </TabPanel>
+                  <TabPanel name={settingsTabName}>
+                    {activeTab === SellPageTabs.SETTINGS && <SettingsTab />}
+                  </TabPanel>
+                  <TabPanel name='Summary'>
+                    {activeTab === SellPageTabs.SUMMARY && <SummaryTab />}
+                  </TabPanel>
+                </TabPanels>
+              </Tabs>
+            </Box>
+          </Container>
+        </Box>
       </Box>
     </MarketplaceSellContext.Provider>
   );

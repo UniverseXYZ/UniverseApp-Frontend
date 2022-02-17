@@ -21,6 +21,7 @@ const useStyles: (isBundle: boolean) => Record<
       top: 0,
       w: '100%',
       zIndex: 2,
+      transition: '100ms',
     },
 
     // border

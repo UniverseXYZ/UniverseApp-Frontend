@@ -32,7 +32,7 @@ export const BundlePageProvider = ({ hash, children }: IBundlePageProviderProps)
 
     switch (order?.make.assetType.assetClass) {
       case 'ERC721':
-        NFTsPromises.push(GetNFTApi(order.make.assetType.contract as string, order.make.assetType.tokenId as string));
+        NFTsPromises.push(GetNFTApi(order.make.assetType.contract as string, order.make.assetType.tokenId));
         break;
       case 'ERC721_BUNDLE':
         for (let i = 0; i < (order.make.assetType.contracts?.length ?? 0); i++) {

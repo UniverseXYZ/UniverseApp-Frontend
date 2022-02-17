@@ -1,32 +1,31 @@
-import dutchAuction from '../../../../../../assets/images/marketplace/v2/dutch_auction.svg';
-import englishAuction from '../../../../../../assets/images/marketplace/v2/english_auction.svg';
-import fixedListing from '../../../../../../assets/images/marketplace/v2/fixed_listing.svg';
 import { SellMethod } from '../enums';
+import { IBoxSelectOption } from '../components';
 
-interface IOption {
-  value: SellMethod,
-  title: string;
-  description: string;
-  image: string;
-}
+import FixedListingImage from '../../../../../../assets/images/v2/marketplace/fixed_listing.png';
+import DutchAuctionImage from '../../../../../../assets/images/v2/marketplace/dutch_aution.png';
+import EnglishAuctionImage from '../../../../../../assets/images/v2/marketplace/english_auction.png';
 
-export const sellMethodOptions: Array<IOption> = [
+export const sellMethodOptions: Array<IBoxSelectOption> = [
   {
     value: SellMethod.FIXED,
     title: 'Fixed Listing',
     description: 'List your NFT for a fixed price',
-    image: fixedListing
+    image: FixedListingImage,
   },
   {
     value: SellMethod.DUTCH,
     title: 'Dutch Auction',
-    description: 'Set price for your NFT to sell at fixed or declining cost',
-    image: dutchAuction
+    // description: 'Set price for your NFT to sell at fixed or declining cost',
+    description: 'Coming soon...',
+    image: DutchAuctionImage,
+    disabled: true,
   },
   {
     value: SellMethod.ENGLISH,
     title: 'English Auction',
-    description: 'Set the starting bid and sell your NFT to the highest bidder',
-    image: englishAuction
+    // description: 'Set the starting bid and sell your NFT to the highest bidder',
+    description: 'Coming soon...',
+    image: EnglishAuctionImage,
+    disabled: true,
   },
 ];

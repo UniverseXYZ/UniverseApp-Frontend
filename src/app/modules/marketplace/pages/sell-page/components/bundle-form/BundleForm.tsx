@@ -1,7 +1,7 @@
 import { Box, Flex, FormControl, FormErrorMessage, Heading, Input, Text } from '@chakra-ui/react';
 import React from 'react';
 
-import * as styles from '../tabs/settings-tab/styles';
+import * as styles from '../tab-settings/styles';
 import { useMarketplaceSellData } from '../../hooks';
 
 const maxDescriptionSymbols = 500;

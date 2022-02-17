@@ -11,14 +11,14 @@ import {
 } from '@chakra-ui/react';
 import React, { useCallback, useMemo } from 'react';
 import { useMutation } from 'react-query';
-import axios from 'axios';
-import { Contract, utils } from 'ethers';
-
-import * as styles from './styles';
-import { IERC721AssetType, IOrder } from '../../../../types';
+import { Contract } from 'ethers';
 
 import Contracts from '../../../../../../../contracts/contracts.json';
+
+import * as styles from './styles';
+import { IOrder } from '../../../../types';
 import { useAuthContext } from '../../../../../../../contexts/AuthContext';
+import { EncodeOrderApi } from '../../../../../../api';
 
 // @ts-ignore
 const { contracts: contractsData } = Contracts[process.env.REACT_APP_NETWORK_CHAIN_ID];
@@ -38,19 +38,29 @@ export const NFTCancelListingPopup = ({ order, isOpen, onClose, }: INFTCancelLis
     [order, signer]
   );
 
-  const encodeDataMutation = useMutation((data: any) => {
-    return axios.post(`${process.env.REACT_APP_MARKETPLACE_BACKEND}/v1/orders/encoder/order`, data);
-  });
+  const encodeOrderMutation = useMutation(EncodeOrderApi);
 
   const handleCancelListing = useCallback(async () => {
-    const { data: encodedOrder } = (await encodeDataMutation.mutateAsync({
-      ...order,
-      salt: +`${order?.salt}`,
-      start: +`${order?.start}`,
-      end: +`${order?.end}`,
+    const orderData: any = { ...order };
+    orderData.make.assetType.tokenId = `${orderData.make.assetType.tokenId}`;
+
+    if (!order) {
+      return;
+    }
+
+    const { data: encodedOrderData } = (await encodeOrderMutation.mutateAsync({
+      type: order.type,
+      data: order.data,
+      maker: order.maker,
+      make: order.make as any,
+      salt: order.salt,
+      start: order.start,
+      end: order.end,
+      take: order.take,
+      taker: order.taker,
     }));
 
-    const cancelResponse = await contract.cancel(encodedOrder);
+    const cancelResponse = await contract.cancel(encodedOrderData);
 
     console.log('cancelResponse', cancelResponse);
 
