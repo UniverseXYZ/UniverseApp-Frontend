@@ -1,7 +1,8 @@
 import React, { createContext, useContext, useRef } from 'react';
 
 interface ILayoutValue {
-  footerRef: React.MutableRefObject<HTMLElement>;
+  headerRef: React.RefObject<HTMLElement>;
+  footerRef: React.RefObject<HTMLElement>;
 }
 
 const LayoutContext = createContext({} as ILayoutValue);
@@ -11,10 +12,16 @@ interface ILayoutProviderProps {
 }
 
 export const LayoutProvider = (props: ILayoutProviderProps) => {
+  const headerRef = useRef<HTMLElement>(null);
   const footerRef = useRef<HTMLElement>(null);
 
+  const value: ILayoutValue = {
+    headerRef,
+    footerRef,
+  };
+
   return (
-    <LayoutContext.Provider value={{ footerRef } as ILayoutValue} {...props} />
+    <LayoutContext.Provider value={value} {...props} />
   );
 };
 

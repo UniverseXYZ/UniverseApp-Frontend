@@ -25,6 +25,7 @@ import { defaultColors } from '../../utils/helpers';
 import { CONNECTORS_NAMES } from '../../utils/dictionary';
 import { useAuthContext } from '../../contexts/AuthContext';
 import { useThemeContext } from '../../contexts/ThemeContext';
+import { useLayout } from '../../app/providers';
 
 const Header = ({ location }) => {
   const {
@@ -36,6 +37,7 @@ const Header = ({ location }) => {
   } = useAuthContext();
 
   const { darkMode } = useThemeContext();
+  const { headerRef } = useLayout();
 
   const history = useHistory();
   const [selectedWallet, setSelectedWallet] = useState('');
@@ -129,7 +131,7 @@ const Header = ({ location }) => {
   }, [showMenu, darkMode]);
 
   return (
-    <header>
+    <header ref={headerRef}>
       <div className="app__logo">
         <Link className="dark" to="/">
           <img src={appDarkLogo} alt="App Logo" />
