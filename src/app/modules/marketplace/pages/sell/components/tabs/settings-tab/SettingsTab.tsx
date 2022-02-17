@@ -14,7 +14,6 @@ import {
   useDisclosure,
 } from '@chakra-ui/react';
 import React, { useCallback, useMemo, useRef, useState } from 'react';
-import { useWindowScroll, useWindowSize } from 'react-use';
 
 import { Navigation, FreeMode } from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/react/swiper-react';
@@ -45,20 +44,10 @@ import { Nfts } from '../../../../../mocks/nfts';
 import { NftItem } from '../../../../../../nft/components';
 import { INft } from '../../../../../../nft/types';
 import { SelectEditionsDropdown } from '../../select-editions-dropdown';
-import { useLayout } from '../../../../../../../providers';
-
-const useStickyToFooter = () => {
-  const { y: scrollY } = useWindowScroll();
-  const { height } = useWindowSize(0, 0);
-  const { footerRef } = useLayout();
-
-  return useMemo<boolean>(() => {
-    return !(scrollY + height >= footerRef.current?.offsetTop ?? 0);
-  }, [scrollY, height, footerRef.current]);
-};
+import { useStickyFooter } from '../../../../../../../hooks';
 
 export const SettingsTab = () => {
-  const actionBarRef = useRef(null);
+  const actionBarRef = useRef<HTMLDivElement>(null);
   const prevRef = useRef(null);
   const nextRef = useRef(null);
 
@@ -66,7 +55,7 @@ export const SettingsTab = () => {
 
   const { form, ...sellData } = useMarketplaceSellData();
 
-  const isStickiedActionBar = useStickyToFooter();
+  useStickyFooter(actionBarRef);
 
   const [sortBy, setSortBy] = useState();
   const [nfts, setNfts] = useState(Nfts);
@@ -224,7 +213,7 @@ export const SettingsTab = () => {
             <Button boxShadow={'xl'} onClick={sellData.goContinue}>Continue</Button>
           </Box>
         ) : (
-          <Box mb={actionBarRef?.current ? (actionBarRef?.current as any).offsetHeight + 'px' : 0}>
+          <Box mb={`${(actionBarRef.current?.offsetHeight || 0)}px`}>
             <Box
               ref={actionBarRef}
               width={'100%'}
@@ -232,8 +221,8 @@ export const SettingsTab = () => {
               bg={'linear-gradient(135deg, rgba(188, 235, 0, 0.03) 15.57%, rgba(0, 234, 234, 0.03) 84.88%), rgba(255, 255, 255, 0.8)'}
               backdropFilter={'blur(10px)'}
               borderTop={'1px solid rgba(0, 0, 0, 0.1)'}
-              position={isStickiedActionBar ? 'fixed' : 'absolute'}
-              bottom={isStickiedActionBar ? 0 : 'inherit'}
+              position={'absolute'}
+              bottom={'inherit'}
               left={0}
               zIndex={10}
             >
