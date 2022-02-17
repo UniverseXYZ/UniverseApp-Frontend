@@ -1,18 +1,19 @@
 import { Box, Button, Image, SimpleGrid, Text } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
+import { useMeasure } from 'react-use';
+import { UseMeasureRect } from 'react-use/lib/useMeasure';
+
+import ClockIcon from '../../../../../../../assets/images/clock.svg';
 
 import { useBuyNFTSection } from '../../mocks';
 import { useDateCountdown } from '../../../../../../hooks';
 import * as styles from './styles';
 import { HighestBid } from './components';
+import { IOrder } from '../../../../types';
 import { NFTCheckoutPopup } from '../nft-checkout-popup';
 import { NFTPlaceABidPopup } from '../nft-place-a-bid-popup';
 import { NFTMakeAnOfferPopup } from '../nft-make-an-offer-popup';
-
-import ClockIcon from '../../../../../../../assets/images/clock.svg';
-import { IOrder } from '../../../../types';
-import { useMeasure } from 'react-use';
-import { UseMeasureRect } from 'react-use/lib/useMeasure';
+import { NFTCancelListingPopup } from '../nft-cancel-listing-popup';
 
 interface INFTBuySectionProps {
   order?: IOrder;
@@ -33,6 +34,7 @@ export const NFTBuySection = ({ order, onMeasureChange }: INFTBuySectionProps) =
   const [isCheckoutPopupOpened, setIsCheckoutPopupOpened] = useState(false);
   const [isPlaceABidPopupOpened, setIsPlaceABidPopupOpened] = useState(false);
   const [isMakeAnOfferPopupOpened, setIsMakeAnOfferPopupOpened] = useState(false);
+  const [isCancelListingPopupOpened, setIsCancelListingPopupOpened] = useState(false);
 
   return (
     <Box {...styles.WrapperStyle} ref={ref}>
@@ -89,8 +91,8 @@ export const NFTBuySection = ({ order, onMeasureChange }: INFTBuySectionProps) =
           <>
             <HighestBid />
             <SimpleGrid columns={2} spacingX={'12px'}>
-              <Button boxShadow={'lg'}>Lower Price</Button>
-              <Button variant={'outline'}>Cancel listing</Button>
+              <Button boxShadow={'lg'} _focus={{ boxShadow: 'lg' }}>Lower Price</Button>
+              <Button variant={'outline'} onClick={() => setIsCancelListingPopupOpened(true)}>Cancel listing</Button>
             </SimpleGrid>
           </>
         )}
@@ -99,7 +101,7 @@ export const NFTBuySection = ({ order, onMeasureChange }: INFTBuySectionProps) =
             <HighestBid />
             <SimpleGrid columns={2} spacingX={'12px'}>
               <Button boxShadow={'lg'}>Change price</Button>
-              <Button variant={'outline'}>Cancel listing</Button>
+              <Button variant={'outline'} onClick={() => setIsCancelListingPopupOpened(true)}>Cancel listing</Button>
             </SimpleGrid>
           </>
         )}
@@ -107,7 +109,7 @@ export const NFTBuySection = ({ order, onMeasureChange }: INFTBuySectionProps) =
           <>
             <SimpleGrid columns={2} spacingX={'12px'}>
               <Button boxShadow={'lg'}>Change price</Button>
-              <Button variant={'outline'}>Cancel listing</Button>
+              <Button variant={'outline'} onClick={() => setIsCancelListingPopupOpened(true)}>Cancel listing</Button>
             </SimpleGrid>
             <Text {...styles.ContentFeeLabelStyle} textAlign={'center'} mt={'12px'}>
               This NFT is on your wallet
@@ -128,6 +130,11 @@ export const NFTBuySection = ({ order, onMeasureChange }: INFTBuySectionProps) =
         order={order}
         isOpen={isMakeAnOfferPopupOpened}
         onClose={() => setIsMakeAnOfferPopupOpened(false)}
+      />
+      <NFTCancelListingPopup
+        order={order}
+        isOpen={isCancelListingPopupOpened}
+        onClose={() => setIsCancelListingPopupOpened(false)}
       />
     </Box>
   );
