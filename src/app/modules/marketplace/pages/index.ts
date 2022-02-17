@@ -1,2 +1,2 @@
-export * from './browse-nfts';
-export * from './sell';
+export * from './browse-nfts-page';
+export * from './sell-page';

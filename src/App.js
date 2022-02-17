@@ -53,7 +53,7 @@ import ErrorPopup from './components/popups/ErrorPopup';
 import { useErrorContext } from './contexts/ErrorContext';
 import Minting from './components/products/minting/Minting';
 import { App as NewApp } from './app/App';
-import { MarketplaceSell, MarketplaceBrowseNFTs } from './app/modules/marketplace/pages';
+import { SellPage, BrowseNFTsPage } from './app/modules/marketplace/pages';
 import { LayoutProvider } from './app/providers';
 
 class UniverseRoute {
@@ -89,8 +89,8 @@ const routes = {
   '/nft/:collectionAddress/:tokenId': new UniverseRoute(MarketplaceNFT),
   // '/character-page': new UniverseRoute(CharacterPage),
   '/marketplace': new UniverseRoute(BrowseNFT),
-  '/v2/marketplace/browse': new UniverseRoute(MarketplaceBrowseNFTs, false, true),
-  '/v2/marketplace/sell': new UniverseRoute(MarketplaceSell, false, true),
+  '/v2/marketplace/browse': new UniverseRoute(BrowseNFTsPage, false, true),
+  '/v2/marketplace/sell': new UniverseRoute(SellPage, false, true),
   '/nft-marketplace/:steps': new UniverseRoute(NFTMarketplace),
   // '/search': new UniverseRoute(Search),
   // '/core-drops': new UniverseRoute(CharectersDrop),
