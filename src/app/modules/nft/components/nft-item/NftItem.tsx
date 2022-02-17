@@ -23,6 +23,7 @@ const styles: IStyles = {
   assetContainer: {
     overflow: 'hidden',
     position: 'relative',
+    zIndex: 3,
   },
   assetLabelContainer: {
     display: 'flex',
@@ -33,6 +34,8 @@ const styles: IStyles = {
   },
   NFTContent: {
     padding: '16px 14px 14px 14px',
+    position: 'relative',
+    zIndex: 4,
   },
   firstContentRow: {
     display: 'flex',

@@ -81,6 +81,7 @@ export const Dropdown = (
               '--button-lg-padding-y': '16px',
               '--button-md-padding-x': '12px',
               '--button-md-padding-y': '11px',
+              fontSize: '14px',
               minWidth: 'fit-content',
               padding: `var(--button-${buttonProps?.size || 'md'}-padding-y) var(--button-${buttonProps?.size || 'md'}-padding-x)`,
               position: 'relative',
@@ -107,6 +108,7 @@ export const Dropdown = (
                   transform: value
                     ? `translate(${buttonProps?.leftIcon ? '-24px' : '0px'}, calc((var(--button-${buttonProps?.size || 'md'}-padding-y) + var(--padding) + (var(--opened-label-font-size) / 2)) * -1))`
                     : '',
+                  zIndex: 20,
                 }}
               >{label}</Box>
               {renderValue ? renderValue(value) : (value || '')}

@@ -18,11 +18,15 @@ export const Popover = {
       }
     },
     tooltip: {
+      popper: {
+        zIndex: 1000,
+      },
       body: {
         padding: '8px 12px',
       },
       content: {
         background: 'black',
+        border: 0,
         borderRadius: '12px',
         boxShadow: '0px 10px 20px rgba(136, 120, 172, 0.2)',
         color: 'white',
