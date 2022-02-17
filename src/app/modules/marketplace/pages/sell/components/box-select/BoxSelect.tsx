@@ -9,7 +9,7 @@ export interface IBoxSelectProps {
     description: string;
     image: string;
   }>;
-  onSelect?: (value: string) => void;
+  onSelect?: (value: any) => void;
 }
 
 const styles: Record<string, SystemStyleObject> = {

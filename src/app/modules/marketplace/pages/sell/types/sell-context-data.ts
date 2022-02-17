@@ -1,6 +1,8 @@
+import { SellAmountType, SellMethod } from '../enums';
+
 export interface IMarketplaceSellContextData {
-  selectAmount: (amountType: string) => void; // TODO: replace amountType string --> enum
-  selectMethod: (amountType: string) => void; // TODO: replace amountType string --> enum
+  selectAmount: (amountType: SellAmountType) => void;
+  selectMethod: (amountType: SellMethod) => void;
   backToSettings: () => void;
   save: () => void;
 }
