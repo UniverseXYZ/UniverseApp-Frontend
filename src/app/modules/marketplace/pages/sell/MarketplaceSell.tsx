@@ -12,9 +12,13 @@ import {
 } from '@chakra-ui/react';
 
 import bg from '../../../../../assets/images/marketplace/v2/bg.png';
-import nft from '../../mocks/assets/nft.png';
-
+import ethereumIcon from '../../../../../assets/images/eth-icon-new.svg';
 import arrow from '../../../../../assets/images/arrow.svg';
+
+// TODO: remove mocks
+import nft from '../../mocks/assets/nft.png';
+import { fees } from '../../mocks/fees';
+
 import { useThemeContext } from '../../../../../contexts/ThemeContext';
 import { sellPageTabs, sellAmountOptions, sellMethodOptions } from './constants';
 import { BoxSelect, TieredAuctionsBanner } from './components';
@@ -85,14 +89,31 @@ export const MarketplaceSell = () => {
                   boxShadow={'0 10px 36px rgba(136, 120, 172, 0.14)'}
                   p={'50px'}
                   mb={'40px'}
+                  sx={{
+                    '--image-size': '390px',
+                    '--image-margin': '60px',
+                  }}
                 >
-                  <Box mr={'60px'}>
-                    <Image src={nft} h={390} w={390} />
+                  <Box mr={'var(--image-margin)'}>
+                    <Image src={nft} h={'var(--image-size)'} w={'var(--image-size)'} />
                   </Box>
-                  <Flex flex={1}>
-                    <Center flexDir={'column'} alignItems={'flex-start'}>
-                      <Heading as={'h4'} fontFamily={'Space Grotesk'} fontSize={'18px'} mb={'6px'}>Listing</Heading>
-                      <Text mb={'30px'} fontSize={'14px'}>Your bundle will be listed for 0.8</Text>
+                  <Flex width={'calc(100% - var(--image-size) - var(--image-margin))'}>
+                    <Center flexDir={'column'} alignItems={'flex-start'} w={'100%'}>
+                      <Heading as={'h4'} fontFamily={'Space Grotesk'} fontSize={'18px'} mb={'6px'}>
+                        Listing
+                      </Heading>
+                      <Text mb={'30px'} fontSize={'14px'}>
+                        Your bundle will be listed for
+                        <Image
+                          src={ethereumIcon}
+                          alt='Ethereum icon'
+                          display={'inline'}
+                          ml={2}
+                          mr={1}
+                          w={'11px'}
+                        />
+                        <strong>0.8</strong>
+                      </Text>
 
                       <Heading as={'h4'} fontFamily={'Space Grotesk'} fontSize={'18px'} mb={'6px'}>Fees</Heading>
                       <Text mb={'20px'} fontSize={'14px'} color={'#00000066'}>
@@ -104,32 +125,36 @@ export const MarketplaceSell = () => {
                         border={'1px solid rgba(0, 0, 0, 0.1)'}
                         borderRadius={'10px'}
                         p={'28px'}
+                        mb={'30px'}
                         w={'100%'}
                       >
-                        <Flex py={'5px'}>
-                          <Box>To Universe</Box>
-                          <Flex flex={1} borderBottom={'2px dotted rgba(0, 0, 0, 0.1)'} m={'5px'} />
-                          <Box>2.5%</Box>
-                        </Flex>
-                        <Flex py={'5px'}>
-                          <Box>To creator</Box>
-                          <Flex flex={1} borderBottom={'2px dotted rgba(0, 0, 0, 0.1)'} m={'5px'} />
-                          <Box>10%</Box>
-                        </Flex>
-                        <Flex fontWeight={'bold'} py={'5px'}>
-                          <Box>Total</Box>
-                          <Flex flex={1} borderBottom={'2px dotted rgba(0, 0, 0, 0.1)'} m={'5px'} />
-                          <Box>12.5%</Box>
-                        </Flex>
+                        {fees.map((fee, i) => (
+                          <Flex py={'5px'} key={i} fontWeight={i === fees.length - 1 ? 'bold' : 'normal'}>
+                            <Box>{fee.name}</Box>
+                            <Flex flex={1} borderBottom={'2px dotted rgba(0, 0, 0, 0.1)'} m={'5px'} />
+                            <Box>{fee.value}%</Box>
+                          </Flex>
+                        ))}
                       </Box>
 
-                      <Heading as={'h4'} fontFamily={'Space Grotesk'} fontSize={'18px'}>You will receive: 0.7</Heading>
+                      <Heading as={'h4'} fontFamily={'Space Grotesk'} fontSize={'18px'}>
+                        You will receive:
+                        <Image
+                          src={ethereumIcon}
+                          alt='Ethereum icon'
+                          display={'inline'}
+                          ml={2}
+                          mr={1}
+                          width={'14px'}
+                        />
+                        0.7
+                      </Heading>
                     </Center>
                   </Flex>
                 </Flex>
                 <Box textAlign={'right'} mb={'50px'}>
-                  <Button mr={'10px'}>Back</Button>
-                  <Button>Post your listing</Button>
+                  <Button mr={'10px'} variant={'outline'}>Back</Button>
+                  <Button boxShadow={'xl'}>Post your listing</Button>
                 </Box>
               </TabPanel>
             </TabPanels>
