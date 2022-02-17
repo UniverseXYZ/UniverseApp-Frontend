@@ -4,7 +4,7 @@ import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-  ButtonProps, Box,
+  ButtonProps, Box, Flex, Link,
 } from '@chakra-ui/react';
 import React, { useCallback, useEffect, useState } from 'react';
 
@@ -67,6 +67,9 @@ export const Dropdown = (
               '--button-lg-padding-y': '16px',
               '--button-md-padding-x': '12px',
               '--button-md-padding-y': '11px',
+              '.chakra-button__icon:nth-of-type(1)': {
+                marginRight: '10px',
+              },
             }}
             minWidth={'fit-content'}
             padding={`var(--button-${buttonProps?.size || 'md'}-padding-y) var(--button-${buttonProps?.size || 'md'}-padding-x)`}
@@ -113,6 +116,46 @@ export const Dropdown = (
           {children}
         </PopoverContent>
       </Popover>
+    </>
+  );
+};
+
+interface IDropdownFilterContainerProps {
+  children: React.ReactNode;
+  onSave: () => void;
+  onClear: () => void;
+}
+
+export const DropdownFilterContainer = (
+  {
+    children = null,
+    onSave,
+    onClear,
+  }: IDropdownFilterContainerProps) => {
+  return (
+    <>
+      <Box width={'405px'} p={'30px'}>
+        {children}
+      </Box>
+      <Flex
+        borderTop={'1px solid rgba(0, 0, 0, 0.1)'}
+        justifyContent={'space-between'}
+        p={'14px 30px'}
+        alignItems={'center'}
+      >
+        <Link
+          sx={{
+            fontSize: '14px',
+            fontWeight: 500,
+            textDecoration: 'underline',
+            _hover: {
+              textDecoration: 'none',
+            },
+          }}
+          onClick={onClear}
+        >Clear</Link>
+        <Button boxShadow={'lg'} onClick={onSave}>Save</Button>
+      </Flex>
     </>
   );
 };

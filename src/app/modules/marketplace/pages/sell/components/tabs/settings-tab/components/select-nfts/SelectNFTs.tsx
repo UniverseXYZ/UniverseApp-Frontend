@@ -8,8 +8,11 @@ import {
   Input,
   InputGroup,
   InputLeftElement,
-  Link, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, SimpleGrid,
-  Text, Tooltip, useDisclosure,
+  Link,
+  SimpleGrid,
+  Text,
+  Tooltip,
+  useDisclosure,
 } from '@chakra-ui/react';
 import React, { useCallback, useMemo, useRef, useState } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react/swiper-react';
@@ -19,6 +22,7 @@ import searchIcon from '../../../../../../../../../../assets/images/search-gray.
 import artistIcon from '../../../../../../../../../../assets/images/marketplace/artist.svg';
 import filtersIcon from '../../../../../../../../../../assets/images/marketplace/filters2.svg';
 import saleTypeIcon from '../../../../../../../../../../assets/images/marketplace/sale-type.svg';
+import nftTypeIcon from '../../../../../../../../../../assets/images/select-type-icon.svg';
 import priceRangeIcon from '../../../../../../../../../../assets/images/marketplace/price-range.svg';
 import collectionsIcon from '../../../../../../../../../../assets/images/marketplace/collections.svg';
 import arrowLeftIcon from '../../../../../../../../../../assets/images/marketplace/bundles-left-arrow.svg';
@@ -34,6 +38,7 @@ import { useMarketplaceSellData } from '../../../../../hooks';
 import { useStickyFooter } from '../../../../../../../../../hooks';
 import { Nfts } from '../../../../../../../mocks/nfts';
 import { UncheckBundleEditionsModal } from './components';
+import { NFTTypeFilter, SaleTypeFilter } from '../../../../../../../components';
 
 interface IActionBarNFTItemProps {
   nft: INft;
@@ -233,10 +238,8 @@ export const SelectNFTs = ({}: ISelectNFTsProps) => {
             }
           }}
         >
-          <Dropdown
-            label={'Sale type'}
-            buttonProps={{ leftIcon: <Image src={saleTypeIcon} /> }}
-          />
+          <SaleTypeFilter onChange={(values) => console.log('values', values)} />
+          <NFTTypeFilter onChange={(values) => console.log('values', values)} />
           <Dropdown
             label={'Price range'}
             buttonProps={{ leftIcon: <Image src={priceRangeIcon} /> }}
