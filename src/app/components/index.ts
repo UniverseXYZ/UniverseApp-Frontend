@@ -3,4 +3,5 @@ export * from './date-time-picker';
 export * from './dropdown';
 export * from './info-tooltip';
 export * from './input-shadow';
+export * from './item-wrapper';
 export * from './select';

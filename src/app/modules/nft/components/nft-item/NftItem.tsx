@@ -21,13 +21,23 @@ import arrowRightIcon from '../../../../../assets/images/marketplace/bundles-rig
 
 import { INft } from '../../types';
 import { AudioLabel, VideoLabel, LikeButton, BundleLabel, StorybookLabel } from './components';
+import { ItemWrapper } from '../../../../components';
 
 interface INftItemProps {
   nft: INft;
+  isSelected?: boolean;
+  selectedLabel?: string;
   onAuctionTimeOut?: () => void;
 }
 
-export const NftItem = ({ nft, onAuctionTimeOut }: INftItemProps) => {
+export const NftItem = (
+  {
+    nft,
+    isSelected,
+    selectedLabel,
+    onAuctionTimeOut
+  }: INftItemProps
+) => {
   const { auctionExpDate } = nft;
 
   const [isRunningAuctionTime, toggleIsRunningAuctionTime] = useState(!!auctionExpDate);
@@ -76,28 +86,7 @@ export const NftItem = ({ nft, onAuctionTimeOut }: INftItemProps) => {
   }, isRunningAuctionTime ? 1000 : null);
 
   return (
-    <Box
-      bg={'white'}
-      border={'1px solid rgba(0, 0, 0, 0.1)'}
-      borderRadius={'12px'}
-      cursor={'pointer'}
-      position={'relative'}
-      p={'12px'}
-      _hover={{
-        borderColor: 'transparent',
-        boxShadow: `0px 0px 30px rgba(0, 0, 0, ${nft.tokenIds.length > 1 ? 0.1 : 0.2})`,
-        '[data-shadow]': {
-          _before: {
-            boxShadow: '0px 0px 30px rgba(0, 0, 0, 0.1)',
-            borderColor: 'transparent',
-          },
-          _after: {
-            boxShadow: '0px 0px 30px rgba(0, 0, 0, 0.1)',
-            borderColor: 'transparent',
-          }
-        },
-      }}
-    >
+    <ItemWrapper isBundle={nft.tokenIds.length > 1} isSelected={isSelected} selectedLabel={selectedLabel}>
       <Flex alignItems={'center'} justifyContent={'space-between'}>
         <Box>
           {avatars.map((avatar, i) => (
@@ -241,52 +230,6 @@ export const NftItem = ({ nft, onAuctionTimeOut }: INftItemProps) => {
 
       <Text fontSize={'14px'} fontWeight={700} mb={'10px'}>{nft.name}</Text>
       <Text fontSize={'10px'} fontWeight={600} color={'#00000066'}>{nft.tokenIds?.length ?? 0}/{nft.numberOfEditions}</Text>
-      {nft.tokenIds.length > 1 && (
-        <Box
-          data-shadow
-          sx={{
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            width: '100%',
-            height: '100%',
-            background: 'white',
-            borderRadius: 'inherit',
-            zIndex: -1,
-            _before: {
-              position: 'absolute',
-              display: 'block',
-              content: '" "',
-              top: '4px',
-              left: '1%',
-              width: '98%',
-              height: '100%',
-              border: '1px solid rgba(0, 0, 0, 0.1)',
-              borderRadius: 'inherit',
-              background: 'white',
-              zIndex: -1,
-            },
-            _after: {
-              position: 'absolute',
-              display: 'block',
-              content: '" "',
-              top: '7px',
-              left: '3%',
-              width: '94%',
-              height: '100%',
-              border: '1px solid rgba(0, 0, 0, 0.1)',
-              borderRadius: 'inherit',
-              background: 'white',
-              zIndex: -2,
-            },
-            _hover: {
-              _before: {
-                borderColor: 'none',
-              },
-            },
-          }}
-        />
-      )}
-    </Box>
+    </ItemWrapper>
   );
 };

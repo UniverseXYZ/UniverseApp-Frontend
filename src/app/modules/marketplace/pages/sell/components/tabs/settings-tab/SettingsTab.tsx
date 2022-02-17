@@ -160,6 +160,7 @@ export const SettingsTab = () => {
                 <NftItem
                   key={nft.id}
                   nft={nft as INft}
+                  isSelected={i === 4}
                   onAuctionTimeOut={() => handleNFTAuctionTimeOut(i)}
                 />
               ))}
