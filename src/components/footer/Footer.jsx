@@ -10,10 +10,12 @@ import coinGesco from '../../assets/images/coingecko-icon.svg';
 import youtubeIcon from '../../assets/images/youtube.svg';
 import mediumIcon from '../../assets/images/medium.svg';
 import SubscribePopup from '../popups/SubscribePopup.jsx';
+import { useLayout } from '../../app/providers';
 
 const Footer = () => {
   const history = useHistory();
   const [email, setEmail] = useState('');
+  const { footerRef } = useLayout();
 
   const handleSubscribe = () => {
     const re =
@@ -43,7 +45,7 @@ const Footer = () => {
     }
   };
   return (
-    <footer>
+    <footer ref={footerRef}>
       <Popup
         trigger={
           <button

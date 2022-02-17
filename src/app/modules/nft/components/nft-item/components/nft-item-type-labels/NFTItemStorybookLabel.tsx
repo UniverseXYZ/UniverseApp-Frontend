@@ -4,9 +4,10 @@ import { NFTItemTypeLabel } from './NFTItemTypeLabel';
 
 import storybookIcon from '../../../../../../../assets/images/marketplace/storybook.svg';
 
+// TODO: rename to composition
 export const NFTItemStorybookLabel = ({ count }: { count: number }) => (
   <NFTItemTypeLabel
     icon={storybookIcon}
-    label={`Storybook: ${count ?? 0} assets`}
+    label={`Composition: ${count ?? 0} assets`}
   />
 );
