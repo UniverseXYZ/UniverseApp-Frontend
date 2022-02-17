@@ -20,11 +20,11 @@ export function mapBackendNft(
     thumbnailUrl: thumbnail_url,
     createdAt: new Date(createdAt),
     updatedAt: new Date(updatedAt),
-    creator: typeof creator === 'object' ? mapBackendUser(creator) : {
+    creator: creator && typeof creator === 'object' ? mapBackendUser(creator) : {
       address: creator,
       displayName: creator,
     },
-    owner: typeof owner === 'object' ? mapBackendUser(owner) : {
+    owner: owner && typeof owner === 'object' ? mapBackendUser(owner) : {
       address: owner,
       displayName: owner,
     },

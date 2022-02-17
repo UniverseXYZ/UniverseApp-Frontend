@@ -4,7 +4,7 @@ import {
   Container,
   Flex,
   Heading,
-  HeadingProps,
+  Image,
   Link,
   SimpleGrid,
   Tab,
@@ -12,38 +12,31 @@ import {
   TabPanels,
   Tabs,
   Text,
-  TextProps,
 } from '@chakra-ui/react';
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
+import { uniqBy } from 'lodash';
 
 import * as styles from '../nft-page/styles';
-import { NFTAssetAudio, NFTBuySection, TabBids, TabHistory, TabOffers } from '../nft-page/components';
+import * as styles2 from './styles';
+import {
+  NFTAssetAudio,
+  NFTAssetImage,
+  NFTAssetVideo,
+  NFTBuySection,
+  TabBids,
+  TabHistory,
+  TabOffers,
+} from '../nft-page/components';
 import { BundleMenu, NftItem, NFTPageRelation, RelationType } from '../../components';
 import { LineTabList } from '../../../../components';
 import { useThemeContext } from '../../../../../contexts/ThemeContext';
 import { BundlePageProvider, useBundlePage } from './BundlePage.provider';
 import { TabNFTs } from './components';
+import { INFT, NFTArtworkType } from '../../types';
+import { isNFTAssetAudio, isNFTAssetImage, isNFTAssetVideo } from '../../helpers';
 
-const NameStyle: HeadingProps = {
-  as: 'h2',
-  fontSize: '26px',
-};
-
-const DescriptionStyle: TextProps = {
-  color: 'rgba(0, 0, 0, 0.6)',
-  fontSize: '14px',
-  mb: '40px',
-  mt: '24px',
-
-  sx: {
-    a: {
-      color: 'black',
-      fontWeight: 'bold',
-      ml: '6px',
-    },
-  }
-}
+import AudioNFTPreviewImage from './../../../../../assets/images/v2/audio-nft-preview.png';
 
 export const BundlePageContent = () => {
   const router = useHistory();
@@ -52,11 +45,21 @@ export const BundlePageContent = () => {
 
   const { owner, NFTs, isLoading, moreFromCollection } = useBundlePage();
 
+  const [selectedNFTIdx, setSelectedNFTIdx] = useState(0);
+
   const handleClickViewCollection = useCallback(() => {
     if (moreFromCollection && moreFromCollection[0].collection) {
       router.push(`/collection/${moreFromCollection[0].collection.address}`);
     }
   }, [moreFromCollection]);
+
+  const uniqNFTs = useMemo(() => {
+    if (!NFTs) {
+      return [];
+    }
+
+    return uniqBy(NFTs, (NFT: INFT) => NFT.thumbnailUrl);
+  }, [NFTs]);
 
   useEffect(() => setDarkMode(false), []);
 
@@ -67,9 +70,33 @@ export const BundlePageContent = () => {
   return (
     <>
       <Box>
-        <Box {...styles.NFTAssetContainerStyle}>
-          {/*<NFTAssetImage />*/}
-          <NFTAssetAudio />
+        <Box {...styles.NFTAssetContainerStyle} flexDir={'column'} alignItems={'center'}>
+          <Box>
+            {isNFTAssetImage(uniqNFTs[selectedNFTIdx].artworkType) &&
+              <NFTAssetImage image={uniqNFTs[selectedNFTIdx].thumbnailUrl} maxH={'512px'} maxW={'512px'} />
+            }
+            {isNFTAssetVideo(uniqNFTs[selectedNFTIdx].artworkType) &&
+              <NFTAssetVideo video={uniqNFTs[selectedNFTIdx].thumbnailUrl} maxH={'512px'} maxW={'512px'} />
+            }
+            {isNFTAssetAudio(uniqNFTs[selectedNFTIdx].artworkType) &&
+              <NFTAssetAudio audio={uniqNFTs[selectedNFTIdx].thumbnailUrl} maxH={'512px'} maxW={'512px'} />
+            }
+          </Box>
+
+          <Box sx={{ display: 'flex', mt: '20px', }}>
+            {uniqNFTs.map((NFT, i) => (
+              <Box
+                key={i}
+                data-selected={selectedNFTIdx === i ? true : undefined}
+                {...styles2.SliderPreviewImageStyle}
+                onClick={() => setSelectedNFTIdx(i)}
+              >
+                {isNFTAssetImage(NFT.artworkType) && <Image src={NFT.thumbnailUrl} />}
+                {isNFTAssetVideo(NFT.artworkType) && <video src={NFT.thumbnailUrl} />}
+                {isNFTAssetAudio(NFT.artworkType) && <Image src={AudioNFTPreviewImage} />}
+              </Box>
+            ))}
+          </Box>
         </Box>
         <Box {...styles.NFTDetailsContainerStyle}>
           <Box sx={{ p: '60px 40px', }}>
@@ -78,7 +105,7 @@ export const BundlePageContent = () => {
               mb: '12px',
               justifyContent: 'space-between'
             }}>
-              <Heading {...NameStyle}>Bundle long name</Heading>
+              <Heading {...styles2.NameStyle}>Bundle long name</Heading>
               <Box>
                 <BundleMenu />
               </Box>
@@ -88,7 +115,7 @@ export const BundlePageContent = () => {
               <NFTPageRelation type={RelationType.CREATOR} image={owner.profileImageUrl} value={owner.displayName} />
             </Flex>
 
-            <Text {...DescriptionStyle}>
+            <Text {...styles2.DescriptionStyle}>
               Cras vel eget vitae quis scelerisque arcu ut.
               Tristique velit nec sed sit massa. Odio molestie velit purus at blandit.
               Lacus, fusce quam dolor imperdiet velit augue neque tincidunt lorem et diam...

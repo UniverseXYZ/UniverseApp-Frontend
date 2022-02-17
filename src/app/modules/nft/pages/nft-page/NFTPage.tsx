@@ -55,7 +55,7 @@ export const NFTPage = () => {
         <Box {...styles.NFTAssetContainerStyle}>
           {/*TODO: ✅ image / ✅ audio / ☑️ video / ☑️ bundle / ☑️ storybook */}
           {/*<NFTAssetImage />*/}
-          <NFTAssetAudio />
+          {/*<NFTAssetAudio />*/}
         </Box>
         <Box {...styles.NFTDetailsContainerStyle}>
           <Box sx={{ p: '60px 40px', }}>
