@@ -1,9 +1,9 @@
 import { IFixedListingForm } from '../types';
 
 export const defaultFixedListingForm: IFixedListingForm = {
-  selectedNFTsIds: {},
   bundleName: '',
   bundleDescription: '',
+  bundleSelectedNFTs: [],
   price: {
     value: 0,
     currency: 'ETH',
