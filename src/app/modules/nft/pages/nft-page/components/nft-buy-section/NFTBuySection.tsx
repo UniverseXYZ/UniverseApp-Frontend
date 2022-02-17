@@ -17,6 +17,9 @@ import { NFTCancelListingPopup } from '../nft-cancel-listing-popup';
 import { NFTChangeListingPricePopup } from '../nft-change-listing-price-popup';
 import { useAuthContext } from '../../../../../../../contexts/AuthContext';
 import { BuyNFTSectionState } from './enums';
+import { utils } from 'ethers';
+import { TOKENS_MAP } from '../../../../../../constants';
+import { TokenTicker } from '../../../../../../enums';
 
 interface INFTBuySectionProps {
   NFT?: INFT;
@@ -58,6 +61,7 @@ export const NFTBuySection = ({ NFT, NFTs, order, onMeasureChange }: INFTBuySect
           setState(BuyNFTSectionState.BUYER_FIXED_LISTING_BUY_N_OFFER);
         }
       }
+      setState(BuyNFTSectionState.BUYER_FIXED_LISTING_BUY_N_OFFER);
     } catch (e) {
     }
   }, [signer, NFT, order]);
@@ -108,14 +112,18 @@ export const NFTBuySection = ({ NFT, NFTs, order, onMeasureChange }: INFTBuySect
           <>
             <HighestBid />
             <SimpleGrid columns={2} spacingX={'12px'}>
-              <Button boxShadow={'lg'} onClick={() => setIsCheckoutPopupOpened(true)}>Buy for 0.5 ETH</Button>
+              <Button boxShadow={'lg'} onClick={() => setIsCheckoutPopupOpened(true)}>
+                Buy for {utils.formatUnits(order?.take.value ?? '', `${TOKENS_MAP[order?.take.assetType.assetClass as TokenTicker].decimals}`)} {order?.take.assetType.assetClass}
+              </Button>
               <Button variant={'outline'} onClick={() => setIsMakeAnOfferPopupOpened(true)}>Make offer</Button>
             </SimpleGrid>
           </>
         )}
         {state === BuyNFTSectionState.BUYER_FIXED_LISTING_BUY && (
           <>
-            <Button boxShadow={'lg'} w={'100%'} onClick={() => setIsCheckoutPopupOpened(true)}>Buy for 0.5 ETH</Button>
+            <Button boxShadow={'lg'} w={'100%'} onClick={() => setIsCheckoutPopupOpened(true)}>
+              Buy for {utils.formatUnits(order?.take.value ?? '', `${TOKENS_MAP[order?.take.assetType.assetClass as TokenTicker].decimals}`)} {order?.take.assetType.assetClass}
+            </Button>
             <Text {...styles.ContentFeeLabelStyle} textAlign={'center'} mt={'12px'}>(10% of sales will go to creator)</Text>
           </>
         )}
@@ -159,6 +167,7 @@ export const NFTBuySection = ({ NFT, NFTs, order, onMeasureChange }: INFTBuySect
       <NFTCheckoutPopup
         NFT={NFT}
         NFTs={NFTs}
+        order={order as IOrder}
         isOpen={isCheckoutPopupOpened}
         onClose={() => setIsCheckoutPopupOpened(false)}
       />
