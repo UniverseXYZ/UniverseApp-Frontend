@@ -1,33 +1,64 @@
 import {
-  Avatar,
-  Box,
+  Box, BoxProps,
   Flex,
   Image,
-  Text,
-  Tooltip,
+  Text, TextProps,
 } from '@chakra-ui/react';
-import React, { useMemo, useState } from 'react';
+import React, { useState } from 'react';
 import { useInterval } from 'react-use';
 import { default as dayjs } from 'dayjs';
-import { Navigation, Pagination } from 'swiper';
-import { Swiper, SwiperSlide } from 'swiper/react/swiper-react';
 
 import 'swiper/swiper-bundle.min.css';
 import 'swiper/swiper.min.css';
 
 import greenClockIcon from '../../../../../assets/images/marketplace/green-clock.svg';
-import arrowLeftIcon from '../../../../../assets/images/marketplace/bundles-left-arrow.svg';
-import arrowRightIcon from '../../../../../assets/images/marketplace/bundles-right-arrow.svg';
 
 import { INft } from '../../types';
-import { AudioLabel, VideoLabel, LikeButton, BundleLabel, StorybookLabel } from './components';
+import { NFTItemAssetAudioLabel, NFTItemAssetVideoLabel, NFTItemHeader, NFTItemAsset } from './components';
 import { ItemWrapper } from '../../../../components';
+
+interface IStyles {
+  assetContainer: BoxProps;
+  assetLabelContainer: BoxProps;
+  nftName: TextProps;
+  addition: TextProps;
+}
+
+const styles: IStyles = {
+  assetContainer: {
+    borderRadius: '6px',
+    my: '16px',
+    overflow: 'hidden',
+    position: 'relative',
+  },
+  assetLabelContainer: {
+    display: 'flex',
+    position: 'absolute',
+    top: '10px',
+    right: '10px',
+    zIndex: 1,
+  },
+  nftName: {
+    fontSize: '14px',
+    fontWeight: 700,
+    mb: '10px',
+  },
+  addition: {
+    fontSize: '10px',
+    fontWeight: 600,
+    color: '#00000066',
+  },
+};
 
 interface INftItemProps {
   nft: INft;
   isSelected?: boolean;
   selectedLabel?: string;
   onAuctionTimeOut?: () => void;
+
+  showAuctionTimer?: boolean;
+  assetLabel?: React.ReactNode;
+  assetLabelContainerProps?: BoxProps;
 }
 
 export const NftItem = (
@@ -35,29 +66,15 @@ export const NftItem = (
     nft,
     isSelected,
     selectedLabel,
-    onAuctionTimeOut
+    onAuctionTimeOut,
+    assetLabel,
+    assetLabelContainerProps,
   }: INftItemProps
 ) => {
   const { auctionExpDate } = nft;
 
   const [isRunningAuctionTime, toggleIsRunningAuctionTime] = useState(!!auctionExpDate);
   const [formattedAuctionExpTime, setFormattedAuctionExpTime] = useState<string>();
-
-  const avatars = useMemo(() => {
-    const avatars = [];
-
-    if (nft.creator) {
-      avatars.push({ name: 'Creator', value: nft.creator.displayName, img: nft.creator.profileImageUrl });
-    }
-    if (nft.collection) {
-      avatars.push({ name: 'Collection', value: nft.collection.name, img: nft.collection.coverUrl });
-    }
-    if (nft.owner) {
-      avatars.push({ name: 'Owner', value: nft.owner.displayName, img: nft.owner.profileImageUrl });
-    }
-
-    return avatars;
-  }, [nft]);
 
   useInterval(() => {
     const expDate = dayjs(auctionExpDate);
@@ -87,118 +104,21 @@ export const NftItem = (
 
   return (
     <ItemWrapper isBundle={nft.tokenIds.length > 1} isSelected={isSelected} selectedLabel={selectedLabel}>
-      <Flex alignItems={'center'} justifyContent={'space-between'}>
-        <Box>
-          {avatars.map((avatar, i) => (
-            <Tooltip
-              key={i}
-              hasArrow
-              label={`${avatar.name}: ${avatar.value}`}
-              placement={'top'}
-              variant={'black'}
-              fontWeight={700}
-            >
-              <Avatar
-                w={'26px'}
-                h={'26px'}
-                src={avatar.img}
-                name={`${avatar.name}: ${avatar.value}`}
-                border={'1px solid white'}
-                _notFirst={{
-                  marginLeft: '-7px',
-                  position: 'relative',
-                }}
-              />
-            </Tooltip>
-          ))}
+
+      <NFTItemHeader nft={nft} />
+
+      <Box {...styles.assetContainer}>
+
+        <NFTItemAsset nft={nft} showSwiperPagination={!formattedAuctionExpTime} />
+
+        <Box {...styles.assetLabelContainer} {...assetLabelContainerProps}>
+          {assetLabel ? assetLabel : (
+            <>
+              {nft.isAudio && (<NFTItemAssetAudioLabel />)}
+              {nft.isVideo && (<NFTItemAssetVideoLabel />)}
+            </>
+          )}
         </Box>
-        <Flex fontSize={'12px'}>
-          {nft.tokenIds?.length > 1 && (<BundleLabel count={nft.tokenIds.length ?? 0} />)}
-          {nft.assets?.length && (<StorybookLabel count={nft.assets.length ?? 0} />)}
-
-          <LikeButton likes={nft.likes} isLiked={nft.isLiked} />
-        </Flex>
-      </Flex>
-      <Box
-        position={'relative'}
-        my={'16px'}
-        borderRadius={'6px'}
-        overflow={'hidden'}
-        sx={{
-          '.swiper-button-prev': {
-            bg: 'white',
-            borderRadius: '50%',
-            opacity: 0.4,
-            height: '30px',
-            width: '30px',
-            mt: '-15px',
-            _after: {
-              bg: `url(${arrowLeftIcon}) no-repeat center`,
-              content: '""',
-              fontFamily: 'inherit',
-              h: 'inherit',
-              w: 'inherit',
-            }
-          },
-          '.swiper-button-next': {
-            bg: 'white',
-            borderRadius: '50%',
-            opacity: 0.4,
-            height: '30px',
-            width: '30px',
-            mt: '-15px',
-            _after: {
-              bg: `url(${arrowRightIcon}) no-repeat center`,
-              content: '""',
-              fontFamily: 'inherit',
-              h: 'inherit',
-              w: 'inherit',
-            }
-          },
-          '.swiper-pagination-bullet': {
-            opacity: 0.4,
-          },
-          '.swiper-pagination-bullet-active': {
-            bg: 'linear-gradient(135deg, #BCEB00 15.57%, #00EAEA 84.88%)',
-            opacity: 1,
-          },
-        }}
-      >
-
-        {nft.assets ? (
-          <Swiper
-            modules={[Navigation, Pagination]}
-            navigation={true}
-            pagination={formattedAuctionExpTime ? false : {
-              dynamicBullets: true,
-              clickable: true,
-            }}
-            loop={true}
-          >
-            {[nft.thumbnail_url, ...nft.assets].map((asset, i) => (
-              <SwiperSlide key={i}>
-                <Image
-                  src={asset}
-                  alt={nft.name}
-                  boxSize={'231px'}
-                  objectFit={'cover'}
-                />
-              </SwiperSlide>
-            ))}
-          </Swiper>
-        ) : (
-          <Image
-            src={nft.thumbnail_url}
-            alt={nft.name}
-            boxSize={'231px'}
-            objectFit={'cover'}
-          />
-        )}
-
-        <Flex position={'absolute'} top={'10px'} right={'10px'}>
-          {nft.isAudio && (<AudioLabel />)}
-          {nft.isVideo && (<VideoLabel />)}
-        </Flex>
 
         {formattedAuctionExpTime && (
           <Flex position={'absolute'} bottom={'10px'} justifyContent={'center'} w={'100%'} zIndex={1}>
@@ -225,11 +145,10 @@ export const NftItem = (
             </Box>
           </Flex>
         )}
-
       </Box>
 
-      <Text fontSize={'14px'} fontWeight={700} mb={'10px'}>{nft.name}</Text>
-      <Text fontSize={'10px'} fontWeight={600} color={'#00000066'}>{nft.tokenIds?.length ?? 0}/{nft.numberOfEditions}</Text>
+      <Text {...styles.nftName}>{nft.name}</Text>
+      <Text {...styles.addition}>{nft.tokenIds?.length ?? 0}/{nft.numberOfEditions}</Text>
     </ItemWrapper>
   );
 };

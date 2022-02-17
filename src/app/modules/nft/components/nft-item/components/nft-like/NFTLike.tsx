@@ -17,11 +17,11 @@ import heartFilled from '../../../../../../../assets/images/marketplace/heart-fi
 import heart from '../../../../../../../assets/images/marketplace/heart.svg';
 import heartHover from '../../../../../../../assets/images/marketplace/heart-hover.svg';
 
-interface ILikeButtonProps extends ButtonProps, Pick<INft, 'likes' | 'isLiked'> {
+interface INFTLikeProps extends ButtonProps, Pick<INft, 'likes' | 'isLiked'> {
   onToggle?: (isLiked: boolean) => void;
 }
 
-export const LikeButton = ({ isLiked, likes, onToggle, sx = {}, ...rest }: ILikeButtonProps) => {
+export const NFTLike = ({ isLiked, likes, onToggle, sx = {}, ...rest }: INFTLikeProps) => {
   return (
     <Popover trigger={'hover'} placement={'top'} variant={'tooltip'}>
       <PopoverTrigger>
