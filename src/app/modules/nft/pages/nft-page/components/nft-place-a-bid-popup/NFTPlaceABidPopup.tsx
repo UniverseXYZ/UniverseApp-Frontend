@@ -47,7 +47,7 @@ export enum PlaceABidState {
   SUCCESS,
 }
 
-export const ValidationSchema = Yup.object().shape({
+export const NFTPlaceABidValidationSchema = Yup.object().shape({
   token: Yup.string().required('This field is required'),
   amount: Yup.number().required('This field is required').moreThan(0),
 });
@@ -85,7 +85,7 @@ export const NFTPlaceABidPopup = ({ order, isOpen, onClose, }: INFTPlaceABidPopu
       amount: '',
       token: TOKENS_MAP.WETH.ticker,
     },
-    validationSchema: ValidationSchema,
+    validationSchema: NFTPlaceABidValidationSchema,
     onSubmit: async (value) => {
       setState(PlaceABidState.PROCESSING);
 
