@@ -1,6 +1,5 @@
 import { Box, BoxProps, Image, Text } from '@chakra-ui/react';
-import React, { useMemo, useRef } from 'react';
-import { useHoverDirty } from 'react-use';
+import React, { useMemo } from 'react';
 
 import checkNftIcon from '../../../assets/images/check-nft.svg';
 
@@ -37,13 +36,15 @@ const useStyles: (isBundle: boolean) => Record<
         },
       },
 
-      _hover: {
-        boxShadow: `0px 0px 30px rgba(0, 0, 0, ${isBundle ? 0.1 : 0.2})`,
-        _after: {
-          background: 'transparent',
-          border: 0,
-        }
-      },
+      sx: {
+        '&:hover, &:hover [data-layer]': {
+          boxShadow: `0px 0px 30px rgba(0, 0, 0, ${isBundle ? 0.1 : 0.2})`,
+          _after: {
+            background: 'transparent',
+            border: 0,
+          }
+        },
+      }
     };
   }, [isBundle]);
 
@@ -56,7 +57,6 @@ const useStyles: (isBundle: boolean) => Record<
       height: '100%',
       _after: itemWrapperStyles._after,
       _selected: itemWrapperStyles?._selected,
-      _hover: itemWrapperStyles?._hover,
     };
   }, [itemWrapperStyles]);
 
@@ -96,18 +96,15 @@ export const ItemWrapper = (
     ...rest
   }: IItemWrapperProps
 ) => {
-  const itemWrapperRef = useRef(null);
-  const isHovering = useHoverDirty(itemWrapperRef);
-
   const styles = useStyles(isBundle);
 
   return (
-    <Box ref={itemWrapperRef} {...styles.itemWrapperStyles} {...rest} data-selected={isSelected || null}>
+    <Box {...styles.itemWrapperStyles} {...rest} data-selected={isSelected || null}>
       {children}
       {isBundle && (
         <>
-          <Box data-hover={isHovering || null} data-selected={isSelected || null} {...styles.subLayerStyles} top={`5px`} left={`2%`} width={`96%`} zIndex={-1} />
-          <Box data-hover={isHovering || null} data-selected={isSelected || null} {...styles.subLayerStyles} top={`10px`} left={`4%`} width={`92%`} zIndex={-2} />
+          <Box data-layer data-selected={isSelected || null} {...styles.subLayerStyles} top={`5px`} left={`2%`} width={`96%`} zIndex={-1} />
+          <Box data-layer data-selected={isSelected || null} {...styles.subLayerStyles} top={`10px`} left={`4%`} width={`92%`} zIndex={-2} />
         </>
       )}
       {isSelected && (
