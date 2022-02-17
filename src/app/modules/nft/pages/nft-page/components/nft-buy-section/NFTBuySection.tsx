@@ -6,9 +6,10 @@ import { useDateCountDown } from '../../../../../../hooks';
 import * as styles from './styles';
 import { HighestBid } from './components';
 import { NFTCheckoutPopup } from '../nft-checkout-popup';
+import { NFTPlaceABidPopup } from '../nft-place-a-bid-popup';
+import { NFTMakeAnOfferPopup } from '../nft-make-an-offer-popup';
 
 import ClockIcon from '../../../../../../../assets/images/clock.svg';
-import { NFTPlaceABidPopup } from '../nft-place-a-bid-popup';
 
 export const NFTBuySection = () => {
   const buyNFTSection = useBuyNFTSection(8);
@@ -17,6 +18,7 @@ export const NFTBuySection = () => {
 
   const [isCheckoutPopupOpened, setIsCheckoutPopupOpened] = useState(false);
   const [isPlaceABidPopupOpened, setIsPlaceABidPopupOpened] = useState(false);
+  const [isMakeAnOfferPopupOpened, setIsMakeAnOfferPopupOpened] = useState(false);
 
   return (
     <Box {...styles.WrapperStyle}>
@@ -36,7 +38,7 @@ export const NFTBuySection = () => {
             <HighestBid />
             <SimpleGrid columns={2} spacingX={'12px'}>
               <Button boxShadow={'lg'} onClick={() => setIsPlaceABidPopupOpened(true)}>Place a bid</Button>
-              <Button variant={'outline'}>Make offer</Button>
+              <Button variant={'outline'} onClick={() => setIsMakeAnOfferPopupOpened(true)}>Make offer</Button>
             </SimpleGrid>
           </>
         )}
@@ -45,7 +47,7 @@ export const NFTBuySection = () => {
             <HighestBid />
             <SimpleGrid columns={2} spacingX={'12px'}>
               <Button boxShadow={'lg'} onClick={() => setIsCheckoutPopupOpened(true)}>Buy for 0.5 ETH</Button>
-              <Button variant={'outline'}>Make offer</Button>
+              <Button variant={'outline'} onClick={() => setIsMakeAnOfferPopupOpened(true)}>Make offer</Button>
             </SimpleGrid>
           </>
         )}
@@ -101,6 +103,7 @@ export const NFTBuySection = () => {
       </Box>
       <NFTCheckoutPopup isOpen={isCheckoutPopupOpened} onClose={() => setIsCheckoutPopupOpened(false)} />
       <NFTPlaceABidPopup isOpen={isPlaceABidPopupOpened} onClose={() => setIsPlaceABidPopupOpened(false)} />
+      <NFTMakeAnOfferPopup isOpen={isMakeAnOfferPopupOpened} onClose={() => setIsMakeAnOfferPopupOpened(false)} />
     </Box>
   );
 }

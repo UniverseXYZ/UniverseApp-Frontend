@@ -2,6 +2,7 @@ export * from './nft-asset-audio';
 export * from './nft-asset-image';
 export * from './nft-buy-section';
 export * from './nft-checkout-popup';
+export * from './nft-make-an-offer-popup';
 export * from './nft-place-a-bid-popup';
 export * from './nft-property';
 export * from './polymorph-property';
