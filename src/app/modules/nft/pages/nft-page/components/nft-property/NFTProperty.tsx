@@ -27,7 +27,7 @@ const PropertyDescriptionStyles: TextProps = {
   fontWeight: 400,
 };
 
-interface INFTPropertyProps {
+export interface INFTPropertyProps {
   name: string;
   value: string;
   description?: string;
