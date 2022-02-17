@@ -10,6 +10,7 @@ import { Nfts } from '../../mocks/nfts';
 
 import BrowseNFTsIntroImage from './../../../../../assets/images/marketplace/v2/browse_nfts_intro.png'
 import { useStickyHeader } from '../../../../hooks';
+import { FilterCollectionsItems } from '../../mocks/filter-collections';
 
 export const BrowseNFTsPage = () => {
   const [sortBy, setSortBy] = useState();
@@ -62,7 +63,11 @@ export const BrowseNFTsPage = () => {
               <SaleTypeFilter onChange={(values) => console.log('values', values)} />
               <NFTTypeFilter onChange={(values) => console.log('values', values)} />
               <PriceRangeFilter onChange={(values) => console.log('values', values)} />
-              <CollectionsFilter />
+              <CollectionsFilter
+                items={FilterCollectionsItems}
+                onChange={(values) => console.log('values', values)}
+                onClear={() => {}}
+              />
               <ArtistsFilter />
             </Box>
             <Select

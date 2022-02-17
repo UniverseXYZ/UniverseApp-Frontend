@@ -4,7 +4,7 @@ import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-  ButtonProps, Box, Flex, Link,
+  ButtonProps, Box, Flex, Link, BoxProps,
 } from '@chakra-ui/react';
 import React, { useCallback, useEffect, useState } from 'react';
 
@@ -120,7 +120,7 @@ export const Dropdown = (
   );
 };
 
-interface IDropdownFilterContainerProps {
+interface IDropdownFilterContainerProps extends BoxProps {
   children: React.ReactNode;
   onSave: () => void;
   onClear: () => void;
@@ -131,10 +131,11 @@ export const DropdownFilterContainer = (
     children = null,
     onSave,
     onClear,
+    ...rest
   }: IDropdownFilterContainerProps) => {
   return (
     <>
-      <Box width={'405px'} p={'30px'}>
+      <Box width={'405px'} p={'30px'} {...rest}>
         {children}
       </Box>
       <Flex
