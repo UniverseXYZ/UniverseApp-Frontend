@@ -17,9 +17,9 @@ export const TabOwners = () => {
       {owners.map((owner, i) => (
         <NFTTabItemWrapper key={i} label={i === 0 && owner.price ? 'Lowest ask' : undefined}>
           <Flex>
-            <Image src={owner.user.photo} {...styles.OwnerImageStyles} />
+            <Image src={owner.user.photo} {...styles.ImageStyles} />
             <Box>
-              <Text {...styles.OwnerNameStyles}>{owner.user.name}</Text>
+              <Text {...styles.NameStyles}>{owner.user.name}</Text>
               <Text {...styles.DescriptionStyles}>
                 {owner.edition}/{NFT.tokenIds.length}
                 {!owner.price
