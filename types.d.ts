@@ -12,3 +12,8 @@ declare module "react-read-more-read-less" {
   const content: any;
   export default content;
 }
+
+declare module "ethereum-address" {
+  const content: any;
+  export default content;
+}

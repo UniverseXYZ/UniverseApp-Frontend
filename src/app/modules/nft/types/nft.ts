@@ -8,6 +8,7 @@ export enum NFTArtworkType {
 
 export enum NFTStandard {
   ERC721 = 'ERC721',
+  ERC1155 = 'ERC1155',
 }
 
 export interface IRoyalty {
