@@ -17,7 +17,7 @@ import {
   TabPanel,
   TabPanels,
   Tabs,
-  Text,
+  Text, Tooltip,
 } from '@chakra-ui/react';
 
 import { NftItem } from '../../components';
@@ -27,12 +27,15 @@ import { NFTLike } from '../../components/nft-item/components';
 import { useThemeContext } from '../../../../../contexts/ThemeContext';
 import { NFTMenu, Tabs as NFTTabs } from './constants';
 import Lottie from 'react-lottie';
-
-import DotsIcon from './../../../../../assets/images/marketplace/3-dots.svg';
 import { Bindings } from './mocks';
 import { LineTabList } from '../../../../components';
 import { NFTPageContext } from './NFTPage.context';
+
 import playerAnimation from './../../../../../utils/animations/music-player.json'
+
+import DotsIcon from './../../../../../assets/images/marketplace/3-dots.svg';
+import EthIcon from './../../../../../assets/images/eth-icon-new.svg';
+import UserImage from './../../../../../assets/images/collection_img3.svg';
 
 const MenuItemStyles: MenuItemProps = {
   borderRadius: '6px',
@@ -99,51 +102,63 @@ export const NFTPage = () => {
   return (
     <NFTPageContext.Provider value={{ NFT, isPolymorph }}>
       <Box>
-        <Flex>
-          <Flex sx={{
+        <Flex
+          sx={{
             // alignItems: 'center',
-            flex: 1,
+            // flex: 1,
             justifyContent: 'center',
             py: '60px',
-          }}>
-            {/*TODO: add video / audio / bundle / storybook */}
-            {/*<Image*/}
-            {/*  src={'https://storage.googleapis.com/lobster-images/05020905000503.jpg'}*/}
-            {/*  sx={{*/}
-            {/*    borderRadius: '12px',*/}
-            {/*    maxH: '600px',*/}
-            {/*    maxW: '600px',*/}
-            {/*  }}*/}
-            {/*/>*/}
+            w: 'calc(100% - 550px)',
 
-            <Box sx={{
-              borderRadius: '12px',
-              h: '600px',
-              w: '600px',
-              overflow: 'hidden',
-              position: 'relative',
-            }}>
-              <canvas ref={canvasRef} width="32" height="32" style={{ width: '100%', height: '100%'}}></canvas>
-              <Box sx={{
-                position: 'absolute',
-                top: 0,
-              }}>
-                <Lottie options={{
-                  loop: true,
-                  autoplay: true,
-                  animationData: playerAnimation,
-                  rendererSettings: {
-                    preserveAspectRatio: 'xMidYMid slice',
-                  },
-                }} />
-              </Box>
-            </Box>
-          </Flex>
+            float: 'left',
+            position: 'sticky',
+            top: '84px',
+          }}
+        >
+          {/*TODO: add video / audio / bundle / storybook */}
+          {/*<Image*/}
+          {/*  src={'https://storage.googleapis.com/lobster-images/05020905000503.jpg'}*/}
+          {/*  sx={{*/}
+          {/*    borderRadius: '12px',*/}
+          {/*    maxH: '600px',*/}
+          {/*    maxW: '600px',*/}
+          {/*  }}*/}
+          {/*/>*/}
+
           <Box sx={{
-            borderLeft: '1px solid #E4E4E4',
-            p: '60px 40px',
-            w: '550px',
+            borderRadius: '12px',
+            // h: '600px',
+            // w: '600px',
+            h: 'calc(100vh - 84px - 120px)',
+            w: 'calc(100vh - 84px - 120px)',
+            overflow: 'hidden',
+            position: 'relative',
           }}>
+            <canvas ref={canvasRef} width="32" height="32" style={{ width: '100%', height: '100%'}}></canvas>
+            <Box sx={{
+              position: 'absolute',
+              top: 0,
+            }}>
+              <Lottie options={{
+                loop: true,
+                autoplay: true,
+                animationData: playerAnimation,
+                rendererSettings: {
+                  preserveAspectRatio: 'xMidYMid slice',
+                },
+              }} />
+            </Box>
+          </Box>
+        </Flex>
+        <Box
+          sx={{
+            borderLeft: '1px solid #E4E4E4',
+            w: '550px',
+
+            float: 'right',
+          }}
+        >
+          <Box sx={{ p: '60px 40px', }}>
             <Flex sx={{
               alignItems: 'center',
               mb: '12px',
@@ -243,32 +258,107 @@ export const NFTPage = () => {
 
               <TabPanels>
                 {NFTTabs.map(({ component: TabContentComponent }, i) => (
-                  <TabPanel key={i} px={0} pt={'30px'}>
+                  <TabPanel key={i} px={0} pt={'30px'} pb={0}>
                     <TabContentComponent />
                   </TabPanel>
                 ))}
               </TabPanels>
             </Tabs>
           </Box>
-        </Flex>
-        <Box sx={{
-          bg: 'linear-gradient(127.59deg, #F2F3FB -1.33%, #FCF9F4 91.03%)',
-          py: '80px',
-          px: '40px',
-        }}>
-          <Heading as={'h2'} sx={{ fontSize: '26px', textAlign: 'center', }}>More from this collection</Heading>
-          <Container maxW={'1110px'} py={'40px !important'}>
-            <SimpleGrid
-              columns={{ base: 1, md: 2, lg: 4 }}
-              spacingX={'20px'}
-            >
-              {moreNFTs.map((NFT) => (<NftItem key={NFT.id} nft={NFT} />))}
+
+          <Box sx={{
+            bg: 'linear-gradient(135deg, rgba(188, 235, 0, 0.03) 15.57%, rgba(0, 234, 234, 0.03) 84.88%), rgba(255, 255, 255, 0.8)',
+            backdropFilter: 'blur(10px)',
+            p: '40px',
+            position: 'sticky',
+            bottom: 0,
+            _before: {
+              position: 'absolute',
+              height: '2px',
+              bg: 'linear-gradient(90deg, #2AD0CA 0%, #E1F664 22.92%, #FEB0FE 46.88%, #ABB3FC 68.23%, #5DF7A4 87.5%, #58C4F6 100%)',
+              content: '""',
+              w: '100%',
+              top: 0,
+              left: 0,
+            },
+          }}>
+            <Flex mb={'24px'} fontSize={'14px'}>
+              <Image src={UserImage} sx={{
+                mr: '16px',
+                w: '50px',
+                h: '50px',
+                borderRadius: '50%',
+              }} />
+              <Box>
+                <Text
+                  sx={{
+                    color: 'rgba(0, 0, 0, 0.4)',
+                    mb: '6px',
+                    strong: {
+                      color: 'black',
+                      fontWeight: 700,
+                    }
+                  }}
+                >Highest bid by <strong>The Unveiling</strong></Text>
+                <Flex sx={{
+                  fontWeight: 500,
+                  lineHeight: '20px',
+                  padding: '',
+                  p: {
+                    mr: '6px',
+                  }
+                }}>
+                  <Text sx={{
+                    fontSize: '20px',
+                    fontWeight: 700,
+                  }}>
+                    <Tooltip
+                      hasArrow
+                      variant={'black'}
+                      placement={'top'}
+                      label={'WETH'}
+                      fontWeight={700}
+                    >
+                      <Image src={EthIcon} sx={{
+                        mr: '6px',
+                        display: 'inline',
+                        h: '22px',
+                        w: '14px',
+                        mt: '-3px',
+                      }} />
+                    </Tooltip>
+                    0.5
+                  </Text>
+                  <Text sx={{ color: 'rgba(0, 0, 0, 0.4)' }}>$142.39</Text>
+                  <Text sx={{ color: '#E4B613' }}>(10% of sales will go to creator)</Text>
+                </Flex>
+              </Box>
+            </Flex>
+            <SimpleGrid columns={2} spacingX={'12px'}>
+              <Button boxShadow={'lg'}>Place a bid</Button>
+              <Button variant={'outline'}>Make offer</Button>
             </SimpleGrid>
-          </Container>
-          <Flex justifyContent={'center'}>
-            <Button variant={'outline'} boxShadow={'inset 2px 1000px 1px #fbf8f6'}>View collection</Button>
-          </Flex>
+            {/*<Button boxShadow={'lg'} w={'100%'}>Put on sale</Button>*/}
+          </Box>
         </Box>
+      </Box>
+      <Box sx={{
+        bg: 'linear-gradient(127.59deg, #F2F3FB -1.33%, #FCF9F4 91.03%)',
+        py: '80px',
+        px: '40px',
+      }}>
+        <Heading as={'h2'} sx={{ fontSize: '26px', textAlign: 'center', }}>More from this collection</Heading>
+        <Container maxW={'1110px'} py={'40px !important'}>
+          <SimpleGrid
+            columns={{ base: 1, md: 2, lg: 4 }}
+            spacingX={'20px'}
+          >
+            {moreNFTs.map((NFT) => (<NftItem key={NFT.id} nft={NFT} />))}
+          </SimpleGrid>
+        </Container>
+        <Flex justifyContent={'center'}>
+          <Button variant={'outline'} boxShadow={'inset 2px 1000px 1px #fbf8f6'}>View collection</Button>
+        </Flex>
       </Box>
     </NFTPageContext.Provider>
   );
