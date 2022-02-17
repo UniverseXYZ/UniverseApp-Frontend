@@ -1,8 +1,9 @@
 import { Box, Button, Center, Container, Heading, Image } from '@chakra-ui/react';
+import React from 'react';
+
 import universeTieredAuctionsBG
   from '../../../../../../../assets/images/sellNft/go-to-universe-auction-section-bg-img.png';
 import arrowRight from '../../../../../../../assets/images/arrow-black.svg';
-import React from 'react';
 
 export const TieredAuctionsBanner = () => {
   return (
