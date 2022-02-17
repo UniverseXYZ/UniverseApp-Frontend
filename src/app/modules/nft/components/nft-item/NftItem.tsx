@@ -1,5 +1,5 @@
 import {
-  Box, BoxProps,
+  Box, BoxProps, Image,
   Text, TextProps,
 } from '@chakra-ui/react';
 import React, { useCallback } from 'react';
@@ -15,11 +15,15 @@ import {
 } from './components';
 import { ItemWrapper } from '../../../../components';
 
+import ethereumIcon from './../../../../../assets/images/marketplace/eth-icon.svg';
+
 interface IStyles {
   assetContainer: BoxProps;
   assetLabelContainer: BoxProps;
-  nftName: TextProps;
-  addition: TextProps;
+  footer: {
+    nameLine: BoxProps;
+    additionLine: BoxProps;
+  }
 }
 
 const styles: IStyles = {
@@ -36,15 +40,21 @@ const styles: IStyles = {
     right: '10px',
     zIndex: 1,
   },
-  nftName: {
-    fontSize: '14px',
-    fontWeight: 700,
-    mb: '10px',
-  },
-  addition: {
-    fontSize: '10px',
-    fontWeight: 600,
-    color: '#00000066',
+  footer: {
+    nameLine: {
+      display: 'flex',
+      fontSize: '14px',
+      fontWeight: 700,
+      justifyContent: 'space-between',
+      mb: '10px',
+    },
+    additionLine: {
+      display: 'flex',
+      fontSize: '10px',
+      fontWeight: 600,
+      justifyContent: 'space-between',
+      color: '#00000066',
+    }
   },
 };
 
@@ -55,8 +65,13 @@ interface INftItemProps {
   onAuctionTimeOut?: () => void;
 
   showAuctionTimer?: boolean;
-  assetLabel?: React.ReactNode;
+  showNFTName?: boolean;
+  showNFTPrice?: boolean;
+
+  renderAssetLabel?: React.ReactNode;
   assetLabelContainerProps?: BoxProps;
+
+  renderFooter?: React.ReactNode;
 }
 
 export const NftItem = (
@@ -66,8 +81,11 @@ export const NftItem = (
     selectedLabel,
     onAuctionTimeOut,
     showAuctionTimer = true,
-    assetLabel,
+    showNFTName = true,
+    showNFTPrice = true,
+    renderAssetLabel,
     assetLabelContainerProps,
+    renderFooter,
   }: INftItemProps
 ) => {
   const [existAuctionTimer, toggleExistAuctionTimer] = useBoolean(!!nft.auctionExpDate);
@@ -80,6 +98,7 @@ export const NftItem = (
   return (
     <ItemWrapper isBundle={nft.tokenIds.length > 1} isSelected={isSelected} selectedLabel={selectedLabel}>
 
+      {/*TODO: add render header*/}
       <NFTItemHeader nft={nft} />
 
       <Box {...styles.assetContainer}>
@@ -87,7 +106,7 @@ export const NftItem = (
         <NFTItemAsset nft={nft} showSwiperPagination={!showAuctionTimer || !existAuctionTimer} />
 
         <Box {...styles.assetLabelContainer} {...assetLabelContainerProps}>
-          {assetLabel ? assetLabel : (
+          {renderAssetLabel ? renderAssetLabel : (
             <>
               {nft.isAudio && (<NFTItemAssetAudioLabel />)}
               {nft.isVideo && (<NFTItemAssetVideoLabel />)}
@@ -100,8 +119,51 @@ export const NftItem = (
         )}
       </Box>
 
-      <Text {...styles.nftName}>{nft.name}</Text>
-      <Text {...styles.addition}>{nft.tokenIds?.length ?? 0}/{nft.numberOfEditions}</Text>
+      {renderFooter ? renderFooter : (
+        <>
+          <Box {...styles.footer.nameLine}>
+            <Box flex={1}>
+              {showNFTName && (<Text>{nft.name}</Text>)}
+            </Box>
+            <Box>
+              {showNFTPrice && nft.price && (
+                <Text>
+                  <Image
+                    src={ethereumIcon}
+                    alt={'Ethereum icon'}
+                    display={'inline'}
+                    mx={'4px'}
+                    position={'relative'}
+                    top={'-2px'}
+                    width={'9px'}
+                  />
+                  {nft.price}
+                </Text>
+              )}
+            </Box>
+          </Box>
+          <Box {...styles.footer.additionLine}>
+            <Box flex={1}>
+              <Text>{nft.tokenIds?.length ?? 0}/{nft.numberOfEditions}</Text>
+            </Box>
+            <Box>
+              <Text>
+                Offer for
+                <Image
+                  src={ethereumIcon}
+                  alt={'Ethereum icon'}
+                  display={'inline'}
+                  mx={'4px'}
+                  position={'relative'}
+                  top={'-1px'}
+                  width={'6px'}
+                />
+                <Box as={'span'} color={'black'}>0.35</Box>
+              </Text>
+            </Box>
+          </Box>
+        </>
+      )}
     </ItemWrapper>
   );
 };

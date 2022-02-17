@@ -71,4 +71,5 @@ export interface INftBackend {
   isVideo: boolean;
   auctionExpDate: string;
   assets: string[]; // storybook
+  price: number | string;
 }
