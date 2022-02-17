@@ -192,14 +192,6 @@ const SettingsTabDutchAuction = () => {
                 <Text>Your listing will automatically end at this time. No need to cancel it!</Text>
               </Box>
               <Box>
-                {/*<InputShadow>*/}
-                {/*  <Input*/}
-                {/*    placeholder="Mar 14, 2021, 12:00 EST"*/}
-                {/*    name="expirationDate"*/}
-                {/*    value={sellData.form.values.expirationDate}*/}
-                {/*    onChange={sellData.form.handleChange}*/}
-                {/*  />*/}
-                {/*</InputShadow>*/}
                 <DateTimePicker
                   value={sellData.form.values.expirationDate}
                   modalName={'Expiration date'}
@@ -232,14 +224,11 @@ const SettingsTabDutchAuction = () => {
                   <Text>Schedule for a future time.</Text>
                 </Box>
                 <Box>
-                  <InputShadow>
-                    <Input
-                      placeholder="Mar 14, 2021, 12:00 EST"
-                      name="futureDate"
-                      value={sellData.form.values.futureDate}
-                      onChange={sellData.form.handleChange}
-                    />
-                  </InputShadow>
+                  <DateTimePicker
+                    value={sellData.form.values.futureDate}
+                    modalName={'Future date'}
+                    onChange={(val) => sellData.form.setFieldValue('futureDate', val)}
+                  />
                 </Box>
               </Flex>
             </GreyBox>
