@@ -10,67 +10,81 @@ import {
   RangeSliderTrack,
   SimpleGrid,
 } from '@chakra-ui/react';
-import { useFormik } from 'formik';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Dropdown, DropdownFilterContainer, CurrencySelect } from '../../../../../components';
+import { IPriceRangeFilterProps, IPriceRangeFilterValue } from './types';
 
 import priceRangeIcon from '../../../../../../assets/images/marketplace/price-range.svg';
-import { coins } from '../../../../../mocks';
 
-interface IPriceRangeFilterForm {
-  currency: any | null; // TODO
-  price: [number, number];
-}
+export const PriceRangeFilter = ({ value: _value, isDirty, onChange, onClear }: IPriceRangeFilterProps) => {
+  const [isOpened, setIsOpened] = useState(false);
+  const [value, setValue] = useState<IPriceRangeFilterValue>({} as IPriceRangeFilterValue);
 
-interface IPriceRangeFilterProps {
-  onChange: (values: IPriceRangeFilterForm) => void;
-}
-
-const DEFAULT_MIN_VALUE = 0;
-const DEFAULT_MAX_VALUE = 100;
-
-export const PriceRangeFilter = ({ onChange }: IPriceRangeFilterProps) => {
   const [isMaxPriceFocused, setIsMaxPriceFocused] = useState<boolean>(false);
-  const [minPriceVal, setMinPriceVal] = useState<string>(DEFAULT_MIN_VALUE.toString());
-  const [maxPriceVal, setMaxPriceVal] = useState<string>(DEFAULT_MAX_VALUE.toString());
+  const [minPriceVal, setMinPriceVal] = useState<string>('');
+  const [maxPriceVal, setMaxPriceVal] = useState<string>('');
 
-  const form = useFormik<IPriceRangeFilterForm>({
-    initialValues: {
-      currency: coins[0],
-      price: [DEFAULT_MIN_VALUE, DEFAULT_MAX_VALUE],
-    },
-    onSubmit: (values) => {
-      onChange(values);
-    },
-  });
+  const handleSave = useCallback(() => {
+    onChange(value);
+    setIsOpened(false);
+  }, [value, onChange]);
+
+  const handleClear = useCallback(() => {
+    setValue(_value);
+    onClear();
+  }, [_value, onClear]);
+
+  const handleChangeCurrency = useCallback((newCurrency) => {
+    setValue({...value, currency: newCurrency})
+  }, [value]);
+
+  const handleChangePrice = useCallback((newPrice: number[]) => {
+    setValue({...value, price: newPrice})
+  }, [value]);
+
+  const valueLabel = useMemo(() => {
+    if (!isDirty) {
+      return null;
+    }
+    return `${_value.price[0]}-${_value.price[1]}${_value.price[1] === 100 ? '+' : ''} ${_value.currency.token}`;
+  }, [_value, isDirty]);
+
+  useEffect(() => setValue(_value), [_value]);
 
   useEffect(() => {
-    setMinPriceVal(`${form.values.price[0]}`);
-    setMaxPriceVal(`${form.values.price[1]}`);
-  }, [form.values.price])
+    setMinPriceVal(`${value.price?.[0]}`);
+    setMaxPriceVal(`${value.price?.[1]}`);
+  }, [value.price]);
 
   return (
     <Dropdown
       label={'Price range'}
+      value={valueLabel}
       buttonProps={{ leftIcon: <Image src={priceRangeIcon} /> }}
+      isOpened={isOpened}
+      onOpen={() => setIsOpened(true)}
+      onClose={() => {
+        setValue(_value);
+        setIsOpened(false);
+      }}
     >
       <DropdownFilterContainer
-        onSave={() => form.submitForm()}
-        onClear={() => form.resetForm()}
+        onSave={handleSave}
+        onClear={handleClear}
       >
         <Box mb={'30px'}>
           <CurrencySelect
-            value={form.values.currency}
-            onChange={(currency) => form.setFieldValue('currency', currency)}
+            value={value.currency}
+            onChange={(currency) => handleChangeCurrency(currency)}
           />
         </Box>
 
         <RangeSlider
           aria-label={['min', 'max']}
           name={'price'}
-          value={form.values.price}
-          onChange={(value) => form.setFieldValue('price', value)}
+          value={value.price}
+          onChange={(value) => handleChangePrice(value)}
         >
           <RangeSliderTrack>
             <RangeSliderFilledTrack />
@@ -89,7 +103,7 @@ export const PriceRangeFilter = ({ onChange }: IPriceRangeFilterProps) => {
               onBlur={() => {
                 const val = +(minPriceVal || 0);
                 setMinPriceVal(`${val}`);
-                form.setFieldValue('price', [val, form.values.price[1]]);
+                handleChangePrice([val, value.price[1]]);
               }}
             >
               <NumberInputField
@@ -117,13 +131,13 @@ export const PriceRangeFilter = ({ onChange }: IPriceRangeFilterProps) => {
             <NumberInput
               min={1}
               max={100}
-              value={!isMaxPriceFocused && form.values.price[1] === 100 ? `100+` : maxPriceVal}
+              value={!isMaxPriceFocused && value.price?.[1] === 100 ? `100+` : maxPriceVal}
               onChange={(val) => setMaxPriceVal(val)}
               onFocus={() => setIsMaxPriceFocused(true)}
               onBlur={() => {
                 const val = +(maxPriceVal || 0);
                 setMaxPriceVal(`${val}`);
-                form.setFieldValue('price', [form.values.price[0], val]);
+                handleChangePrice([value.price[0], val]);
                 setIsMaxPriceFocused(false);
               }}
             >

@@ -1,5 +1,6 @@
-import React, { useCallback, useRef, useState } from 'react';
 import { Box, Button, Container, Flex, Heading, Link, SimpleGrid, Text } from '@chakra-ui/react';
+import React, { useCallback, useRef, useState } from 'react';
+import { useFormik } from 'formik';
 
 import {
   ArtistsFilter,
@@ -8,19 +9,20 @@ import {
   NFTTypeFilter,
   PriceRangeFilter,
   SaleTypeFilter,
+  INftTypeFilterValue,
+  IPriceRangeFilterValue,
 } from '../../components';
 import { SortNftsOptions } from '../../constants';
 import { BackToTopButton, Select } from '../../../../components';
 import { NftItem } from '../../../nft/components';
 import { INft } from '../../../nft/types';
 import { Nfts } from '../../mocks/nfts';
-
-import BrowseNFTsIntroImage from './../../../../../assets/images/marketplace/v2/browse_nfts_intro.png'
 import { useStickyHeader } from '../../../../hooks';
 import { FilterCollectionsItems } from '../../mocks/filter-collections';
 import { FilterArtistsItems } from '../../mocks/filter-artists';
-import { useFormik } from 'formik';
-import { INftTypeFilterValue } from '../../components/filters/nft-type-filter/types';
+import { coins } from '../../../../mocks';
+
+import BrowseNFTsIntroImage from './../../../../../assets/images/marketplace/v2/browse_nfts_intro.png'
 
 export const BrowseNFTsPage = () => {
   const saleTypeFilterForm = useFormik<ISaleTypeFilterValue>({
@@ -30,7 +32,7 @@ export const BrowseNFTsPage = () => {
       new: false,
       hasOffers: false,
     },
-    onSubmit: (values) => {},
+    onSubmit: () => {},
   });
 
   const nftTypeFilterForm = useFormik<INftTypeFilterValue>({
@@ -43,7 +45,15 @@ export const BrowseNFTsPage = () => {
       audio: false,
       video: false,
     },
-    onSubmit: (values) => {},
+    onSubmit: () => {},
+  });
+
+  const priceRangeFilterForm = useFormik<IPriceRangeFilterValue>({
+    initialValues: {
+      currency: coins[0],
+      price: [0, 100],
+    },
+    onSubmit: () => {},
   });
 
   const [sortBy, setSortBy] = useState();
@@ -70,6 +80,7 @@ export const BrowseNFTsPage = () => {
   const handleClear = useCallback(() => {
     saleTypeFilterForm.resetForm();
     nftTypeFilterForm.resetForm();
+    priceRangeFilterForm.resetForm();
   }, []);
 
   return (
@@ -108,7 +119,12 @@ export const BrowseNFTsPage = () => {
                 onChange={(values) => nftTypeFilterForm.setValues(values)}
                 onClear={() => nftTypeFilterForm.resetForm()}
               />
-              <PriceRangeFilter onChange={(values) => console.log('values', values)} />
+              <PriceRangeFilter
+                value={priceRangeFilterForm.values}
+                isDirty={priceRangeFilterForm.dirty}
+                onChange={(values) => priceRangeFilterForm.setValues(values)}
+                onClear={() => priceRangeFilterForm.resetForm()}
+              />
               <CollectionsFilter
                 items={FilterCollectionsItems}
                 onChange={(values) => console.log('values', values)}
@@ -121,8 +137,9 @@ export const BrowseNFTsPage = () => {
               />
               {
                 (
-                  saleTypeFilterForm.dirty ||
-                  nftTypeFilterForm.dirty
+                  saleTypeFilterForm.dirty
+                  || nftTypeFilterForm.dirty
+                  || priceRangeFilterForm.dirty
                 ) && (
                   <Link onClick={handleClear} sx={{
                     fontWeight: 500,
