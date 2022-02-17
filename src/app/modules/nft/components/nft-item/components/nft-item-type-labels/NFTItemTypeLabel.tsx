@@ -3,7 +3,7 @@ import React from 'react';
 
 interface INFTItemTypeLabelProps {
   label: string;
-  icon: any;
+  icon: string;
   iconProps?: ImageProps;
 }
 

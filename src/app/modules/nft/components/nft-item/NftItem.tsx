@@ -92,8 +92,8 @@ export const NftItem = (
       isBundle={nft.tokenIds.length > 1}
       isSelected={isSelected}
       selectedLabel={selectedLabel}
-      onClick={(e) => {
-        if (['swiper-button-next', 'swiper-button-prev'].includes((e.target as any).className)) {
+      onClick={(e: React.MouseEvent<HTMLElement>) => {
+        if (['swiper-button-next', 'swiper-button-prev'].includes((e.target as HTMLElement).className)) {
           return;
         }
         onClick && onClick(nft);

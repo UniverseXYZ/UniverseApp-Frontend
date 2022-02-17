@@ -29,15 +29,6 @@ export const SaleTypeFilter = ({ onChange }: ISaleTypeFilterProps) => {
     },
   });
 
-  const handleCancel = useCallback(() => {
-    form.setValues({
-      buyNow: false,
-      onAuction: false,
-      new: false,
-      hasOffers: false,
-    });
-  }, []);
-
   return (
     <Dropdown
       label={'Sale type'}
@@ -45,7 +36,7 @@ export const SaleTypeFilter = ({ onChange }: ISaleTypeFilterProps) => {
     >
       <DropdownFilterContainer
         onSave={() => form.submitForm()}
-        onClear={handleCancel}
+        onClear={() => form.resetForm()}
       >
         <SimpleGrid columns={2} spacingY={'20px'}>
           <Box>

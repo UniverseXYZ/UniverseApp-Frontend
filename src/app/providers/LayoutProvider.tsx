@@ -6,7 +6,11 @@ interface ILayoutValue {
 
 const LayoutContext = createContext({} as ILayoutValue);
 
-export const LayoutProvider = (props: any) => {
+interface ILayoutProviderProps {
+  children: React.ReactNode;
+}
+
+export const LayoutProvider = (props: ILayoutProviderProps) => {
   const footerRef = useRef<HTMLElement>(null);
 
   return (
