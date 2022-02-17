@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { Route, Switch, useLocation } from 'react-router-dom';
 import Popup from 'reactjs-popup';
+import uuid from 'react-uuid';
 import './assets/scss/normalize.scss';
 import Header from './components/header/Header.jsx';
 import Footer from './components/footer/Footer.jsx';
@@ -50,6 +51,64 @@ import { useAuthContext } from './contexts/AuthContext';
 import ErrorPopup from './components/popups/ErrorPopup';
 import { useErrorContext } from './contexts/ErrorContext';
 import Minting from './components/products/minting/Minting';
+import { App as NewApp } from './app/App';
+
+class UniverseRoute {
+  constructor(
+    component,
+    isPrivate = false,
+    isRewritten = false,
+    routeProps = { exact: true },
+    componentProps = {}
+  ) {
+    this.Component = component;
+    this.isPrivate = isPrivate;
+    this.isRewritten = isRewritten;
+    this.routeProps = routeProps;
+    this.componentProps = componentProps;
+  }
+}
+
+const routes = {
+  '/': new UniverseRoute(Homepage),
+  '/about': new UniverseRoute(About),
+  '/team': new UniverseRoute(Team),
+  '/minting': new UniverseRoute(Minting),
+  '/polymorphs': new UniverseRoute(Polymorphs),
+  '/polymorph-universe': new UniverseRoute(PolymorphUniverse),
+  // '/mint-polymorph': new UniverseRoute(MintPolymorph),
+  // '/burn-to-mint': new UniverseRoute(BurnToMint),
+  // '/planets/adaka': new UniverseRoute(Planet1),
+  // '/planets/prosopon': new UniverseRoute(Planet2),
+  // '/planets/kuapo': new UniverseRoute(Planet3),
+  '/polymorphs/:id': new UniverseRoute(PolymorphScramblePage),
+  '/lobsters/:id': new UniverseRoute(LobsterInfoPage),
+  '/nft/:collectionAddress/:tokenId': new UniverseRoute(MarketplaceNFT),
+  // '/character-page': new UniverseRoute(CharacterPage),
+  // '/marketplace': new UniverseRoute(BrowseNFT),
+  // '/nft-marketplace/:steps': new UniverseRoute(NFTMarketplace),
+  // '/search': new UniverseRoute(Search),
+  // '/core-drops': new UniverseRoute(CharectersDrop),
+  '/lobby-lobsters': new UniverseRoute(LobbyLobsters),
+  '/polymorph-rarity': new UniverseRoute(RarityCharts),
+  '/my-profile': new UniverseRoute(MyProfile, true),
+  // '/setup-auction': new UniverseRoute(SetupAuction, true, false, { exact: false }),
+  // '/minting-and-auctions/marketplace/active-auctions': new UniverseRoute(Marketplace),
+  // '/minting-and-auctions/marketplace/future-auctions': new UniverseRoute(Marketplace),
+  '/my-nfts': new UniverseRoute(MyNFTs, true),
+  '/my-nfts/create': new UniverseRoute(CreateNFT, true),
+  '/my-account': new UniverseRoute(MyAccount, true),
+  // '/my-auctions': new UniverseRoute(Auctions, true),
+  // '/create-tiers': new UniverseRoute(CreateTiers, true),
+  // '/create-tiers/my-nfts/create': new UniverseRoute(CreateNFT, true),
+  // '/finalize-auction': new UniverseRoute(FinalizeAuction, true),
+  // '/customize-auction-landing-page': new UniverseRoute(CustomizeAuction, true),
+  // '/auction-review': new UniverseRoute(AuctionReview, true),
+  '/:artistUsername': new UniverseRoute(Artist),
+  '/collection/:collectionAddress': new UniverseRoute(Collection),
+  // '/:artist/:auction': new UniverseRoute(AuctionLandingPage),
+  '*': new UniverseRoute(NotFound, false, false, { exact: false }),
+};
 
 const App = () => {
   const location = useLocation();
@@ -68,120 +127,24 @@ const App = () => {
             <MarketplaceContextProvider>
               <Header />
               <Switch>
-                <Route exact path="/">
-                  <Homepage />
-                </Route>
-                <Route exact path="/about">
-                  <About />
-                </Route>
-                <Route exact path="/team">
-                  <Team />
-                </Route>
-                <AuthenticatedRoute exact path="/minting">
-                  <Minting />
-                </AuthenticatedRoute>
-                <Route exact path="/polymorphs">
-                  <Polymorphs />
-                </Route>
-                <Route exact path="/polymorph-universe">
-                  <PolymorphUniverse />
-                </Route>
-                {/* <Route exact path="/mint-polymorph">
-                  <MintPolymorph />
-                </Route>
-                <Route exact path="/burn-to-mint">
-                  <BurnToMint />
-                </Route>
-                <Route exact path="/planets/adaka">
-                  <Planet1 />
-                </Route>
-                <Route exact path="/planets/prosopon">
-                  <Planet2 />
-                </Route>
-                <Route exact path="/planets/kuapo">
-                  <Planet3 />
-                </Route> */}
-                <Route exact path="/polymorphs/:id">
-                  <PolymorphScramblePage />
-                </Route>
-                <Route exact path="/lobsters/:id">
-                  <LobsterInfoPage />
-                </Route>
-                <Route exact path="/nft/:collectionAddress/:tokenId">
-                  <MarketplaceNFT />
-                </Route>
-                {/* <Route exact path="/character-page">
-                  <CharacterPage />
-                </Route> */}
-                {/* <Route exact path="/marketplace">
-                  <BrowseNFT />
-                </Route> */}
-                {/* <Route exact path="/nft-marketplace/:steps">
-                  <NFTMarketplace />
-                </Route> */}
-                {/* <Route exact path="/search">
-                  <Search />
-                </Route>
-                <Route exact path="/core-drops">
-                  <CharectersDrop />
-                </Route> */}
-                <Route exact path="/lobby-lobsters">
-                  <LobbyLobsters />
-                </Route>
-                <Route exact path="/polymorph-rarity">
-                  <RarityCharts />
-                </Route>
-                <AuthenticatedRoute exact path="/my-profile">
-                  <MyProfile />
-                </AuthenticatedRoute>
-                {/* <AuthenticatedRoute path="/setup-auction">
-                  <SetupAuction />
-                </AuthenticatedRoute>
-                <Route exact path="/minting-and-auctions/marketplace/active-auctions">
-                  <Marketplace />
-                </Route> */}
-                {/* <Route exact path="/minting-and-auctions/marketplace/future-auctions">
-                  <Marketplace />
-                </Route> */}
-                <AuthenticatedRoute exact path="/my-nfts">
-                  <MyNFTs />
-                </AuthenticatedRoute>
-                <AuthenticatedRoute exact path="/my-nfts/create">
-                  <CreateNFT />
-                </AuthenticatedRoute>
-                <AuthenticatedRoute exact path="/my-account">
-                  <MyAccount />
-                </AuthenticatedRoute>
-                {/* <AuthenticatedRoute exact path="/my-auctions">
-                  <Auctions />
-                </AuthenticatedRoute>
-                <AuthenticatedRoute exact path="/create-tiers">
-                  <CreateTiers />
-                </AuthenticatedRoute>
-                <AuthenticatedRoute exact path="/create-tiers/my-nfts/create">
-                  <CreateNFT />
-                </AuthenticatedRoute>
-                <AuthenticatedRoute exact path="/finalize-auction">
-                  <FinalizeAuction />
-                </AuthenticatedRoute>
-                <AuthenticatedRoute exact path="/customize-auction-landing-page">
-                  <CustomizeAuction />
-                </AuthenticatedRoute>
-                <AuthenticatedRoute exact path="/auction-review">
-                  <AuctionReview />
-                </AuthenticatedRoute> */}
-                <Route exact path="/:artistUsername">
-                  <Artist />
-                </Route>
-                <Route exact path="/collection/:collectionAddress">
-                  <Collection />
-                </Route>
-                {/* <Route exact path="/:artist/:auction">
-                  <AuctionLandingPage />
-                </Route> */}
-                <Route path="*">
-                  <NotFound />
-                </Route>
+                {Object.keys(routes).map((key) => {
+                  const { Component, isPrivate, isRewritten, routeProps, componentProps } =
+                    routes[key];
+
+                  const RouteComponent = isPrivate ? AuthenticatedRoute : Route;
+
+                  return (
+                    <RouteComponent key={uuid()} path={key} {...routeProps}>
+                      {!isRewritten ? (
+                        <Component {...componentProps} />
+                      ) : (
+                        <NewApp>
+                          <Component {...componentProps} />
+                        </NewApp>
+                      )}
+                    </RouteComponent>
+                  );
+                })}
               </Switch>
               <Footer />
               <Popup closeOnDocumentClick={false} open={showWrongNetworkPopup}>
