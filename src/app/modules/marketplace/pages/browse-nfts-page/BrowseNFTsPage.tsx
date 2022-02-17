@@ -1,7 +1,14 @@
 import React, { useCallback, useRef, useState } from 'react';
-import { Box, Button, Container, Flex, Heading, SimpleGrid, Text } from '@chakra-ui/react';
+import { Box, Button, Container, Flex, Heading, Link, SimpleGrid, Text } from '@chakra-ui/react';
 
-import { ArtistsFilter, CollectionsFilter, NFTTypeFilter, PriceRangeFilter, SaleTypeFilter } from '../../components';
+import {
+  ArtistsFilter,
+  CollectionsFilter,
+  ISaleTypeFilterValue,
+  NFTTypeFilter,
+  PriceRangeFilter,
+  SaleTypeFilter,
+} from '../../components';
 import { SortNftsOptions } from '../../constants';
 import { BackToTopButton, Select } from '../../../../components';
 import { NftItem } from '../../../nft/components';
@@ -12,8 +19,19 @@ import BrowseNFTsIntroImage from './../../../../../assets/images/marketplace/v2/
 import { useStickyHeader } from '../../../../hooks';
 import { FilterCollectionsItems } from '../../mocks/filter-collections';
 import { FilterArtistsItems } from '../../mocks/filter-artists';
+import { useFormik } from 'formik';
 
 export const BrowseNFTsPage = () => {
+  const saleTypeFilterForm = useFormik<ISaleTypeFilterValue>({
+    initialValues: {
+      buyNow: false,
+      onAuction: false,
+      new: false,
+      hasOffers: false,
+    },
+    onSubmit: (values) => {},
+  });
+
   const [sortBy, setSortBy] = useState();
   const [nfts, setNfts] = useState(Nfts);
 
@@ -34,6 +52,10 @@ export const BrowseNFTsPage = () => {
       }))
     ]);
   }, [nfts]);
+
+  const handleClear = useCallback(() => {
+    saleTypeFilterForm.resetForm();
+  }, []);
 
   return (
     <>
@@ -57,11 +79,15 @@ export const BrowseNFTsPage = () => {
         <Container maxW={'1360px'} py={'0 !important'} position={'relative'}>
           <Flex justifyContent={'space-between'}>
             <Box sx={{
-              '> button': {
+              '> button, a': {
                 mr: '14px'
               }
             }}>
-              <SaleTypeFilter onChange={(values) => console.log('values', values)} />
+              <SaleTypeFilter
+                value={saleTypeFilterForm.values}
+                onChange={(values) => saleTypeFilterForm.setValues(values)}
+                onClear={() => saleTypeFilterForm.resetForm()}
+              />
               <NFTTypeFilter onChange={(values) => console.log('values', values)} />
               <PriceRangeFilter onChange={(values) => console.log('values', values)} />
               <CollectionsFilter
@@ -74,6 +100,13 @@ export const BrowseNFTsPage = () => {
                 onChange={(values) => console.log('values', values)}
                 onClear={() => {}}
               />
+              <Link onClick={handleClear} sx={{
+                fontWeight: 500,
+                textDecoration: 'underline',
+                _hover: {
+                  textDecoration: 'none',
+                }
+              }}>Clear all</Link>
             </Box>
             <Select
               label={'Sort by'}

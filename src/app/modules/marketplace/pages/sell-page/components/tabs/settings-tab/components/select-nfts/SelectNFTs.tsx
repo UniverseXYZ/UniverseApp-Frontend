@@ -248,19 +248,20 @@ export const SelectNFTs = ({}: ISelectNFTsProps) => {
             }
           }}
         >
-          <SaleTypeFilter onChange={(values) => console.log('values', values)} />
-          <NFTTypeFilter onChange={(values) => console.log('values', values)} />
-          <PriceRangeFilter onChange={(values) => console.log('values', values)} />
-          <CollectionsFilter
-            items={FilterCollectionsItems}
-            onChange={(values) => console.log('values', values)}
-            onClear={() => {}}
-          />
-          <ArtistsFilter
-            items={FilterArtistsItems}
-            onChange={(values) => console.log('values', values)}
-            onClear={() => {}}
-          />
+        {/*  TODO: uncomment*/}
+        {/*  <SaleTypeFilter onChange={(values) => console.log('values', values)} />*/}
+        {/*  <NFTTypeFilter onChange={(values) => console.log('values', values)} />*/}
+        {/*  <PriceRangeFilter onChange={(values) => console.log('values', values)} />*/}
+        {/*  <CollectionsFilter*/}
+        {/*    items={FilterCollectionsItems}*/}
+        {/*    onChange={(values) => console.log('values', values)}*/}
+        {/*    onClear={() => {}}*/}
+        {/*  />*/}
+        {/*  <ArtistsFilter*/}
+        {/*    items={FilterArtistsItems}*/}
+        {/*    onChange={(values) => console.log('values', values)}*/}
+        {/*    onClear={() => {}}*/}
+        {/*  />*/}
         </Flex>
       </Fade>
 
