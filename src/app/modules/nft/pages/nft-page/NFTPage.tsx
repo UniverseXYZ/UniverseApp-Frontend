@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   Box,
   Button,
@@ -26,11 +26,13 @@ import { Nfts } from '../../../marketplace/mocks/nfts';
 import { NFTLike } from '../../components/nft-item/components';
 import { useThemeContext } from '../../../../../contexts/ThemeContext';
 import { NFTMenu, Tabs as NFTTabs } from './constants';
+import Lottie from 'react-lottie';
 
 import DotsIcon from './../../../../../assets/images/marketplace/3-dots.svg';
 import { Bindings } from './mocks';
 import { LineTabList } from '../../../../components';
 import { NFTPageContext } from './NFTPage.context';
+import playerAnimation from './../../../../../utils/animations/music-player.json'
 
 const MenuItemStyles: MenuItemProps = {
   borderRadius: '6px',
@@ -47,6 +49,7 @@ const MenuItemStyles: MenuItemProps = {
 
 // TODO: hide metadata tab for not Polymorph NFT type
 export const NFTPage = () => {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
   const { setDarkMode } = useThemeContext() as any;
 
   const [NFT] = useState<INft>(Nfts[0] as INft);
@@ -56,6 +59,42 @@ export const NFTPage = () => {
   const [isPolymorph] = useState(true);
 
   useEffect(() => setDarkMode(false), []);
+
+  useEffect(() => {
+    if (canvasRef.current) {
+      const $ = canvasRef.current.getContext('2d') as any;
+
+      var col = function(x: any, y: any, r: any, g: any, b: any) {
+        $.fillStyle = "rgb(" + r + "," + g + "," + b + ")";
+        $.fillRect(x, y, 1,1);
+      }
+      var R = function(x: any, y: any, t: any) {
+        return( Math.floor(192 + 64*Math.cos( (x*x-y*y)/300 + t )) );
+      }
+
+      var G = function(x: any, y: any, t: any) {
+        return( Math.floor(192 + 64*Math.sin( (x*x*Math.cos(t/4)+y*y*Math.sin(t/3))/300 ) ) );
+      }
+
+      var B = function(x: any, y: any, t: any) {
+        return( Math.floor(192 + 64*Math.sin( 5*Math.sin(t/9) + ((x-100)*(x-100)+(y-100)*(y-100))/1100) ));
+      }
+
+      var t = 0;
+
+      var run = function() {
+        for(let x=0;x<=35;x++) {
+          for(let y = 0; y <= 35; y++) {
+            col(x, y, R(x,y,t), G(x,y,t), B(x,y,t));
+          }
+        }
+        t = t + 0.04;
+        window.requestAnimationFrame(run);
+      }
+
+      run();
+    }
+  }, [canvasRef.current]);
 
   return (
     <NFTPageContext.Provider value={{ NFT, isPolymorph }}>
@@ -68,14 +107,37 @@ export const NFTPage = () => {
             py: '60px',
           }}>
             {/*TODO: add video / audio / bundle / storybook */}
-            <Image
-              src={'https://storage.googleapis.com/lobster-images/05020905000503.jpg'}
-              sx={{
-                borderRadius: '12px',
-                maxH: '600px',
-                maxW: '600px',
-              }}
-            />
+            {/*<Image*/}
+            {/*  src={'https://storage.googleapis.com/lobster-images/05020905000503.jpg'}*/}
+            {/*  sx={{*/}
+            {/*    borderRadius: '12px',*/}
+            {/*    maxH: '600px',*/}
+            {/*    maxW: '600px',*/}
+            {/*  }}*/}
+            {/*/>*/}
+
+            <Box sx={{
+              borderRadius: '12px',
+              h: '600px',
+              w: '600px',
+              overflow: 'hidden',
+              position: 'relative',
+            }}>
+              <canvas ref={canvasRef} width="32" height="32" style={{ width: '100%', height: '100%'}}></canvas>
+              <Box sx={{
+                position: 'absolute',
+                top: 0,
+              }}>
+                <Lottie options={{
+                  loop: true,
+                  autoplay: true,
+                  animationData: playerAnimation,
+                  rendererSettings: {
+                    preserveAspectRatio: 'xMidYMid slice',
+                  },
+                }} />
+              </Box>
+            </Box>
           </Flex>
           <Box sx={{
             borderLeft: '1px solid #E4E4E4',
