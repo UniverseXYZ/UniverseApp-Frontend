@@ -78,7 +78,7 @@ export const NFTPage = () => {
                   onOpen={() => setIsLikesPopupOpened(true)}
                 />
 
-                <NFTMenu />
+                <NFTMenu nft={NFT} />
               </Box>
             </Flex>
 

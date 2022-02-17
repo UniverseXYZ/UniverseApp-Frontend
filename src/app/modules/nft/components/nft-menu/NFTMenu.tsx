@@ -10,6 +10,7 @@ import React, { useCallback, useState } from 'react';
 import { NFTReportPopup } from '../nft-report-popup';
 import { MenuItem } from './components';
 import * as styles from './styles';
+import { INft } from '../../types';
 
 import DotsIcon from '../../../../../assets/images/marketplace/3-dots.svg';
 import SellIcon from '../../../../../assets/images/sell-nft.svg';
@@ -22,8 +23,10 @@ import BurnIcon from '../../../../../assets/images/burn-nft.svg';
 import RemoveIcon from '../../../../../assets/images/remove.svg';
 import ReportIcon from '../../../../../assets/images/report.svg';
 import { NFTSharePopup } from '../nft-share-popup';
+import { useHistory } from 'react-router-dom';
 
 interface INFTMenuProps {
+  nft: INft;
   showSell?: boolean;
   showTransfer?: boolean;
   showShare?: boolean;
@@ -44,6 +47,7 @@ interface INFTMenuProps {
 
 export const NFTMenu = (
   {
+    nft,
     showSell = true,
     showTransfer = true,
     showShare = true,
@@ -62,16 +66,18 @@ export const NFTMenu = (
     onReport,
   }: INFTMenuProps
 ) => {
+  const router = useHistory();
   const [isReportPopupOpened, setIsReportPopupOpened] = useState(false);
   const [isSharePopupOpened, setIsSharePopupOpened] = useState(false);
 
   const handleSell = useCallback(() => {
-    if (onSell) {
-      onSell();
-    } else {
-
-    }
-  }, [onSell]);
+    router.push(`/v2/marketplace/sell?nft=${'0x73faeb0216be26b45794890a77a6124772146666'}&tokenId=${4}`)
+    // if (onSell) {
+    //   onSell();
+    // } else {
+    //
+    // }
+  }, [nft, onSell]);
 
   const handleTransfer = useCallback(() => {
     if (onTransfer) {
