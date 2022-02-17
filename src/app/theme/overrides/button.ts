@@ -20,23 +20,28 @@ export const Button = {
       }
     },
     outline: {
-      background: 'linear-gradient(#ffffff, #ffffff) padding-box,linear-gradient(135deg, #bceb00 15.57%, #00eaea 84.88%) border-box',
-      border: '1px solid rgba(0, 0, 0, 0.1)',
+      backgroundImage: 'linear-gradient(175deg,#bceb00,#00eaea)',
+      backgroundOrigin: 'border-box !important',
       borderColor: 'transparent',
       borderRadius: '12px',
+      boxShadow: 'inset 2px 1000px 1px #fff',
       padding: '11px 26px',
       _hover: {
-        background: 'linear-gradient(#ffffff, #ffffff) padding-box,linear-gradient(135deg, #bceb00 15.57%, #00eaea 84.88%) border-box',
-        border: '1px solid rgba(0, 0, 0, 0.1)',
+        backgroundImage: 'linear-gradient(175deg,#bceb00,#00eaea)',
+        backgroundOrigin: 'border-box',
         borderColor: 'transparent',
-        boxShadow: 'xl',
+        boxShadow: 'inset 2px 1000px 1px hsla(0,0%,100%,.9)',
       },
       _focus: {
-        boxShadow: 'xl',
+        backgroundImage: 'linear-gradient(175deg,#bceb00,#00eaea)',
+        backgroundOrigin: 'border-box',
+        borderColor: 'transparent',
+        boxShadow: 'inset 2px 1000px 1px hsla(0,0%,100%,.9)',
       },
       _active: {
-        background: 'linear-gradient(#ffffff, #ffffff) padding-box,linear-gradient(135deg, #bceb00 15.57%, #00eaea 84.88%) border-box',
-        boxShadow: 'lg',
+        backgroundImage: 'linear-gradient(175deg,#bceb00,#00eaea)',
+        borderColor: 'transparent',
+        boxShadow: 'inset 2px 1000px 1px white',
       }
     },
   }
