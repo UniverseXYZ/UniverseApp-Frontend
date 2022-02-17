@@ -2,14 +2,14 @@ import { Box, Flex, Text, Link, Image, Tooltip } from '@chakra-ui/react';
 import { useState } from 'react';
 import { default as dayjs } from 'dayjs';
 
-import { History } from '../../mocks';
-import { NFTTabItemWrapper } from '../nft-tab-item-wrapper';
-import { ETH_USD_RATE } from '../../../../../../mocks';
+import { History } from '../../../../mocks';
+import { NFTTabItemWrapper } from '..';
+import { ETH_USD_RATE } from '../../../../../../../../mocks';
 import { actionIcon, nameLabels } from './constants';
 import { getAddedAtLabel, getEtherScanAddress } from './helpers';
 import * as styles from './styles';
 
-import EtherScanIcon from './../../../../../../../assets/images/etherscan.svg';
+import EtherScanIcon from './../../../../../../../../../assets/images/etherscan.svg';
 
 export const TabHistory = () => {
   const [history] = useState([...History]);

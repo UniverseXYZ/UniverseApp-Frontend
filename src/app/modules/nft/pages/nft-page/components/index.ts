@@ -3,14 +3,8 @@ export * from './nft-asset-image';
 export * from './nft-asset-video';
 export * from './nft-buy-section';
 export * from './nft-checkout-popup';
+export * from './nft-info';
 export * from './nft-make-an-offer-popup';
 export * from './nft-place-a-bid-popup';
-export * from './nft-property';
-export * from './polymorph-property';
-export * from './polymorph-property-trait';
-export * from './tab-bids';
-export * from './tab-history';
-export * from './tab-metadata';
-export * from './tab-offers';
-export * from './tab-owners';
-export * from './tab-properties';
+
+

@@ -1,6 +1,6 @@
 import { Flex, Image, Text } from '@chakra-ui/react';
 
-import TextBubbleImage from '../../../../../../../../../assets/images/text-bubble.png';
+import TextBubbleImage from '../../../../../../../../../../../assets/images/text-bubble.png';
 
 export const OffersEmpty = () => (
   <Flex align={'center'} color={'rgba(0, 0, 0, 0.4)'} flexDir={'column'}>

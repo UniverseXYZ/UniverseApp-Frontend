@@ -1,4 +1,4 @@
-import { HistoryType } from '../../../enums';
+import { HistoryType } from '../../../../../enums';
 
 export const nameLabels: Record<HistoryType, string> = {
   [HistoryType.BID]: 'Bit by',

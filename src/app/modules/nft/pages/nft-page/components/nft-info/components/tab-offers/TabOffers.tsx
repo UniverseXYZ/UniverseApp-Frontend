@@ -2,9 +2,9 @@ import { Box, Button, Flex, Image, Text } from '@chakra-ui/react';
 import { useState } from 'react';
 import { default as dayjs } from 'dayjs';
 
-import { ETH_USD_RATE } from '../../../../../../mocks';
-import { NFTTabItemWrapper } from '../nft-tab-item-wrapper';
-import { Offers } from '../../mocks';
+import { ETH_USD_RATE } from '../../../../../../../../mocks';
+import { NFTTabItemWrapper } from '..';
+import { Offers } from '../../../../mocks';
 import * as styles from './styles';
 import { OffersEmpty } from './components';
 

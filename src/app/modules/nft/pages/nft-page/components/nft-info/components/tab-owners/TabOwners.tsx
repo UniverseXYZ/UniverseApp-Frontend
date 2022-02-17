@@ -1,9 +1,9 @@
 import { Box, Button, Flex, Image, Text } from '@chakra-ui/react';
 import { useState } from 'react';
 
-import { Owners } from '../../mocks';
-import { useNFTPageData } from '../../NFTPage.context';
-import { NFTTabItemWrapper } from '../nft-tab-item-wrapper';
+import { Owners } from '../../../../mocks';
+import { useNFTPageData } from '../../../../NFTPage.context';
+import { NFTTabItemWrapper } from '..';
 import * as styles from './styles';
 import { sortOwners } from './helpers';
 
