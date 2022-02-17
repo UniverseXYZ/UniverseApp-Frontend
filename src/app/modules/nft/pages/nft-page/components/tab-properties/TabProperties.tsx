@@ -6,6 +6,7 @@ import { NFTProperty } from '../nft-property';
 import { useNFTPageData } from '../../NFTPage.context';
 import { PolymorphPropertyTrait } from '../polymorph-property-trait';
 import { PolymorphProperty } from '../polymorph-property';
+import { PropertyTraitVariant } from '../polymorph-property-trait/enums';
 
 export const TabProperties = () => {
   const { isPolymorph } = useNFTPageData();
@@ -30,7 +31,9 @@ export const TabProperties = () => {
       <SimpleGrid columns={2} spacing={'20px'}>
         {properties.map((property, i) => (
           isPolymorph
-            ? !polymorphProperties.includes(property) ? <PolymorphPropertyTrait key={i} {...property} /> : null
+            ? !polymorphProperties.includes(property)
+              ? <PolymorphPropertyTrait key={i} {...property} />
+              : null
             : <NFTProperty key={i} {...property} />
         ))}
       </SimpleGrid>

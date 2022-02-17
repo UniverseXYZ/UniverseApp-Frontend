@@ -27,15 +27,17 @@ const PropertyDescriptionStyles: TextProps = {
   fontWeight: 400,
 };
 
-export interface INFTPropertyProps {
+export interface INFTProperty {
   name: string;
   value: string;
   description?: string;
 }
 
-export const NFTProperty = ({ name, value, description }: INFTPropertyProps) => {
+export interface INFTPropertyProps extends BoxProps, INFTProperty {}
+
+export const NFTProperty = ({ name, value, description, ...props }: INFTPropertyProps) => {
   return (
-    <Box {...PropertyContainerStyles}>
+    <Box {...PropertyContainerStyles} {...props}>
       <Text {...PropertyNameStyles}>{name}</Text>
       <Text {...PropertyValueStyles}>{value}</Text>
       {description && (<Text {...PropertyDescriptionStyles}>{description}</Text>)}
