@@ -32,6 +32,8 @@ import { INFT, IOrder } from '../../../../types';
 import { isNFTAssetAudio, isNFTAssetImage, isNFTAssetVideo } from '../../../../helpers';
 import { TOKENS_MAP } from '../../../../../../constants';
 import { TokenTicker } from '../../../../../../enums';
+import { useMutation } from 'react-query';
+import axios from 'axios';
 
 interface INFTCheckoutPopupProps {
   NFT?: INFT;
@@ -54,9 +56,21 @@ export const NFTCheckoutPopup = ({ NFT, NFTs, order, isOpen, onClose }: INFTChec
   const [isNFTAudio] = useState(false);
   const [agreeBundle, setAgreeBundle] = useState(false);
 
-  const handleCheckoutClick = useCallback(() => {
-    setState(CheckoutState.CONGRATULATIONS);
-  }, []);
+  const prepareMutation = useMutation(({ hash, data }: { hash: string, data: any }) => {
+    return axios.post(`${process.env.REACT_APP_MARKETPLACE_BACKEND}/v1/orders/${hash}/prepare`, data);
+  });
+
+  const handleCheckoutClick = useCallback(async () => {
+    const response = await prepareMutation.mutateAsync({
+      hash: order.hash,
+      data: {
+        maker: address,
+        amount: order.make.value,
+      },
+    });
+    console.log('response', response);
+    // setState(CheckoutState.CONGRATULATIONS);
+  }, [order, address]);
 
   const handleMyNFTsClick = useCallback(() => {
     router.push('/my-nfts');
