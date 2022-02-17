@@ -7,6 +7,7 @@ export const Button = {
     solid: {
       background: 'linear-gradient(170deg, #bceb00 15.57%, #00eaea 84.88%)',
       borderRadius: '12px',
+      color: 'black',
       padding: '11px 26px',
       _hover: {
         background: 'linear-gradient(0deg, rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0.4)), linear-gradient(170deg, #bceb00 15.57%, #00eaea 84.88%) !important',
