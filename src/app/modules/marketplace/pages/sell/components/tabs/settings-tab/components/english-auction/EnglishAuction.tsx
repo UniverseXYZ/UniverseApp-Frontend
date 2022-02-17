@@ -3,17 +3,18 @@ import React from 'react';
 import { FormikProps } from 'formik';
 
 import { useMarketplaceSellData } from '../../../../../hooks';
-import { SellMethod } from '../../../../../enums';
+import { SellAmountType, SellMethod } from '../../../../../enums';
 import * as styles from '../../styles';
 import { CurrencyInput, DateTimePicker, InfoTooltip } from '../../../../../../../../../components';
 import { IEnglishAuctionForm, IMarketplaceSellContextData } from '../../../../../types';
+import { BundleForm } from '../../../../bundle-form';
 
 interface IMarketplaceSellContextDataOverride extends Omit<IMarketplaceSellContextData, 'form'> {
   form: FormikProps<IEnglishAuctionForm>;
 }
 
 export const SettingsTabEnglishAuction = () => {
-  const { form, sellMethod } = useMarketplaceSellData() as IMarketplaceSellContextDataOverride;
+  const { form, sellMethod, amountType } = useMarketplaceSellData() as IMarketplaceSellContextDataOverride;
 
   if (sellMethod !== SellMethod.ENGLISH) {
     return null;
@@ -21,6 +22,7 @@ export const SettingsTabEnglishAuction = () => {
 
   return (
     <>
+      { amountType === SellAmountType.BUNDLE && (<BundleForm />) }
       <Flex sx={styles.settingsItem}>
         <Box>
           <Heading as={'h5'}>

@@ -3,18 +3,19 @@ import React from 'react';
 import { FormikProps } from 'formik';
 
 import { useMarketplaceSellData } from '../../../../../hooks';
-import { SellMethod } from '../../../../../enums';
+import { SellAmountType, SellMethod } from '../../../../../enums';
 import * as styles from '../../styles';
 import { CurrencyInput, DateTimePicker, InputShadow } from '../../../../../../../../../components';
 import { GreyBox } from '../../../../grey-box';
 import { IMarketplaceSellContextData, IDutchAuctionForm } from '../../../../../types';
+import { BundleForm } from '../../../../bundle-form';
 
 interface IMarketplaceSellContextDataOverride extends Omit<IMarketplaceSellContextData, 'form'> {
   form: FormikProps<IDutchAuctionForm>;
 }
 
 export const SettingsTabDutchAuction = () => {
-  const { form, sellMethod } = useMarketplaceSellData() as IMarketplaceSellContextDataOverride;
+  const { form, sellMethod, amountType } = useMarketplaceSellData() as IMarketplaceSellContextDataOverride;
 
   if (sellMethod !== SellMethod.DUTCH) {
     return null;
@@ -22,6 +23,7 @@ export const SettingsTabDutchAuction = () => {
 
   return (
     <>
+      { amountType === SellAmountType.BUNDLE && (<BundleForm />) }
       <Flex sx={styles.settingsItem}>
         <Box>
           <Heading as={'h5'}>Price</Heading>
