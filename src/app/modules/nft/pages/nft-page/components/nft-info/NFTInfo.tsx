@@ -76,7 +76,12 @@ export const NFTInfo = () => {
                     <Box>
                       {/*<NFTLike likes={[]} isLiked={true} {...styles.LikeButtonStyle} />*/}
 
-                      <NFTMenu nft={NFT} />
+                      <NFTMenu
+                        nft={NFT}
+                        showSell={!order}
+                        showBurn={false}
+                        showRemove={false}
+                      />
                     </Box>
                   </Flex>
 

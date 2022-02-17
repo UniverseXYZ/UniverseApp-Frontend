@@ -61,7 +61,6 @@ export const NFTBuySection = ({ NFT, NFTs, order, onMeasureChange }: INFTBuySect
           setState(BuyNFTSectionState.BUYER_FIXED_LISTING_BUY_N_OFFER);
         }
       }
-      setState(BuyNFTSectionState.BUYER_FIXED_LISTING_BUY_N_OFFER);
     } catch (e) {
     }
   }, [signer, NFT, order]);
@@ -113,7 +112,7 @@ export const NFTBuySection = ({ NFT, NFTs, order, onMeasureChange }: INFTBuySect
             <HighestBid />
             <SimpleGrid columns={2} spacingX={'12px'}>
               <Button boxShadow={'lg'} onClick={() => setIsCheckoutPopupOpened(true)}>
-                Buy for {utils.formatUnits(order?.take.value ?? '', `${TOKENS_MAP[order?.take.assetType.assetClass as TokenTicker].decimals}`)} {order?.take.assetType.assetClass}
+                Buy for {utils.formatUnits(order?.take.value ?? '', `${TOKENS_MAP[order?.take.assetType.assetClass as TokenTicker]?.decimals}`)} {order?.take.assetType.assetClass}
               </Button>
               <Button variant={'outline'} onClick={() => setIsMakeAnOfferPopupOpened(true)}>Make offer</Button>
             </SimpleGrid>
@@ -122,7 +121,7 @@ export const NFTBuySection = ({ NFT, NFTs, order, onMeasureChange }: INFTBuySect
         {state === BuyNFTSectionState.BUYER_FIXED_LISTING_BUY && (
           <>
             <Button boxShadow={'lg'} w={'100%'} onClick={() => setIsCheckoutPopupOpened(true)}>
-              Buy for {utils.formatUnits(order?.take.value ?? '', `${TOKENS_MAP[order?.take.assetType.assetClass as TokenTicker].decimals}`)} {order?.take.assetType.assetClass}
+              Buy for {utils.formatUnits(order?.take.value ?? '', `${TOKENS_MAP[order?.take.assetType.assetClass as TokenTicker]?.decimals}`)} {order?.take.assetType.assetClass}
             </Button>
             <Text {...styles.ContentFeeLabelStyle} textAlign={'center'} mt={'12px'}>(10% of sales will go to creator)</Text>
           </>
