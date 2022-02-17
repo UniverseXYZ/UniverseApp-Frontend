@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import {
   Box,
   Button,
@@ -36,6 +36,9 @@ import playerAnimation from './../../../../../utils/animations/music-player.json
 import DotsIcon from './../../../../../assets/images/marketplace/3-dots.svg';
 import EthIcon from './../../../../../assets/images/eth-icon-new.svg';
 import UserImage from './../../../../../assets/images/collection_img3.svg';
+import ClockIcon from './../../../../../assets/images/clock.svg';
+import { useInterval } from 'react-use';
+import { default as dayjs } from 'dayjs';
 
 const MenuItemStyles: MenuItemProps = {
   borderRadius: '6px',
@@ -50,8 +53,59 @@ const MenuItemStyles: MenuItemProps = {
   },
 };
 
+const useDateCountDown = (_initialDate: Date, onCountDownEnd?: () => void) => {
+  const [expDate] = useState(dayjs(_initialDate));
+  const [isRunning, toggleIsRunning] = useState(!!_initialDate);
+  const [formattedString, setFormattedString] = useState<string>();
+
+  useInterval(() => {
+    const today = new Date();
+
+    if (expDate.diff(today) < 0) {
+      toggleIsRunning(false);
+      onCountDownEnd && onCountDownEnd();
+      return;
+    }
+
+    const days = expDate.diff(today, 'd');
+    const hours = expDate.diff(today, 'h') - days * 24;
+    const minutes = expDate.diff(today, 'm') - hours * 60;
+    const seconds = expDate.diff(today, 's') - expDate.diff(today, 'm') * 60;
+
+    const daysString = days ? `${days}d` : '';
+    const hoursString = hours || daysString ? `${hours.toString().padStart(2, '0')}h` : '';
+    const minutesString = minutes || hoursString ? `${minutes.toString().padStart(2, '0')}m` : '';
+    const secondsString = `${seconds.toString().padStart(2, '0')}s`;
+
+    const formattedAuctionExpTime = [daysString, hoursString, minutesString, secondsString].filter(v => !!v).join(' : ');
+
+    setFormattedString(formattedAuctionExpTime);
+
+  }, isRunning ? 1000 : null);
+
+  return formattedString;
+};
+
+const useBuyNFTSection = (_maxValue: number) => {
+  const [index, setIndex] = useState(0);
+  const [maxValue] = useState(_maxValue);
+
+  const handleNext = useCallback(() => {
+    setIndex(index + 1 < maxValue ? index + 1 : 0)
+  }, [index, maxValue]);
+
+  return {
+    index,
+    changeBuyNFTSection: handleNext,
+  };
+};
+
 // TODO: hide metadata tab for not Polymorph NFT type
 export const NFTPage = () => {
+  const countDownString = useDateCountDown(new Date(new Date().setDate(new Date().getDate() + 1)));
+
+  const buyNFTSection = useBuyNFTSection(2);
+
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const { setDarkMode } = useThemeContext() as any;
 
@@ -269,12 +323,11 @@ export const NFTPage = () => {
           <Box sx={{
             bg: 'linear-gradient(135deg, rgba(188, 235, 0, 0.03) 15.57%, rgba(0, 234, 234, 0.03) 84.88%), rgba(255, 255, 255, 0.8)',
             backdropFilter: 'blur(10px)',
-            p: '40px',
             position: 'sticky',
             bottom: 0,
             _before: {
               position: 'absolute',
-              height: '2px',
+              height: '3px',
               bg: 'linear-gradient(90deg, #2AD0CA 0%, #E1F664 22.92%, #FEB0FE 46.88%, #ABB3FC 68.23%, #5DF7A4 87.5%, #58C4F6 100%)',
               content: '""',
               w: '100%',
@@ -282,63 +335,94 @@ export const NFTPage = () => {
               left: 0,
             },
           }}>
-            <Flex mb={'24px'} fontSize={'14px'}>
-              <Image src={UserImage} sx={{
-                mr: '16px',
-                w: '50px',
-                h: '50px',
-                borderRadius: '50%',
-              }} />
-              <Box>
-                <Text
-                  sx={{
-                    color: 'rgba(0, 0, 0, 0.4)',
-                    mb: '6px',
-                    strong: {
-                      color: 'black',
-                      fontWeight: 700,
-                    }
-                  }}
-                >Highest bid by <strong>The Unveiling</strong></Text>
-                <Flex sx={{
-                  fontWeight: 500,
-                  lineHeight: '20px',
-                  padding: '',
-                  p: {
-                    mr: '6px',
-                  }
-                }}>
-                  <Text sx={{
-                    fontSize: '20px',
-                    fontWeight: 700,
-                  }}>
-                    <Tooltip
-                      hasArrow
-                      variant={'black'}
-                      placement={'top'}
-                      label={'WETH'}
-                      fontWeight={700}
-                    >
-                      <Image src={EthIcon} sx={{
-                        mr: '6px',
-                        display: 'inline',
-                        h: '22px',
-                        w: '14px',
-                        mt: '-3px',
-                      }} />
-                    </Tooltip>
-                    0.5
-                  </Text>
-                  <Text sx={{ color: 'rgba(0, 0, 0, 0.4)' }}>$142.39</Text>
-                  <Text sx={{ color: '#E4B613' }}>(10% of sales will go to creator)</Text>
-                </Flex>
+            <Box
+              sx={{
+                bg: 'linear-gradient(90deg, #2AD0CA 0%, #E1F664 22.92%, #FEB0FE 46.88%, #ABB3FC 68.23%, #5DF7A4 87.5%, #58C4F6 100%)',
+                position: 'absolute',
+                padding: '3px',
+                top: 0,
+                left: '50%',
+                borderRadius: '100px',
+                transform: 'translate(-50%, -50%)'
+              }}
+            >
+              <Box sx={{
+                bg: 'white',
+                borderRadius: 'inherit',
+                padding: '5px 15px',
+                textAlign: 'center',
+                minW: `${((countDownString?.length ?? 0) + 5) * 10}px`,
+              }}>
+                <Text fontSize={'14px'} fontWeight={700}>
+                  <Image src={ClockIcon} display={'inline'} mr={'8px'} />
+                  {countDownString} left
+                </Text>
+                <Text fontSize={'10px'} fontWeight={500} color={'rgba(0, 0, 0, 0.4)'}>Reserve price has been met</Text>
               </Box>
-            </Flex>
-            <SimpleGrid columns={2} spacingX={'12px'}>
-              <Button boxShadow={'lg'}>Place a bid</Button>
-              <Button variant={'outline'}>Make offer</Button>
-            </SimpleGrid>
-            {/*<Button boxShadow={'lg'} w={'100%'}>Put on sale</Button>*/}
+            </Box>
+            <Box p={'40px'}>
+              <Flex mb={'24px'} fontSize={'14px'}>
+                <Image src={UserImage} sx={{
+                  mr: '16px',
+                  w: '50px',
+                  h: '50px',
+                  borderRadius: '50%',
+                }} />
+                <Box>
+                  <Text
+                    sx={{
+                      color: 'rgba(0, 0, 0, 0.4)',
+                      mb: '6px',
+                      strong: {
+                        color: 'black',
+                        fontWeight: 700,
+                      }
+                    }}
+                  >Highest bid by <strong>The Unveiling</strong></Text>
+                  <Flex sx={{
+                    fontWeight: 500,
+                    lineHeight: '20px',
+                    padding: '',
+                    p: {
+                      mr: '6px',
+                    }
+                  }}>
+                    <Text sx={{
+                      fontSize: '20px',
+                      fontWeight: 700,
+                    }}>
+                      <Tooltip
+                        hasArrow
+                        variant={'black'}
+                        placement={'top'}
+                        label={'WETH'}
+                        fontWeight={700}
+                      >
+                        <Image src={EthIcon} sx={{
+                          mr: '6px',
+                          display: 'inline',
+                          h: '22px',
+                          w: '14px',
+                          mt: '-3px',
+                        }} />
+                      </Tooltip>
+                      0.5
+                    </Text>
+                    <Text sx={{ color: 'rgba(0, 0, 0, 0.4)' }}>$142.39</Text>
+                    <Text sx={{ color: '#E4B613' }}>(10% of sales will go to creator)</Text>
+                  </Flex>
+                </Box>
+              </Flex>
+              {buyNFTSection.index === 0 && (
+                <SimpleGrid columns={2} spacingX={'12px'}>
+                  <Button boxShadow={'lg'} onClick={buyNFTSection.changeBuyNFTSection}>Place a bid</Button>
+                  <Button variant={'outline'} onClick={buyNFTSection.changeBuyNFTSection}>Make offer</Button>
+                </SimpleGrid>
+              )}
+              {buyNFTSection.index === 1 && (
+                <Button boxShadow={'lg'} w={'100%'} onClick={buyNFTSection.changeBuyNFTSection}>Put on sale</Button>
+              )}
+            </Box>
           </Box>
         </Box>
       </Box>
