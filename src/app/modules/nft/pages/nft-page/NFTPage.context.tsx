@@ -1,4 +1,6 @@
-import { FC, createContext, useContext } from 'react';
+import { FC, createContext, useContext, useEffect } from 'react';
+import { request } from "graphql-request";
+import { gql, ApolloClient, InMemoryCache } from '@apollo/client';
 
 import { INft } from '../../types';
 import {useQuery} from "react-query";
@@ -24,7 +26,35 @@ const NFTPageProvider: FC = ({ children }) => {
   // @ts-ignore
   const { isLoading, data, error } = useQuery('getNftData', () => getNftData(collectionAddress, tokenId))
 
-  console.log('data', data)
+  const { data: subgraphsData } =  useQuery("subgraphs", async () => {
+    const { orderMatchEntities } = await request(
+      'https://api.thegraph.com/subgraphs/name/kunone/marketplace-rinkeby-v2',
+      gql`
+          query {
+              orderMatchEntities(first: 1, orderBy: blockNumber, orderDirection: asc, where: {blockNumber_gte: 0}) {
+                  id
+                  txFrom
+                  txValue
+                  blockNumber
+                  blockTimestamp
+                  leftOrderHash
+                  rightOrderHash
+                  leftMaker
+                  rightMaker
+                  newLeftFill
+                  newRightFill
+                  leftAssetClass
+                  rightAssetClass
+                  leftAssetData
+                  rightAssetData
+              }
+          }
+      `
+    );
+    return orderMatchEntities;
+  });
+
+  console.log('subgraphsData', subgraphsData)
 
   const value: INFTPageContext = {
     NFT: data,
