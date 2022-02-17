@@ -1,6 +1,8 @@
 import { Box, Button, Container, Flex, Heading, Link, SimpleGrid, Text } from '@chakra-ui/react';
-import React, { useCallback, useRef, useState } from 'react';
 import { useFormik } from 'formik';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { useQuery } from 'react-query';
+import axios from 'axios';
 
 import {
   ArtistsFilter,
@@ -65,6 +67,10 @@ export const BrowseNFTsPage = () => {
     onSubmit: () => {},
   });
 
+  const { data: orders } = useQuery('nft', async () => {
+    return (await axios.get(`${process.env.REACT_APP_MARKETPLACE_BACKEND}/v1/orders`)).data;
+  });
+
   const [sortBy, setSortBy] = useState();
   const [nfts, setNfts] = useState(Nfts);
 
@@ -93,6 +99,10 @@ export const BrowseNFTsPage = () => {
     collectionsFilterForm.resetForm();
     artistsFilterForm.resetForm();
   }, []);
+
+  useEffect(() => {
+    console.log('orders', orders);
+  }, [orders]);
 
   return (
     <Box>
