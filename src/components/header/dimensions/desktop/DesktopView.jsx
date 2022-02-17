@@ -102,7 +102,7 @@ const DesktopView = ({
                 // className="disable"
                 onClick={() => {
                   setIsMintingDropdownOpened(false);
-                  history.push('/marketplace');
+                  history.push('/v2/marketplace/sell');
                 }}
               >
                 <img src={marketplaceIcon} alt="NFT Marketplace" />
