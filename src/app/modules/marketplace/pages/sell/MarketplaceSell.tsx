@@ -24,7 +24,7 @@ const settingsMethodsTitleText: Record<SellMethod, string> = {
 
 export const MarketplaceSell = () => {
   const { setDarkMode } = useThemeContext() as any;
-  const [activeTab, setActiveTab] = useState<SellPageTabs>(SellPageTabs.SETTINGS);
+  const [activeTab, setActiveTab] = useState<SellPageTabs>(SellPageTabs.SELL_AMOUNT);
 
   const form = useFormik({
     initialValues: {
@@ -34,17 +34,20 @@ export const MarketplaceSell = () => {
         value: 0,
         currency: '',
       },
+      endingPrice: {
+        value: 0,
+        currency: '',
+      },
+      expirationDate: '',
       withPrivacy: false,
+      isScheduledForFutureTime: false,
+      futureDate: '',
       buyerAddress: '',
     },
     onSubmit: values => {
       alert(JSON.stringify(values, null, 2));
     },
   });
-
-  useEffect(() => {
-    console.log('1234'); // TODO: ERROR
-  }, []);
 
   const handleSelectAmount = useCallback((amountType: SellAmountType) => {
     form.setFieldValue('amountType', amountType);
