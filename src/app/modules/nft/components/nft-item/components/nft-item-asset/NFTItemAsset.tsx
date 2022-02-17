@@ -10,6 +10,7 @@ import 'swiper/swiper.min.css';
 import arrowLeftIcon from '../../../../../../../assets/images/marketplace/bundles-left-arrow.svg';
 import arrowRightIcon from '../../../../../../../assets/images/marketplace/bundles-right-arrow.svg';
 import { INFT } from '../../../../types';
+import { isNFTAssetAudio, isNFTAssetImage, isNFTAssetVideo } from '../../../../helpers';
 
 type IUseStyles = (width?: number | string) => {
   image: ImageProps;
@@ -76,6 +77,10 @@ export const NFTItemAsset = ({ nft, bundleNFTs = [], showSwiperPagination = true
     return bundleNFTs?.length;
   }, [nft, bundleNFTs]);
 
+  const isImage = isNFTAssetImage(nft.artworkType);
+  const isVideo = isNFTAssetVideo(nft.artworkType);
+  const isAudio = isNFTAssetAudio(nft.artworkType);
+
   return (
     showSwiper ? (
       <Box ref={ref} sx={styles.swiper}>
@@ -96,8 +101,15 @@ export const NFTItemAsset = ({ nft, bundleNFTs = [], showSwiperPagination = true
         </Swiper>
       </Box>
     ) : (
-      <Box ref={ref}>
-        <Image src={nft.thumbnailUrl} alt={nft.name} {...styles.image} />
+      <Box
+        ref={ref}
+        sx={{
+          img: {...styles.image},
+          video: {...styles.image},
+        }}
+      >
+        {isImage && (<Image src={nft.thumbnailUrl} alt={nft.name} />)}
+        {isVideo && (<video src={nft.thumbnailUrl} />)}
       </Box>
     )
   );

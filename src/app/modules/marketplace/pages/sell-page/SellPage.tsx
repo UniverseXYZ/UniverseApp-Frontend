@@ -5,6 +5,7 @@ import { useFormik } from 'formik';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useMutation, useQuery } from 'react-query';
+import * as Yup from 'yup';
 
 import bg from '../../../../../assets/images/marketplace/v2/bg.png';
 import arrow from '../../../../../assets/images/arrow.svg';
@@ -23,12 +24,11 @@ import { SelectAmountTab, SelectMethodType, SettingsTab, SummaryTab, TabPanel } 
 import { SellAmountType, SellMethod, SellPageTabs } from './enums';
 import { IMarketplaceSellContextData, ISellForm } from './types';
 import { getLocationSearchObj, sign } from '../../../../helpers';
-import { getNftData } from '../../../../../utils/api/mintNFT';
 import { useAuthContext } from '../../../../../contexts/AuthContext';
-
-import * as Yup from 'yup';
 import { TOKENS_MAP } from '../../../../constants';
 import { Tokens } from '../../../../enums';
+import { GetNFTApi } from '../../../nft/api';
+import { INFT } from '../../../nft/types';
 
 const getValidationSchema = (amountType?: SellAmountType, sellMethod?: SellMethod) => {
   switch (sellMethod) {
@@ -58,7 +58,7 @@ export const SellPage = () => {
 
   const [locationState] = useState(getLocationSearchObj(history.location.search) as { nft: string; tokenId: string; });
 
-  const { data: nft } = useQuery('nft', () => getNftData(locationState.nft, locationState.tokenId));
+  const { data: nft } = useQuery(['sell-nft', locationState.nft, locationState.tokenId], () => GetNFTApi(locationState.nft, locationState.tokenId));
 
   const { setDarkMode } = useThemeContext() as any;
   const [activeTab, setActiveTab] = useState<SellPageTabs>(SellPageTabs.SELL_AMOUNT);
@@ -76,8 +76,8 @@ export const SellPage = () => {
 
       const make: any = {
         assetType: {
-          assetClass: nft.nft.standard,
-          contract: nft.collection.address,
+          assetClass: nft?.standard,
+          contract: nft?.collection?.address,
           tokenId: locationState.tokenId,
         },
         value: '1',
@@ -97,7 +97,7 @@ export const SellPage = () => {
 
           acc[1][i].push(NFTTokenId);
           return acc;
-        }, [[nft.collection.address], [[locationState.tokenId]]]);
+        }, [[(nft?.collection?.address ?? '')], [[locationState.tokenId]]]);
 
         make.assetType = {
           assetClass: 'ERC721_BUNDLE',
@@ -126,7 +126,7 @@ export const SellPage = () => {
         end: 0,
         data: {
           dataType: 'ORDER_DATA',
-          revenueSplits: nft.nft.royalties.map((royalty: any) => ({
+          revenueSplits: nft?.royalties.map((royalty: any) => ({
             account: royalty.address,
             value: royalty.amount * 100,
           }))
@@ -205,7 +205,7 @@ export const SellPage = () => {
   useEffect(() => setDarkMode(false), []);
 
   const contextValue: IMarketplaceSellContextData = {
-    nft,
+    nft: nft as INFT,
     isPosted,
     amountType: amountType as SellAmountType,
     sellMethod: sellMethod as SellMethod,
@@ -262,10 +262,10 @@ export const SellPage = () => {
                   <SelectMethodType />
                 </TabPanel>
                 <TabPanel name={settingsTabName}>
-                  { amountType && sellMethod && <SettingsTab />}
+                  { amountType && sellMethod && nft && <SettingsTab />}
                 </TabPanel>
                 <TabPanel name="Summary">
-                  <SummaryTab />
+                  {nft && <SummaryTab />}
                 </TabPanel>
               </TabPanels>
             </Tabs>
