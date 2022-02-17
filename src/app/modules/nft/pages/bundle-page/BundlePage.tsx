@@ -15,7 +15,7 @@ import {
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import { uniqBy } from 'lodash';
-import ReactReadMoreReadLess from 'react-read-more-read-less';
+import ReadMoreAndLess from 'react-read-more-less';
 import { Swiper, SwiperSlide } from 'swiper/react/swiper-react';
 import { Navigation } from 'swiper';
 
@@ -155,13 +155,13 @@ export const BundlePageContent = () => {
             </Flex>
 
             <Text mt={'24px'} {...styles.DescriptionStyle}>
-              <ReactReadMoreReadLess
+              <ReadMoreAndLess
                 charLimit={150}
                 readMoreText="Read more"
                 readLessText="Read less"
               >
                 {(order.make.assetType as IERC721BundleAssetType).bundleDescription || ''}
-              </ReactReadMoreReadLess>
+              </ReadMoreAndLess>
             </Text>
 
             <Tabs>

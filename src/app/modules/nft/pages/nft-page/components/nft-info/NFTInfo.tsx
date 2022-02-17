@@ -13,7 +13,7 @@ import {
   Text,
 } from '@chakra-ui/react';
 import React, { useCallback, useState } from 'react';
-import ReactReadMoreReadLess from 'react-read-more-read-less';
+import ReadMoreAndLess from 'react-read-more-less';
 import { UseMeasureRect } from 'react-use/lib/useMeasure';
 import { useHistory } from 'react-router-dom';
 
@@ -138,13 +138,13 @@ export const NFTInfo = () => {
                   </Flex>
 
                   <Text {...styles.DescriptionStyle}>
-                    <ReactReadMoreReadLess
+                    <ReadMoreAndLess
                       charLimit={150}
                       readMoreText="Read more"
                       readLessText="Read less"
                     >
                       {NFT.description || ''}
-                    </ReactReadMoreReadLess>
+                    </ReadMoreAndLess>
                   </Text>
 
                   <Tabs>
