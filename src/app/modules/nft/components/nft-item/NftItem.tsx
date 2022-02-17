@@ -1,7 +1,4 @@
-import {
-  Box, BoxProps, Image,
-  Text, TextProps,
-} from '@chakra-ui/react';
+import { Box, BoxProps } from '@chakra-ui/react';
 import React, { useCallback } from 'react';
 import { useBoolean } from 'react-use';
 
@@ -11,19 +8,14 @@ import {
   NFTItemAssetVideoLabel,
   NFTItemHeader,
   NFTItemAsset,
-  NFTItemAuctionTimer,
+  NFTItemAuctionTimer, NFTItemFooter,
 } from './components';
 import { ItemWrapper } from '../../../../components';
 
-import ethereumIcon from './../../../../../assets/images/marketplace/eth-icon.svg';
 
 interface IStyles {
   assetContainer: BoxProps;
   assetLabelContainer: BoxProps;
-  footer: {
-    nameLine: BoxProps;
-    additionLine: BoxProps;
-  }
 }
 
 const styles: IStyles = {
@@ -39,22 +31,6 @@ const styles: IStyles = {
     top: '10px',
     right: '10px',
     zIndex: 1,
-  },
-  footer: {
-    nameLine: {
-      display: 'flex',
-      fontSize: '14px',
-      fontWeight: 700,
-      justifyContent: 'space-between',
-      mb: '10px',
-    },
-    additionLine: {
-      display: 'flex',
-      fontSize: '10px',
-      fontWeight: 600,
-      justifyContent: 'space-between',
-      color: '#00000066',
-    }
   },
 };
 
@@ -81,8 +57,8 @@ export const NftItem = (
     selectedLabel,
     onAuctionTimeOut,
     showAuctionTimer = true,
-    showNFTName = true,
-    showNFTPrice = true,
+    showNFTName,
+    showNFTPrice,
     renderAssetLabel,
     assetLabelContainerProps,
     renderFooter,
@@ -120,49 +96,11 @@ export const NftItem = (
       </Box>
 
       {renderFooter ? renderFooter : (
-        <>
-          <Box {...styles.footer.nameLine}>
-            <Box flex={1}>
-              {showNFTName && (<Text>{nft.name}</Text>)}
-            </Box>
-            <Box>
-              {showNFTPrice && nft.price && (
-                <Text>
-                  <Image
-                    src={ethereumIcon}
-                    alt={'Ethereum icon'}
-                    display={'inline'}
-                    mx={'4px'}
-                    position={'relative'}
-                    top={'-2px'}
-                    width={'9px'}
-                  />
-                  {nft.price}
-                </Text>
-              )}
-            </Box>
-          </Box>
-          <Box {...styles.footer.additionLine}>
-            <Box flex={1}>
-              <Text>{nft.tokenIds?.length ?? 0}/{nft.numberOfEditions}</Text>
-            </Box>
-            <Box>
-              <Text>
-                Offer for
-                <Image
-                  src={ethereumIcon}
-                  alt={'Ethereum icon'}
-                  display={'inline'}
-                  mx={'4px'}
-                  position={'relative'}
-                  top={'-1px'}
-                  width={'6px'}
-                />
-                <Box as={'span'} color={'black'}>0.35</Box>
-              </Text>
-            </Box>
-          </Box>
-        </>
+        <NFTItemFooter
+          nft={nft}
+          showNFTName={showNFTName}
+          showNFTPrice={showNFTPrice}
+        />
       )}
     </ItemWrapper>
   );
