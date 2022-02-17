@@ -7,5 +7,6 @@ export * from './dropdown';
 export * from './info-tooltip';
 export * from './input-shadow';
 export * from './item-wrapper';
+export * from './multi-select';
 export * from './search-input';
 export * from './select';
