@@ -1,4 +1,5 @@
 export enum NFTArtworkType {
+  JPG = 'jpg',
   JPEG = 'jpeg',
   PNG = 'png',
   MP4 = 'mp4',

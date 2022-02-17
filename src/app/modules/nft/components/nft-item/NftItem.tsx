@@ -46,13 +46,15 @@ export const NftItem = (
       selectedLabel={selectedLabel}
       onClick={(e: React.MouseEvent<HTMLElement>) => {
         if (onClick) {
-          e.preventDefault();
           onClick(e, NFT);
         }
       }}
     >
       <LinkBox>
-        <LinkOverlay href={`/v2/nft/${NFT.collection?.address}/${NFT.tokenId}`} display={'contents'}>
+        <LinkOverlay
+          href={!onClick ? `/v2/nft/${NFT.collection?.address}/${NFT.tokenId}`: 'javascript: void(0);'}
+          display={'contents'}
+        >
           {renderHeader === null ? null :
             renderHeader ? renderHeader(NFT) : null}
 

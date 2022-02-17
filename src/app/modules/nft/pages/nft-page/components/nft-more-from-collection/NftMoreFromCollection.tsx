@@ -2,6 +2,7 @@ import * as styles from "../../styles";
 import {Box, Button, Container, Heading, SimpleGrid} from "@chakra-ui/react";
 import {useNFTPageData} from "../../NFTPage.context";
 
+// TODO: use or remove
 export const NftMoreFromCollection = () => {
   const { NFT } = useNFTPageData();
   return NFT && NFT.moreFromCollection && (

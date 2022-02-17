@@ -6,7 +6,6 @@ import { useMarketplaceSellData } from '../../../../../hooks';
 import { SellAmountType, SellMethod } from '../../../../../enums';
 import * as styles from '../../styles';
 import { CurrencyInput, DateTimePicker, InputShadow } from '../../../../../../../../../components';
-import { GreyBox } from '../../../../grey-box';
 import { IMarketplaceSellContextData, IDutchAuctionForm } from '../../../../../types';
 import { BundleForm } from '../../../../bundle-form';
 
@@ -49,7 +48,7 @@ export const SettingsTabDutchAuction = () => {
         </Box>
         <Flex justifyContent={'flex-end'} />
         <Box pt={'20px'} w={'100%'}>
-          <GreyBox p={{ base: '20px', md: '30px' }}>
+          <Box layerStyle={'grey'} p={{ base: '20px', md: '30px' }}>
             <Flex sx={styles.settingsItem}>
               <Box>
                 <Heading as={'h5'}>Ending price</Heading>
@@ -81,7 +80,7 @@ export const SettingsTabDutchAuction = () => {
                 />
               </Box>
             </Flex>
-          </GreyBox>
+          </Box>
         </Box>
       </Flex>
       <Flex data-checkbox sx={styles.settingsItem}>
@@ -99,7 +98,7 @@ export const SettingsTabDutchAuction = () => {
         </Flex>
         {form.values.isScheduledForFutureTime && (
           <Box pt={'20px'} w={'100%'}>
-            <GreyBox p={'30px'}>
+            <Box layerStyle={'grey'} p={'30px'}>
               <Flex sx={styles.settingsItem}>
                 <Box>
                   <Heading as={'h5'}>Future date</Heading>
@@ -113,7 +112,7 @@ export const SettingsTabDutchAuction = () => {
                   />
                 </Box>
               </Flex>
-            </GreyBox>
+            </Box>
           </Box>
         )}
       </Flex>

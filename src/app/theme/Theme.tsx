@@ -13,6 +13,13 @@ const theme = extendTheme({
   components: {
     ...components,
   },
+  layerStyles: {
+    grey: {
+      background: 'rgba(0, 0, 0, 0.02)',
+      border: '1px solid rgba(0, 0, 0, 0.1)',
+      borderRadius: '10px',
+    },
+  },
 });
 
 interface IThemeProps {
