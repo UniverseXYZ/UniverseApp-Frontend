@@ -1,5 +1,6 @@
-export * from './container';
 export * from './button';
+export * from './checkbox';
+export * from './container';
 export * from './heading';
 export * from './input';
 export * from './number-input';

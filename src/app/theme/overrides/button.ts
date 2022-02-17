@@ -101,5 +101,10 @@ export const Button = {
         boxShadow: 'none',
       },
     }
-  }
+  },
+  sizes: {
+    lg: {
+      height: '50px',
+    }
+  },
 };

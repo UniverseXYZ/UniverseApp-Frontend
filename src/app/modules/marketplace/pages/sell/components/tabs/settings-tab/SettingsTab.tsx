@@ -137,28 +137,24 @@ export const SettingsTab = () => {
                 label={'Sale type'}
                 buttonProps={{
                   leftIcon: <Image src={saleTypeIcon} />,
-                  minWidth: '200px',
                 }}
               />
               <Dropdown
                 label={'Price range'}
                 buttonProps={{
                   leftIcon: <Image src={priceRangeIcon} />,
-                  minWidth: '200px',
                 }}
               />
               <Dropdown
                 label={'Collections'}
                 buttonProps={{
                   leftIcon: <Image src={collectionsIcon} />,
-                  minWidth: '200px',
                 }}
               />
               <Dropdown
                 label={'Artists'}
                 buttonProps={{
                   leftIcon: <Image src={artistIcon} />,
-                  minWidth: '200px',
                 }}
               />
             </Flex>
@@ -171,11 +167,25 @@ export const SettingsTab = () => {
                   key={nft.id}
                   nft={nft as INft}
                   isSelected={!!selectedNFTs[nft.id as number]}
+                  selectedLabel={(nft.tokenIds as any)?.length > 1 ? `${(selectedNFTs[nft.id as number] || []).length} / ${(nft.tokenIds as any)?.length}` : undefined}
                   renderFooterNFTAdditions={(nft.tokenIds as any)?.length > 1
-                    ? <SelectEditionsDropdown nft={nft as INft} />
+                    ? (
+                      <Box display={'inline-block'} onClick={(e) => e.stopPropagation()}>
+                        <SelectEditionsDropdown
+                          nft={nft as INft}
+                          selectedEditions={selectedNFTs[nft.id as number] || []}
+                          onChange={(editions) => {
+                            setSelectedNFTs({
+                              ...selectedNFTs,
+                              [nft.id as number]: editions,
+                            });
+                          }}
+                        />
+                      </Box>
+                    )
                     : <Text>#{(nft.tokenIds as any)[0]}</Text>
                   }
-                  onClick={handleClickNFT}
+                  onClick={(nft.tokenIds as any)?.length > 1 ? undefined : handleClickNFT}
                   onAuctionTimeOut={() => handleNFTAuctionTimeOut(i)}
                 />
               ))}
