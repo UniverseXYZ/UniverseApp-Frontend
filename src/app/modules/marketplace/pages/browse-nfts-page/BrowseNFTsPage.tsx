@@ -316,6 +316,7 @@ export const BrowseNFTsPage = () => {
                         priceToken={order.take.assetType.assetClass as TokenTicker}
                       />
                     )}
+                    onClick={(NFT) => console.log('NFT', NFT)}
                   />
                 );
               })
