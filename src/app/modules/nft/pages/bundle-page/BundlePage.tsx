@@ -33,7 +33,7 @@ import { LineTabList } from '../../../../components';
 import { useThemeContext } from '../../../../../contexts/ThemeContext';
 import { BundlePageProvider, useBundlePage } from './BundlePage.provider';
 import { TabNFTs } from './components';
-import { INFT, NFTArtworkType } from '../../types';
+import { INFT } from '../../types';
 import { isNFTAssetAudio, isNFTAssetImage, isNFTAssetVideo } from '../../helpers';
 
 import AudioNFTPreviewImage from './../../../../../assets/images/v2/audio-nft-preview.png';
@@ -43,7 +43,7 @@ export const BundlePageContent = () => {
 
   const { setDarkMode } = useThemeContext() as any;
 
-  const { owner, NFTs, isLoading, moreFromCollection } = useBundlePage();
+  const { owner, NFTs, isLoading, moreFromCollection, order } = useBundlePage();
 
   const [selectedNFTIdx, setSelectedNFTIdx] = useState(0);
 
@@ -138,7 +138,7 @@ export const BundlePageContent = () => {
               </TabPanels>
             </Tabs>
           </Box>
-          <NFTBuySection />
+          <NFTBuySection order={order} />
         </Box>
       </Box>
       {moreFromCollection && (
@@ -154,7 +154,7 @@ export const BundlePageContent = () => {
                 base: 1,
                 md: 2,
                 lg: moreFromCollection.length < 4 ? moreFromCollection.length : 4,
-            }}
+              }}
               spacingX={'20px'}
             >
               {moreFromCollection.map((NFT) => (<NftItem key={NFT.id} nft={NFT} />))}
