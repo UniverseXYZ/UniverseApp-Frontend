@@ -72,4 +72,6 @@ export interface INftBackend {
   auctionExpDate: string;
   assets: string[]; // storybook
   price: number | string;
+  offerPrice: number | string;
+  lastPrice: number | string;
 }
