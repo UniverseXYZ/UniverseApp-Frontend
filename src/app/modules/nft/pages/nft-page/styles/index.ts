@@ -1,4 +1,5 @@
 export * from './description.style';
+export * from './like-button.style';
 export * from './more-nfts-button.style';
 export * from './more-nfts-container.style';
 export * from './more-nfts-title.style';

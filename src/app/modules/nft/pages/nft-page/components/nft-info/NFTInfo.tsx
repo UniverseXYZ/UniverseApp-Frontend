@@ -27,6 +27,7 @@ import { TabBids, TabHistory, TabMetadata, TabOffers, TabOwners, TabProperties }
 import { CollectionPageLoader } from '../../../../../../../containers/collection/CollectionPageLoader';
 import NotFound from '../../../../../../../components/notFound/NotFound';
 import * as styles from '../../styles';
+import { NFTLike } from '../../../../components/nft-item/components';
 
 // TODO: hide metadata tab for not Polymorph NFT type
 export const NFTInfo = () => {
@@ -73,17 +74,7 @@ export const NFTInfo = () => {
                   }}>
                     <Heading as={'h2'} sx={{ fontSize: '26px', }}>{NFT.name}</Heading>
                     <Box>
-                      {/*  <NFTLike*/}
-                      {/*    likes={NFT.likes}*/}
-                      {/*    isLiked={false}*/}
-                      {/*    sx={{*/}
-                      {/*      padding: '15px 17px',*/}
-                      {/*      height: '42px',*/}
-                      {/*      borderRadius: '12px',*/}
-                      {/*      mr: '7px',*/}
-                      {/*    }}*/}
-                      {/*    onOpen={() => setIsLikesPopupOpened(true)}*/}
-                      {/*  />*/}
+                      {/*<NFTLike likes={[]} isLiked={true} {...styles.LikeButtonStyle} />*/}
 
                       <NFTMenu nft={NFT} />
                     </Box>
