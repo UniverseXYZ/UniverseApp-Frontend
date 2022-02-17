@@ -10,11 +10,17 @@ import {
   InputLeftElement,
   Link,
   SimpleGrid,
-  Text,
+  Text, Tooltip,
   useDisclosure,
 } from '@chakra-ui/react';
 import React, { useCallback, useMemo, useRef, useState } from 'react';
 import { useWindowScroll } from 'react-use';
+
+import { Navigation, FreeMode } from 'swiper';
+import { Swiper, SwiperSlide } from 'swiper/react/swiper-react';
+
+import 'swiper/swiper-bundle.min.css';
+import 'swiper/swiper.min.css';
 
 import { GreyBox } from '../../grey-box';
 import { useMarketplaceSellData } from '../../../hooks';
@@ -23,7 +29,11 @@ import { SettingsTabDutchAuction, SettingsTabEnglishAuction, SettingsTabFixedLis
 import { SellAmountType } from '../../../enums';
 import { Dropdown, InputShadow, Select } from '../../../../../../../components';
 
+import arrowLeftIcon from '../../../../../../../../assets/images/marketplace/bundles-left-arrow.svg';
+import arrowRightIcon from '../../../../../../../../assets/images/marketplace/bundles-right-arrow.svg';
+
 import searchIcon from '../../../../../../../../assets/images/search-gray.svg';
+import closeWhiteIcon from '../../../../../../../../assets/images/marketplace/v2/close-white.svg';
 import filtersIcon from '../../../../../../../../assets/images/marketplace/filters2.svg';
 import { SortNftsOptions } from '../../../../../constants';
 
@@ -53,6 +63,8 @@ const useStickyToFooter = () => {
 
 export const SettingsTab = () => {
   const actionBarRef = useRef(null);
+  const prevRef = useRef(null);
+  const nextRef = useRef(null);
 
   const { isOpen: isFiltersOpen, onToggle: onToggleFilters } = useDisclosure();
 
@@ -76,6 +88,16 @@ export const SettingsTab = () => {
       ...form.values.selectedNFTsIds,
       [nft.id]: selected,
     });
+  }, [form.values.selectedNFTsIds]);
+
+  const selectedNFTsNumber = useMemo(() => {
+    if (!form.values.selectedNFTsIds) {
+      return 0;
+    }
+    return Object
+      .keys(form.values.selectedNFTsIds)
+      .filter((key) => !!form.values.selectedNFTsIds[key])
+      .length;
   }, [form.values.selectedNFTsIds]);
 
   return (
@@ -201,29 +223,183 @@ export const SettingsTab = () => {
         </>
       )}
 
-      {sellData.amountType === SellAmountType.SINGLE ? (
-        <Box textAlign={'right'} mb={'50px'}>
-          <Button mr={'10px'} variant={'outline'} onClick={sellData.goBack}>Back</Button>
-          <Button boxShadow={'xl'} onClick={sellData.goContinue}>Continue</Button>
-        </Box>
-      ) : (
-        <Box mb={actionBarRef?.current ? (actionBarRef?.current as any).offsetHeight + 'px' : 0}>
-          <Box
-            ref={actionBarRef}
-            textAlign={'right'}
-            width={'100%'}
-            p={'20px 40px'}
-            bg={'linear-gradient(135deg, rgba(188, 235, 0, 0.03) 15.57%, rgba(0, 234, 234, 0.03) 84.88%), rgba(255, 255, 255, 0.8)'}
-            backdropFilter={'blur(10px)'}
-            borderTop={'1px solid rgba(0, 0, 0, 0.1)'}
-            position={isStickiedActionBar ? 'fixed' : 'absolute'}
-            bottom={isStickiedActionBar ? 0 : 'inherit'}
-            left={0}
-            zIndex={10}
-          >
+      {!!sellData.sellMethod && (
+        sellData.amountType === SellAmountType.SINGLE ? (
+          <Box textAlign={'right'} mb={'50px'}>
+            <Button mr={'10px'} variant={'outline'} onClick={sellData.goBack}>Back</Button>
             <Button boxShadow={'xl'} onClick={sellData.goContinue}>Continue</Button>
           </Box>
-        </Box>
+        ) : (
+          <Box mb={actionBarRef?.current ? (actionBarRef?.current as any).offsetHeight + 'px' : 0}>
+            <Box
+              ref={actionBarRef}
+              width={'100%'}
+              p={'20px 40px'}
+              bg={'linear-gradient(135deg, rgba(188, 235, 0, 0.03) 15.57%, rgba(0, 234, 234, 0.03) 84.88%), rgba(255, 255, 255, 0.8)'}
+              backdropFilter={'blur(10px)'}
+              borderTop={'1px solid rgba(0, 0, 0, 0.1)'}
+              position={isStickiedActionBar ? 'fixed' : 'absolute'}
+              bottom={isStickiedActionBar ? 0 : 'inherit'}
+              left={0}
+              zIndex={10}
+            >
+              <Flex alignItems={'center'}>
+                <Box sx={{
+                  flex: 1,
+                  position: 'relative',
+                  maxWidth: '80%',
+                  '.swiper-slide': {
+                    width: 'fit-content !important'
+                  },
+                  '[data-swiper-button]': {
+                    border: 0,
+                    width: '30px',
+                    height: '30px',
+                    background: 'white',
+                    zIndex: 10,
+                    position: 'absolute',
+                    minW: 'auto',
+                    borderRadius: '50%',
+                    top: 'calc(50% - 15px)',
+                    padding: 0,
+                    _disabled: {
+                      display: 'none',
+                    },
+                    _before: {
+                      border: '1px solid',
+                      borderColor: 'rgba(0, 0, 0, 0.1)',
+                      borderRadius: 'inherit',
+                      position: 'absolute',
+                      content: '" "',
+                      top: 0,
+                      left: 0,
+                      height: '100%',
+                      width: '100%',
+                      zIndex: -1,
+                    },
+                    _hover: {
+                      _before: {
+                        backgroundImage: 'linear-gradient(175deg,#bceb00,#00eaea)',
+                        backgroundOrigin: 'border-box',
+                        borderColor: 'transparent',
+                        boxShadow: 'inset 2px 1000px 1px white',
+                      },
+                    },
+                    _focus: {
+                      boxShadow: 'none',
+                      _before: {
+                        backgroundImage: 'linear-gradient(175deg,#bceb00,#00eaea)',
+                        backgroundOrigin: 'border-box',
+                        borderColor: 'transparent',
+                        boxShadow: 'inset 2px 1000px 1px white',
+                      },
+                    },
+                  }
+                }}>
+                  <Button ref={prevRef} variant={'simpleOutline'} data-swiper-button left={'-15px'}>
+                    <Image src={arrowLeftIcon} width={'9px'} />
+                  </Button>
+                  <Button ref={nextRef} variant={'simpleOutline'} data-swiper-button right={'-15px'}>
+                    <Image src={arrowRightIcon} width={'9px'} />
+                  </Button>
+                  {prevRef?.current && nextRef?.current && (
+                    <Swiper
+                      modules={[Navigation, FreeMode]}
+                      navigation={{
+                        prevEl: prevRef.current,
+                        nextEl: nextRef.current,
+                      }}
+                      loop={false}
+                      freeMode={true}
+                      slidesPerView={'auto'}
+                      spaceBetween={8}
+                    >
+                      {[1, 2, 3, 4, 5].map((i) => (
+                        <React.Fragment key={i}>
+                          {nfts.map((nft) => {
+                            const selectedNFTRef = form.values.selectedNFTsIds[nft.id as number];
+
+                            if (!selectedNFTRef) {
+                              return null;
+                            }
+
+                            const isNFTBundle = typeof selectedNFTRef !== 'boolean';
+
+                            return (
+                              <SwiperSlide key={nft.id as number * i}>
+                                <Tooltip
+                                  hasArrow
+                                  variant={'black'}
+                                  label={isNFTBundle ? 'Select editions to remove' : 'Remove'}
+                                  fontWeight={700}
+                                >
+                                  <Box
+                                    borderRadius={'8px'}
+                                    overflow={'hidden'}
+                                    cursor={'pointer'}
+                                    position={'relative'}
+                                    sx={{
+                                      width: '54px',
+                                      _after: {
+                                        display: 'none',
+                                        content: '" "',
+                                        position: 'absolute',
+                                        bg: `center / 30% no-repeat url(${closeWhiteIcon}), rgba(0, 0, 0, 0.8)`,
+                                        top: 0,
+                                        left: 0,
+                                        h: '100%',
+                                        w: '100%',
+                                      },
+                                      _hover: {
+                                        _after: {
+                                          display: 'block',
+                                        },
+                                      },
+                                    }}
+                                    onClick={isNFTBundle ? undefined : () => {
+                                      handleCheckNFT(nft, false);
+                                    }}
+                                  >
+                                    <Image
+                                      src={nft.thumbnail_url}
+                                      height={'54px'}
+                                      width={'54px'}
+                                      objectFit={'cover'}
+                                    />
+                                    {isNFTBundle && (
+                                      <Text
+                                        sx={{
+                                          bg: 'rgba(0, 0, 0, 0.8)',
+                                          backdropFilter: 'blur(2px)',
+                                          borderRadius: '4px',
+                                          color: 'white',
+                                          fontSize: '10px',
+                                          fontWeight: 600,
+                                          lineHeight: '15px',
+                                          paddingX: '4px',
+                                          position: 'absolute',
+                                          right: '4px',
+                                          top: '4px',
+                                          zIndex: 2,
+                                        }}
+                                      >{selectedNFTRef.length}</Text>
+                                    )}
+                                  </Box>
+                                </Tooltip>
+                              </SwiperSlide>
+                            )
+                          })}
+                        </React.Fragment>
+                      ))}
+                    </Swiper>
+                  )}
+                </Box>
+                <Text mx={'20px'} fontSize={'12px'}>Total NFTs: <strong>{selectedNFTsNumber}</strong></Text>
+                <Button boxShadow={'xl'} onClick={sellData.goContinue}>Continue</Button>
+              </Flex>
+            </Box>
+          </Box>
+        )
       )}
     </>
   );
