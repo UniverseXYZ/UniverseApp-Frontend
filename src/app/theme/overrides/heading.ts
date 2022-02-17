@@ -1,5 +1,5 @@
 export const Heading = {
   baseStyle: {
-    fontFamily: 'Sharp Grotesk Medium'
+    fontFamily: 'Sharp Grotesk SemiBold',
   }
 };

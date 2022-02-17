@@ -5,13 +5,37 @@ export const Tabs = {
         border: 0,
       },
       tab: {
-        background: 'white',
+        '--tab-height': {
+          base: '70px',
+          lg: '50px'
+        },
+        background: 'rgba(0, 0, 0, 0.03)',
         border: 0,
-        fontFamily: '"Sharp Grotesk", sans-serif',
+        fontFamily: '"Sharp Grotesk SemiBold", sans-serif',
         fontSize: '12px',
-        padding: '16px',
+        flexDir: {
+          base: 'column',
+          lg: 'row',
+        },
+        padding: {
+          base: '8px 16px',
+          lg: '16px'
+        },
         position: 'relative',
         margin: '0 3px',
+        img: {
+          h: '17px',
+          m: {
+            base: '0 0 1px 0',
+            lg: '0 10px 0 0'
+          },
+        },
+        _hover: {
+          background: 'rgba(0, 0, 0, 0.1)',
+          _after: {
+            borderLeftColor: 'rgba(0, 0, 0, 0.1)',
+          }
+        },
         _focus: {
           boxShadow: 'none',
         },
@@ -39,8 +63,8 @@ export const Tabs = {
           top: 0,
           width: 0,
           height: 0,
-          borderTop: '25px solid transparent',
-          borderBottom: '25px solid transparent',
+          borderTop: 'calc(var(--tab-height) / 2) solid transparent',
+          borderBottom: 'calc(var(--tab-height) / 2) solid transparent',
           transition: 'border-color 0.2s ease',
           right: 'auto',
           left: 0,
@@ -54,9 +78,9 @@ export const Tabs = {
           right: '-10px',
           width: 0,
           height: 0,
-          borderTop: '25px solid transparent',
-          borderBottom: '25px solid transparent',
-          borderLeft: '10px solid white',
+          borderTop: 'calc(var(--tab-height) / 2) solid transparent',
+          borderBottom: 'calc(var(--tab-height) / 2) solid transparent',
+          borderLeft: '10px solid rgba(0, 0, 0, 0.03)',
           zIndex: 2,
           transition: 'border-color 0.2s ease',
         },

@@ -1,16 +1,75 @@
 import { Center, Flex, Heading, Image, Text } from '@chakra-ui/react';
 import { useCallback } from 'react';
-
-export interface IBoxSelectItem {
-  value: string;
-  title: string;
-  description: string;
-  image: string;
-}
+import { SystemStyleObject } from '@chakra-ui/styled-system';
 
 export interface IBoxSelectProps {
-  options: IBoxSelectItem[];
+  options: Array<{
+    value: string;
+    title: string;
+    description: string;
+    image: string;
+  }>;
   onSelect?: (value: string) => void;
+}
+
+const styles: Record<string, SystemStyleObject> = {
+  container: {
+    justifyContent: 'space-between',
+    flexDir: {
+      base: 'column',
+      md: 'row'
+    },
+    '> div': {
+      _notLast: {
+        margin: {
+          base: '0 0 15px 0',
+          md: '0 15px 0 0',
+        }
+      },
+    }
+  },
+  item: {
+    bg: 'white',
+    border: '1px solid rgba(0, 0, 0, 0.1)',
+    borderRadius: 12,
+    flex: 1,
+    h: '290px',
+    p: '20px',
+    position: 'relative',
+    textAlign: 'center',
+    transition: '200ms',
+    img: {
+      position: 'relative',
+      transition: '100ms'
+    },
+    _before: {
+      background: 'linear-gradient(135deg, #bceb00 15.57%, #00eaea 84.88%) border-box',
+      borderRadius: 'inherit',
+      content: '""',
+      display: 'none',
+      filter: 'blur(4px)',
+      height: '100%',
+      left: 0,
+      position: 'absolute',
+      top: 0,
+      width: '100%',
+      zIndex: -1,
+    },
+    _hover: {
+      bg: `
+        linear-gradient(#ffffff, #ffffff) padding-box, 
+        linear-gradient(135deg, #bceb00 15.57%, #00eaea 84.88%) border-box
+      `,
+      boxShadow: 'xl',
+      cursor: 'pointer',
+      img: {
+        transform: 'translateY(-6px)'
+      },
+      _before: {
+        display: 'block',
+      }
+    }
+  }
 }
 
 export const BoxSelect = ({ options, onSelect }: IBoxSelectProps) => {
@@ -19,41 +78,9 @@ export const BoxSelect = ({ options, onSelect }: IBoxSelectProps) => {
   }, [onSelect]);
 
   return (
-    <Flex justifyContent={'space-between'} sx={{
-      '> div': {
-        _notLast: {
-          marginRight: '15px',
-        },
-      }
-    }}>
+    <Flex sx={styles.container}>
       {options.map((option, i) => (
-        <Center
-          key={i}
-          border={'1px solid rgba(0, 0, 0, 0.1)'}
-          borderRadius={12}
-          flex={1}
-          h="290px"
-          textAlign={'center'}
-          p={'20px'}
-          transition={'200ms'}
-          sx={{
-            img: {
-              position: 'relative',
-              transition: '100ms'
-            },
-            _hover: {
-              boxShadow: 'xl',
-              bg: `
-                linear-gradient(#ffffff, #ffffff) padding-box, 
-                linear-gradient(135deg, #bceb00 15.57%, #00eaea 84.88%) border-box`,
-              cursor: 'pointer',
-              img: {
-                transform: 'translateY(-6px)'
-              }
-            }
-          }}
-          onClick={() => handleOnClick(option.value)}
-        >
+        <Center key={i} sx={styles.item} onClick={() => handleOnClick(option.value)}>
           <Flex flexDir={'column'} alignItems={'center'}>
             <Image src={option.image} maxW={'72px'} maxH={'72px'} mb={'24px'} />
             <Heading as={'h4'} fontFamily={'Space Grotesk'} fontSize={'18px'} mb={'4px'}>{option.title}</Heading>
