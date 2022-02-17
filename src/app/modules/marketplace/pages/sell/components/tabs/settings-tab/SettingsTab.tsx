@@ -34,6 +34,7 @@ import artistIcon from '../../../../../../../../assets/images/marketplace/artist
 import { Nfts } from '../../../../../mocks/nfts';
 import { NftItem } from '../../../../../../nft/components';
 import { INft } from '../../../../../../nft/types';
+import { SelectEditionsDropdown } from '../../select-editions-dropdown';
 
 export const SettingsTab = () => {
   const actionBarRef = useRef(null);
@@ -41,6 +42,8 @@ export const SettingsTab = () => {
   const { isOpen: isFiltersOpen, onToggle: onToggleFilters } = useDisclosure();
 
   const { y: windowScrollY } = useWindowScroll();
+
+  const [selectedNFTs, setSelectedNFTs] = useState<any>({});
 
   const footerEl = useMemo<any>(() => document.querySelector('footer'), []);
 
@@ -63,6 +66,13 @@ export const SettingsTab = () => {
   const handleNFTAuctionTimeOut = useCallback((index) => {
     setNfts(nfts.filter((nft, i) => i !== index));
   }, [nfts]);
+
+  const handleClickNFT = useCallback((nft) => {
+    setSelectedNFTs({
+      ...selectedNFTs,
+      [nft.id]: !selectedNFTs[nft.id],
+    });
+  }, [selectedNFTs]);
 
   return (
     <>
@@ -160,7 +170,12 @@ export const SettingsTab = () => {
                 <NftItem
                   key={nft.id}
                   nft={nft as INft}
-                  isSelected={i === 4}
+                  isSelected={!!selectedNFTs[nft.id as number]}
+                  renderFooterNFTAdditions={(nft.tokenIds as any)?.length > 1
+                    ? <SelectEditionsDropdown nft={nft as INft} />
+                    : <Text>#{(nft.tokenIds as any)[0]}</Text>
+                  }
+                  onClick={handleClickNFT}
                   onAuctionTimeOut={() => handleNFTAuctionTimeOut(i)}
                 />
               ))}
