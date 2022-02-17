@@ -56,11 +56,7 @@ export const BundlePageContent = () => {
   }, [moreFromCollection]);
 
   const uniqNFTs = useMemo(() => {
-    if (!NFTs) {
-      return [];
-    }
-
-    return uniqBy(NFTs, (NFT: INFT) => NFT.thumbnailUrl);
+    return NFTs ? uniqBy(NFTs, (NFT: INFT) => NFT.thumbnailUrl) : [];
   }, [NFTs]);
 
   useEffect(() => setDarkMode(false), []);

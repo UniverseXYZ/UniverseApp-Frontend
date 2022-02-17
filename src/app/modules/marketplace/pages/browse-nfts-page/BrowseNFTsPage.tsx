@@ -3,7 +3,6 @@ import { useFormik } from 'formik';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useInfiniteQuery } from 'react-query';
 import { useHistory } from 'react-router-dom';
-import axios from 'axios';
 import { utils } from 'ethers';
 
 import NoiseTextureImage from './../../../../../assets/images/v2/marketplace/noise_texture.png';
@@ -32,12 +31,11 @@ import {
   NFTItemAuctionCountdown,
   BundleItem,
 } from '../../../nft/components';
-import { IERC721AssetType, IERC721BundleAssetType, INFT, IOrder, IOrderBackend } from '../../../nft/types';
+import { IERC721AssetType, IERC721BundleAssetType, INFT, IOrder } from '../../../nft/types';
 import { useStickyHeader2 } from '../../../../hooks';
 import { coins } from '../../../../mocks';
-import { mapBackendOrder } from '../../../nft';
 import { ORDERS_PER_PAGE } from './constants';
-import { GetNFTApi } from '../../../nft/api';
+import { GetNFTApi, GetOrdersApi } from '../../../nft/api';
 import { TokenTicker } from '../../../../enums';
 import { TOKENS_MAP } from '../../../../constants';
 import { useThemeContext } from '../../../../../contexts/ThemeContext';
@@ -89,17 +87,8 @@ export const BrowseNFTsPage = () => {
     onSubmit: () => {},
   });
 
-  const { data: ordersResult, fetchNextPage, hasNextPage, isFetching } = useInfiniteQuery('browse-nfts:orders', async ({ pageParam = 1 }) => {
-    const [data, total] = (await axios.get<[IOrderBackend[], number]>(
-      `${process.env.REACT_APP_MARKETPLACE_BACKEND}/v1/orders`,
-      {
-        params: {
-          page: pageParam
-        }
-      }
-    )).data;
-
-    const orders = data.map((order) => mapBackendOrder(order));
+  const { data: ordersResult, fetchNextPage, hasNextPage, isFetching } = useInfiniteQuery(['orders'], async ({ pageParam = 1 }) => {
+    const { orders, total } = await GetOrdersApi({ page: pageParam });
 
     const NFTsRequests: Array<any> = [];
 
