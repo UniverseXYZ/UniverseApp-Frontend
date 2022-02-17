@@ -144,8 +144,19 @@ export const BundlePageContent = () => {
       {moreFromCollection && (
         <Box {...styles.MoreNFTsWrapperStyle}>
           <Heading {...styles.MoreNFTsTitleStyle}>More from this collection</Heading>
-          <Container {...styles.MoreNFTsContainerStyle}>
-            <SimpleGrid columns={{ base: 1, md: 2, lg: 4 }} spacingX={'20px'}>
+          <Container
+            {...styles.MoreNFTsContainerStyle}
+            /*TODO: move 1110px to styles*/
+            w={moreFromCollection.length < 4 ? `calc(1110px / 4 * ${moreFromCollection.length})` : '100%'}
+          >
+            <SimpleGrid
+              columns={{
+                base: 1,
+                md: 2,
+                lg: moreFromCollection.length < 4 ? moreFromCollection.length : 4,
+            }}
+              spacingX={'20px'}
+            >
               {moreFromCollection.map((NFT) => (<NftItem key={NFT.id} nft={NFT} />))}
             </SimpleGrid>
           </Container>
