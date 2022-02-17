@@ -143,7 +143,7 @@ export const BundlePageContent = () => {
               </TabPanels>
             </Tabs>
           </Box>
-          <NFTBuySection order={order} />
+          <NFTBuySection NFTs={NFTs} order={order} />
         </Box>
       </Box>
       {moreFromCollection && (
