@@ -6,7 +6,6 @@ import {
   PopoverBody,
   PopoverCloseButton,
   PopoverContent,
-  PopoverHeader,
   PopoverTrigger,
   ButtonProps, Box,
 } from '@chakra-ui/react';
@@ -14,14 +13,10 @@ import React, { useCallback, useEffect, useState } from 'react';
 
 import arrowDownIcon from '../../../assets/images/arrow-down.svg';
 
-const paddings: Record<string, string | number> = {
-  'xl': '15px 16px',
-  'md': '11px',
-}
-
 export interface IDropdownProps {
   children?: React.ReactNode;
-  label: string;
+  label?: string;
+  value?: string;
   isOpened?: boolean;
   buttonProps?: ButtonProps;
   onOpen?: () => void;
@@ -30,8 +25,9 @@ export interface IDropdownProps {
 
 export const Dropdown = (
   {
-    label,
     children,
+    label,
+    value,
     isOpened: isOpenedProp,
     buttonProps,
     onOpen,
@@ -69,9 +65,17 @@ export const Dropdown = (
           <Button
             variant={'dropdown'}
             isActive={isOpened}
+            sx={{
+              '--button-lg-padding-x': '16px',
+              '--button-lg-padding-y': '15px',
+              '--button-md-padding-x': '12px',
+              '--button-md-padding-y': '11px',
+            }}
             justifyContent={'space-between'}
             minWidth={'fit-content'}
-            padding={paddings[buttonProps?.size || 'md']}
+            paddingX={`var(--button-${buttonProps?.size || 'md'}-padding-x) !important`}
+            paddingY={`var(--button-${buttonProps?.size || 'md'}-padding-y) !important`}
+            position={'relative'}
             rightIcon={
               <Image
                 src={arrowDownIcon}
@@ -82,7 +86,21 @@ export const Dropdown = (
             }
             {...buttonProps}
           >
-            <Box as={'span'} flex={1} textAlign={'left'}>{label}</Box>
+            <Box as={'span'} flex={1} textAlign={'left'}>
+              <Box
+                as={'span'}
+                bg={'white'}
+                sx={{'--padding': '4px'}}
+                fontSize={value ? '11px' : 'inherit'}
+                left={`calc(var(--button-${buttonProps?.size || 'md'}-padding-x) - var(--padding) + ${!value && buttonProps?.leftIcon ? '22px' : '0px'})`}
+                padding={'var(--padding)'}
+                position={'absolute'}
+                top={value ? '-11px' : `calc(var(--button-${buttonProps?.size || 'md'}-padding-y) - var(--padding))`}
+                transition={'300ms'}
+                zIndex={-1}
+              >{label}</Box>
+              {value || ''}
+            </Box>
           </Button>
         </PopoverTrigger>
         <PopoverContent>

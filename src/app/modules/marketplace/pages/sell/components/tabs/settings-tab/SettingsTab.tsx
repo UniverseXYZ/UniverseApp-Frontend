@@ -1,17 +1,19 @@
 import {
+  Avatar,
+  AvatarGroup,
   Box,
   Button, Fade,
-  Flex,
+  Flex, Grid,
   Heading,
   Image,
   Input,
   InputGroup,
   InputLeftElement,
   Link, Slide, SlideFade,
-  Text,
+  Text, Tooltip,
   useDisclosure,
 } from '@chakra-ui/react';
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 
 import { GreyBox } from '../../grey-box';
 import { useMarketplaceSellData } from '../../../hooks';
@@ -28,13 +30,21 @@ import saleTypeIcon from '../../../../../../../../assets/images/marketplace/sale
 import priceRangeIcon from '../../../../../../../../assets/images/marketplace/price-range.svg';
 import collectionsIcon from '../../../../../../../../assets/images/marketplace/collections.svg';
 import artistIcon from '../../../../../../../../assets/images/marketplace/artist.svg';
+import { Nfts } from '../../../../../mocks/nfts';
+import { NftItem } from '../../../../../../nft/components';
+import { INft } from '../../../../../../nft/types';
 
 export const SettingsTab = () => {
-  const sellData = useMarketplaceSellData();
-
   const { isOpen: isFiltersOpen, onToggle: onToggleFilters } = useDisclosure();
 
+  const sellData = useMarketplaceSellData();
+
   const [sortBy, setSortBy] = useState();
+  const [nfts, setNfts] = useState(Nfts);
+
+  const handleLoadMore = useCallback(() => {
+    setNfts([...nfts, ...Nfts])
+  }, [nfts]);
 
   return (
     <>
@@ -47,7 +57,7 @@ export const SettingsTab = () => {
       {sellData.amountType === SellAmountType.BUNDLE && (
         <>
           <Heading as={'h2'} size={'md'} mb={'8px'}>Select NFTs</Heading>
-          <Text fontFamily={'Space Grotesk'} fontSize={'14px'} color={'rgba(0, 0, 0, 0.6)'}>
+          <Text fontSize={'14px'} color={'rgba(0, 0, 0, 0.6)'}>
             You can only select minted NFTs from your wallet.
             If you want to create NFTs, go to <Link
               href={'/minting'}
@@ -70,9 +80,10 @@ export const SettingsTab = () => {
               value={sortBy}
               buttonProps={{
                 mr: '12px',
-                size: 'xl',
+                size: 'lg',
                 minWidth: '225px',
                 justifyContent: 'space-between',
+                leftIcon: <Image src={artistIcon} />,
               }}
               onSelect={(val) => setSortBy(val)}
             />
@@ -85,8 +96,9 @@ export const SettingsTab = () => {
             >Filters</Button>
           </Flex>
 
-          <Fade in={isFiltersOpen}>
+          <Fade in={isFiltersOpen} delay={isFiltersOpen ? 0.15 : 0}>
             <Flex
+              mb={'30px'}
               sx={{
                 '> button': {
                   mr: '8px'
@@ -123,6 +135,13 @@ export const SettingsTab = () => {
               />
             </Flex>
           </Fade>
+
+          <Box mt={isFiltersOpen ? 0 : '-70px'} transition={'300ms'}>
+            <Grid templateColumns='repeat(4, 1fr)' gap={'30px'} mb={'40px'}>
+              {nfts.map((nft, i) => (<NftItem key={i} nft={nft as INft} />))}
+            </Grid>
+            <Button variant={'outline'} isFullWidth mb={'20px'} onClick={handleLoadMore}>Load More</Button>
+          </Box>
         </>
       )}
 

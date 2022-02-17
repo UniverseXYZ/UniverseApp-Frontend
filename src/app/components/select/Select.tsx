@@ -1,6 +1,6 @@
 import { Dropdown, IDropdownProps } from '../dropdown';
 import { Box } from '@chakra-ui/react';
-import { useCallback, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 
 interface ISelectProps extends Omit<IDropdownProps, 'isOpened'> {
   items: any[];
@@ -26,7 +26,8 @@ export const Select = ({ items, value, label, onSelect, ...props }: ISelectProps
 
   return (
     <Dropdown
-      label={value || label}
+      label={label}
+      value={value}
       isOpened={isOpened}
       onOpen={handleOpen}
       onClose={handleClose}
