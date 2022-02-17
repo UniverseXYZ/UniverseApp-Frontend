@@ -56,6 +56,12 @@ export const TokenIcon = (
   }, [_width, size]);
 
   return (
-    <Image src={TOKENS_MAP[ticker].icons[iconIndex]} {...props} height={height} width={width} />
+    <Image
+      src={TOKENS_MAP[ticker].icons[iconIndex]}
+      alt={TOKENS_MAP[ticker].name}
+      {...props}
+      height={height}
+      width={width}
+    />
   );
 };
