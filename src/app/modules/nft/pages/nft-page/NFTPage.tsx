@@ -20,7 +20,7 @@ import {
 } from '@chakra-ui/react';
 import React, { useCallback, useEffect, useState } from 'react';
 
-import { NftItem, NFTLikesPopup } from '../../components';
+import { NftItem, NFTLikesPopup, NFTReportPopup } from '../../components';
 import { INft } from '../../types';
 import { Nfts } from '../../../marketplace/mocks/nfts';
 import { NFTLike } from '../../components/nft-item/components';
@@ -58,6 +58,7 @@ export const NFTPage = () => {
   const [isPolymorph] = useState(true);
 
   const [isLikesOpened, setIsLikesOpened] = useState(false);
+  const [isReportOpened, setIsReportOpened] = useState(false);
 
   useEffect(() => setDarkMode(false), []);
 
@@ -114,6 +115,7 @@ export const NFTPage = () => {
                         key={i}
                         {...MenuItemStyles}
                         color={menuItem.red ? '#FF4949' : ''}
+                        onClick={() => setIsReportOpened(true)}
                       >
                         {menuItem.icon && <Image src={menuItem.icon} mr={'6px'} />}
                         {menuItem.name}
@@ -196,7 +198,9 @@ export const NFTPage = () => {
         </Container>
         <Button {...styles.MoreNFTsButtonStyle}>View collection</Button>
       </Box>
+      {/*TODO: move to nft-like component*/}
       <NFTLikesPopup isOpen={isLikesOpened} onClose={() => setIsLikesOpened(false)} />
+      <NFTReportPopup isOpen={isReportOpened} onClose={() => setIsReportOpened(false)} />
     </NFTPageContext.Provider>
   );
 };

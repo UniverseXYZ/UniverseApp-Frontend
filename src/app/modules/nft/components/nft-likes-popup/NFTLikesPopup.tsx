@@ -11,23 +11,18 @@ import {
   SimpleGrid,
   Text,
 } from '@chakra-ui/react';
-import { useCallback } from 'react';
 
 import { NftLikes } from '../../../../mocks';
 import * as styles from './styles';
 
 interface INFTLikesPopupProps {
   isOpen: boolean;
-  onClose?: () => void;
+  onClose: () => void;
 }
 
 export const NFTLikesPopup = ({ isOpen, onClose }: INFTLikesPopupProps) => {
-  const handleClose = useCallback(() => {
-    onClose && onClose();
-  }, [onClose]);
-
   return (
-    <Modal isOpen={isOpen} onClose={handleClose} scrollBehavior={'inside'}>
+    <Modal isOpen={isOpen} onClose={onClose} scrollBehavior={'inside'}>
       <ModalOverlay />
       <ModalContent maxW={'608px'}>
         <ModalHeader pb={'20px !important'}>Likes: {NftLikes.length}</ModalHeader>
