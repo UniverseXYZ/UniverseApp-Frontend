@@ -1,5 +1,6 @@
 import { Box, Image, ImageProps, SystemStyleObject } from '@chakra-ui/react';
 import React, { useMemo } from 'react';
+import { useMeasure } from 'react-use';
 import { Navigation, Pagination } from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/react/swiper-react';
 
@@ -9,7 +10,6 @@ import 'swiper/swiper.min.css';
 import arrowLeftIcon from '../../../../../../../assets/images/marketplace/bundles-left-arrow.svg';
 import arrowRightIcon from '../../../../../../../assets/images/marketplace/bundles-right-arrow.svg';
 import { INft } from '../../../../types';
-import { useMeasure } from 'react-use';
 
 type IUseStyles = (width?: number | string) => {
   image: ImageProps;

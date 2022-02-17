@@ -40,6 +40,7 @@ import {
   PriceRangeFilter,
   SaleTypeFilter,
 } from '../../../../../../../components';
+import { NFTItemEditionsLabel } from '../../../../../../../../nft/components/nft-item/components';
 
 interface IActionBarNFTItemProps {
   nft: INft;
@@ -265,7 +266,7 @@ export const SelectNFTs = ({}: ISelectNFTsProps) => {
                 nft={nft as INft}
                 isSelected={!!selectedNFTRef}
                 selectedLabel={isBundle ? `${(selectedNFTRef || []).length} / ${tokensNumber}` : undefined}
-                renderFooterNFTAdditions={isBundle
+                renderNFTAdditions={isBundle
                   ? (
                     <SelectEditionsDropdown
                       nft={nft as INft}
@@ -273,7 +274,10 @@ export const SelectNFTs = ({}: ISelectNFTsProps) => {
                       onChange={(editions) => handleCheckNFT(nft, editions.length ? editions : false)}
                     />
                   )
-                  : (nft.tokenIds && (<Text>#{nft.tokenIds[0]}</Text>))
+                  : (
+                    <NFTItemEditionsLabel nft={nft as INft} mr={'6px'}>
+                      {nft.tokenIds ? `#${nft.tokenIds[0]}` : ''}
+                    </NFTItemEditionsLabel>)
                 }
                 onClick={isBundle
                   ? undefined
@@ -382,29 +386,25 @@ export const SelectNFTs = ({}: ISelectNFTsProps) => {
                   slidesPerView={'auto'}
                   spaceBetween={8}
                 >
-                  {/*{[1, 2, 3, 4, 5].map((i) => (*/}
-                  {/*  <React.Fragment key={i}>*/}
-                      {nfts.map((nft) => {
-                        const selectedEditions = form.values.selectedNFTsIds[nft.id as number];
+                  {nfts.map((nft) => {
+                    const selectedEditions = form.values.selectedNFTsIds[nft.id as number];
 
-                        if (!selectedEditions) {
-                          return null;
-                        }
+                    if (!selectedEditions) {
+                      return null;
+                    }
 
-                        return (
-                          <SwiperSlide key={nft.id as number}>
-                            <ActionBarNFTItem
-                              nft={nft as INft}
-                              selectedEditions={selectedEditions as string[]}
-                              onRemove={(editions) => {
-                                handleCheckNFT(nft, editions);
-                              }}
-                            />
-                          </SwiperSlide>
-                        )
-                      })}
-                    {/*</React.Fragment>*/}
-                  {/*))}*/}
+                    return (
+                      <SwiperSlide key={nft.id as number}>
+                        <ActionBarNFTItem
+                          nft={nft as INft}
+                          selectedEditions={selectedEditions as string[]}
+                          onRemove={(editions) => {
+                            handleCheckNFT(nft, editions);
+                          }}
+                        />
+                      </SwiperSlide>
+                    )
+                  })}
                 </Swiper>
               )}
             </Box>

@@ -65,7 +65,7 @@ export const NFTItemBindings = ({ creator, collection, owner, wrapperProps, tool
             h={'26px'}
             src={avatar.img}
             name={`${avatar.name}: ${avatar.value}`}
-            border={'1px solid white'}
+            border={'2px solid white'}
             _notFirst={{
               marginLeft: '-7px',
               position: 'relative',

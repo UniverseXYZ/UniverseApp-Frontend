@@ -1,16 +1,16 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import { Box, Button, Container, Flex, SimpleGrid } from '@chakra-ui/react';
+import React, { useCallback, useState } from 'react';
+import { Box, Button, Container, Flex, Heading, SimpleGrid, Text } from '@chakra-ui/react';
 
 import { ArtistsFilter, CollectionsFilter, NFTTypeFilter, PriceRangeFilter, SaleTypeFilter } from '../../components';
 import { SortNftsOptions } from '../../constants';
-import { Select } from '../../../../components';
+import { BackToTopButton, Select } from '../../../../components';
 import { NftItem } from '../../../nft/components';
 import { INft } from '../../../nft/types';
 import { Nfts } from '../../mocks/nfts';
-import { useThemeContext } from '../../../../../contexts/ThemeContext';
+
+import BrowseNFTsIntroImage from './../../../../../assets/images/marketplace/v2/browse_nfts_intro.png'
 
 export const BrowseNFTsPage = () => {
-  const { setDarkMode } = useThemeContext() as any;
 
   const [sortBy, setSortBy] = useState();
   const [nfts, setNfts] = useState(Nfts);
@@ -29,11 +29,25 @@ export const BrowseNFTsPage = () => {
     ]);
   }, [nfts]);
 
-  useEffect(() => setDarkMode(false), []);
-
   return (
     <>
-      <Container maxW={'1360px'}>
+      <Flex
+        sx={{
+          bg: `url(${BrowseNFTsIntroImage}) center / cover, black`,
+          minH: '250px',
+          h: '250px',
+          justifyContent: 'center',
+          alignItems: 'center',
+          color: 'white',
+          textAlign: 'center',
+        }}
+      >
+        <Box>
+          <Text fontSize={'12px'} fontWeight={500} textTransform={'uppercase'} mb={'23px'}>Welcome to the</Text>
+          <Heading as={'h1'} fontSize={'36px'}>Marketplace</Heading>
+        </Box>
+      </Flex>
+      <Container maxW={'1360px'} pt={'0 !important'} position={'relative'}>
         <Box py={'40px'}>
           <Flex justifyContent={'space-between'}>
             <Box sx={{
@@ -52,14 +66,13 @@ export const BrowseNFTsPage = () => {
               items={SortNftsOptions}
               value={sortBy}
               buttonProps={{
-                mr: '12px',
                 justifyContent: 'space-between',
               }}
               onSelect={(val) => setSortBy(val)}
             />
           </Flex>
         </Box>
-        <SimpleGrid columns={4} spacing={'20px'} mb={'40px'}>
+        <SimpleGrid columns={{ base: 1, md: 2, lg: 4 }} spacingX={'20px'} spacingY={'30px'} mb={'40px'}>
           {nfts.map((nft, i) => {
             return (
               <NftItem
@@ -71,6 +84,7 @@ export const BrowseNFTsPage = () => {
           })}
         </SimpleGrid>
         <Button variant={'outline'} isFullWidth mb={'20px'} onClick={handleLoadMore}>Load More</Button>
+        <BackToTopButton />
       </Container>
     </>
   );

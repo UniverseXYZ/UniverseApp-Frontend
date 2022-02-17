@@ -1,3 +1,4 @@
+export * from './back-to-top-button';
 export * from './checkbox';
 export * from './currency-input';
 export * from './currency-select';

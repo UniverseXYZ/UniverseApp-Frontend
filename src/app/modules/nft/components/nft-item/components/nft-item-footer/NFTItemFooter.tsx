@@ -1,26 +1,21 @@
-import { Box, BoxProps, Text } from '@chakra-ui/react';
+import { Box, BoxProps, Flex } from '@chakra-ui/react';
 import React from 'react';
 
 import { INft } from '../../../../types';
-import { NFTItemPrice } from '../nft-item-price';
-import { NFTItemPriceInfo } from '../nft-item-price-info';
+import { NFTItemCompositionLabel, NFTItemBundleLabel } from '../nft-item-type-labels';
+import { NFTLike } from '../nft-like';
+import { NFTItemEditionsLabel } from '../nft-item-editions-label';
 
 interface IStyles {
-  nameRow: BoxProps;
-  additionsRow: BoxProps;
+  wrapper: BoxProps;
 }
 
 const styles: IStyles = {
-  nameRow: {
+  wrapper: {
+    borderTop: '0.5px solid rgba(0, 0, 0, 0.1)',
+    pt: '14px',
     display: 'flex',
-    fontSize: '14px',
-    fontWeight: 700,
-    justifyContent: 'space-between',
-    mb: '10px',
-  },
-  additionsRow: {
-    display: 'flex',
-    fontSize: '10px',
+    fontSize: '12px',
     fontWeight: 600,
     justifyContent: 'space-between',
     color: '#00000066',
@@ -29,45 +24,28 @@ const styles: IStyles = {
 
 interface INFTItemFooterProps {
   nft: INft;
-  renderNFTName?: React.ReactNode | null;
-  renderNFTPrice?: React.ReactNode | null;
   renderNFTAdditions?: React.ReactNode | null;
-  renderNFTPriceInfo?: React.ReactNode | null;
 }
 
 export const NFTItemFooter = (
   {
     nft,
-    renderNFTName,
-    renderNFTPrice,
     renderNFTAdditions,
-    renderNFTPriceInfo,
   }: INFTItemFooterProps
 ) => {
   return (
-    <>
-      <Box {...styles.nameRow}>
-        <Box flex={1}>
-          {renderNFTName || renderNFTName === null ? renderNFTName : <Text>{nft.name}</Text>}
-        </Box>
-        <Box>
-          {renderNFTPrice || renderNFTPrice === null ? renderNFTPrice : (nft.price && (
-            <NFTItemPrice price={nft.price} />
-          ))}
-        </Box>
+    <Flex {...styles.wrapper}>
+      <Flex>
+        {renderNFTAdditions || renderNFTAdditions === null ? renderNFTAdditions : (
+          <NFTItemEditionsLabel nft={nft} mr={'6px'} />
+        )}
+        {nft.tokenIds?.length > 1 && (<NFTItemBundleLabel count={nft.tokenIds.length ?? 0} mr={'6px'} />)}
+        {nft.assets?.length && (<NFTItemCompositionLabel count={nft.assets.length ?? 0} mr={'6px'} />)}
+      </Flex>
+
+      <Box>
+        <NFTLike likes={nft.likes} isLiked={nft.isLiked} />
       </Box>
-      <Box {...styles.additionsRow}>
-        <Box flex={1}>
-          {renderNFTAdditions || renderNFTAdditions === null ? renderNFTAdditions : (
-            <Text>{nft.tokenIds?.length ?? 0}/{nft.numberOfEditions}</Text>
-          )}
-        </Box>
-        <Box>
-          {renderNFTPriceInfo || renderNFTPriceInfo === null ? renderNFTPriceInfo : (
-            <NFTItemPriceInfo offerPrice={nft.offerPrice} lastPrice={nft.lastPrice} />
-          )}
-        </Box>
-      </Box>
-    </>
+    </Flex>
   );
 };

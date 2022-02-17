@@ -111,7 +111,7 @@ export const SellPage = () => {
         <Container maxW={'var(--container-max-width)'} pb={'0 !important'}>
           <Box px={{ base: '20px', md: '60px', xl: 0 }}>
             <Link
-              href={'/'}
+              href={'/v2/marketplace/browse'}
               mb={'20px'}
               fontFamily={'Space Grotesk'}
               fontWeight={500}
