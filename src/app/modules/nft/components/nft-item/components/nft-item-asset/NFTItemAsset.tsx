@@ -9,13 +9,14 @@ import 'swiper/swiper.min.css';
 import arrowLeftIcon from '../../../../../../../assets/images/marketplace/bundles-left-arrow.svg';
 import arrowRightIcon from '../../../../../../../assets/images/marketplace/bundles-right-arrow.svg';
 import { INft } from '../../../../types';
+import { useMeasure } from 'react-use';
 
 type IUseStyles = (width?: number | string) => {
   image: ImageProps;
   swiper: SystemStyleObject;
 };
 
-const useStyles: IUseStyles = (width: string | number = 231) => {
+const useStyles: IUseStyles = (width: string | number = 200) => {
   const _width = typeof width === 'number' ? `${width}px` : width;
 
   const _getSwiperArrowStyles = (icon: string) => ({
@@ -67,10 +68,13 @@ interface INFTItemAssetProps {
 }
 
 export const NFTItemAsset = ({ nft, showSwiper = true, showSwiperPagination = true }: INFTItemAssetProps) => {
-  const styles = useStyles();
+  const [ref, { width }] = useMeasure<HTMLDivElement>();
+
+  const styles = useStyles(width);
+
   return (
     showSwiper && nft.assets ? (
-      <Box sx={styles.swiper}>
+      <Box ref={ref} sx={styles.swiper}>
         <Swiper
           modules={[Navigation, Pagination]}
           navigation={true}
@@ -88,7 +92,9 @@ export const NFTItemAsset = ({ nft, showSwiper = true, showSwiperPagination = tr
         </Swiper>
       </Box>
     ) : (
-      <Image src={nft.thumbnail_url} alt={nft.name} {...styles.image} />
+      <Box ref={ref}>
+        <Image src={nft.thumbnail_url} alt={nft.name} {...styles.image} />
+      </Box>
     )
   );
 };
