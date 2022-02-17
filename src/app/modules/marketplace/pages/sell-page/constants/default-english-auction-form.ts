@@ -4,13 +4,9 @@ export const defaultEnglishAuctionForm: IEnglishAuctionForm = {
   bundleName: '',
   bundleDescription: '',
   bundleSelectedNFTs: [],
-  minBit: {
-    value: 0,
-    currency: 'ETH',
-  },
-  reservePrice: {
-    value: 0,
-    currency: 'ETH',
-  },
+  minBit: '',
+  minBitCurrency: 'ETH',
+  reservePrice: '',
+  reservePriceCurrency: 'ETH',
   expirationDate: null,
 };

@@ -37,12 +37,13 @@ export const SettingsTabEnglishAuction = () => {
           <Text>Set your starting bid price.</Text>
         </Box>
         <Box>
-          <CurrencyInput
-            placeholder={'Minimum bid'}
-            name={'minimumBid'}
-            value={form.values.minBit}
-            onChange={(value) => form.setFieldValue('minBit', value)}
-          />
+          {/*TODO*/}
+          {/*<CurrencyInput*/}
+          {/*  placeholder={'Minimum bid'}*/}
+          {/*  name={'minimumBid'}*/}
+          {/*  value={form.values.minBit}*/}
+          {/*  onChange={(value) => form.setFieldValue('minBit', value)}*/}
+          {/*/>*/}
         </Box>
       </Flex>
       <Flex sx={styles.settingsItem}>
@@ -59,12 +60,13 @@ export const SettingsTabEnglishAuction = () => {
           <Text>Set a reserve price for your NFT</Text>
         </Box>
         <Box>
-          <CurrencyInput
-            placeholder={'Reserve price'}
-            name={'reservePrice'}
-            value={form.values.reservePrice}
-            onChange={(value) => form.setFieldValue('reservePrice', value)}
-          />
+          {/*TODO*/}
+          {/*<CurrencyInput*/}
+          {/*  placeholder={'Reserve price'}*/}
+          {/*  name={'reservePrice'}*/}
+          {/*  value={form.values.reservePrice}*/}
+          {/*  onChange={(value) => form.setFieldValue('reservePrice', value)}*/}
+          {/*/>*/}
         </Box>
       </Flex>
       <Flex sx={styles.settingsItem}>

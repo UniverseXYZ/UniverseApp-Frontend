@@ -1,4 +1,4 @@
-import { Box, Flex, Heading, Input, Switch, Text } from '@chakra-ui/react';
+import { Box, Flex, FormControl, FormErrorMessage, Heading, Input, Switch, Text } from '@chakra-ui/react';
 import React from 'react';
 import { FormikProps } from 'formik';
 
@@ -29,12 +29,18 @@ export const SettingsTabFixedListing = () => {
           <Text>Will be on sale until you transfer this item or cancel it.</Text>
         </Box>
         <Box>
-          <CurrencyInput
-            placeholder={'Amount'}
-            name={'price'}
-            value={form.values.price}
-            onChange={(value) => form.setFieldValue('price', value)}
-          />
+          <FormControl isInvalid={!!(form.touched.price && form.errors.price)}>
+            <CurrencyInput
+              placeholder={'Amount'}
+              name={'price'}
+              value={form.values.price}
+              currencyValue={form.values.priceCurrency}
+              onChange={(value) => form.setFieldValue('price', value)}
+              onChangeCurrency={(value) => form.setFieldValue('priceCurrency', value)}
+              onBlur={form.handleBlur}
+            />
+            <FormErrorMessage>{form.errors.price}</FormErrorMessage>
+          </FormControl>
         </Box>
       </Flex>
       <Flex data-checkbox sx={styles.settingsItem}>

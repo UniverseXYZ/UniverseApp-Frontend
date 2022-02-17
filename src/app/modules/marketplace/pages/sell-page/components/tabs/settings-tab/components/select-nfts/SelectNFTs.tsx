@@ -472,7 +472,7 @@ export const SelectNFTs = ({}: ISelectNFTsProps) => {
               )}
             </Box>
             <Text mx={'20px'} fontSize={'12px'}>Total NFTs: <strong>{selectedNFTsNumber}</strong></Text>
-            <Button boxShadow={'xl'} onClick={sellData.goContinue}>Continue</Button>
+            <Button boxShadow={'xl'} disabled={!form.isValid} onClick={sellData.goContinue}>Continue</Button>
           </Flex>
         </Box>
       </Box>

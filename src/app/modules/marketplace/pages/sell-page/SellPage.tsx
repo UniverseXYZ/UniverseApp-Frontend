@@ -26,6 +26,24 @@ import { getLocationSearchObj, sign } from '../../../../helpers';
 import { getNftData } from '../../../../../utils/api/mintNFT';
 import { useAuthContext } from '../../../../../contexts/AuthContext';
 
+import * as Yup from 'yup';
+import { TOKENS_MAP } from '../../../../constants';
+import { Tokens } from '../../../../enums';
+
+const getValidationSchema = (amountType?: SellAmountType, sellMethod?: SellMethod) => {
+  switch (sellMethod) {
+    case SellMethod.FIXED: return Yup.object().shape({
+      bundleName: amountType === SellAmountType.SINGLE ? Yup.string() : Yup.string().required('Required'),
+      bundleDescription: amountType === SellAmountType.SINGLE ? Yup.string() : Yup.string().max(500, 'Too Long!'), // TODO: use variable maxDescriptionSymbols
+      price: Yup.number()
+        .typeError('Invalid price')
+        .required('Required')
+        .moreThan(0, 'Price must be greater than 0'),
+    });
+    default: return Yup.object().shape({});
+  }
+}
+
 export const SellPage = () => {
   const history = useHistory();
   const { signer, web3Provider } = useAuthContext() as any;
@@ -50,6 +68,8 @@ export const SellPage = () => {
 
   const form = useFormik<ISellForm>({
     initialValues: {} as ISellForm,
+    validateOnMount: true,
+    validationSchema: getValidationSchema(amountType, sellMethod),
     onSubmit: async (values: any) => {
       const address = await signer.getAddress();
       const network = await web3Provider.getNetwork();
@@ -63,57 +83,6 @@ export const SellPage = () => {
         value: '1',
       };
 
-      // TODO: v1
-      // if (amountType === SellAmountType.BUNDLE) {
-      //   const [contracts, tokenIds] = values.bundleSelectedNFTs.reduce((acc: [string[], string[]], key: string) => {
-      //     const [NFTId, NFTHash, NFTTokenId] = key.split(':');
-      //     acc[0].push(NFTHash);
-      //     acc[1].push(NFTTokenId);
-      //     return acc;
-      //   }, [[], []]);
-      //
-      //   make.assetType = {
-      //     assetClass: 'ERC721_BUNDLE',
-      //     // contracts: [nft.collection.address, ...contracts],
-      //     // @ts-ignore
-      //     contracts: [...(new Set([nft.collection.address, ...contracts]))],
-      //     tokenIds: [[locationState.tokenId, ...tokenIds]],
-      //   };
-      //
-      //   make.value = `${make.assetType.contracts.length}`;
-      // }
-
-      // TODO: v2
-      // if (amountType === SellAmountType.BUNDLE) {
-      //   const bundleSelectedNFTs = [...values.bundleSelectedNFTs];
-      //   // add original NFT
-      //   bundleSelectedNFTs.push([nft.id, nft.collection.address, locationState.tokenId].join(':'));
-      //
-      //   const bundleNFTs = bundleSelectedNFTs.reduce((acc: Record<string, string[]>, key: string) => {
-      //     const [NFTId, NFTHash, NFTTokenId] = key.split(':');
-      //
-      //     if (!acc[NFTHash]) {
-      //       acc[NFTHash] = [];
-      //     }
-      //
-      //     acc[NFTHash].push(NFTTokenId);
-      //     return acc;
-      //   }, {});
-      //
-      //   const [contracts, tokenIds] = Object.keys(bundleNFTs).reduce((acc: [string[], string[]], key: string) => {
-      //     acc[0].push(key);
-      //     acc[1].push(bundleNFTs[key]);
-      //     return acc;
-      //   }, [[], []])
-      //
-      //   make.assetType = {
-      //     assetClass: 'ERC721_BUNDLE',
-      //     contracts: contracts,
-      //     tokenIds: tokenIds,
-      //   };
-      // }
-
-      // TODO: v3
       if (amountType === SellAmountType.BUNDLE) {
         const [contracts, tokenIds] = (values.bundleSelectedNFTs as string[]).reduce<[string[], [string[]]]>((acc, key: string) => {
           const [NFTId, NFTHash, NFTTokenId] = key.split(':');
@@ -142,11 +111,15 @@ export const SellPage = () => {
         maker: address,
         taker: values.buyerAddress || '0x0000000000000000000000000000000000000000',
         make,
+        // TODO: improve take.assetClass & take.value for Dutch & English auction
         take: {
           assetType: {
-            assetClass: 'ETH'
+            assetClass: values.priceCurrency,
           },
-          value: utils.parseEther(`${values.price.value}`).toString()
+          value: utils.parseUnits(
+            `${values.price}`,
+            `${TOKENS_MAP[values.priceCurrency as Tokens].decimals}`
+          ).toString(),
         },
         salt: 1,
         start: 0,
@@ -289,7 +262,7 @@ export const SellPage = () => {
                   <SelectMethodType />
                 </TabPanel>
                 <TabPanel name={settingsTabName}>
-                  <SettingsTab />
+                  { amountType && sellMethod && <SettingsTab />}
                 </TabPanel>
                 <TabPanel name="Summary">
                   <SummaryTab />

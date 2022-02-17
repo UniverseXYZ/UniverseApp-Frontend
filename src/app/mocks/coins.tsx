@@ -4,6 +4,7 @@ import bond from '../../assets/images/coins/bond.svg';
 import snx from '../../assets/images/coins/snx.svg';
 import dai from '../../assets/images/coins/dai.svg';
 
+// TODO: remove
 export const coins = [
   {
     token: 'ETH',

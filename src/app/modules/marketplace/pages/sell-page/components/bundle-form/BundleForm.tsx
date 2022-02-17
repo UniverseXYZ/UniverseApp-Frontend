@@ -1,9 +1,8 @@
-import { Box, Flex, Heading, Input, Text } from '@chakra-ui/react';
+import { Box, Flex, FormControl, FormErrorMessage, Heading, Input, Text } from '@chakra-ui/react';
 import React from 'react';
 
 import * as styles from '../tabs/settings-tab/styles';
 import { useMarketplaceSellData } from '../../hooks';
-import { InputShadow } from '../../../../../../components';
 
 const maxDescriptionSymbols = 500;
 
@@ -14,15 +13,17 @@ export const BundleForm = () => {
       <Flex sx={styles.settingsItem}>
         <Box width={'100% !important'} pr={'0 !important'}>
           <Box mb={'30px'}>
-            <Heading as={'h5'}>Bundle name</Heading>
-            <InputShadow>
+            <FormControl isInvalid={!!(form.touched.bundleName && form.errors.bundleName)}>
+              <Heading as={'h5'}>Bundle name</Heading>
               <Input
                 placeholder={'Enter name'}
                 name={'bundleName'}
                 value={form.values.bundleName}
                 onChange={form.handleChange}
+                onBlur={form.handleBlur}
               />
-            </InputShadow>
+              <FormErrorMessage>{form.errors.bundleName}</FormErrorMessage>
+            </FormControl>
           </Box>
 
           <Flex
@@ -34,14 +35,16 @@ export const BundleForm = () => {
             <Text order={{ base: 3, md: 0 }}>
               {form.values.bundleDescription.length} of {maxDescriptionSymbols} characters used
             </Text>
-            <InputShadow w={'100%'}>
+            <FormControl isInvalid={!!(form.touched.bundleDescription && form.errors.bundleDescription)}>
               <Input
                 placeholder={'Bundle description'}
                 name={'bundleDescription'}
                 value={form.values.bundleDescription}
                 onChange={form.handleChange}
+                onBlur={form.handleBlur}
               />
-            </InputShadow>
+              <FormErrorMessage>{form.errors.bundleDescription}</FormErrorMessage>
+            </FormControl>
           </Flex>
         </Box>
       </Flex>

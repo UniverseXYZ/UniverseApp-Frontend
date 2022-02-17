@@ -15,13 +15,25 @@ export const NumberInput = {
         fontFamily: 'Space Grotesk',
         fontSize: '16px',
         position: 'relative',
-        _focus: {
+        _hover: {
           bg: `
             linear-gradient(#ffffff, #ffffff) padding-box, 
             linear-gradient(135deg, #bceb00 15.57%, #00eaea 84.88%) border-box
           `,
+          borderColor: 'transparent !important',
+          boxShadow: 'none',
+        },
+        _focus: {
+          bg: `
+            linear-gradient(#ffffff, #ffffff) padding-box,
+            linear-gradient(135deg, #bceb00 15.57%, #00eaea 84.88%) border-box
+          `,
           borderColor: 'transparent',
-          boxShadow: '0',
+          boxShadow: '0px 0px 0px 5px rgba(102, 234, 90, 0.15)',
+        },
+        _invalid: {
+          borderColor: 'rgba(255, 73, 73, 1)',
+          boxShadow: 'none',
         },
       }
     }
