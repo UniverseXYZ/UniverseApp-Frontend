@@ -1,52 +1,39 @@
-import { Box, BoxProps, Flex } from '@chakra-ui/react';
+import { Box, Flex } from '@chakra-ui/react';
 import React from 'react';
 
 import { INFT } from '../../../../types';
 import { NFTItemCompositionLabel, NFTItemBundleLabel } from '../nft-item-type-labels';
 import { NFTLike } from '../nft-like';
 import { NFTItemEditionsLabel } from '../nft-item-editions-label';
-
-interface IStyles {
-  wrapper: BoxProps;
-}
-
-const styles: IStyles = {
-  wrapper: {
-    borderTop: '0.5px solid rgba(0, 0, 0, 0.1)',
-    pt: '14px',
-    display: 'flex',
-    fontSize: '12px',
-    fontWeight: 600,
-    justifyContent: 'space-between',
-    color: '#00000066',
-  },
-};
+import * as styles from './styles';
 
 interface INFTItemFooterProps {
   nft: INFT;
   renderNFTAdditions?: React.ReactNode | null;
+  bundleNFTsLength?: number;
 }
 
 export const NFTItemFooter = (
   {
     nft,
     renderNFTAdditions,
+    bundleNFTsLength = 0,
   }: INFTItemFooterProps
 ) => {
   return (
-    <Flex {...styles.wrapper}>
+    <Flex {...styles.WrapperStyle}>
       <Flex>
         {renderNFTAdditions || renderNFTAdditions === null ? renderNFTAdditions : (
           <NFTItemEditionsLabel nft={nft} mr={'6px'} />
         )}
-        {nft.tokenIds?.length > 1 && (<NFTItemBundleLabel count={nft.tokenIds.length ?? 0} mr={'6px'} />)}
+        {bundleNFTsLength ? (<NFTItemBundleLabel count={bundleNFTsLength} mr={'6px'} />) : null}
         {/*TODO: composition*/}
         {/*{nft.assets?.length && (<NFTItemCompositionLabel count={nft.assets.length ?? 0} mr={'6px'} />)}*/}
       </Flex>
 
       <Box>
         {/*TODO: likes*/}
-        {/*<NFTLike likes={nft.likes || []} isLiked={nft.isLiked} />*/}
+        {/*<NFTLike likes={[]} isLiked={true} />*/}
       </Box>
     </Flex>
   );
