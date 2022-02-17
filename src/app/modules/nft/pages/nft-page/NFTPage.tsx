@@ -1,4 +1,3 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
 import {
   Box,
   Button,
@@ -19,6 +18,7 @@ import {
   Tabs,
   Text, Tooltip,
 } from '@chakra-ui/react';
+import React, { useEffect, useState } from 'react';
 
 import { NftItem } from '../../components';
 import { INft } from '../../types';
@@ -26,19 +26,17 @@ import { Nfts } from '../../../marketplace/mocks/nfts';
 import { NFTLike } from '../../components/nft-item/components';
 import { useThemeContext } from '../../../../../contexts/ThemeContext';
 import { NFTMenu, Tabs as NFTTabs } from './constants';
-import Lottie from 'react-lottie';
-import { Bindings } from './mocks';
+import { Bindings, useBuyNFTSection } from './mocks';
 import { LineTabList } from '../../../../components';
 import { NFTPageContext } from './NFTPage.context';
-
-import playerAnimation from './../../../../../utils/animations/music-player.json'
+import { useDateCountDown } from '../../../../hooks';
+import * as styles from './styles';
 
 import DotsIcon from './../../../../../assets/images/marketplace/3-dots.svg';
 import EthIcon from './../../../../../assets/images/eth-icon-new.svg';
 import UserImage from './../../../../../assets/images/collection_img3.svg';
 import ClockIcon from './../../../../../assets/images/clock.svg';
-import { useInterval } from 'react-use';
-import { default as dayjs } from 'dayjs';
+import { NFTAssetAudio, NFTAssetImage, NFTBuySection } from './components';
 
 const MenuItemStyles: MenuItemProps = {
   borderRadius: '6px',
@@ -53,60 +51,8 @@ const MenuItemStyles: MenuItemProps = {
   },
 };
 
-const useDateCountDown = (_initialDate: Date, onCountDownEnd?: () => void) => {
-  const [expDate] = useState(dayjs(_initialDate));
-  const [isRunning, toggleIsRunning] = useState(!!_initialDate);
-  const [formattedString, setFormattedString] = useState<string>();
-
-  useInterval(() => {
-    const today = new Date();
-
-    if (expDate.diff(today) < 0) {
-      toggleIsRunning(false);
-      onCountDownEnd && onCountDownEnd();
-      return;
-    }
-
-    const days = expDate.diff(today, 'd');
-    const hours = expDate.diff(today, 'h') - days * 24;
-    const minutes = expDate.diff(today, 'm') - hours * 60;
-    const seconds = expDate.diff(today, 's') - expDate.diff(today, 'm') * 60;
-
-    const daysString = days ? `${days}d` : '';
-    const hoursString = hours || daysString ? `${hours.toString().padStart(2, '0')}h` : '';
-    const minutesString = minutes || hoursString ? `${minutes.toString().padStart(2, '0')}m` : '';
-    const secondsString = `${seconds.toString().padStart(2, '0')}s`;
-
-    const formattedAuctionExpTime = [daysString, hoursString, minutesString, secondsString].filter(v => !!v).join(' : ');
-
-    setFormattedString(formattedAuctionExpTime);
-
-  }, isRunning ? 1000 : null);
-
-  return formattedString;
-};
-
-const useBuyNFTSection = (_maxValue: number) => {
-  const [index, setIndex] = useState(0);
-  const [maxValue] = useState(_maxValue);
-
-  const handleNext = useCallback(() => {
-    setIndex(index + 1 < maxValue ? index + 1 : 0)
-  }, [index, maxValue]);
-
-  return {
-    index,
-    changeBuyNFTSection: handleNext,
-  };
-};
-
 // TODO: hide metadata tab for not Polymorph NFT type
 export const NFTPage = () => {
-  const countDownString = useDateCountDown(new Date(new Date().setDate(new Date().getDate() + 1)));
-
-  const buyNFTSection = useBuyNFTSection(2);
-
-  const canvasRef = useRef<HTMLCanvasElement>(null);
   const { setDarkMode } = useThemeContext() as any;
 
   const [NFT] = useState<INft>(Nfts[1] as INft);
@@ -117,101 +63,15 @@ export const NFTPage = () => {
 
   useEffect(() => setDarkMode(false), []);
 
-  useEffect(() => {
-    if (canvasRef.current) {
-      const $ = canvasRef.current.getContext('2d') as any;
-
-      var col = function(x: any, y: any, r: any, g: any, b: any) {
-        $.fillStyle = "rgb(" + r + "," + g + "," + b + ")";
-        $.fillRect(x, y, 1,1);
-      }
-      var R = function(x: any, y: any, t: any) {
-        return( Math.floor(192 + 64*Math.cos( (x*x-y*y)/300 + t )) );
-      }
-
-      var G = function(x: any, y: any, t: any) {
-        return( Math.floor(192 + 64*Math.sin( (x*x*Math.cos(t/4)+y*y*Math.sin(t/3))/300 ) ) );
-      }
-
-      var B = function(x: any, y: any, t: any) {
-        return( Math.floor(192 + 64*Math.sin( 5*Math.sin(t/9) + ((x-100)*(x-100)+(y-100)*(y-100))/1100) ));
-      }
-
-      var t = 0;
-
-      var run = function() {
-        for(let x=0;x<=35;x++) {
-          for(let y = 0; y <= 35; y++) {
-            col(x, y, R(x,y,t), G(x,y,t), B(x,y,t));
-          }
-        }
-        t = t + 0.04;
-        window.requestAnimationFrame(run);
-      }
-
-      run();
-    }
-  }, [canvasRef.current]);
-
   return (
     <NFTPageContext.Provider value={{ NFT, isPolymorph }}>
       <Box>
-        <Flex
-          sx={{
-            // alignItems: 'center',
-            // flex: 1,
-            justifyContent: 'center',
-            py: '60px',
-            w: 'calc(100% - 550px)',
-
-            float: 'left',
-            position: 'sticky',
-            top: '84px',
-          }}
-        >
-          {/*TODO: add video / audio / bundle / storybook */}
-          {/*<Image*/}
-          {/*  src={'https://storage.googleapis.com/lobster-images/05020905000503.jpg'}*/}
-          {/*  sx={{*/}
-          {/*    borderRadius: '12px',*/}
-          {/*    maxH: '600px',*/}
-          {/*    maxW: '600px',*/}
-          {/*  }}*/}
-          {/*/>*/}
-
-          <Box sx={{
-            borderRadius: '12px',
-            // h: '600px',
-            // w: '600px',
-            h: 'calc(100vh - 84px - 120px)',
-            w: 'calc(100vh - 84px - 120px)',
-            overflow: 'hidden',
-            position: 'relative',
-          }}>
-            <canvas ref={canvasRef} width="32" height="32" style={{ width: '100%', height: '100%'}}></canvas>
-            <Box sx={{
-              position: 'absolute',
-              top: 0,
-            }}>
-              <Lottie options={{
-                loop: true,
-                autoplay: true,
-                animationData: playerAnimation,
-                rendererSettings: {
-                  preserveAspectRatio: 'xMidYMid slice',
-                },
-              }} />
-            </Box>
-          </Box>
-        </Flex>
-        <Box
-          sx={{
-            borderLeft: '1px solid #E4E4E4',
-            w: '550px',
-
-            float: 'right',
-          }}
-        >
+        <Box {...styles.NFTAssetContainerStyle}>
+          {/*TODO: ✅ image / ✅ audio / ☑️ video / ☑️ bundle / ☑️ storybook */}
+          {/*<NFTAssetImage />*/}
+          <NFTAssetAudio />
+        </Box>
+        <Box {...styles.NFTDetailsContainerStyle}>
           <Box sx={{ p: '60px 40px', }}>
             <Flex sx={{
               alignItems: 'center',
@@ -298,11 +158,17 @@ export const NFTPage = () => {
               color: 'rgba(0, 0, 0, 0.6)',
               fontSize: '14px',
               mb: '40px',
+
+              a: {
+                color: 'black',
+                fontWeight: 'bold',
+                ml: '6px',
+              },
             }}>
               Cras vel eget vitae quis scelerisque arcu ut.
               Tristique velit nec sed sit massa. Odio molestie velit purus at blandit.
               Lacus, fusce quam dolor imperdiet velit augue neque tincidunt lorem et diam...
-              <Link sx={{ color: 'black', fontWeight: 'bold', ml: '6px' }}>Read more</Link>
+              <Link>Read more</Link>
             </Text>
 
             <Tabs>
@@ -319,130 +185,17 @@ export const NFTPage = () => {
               </TabPanels>
             </Tabs>
           </Box>
-
-          <Box sx={{
-            bg: 'linear-gradient(135deg, rgba(188, 235, 0, 0.03) 15.57%, rgba(0, 234, 234, 0.03) 84.88%), rgba(255, 255, 255, 0.8)',
-            backdropFilter: 'blur(10px)',
-            position: 'sticky',
-            bottom: 0,
-            _before: {
-              position: 'absolute',
-              height: '3px',
-              bg: 'linear-gradient(90deg, #2AD0CA 0%, #E1F664 22.92%, #FEB0FE 46.88%, #ABB3FC 68.23%, #5DF7A4 87.5%, #58C4F6 100%)',
-              content: '""',
-              w: '100%',
-              top: 0,
-              left: 0,
-            },
-          }}>
-            <Box
-              sx={{
-                bg: 'linear-gradient(90deg, #2AD0CA 0%, #E1F664 22.92%, #FEB0FE 46.88%, #ABB3FC 68.23%, #5DF7A4 87.5%, #58C4F6 100%)',
-                position: 'absolute',
-                padding: '3px',
-                top: 0,
-                left: '50%',
-                borderRadius: '100px',
-                transform: 'translate(-50%, -50%)'
-              }}
-            >
-              <Box sx={{
-                bg: 'white',
-                borderRadius: 'inherit',
-                padding: '5px 15px',
-                textAlign: 'center',
-                minW: `${((countDownString?.length ?? 0) + 5) * 10}px`,
-              }}>
-                <Text fontSize={'14px'} fontWeight={700}>
-                  <Image src={ClockIcon} display={'inline'} mr={'8px'} />
-                  {countDownString} left
-                </Text>
-                <Text fontSize={'10px'} fontWeight={500} color={'rgba(0, 0, 0, 0.4)'}>Reserve price has been met</Text>
-              </Box>
-            </Box>
-            <Box p={'40px'}>
-              <Flex mb={'24px'} fontSize={'14px'}>
-                <Image src={UserImage} sx={{
-                  mr: '16px',
-                  w: '50px',
-                  h: '50px',
-                  borderRadius: '50%',
-                }} />
-                <Box>
-                  <Text
-                    sx={{
-                      color: 'rgba(0, 0, 0, 0.4)',
-                      mb: '6px',
-                      strong: {
-                        color: 'black',
-                        fontWeight: 700,
-                      }
-                    }}
-                  >Highest bid by <strong>The Unveiling</strong></Text>
-                  <Flex sx={{
-                    fontWeight: 500,
-                    lineHeight: '20px',
-                    padding: '',
-                    p: {
-                      mr: '6px',
-                    }
-                  }}>
-                    <Text sx={{
-                      fontSize: '20px',
-                      fontWeight: 700,
-                    }}>
-                      <Tooltip
-                        hasArrow
-                        variant={'black'}
-                        placement={'top'}
-                        label={'WETH'}
-                        fontWeight={700}
-                      >
-                        <Image src={EthIcon} sx={{
-                          mr: '6px',
-                          display: 'inline',
-                          h: '22px',
-                          w: '14px',
-                          mt: '-3px',
-                        }} />
-                      </Tooltip>
-                      0.5
-                    </Text>
-                    <Text sx={{ color: 'rgba(0, 0, 0, 0.4)' }}>$142.39</Text>
-                    <Text sx={{ color: '#E4B613' }}>(10% of sales will go to creator)</Text>
-                  </Flex>
-                </Box>
-              </Flex>
-              {buyNFTSection.index === 0 && (
-                <SimpleGrid columns={2} spacingX={'12px'}>
-                  <Button boxShadow={'lg'} onClick={buyNFTSection.changeBuyNFTSection}>Place a bid</Button>
-                  <Button variant={'outline'} onClick={buyNFTSection.changeBuyNFTSection}>Make offer</Button>
-                </SimpleGrid>
-              )}
-              {buyNFTSection.index === 1 && (
-                <Button boxShadow={'lg'} w={'100%'} onClick={buyNFTSection.changeBuyNFTSection}>Put on sale</Button>
-              )}
-            </Box>
-          </Box>
+          <NFTBuySection />
         </Box>
       </Box>
-      <Box sx={{
-        bg: 'linear-gradient(127.59deg, #F2F3FB -1.33%, #FCF9F4 91.03%)',
-        py: '80px',
-        px: '40px',
-      }}>
-        <Heading as={'h2'} sx={{ fontSize: '26px', textAlign: 'center', }}>More from this collection</Heading>
-        <Container maxW={'1110px'} py={'40px !important'}>
-          <SimpleGrid
-            columns={{ base: 1, md: 2, lg: 4 }}
-            spacingX={'20px'}
-          >
+      <Box {...styles.MoreNFTsWrapperStyle}>
+        <Heading {...styles.MoreNFTsTitleStyle}>More from this collection</Heading>
+        <Container {...styles.MoreNFTsContainerStyle}>
+          <SimpleGrid columns={{ base: 1, md: 2, lg: 4 }} spacingX={'20px'}>
             {moreNFTs.map((NFT) => (<NftItem key={NFT.id} nft={NFT} />))}
           </SimpleGrid>
         </Container>
-        <Flex justifyContent={'center'}>
-          <Button variant={'outline'} boxShadow={'inset 2px 1000px 1px #fbf8f6'}>View collection</Button>
-        </Flex>
+        <Button {...styles.MoreNFTsButtonStyle}>View collection</Button>
       </Box>
     </NFTPageContext.Provider>
   );
