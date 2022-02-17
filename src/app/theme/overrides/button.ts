@@ -88,5 +88,18 @@ export const Button = {
         },
       }
     },
+    simpleOutline: {
+      border: '1px solid rgba(0, 0, 0, 0.1)',
+      borderRadius: '8px',
+      padding: '10px 12px',
+      '.chakra-button__icon': {
+        _first: {
+          mr: '6px',
+        },
+      },
+      _focus: {
+        boxShadow: 'none',
+      },
+    }
   }
 };

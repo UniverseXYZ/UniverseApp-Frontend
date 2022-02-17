@@ -1,10 +1,15 @@
 import {
-  Avatar, AvatarGroup,
+  Avatar,
+  AvatarGroup,
   Box,
   Button,
+  ButtonProps,
   Flex,
   Image,
-  Popover, PopoverArrow, PopoverBody,
+  Popover,
+  PopoverArrow,
+  PopoverBody,
+  FlexProps,
   PopoverContent,
   PopoverTrigger,
   Text,
@@ -18,11 +23,6 @@ import heartHover from '../../../../../assets/images/marketplace/heart-hover.svg
 import heartFilled from '../../../../../assets/images/marketplace/heart-filled.svg';
 import audioIcon from '../../../../../assets/images/marketplace/audio-icon.svg';
 import videoIcon from '../../../../../assets/images/marketplace/video-icon.svg';
-import { FlexProps } from '@chakra-ui/layout/src/flex';
-
-interface INftItemProps {
-  nft: INft;
-}
 
 interface IMediaIconProps extends FlexProps {
   icon: any;
@@ -33,6 +33,65 @@ const MediaIcon = ({ icon, ...rest }: IMediaIconProps) => (
     <Image src={icon} />
   </Flex>
 );
+
+// ######################################################################
+
+interface ILikeButtonProps extends ButtonProps, Pick<INft, 'likes' | 'isLiked'> {
+  onToggle?: (isLiked: boolean) => void;
+}
+
+const LikeButton = ({ isLiked, likes, onToggle, sx = {}, ...rest }: ILikeButtonProps) => {
+  return (
+    <Popover trigger={'hover'} placement={'top'} variant={'tooltip'}>
+      <PopoverTrigger>
+        <Button
+          leftIcon={
+            <>
+              <Image src={isLiked ? heartFilled : heart} w={'14px'} display={'inline'} />
+              <Image src={isLiked ? heartFilled : heartHover} w={'14px'} display={'none'} />
+            </>
+          }
+          size={'sm'}
+          variant='simpleOutline'
+          sx={{
+            '--hover-color': '#FF4949',
+            color: isLiked ? 'var(--hover-color)' : 'rgba(0, 0, 0, 0.4)',
+            fontSize: '12px',
+            _hover: {
+              color: 'var(--hover-color)',
+              '.chakra-button__icon:first-child img': {
+                '&:nth-of-type(1)': { display: 'none', },
+                '&:nth-of-type(2)': { display: 'inline', }
+              }
+            },
+            ...sx,
+          }}
+          {...rest}
+          onClick={() => onToggle && onToggle(!isLiked)}
+        >
+          {likes.length}
+        </Button>
+      </PopoverTrigger>
+      <PopoverContent width={'fit-content'}>
+        <PopoverArrow />
+        <PopoverBody>
+          <Text fontWeight={700} mb={'6px'}>{likes.length} people liked this</Text>
+          <AvatarGroup size='md' spacing={'-6px'}>
+            {likes.slice(0, 6).map((avatar, i) => (
+              <Avatar key={i} src={avatar} w={'26px'} h={'26px'} />
+            ))}
+          </AvatarGroup>
+        </PopoverBody>
+      </PopoverContent>
+    </Popover>
+  );
+};
+
+// ######################################################################
+
+interface INftItemProps {
+  nft: INft;
+}
 
 export const NftItem = ({ nft }: INftItemProps) => {
   const avatars = useMemo(() => {
@@ -93,41 +152,7 @@ export const NftItem = ({ nft }: INftItemProps) => {
           ))}
         </Box>
         <Box fontSize={'12px'}>
-          <Popover trigger={'hover'} placement={'top'} variant={'tooltip'}>
-            <PopoverTrigger>
-              <Box
-                color={nft.isLiked ? '#FF4949' : 'rgba(0, 0, 0, 0.4)'}
-                _hover={{
-                  color: '#FF4949',
-                  '> span img': {
-                    '&:nth-of-type(1)': {
-                      display: 'none',
-                    },
-                    '&:nth-of-type(2)': {
-                      display: 'inline',
-                    }
-                  }
-                }}
-              >
-                <Box as={'span'}>
-                  <Image src={nft.isLiked ? heartFilled : heart} display={'inline'} mr={'6px'} />
-                  <Image src={nft.isLiked ? heartFilled : heartHover} display={'none'} mr={'6px'} />
-                </Box>
-                {nft.likes.length}
-              </Box>
-            </PopoverTrigger>
-            <PopoverContent width={'fit-content'}>
-              <PopoverArrow />
-              <PopoverBody>
-                <Text fontWeight={700} mb={'6px'}>{nft.likes.length} people liked this</Text>
-                <AvatarGroup size='md' spacing={'-6px'}>
-                  {nft.likes.slice(0, 6).map((avatar, i) => (
-                    <Avatar key={i} src={avatar} w={'26px'} h={'26px'} />
-                  ))}
-                </AvatarGroup>
-              </PopoverBody>
-            </PopoverContent>
-          </Popover>
+          <LikeButton likes={nft.likes} isLiked={nft.isLiked} />
         </Box>
       </Flex>
 
