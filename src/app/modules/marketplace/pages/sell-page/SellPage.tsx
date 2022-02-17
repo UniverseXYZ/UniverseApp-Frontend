@@ -60,6 +60,10 @@ export const SellPage = () => {
 
   const { data: nft } = useQuery(['sell-nft', locationState.nft, locationState.tokenId], () => GetNFTApi(locationState.nft, locationState.tokenId));
 
+  const getSaltMutation = useMutation((address: string) => {
+    return axios.get(`${process.env.REACT_APP_MARKETPLACE_BACKEND}/v1/orders/salt/${address}`);
+  });
+
   const { setDarkMode } = useThemeContext() as any;
   const [activeTab, setActiveTab] = useState<SellPageTabs>(SellPageTabs.SELL_AMOUNT);
   const [amountType, setAmountType] = useState<SellAmountType>();
@@ -74,11 +78,13 @@ export const SellPage = () => {
       const address = await signer.getAddress();
       const network = await web3Provider.getNetwork();
 
+      const salt = (await getSaltMutation.mutateAsync(address)).data.salt;
+
       const make: any = {
         assetType: {
           assetClass: nft?.standard,
           contract: nft?.collection?.address,
-          tokenId: locationState.tokenId,
+          tokenId: +locationState.tokenId,
         },
         value: '1',
       };
@@ -123,9 +129,10 @@ export const SellPage = () => {
             `${TOKENS_MAP[values.priceCurrency as TokenTicker].decimals}`
           ).toString(),
         },
-        salt: 1,
+        salt: salt,
         start: 0,
         end: 0,
+        signature: '1', // TODO: remove
         data: {
           dataType: 'ORDER_DATA',
           revenueSplits: nft?.royalties.map((royalty: any) => ({

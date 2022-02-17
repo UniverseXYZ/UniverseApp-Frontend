@@ -12,10 +12,15 @@ import {
   Tabs,
   Text,
 } from '@chakra-ui/react';
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import { uniqBy } from 'lodash';
 import ReactReadMoreReadLess from 'react-read-more-read-less';
+import { Swiper, SwiperSlide } from 'swiper/react/swiper-react';
+import { Navigation } from 'swiper';
+
+import 'swiper/swiper-bundle.min.css';
+import 'swiper/swiper.min.css';
 
 import AudioNFTPreviewImage from './../../../../../assets/images/v2/audio-nft-preview.png';
 
@@ -39,8 +44,12 @@ import { TabNFTs } from './components';
 import { IERC721BundleAssetType, INFT } from '../../types';
 import { isNFTAssetAudio, isNFTAssetImage, isNFTAssetVideo } from '../../helpers';
 import { NFTRelationType } from '../../enums';
+import { SwiperArrowButton } from '../../../../components/swiper-arrow-button';
 
 export const BundlePageContent = () => {
+  const prevRef = useRef(null);
+  const nextRef = useRef(null);
+
   const router = useHistory();
 
   const { setDarkMode } = useThemeContext() as any;
@@ -81,19 +90,47 @@ export const BundlePageContent = () => {
             }
           </Box>
 
-          <Box sx={{ display: 'flex', mt: '20px', }}>
-            {uniqNFTs.map((NFT, i) => (
-              <Box
-                key={i}
-                data-selected={selectedNFTIdx === i ? true : undefined}
-                {...styles2.SliderPreviewImageStyle}
-                onClick={() => setSelectedNFTIdx(i)}
+          <Box
+            sx={{
+              display: 'flex',
+              mt: '20px',
+              pos: 'relative',
+              '.swiper-slide > div': {
+                mx: '6px',
+              },
+          }}
+            w={uniqNFTs.length > 6 ? `${470}px` : `${470 / 6 * uniqNFTs.length}px`}
+          >
+            <Box display={uniqNFTs.length > 6 ? 'block' : 'none'}>
+              <SwiperArrowButton ref={prevRef} dir={'left'} left={'-9px'} />
+              <SwiperArrowButton ref={nextRef} dir={'right'} right={'-9px'} />
+            </Box>
+            {prevRef?.current && nextRef?.current && (
+              <Swiper
+                modules={[Navigation]}
+                navigation={uniqNFTs.length > 6 && {
+                  prevEl: prevRef.current,
+                  nextEl: nextRef.current,
+                }}
+                loop={uniqNFTs.length > 6}
+                slidesPerView={uniqNFTs.length > 6 ? 6 : uniqNFTs.length}
               >
-                {isNFTAssetImage(NFT.artworkType) && <Image src={NFT.thumbnailUrl} />}
-                {isNFTAssetVideo(NFT.artworkType) && <video src={NFT.thumbnailUrl} />}
-                {isNFTAssetAudio(NFT.artworkType) && <Image src={AudioNFTPreviewImage} />}
-              </Box>
-            ))}
+                {uniqNFTs.map((NFT, i) => (
+                  <SwiperSlide key={i}>
+                    <Box
+                      data-selected={selectedNFTIdx === i ? true : undefined}
+                      {...styles2.SliderPreviewImageStyle}
+                      w={'70px'}
+                      onClick={() => setSelectedNFTIdx(i)}
+                    >
+                      {isNFTAssetImage(NFT.artworkType) && <Image src={NFT.thumbnailUrl} />}
+                      {isNFTAssetVideo(NFT.artworkType) && <video src={NFT.thumbnailUrl} />}
+                      {isNFTAssetAudio(NFT.artworkType) && <Image src={AudioNFTPreviewImage} />}
+                    </Box>
+                  </SwiperSlide>
+                ))}
+              </Swiper>
+            )}
           </Box>
         </Box>
         <Box {...styles.NFTDetailsContainerStyle}>

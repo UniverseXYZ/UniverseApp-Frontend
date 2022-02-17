@@ -2,13 +2,11 @@ import { Box, Button, Center, Flex, Heading, Image, Text } from '@chakra-ui/reac
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Navigation } from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/react/swiper-react';
-import { useMountedState, useUpdate } from 'react-use';
+import { useUpdate } from 'react-use';
 
 import 'swiper/swiper-bundle.min.css';
 import 'swiper/swiper.min.css';
 
-import arrowLeftIcon from '../../../../../../../../assets/images/marketplace/bundles-left-arrow.svg';
-import arrowRightIcon from '../../../../../../../../assets/images/marketplace/bundles-right-arrow.svg';
 import BundleWhiteIcon from '../../../../../../../../assets/images/marketplace/v2/bundle-white.svg';
 
 import { Status, Status as PostingPopupStatus } from './compoents/posting-popup/enums';
@@ -31,6 +29,7 @@ import * as styles from './styles';
 import { INFT, INFTBackend } from '../../../../../../nft/types';
 import { useMyNftsContext } from '../../../../../../../../contexts/MyNFTsContext';
 import { useAuthContext } from '../../../../../../../../contexts/AuthContext';
+import { SwiperArrowButton } from '../../../../../../../components/swiper-arrow-button';
 
 export const SummaryTab = () => {
   const prevRef = useRef(null);
@@ -44,8 +43,6 @@ export const SummaryTab = () => {
   const { nft, isPosted, form, sellMethod, amountType, goBack } = useMarketplaceSellData();
 
   const update = useUpdate();
-
-  const isMounted = useMountedState();
 
   const [postingPopupStatus, setPostingPopupStatus] = useState<PostingPopupStatus>(PostingPopupStatus.HIDDEN);
 
@@ -126,79 +123,14 @@ export const SummaryTab = () => {
             </>
           )}
 
-          {/*TODO: refactor styles*/}
           {amountType === 'bundle' && (
-            <Box w={'var(--image-size)'} sx={{
-              pos: 'relative',
-              '[data-swiper-button]': {
-                background: 'white',
-                border: 0,
-                borderRadius: '50%',
-                height: '30px',
-                minW: 'auto',
-                padding: 0,
-                position: 'absolute',
-                top: 'calc(50% - 15px)',
-                width: '30px',
-                zIndex: 10,
-
-                _disabled: {
-                  display: 'none',
-                },
-                _before: {
-                  border: '1px solid',
-                  borderColor: 'rgba(0, 0, 0, 0.1)',
-                  borderRadius: 'inherit',
-                  position: 'absolute',
-                  content: '" "',
-                  top: 0,
-                  left: 0,
-                  height: '100%',
-                  width: '100%',
-                  zIndex: -1,
-                },
-                _hover: {
-                  _before: {
-                    backgroundImage: 'linear-gradient(175deg,#bceb00,#00eaea)',
-                    backgroundOrigin: 'border-box',
-                    borderColor: 'transparent',
-                    boxShadow: 'inset 2px 1000px 1px white',
-                  },
-                },
-                _focus: {
-                  boxShadow: 'none',
-                  _before: {
-                    backgroundImage: 'linear-gradient(175deg,#bceb00,#00eaea)',
-                    backgroundOrigin: 'border-box',
-                    borderColor: 'transparent',
-                    boxShadow: 'inset 2px 1000px 1px white',
-                  },
-                },
-              }
-            }}>
-              <Box sx={{
-                bg: 'rgba(0, 0, 0, 0.5)',
-                border: '1px solid rgba(255, 255, 255, 0.2)',
-                borderRadius: '8px',
-                backdropFilter: 'blur(4px)',
-                color: 'white',
-                fontSize: '14px',
-                fontWeight: 500,
-                pos: 'absolute',
-                padding: '7px 14px',
-                top: '15px',
-                left: '15px',
-                zIndex: 3,
-              }}>
-                <Image src={BundleWhiteIcon} w={'20px'} display={'inline-block'} mr={'6px'} mt={'-3px'} />
+            <Box w={'var(--image-size)'} pos={'relative'}>
+              <Box {...styles.BundleLabelStyle}>
+                <Image src={BundleWhiteIcon} display={'inline-block'} mr={'6px'} mt={'-3px'} w={'20px'} />
                 {activeIndex + 1} of {NFTsForPreview.length}
               </Box>
-              <Button ref={prevRef} variant={'simpleOutline'} data-swiper-button left={'15px'}>
-                <Image src={arrowLeftIcon} width={'9px'} />
-              </Button>
-              <Button ref={nextRef} variant={'simpleOutline'} data-swiper-button right={'15px'}>
-                <Image src={arrowRightIcon} width={'9px'} />
-              </Button>
+              <SwiperArrowButton ref={prevRef} dir={'left'} left={'15px'} />
+              <SwiperArrowButton ref={nextRef} dir={'right'} right={'15px'} />
               {prevRef?.current && nextRef?.current && (
                 <Swiper
                   modules={[Navigation]}
