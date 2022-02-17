@@ -8,14 +8,14 @@ import { NFTItemEditionsLabel } from '../nft-item-editions-label';
 import * as styles from './styles';
 
 interface INFTItemFooterProps {
-  nft: INFT;
+  NFT: INFT;
   renderNFTAdditions?: React.ReactNode | null;
   bundleNFTsLength?: number;
 }
 
 export const NFTItemFooter = (
   {
-    nft,
+    NFT,
     renderNFTAdditions,
     bundleNFTsLength = 0,
   }: INFTItemFooterProps
@@ -24,11 +24,11 @@ export const NFTItemFooter = (
     <Flex {...styles.WrapperStyle}>
       <Flex>
         {renderNFTAdditions || renderNFTAdditions === null ? renderNFTAdditions : (
-          <NFTItemEditionsLabel nft={nft} mr={'6px'} />
+          <NFTItemEditionsLabel nft={NFT} mr={'6px'} />
         )}
         {bundleNFTsLength ? (<NFTItemBundleLabel count={bundleNFTsLength} mr={'6px'} />) : null}
         {/*TODO: composition*/}
-        {/*{nft.assets?.length && (<NFTItemCompositionLabel count={nft.assets.length ?? 0} mr={'6px'} />)}*/}
+        {/*{NFT.assets?.length && (<NFTItemCompositionLabel count={NFT.assets.length ?? 0} mr={'6px'} />)}*/}
       </Flex>
 
       <Box>

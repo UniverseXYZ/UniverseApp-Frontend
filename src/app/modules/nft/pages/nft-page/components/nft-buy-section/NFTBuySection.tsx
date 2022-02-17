@@ -2,7 +2,7 @@ import { Box, Button, Image, SimpleGrid, Text } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
 
 import { useBuyNFTSection } from '../../mocks';
-import { useDateCountDown } from '../../../../../../hooks';
+import { useDateCountdown } from '../../../../../../hooks';
 import * as styles from './styles';
 import { HighestBid } from './components';
 import { NFTCheckoutPopup } from '../nft-checkout-popup';
@@ -28,7 +28,7 @@ export const NFTBuySection = ({ order, onMeasureChange }: INFTBuySectionProps) =
     onMeasureChange && onMeasureChange(measure);
   }, [measure]);
 
-  const { countDownString } = useDateCountDown(new Date(new Date().setDate(new Date().getDate() + 1)));
+  const { countDownString } = useDateCountdown(new Date(new Date().setDate(new Date().getDate() + 1)));
 
   const [isCheckoutPopupOpened, setIsCheckoutPopupOpened] = useState(false);
   const [isPlaceABidPopupOpened, setIsPlaceABidPopupOpened] = useState(false);

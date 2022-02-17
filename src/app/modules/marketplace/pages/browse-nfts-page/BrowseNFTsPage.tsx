@@ -20,7 +20,7 @@ import {
 } from '../../components';
 import { SortNftsOptions } from '../../constants';
 import { BackToTopButton, Select } from '../../../../components';
-import { NftItem, NFTItemContentWithPrice } from '../../../nft/components';
+import { NftItem, NFTItemContentWithPrice, NFTItemAsset, NFTItemAuctionCountdown } from '../../../nft/components';
 import { IERC721AssetType, IERC721BundleAssetType, INFT, IOrder, IOrderBackend } from '../../../nft/types';
 import { useStickyHeader2 } from '../../../../hooks';
 import { coins } from '../../../../mocks';
@@ -285,9 +285,9 @@ export const BrowseNFTsPage = () => {
                 return (
                   <NftItem
                     key={order.id}
-                    nft={NFTs[0]}
+                    NFT={NFTs[0]}
                     bundleNFTs={NFTs.slice(1)}
-                    renderContent={(
+                    renderContent={() => (
                       <NFTItemContentWithPrice
                         name={NFTs[0].name}
                         creator={NFTs[0].creator}

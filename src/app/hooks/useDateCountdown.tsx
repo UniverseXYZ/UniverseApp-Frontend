@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useInterval } from 'react-use';
 import { default as dayjs } from 'dayjs';
 
-export const useDateCountDown = (_initialDate: Date, onCountDownEnd?: () => void) => {
+export const useDateCountdown = (_initialDate: Date, onCountDownEnd?: () => void) => {
   const [targetDate] = useState(dayjs(_initialDate));
   const [isRunning, setIsRunning] = useState(!!_initialDate);
   const [formattedString, setFormattedString] = useState<string>();

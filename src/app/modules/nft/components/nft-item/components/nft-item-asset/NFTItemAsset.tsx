@@ -3,13 +3,13 @@ import React from 'react';
 import { useMeasure } from 'react-use';
 
 import { INFT } from '../../../../types';
-import { isNFTAssetAudio, isNFTAssetImage, isNFTAssetVideo } from '../../../../helpers';
-import { NFTItemAssetAudioLabel, NFTItemAssetVideoLabel } from './components';
+import { isNFTAssetImage, isNFTAssetVideo } from '../../../../helpers';
+import { NFTItemAssetType } from './components';
 import * as styles from './styles';
 
 interface INFTItemAssetProps {
   NFT: INFT;
-  renderAssetLabel?: React.ReactNode;
+  renderAssetLabel?: ((NFT: INFT) => React.ReactNode) | null;
 }
 
 export const NFTItemAsset = ({ NFT, renderAssetLabel }: INFTItemAssetProps) => {
@@ -17,7 +17,6 @@ export const NFTItemAsset = ({ NFT, renderAssetLabel }: INFTItemAssetProps) => {
 
   const isImage = isNFTAssetImage(NFT.artworkType);
   const isVideo = isNFTAssetVideo(NFT.artworkType);
-  const isAudio = isNFTAssetAudio(NFT.artworkType);
 
   return (
     <Box ref={ref} pos={'relative'}>
@@ -26,14 +25,9 @@ export const NFTItemAsset = ({ NFT, renderAssetLabel }: INFTItemAssetProps) => {
         {isVideo && (<video src={NFT.thumbnailUrl} />)}
       </Box>
 
-      <Box {...styles.AssetLabelContainerStyle}>
-        {renderAssetLabel || renderAssetLabel === null ? renderAssetLabel : (
-          <>
-            {isVideo && (<NFTItemAssetVideoLabel />)}
-            {isAudio && (<NFTItemAssetAudioLabel />)}
-          </>
-        )}
-      </Box>
+      {renderAssetLabel === null ? null :
+        renderAssetLabel ? renderAssetLabel(NFT) : (<NFTItemAssetType NFT={NFT} />)
+      }
     </Box>
   );
 };
