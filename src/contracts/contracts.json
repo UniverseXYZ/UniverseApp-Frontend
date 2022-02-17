@@ -6132,7 +6132,6 @@
             "type": "event"
           },
           {
-            "anonymous": false,
             "inputs": [
               {
                 "indexed": false,
@@ -6695,7 +6694,9 @@
                 "type": "bool"
               }
             ],
-            "stateMutability": "view",
+            "name": "grantRole",
+            "outputs": [],
+            "stateMutability": "nonpayable",
             "type": "function"
           },
           {
@@ -6780,7 +6781,9 @@
             "type": "function"
           },
           {
-            "inputs": [
+            "inputs": [],
+            "name": "maxSupply",
+            "outputs": [
               {
                 "internalType": "address",
                 "name": "to",
@@ -6821,7 +6824,9 @@
                 "type": "uint256[]"
               }
             ],
-            "stateMutability": "view",
+            "name": "mint",
+            "outputs": [],
+            "stateMutability": "pure",
             "type": "function"
           },
           {
@@ -6844,14 +6849,8 @@
             "type": "function"
           },
           {
-            "inputs": [
-              {
-                "internalType": "bytes32",
-                "name": "role",
-                "type": "bytes32"
-              }
-            ],
-            "name": "getRoleAdmin",
+            "inputs": [],
+            "name": "name",
             "outputs": [
               {
                 "internalType": "string",
@@ -6950,9 +6949,9 @@
                 "type": "address"
               },
               {
-                "internalType": "uint256",
-                "name": "tokenId",
-                "type": "uint256"
+                "internalType": "string",
+                "name": "_arweaveAssetsJSON",
+                "type": "string"
               }
             ],
             "name": "safeTransferFrom",
@@ -7067,7 +7066,7 @@
               {
                 "internalType": "address payable",
                 "name": "",
-                "type": "address"
+                "type": "uint256"
               }
             ],
             "stateMutability": "view",
@@ -7126,14 +7125,32 @@
                 "type": "uint256"
               }
             ],
-            "stateMutability": "view",
+            "name": "transferFrom",
+            "outputs": [],
+            "stateMutability": "nonpayable",
             "type": "function"
           },
+          {
+            "inputs": [],
+            "name": "unpause",
+            "outputs": [],
+            "stateMutability": "nonpayable",
+            "type": "function"
+          },
+          {
+            "stateMutability": "payable",
+            "type": "receive"
+          }
+        ]
+      },
+      "AuctionFactory": {
+        "address": "",
+        "abi": [
           {
             "inputs": [
               {
                 "internalType": "uint256",
-                "name": "tokenId",
+                "name": "_maxNumberOfSlotsPerAuction",
                 "type": "uint256"
               }
             ],
@@ -7145,10 +7162,11 @@
                 "type": "string"
               }
             ],
-            "stateMutability": "view",
-            "type": "function"
+            "name": "LogAuctionCanceled",
+            "type": "event"
           },
           {
+            "anonymous": false,
             "inputs": [
               {
                 "indexed": false,
@@ -7548,7 +7566,6 @@
             "type": "event"
           },
           {
-            "anonymous": false,
             "inputs": [
               {
                 "indexed": true,
@@ -7587,16 +7604,13 @@
             "type": "constructor"
           },
           {
-            "anonymous": false,
             "inputs": [
               {
-                "indexed": false,
                 "internalType": "uint256",
                 "name": "auctionId",
                 "type": "uint256"
               },
               {
-                "indexed": false,
                 "internalType": "uint256",
                 "name": "time",
                 "type": "uint256"
@@ -7606,10 +7620,8 @@
             "type": "event"
           },
           {
-            "anonymous": false,
             "inputs": [
               {
-                "indexed": false,
                 "internalType": "uint256",
                 "name": "auctionId",
                 "type": "uint256"
@@ -7661,7 +7673,6 @@
             "type": "event"
           },
           {
-            "anonymous": false,
             "inputs": [
               {
                 "indexed": false,
@@ -7769,7 +7780,14 @@
                 "type": "uint256"
               },
               {
-                "indexed": false,
+                "internalType": "address",
+                "name": "bidder",
+                "type": "address"
+              }
+            ],
+            "name": "getBidderBalance",
+            "outputs": [
+              {
                 "internalType": "uint256",
                 "name": "currentBid",
                 "type": "uint256"
@@ -7799,19 +7817,47 @@
                 "type": "address"
               },
               {
-                "indexed": false,
                 "internalType": "uint256",
                 "name": "auctionId",
                 "type": "uint256"
-              },
+              }
+            ],
+            "name": "getDepositedNftsInSlot",
+            "outputs": [
               {
-                "indexed": false,
+                "components": [
+                  {
+                    "internalType": "address",
+                    "name": "tokenAddress",
+                    "type": "address"
+                  },
+                  {
+                    "internalType": "uint256",
+                    "name": "tokenId",
+                    "type": "uint256"
+                  },
+                  {
+                    "internalType": "address",
+                    "name": "depositor",
+                    "type": "address"
+                  }
+                ],
+                "internalType": "struct IAuctionFactory.DepositedERC721[]",
+                "name": "",
+                "type": "tuple[]"
+              }
+            ],
+            "stateMutability": "view",
+            "type": "function"
+          },
+          {
+            "inputs": [
+              {
                 "internalType": "uint256",
                 "name": "amount",
                 "type": "uint256"
               },
               {
-                "indexed": false,
                 "internalType": "uint256",
                 "name": "time",
                 "type": "uint256"
@@ -7837,7 +7883,7 @@
               {
                 "indexed": false,
                 "internalType": "uint256",
-                "name": "tokenId",
+                "name": "slotIndex",
                 "type": "uint256"
               },
               {
@@ -7870,7 +7916,6 @@
           {
             "inputs": [
               {
-                "indexed": false,
                 "internalType": "address",
                 "name": "claimer",
                 "type": "address"
@@ -7984,11 +8029,18 @@
             "type": "event"
           },
           {
+            "inputs": [],
+            "name": "renounceOwnership",
+            "outputs": [],
+            "stateMutability": "nonpayable",
+            "type": "function"
+          },
+          {
             "inputs": [
               {
                 "indexed": false,
                 "internalType": "uint256",
-                "name": "amount",
+                "name": "",
                 "type": "uint256"
               },
               {
@@ -8044,7 +8096,7 @@
               {
                 "internalType": "address",
                 "name": "",
-                "type": "address"
+                "type": "bool"
               }
             ],
             "name": "royaltiesReserve",
@@ -8231,8 +8283,19 @@
             ],
             "stateMutability": "nonpayable",
             "type": "function"
+          }
+        ]
+      },
+      "MockNFT": {
+        "address": "",
+        "abi": [
+          {
+            "inputs": [],
+            "stateMutability": "nonpayable",
+            "type": "constructor"
           },
           {
+            "anonymous": false,
             "inputs": [
               {
                 "indexed": true,
@@ -8267,6 +8330,7 @@
                 "type": "bool"
               },
               {
+                "indexed": true,
                 "internalType": "address",
                 "name": "_bidToken",
                 "type": "address"
@@ -8284,6 +8348,7 @@
             "type": "function"
           },
           {
+            "anonymous": false,
             "inputs": [
               {
                 "internalType": "uint256",
@@ -8301,6 +8366,7 @@
                 "type": "uint256"
               },
               {
+                "indexed": true,
                 "internalType": "address",
                 "name": "_tokenAddress",
                 "type": "address"
@@ -8320,6 +8386,13 @@
           {
             "inputs": [
               {
+                "indexed": true,
+                "internalType": "address",
+                "name": "to",
+                "type": "address"
+              },
+              {
+                "indexed": true,
                 "internalType": "uint256",
                 "name": "_auctionId",
                 "type": "uint256"
@@ -8530,6 +8603,19 @@
                 "internalType": "address",
                 "name": "addressToCheck",
                 "type": "address"
+              },
+              {
+                "internalType": "string",
+                "name": "tokenURI",
+                "type": "string"
+              }
+            ],
+            "name": "mint",
+            "outputs": [
+              {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
               }
             ],
             "name": "isAddressWhitelisted",
@@ -8641,8 +8727,28 @@
             "outputs": [],
             "stateMutability": "nonpayable",
             "type": "function"
+          }
+        ]
+      },
+      "WrappedEther": {
+        "address": "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2",
+        "abi": [
+          {
+            "constant": true,
+            "inputs": [],
+            "name": "name",
+            "outputs": [
+              {
+                "name": "",
+                "type": "string"
+              }
+            ],
+            "payable": false,
+            "stateMutability": "view",
+            "type": "function"
           },
           {
+            "constant": false,
             "inputs": [
               {
                 "internalType": "address",
@@ -8658,10 +8764,12 @@
                 "type": "uint256"
               }
             ],
-            "stateMutability": "view",
+            "payable": false,
+            "stateMutability": "nonpayable",
             "type": "function"
           },
           {
+            "constant": true,
             "inputs": [],
             "name": "royaltyFeeMantissa",
             "outputs": [
@@ -9217,6 +9325,14 @@
           {
             "inputs": [
               {
+                "internalType": "address",
+                "name": "owner",
+                "type": "address"
+              }
+            ],
+            "name": "balanceOf",
+            "outputs": [
+              {
                 "internalType": "uint256",
                 "name": "tokenId",
                 "type": "uint256"
@@ -9225,6 +9341,17 @@
             "name": "safeTransferFrom",
             "outputs": [],
             "stateMutability": "nonpayable",
+            "type": "function"
+          },
+          {
+            "inputs": [
+              {
+                "internalType": "string",
+                "name": "",
+                "type": "string"
+              }
+            ],
+            "stateMutability": "view",
             "type": "function"
           },
           {
@@ -9472,7 +9599,7 @@
             "outputs": [
               {
                 "name": "",
-                "type": "uint256"
+                "type": "address"
               }
             ],
             "payable": false,
