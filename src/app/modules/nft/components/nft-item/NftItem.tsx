@@ -1,19 +1,10 @@
 import {
   Avatar,
-  AvatarGroup,
   Box,
-  Button,
-  ButtonProps,
   Flex,
   Image,
-  Popover,
-  PopoverArrow,
-  PopoverBody,
-  FlexProps,
-  PopoverContent,
-  PopoverTrigger,
   Text,
-  Tooltip, ImageProps,
+  Tooltip,
 } from '@chakra-ui/react';
 import React, { useMemo, useState } from 'react';
 import { useInterval } from 'react-use';
@@ -21,110 +12,12 @@ import { default as dayjs } from 'dayjs';
 
 import { INft } from '../../types';
 
-import heart from '../../../../../assets/images/marketplace/heart.svg';
-import heartHover from '../../../../../assets/images/marketplace/heart-hover.svg';
-import heartFilled from '../../../../../assets/images/marketplace/heart-filled.svg';
-import audioIcon from '../../../../../assets/images/marketplace/audio-icon.svg';
-import videoIcon from '../../../../../assets/images/marketplace/video-icon.svg';
 import greenClockIcon from '../../../../../assets/images/marketplace/green-clock.svg';
-import bundleIcon from '../../../../../assets/images/marketplace/bundle.svg';
-import storybookIcon from '../../../../../assets/images/marketplace/storybook.svg';
-
-interface IMediaIconProps extends FlexProps {
-  icon: any;
-}
-
-const MediaIcon = ({ icon, ...rest }: IMediaIconProps) => (
-  <Flex
-    bg={'rgba(0, 0, 0, 0.1)'}
-    borderRadius={'4px'}
-    ml={'4px'}
-    p={'5px'}
-    h={'20px'}
-    w={'20px'}
-    {...rest}
-  >
-    <Image src={icon} />
-  </Flex>
-);
+import { AudioLabel, VideoLabel, LikeButton, BundleLabel, StorybookLabel } from './components';
 
 // ######################################################################
 
-interface ILikeButtonProps extends ButtonProps, Pick<INft, 'likes' | 'isLiked'> {
-  onToggle?: (isLiked: boolean) => void;
-}
-
-const LikeButton = ({ isLiked, likes, onToggle, sx = {}, ...rest }: ILikeButtonProps) => {
-  return (
-    <Popover trigger={'hover'} placement={'top'} variant={'tooltip'}>
-      <PopoverTrigger>
-        <Button
-          leftIcon={
-            <>
-              <Image src={isLiked ? heartFilled : heart} w={'14px'} display={'inline'} />
-              <Image src={isLiked ? heartFilled : heartHover} w={'14px'} display={'none'} />
-            </>
-          }
-          size={'sm'}
-          variant='simpleOutline'
-          sx={{
-            '--hover-color': '#FF4949',
-            color: isLiked ? 'var(--hover-color)' : 'rgba(0, 0, 0, 0.4)',
-            fontSize: '12px',
-            _hover: {
-              color: 'var(--hover-color)',
-              '.chakra-button__icon:first-of-type img': {
-                '&:nth-of-type(1)': { display: 'none', },
-                '&:nth-of-type(2)': { display: 'inline', }
-              }
-            },
-            ...sx,
-          }}
-          {...rest}
-          onClick={() => onToggle && onToggle(!isLiked)}
-        >
-          {likes.length}
-        </Button>
-      </PopoverTrigger>
-      <PopoverContent width={'fit-content'}>
-        <PopoverArrow />
-        <PopoverBody>
-          <Text fontWeight={700} mb={'6px'}>{likes.length} people liked this</Text>
-          <AvatarGroup size='md' spacing={'-6px'}>
-            {likes.slice(0, 6).map((avatar, i) => (
-              <Avatar key={i} src={avatar} w={'26px'} h={'26px'} />
-            ))}
-          </AvatarGroup>
-        </PopoverBody>
-      </PopoverContent>
-    </Popover>
-  );
-};
-
 // ######################################################################
-
-interface ITypeIconProps {
-  label: string;
-  icon: any;
-  iconProps?: ImageProps;
-}
-
-const TypeIcon = ({ label, icon, iconProps = {} }: ITypeIconProps) => {
-  return (
-    <Tooltip hasArrow label={label} placement={'top'} variant={'black'} fontWeight={'700'}>
-      <Box
-        border={'1px solid rgba(0, 0, 0, 0.1)'}
-        borderRadius={'8px'}
-        display={'inline-flex'}
-        p={'5px 6px'}
-        mr={'6px'}
-        minW={'32px'}
-      >
-        <Image src={icon} alt={label} {...iconProps} />
-      </Box>
-    </Tooltip>
-  );
-}
 
 interface INftItemProps {
   nft: INft;
@@ -205,7 +98,14 @@ export const NftItem = ({ nft, onAuctionTimeOut }: INftItemProps) => {
       <Flex alignItems={'center'} justifyContent={'space-between'}>
         <Box>
           {avatars.map((avatar, i) => (
-            <Tooltip key={i} hasArrow label={`${avatar.name}: ${avatar.value}`} placement={'top'} variant={'black'}>
+            <Tooltip
+              key={i}
+              hasArrow
+              label={`${avatar.name}: ${avatar.value}`}
+              placement={'top'}
+              variant={'black'}
+              fontWeight={700}
+            >
               <Avatar
                 w={'26px'}
                 h={'26px'}
@@ -221,19 +121,9 @@ export const NftItem = ({ nft, onAuctionTimeOut }: INftItemProps) => {
           ))}
         </Box>
         <Flex fontSize={'12px'}>
-          {nft.tokenIds?.length > 1 && (
-            <TypeIcon
-              icon={bundleIcon}
-              label={`Bundle: ${nft.tokenIds.length} NFTs`}
-              iconProps={{ opacity: 0.4 }}
-            />
-          )}
-          {nft.isStorybook && (
-            <TypeIcon
-              icon={storybookIcon}
-              label={`Storybook: ${nft.assets?.length ?? 0} assets`}
-            />
-          )}
+          {nft.tokenIds?.length > 1 && (<BundleLabel count={nft.tokenIds.length ?? 0} />)}
+          {nft.assets?.length && (<StorybookLabel count={nft.assets.length ?? 0} />)}
+
           <LikeButton likes={nft.likes} isLiked={nft.isLiked} />
         </Flex>
       </Flex>
@@ -249,8 +139,8 @@ export const NftItem = ({ nft, onAuctionTimeOut }: INftItemProps) => {
         />
 
         <Flex position={'absolute'} top={'10px'} right={'10px'}>
-          {nft.isAudio && (<MediaIcon icon={audioIcon} />)}
-          {nft.isVideo && (<MediaIcon icon={videoIcon} />)}
+          {nft.isAudio && (<AudioLabel />)}
+          {nft.isVideo && (<VideoLabel />)}
         </Flex>
 
         {formattedAuctionExpTime && (
