@@ -44,5 +44,49 @@ export const Button = {
         boxShadow: 'inset 2px 1000px 1px white',
       }
     },
+    dropDown: {
+      borderRadius: '12px',
+      padding: '11px 26px',
+      position: 'relative',
+      _before: {
+        border: '1px solid',
+        borderColor: 'rgba(0, 0, 0, 0.1)',
+        borderRadius: 'inherit',
+        position: 'absolute',
+        content: '" "',
+        top: 0,
+        left: 0,
+        height: '100%',
+        width: '100%',
+        zIndex: -1,
+      },
+      _hover: {
+        _before: {
+          backgroundImage: 'linear-gradient(175deg,#bceb00,#00eaea)',
+          backgroundOrigin: 'border-box',
+          borderColor: 'transparent',
+          boxShadow: 'inset 2px 1000px 1px white',
+        },
+      },
+      _focus: {
+        boxShadow: 'none',
+        _before: {
+          backgroundImage: 'linear-gradient(175deg,#bceb00,#00eaea)',
+          backgroundOrigin: 'border-box',
+          borderColor: 'transparent',
+          boxShadow: 'inset 2px 1000px 1px white',
+        },
+      },
+      _active: {
+        boxShadow: 'none',
+        _before: {
+          backgroundImage: 'linear-gradient(175deg,#bceb00,#00eaea)',
+          backgroundOrigin: 'border-box',
+          borderWidth: '2px',
+          borderColor: 'transparent',
+          boxShadow: 'inset 2px 1000px 1px white',
+        },
+      }
+    },
   }
 };
