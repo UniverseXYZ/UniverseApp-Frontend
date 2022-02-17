@@ -6,7 +6,6 @@ import { UseMeasureRect } from 'react-use/lib/useMeasure';
 
 import ClockIcon from '../../../../../../../assets/images/clock.svg';
 
-import { NFTBuyNFTSectionState, useBuyNFTSection } from '../../mocks';
 import { useDateCountdown } from '../../../../../../hooks';
 import * as styles from './styles';
 import { HighestBid } from './components';
@@ -17,6 +16,7 @@ import { NFTMakeAnOfferPopup } from '../nft-make-an-offer-popup';
 import { NFTCancelListingPopup } from '../nft-cancel-listing-popup';
 import { NFTChangeListingPricePopup } from '../nft-change-listing-price-popup';
 import { useAuthContext } from '../../../../../../../contexts/AuthContext';
+import { BuyNFTSectionState } from './enums';
 
 interface INFTBuySectionProps {
   NFT?: INFT;
@@ -30,7 +30,8 @@ export const NFTBuySection = ({ NFT, order, onMeasureChange }: INFTBuySectionPro
   const router = useHistory();
 
   const { signer, web3Provider } = useAuthContext() as any;
-  const buyNFTSection = useBuyNFTSection();
+
+  const [state, setState] = useState<BuyNFTSectionState>();
 
   const updateSectionState = useCallback(async () => {
     if (!signer) {
@@ -42,18 +43,18 @@ export const NFTBuySection = ({ NFT, order, onMeasureChange }: INFTBuySectionPro
       if (!order) {
         if (NFT) {
           if (address.toUpperCase() === NFT.owner?.address.toUpperCase()) {
-            buyNFTSection.setState(NFTBuyNFTSectionState.OWNER_PUT_ON_SALE);
+            setState(BuyNFTSectionState.OWNER_PUT_ON_SALE);
           }
         }
       } else {
         if (order.maker.toUpperCase() === address.toUpperCase()) {
           // TODO: process case with NFTBuyNFTSectionState.OWNER_AUCTION_LOWER_PRICE
-          buyNFTSection.setState(NFTBuyNFTSectionState.OWNER_FIXED_LISTING_CHANGE_PRICE);
+          setState(BuyNFTSectionState.OWNER_FIXED_LISTING_CHANGE_PRICE);
         } else {
           // TODO: case with NFTBuyNFTSectionState.BUYER_FIXED_LISTING_BUY
           // TODO: case with NFTBuyNFTSectionState.BUYER_AUCTION_BID
           // TODO: case with NFTBuyNFTSectionState.BUYER_AUCTION_BID_N_OFFER
-          buyNFTSection.setState(NFTBuyNFTSectionState.BUYER_FIXED_LISTING_BUY_N_OFFER);
+          setState(BuyNFTSectionState.BUYER_FIXED_LISTING_BUY_N_OFFER);
         }
       }
     } catch (e) {
@@ -76,13 +77,13 @@ export const NFTBuySection = ({ NFT, order, onMeasureChange }: INFTBuySectionPro
   const [isCancelListingPopupOpened, setIsCancelListingPopupOpened] = useState(false);
   const [isChangeListingPricePopupOpened, setIsChangeListingPricePopupOpened] = useState(false);
 
-  if (buyNFTSection.state === null) {
+  if (state === undefined) {
     return <Box ref={ref}></Box>;
   }
 
   return (
     <Box {...styles.WrapperStyle} ref={ref}>
-      {/*<Box {...styles.CountDownWrapperStyle} cursor={'pointer'} onClick={buyNFTSection.changeBuyNFTSection}>*/}
+      {/*<Box {...styles.CountDownWrapperStyle} cursor={'pointer'}>*/}
       {/*  <Box {...styles.CountDownContentStyle} minW={`${((countDownString?.length ?? 0) + 5) * 10}px`}>*/}
       {/*    <Text>*/}
       {/*      <Image src={ClockIcon} />*/}
@@ -93,7 +94,7 @@ export const NFTBuySection = ({ NFT, order, onMeasureChange }: INFTBuySectionPro
       {/*</Box>*/}
       <Box {...styles.ContentStyle}>
 
-        {buyNFTSection.state === NFTBuyNFTSectionState.BUYER_AUCTION_BID_N_OFFER && (
+        {state === BuyNFTSectionState.BUYER_AUCTION_BID_N_OFFER && (
           <>
             <HighestBid />
             <SimpleGrid columns={2} spacingX={'12px'}>
@@ -102,7 +103,7 @@ export const NFTBuySection = ({ NFT, order, onMeasureChange }: INFTBuySectionPro
             </SimpleGrid>
           </>
         )}
-        {buyNFTSection.state === NFTBuyNFTSectionState.BUYER_FIXED_LISTING_BUY_N_OFFER && (
+        {state === BuyNFTSectionState.BUYER_FIXED_LISTING_BUY_N_OFFER && (
           <>
             <HighestBid />
             <SimpleGrid columns={2} spacingX={'12px'}>
@@ -111,19 +112,19 @@ export const NFTBuySection = ({ NFT, order, onMeasureChange }: INFTBuySectionPro
             </SimpleGrid>
           </>
         )}
-        {buyNFTSection.state === NFTBuyNFTSectionState.BUYER_FIXED_LISTING_BUY && (
+        {state === BuyNFTSectionState.BUYER_FIXED_LISTING_BUY && (
           <>
             <Button boxShadow={'lg'} w={'100%'} onClick={() => setIsCheckoutPopupOpened(true)}>Buy for 0.5 ETH</Button>
             <Text {...styles.ContentFeeLabelStyle} textAlign={'center'} mt={'12px'}>(10% of sales will go to creator)</Text>
           </>
         )}
-        {buyNFTSection.state === NFTBuyNFTSectionState.BUYER_AUCTION_BID && (
+        {state === BuyNFTSectionState.BUYER_AUCTION_BID && (
           <>
             <Button boxShadow={'lg'} w={'100%'} onClick={() => setIsPlaceABidPopupOpened(true)}>Place a bid</Button>
             <Text {...styles.ContentFeeLabelStyle} textAlign={'center'} mt={'12px'}>(10% of sales will go to creator)</Text>
           </>
         )}
-        {buyNFTSection.state === NFTBuyNFTSectionState.OWNER_PUT_ON_SALE && (
+        {state === BuyNFTSectionState.OWNER_PUT_ON_SALE && (
           <>
             <Button boxShadow={'lg'} w={'100%'} onClick={() => router.push(`/v2/marketplace/sell?nft=${NFT?.collection?.address}&tokenId=${NFT?.tokenId}`)}>Put on sale</Button>
             <Text {...styles.ContentFeeLabelStyle} textAlign={'center'} mt={'12px'} color={'rgba(0, 0, 0, 0.4)'}>
@@ -131,7 +132,7 @@ export const NFTBuySection = ({ NFT, order, onMeasureChange }: INFTBuySectionPro
             </Text>
           </>
         )}
-        {buyNFTSection.state === NFTBuyNFTSectionState.OWNER_AUCTION_LOWER_PRICE && (
+        {state === BuyNFTSectionState.OWNER_AUCTION_LOWER_PRICE && (
           <>
             <HighestBid />
             <SimpleGrid columns={2} spacingX={'12px'}>
@@ -140,7 +141,7 @@ export const NFTBuySection = ({ NFT, order, onMeasureChange }: INFTBuySectionPro
             </SimpleGrid>
           </>
         )}
-        {buyNFTSection.state === NFTBuyNFTSectionState.OWNER_FIXED_LISTING_CHANGE_PRICE && (
+        {state === BuyNFTSectionState.OWNER_FIXED_LISTING_CHANGE_PRICE && (
           <>
             {/*TODO: show if highest bid exist, if not show message (below) "This NFT is on your wallet" */}
             {/*<HighestBid />*/}
