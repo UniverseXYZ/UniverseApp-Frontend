@@ -1,38 +1,54 @@
-import { Box, Text } from '@chakra-ui/react';
+import { Box, Text, CheckboxProps, ButtonProps, BoxProps, TextProps } from '@chakra-ui/react';
+import { useCallback } from 'react';
 
 import { INft } from '../../../../../nft/types';
 import { Dropdown, Checkbox } from '../../../../../../components';
 
-interface ISelectEditionsDropdownItemProps {
-  label: string;
-  isChecked: boolean;
-  onChange: (isChecked: boolean) => void;
+interface IStyles {
+  checkbox: CheckboxProps;
+  button: ButtonProps;
+  container: BoxProps;
+  title: TextProps;
 }
 
-const EditionItem = ({ isChecked, label, onChange }: ISelectEditionsDropdownItemProps) => {
-  return (
-    <Box
-      fontSize={'12px'}
-      fontWeight={400}
-      borderTop={'1px solid rgba(0, 0, 0, 0.1)'}
-      _hover={{
-        background: '#F6FAF3',
-        cursor: 'pointer',
-      }}
-      sx={{
-        label: {
-          padding: '5px 20px',
-          width: '100%',
-        }
-      }}
-    >
-      <Checkbox
-        isChecked={isChecked}
-        onChange={(e) => onChange(e.target.checked)}
-      >{label}</Checkbox>
-    </Box>
-  );
-}
+const styles: IStyles = {
+  checkbox: {
+    borderTop: '1px solid rgba(0, 0, 0, 0.1)',
+    fontSize: '12px',
+    fontWeight: 400,
+    padding: '5px 20px',
+    width: '100%',
+    _hover: {
+      background: '#F6FAF3',
+      cursor: 'pointer',
+    }
+  },
+  button: {
+    color: 'black',
+    fontSize: '12px',
+    fontWeight: 400,
+    height: 'fit-content',
+    padding: '4px 10px',
+    sx: {
+      '.chakra-button__icon': {
+        _last: {
+          ml: '5px',
+        },
+      },
+    }
+  },
+  container: {
+    color: 'black',
+    position: 'relative',
+    w: '235px',
+    zIndex: 11,
+  },
+  title: {
+    fontSize: '14px',
+    fontWeight: 700,
+    p: '18px 20px 14px 20px',
+  }
+};
 
 interface ISelectEditionsDropdownProps {
   nft: INft;
@@ -41,48 +57,35 @@ interface ISelectEditionsDropdownProps {
 }
 
 export const SelectEditionsDropdown = ({ nft, selectedEditions, onChange }: ISelectEditionsDropdownProps) => {
-  return (
-    <Dropdown
-      label={'Editions #'}
-      buttonProps={{
-        fontSize: '12px',
-        padding: '4px 10px',
-        height: 'fit-content',
-        color: 'black',
-        fontWeight: 400,
-        sx: {
-          '.chakra-button__icon': {
-            _last: {
-              ml: '5px',
-            },
-          },
-        }
-      }}
-    >
-      <Box color={'black'} w={'235px'} position={'relative'} zIndex={11}>
-        <Box p={'18px 20px 14px 20px'}>
-          <Text fontSize={'14px'} fontWeight={700}>Choose edition number</Text>
-        </Box>
-        <EditionItem
-          label={'Select All'}
-          isChecked={nft.tokenIds.length === selectedEditions.length}
-          onChange={(isChecked) => {
-            onChange(isChecked ? [...nft.tokenIds] : []);
-          }}
-        />
-        {nft.tokenIds.map((tokenId, i) => (
-          <EditionItem
-            key={i}
-            label={`#${tokenId}`}
-            isChecked={selectedEditions.includes(tokenId)}
-            onChange={(isChecked) => {
-              const newEditions = isChecked
-                ? [...selectedEditions, tokenId]
-                : selectedEditions.filter(_tokenId => _tokenId !== tokenId);
 
-              onChange(newEditions);
-            }}
-          />
+  const handleCheckEdition = useCallback((e, tokenId) => {
+    const newEditions = e.target.checked
+      ? [...selectedEditions, tokenId]
+      : selectedEditions.filter(_tokenId => _tokenId !== tokenId);
+
+    onChange(newEditions);
+  }, [selectedEditions, onChange]);
+
+  const handleCheckAllEdition = useCallback((e) => {
+    onChange(e.target.checked ? [...nft.tokenIds] : []);
+  }, [nft, onChange]);
+
+  return (
+    <Dropdown label={'Editions #'} buttonProps={styles.button}>
+      <Box {...styles.container}>
+        <Text {...styles.title}>Choose edition number</Text>
+        <Checkbox
+          {...styles.checkbox}
+          isChecked={nft.tokenIds.length === selectedEditions.length}
+          onChange={handleCheckAllEdition}
+        >Select All</Checkbox>
+        {nft.tokenIds.map((tokenId, i) => (
+          <Checkbox
+            {...styles.checkbox}
+            key={i}
+            isChecked={selectedEditions.includes(tokenId)}
+            onChange={(e) => handleCheckEdition(e, tokenId)}
+          >{`#${tokenId}`}</Checkbox>
         ))}
       </Box>
     </Dropdown>
