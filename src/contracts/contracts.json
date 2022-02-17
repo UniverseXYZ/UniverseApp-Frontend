@@ -6686,37 +6686,8 @@
             "type": "function"
           },
           {
-            "inputs": [
-              {
-                "internalType": "bytes32",
-                "name": "role",
-                "type": "bytes32"
-              },
-              {
-                "internalType": "address",
-                "name": "account",
-                "type": "address"
-              }
-            ],
-            "name": "grantRole",
-            "outputs": [],
-            "stateMutability": "nonpayable",
-            "type": "function"
-          },
-          {
-            "inputs": [
-              {
-                "internalType": "bytes32",
-                "name": "role",
-                "type": "bytes32"
-              },
-              {
-                "internalType": "address",
-                "name": "account",
-                "type": "address"
-              }
-            ],
-            "name": "hasRole",
+            "inputs": [],
+            "name": "baseURI",
             "outputs": [
               {
                 "internalType": "bool",
@@ -6766,12 +6737,12 @@
           },
           {
             "inputs": [],
-            "name": "lobsterPrice",
+            "name": "daoAddress",
             "outputs": [
               {
-                "internalType": "uint256",
+                "internalType": "address payable",
                 "name": "",
-                "type": "uint256"
+                "type": "address"
               }
             ],
             "stateMutability": "view",
@@ -6785,16 +6756,27 @@
                 "internalType": "uint256",
                 "name": "",
                 "type": "uint256"
+              },
+              {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+              }
+            ],
+            "name": "fees",
+            "outputs": [
+              {
+                "internalType": "address payable",
+                "name": "recipient",
+                "type": "address"
+              },
+              {
+                "internalType": "uint256",
+                "name": "value",
+                "type": "uint256"
               }
             ],
             "stateMutability": "view",
-            "type": "function"
-          },
-          {
-            "inputs": [],
-            "name": "mint",
-            "outputs": [],
-            "stateMutability": "payable",
             "type": "function"
           },
           {
@@ -6824,8 +6806,52 @@
             "type": "function"
           },
           {
-            "inputs": [],
-            "name": "name",
+            "inputs": [
+              {
+                "internalType": "uint256",
+                "name": "id",
+                "type": "uint256"
+              }
+            ],
+            "name": "getFeeBps",
+            "outputs": [
+              {
+                "internalType": "uint256[]",
+                "name": "",
+                "type": "uint256[]"
+              }
+            ],
+            "stateMutability": "view",
+            "type": "function"
+          },
+          {
+            "inputs": [
+              {
+                "internalType": "uint256",
+                "name": "id",
+                "type": "uint256"
+              }
+            ],
+            "name": "getFeeRecipients",
+            "outputs": [
+              {
+                "internalType": "address payable[]",
+                "name": "",
+                "type": "address[]"
+              }
+            ],
+            "stateMutability": "view",
+            "type": "function"
+          },
+          {
+            "inputs": [
+              {
+                "internalType": "bytes32",
+                "name": "role",
+                "type": "bytes32"
+              }
+            ],
+            "name": "getRoleAdmin",
             "outputs": [
               {
                 "internalType": "string",
@@ -6994,7 +7020,22 @@
             "type": "function"
           },
           {
-            "inputs": [
+            "inputs": [],
+            "name": "lobsterPrice",
+            "outputs": [
+              {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+              }
+            ],
+            "stateMutability": "view",
+            "type": "function"
+          },
+          {
+            "inputs": [],
+            "name": "maxSupply",
+            "outputs": [
               {
                 "internalType": "string",
                 "name": "_baseURI",
@@ -7016,49 +7057,17 @@
             ],
             "name": "setBulkBuyLimit",
             "outputs": [],
-            "stateMutability": "nonpayable",
+            "stateMutability": "pure",
             "type": "function"
           },
           {
-            "inputs": [
-              {
-                "internalType": "uint256",
-                "name": "newLobsterPrice",
-                "type": "uint256"
-              }
-            ],
-            "name": "setLobsterPrice",
-            "outputs": [],
-            "stateMutability": "nonpayable",
-            "type": "function"
-          },
-          {
-            "inputs": [
-              {
-                "internalType": "uint256",
-                "name": "_maxSupply",
-                "type": "uint256"
-              }
-            ],
-            "name": "setMaxSupply",
-            "outputs": [],
-            "stateMutability": "nonpayable",
-            "type": "function"
-          },
-          {
-            "inputs": [
-              {
-                "internalType": "bytes4",
-                "name": "interfaceId",
-                "type": "bytes4"
-              }
-            ],
-            "name": "supportsInterface",
+            "inputs": [],
+            "name": "multiSig",
             "outputs": [
               {
-                "internalType": "bool",
+                "internalType": "address payable",
                 "name": "",
-                "type": "bool"
+                "type": "address"
               }
             ],
             "stateMutability": "view",
@@ -7140,89 +7149,6 @@
             "type": "function"
           },
           {
-            "inputs": [],
-            "name": "totalSupply",
-            "outputs": [
-              {
-                "internalType": "uint256",
-                "name": "",
-                "type": "uint256"
-              }
-            ],
-            "stateMutability": "view",
-            "type": "function"
-          },
-          {
-            "inputs": [
-              {
-                "internalType": "address",
-                "name": "from",
-                "type": "address"
-              },
-              {
-                "internalType": "address",
-                "name": "to",
-                "type": "address"
-              },
-              {
-                "internalType": "uint256",
-                "name": "tokenId",
-                "type": "uint256"
-              }
-            ],
-            "name": "transferFrom",
-            "outputs": [],
-            "stateMutability": "nonpayable",
-            "type": "function"
-          },
-          {
-            "inputs": [],
-            "name": "unpause",
-            "outputs": [],
-            "stateMutability": "nonpayable",
-            "type": "function"
-          },
-          {
-            "stateMutability": "payable",
-            "type": "receive"
-          }
-        ]
-      },
-      "AuctionFactory": {
-        "address": "",
-        "abi": [
-          {
-            "inputs": [
-              {
-                "internalType": "uint256",
-                "name": "_maxNumberOfSlotsPerAuction",
-                "type": "uint256"
-              }
-            ],
-            "stateMutability": "nonpayable",
-            "type": "constructor"
-          },
-          {
-            "anonymous": false,
-            "inputs": [
-              {
-                "indexed": false,
-                "internalType": "uint256",
-                "name": "auctionId",
-                "type": "uint256"
-              },
-              {
-                "indexed": false,
-                "internalType": "uint256",
-                "name": "time",
-                "type": "uint256"
-              }
-            ],
-            "name": "LogAuctionCanceled",
-            "type": "event"
-          },
-          {
-            "anonymous": false,
             "inputs": [
               {
                 "indexed": false,
@@ -7436,12 +7362,14 @@
               {
                 "indexed": false,
                 "internalType": "uint256",
-                "name": "time",
+                "name": "newLobsterPrice",
                 "type": "uint256"
               }
             ],
-            "name": "LogBidWithdrawal",
-            "type": "event"
+            "name": "setLobsterPrice",
+            "outputs": [],
+            "stateMutability": "nonpayable",
+            "type": "function"
           },
           {
             "anonymous": false,
@@ -7461,9 +7389,25 @@
               {
                 "indexed": false,
                 "internalType": "uint256",
-                "name": "tokenId",
+                "name": "_maxSupply",
                 "type": "uint256"
-              },
+              }
+            ],
+            "name": "setMaxSupply",
+            "outputs": [],
+            "stateMutability": "nonpayable",
+            "type": "function"
+          },
+          {
+            "inputs": [
+              {
+                "internalType": "bytes4",
+                "name": "interfaceId",
+                "type": "bytes4"
+              }
+            ],
+            "name": "supportsInterface",
+            "outputs": [
               {
                 "indexed": false,
                 "internalType": "uint256",
@@ -7623,7 +7567,488 @@
             "type": "event"
           },
           {
+            "stateMutability": "payable",
+            "type": "receive"
+          }
+        ]
+      },
+      "AuctionFactory": {
+        "address": "",
+        "abi": [
+          {
             "inputs": [
+              {
+                "internalType": "uint256",
+                "name": "_maxNumberOfSlotsPerAuction",
+                "type": "uint256"
+              }
+            ],
+            "stateMutability": "nonpayable",
+            "type": "constructor"
+          },
+          {
+            "anonymous": false,
+            "inputs": [
+              {
+                "indexed": false,
+                "internalType": "uint256",
+                "name": "auctionId",
+                "type": "uint256"
+              },
+              {
+                "indexed": false,
+                "internalType": "uint256",
+                "name": "time",
+                "type": "uint256"
+              }
+            ],
+            "name": "LogAuctionCanceled",
+            "type": "event"
+          },
+          {
+            "anonymous": false,
+            "inputs": [
+              {
+                "indexed": false,
+                "internalType": "uint256",
+                "name": "auctionId",
+                "type": "uint256"
+              },
+              {
+                "indexed": false,
+                "internalType": "address",
+                "name": "auctionOwner",
+                "type": "address"
+              },
+              {
+                "indexed": false,
+                "internalType": "uint256",
+                "name": "numberOfSlots",
+                "type": "uint256"
+              },
+              {
+                "indexed": false,
+                "internalType": "uint256",
+                "name": "startBlockNumber",
+                "type": "uint256"
+              },
+              {
+                "indexed": false,
+                "internalType": "uint256",
+                "name": "endBlockNumber",
+                "type": "uint256"
+              },
+              {
+                "indexed": false,
+                "internalType": "uint256",
+                "name": "resetTimer",
+                "type": "uint256"
+              },
+              {
+                "indexed": false,
+                "internalType": "bool",
+                "name": "supportsWhitelist",
+                "type": "bool"
+              },
+              {
+                "indexed": false,
+                "internalType": "uint256",
+                "name": "time",
+                "type": "uint256"
+              }
+            ],
+            "name": "LogAuctionCreated",
+            "type": "event"
+          },
+          {
+            "anonymous": false,
+            "inputs": [
+              {
+                "indexed": false,
+                "internalType": "uint256",
+                "name": "auctionId",
+                "type": "uint256"
+              },
+              {
+                "indexed": false,
+                "internalType": "uint256",
+                "name": "endBlockNumber",
+                "type": "uint256"
+              },
+              {
+                "indexed": false,
+                "internalType": "uint256",
+                "name": "time",
+                "type": "uint256"
+              }
+            ],
+            "name": "LogAuctionExtended",
+            "type": "event"
+          },
+          {
+            "inputs": [
+              {
+                "indexed": false,
+                "internalType": "address",
+                "name": "recipient",
+                "type": "address"
+              },
+              {
+                "indexed": false,
+                "internalType": "uint256",
+                "name": "auctionId",
+                "type": "uint256"
+              },
+              {
+                "indexed": false,
+                "internalType": "uint256",
+                "name": "amount",
+                "type": "uint256"
+              },
+              {
+                "indexed": false,
+                "internalType": "uint256",
+                "name": "time",
+                "type": "uint256"
+              }
+            ],
+            "name": "LogAuctionRevenueWithdrawal",
+            "type": "event"
+          },
+          {
+            "inputs": [
+              {
+                "internalType": "uint256",
+                "name": "auctionId",
+                "type": "uint256"
+              },
+              {
+                "internalType": "uint256",
+                "name": "slotIndex",
+                "type": "uint256"
+              },
+              {
+                "internalType": "uint256",
+                "name": "slotReservePrice",
+                "type": "uint256"
+              },
+              {
+                "indexed": false,
+                "internalType": "uint256",
+                "name": "winningBidAmount",
+                "type": "uint256"
+              },
+              {
+                "indexed": false,
+                "internalType": "address",
+                "name": "winner",
+                "type": "address"
+              },
+              {
+                "indexed": false,
+                "internalType": "uint256",
+                "name": "time",
+                "type": "uint256"
+              }
+            ],
+            "name": "LogBidMatched",
+            "type": "event"
+          },
+          {
+            "inputs": [
+              {
+                "indexed": false,
+                "internalType": "address",
+                "name": "sender",
+                "type": "address"
+              },
+              {
+                "indexed": false,
+                "internalType": "uint256",
+                "name": "auctionId",
+                "type": "uint256"
+              },
+              {
+                "indexed": false,
+                "internalType": "uint256",
+                "name": "currentBid",
+                "type": "uint256"
+              },
+              {
+                "indexed": false,
+                "internalType": "uint256",
+                "name": "totalBid",
+                "type": "uint256"
+              },
+              {
+                "indexed": false,
+                "internalType": "uint256",
+                "name": "time",
+                "type": "uint256"
+              }
+            ],
+            "name": "LogBidSubmitted",
+            "type": "event"
+          },
+          {
+            "inputs": [
+              {
+                "indexed": false,
+                "internalType": "address",
+                "name": "recipient",
+                "type": "address"
+              },
+              {
+                "indexed": false,
+                "internalType": "uint256",
+                "name": "auctionId",
+                "type": "uint256"
+              },
+              {
+                "indexed": false,
+                "internalType": "uint256",
+                "name": "amount",
+                "type": "uint256"
+              },
+              {
+                "indexed": false,
+                "internalType": "uint256",
+                "name": "time",
+                "type": "uint256"
+              }
+            ],
+            "name": "LogBidWithdrawal",
+            "type": "event"
+          },
+          {
+            "inputs": [
+              {
+                "indexed": false,
+                "internalType": "address",
+                "name": "depositor",
+                "type": "address"
+              },
+              {
+                "indexed": false,
+                "internalType": "address",
+                "name": "tokenAddress",
+                "type": "address"
+              },
+              {
+                "indexed": false,
+                "internalType": "uint256",
+                "name": "tokenId",
+                "type": "uint256"
+              },
+              {
+                "indexed": false,
+                "internalType": "uint256",
+                "name": "auctionId",
+                "type": "uint256"
+              },
+              {
+                "internalType": "uint256",
+                "name": "slotIndex",
+                "type": "uint256"
+              },
+              {
+                "indexed": false,
+                "internalType": "uint256",
+                "name": "nftSlotIndex",
+                "type": "uint256"
+              },
+              {
+                "indexed": false,
+                "internalType": "uint256",
+                "name": "time",
+                "type": "uint256"
+              }
+            ],
+            "name": "LogERC721Deposit",
+            "type": "event"
+          },
+          {
+            "inputs": [
+              {
+                "indexed": false,
+                "internalType": "address",
+                "name": "claimer",
+                "type": "address"
+              },
+              {
+                "indexed": false,
+                "internalType": "uint256",
+                "name": "auctionId",
+                "type": "uint256"
+              },
+              {
+                "internalType": "address",
+                "name": "bidder",
+                "type": "address"
+              }
+            ],
+            "name": "getBidderBalance",
+            "outputs": [
+              {
+                "internalType": "uint256",
+                "name": "slotIndex",
+                "type": "uint256"
+              },
+              {
+                "indexed": false,
+                "internalType": "uint256",
+                "name": "time",
+                "type": "uint256"
+              }
+            ],
+            "name": "LogERC721RewardsClaim",
+            "type": "event"
+          },
+          {
+            "inputs": [
+              {
+                "indexed": false,
+                "internalType": "address",
+                "name": "depositor",
+                "type": "address"
+              },
+              {
+                "indexed": false,
+                "internalType": "address",
+                "name": "tokenAddress",
+                "type": "address"
+              },
+              {
+                "indexed": false,
+                "internalType": "uint256",
+                "name": "auctionId",
+                "type": "uint256"
+              },
+              {
+                "internalType": "uint256",
+                "name": "auctionId",
+                "type": "uint256"
+              }
+            ],
+            "name": "getDepositedNftsInSlot",
+            "outputs": [
+              {
+                "components": [
+                  {
+                    "internalType": "address",
+                    "name": "tokenAddress",
+                    "type": "address"
+                  },
+                  {
+                    "internalType": "uint256",
+                    "name": "tokenId",
+                    "type": "uint256"
+                  },
+                  {
+                    "internalType": "address",
+                    "name": "depositor",
+                    "type": "address"
+                  }
+                ],
+                "internalType": "struct IAuctionFactory.DepositedERC721[]",
+                "name": "",
+                "type": "tuple[]"
+              }
+            ],
+            "stateMutability": "view",
+            "type": "function"
+          },
+          {
+            "inputs": [
+              {
+                "internalType": "uint256",
+                "name": "slotIndex",
+                "type": "uint256"
+              },
+              {
+                "internalType": "uint256",
+                "name": "nftSlotIndex",
+                "type": "uint256"
+              }
+            ],
+            "name": "getMinimumReservePriceForSlot",
+            "outputs": [
+              {
+                "indexed": false,
+                "internalType": "uint256",
+                "name": "time",
+                "type": "uint256"
+              }
+            ],
+            "name": "LogERC721Withdrawal",
+            "type": "event"
+          },
+          {
+            "inputs": [
+              {
+                "indexed": false,
+                "internalType": "uint256",
+                "name": "amount",
+                "type": "uint256"
+              },
+              {
+                "indexed": false,
+                "internalType": "address",
+                "name": "to",
+                "type": "address"
+              },
+              {
+                "indexed": false,
+                "internalType": "address",
+                "name": "token",
+                "type": "address"
+              },
+              {
+                "indexed": false,
+                "internalType": "uint256",
+                "name": "time",
+                "type": "uint256"
+              }
+            ],
+            "name": "LogRoyaltiesWithdrawal",
+            "type": "event"
+          },
+          {
+            "anonymous": false,
+            "inputs": [
+              {
+                "indexed": true,
+                "internalType": "address",
+                "name": "previousOwner",
+                "type": "address"
+              },
+              {
+                "indexed": true,
+                "internalType": "address",
+                "name": "newOwner",
+                "type": "address"
+              }
+            ],
+            "name": "OwnershipTransferred",
+            "type": "event"
+          },
+          {
+            "inputs": [],
+            "name": "renounceOwnership",
+            "outputs": [],
+            "stateMutability": "nonpayable",
+            "type": "function"
+          },
+          {
+            "inputs": [
+              {
+                "internalType": "address",
+                "name": "",
+                "type": "address"
+              }
+            ],
+            "name": "royaltiesReserve",
+            "outputs": [
               {
                 "internalType": "uint256",
                 "name": "",
@@ -7651,7 +8076,10 @@
                 "internalType": "uint256",
                 "name": "resetTimer",
                 "type": "uint256"
-              },
+              }
+            ],
+            "name": "setRoyaltyFeeMantissa",
+            "outputs": [
               {
                 "internalType": "uint256",
                 "name": "numberOfSlots",
@@ -7693,7 +8121,7 @@
                 "type": "bool"
               }
             ],
-            "stateMutability": "view",
+            "stateMutability": "nonpayable",
             "type": "function"
           },
           {
@@ -7712,7 +8140,7 @@
                 "type": "uint256"
               }
             ],
-            "stateMutability": "view",
+            "stateMutability": "nonpayable",
             "type": "function"
           },
           {
@@ -7769,15 +8197,17 @@
             "name": "cancelAuction",
             "outputs": [
               {
-                "internalType": "bool",
-                "name": "",
-                "type": "bool"
+                "indexed": true,
+                "internalType": "uint256",
+                "name": "tokenId",
+                "type": "uint256"
               }
             ],
             "stateMutability": "nonpayable",
             "type": "function"
           },
           {
+            "anonymous": false,
             "inputs": [
               {
                 "internalType": "uint256",
@@ -7793,8 +8223,9 @@
             "name": "claimERC721Rewards",
             "outputs": [
               {
+                "indexed": false,
                 "internalType": "bool",
-                "name": "",
+                "name": "approved",
                 "type": "bool"
               }
             ],
@@ -7804,6 +8235,13 @@
           {
             "inputs": [
               {
+                "indexed": true,
+                "internalType": "address",
+                "name": "to",
+                "type": "address"
+              },
+              {
+                "indexed": true,
                 "internalType": "uint256",
                 "name": "_startBlockNumber",
                 "type": "uint256"
@@ -7900,6 +8338,19 @@
                 "internalType": "address",
                 "name": "_tokenAddress",
                 "type": "address"
+              },
+              {
+                "internalType": "string",
+                "name": "tokenURI",
+                "type": "string"
+              }
+            ],
+            "name": "mint",
+            "outputs": [
+              {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
               }
             ],
             "name": "depositMultipleERC721",
@@ -7911,6 +8362,19 @@
               }
             ],
             "stateMutability": "nonpayable",
+            "type": "function"
+          },
+          {
+            "inputs": [],
+            "name": "name",
+            "outputs": [
+              {
+                "internalType": "string",
+                "name": "",
+                "type": "string"
+              }
+            ],
+            "stateMutability": "view",
             "type": "function"
           },
           {
@@ -8034,6 +8498,11 @@
                 "type": "uint256"
               },
               {
+                "internalType": "address",
+                "name": "owner",
+                "type": "address"
+              },
+              {
                 "internalType": "uint256",
                 "name": "slotIndex",
                 "type": "uint256"
@@ -8079,6 +8548,16 @@
             "name": "maxNumberOfSlotsPerAuction",
             "outputs": [
               {
+                "internalType": "address",
+                "name": "from",
+                "type": "address"
+              },
+              {
+                "internalType": "address",
+                "name": "to",
+                "type": "address"
+              },
+              {
                 "internalType": "uint256",
                 "name": "",
                 "type": "uint256"
@@ -8086,8 +8565,28 @@
             ],
             "stateMutability": "view",
             "type": "function"
+          }
+        ]
+      },
+      "WrappedEther": {
+        "address": "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2",
+        "abi": [
+          {
+            "constant": true,
+            "inputs": [],
+            "name": "name",
+            "outputs": [
+              {
+                "name": "",
+                "type": "string"
+              }
+            ],
+            "payable": false,
+            "stateMutability": "view",
+            "type": "function"
           },
           {
+            "constant": false,
             "inputs": [
               {
                 "internalType": "address",
@@ -8122,6 +8621,7 @@
             "type": "function"
           },
           {
+            "constant": true,
             "inputs": [],
             "name": "owner",
             "outputs": [
@@ -8131,6 +8631,7 @@
                 "type": "address"
               }
             ],
+            "payable": false,
             "stateMutability": "view",
             "type": "function"
           },
@@ -8165,15 +8666,16 @@
             "name": "royaltyFeeMantissa",
             "outputs": [
               {
-                "internalType": "uint256",
                 "name": "",
-                "type": "uint256"
+                "type": "bool"
               }
             ],
-            "stateMutability": "view",
+            "payable": false,
+            "stateMutability": "nonpayable",
             "type": "function"
           },
           {
+            "constant": false,
             "inputs": [
               {
                 "internalType": "uint256",
@@ -8198,6 +8700,7 @@
             "type": "function"
           },
           {
+            "constant": true,
             "inputs": [
               {
                 "internalType": "uint256",
@@ -8217,19 +8720,21 @@
             "type": "function"
           },
           {
+            "constant": true,
             "inputs": [],
             "name": "totalAuctions",
             "outputs": [
               {
-                "internalType": "uint256",
                 "name": "",
-                "type": "uint256"
+                "type": "string"
               }
             ],
+            "payable": false,
             "stateMutability": "view",
             "type": "function"
           },
           {
+            "constant": false,
             "inputs": [
               {
                 "internalType": "address",
@@ -8239,7 +8744,8 @@
             ],
             "name": "transferOwnership",
             "outputs": [],
-            "stateMutability": "nonpayable",
+            "payable": true,
+            "stateMutability": "payable",
             "type": "function"
           },
           {
@@ -8441,14 +8947,23 @@
             "type": "event"
           },
           {
-            "anonymous": false,
-            "inputs": [
+            "inputs": [],
+            "name": "lastDeployedContractAddress",
+            "outputs": [
               {
                 "indexed": true,
                 "internalType": "address",
                 "name": "owner",
                 "type": "address"
-              },
+              }
+            ],
+            "stateMutability": "view",
+            "type": "function"
+          },
+          {
+            "inputs": [],
+            "name": "owner",
+            "outputs": [
               {
                 "indexed": true,
                 "internalType": "address",
@@ -8623,6 +9138,14 @@
           {
             "inputs": [
               {
+                "internalType": "address",
+                "name": "owner",
+                "type": "address"
+              }
+            ],
+            "name": "balanceOf",
+            "outputs": [
+              {
                 "internalType": "uint256",
                 "name": "tokenId",
                 "type": "uint256"
@@ -8630,6 +9153,17 @@
             ],
             "name": "ownerOf",
             "outputs": [
+              {
+                "internalType": "string",
+                "name": "",
+                "type": "string"
+              }
+            ],
+            "stateMutability": "view",
+            "type": "function"
+          },
+          {
+            "inputs": [
               {
                 "internalType": "address",
                 "name": "",
@@ -8651,6 +9185,37 @@
                 "name": "to",
                 "type": "address"
               },
+              {
+                "components": [
+                  {
+                    "internalType": "address payable",
+                    "name": "recipient",
+                    "type": "address"
+                  },
+                  {
+                    "internalType": "uint256",
+                    "name": "value",
+                    "type": "uint256"
+                  }
+                ],
+                "internalType": "struct HasSecondarySaleFees.Fee[][]",
+                "name": "fees",
+                "type": "tuple[][]"
+              }
+            ],
+            "name": "batchMintWithDifferentFees",
+            "outputs": [
+              {
+                "internalType": "uint256[]",
+                "name": "",
+                "type": "uint256[]"
+              }
+            ],
+            "stateMutability": "nonpayable",
+            "type": "function"
+          },
+          {
+            "inputs": [
               {
                 "internalType": "uint256",
                 "name": "tokenId",
@@ -8766,6 +9331,26 @@
                 "name": "owner",
                 "type": "address"
               },
+              {
+                "components": [
+                  {
+                    "internalType": "address payable",
+                    "name": "recipient",
+                    "type": "address"
+                  },
+                  {
+                    "internalType": "uint256",
+                    "name": "value",
+                    "type": "uint256"
+                  }
+                ],
+                "internalType": "struct HasSecondarySaleFees.Fee[]",
+                "name": "fees",
+                "type": "tuple[]"
+              }
+            ],
+            "name": "mint",
+            "outputs": [
               {
                 "internalType": "uint256",
                 "name": "index",
@@ -8961,7 +9546,7 @@
             "outputs": [
               {
                 "name": "",
-                "type": "uint256"
+                "type": "bool"
               }
             ],
             "payable": false,
@@ -9197,7 +9782,11 @@
             "payable": false,
             "stateMutability": "nonpayable",
             "type": "function"
-          },
+          }
+        ]
+      },
+      "ERC721": {
+        "abi": [
           {
             "constant": false,
             "inputs": [
