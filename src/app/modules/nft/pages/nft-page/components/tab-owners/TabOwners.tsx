@@ -17,14 +17,14 @@ export const TabOwners = () => {
       {owners.map((owner, i) => (
         <NFTTabItemWrapper key={i} label={i === 0 && owner.price ? 'Lowest ask' : undefined}>
           <Flex>
-            <Image src={owner.user.photo} {...styles.ImageStyles} />
+            <Image src={owner.user.photo} {...styles.ImageStyle} />
             <Box>
-              <Text {...styles.NameStyles}>{owner.user.name}</Text>
-              <Text {...styles.DescriptionStyles}>
+              <Text {...styles.NameStyle}>{owner.user.name}</Text>
+              <Text {...styles.DescriptionStyle}>
                 {owner.edition}/{NFT.tokenIds.length}
                 {!owner.price
-                  ? (<> editions<Box as={'strong'} color={'black'}> not for sale</Box></>)
-                  : (<> on sale for <Box as={'strong'} color={'black'}> {owner.price.toString()} ETH</Box> each</>)
+                  ? (<> editions<Box {...styles.PriceStyles}> not for sale</Box></>)
+                  : (<> on sale for <Box {...styles.PriceStyles}> {owner.price.toString()} ETH</Box> each</>)
                 }
               </Text>
             </Box>

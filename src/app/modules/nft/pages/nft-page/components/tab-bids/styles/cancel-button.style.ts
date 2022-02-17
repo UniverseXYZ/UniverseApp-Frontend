@@ -1,6 +1,6 @@
 import { ButtonProps } from '@chakra-ui/react';
 
-export const CancelButtonStyles: ButtonProps = {
+export const CancelButtonStyle: ButtonProps = {
   color: '#FF4949',
   borderColor: '#FF4949',
   fontSize: '14px',

@@ -82,12 +82,22 @@ export const LineTabList = ({ sx, ...props }: TabListProps) => {
   return (
     <Box position={'relative'}>
       <Fade in={showLeftArrow}>
-        <Box {...LeftArrowBoxBaseStyles} top={topPosition} onClick={handleClickLeftArrow}>
+        <Box
+          {...LeftArrowBoxBaseStyles}
+          top={topPosition}
+          pointerEvents={showLeftArrow ? 'auto' : 'none'}
+          onClick={handleClickLeftArrow}
+        >
           <Image src={ArrowRightIcon} transform={'rotate(-180deg)'} />
         </Box>
       </Fade>
       <Fade in={showRightArrow}>
-        <Box {...RightArrowBoxBaseStyles} top={topPosition} onClick={handleClickRightArrow}>
+        <Box
+          {...RightArrowBoxBaseStyles}
+          top={topPosition}
+          pointerEvents={showRightArrow ? 'auto' : 'none'}
+          onClick={handleClickRightArrow}
+        >
           <Image src={ArrowRightIcon} />
         </Box>
       </Fade>
