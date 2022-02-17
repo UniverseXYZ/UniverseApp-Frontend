@@ -24,7 +24,10 @@ export const GetNFTApi = async (collectionAddress: string, tokenId: string) => {
   NFT.owner = mapBackendUser(data.owner);
 
   NFT.tokenIds = data.tokenIds;
-  NFT.moreFromCollection = data.moreFromCollection.map((NFTBackend) => mapBackendNft(NFTBackend));
+  NFT.moreFromCollection = data.moreFromCollection.map((NFTBackend) => ({
+    ...mapBackendNft(NFTBackend),
+    collection: NFT.collection
+  }));
 
   return NFT;
 };
