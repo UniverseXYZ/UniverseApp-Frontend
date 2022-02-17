@@ -44,16 +44,6 @@ export const NFTPage = () => {
   return (
     <NFTPageProvider>
       <NFTInfo />
-      <Box {...styles.MoreNFTsWrapperStyle}>
-        <Heading {...styles.MoreNFTsTitleStyle}>More from this collection</Heading>
-        <Container {...styles.MoreNFTsContainerStyle}>
-          <SimpleGrid columns={{ base: 1, md: 2, lg: 4 }} spacingX={'20px'}>
-            {/*@ts-ignore*/}
-            {moreNFTs.map((NFT) => (<NftItem key={NFT.id} nft={NFT} />))}
-          </SimpleGrid>
-        </Container>
-        <Button {...styles.MoreNFTsButtonStyle}>View collection</Button>
-      </Box>
       {/*TODO: move to nft-like component*/}
       <NFTLikesPopup isOpen={isLikesPopupOpened} onClose={() => setIsLikesPopupOpened(false)} />
     </NFTPageProvider>

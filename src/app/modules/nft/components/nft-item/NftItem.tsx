@@ -1,7 +1,7 @@
 import { Box, BoxProps, Text } from '@chakra-ui/react';
 import React, { useCallback, useState } from 'react';
 
-import { INFT, NFTArtworkType } from '../../types';
+import {IMoreNftBackend, INft} from '../../types';
 import {
   NFTItemAsset,
   NFTItemAssetAudioLabel,
@@ -13,12 +13,55 @@ import {
   NFTItemPriceInfo,
 } from './components';
 import { ItemWrapper } from '../../../../components';
-import { isNFTAssetAudio, isNFTAssetImage, isNFTAssetVideo } from '../../helpers';
-import * as styles from './styles';
 
+
+interface IStyles {
+  assetContainer: BoxProps;
+  assetLabelContainer: BoxProps;
+  NFTContent: BoxProps;
+  firstContentRow: BoxProps;
+  secondContentRow: BoxProps;
+}
+
+const styles: IStyles = {
+  assetContainer: {
+    overflow: 'hidden',
+    position: 'relative',
+    zIndex: 3,
+  },
+  assetLabelContainer: {
+    display: 'flex',
+    position: 'absolute',
+    top: '10px',
+    left: '10px',
+    zIndex: 1,
+  },
+  NFTContent: {
+    padding: '16px 14px 14px 14px',
+    position: 'relative',
+    zIndex: 4,
+  },
+  firstContentRow: {
+    display: 'flex',
+    fontSize: '14px',
+    fontWeight: 700,
+    justifyContent: 'space-between',
+  },
+  secondContentRow: {
+    display: 'flex',
+    fontSize: '11px',
+    fontWeight: 600,
+    justifyContent: 'space-between',
+    color: '#00000066',
+    mt: '12px',
+    mb: '14px',
+    alignItems: 'center',
+  }
+};
+//TODO make Layout for IMoreNftBackend
 interface INftItemProps {
-  nft: INFT;
-  bundleNFTs?: INFT[];
+  nft: INft;
+  // nft: IMoreNftBackend;
   isSelected?: boolean;
   selectedLabel?: string;
 
