@@ -1,5 +1,5 @@
 import { Dropdown, IDropdownProps } from '../dropdown';
-import { Box } from '@chakra-ui/react';
+import { Box, BoxProps, PopoverContentProps, PopoverProps } from '@chakra-ui/react';
 import React, { useCallback, useState } from 'react';
 
 type ISelectItem = any;
@@ -7,10 +7,28 @@ type ISelectItem = any;
 interface ISelectProps extends Omit<IDropdownProps, 'isOpened'> {
   items: ISelectItem[];
   value: ISelectItem;
+  containerProps?: BoxProps;
+  popoverProps?: PopoverProps;
+  popoverContentProps?: PopoverContentProps;
+  renderItem?: (item: ISelectItem) => React.ReactNode;
+  renderSelectedItem?: (item: ISelectItem) => React.ReactNode;
   onSelect?: (value: ISelectItem) => void;
 }
 
-export const Select = ({ items, value, label, onSelect, ...props }: ISelectProps) => {
+export const Select = (
+  {
+    items,
+    value,
+    label,
+    containerProps,
+    popoverProps,
+    popoverContentProps,
+    renderItem,
+    renderSelectedItem,
+    onSelect,
+    ...props
+  }: ISelectProps
+) => {
   const [isOpened, setIsOpened] = useState(false);
 
   const handleOpen = useCallback(() => {
@@ -33,9 +51,13 @@ export const Select = ({ items, value, label, onSelect, ...props }: ISelectProps
       isOpened={isOpened}
       onOpen={handleOpen}
       onClose={handleClose}
+      popoverProps={popoverProps}
+      popoverContentProps={popoverContentProps}
+      renderValue={renderSelectedItem}
       {...props}
     >
-      <Box p={'8px'} w={'225px'}>
+      {/*TODO: remove box & move styles to popoverContentProps*/}
+      <Box p={'8px'} w={'225px'} {...containerProps}>
         {items.map((item, i) => (
           <Box
             key={i}
@@ -48,7 +70,7 @@ export const Select = ({ items, value, label, onSelect, ...props }: ISelectProps
             _hover={{ bg: 'rgba(0, 0, 0, 0.05)' }}
             onClick={() => handleSelect(item)}
           >
-            {item}
+            {renderItem ? renderItem(item) : item.toString()}
           </Box>
         ))}
       </Box>

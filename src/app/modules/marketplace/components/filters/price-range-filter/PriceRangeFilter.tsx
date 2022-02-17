@@ -16,9 +16,10 @@ import React, { useEffect, useState } from 'react';
 import { Dropdown, DropdownFilterContainer, CurrencySelect } from '../../../../../components';
 
 import priceRangeIcon from '../../../../../../assets/images/marketplace/price-range.svg';
+import { coins } from '../../../../../mocks';
 
 interface IPriceRangeFilterForm {
-  currency: string; // TODO
+  currency: any | null; // TODO
   price: [number, number];
 }
 
@@ -36,7 +37,7 @@ export const PriceRangeFilter = ({ onChange }: IPriceRangeFilterProps) => {
 
   const form = useFormik<IPriceRangeFilterForm>({
     initialValues: {
-      currency: '',
+      currency: coins[0],
       price: [DEFAULT_MIN_VALUE, DEFAULT_MAX_VALUE],
     },
     onSubmit: (values) => {
@@ -59,7 +60,10 @@ export const PriceRangeFilter = ({ onChange }: IPriceRangeFilterProps) => {
         onClear={() => form.resetForm()}
       >
         <Box mb={'30px'}>
-          <CurrencySelect />
+          <CurrencySelect
+            value={form.values.currency}
+            onChange={(currency) => form.setFieldValue('currency', currency)}
+          />
         </Box>
 
         <RangeSlider
