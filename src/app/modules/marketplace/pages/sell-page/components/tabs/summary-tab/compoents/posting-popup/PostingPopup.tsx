@@ -29,7 +29,7 @@ export const PostingPopup = ({ status, onClose }: IPostingPopupProps) => {
   const router = useHistory();
 
   const handleClickViewListing = useCallback(() => {
-    router.push(`/v2/nft/${nft.collection?.address}/${nft.tokenId}`);
+    router.push(`/nft/${nft.collection?.address}/${nft.tokenId}`);
   }, [nft]);
 
   const handleClickMyNFTs = useCallback(() => {

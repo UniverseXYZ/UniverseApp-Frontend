@@ -1,3 +1,4 @@
+// TODO: check usage or remove
 export const getLocationSearchObj = (search: string) =>  {
   const pairs = search.substring(1).split('&');
   const obj: Record<string, number | string> = {};

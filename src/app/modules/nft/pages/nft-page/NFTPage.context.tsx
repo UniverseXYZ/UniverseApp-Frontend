@@ -21,7 +21,7 @@ export function useNFTPageData(): INFTPageContext {
 }
 
 const NFTPageProvider: FC = ({ children }) => {
-  const { collectionAddress, tokenId } = useParams() as any;
+  const { collectionAddress, tokenId } = useParams<{ collectionAddress: string; tokenId: string; }>();
 
   const { data: NFT, isLoading: isLoadingNFT, error } = useQuery(
     ['NFT', collectionAddress, tokenId],

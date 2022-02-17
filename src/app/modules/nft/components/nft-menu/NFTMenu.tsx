@@ -72,7 +72,7 @@ export const NFTMenu = (
   const { address } = useAuthContext();
 
   const handleSell = useCallback(() => {
-    router.push(`/v2/marketplace/sell?nft=${nft.collection?.address}&tokenId=${nft.tokenId}`)
+    router.push(`/nft/${nft.collection?.address}/${nft.tokenId}/sell`)
   }, [nft]);
 
   const handleTransfer = useCallback(() => {

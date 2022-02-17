@@ -17,7 +17,7 @@ export const TabNFTs = ({ NFTs: _NFTs }: ITabNFTsProps) => {
   const router = useHistory();
 
   const handleNFTClick = useCallback((address, tokenId) => {
-    router.push(`/v2/nft/${address}/${tokenId}`);
+    router.push(`/nft/${address}/${tokenId}`);
   }, []);
 
   const NFTs = useMemo(() => {

@@ -67,7 +67,7 @@ export const BundleItem = (
       }}
     >
       <LinkBox>
-        <LinkOverlay href={`/v2/bundle/${order.hash}`} display={'contents'}>
+        <LinkOverlay href={`/bundle/${order.hash}`} display={'contents'}>
           {renderHeader === null ? null :
             renderHeader ? renderHeader(NFTs, order) : null}
 
