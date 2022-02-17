@@ -143,7 +143,7 @@ const App = () => {
                       const RouteComponent = isPrivate ? AuthenticatedRoute : Route;
 
                       return (
-                        <RouteComponent key={uuid()} path={key} {...routeProps}>
+                        <RouteComponent key={key} path={key} {...routeProps}>
                           {!isRewritten ? (
                             <Component {...componentProps} />
                           ) : (
