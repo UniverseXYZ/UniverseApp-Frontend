@@ -39,7 +39,7 @@ const NFTPageProvider: FC = ({ children }) => {
     // TODO: remove in favor to passing param tokenId to request
     return orders.find((order) => {
       const assetType = order.make.assetType as IERC721AssetType;
-      return assetType.contract === collectionAddress && assetType.tokenId === tokenId;
+      return assetType.contract === collectionAddress && assetType.tokenId === tokenId && !order.cancelledTxHash;
     });
   }, { enabled: !!NFT?.id });
 
