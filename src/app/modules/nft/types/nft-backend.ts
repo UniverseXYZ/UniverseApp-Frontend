@@ -69,5 +69,7 @@ export interface INftBackend {
   isLiked: boolean;
   isAudio: boolean;
   isVideo: boolean;
+  isStorybook: boolean;
   auctionExpDate: string;
+  assets: string[];
 }

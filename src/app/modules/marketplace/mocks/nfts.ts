@@ -74,6 +74,7 @@ export const Nfts: Partial<INft>[] = [
     thumbnail_url: 'https://universeapp-assets-dev.s3.amazonaws.com/597109bab858d4fe3f5e2993dc5c775fd51a2b22e17ac698.jpeg',
     isVideo: true,
     isAudio: true,
+    isStorybook: true,
     auctionExpDate: new Date(new Date().setDate(new Date().getDate() + 1)),
     creator: {
       id: 79,
@@ -187,6 +188,7 @@ export const Nfts: Partial<INft>[] = [
       'https://universeapp-assets-dev.s3.amazonaws.com/26638d6c9b8f2ec06fc5ea11e6b037b989c4115add733b96.jpeg',
     ],
     isLiked: true,
+    isStorybook: true,
     tokenIds: ['1'],
     thumbnail_url: 'https://universeapp-assets-dev.s3.amazonaws.com/d88c113b24a45ed6c6eab2e92ea18e8dc005681a86e7c9a4.jpg',
     creator: {

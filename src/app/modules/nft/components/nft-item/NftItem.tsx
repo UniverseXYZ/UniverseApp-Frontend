@@ -13,7 +13,7 @@ import {
   PopoverContent,
   PopoverTrigger,
   Text,
-  Tooltip,
+  Tooltip, ImageProps,
 } from '@chakra-ui/react';
 import React, { useMemo, useState } from 'react';
 import { useInterval } from 'react-use';
@@ -27,13 +27,23 @@ import heartFilled from '../../../../../assets/images/marketplace/heart-filled.s
 import audioIcon from '../../../../../assets/images/marketplace/audio-icon.svg';
 import videoIcon from '../../../../../assets/images/marketplace/video-icon.svg';
 import greenClockIcon from '../../../../../assets/images/marketplace/green-clock.svg';
+import bundleIcon from '../../../../../assets/images/marketplace/bundle.svg';
+import storybookIcon from '../../../../../assets/images/marketplace/storybook.svg';
 
 interface IMediaIconProps extends FlexProps {
   icon: any;
 }
 
 const MediaIcon = ({ icon, ...rest }: IMediaIconProps) => (
-  <Flex bg={'rgba(0, 0, 0, 0.1)'} borderRadius={'4px'} p={'5px'} w={'20px'} h={'20px'} {...rest}>
+  <Flex
+    bg={'rgba(0, 0, 0, 0.1)'}
+    borderRadius={'4px'}
+    ml={'4px'}
+    p={'5px'}
+    h={'20px'}
+    w={'20px'}
+    {...rest}
+  >
     <Image src={icon} />
   </Flex>
 );
@@ -92,6 +102,29 @@ const LikeButton = ({ isLiked, likes, onToggle, sx = {}, ...rest }: ILikeButtonP
 };
 
 // ######################################################################
+
+interface ITypeIconProps {
+  label: string;
+  icon: any;
+  iconProps?: ImageProps;
+}
+
+const TypeIcon = ({ label, icon, iconProps = {} }: ITypeIconProps) => {
+  return (
+    <Tooltip hasArrow label={label} placement={'top'} variant={'black'} fontWeight={'700'}>
+      <Box
+        border={'1px solid rgba(0, 0, 0, 0.1)'}
+        borderRadius={'8px'}
+        display={'inline-flex'}
+        p={'5px 6px'}
+        mr={'6px'}
+        minW={'32px'}
+      >
+        <Image src={icon} alt={label} {...iconProps} />
+      </Box>
+    </Tooltip>
+  );
+}
 
 interface INftItemProps {
   nft: INft;
@@ -187,9 +220,22 @@ export const NftItem = ({ nft, onAuctionTimeOut }: INftItemProps) => {
             </Tooltip>
           ))}
         </Box>
-        <Box fontSize={'12px'}>
+        <Flex fontSize={'12px'}>
+          {nft.tokenIds?.length > 1 && (
+            <TypeIcon
+              icon={bundleIcon}
+              label={`Bundle: ${nft.tokenIds.length} NFTs`}
+              iconProps={{ opacity: 0.4 }}
+            />
+          )}
+          {nft.isStorybook && (
+            <TypeIcon
+              icon={storybookIcon}
+              label={`Storybook: ${nft.assets?.length ?? 0} assets`}
+            />
+          )}
           <LikeButton likes={nft.likes} isLiked={nft.isLiked} />
-        </Box>
+        </Flex>
       </Flex>
 
       <Box position={'relative'}>
@@ -203,8 +249,8 @@ export const NftItem = ({ nft, onAuctionTimeOut }: INftItemProps) => {
         />
 
         <Flex position={'absolute'} top={'10px'} right={'10px'}>
-          {nft.isAudio && (<MediaIcon icon={audioIcon} ml={'4px'} />)}
-          {nft.isVideo && (<MediaIcon icon={videoIcon} ml={'4px'} />)}
+          {nft.isAudio && (<MediaIcon icon={audioIcon} />)}
+          {nft.isVideo && (<MediaIcon icon={videoIcon} />)}
         </Flex>
 
         {formattedAuctionExpTime && (
