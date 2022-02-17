@@ -21,6 +21,7 @@ import {
   CollectionPageLoader
 } from "../../../../../../../containers/collection/CollectionPageLoader";
 import {useNFTPageData} from "../../NFTPage.context";
+import NotFound from "../../../../../../../components/notFound/NotFound";
 
 
 // TODO: hide metadata tab for not Polymorph NFT type
@@ -37,7 +38,7 @@ export const NFTInfo = () => {
             <CollectionPageLoader />
           </div>
         )
-      : (
+      : NFT ? (
           <Box>
             <Box {...styles.NFTAssetContainerStyle}>
               {NFT.nft.artworkType.endsWith('png') && (
@@ -148,7 +149,10 @@ export const NFTInfo = () => {
               <NFTBuySection />
             </Box>
           </Box>
-        )}
+        )
+      : (
+            <NotFound />
+          )}
     </>
   )
 };
