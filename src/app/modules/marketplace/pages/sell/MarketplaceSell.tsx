@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import {
-  Box, Button,
+  Box, Button, Center,
   Container, Flex,
   Heading,
   Image,
@@ -8,29 +8,31 @@ import {
   Tab,
   TabList, TabPanel,
   TabPanels,
-  Tabs,
+  Tabs, Text,
 } from '@chakra-ui/react';
 
 import bg from '../../../../../assets/images/marketplace/v2/bg.png';
+import nft from '../../mocks/assets/nft.png';
 
 import arrow from '../../../../../assets/images/arrow.svg';
 import { useThemeContext } from '../../../../../contexts/ThemeContext';
-import { sellPageTabs, amountOptions, sellMethodOptions } from './constants';
+import { sellPageTabs, sellAmountOptions, sellMethodOptions } from './constants';
 import { BoxSelect, TieredAuctionsBanner } from './components';
+import { SellPageTabs } from './enums';
 
 export const MarketplaceSell = () => {
   const { setDarkMode } = useThemeContext() as any;
-  const [activeTab, setActiveTab] = useState(0);
+  const [activeTab, setActiveTab] = useState(SellPageTabs.SUMMARY);
 
   const handleSelectAmount = useCallback((amount: string) => {
     console.log('handleSelectAmount:', amount);
-    setActiveTab(activeTab + 1);
-  }, [activeTab]);
+    setActiveTab(SellPageTabs.SELL_METHOD);
+  }, []);
 
   const handleSelectSellType = useCallback((sellType: string) => {
     console.log('handleSelectSellType:', sellType);
-    setActiveTab(activeTab + 1);
-  }, [activeTab]);
+    setActiveTab(SellPageTabs.SUMMARY); // TODO: change to SellPageTabs.SETTINGS
+  }, []);
 
   useEffect(() => setDarkMode(false), []);
 
@@ -51,10 +53,10 @@ export const MarketplaceSell = () => {
 
           <Heading as="h1" mb={'50px'}>Sell NFT</Heading>
 
-          <Tabs isFitted variant={'arrow'} index={activeTab} onChange={(index) => setActiveTab(index)}>
+          <Tabs isFitted variant={'arrow'} index={activeTab} onChange={setActiveTab}>
             <TabList overflowX={'scroll'}>
               {sellPageTabs.map((tab, i) => (
-                <Tab key={i} minW={'130px'} isDisabled={i > activeTab && i != 3}>
+                <Tab key={i} minW={'130px'} isDisabled={i > activeTab}>
                   <Image src={activeTab === i ? tab.iconActive : tab.icon} />
                   {tab.name}
                 </Tab>
@@ -65,7 +67,7 @@ export const MarketplaceSell = () => {
               <TabPanel p={0}>
                 <Heading as="h3" size="md" my={'60px'}>Select the amount of items</Heading>
                 <Box mb={'100px'}>
-                  <BoxSelect options={amountOptions} onSelect={handleSelectAmount} />
+                  <BoxSelect options={sellAmountOptions} onSelect={handleSelectAmount} />
                 </Box>
                 <TieredAuctionsBanner />
               </TabPanel>
@@ -81,15 +83,49 @@ export const MarketplaceSell = () => {
                 <Flex
                   borderRadius={'12px'}
                   boxShadow={'0 10px 36px rgba(136, 120, 172, 0.14)'}
-                  flexDir={'column'}
                   p={'50px'}
-                  mb={'50px'}
+                  mb={'40px'}
                 >
-                  <p>Listing</p>
-                  <p>Your bundle will be listed for</p>
-                  <p>Fees</p>
-                  <p>Listing is free! At the time of the sale, the following fees will be deducted. </p>
-                  <p>You will receive:</p>
+                  <Box mr={'60px'}>
+                    <Image src={nft} h={390} w={390} />
+                  </Box>
+                  <Flex flex={1}>
+                    <Center flexDir={'column'} alignItems={'flex-start'}>
+                      <Heading as={'h4'} fontFamily={'Space Grotesk'} fontSize={'18px'} mb={'6px'}>Listing</Heading>
+                      <Text mb={'30px'} fontSize={'14px'}>Your bundle will be listed for 0.8</Text>
+
+                      <Heading as={'h4'} fontFamily={'Space Grotesk'} fontSize={'18px'} mb={'6px'}>Fees</Heading>
+                      <Text mb={'20px'} fontSize={'14px'} color={'#00000066'}>
+                        Listing is free! At the time of the sale, the following fees will be deducted.
+                      </Text>
+
+                      <Box
+                        background={'rgba(0, 0, 0, 0.02)'}
+                        border={'1px solid rgba(0, 0, 0, 0.1)'}
+                        borderRadius={'10px'}
+                        p={'28px'}
+                        w={'100%'}
+                      >
+                        <Flex py={'5px'}>
+                          <Box>To Universe</Box>
+                          <Flex flex={1} borderBottom={'2px dotted rgba(0, 0, 0, 0.1)'} m={'5px'} />
+                          <Box>2.5%</Box>
+                        </Flex>
+                        <Flex py={'5px'}>
+                          <Box>To creator</Box>
+                          <Flex flex={1} borderBottom={'2px dotted rgba(0, 0, 0, 0.1)'} m={'5px'} />
+                          <Box>10%</Box>
+                        </Flex>
+                        <Flex fontWeight={'bold'} py={'5px'}>
+                          <Box>Total</Box>
+                          <Flex flex={1} borderBottom={'2px dotted rgba(0, 0, 0, 0.1)'} m={'5px'} />
+                          <Box>12.5%</Box>
+                        </Flex>
+                      </Box>
+
+                      <Heading as={'h4'} fontFamily={'Space Grotesk'} fontSize={'18px'}>You will receive: 0.7</Heading>
+                    </Center>
+                  </Flex>
                 </Flex>
                 <Box textAlign={'right'} mb={'50px'}>
                   <Button mr={'10px'}>Back</Button>
@@ -100,8 +136,6 @@ export const MarketplaceSell = () => {
           </Tabs>
         </Box>
       </Container>
-
-      {/*{activeTab === 0 && (<TieredAuctionsBanner />)}*/}
     </Box>
   );
 };
