@@ -17,7 +17,16 @@ export const Button = {
       },
       _active: {
         boxShadow: 'lg',
-      }
+      },
+      _disabled: {
+        background: 'rgba(0, 0, 0, 0.1)',
+        color: 'rgba(0, 0, 0, 0.4)',
+
+        _hover: {
+          background: 'rgba(0, 0, 0, 0.1) !important',
+          color: 'rgba(0, 0, 0, 0.4) !important',
+        }
+      },
     },
     outline: {
       backgroundImage: 'linear-gradient(175deg,#bceb00,#00eaea)',

@@ -248,7 +248,6 @@ export const SelectNFTs = ({}: ISelectNFTsProps) => {
             }
           }}
         >
-        {/*  TODO: uncomment*/}
           <SaleTypeFilter
             value={{} as ISaleTypeFilterValue}
             onChange={(values) => console.log('values', values)}
