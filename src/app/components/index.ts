@@ -10,3 +10,4 @@ export * from './item-wrapper';
 export * from './multi-select';
 export * from './search-input';
 export * from './select';
+export * from './tabs/line-tab-list';

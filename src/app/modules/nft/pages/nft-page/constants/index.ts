@@ -1,2 +1,2 @@
 export * from './menu';
-export * from './properties';
+export * from './tabs';
