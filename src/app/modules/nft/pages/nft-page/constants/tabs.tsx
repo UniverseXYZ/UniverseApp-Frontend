@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { TabMetadata, TabOwners, TabProperties } from '../components';
+import { TabBids } from '../components/tab-bids';
 
 // TODO: remove
 const TabTemp = () => (<p>Temp tab</p>);
@@ -20,7 +21,7 @@ export const Tabs = [
   },
   {
     name: 'Bids',
-    component: TabTemp,
+    component: TabBids,
   },
   {
     name: 'Offers',
