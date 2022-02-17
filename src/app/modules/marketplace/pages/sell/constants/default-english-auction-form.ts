@@ -1,8 +1,8 @@
-import { IEnglishAuctionForm } from '../types/english-auction-form';
+import { IEnglishAuctionForm } from '../types';
 
 export const defaultEnglishAuctionForm: IEnglishAuctionForm = {
   NFT: null,
-  NFTs: [],
+  selectedNFTsIds: {},
   bundleName: '',
   bundleDescription: '',
   minBit: {

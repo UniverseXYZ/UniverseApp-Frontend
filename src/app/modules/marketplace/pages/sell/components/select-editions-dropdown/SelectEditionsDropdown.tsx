@@ -37,7 +37,7 @@ const EditionItem = ({ isChecked, label, onChange }: ISelectEditionsDropdownItem
 interface ISelectEditionsDropdownProps {
   nft: INft;
   selectedEditions: string[];
-  onChange: (editions: string[] | false) => void;
+  onChange: (editions: string[]) => void;
 }
 
 export const SelectEditionsDropdown = ({ nft, selectedEditions, onChange }: ISelectEditionsDropdownProps) => {
@@ -67,7 +67,7 @@ export const SelectEditionsDropdown = ({ nft, selectedEditions, onChange }: ISel
           label={'Select All'}
           isChecked={nft.tokenIds.length === selectedEditions.length}
           onChange={(isChecked) => {
-            onChange(isChecked ? [...nft.tokenIds] : false);
+            onChange(isChecked ? [...nft.tokenIds] : []);
           }}
         />
         {nft.tokenIds.map((tokenId, i) => (
@@ -80,7 +80,7 @@ export const SelectEditionsDropdown = ({ nft, selectedEditions, onChange }: ISel
                 ? [...selectedEditions, tokenId]
                 : selectedEditions.filter(_tokenId => _tokenId !== tokenId);
 
-              onChange(newEditions.length ? newEditions : false);
+              onChange(newEditions);
             }}
           />
         ))}

@@ -1,8 +1,8 @@
-import { IFixedListingForm } from '../types/fixed-listing-form';
+import { IFixedListingForm } from '../types';
 
 export const defaultFixedListingForm: IFixedListingForm = {
   NFT: null,
-  NFTs: [],
+  selectedNFTsIds: {},
   bundleName: '',
   bundleDescription: '',
   price: {
