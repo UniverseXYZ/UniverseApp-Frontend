@@ -1,7 +1,7 @@
 import { Box, Text, CheckboxProps, ButtonProps, BoxProps, TextProps } from '@chakra-ui/react';
 import { useCallback } from 'react';
 
-import { INft } from '../../../../../nft/types';
+import { INFT } from '../../../../../nft/types';
 import { Dropdown, Checkbox } from '../../../../../../components';
 
 interface IStyles {
@@ -53,12 +53,12 @@ const styles: IStyles = {
 };
 
 interface ISelectEditionsDropdownProps {
-  nft: INft;
+  NFT: INFT;
   selectedEditions: string[];
   onChange: (editions: string[]) => void;
 }
 
-export const SelectEditionsDropdown = ({ nft, selectedEditions, onChange }: ISelectEditionsDropdownProps) => {
+export const SelectEditionsDropdown = ({ NFT, selectedEditions, onChange }: ISelectEditionsDropdownProps) => {
 
   const handleCheckEdition = useCallback((e, tokenId) => {
     const newEditions = e.target.checked
@@ -69,8 +69,8 @@ export const SelectEditionsDropdown = ({ nft, selectedEditions, onChange }: ISel
   }, [selectedEditions, onChange]);
 
   const handleCheckAllEdition = useCallback((e) => {
-    onChange(e.target.checked ? [...nft.tokenIds] : []);
-  }, [nft, onChange]);
+    onChange(e.target.checked ? [...NFT.tokenIds] : []);
+  }, [NFT, onChange]);
 
   return (
     <Dropdown label={'Editions #'} buttonProps={styles.button}>
@@ -78,10 +78,10 @@ export const SelectEditionsDropdown = ({ nft, selectedEditions, onChange }: ISel
         <Text {...styles.title}>Choose edition number</Text>
         <Checkbox
           {...styles.checkbox}
-          isChecked={nft.tokenIds.length === selectedEditions.length}
+          isChecked={NFT.tokenIds.length === selectedEditions.length}
           onChange={handleCheckAllEdition}
         >Select All</Checkbox>
-        {nft.tokenIds.map((tokenId, i) => (
+        {NFT.tokenIds.map((tokenId, i) => (
           <Checkbox
             {...styles.checkbox}
             key={i}

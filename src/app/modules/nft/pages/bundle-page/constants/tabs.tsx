@@ -1,7 +1,8 @@
 import React from 'react';
 
-import { TabBids, TabOffers, TabHistory } from '../../nft-page/components';
+// import { TabBids, TabOffers, TabHistory } from '../../nft-page/components';
 import { TabNFTs } from '../components';
+import { TabBids, TabHistory, TabOffers } from '../../nft-page/components/nft-info/components';
 
 export const Tabs = [
   {

@@ -105,7 +105,7 @@ export const SummaryTab = () => {
       <Flex sx={styles.mainContainer}>
         <Box sx={styles.imageContainer}>
           <Image
-            src={nft?.nft?.thumbnail_url}
+            src={nft.thumbnailUrl}
             sx={{
               objectFit: 'cover',
               borderRadius: '12px',

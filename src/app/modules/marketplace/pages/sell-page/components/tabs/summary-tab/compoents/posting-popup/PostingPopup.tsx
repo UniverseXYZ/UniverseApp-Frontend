@@ -29,7 +29,7 @@ export const PostingPopup = ({ status, onClose }: IPostingPopupProps) => {
   const router = useHistory();
 
   const handleClickViewListing = useCallback(() => {
-    router.push(`/v2/nft/${nft.collection.address}/${nft.nft.tokenId}`);
+    router.push(`/v2/nft/${nft.collection?.address}/${nft.tokenId}`);
   }, [nft]);
 
   const handleClickMyNFTs = useCallback(() => {
@@ -54,7 +54,7 @@ export const PostingPopup = ({ status, onClose }: IPostingPopupProps) => {
               <Heading {...styles.TitleStyle} mb={'10px'}>Congratulations!</Heading>
               <Text color={'rgba(0, 0, 0, 0.6)'} textAlign={'center'}>You have successfully bought the NFT</Text>
 
-              <Image src={nft?.nft?.thumbnail_url} {...styles.AssetCongratsStyle} />
+              <Image src={nft.thumbnailUrl} {...styles.AssetCongratsStyle} />
 
               <Box {...styles.ButtonsContainerStyle}>
                 <Button boxShadow={'lg'} onClick={handleClickViewListing}>View listing</Button>

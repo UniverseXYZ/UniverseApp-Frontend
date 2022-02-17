@@ -101,7 +101,19 @@ export const LineTabList = ({ sx, ...props }: TabListProps) => {
           <Image src={ArrowRightIcon} />
         </Box>
       </Fade>
-      <TabList ref={ref} {...TabListStyles} sx={{ ...sx, scrollBehavior: 'smooth' }} {...props} />
+      <TabList
+        ref={ref}
+        {...TabListStyles}
+        sx={{
+          ...sx,
+          scrollBehavior: 'smooth',
+
+          '> button:focus': {
+            zIndex: '0',
+          },
+        }}
+        {...props}
+      />
     </Box>
   );
 }

@@ -2,9 +2,10 @@ import { FormikProps } from 'formik';
 
 import { SellAmountType, SellMethod } from '../enums';
 import { ISellForm } from './sell-form';
+import { INFT } from '../../../../nft/types';
 
 export interface IMarketplaceSellContextData {
-  nft: any; // TODO
+  nft: INFT;
   isPosted: boolean;
   amountType: SellAmountType;
   sellMethod: SellMethod;

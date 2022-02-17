@@ -1,14 +1,12 @@
 import { Box, Flex, SimpleGrid } from '@chakra-ui/react';
-import React, { useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 
-import { PolymorphProperties, Properties } from '../../../../mocks';
-import { NFTProperty } from '..';
 import { useNFTPageData } from '../../../../NFTPage.context';
+import { NFTProperty } from '..';
 import { PolymorphPropertyTrait } from '..';
 import { PolymorphProperty } from '..';
-// import { PropertyTraitVariant } from '../polymorph-property-trait/enums';
 
-export const TabProperties = ({ properties } : { properties?: any }) => {
+export const TabProperties = ({ properties = [] } : { properties: Array<Record<string, string>> }) => {
   const { isPolymorph } = useNFTPageData();
 
   const polymorphProperties = useMemo(() => {
