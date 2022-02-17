@@ -103,7 +103,7 @@ export const NFTInfo = () => {
 
                   <Flex mb={'24px'}>
                     {Bindings.map((binding, i) => (
-                      <Link to={binding.getLink(NFT)} sx={{
+                      <Link key={i} to={binding.getLink(NFT)} sx={{
                         _hover: {
                           textDecoration: 'none !important',
                           'div p:nth-of-type(2)': {
@@ -118,7 +118,7 @@ export const NFTInfo = () => {
                           },
                         },
                       }}>
-                        <Flex key={i} sx={{
+                        <Flex sx={{
                           alignItems: 'center',
                           flex: 1,
                         }}>

@@ -95,7 +95,13 @@ export const NFTItemAsset = ({ nft, bundleNFTs = [], showSwiperPagination = true
         >
           {[nft, ...bundleNFTs].map((NFT, i) => (
             <SwiperSlide key={i}>
-              <Image src={NFT.thumbnailUrl} alt={nft.name} {...styles.image} />
+              <Box sx={{
+                img: {...styles.image},
+                video: {...styles.image},
+              }}>
+                {isNFTAssetImage(NFT.artworkType) && (<Image src={NFT.thumbnailUrl} alt={NFT.name} />)}
+                {isNFTAssetVideo(NFT.artworkType) && (<video src={NFT.thumbnailUrl} />)}
+              </Box>
             </SwiperSlide>
           ))}
         </Swiper>

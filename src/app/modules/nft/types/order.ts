@@ -8,6 +8,8 @@ export interface IERC721BundleAssetType {
   assetClass: 'ERC721_BUNDLE';
   contracts: string[];
   tokenIds: Array<Array<string>>;
+  bundleName: string;
+  bundleDescription: string;
 }
 
 export interface IOrder {
