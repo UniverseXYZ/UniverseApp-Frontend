@@ -26,11 +26,15 @@ export const MarketplaceSell = (props: IMarketplaceBrowseNFTsProps) => {
 
   const handleSelectAmount = useCallback((amount: string) => {
     console.log('handleSelectAmount:', amount);
-  }, []);
+    setActiveTab(activeTab + 1);
+  }, [activeTab]);
 
-  useEffect(() => {
-    setDarkMode(false);
-  }, []);
+  const handleSelectSellType = useCallback((sellType: string) => {
+    console.log('handleSelectSellType:', sellType);
+    setActiveTab(activeTab + 1);
+  }, [activeTab]);
+
+  useEffect(() => setDarkMode(false), []);
 
   return (
     <Box
@@ -68,7 +72,7 @@ export const MarketplaceSell = (props: IMarketplaceBrowseNFTsProps) => {
               <TabPanel p={0}>
                 <Heading as="h3" size="md" my={'60px'}>Select your sell method</Heading>
                 <Box mb={'120px'}>
-                  <BoxSelect options={sellMethodOptions} onSelect={handleSelectAmount} />
+                  <BoxSelect options={sellMethodOptions} onSelect={handleSelectSellType} />
                 </Box>
               </TabPanel>
               <TabPanel p={0}>3</TabPanel>
