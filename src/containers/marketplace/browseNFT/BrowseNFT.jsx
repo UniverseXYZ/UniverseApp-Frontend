@@ -7,6 +7,11 @@ import NFTCard from '../../../components/nft/NFTCard';
 import LoadMore from '../../../components/pagination/LoadMore';
 import { useThemeContext } from '../../../contexts/ThemeContext';
 
+const MOCK_NFTS = PLACEHOLDER_MARKETPLACE_NFTS.map((nft) => ({
+  ...nft,
+  thumbnail_url: nft.media.url,
+}));
+
 const BrowseNFT = () => {
   const { setDarkMode } = useThemeContext();
   const [selectedPrice, setSelectedPrice] = useState(null);
@@ -75,11 +80,11 @@ const BrowseNFT = () => {
             setSelectedCreators={setSelectedCreators}
           />
           <div className="nfts__lists">
-            {PLACEHOLDER_MARKETPLACE_NFTS.filter((nft) => !nft.hidden).map(
+            {MOCK_NFTS.filter((nft) => !nft.hidden).map(
               (nft, index) => index < quantity && <NFTCard key={nft.id} nft={nft} placeholderData />
             )}
           </div>
-          {PLACEHOLDER_MARKETPLACE_NFTS.filter((nft) => !nft.hidden).length > quantity && (
+          {MOCK_NFTS.filter((nft) => !nft.hidden).length > quantity && (
             <LoadMore quantity={quantity} setQuantity={setQuantity} perPage={8} />
           )}
         </div>
