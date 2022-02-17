@@ -13,6 +13,7 @@ import {
   NFTItemPriceInfo,
 } from './components';
 import { ItemWrapper } from '../../../../components';
+import { isNFTAssetAudio, isNFTAssetImage, isNFTAssetVideo } from '../../helpers';
 
 
 interface IStyles {
@@ -61,6 +62,7 @@ const styles: IStyles = {
 
 interface INftItemProps {
   nft: INFT;
+  bundleNFTs?: INFT[];
   isSelected?: boolean;
   selectedLabel?: string;
 
@@ -84,6 +86,7 @@ interface INftItemProps {
 export const NftItem = (
   {
     nft,
+    bundleNFTs = [],
     isSelected,
     selectedLabel,
     onAuctionTimeOut,
@@ -116,12 +119,13 @@ export const NftItem = (
   //   setShowAuctionTimer(nft.auctionExpDate && renderAuctionTime !== null);
   // }, [nft.auctionExpDate, renderAuctionTime]);
 
-  const isAudio = false; // TODO: nft.artworkType === NFTArtworkType.MP3;
-  const isVideo = false; // TODO: nft.artworkType === NFTArtworkType.MP4;
+  const isAudio = isNFTAssetAudio(nft.artworkType);
+  const isVideo = isNFTAssetVideo(nft.artworkType);
+  const isImage = isNFTAssetImage(nft.artworkType);
 
   return (
     <ItemWrapper
-      isBundle={nft.numberOfEditions > 1}
+      isBundle={!!(nft.numberOfEditions > 1 || bundleNFTs?.length)}
       isSelected={isSelected}
       selectedLabel={selectedLabel}
       onClick={(e: React.MouseEvent<HTMLElement>) => {
@@ -137,7 +141,7 @@ export const NftItem = (
         {...styles.assetContainer}
         borderRadius={renderHeader ? '' : '12px 12px 0 0'}
       >
-        <NFTItemAsset nft={nft} showSwiperPagination={!showAuctionTimer} />
+        <NFTItemAsset nft={nft} bundleNFTs={bundleNFTs} showSwiperPagination={!showAuctionTimer} />
 
         <Box {...styles.assetLabelContainer} {...assetLabelContainerProps}>
           {renderAssetLabel || renderAssetLabel === null ? renderAssetLabel : (

@@ -1,3 +1,15 @@
+export interface IERC721AssetType {
+  assetClass: 'ERC721';
+  contract: string;
+  tokenId: string;
+}
+
+export interface IERC721BundleAssetType {
+  assetClass: 'ERC721_BUNDLE';
+  contracts: string[];
+  tokenIds: Array<Array<string>>;
+}
+
 export interface IOrder {
   cancelledTxHash: null | string;
   createdAt: Date;
@@ -13,13 +25,7 @@ export interface IOrder {
   hash: string;
   id: string;
   make: {
-    assetType: {
-      assetClass: 'ERC721' | 'ERC721_BUNDLE';
-      contracts?: string[];
-      tokenIds?: Array<Array<string>>;
-      contract?: string;
-      tokenId?: string;
-    };
+    assetType: IERC721AssetType | IERC721BundleAssetType;
     value: string;
   };
   makeBalance: string;

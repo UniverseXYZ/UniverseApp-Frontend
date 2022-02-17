@@ -112,7 +112,7 @@ export const NFTMakeAnOfferPopup = ({ order, isOpen, onClose, }: INFTMakeAnOffer
         side: 0,
         salt: salt,
         start: 0,
-        end: 0,
+        end: 0, // TODO
         data: order?.data,
       };
 

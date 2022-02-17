@@ -63,44 +63,42 @@ const useStyles: IUseStyles = (width: string | number = 200) => {
 
 interface INFTItemAssetProps {
   nft: INFT;
-  showSwiper?: boolean;
+  bundleNFTs?: INFT[];
   showSwiperPagination?: boolean;
 }
 
-export const NFTItemAsset = ({ nft, showSwiper = true, showSwiperPagination = true }: INFTItemAssetProps) => {
+export const NFTItemAsset = ({ nft, bundleNFTs = [], showSwiperPagination = true }: INFTItemAssetProps) => {
   const [ref, { width }] = useMeasure<HTMLDivElement>();
 
   const styles = useStyles(width);
 
-  // return (
-  //   showSwiper && nft.assets ? (
-  //     <Box ref={ref} sx={styles.swiper}>
-  //       <Swiper
-  //         modules={[Navigation, Pagination]}
-  //         navigation={true}
-  //         pagination={showSwiperPagination && {
-  //           dynamicBullets: true,
-  //           clickable: true,
-  //         }}
-  //         loop={true}
-  //       >
-  //         {[nft.thumbnailUrl, ...nft.assets].map((asset, i) => (
-  //           <SwiperSlide key={i}>
-  //             <Image src={asset} alt={nft.name} {...styles.image} />
-  //           </SwiperSlide>
-  //         ))}
-  //       </Swiper>
-  //     </Box>
-  //   ) : (
-  //     <Box ref={ref}>
-  //       <Image src={nft.thumbnailUrl} alt={nft.name} {...styles.image} />
-  //     </Box>
-  //   )
-  // );
+  const showSwiper = useMemo(() => {
+    return bundleNFTs?.length;
+  }, [nft, bundleNFTs]);
 
   return (
-    <Box ref={ref}>
-      <Image src={nft.thumbnailUrl} alt={nft.name} {...styles.image} />
-    </Box>
+    showSwiper ? (
+      <Box ref={ref} sx={styles.swiper}>
+        <Swiper
+          modules={[Navigation, Pagination]}
+          navigation={true}
+          pagination={showSwiperPagination && {
+            dynamicBullets: true,
+            clickable: true,
+          }}
+          loop={true}
+        >
+          {[nft, ...bundleNFTs].map((NFT, i) => (
+            <SwiperSlide key={i}>
+              <Image src={NFT.thumbnailUrl} alt={nft.name} {...styles.image} />
+            </SwiperSlide>
+          ))}
+        </Swiper>
+      </Box>
+    ) : (
+      <Box ref={ref}>
+        <Image src={nft.thumbnailUrl} alt={nft.name} {...styles.image} />
+      </Box>
+    )
   );
 };
