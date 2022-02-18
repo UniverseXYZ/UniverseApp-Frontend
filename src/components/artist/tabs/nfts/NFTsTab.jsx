@@ -1,48 +1,34 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useHistory } from 'react-router-dom';
 import PropTypes from 'prop-types';
+import { utils } from 'ethers';
 import bubbleIcon from '../../../../assets/images/text-bubble.png';
 import Button from '../../../button/Button';
 import plusIcon from '../../../../assets/images/PlusIcon.png';
 import NFTCard from '../../../nft/NFTCard';
 import { getUserCollections } from '../../../../utils/api/mintNFT';
-import ApiSearchFilters from '../../../nft/ApiSearchFilters';
 import NftCardSkeleton from '../../../skeletons/nftCardSkeleton/NftCardSkeleton';
-import ApiPagination from '../../../pagination/ApiPagination';
-import ApiItemsPerPageDropdown from '../../../pagination/ApiItemsPerPageDropdown';
-import { useSearchUserNfts } from '../../../../utils/hooks/useUserProfilePageDebouncer.js';
 import { CollectionPageLoader } from '../../../../containers/collection/CollectionPageLoader';
-import { useMyNftsContext } from '../../../../contexts/MyNFTsContext';
+import { useAuthContext } from '../../../../contexts/AuthContext';
+import LoadMore from '../../../pagination/LoadMore';
+import { useErrorContext } from '../../../../contexts/ErrorContext';
+import { getNftsPerAddress } from '../../../../utils/api/marketplace';
 
-const NFTsTab = React.memo(({ showMintPrompt, username, artistAddress, scrollToTop }) => {
+const PER_PAGE = 12;
+
+const NFTsTab = React.memo(({ showMintPrompt, artistAddress }) => {
   const ref = useRef(null);
   const [isDropdownOpened, setIsDropdownOpened] = useState(false);
+  const [showSkeleton, setShowSkeleton] = useState(true);
+  const [showSpinner, setShowSpinner] = useState(false);
+  const [showLoadMore, setShowLoadMore] = useState(false);
   const history = useHistory();
-
-  const { setUserPageNftsCount } = useMyNftsContext();
-
-  const {
-    inputText,
-    setInputText,
-    apiPage,
-    setApiPage,
-    search,
-    results,
-    isLastPage,
-    setIsLastPage,
-    loadedPages,
-    setLoadedPages,
-    collections,
-    setCollections,
-  } = useSearchUserNfts(username);
+  const { address } = useAuthContext();
+  const { setShowError, setErrorTitle, setErrorBody } = useErrorContext();
 
   const [shownNFTs, setShownNFTs] = useState([]);
-  const [isSearching, setIsSearching] = useState(false);
   const [allCollections, setAllCollections] = useState([]);
-
-  const [offset, setOffset] = useState(0);
-  const [perPage, setPerPage] = useState(8);
-  const [page, setPage] = useState(0);
+  const [page, setPage] = useState(1);
 
   const getMyCollections = async () => {
     if (artistAddress) {
@@ -55,96 +41,65 @@ const NFTsTab = React.memo(({ showMintPrompt, username, artistAddress, scrollToT
     }
   };
 
+  const getMyNfts = async () => {
+    if (address) {
+      try {
+        const response = await getNftsPerAddress(utils.getAddress(address), page, PER_PAGE);
+        if (response.error) {
+          const { error, message } = response;
+          setErrorTitle(error);
+          setErrorBody(message);
+          setShowError(true);
+          return;
+        }
+        setShowSkeleton(false);
+        setShowSpinner(false);
+        if (response.length) {
+          const shownNFTsClone = [...shownNFTs, ...response];
+          setShownNFTs(shownNFTsClone);
+          setShowLoadMore(true);
+        } else {
+          setShowLoadMore(false);
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  };
+
   useEffect(() => {
     // Load all collections for the user
     getMyCollections();
   }, [artistAddress]);
 
-  useEffect(() => {
-    if (results.pagination) {
-      setUserPageNftsCount(results.pagination.totalCount || 0);
-      setShownNFTs(results);
-      setIsSearching(false);
-    }
-  }, [results]);
+  useEffect(async () => {
+    setShowSpinner(true);
+    getMyNfts();
+  }, [page, address]);
 
-  const resetPagination = () => {
-    setOffset(0);
-    setPage(0);
-    setApiPage(0);
-    setIsSearching(true);
-  };
+  let loadMoreButton = null;
 
-  useEffect(() => {
-    resetPagination();
-  }, [collections]);
-
-  const changePerPage = (newPerPage) => {
-    if (newPerPage < shownNFTs?.nfts.length) {
-      setPage(0);
-      setOffset(0);
-    } else {
-      const newPage = Math.ceil(offset / newPerPage);
-      setPage(newPage);
-    }
-    setPerPage(newPerPage);
-  };
-
-  useEffect(() => {
-    scrollToTop();
-  }, [page, perPage]);
+  if (showLoadMore) {
+    loadMoreButton = <LoadMore page={page} setPage={setPage} pageAndSize />;
+  }
 
   return (
     <>
-      <ApiSearchFilters
-        searchText={inputText}
-        search={setInputText}
-        resetPagination={resetPagination}
-        selectedCollections={collections}
-        setSelectedCollections={setCollections}
-        allCollections={allCollections}
-      />
-      {isSearching ? (
+      {showSkeleton ? (
         <div className="nfts__lists">
           <NftCardSkeleton />
           <NftCardSkeleton />
           <NftCardSkeleton />
           <NftCardSkeleton />
         </div>
-      ) : shownNFTs?.nfts && shownNFTs?.nfts.length ? (
+      ) : shownNFTs?.length ? (
         <>
           <div className="nfts__lists">
-            {shownNFTs?.nfts
-              .slice(offset, offset + perPage)
-              .filter((nft) => !nft.hidden)
-              .map((nft) => (
-                <NFTCard key={nft.id} nft={nft} />
-              ))}
+            {shownNFTs?.map((nft) => (
+              <NFTCard key={nft.id} nft={nft} />
+            ))}
           </div>
-          {isLastPage && <CollectionPageLoader />}
-
-          <div className="pagination__container">
-            <ApiPagination
-              data={shownNFTs?.nfts}
-              perPage={perPage}
-              setOffset={setOffset}
-              setApiPage={setApiPage}
-              apiPage={apiPage}
-              setIsLastPage={setIsLastPage}
-              page={page}
-              setPage={setPage}
-              loadedPages={loadedPages}
-              setLoadedPages={setLoadedPages}
-              pagination={shownNFTs?.pagination}
-            />
-            <ApiItemsPerPageDropdown
-              perPage={perPage}
-              itemsPerPage={[8, 16, 32]}
-              offset={offset}
-              page={page}
-              changePerPage={changePerPage}
-            />
-          </div>
+          {showSpinner ? <CollectionPageLoader /> : loadMoreButton}
         </>
       ) : showMintPrompt ? (
         <div className="empty__nfts">
@@ -206,9 +161,7 @@ const NFTsTab = React.memo(({ showMintPrompt, username, artistAddress, scrollToT
 
 NFTsTab.propTypes = {
   showMintPrompt: PropTypes.bool,
-  username: PropTypes.string.isRequired,
   artistAddress: PropTypes.string.isRequired,
-  scrollToTop: PropTypes.func.isRequired,
 };
 
 NFTsTab.defaultProps = {
