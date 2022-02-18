@@ -13,6 +13,7 @@ import SellIcon from '../../../../../assets/images/sell-nft.svg';
 import TransferIcon from '../../../../../assets/images/transfer-nft.svg';
 import ShareIcon from '../../../../../assets/images/share-nft.svg';
 import HideIcon from '../../../../../assets/images/hide-nft.svg';
+import RefreshIcon from '../../../../../assets/images/refresh-nft.svg';
 import UnhideIcon from '../../../../../assets/images/unhide-nft.svg';
 import EditIcon from '../../../../../assets/images/edit.svg';
 import BurnIcon from '../../../../../assets/images/burn-nft.svg';
@@ -33,6 +34,7 @@ interface INFTMenuProps {
   showShare?: boolean;
   showHideUnhide?: boolean;
   showEdit?: boolean;
+  showRefresh?: boolean;
   showBurn?: boolean;
   showRemove?: boolean;
   showReport?: boolean;
@@ -43,6 +45,7 @@ interface INFTMenuProps {
   onBurn?: () => void;
   onRemove?: () => void;
   onReport?: () => void;
+  onRefresh?: () => void;
 }
 
 export const NFTMenu = (
@@ -52,6 +55,7 @@ export const NFTMenu = (
     showTransfer = true,
     showShare = true,
     showHideUnhide = true,
+    showRefresh = true,
     showEdit = true,
     showBurn = true,
     showRemove = true,
@@ -63,6 +67,7 @@ export const NFTMenu = (
     onBurn,
     onRemove,
     onReport,
+    onRefresh
   }: INFTMenuProps
 ) => {
   const router = useHistory();
@@ -123,6 +128,12 @@ export const NFTMenu = (
     onReport ? onReport() : setIsReportPopupOpened(true);
   }, [onReport]);
 
+  const handleRefresh = useCallback(() => {
+    if(onRefresh) {
+      onRefresh();
+    }
+  }, [onRefresh])
+
   const isOwner = nft.owner?.address.toUpperCase() === `${address}`.toUpperCase();
 
   return (
@@ -137,6 +148,7 @@ export const NFTMenu = (
           {showShare && (<MenuItem name={'Share'} icon={ShareIcon} onClick={handleShare} />)}
           {showHideUnhide && isOwner && !nft.hidden && (<MenuItem name={'Hide'} icon={HideIcon} onClick={handleHideUnhide} />)}
           {showHideUnhide && isOwner && !!nft.hidden && (<MenuItem name={'Unhide'} icon={UnhideIcon} onClick={handleHideUnhide} />)}
+          {showRefresh && isOwner && (<MenuItem name={'Refresh'} icon={RefreshIcon} onClick={handleRefresh} />)}
           {/*TODO: show edit*/}
           {/*{showEdit && isOwner && (<MenuItem name={'Edit'} icon={EditIcon} onClick={handleEdit} />)}*/}
           {showBurn && isOwner && (<MenuItem name={'Burn'} icon={BurnIcon} redColor={true} onClick={handleBurn} />)}
