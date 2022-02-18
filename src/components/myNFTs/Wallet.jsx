@@ -7,7 +7,7 @@ import NftCardSkeleton from '../skeletons/nftCardSkeleton/NftCardSkeleton';
 import { CollectionPageLoader } from '../../containers/collection/CollectionPageLoader.jsx';
 import NoNftsFound from './NoNftsFound.jsx';
 import { useErrorContext } from '../../contexts/ErrorContext';
-import { getNftsPerAddress } from '../../utils/api/datascraper';
+import { getNftsPerAddress } from '../../utils/api/marketplace.ts';
 import { useAuthContext } from '../../contexts/AuthContext';
 import LoadMore from '../pagination/LoadMore';
 
