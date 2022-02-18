@@ -166,15 +166,15 @@ const Collection = () => {
           />
           {selectedTabIndex === 0 ? (
             <>
+              <ApiCollectionSearchFilters
+                searchText={inputText}
+                search={setInputText}
+                resetPagination={resetPagination}
+              />
               {isSearching ? (
                 <CollectionPageLoader />
               ) : collectionData?.nfts?.filter((nft) => !nft.hidden).length ? (
                 <>
-                  <ApiCollectionSearchFilters
-                    searchText={inputText}
-                    search={setInputText}
-                    resetPagination={resetPagination}
-                  />
                   <div className="nfts__lists" ref={nftsContainerRef}>
                     {collectionData?.nfts
                       .slice(offset, offset + perPage)
