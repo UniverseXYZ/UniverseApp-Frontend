@@ -33,6 +33,7 @@ import * as styles2 from './styles';
 import { NFTLike } from '../../../../components/nft-item/components';
 import { NFTTransferPopup } from '../nft-transfer-popup';
 import {utils} from "ethers"
+import { sendRefreshMetadataRequest } from '../../../../../../../utils/api/marketplace';
 
 // TODO: hide metadata tab for not Polymorph NFT type
 export const NFTInfo = () => {
@@ -62,15 +63,9 @@ export const NFTInfo = () => {
   
   const handleRefresh = async () => {
     try {
-      const apiCall = await fetch(`${process.env.REACT_APP_DATASCRAPER_BACKEND}/v1/tokens/refresh`, {
-        method: "PUT",
-        body: JSON.stringify({
-          contractAddress: utils.getAddress(NFT.collection?.address || ""),
-          tokenId: NFT.tokenId
-        })
-      });
-
-      if (apiCall.status === 204) {
+      const request = await sendRefreshMetadataRequest(NFT?.collection?.address || "", NFT.tokenId);
+      
+      if (request.status === 204) {
         console.log("Successfully sent refresh metadata request")
       }
 

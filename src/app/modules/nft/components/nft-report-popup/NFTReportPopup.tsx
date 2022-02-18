@@ -17,6 +17,7 @@ import ReCAPTCHA from "react-google-recaptcha";
 import { useFormik } from 'formik';
 import { ReportPopupValidationSchema } from './validation-schema';
 import { useEffect } from 'react';
+import { sendReportRequest } from '../../../../../utils/api/marketplace';
 
 interface INFTReportPopupProps {
   isOpen: boolean;
@@ -29,20 +30,15 @@ export const NFTReportPopup = ({ isOpen, onClose, collectionAddress, tokenId }: 
 
   const submitReport = async (values: any) => {
     try {
-      const apiCall = await fetch(`${process.env.REACT_APP_API_BASE_URL}/api/report`, {
-        method: "POST",
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${localStorage.getItem('xyz_access_token')}`,
-        },    
-        body: JSON.stringify({
-          ...values,
-          collectionAddress,
-          tokenId
-        })
-      });
-  
-      if (apiCall.status === 201) {
+      const requestData = {
+        ...values,
+        collectionAddress,
+        tokenId,
+      }
+      
+      const response = await sendReportRequest(requestData);
+
+      if (response.status === 201) {
         console.log("Successfully submited a report")
       }
       onModalClose();
