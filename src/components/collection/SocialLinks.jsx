@@ -41,7 +41,7 @@ const SocialLinks = ({
         {!!twitterLink && (
           <div className="social--icons--grid--item">
             <span className="tooltiptext">Twitter</span>
-            <TwitterIcon width="18" height="14" fillColor="rgba(0, 0, 0, 0.4)" />
+            <TwitterIcon width="18" height="14" fillColor="rgba(255, 255, 255, 0.4)" />
           </div>
         )}
         {!!discordLink && (
@@ -51,7 +51,7 @@ const SocialLinks = ({
             aria-hidden
           >
             <span className="tooltiptext">Discord</span>
-            <DiscordIcon width="18" height="14" fillColor="rgba(0, 0, 0, 0.4)" />
+            <DiscordIcon width="18" height="14" fillColor="rgba(255, 255, 255, 0.4)" />
           </div>
         )}
         {!!siteLink && (
@@ -61,7 +61,7 @@ const SocialLinks = ({
             aria-hidden
           >
             <span className="tooltiptext">Website</span>
-            <WebsiteIcon width="16" height="16" fillColor="rgba(0, 0, 0, 0.4)" />
+            <WebsiteIcon width="16" height="16" fillColor="rgba(255, 255, 255, 0.4)" />
           </div>
         )}
         {!!instagramLink && (
@@ -71,7 +71,7 @@ const SocialLinks = ({
             aria-hidden
           >
             <span className="tooltiptext">Instagram</span>
-            <InstagramIcon width="16" height="16" fillColor="rgba(0, 0, 0, 0.4)" />
+            <InstagramIcon width="16" height="16" fillColor="rgba(255, 255, 255, 0.4)" />
           </div>
         )}
         {!!mediumLink && (
@@ -81,7 +81,7 @@ const SocialLinks = ({
             aria-hidden
           >
             <span className="tooltiptext">Medium</span>
-            <MediumIcon width="18" height="14" fillColor="rgba(0, 0, 0, 0.4)" />
+            <MediumIcon width="18" height="14" fillColor="rgba(255, 255, 255, 0.4)" />
           </div>
         )}
         {!!telegramLink && (
@@ -91,7 +91,7 @@ const SocialLinks = ({
             aria-hidden
           >
             <span className="tooltiptext">Telegram</span>
-            <TelegramIcon width="19" height="15" fillColor="rgba(0, 0, 0, 0.4)" />
+            <TelegramIcon width="19" height="15" fillColor="rgba(255, 255, 255, 0.4)" />
           </div>
         )}
       </div>
