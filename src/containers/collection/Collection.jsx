@@ -4,12 +4,9 @@ import NotFound from '../../components/notFound/NotFound.jsx';
 import './Collection.scss';
 import Cover from '../../components/collection/Cover.jsx';
 import Avatar from '../../components/collection/Avatar.jsx';
-import Title from '../../components/collection/Title.jsx';
 import Description from '../../components/collection/Description.jsx';
 import Button from '../../components/button/Button.jsx';
-import pencilIcon from '../../assets/images/edit.svg';
 import NFTCard from '../../components/nft/NFTCard.jsx';
-import bubbleIcon from '../../assets/images/text-bubble.png';
 import { useThemeContext } from '../../contexts/ThemeContext.jsx';
 import { useAuthContext } from '../../contexts/AuthContext.jsx';
 import '../../components/pagination/Pagination.scss';
@@ -19,8 +16,14 @@ import { useSearchCollection } from '../../utils/hooks/useCollectionPageDebounce
 import { CollectionPageLoader } from './CollectionPageLoader.jsx';
 import ApiItemsPerPageDropdown from '../../components/pagination/ApiItemsPerPageDropdown.jsx';
 import SocialLinks from '../../components/collection/SocialLinks.jsx';
+import EditIcon from '../../components/svgs/EditIcon.jsx';
+import Statistics from '../../components/collection/Statistics.jsx';
+import Tabs from '../../components/tabs/Tabs.jsx';
+import EmptyData from '../../components/collection/EmptyData.jsx';
 
 const Collection = () => {
+  const tabs = ['Items', 'Description'];
+  const [selectedTabIndex, setSelectedTabIndex] = useState(0);
   const { address } = useAuthContext();
   const { setDarkMode } = useThemeContext();
   const { collectionAddress } = useParams();
@@ -110,131 +113,123 @@ const Collection = () => {
       <Cover selectedCollection={collectionData.collection} />
 
       <div className="collection__details__section">
-        <SocialLinks
-          instagramLink={collectionData.collection.instagramLink || ''}
-          siteLink={collectionData.collection.siteLink || ''}
-          mediumLink={collectionData.collection.mediumLink || ''}
-          discordLink={collectionData.collection.discordLink || ''}
-          telegramLink={collectionData.collection.telegramLink || ''}
-          twitterLink=""
-        />
-        {address === collectionData?.collection?.owner ? (
-          <div className="collection__edit">
-            <Button
-              className="light-border-button"
-              onClick={() => handleEdit(collectionData.collection.id)}
-            >
-              <span>Edit</span>
-              <img src={pencilIcon} alt="Edit Icon" />
-            </Button>
-          </div>
-        ) : (
-          <></>
-        )}
-        <div className="collection__details__container">
-          <Avatar selectedCollection={collectionData.collection} />
-          <Title
-            selectedCollection={collectionData.collection}
-            saved={location.state?.saved}
-            nftsCount={collectionData?.pagination?.totalCount}
-            ownersCount={ownersCount}
-          />
-          <Description selectedCollection={collectionData.collection} />
-        </div>
-        <div className="social--and--edit--on--mobile">
-          <SocialLinks />
-          {address !== collectionData?.collection?.owner ? (
-            <div className="collection__edit">
-              <Button
-                className="light-border-button"
-                onClick={() => handleEdit(collectionData.collection.id)}
-              >
-                <span>Edit</span>
-                <img src={pencilIcon} alt="Edit Icon" />
-              </Button>
+        <div className="collection__details__header">
+          <div className="collection__details__header__tp">
+            <div className="collection__details__header__tp__left">
+              <Avatar selectedCollection={collectionData.collection} />
+              <SocialLinks
+                instagramLink={collectionData.collection.instagramLink || ''}
+                siteLink={collectionData.collection.siteLink || ''}
+                mediumLink={collectionData.collection.mediumLink || ''}
+                discordLink={collectionData.collection.discordLink || ''}
+                telegramLink={collectionData.collection.telegramLink || ''}
+                twitterLink=""
+              />
             </div>
-          ) : (
-            <></>
-          )}
+            <div className="collection__details__header__tp__right">
+              {address === collectionData?.collection?.owner ? ( //
+                <div className="collection__vote__edit">
+                  {/* <div>
+                    <Button className="light-button">
+                      <span>Vote</span>
+                    </Button>
+                  </div> */}
+                  <div>
+                    <Button
+                      className="light-button"
+                      onClick={() => handleEdit(collectionData.collection.id)}
+                    >
+                      <span>Edit</span>
+                      <EditIcon />
+                    </Button>
+                  </div>
+                </div>
+              ) : (
+                <></>
+              )}
+            </div>
+          </div>
+          <div className="collection__details__header__bp">
+            <Statistics
+              nftsCount={collectionData?.pagination?.totalCount}
+              ownersCount={ownersCount}
+            />
+          </div>
         </div>
         <div className="collection--nfts--container">
-          <ApiCollectionSearchFilters
-            searchText={inputText}
-            search={setInputText}
-            resetPagination={resetPagination}
+          <Tabs
+            items={tabs.map((tab, index) => ({
+              name: tab,
+              active: selectedTabIndex === index,
+              handler: setSelectedTabIndex.bind(this, index),
+            }))}
           />
-
-          {isSearching ? (
-            <CollectionPageLoader />
-          ) : collectionData?.nfts?.filter((nft) => !nft.hidden).length ? (
+          {selectedTabIndex === 0 ? (
             <>
-              <div className="nfts__lists" ref={nftsContainerRef}>
-                {collectionData?.nfts
-                  .slice(offset, offset + perPage)
-                  .filter((nft) => !nft.hidden)
-                  .map((nft) => (
-                    <NFTCard
-                      key={nft.id}
-                      nft={{
-                        ...nft,
-                        collection: collectionData.collection,
-                      }}
-                      collectionAddress={collectionAddress}
+              <ApiCollectionSearchFilters
+                searchText={inputText}
+                search={setInputText}
+                resetPagination={resetPagination}
+              />
+              {isSearching ? (
+                <CollectionPageLoader />
+              ) : collectionData?.nfts?.filter((nft) => !nft.hidden).length ? (
+                <>
+                  <div className="nfts__lists" ref={nftsContainerRef}>
+                    {collectionData?.nfts
+                      .slice(offset, offset + perPage)
+                      .filter((nft) => !nft.hidden)
+                      .map((nft) => (
+                        <NFTCard
+                          key={nft.id}
+                          nft={{
+                            ...nft,
+                            collection: collectionData.collection,
+                          }}
+                          collectionAddress={collectionAddress}
+                        />
+                      ))}
+                  </div>
+
+                  {isLastPage ? <CollectionPageLoader /> : <></>}
+
+                  <div className="pagination__container">
+                    <ApiPagination
+                      data={collectionData?.nfts}
+                      perPage={perPage}
+                      setOffset={setOffset}
+                      setApiPage={setApiPage}
+                      apiPage={apiPage}
+                      setIsLastPage={setIsLastPage}
+                      page={page}
+                      setPage={setPage}
+                      loadedPages={loadedPages}
+                      setLoadedPages={setLoadedPages}
+                      pagination={collectionData.pagination}
                     />
-                  ))}
-              </div>
-
-              {isLastPage ? <CollectionPageLoader /> : <></>}
-
-              <div className="pagination__container">
-                <ApiPagination
-                  data={collectionData?.nfts}
-                  perPage={perPage}
-                  setOffset={setOffset}
-                  setApiPage={setApiPage}
-                  apiPage={apiPage}
-                  setIsLastPage={setIsLastPage}
-                  page={page}
-                  setPage={setPage}
-                  loadedPages={loadedPages}
-                  setLoadedPages={setLoadedPages}
-                  pagination={collectionData.pagination}
-                />
-                <ApiItemsPerPageDropdown
-                  perPage={perPage}
-                  itemsPerPage={[8, 16, 32]}
-                  offset={offset}
-                  page={page}
-                  changePerPage={changePerPage}
-                />
-              </div>
+                    <ApiItemsPerPageDropdown
+                      perPage={perPage}
+                      itemsPerPage={[8, 16, 32]}
+                      offset={offset}
+                      page={page}
+                      changePerPage={changePerPage}
+                    />
+                  </div>
+                </>
+              ) : (
+                <EmptyData text="No items found" />
+              )}
+            </>
+          ) : selectedTabIndex === 1 ? (
+            <>
+              {collectionData.collection.description ? (
+                <Description selectedCollection={collectionData.collection} />
+              ) : (
+                <EmptyData text="This collection doesn’t have a description yet" />
+              )}
             </>
           ) : (
-            <div className="empty__nfts">
-              <div className="tabs-empty">
-                <div className="image-bubble">
-                  <img src={bubbleIcon} alt="bubble-icon" />
-                </div>
-                <h3>No NFTs found</h3>
-                <p>Create NFTs or NFT collections with our platform by clicking the button below</p>
-                <Button
-                  ref={ref}
-                  className={`create--nft--dropdown  ${
-                    isDropdownOpened ? 'opened' : ''
-                  } light-button`}
-                  onClick={() =>
-                    history.push('/my-nfts/create', {
-                      collectionId: collectionData.collection,
-                      tabIndex: 1,
-                      nftType: 'single',
-                    })
-                  }
-                  aria-hidden="true"
-                >
-                  Create NFT
-                </Button>
-              </div>
-            </div>
+            <></>
           )}
         </div>
       </div>
