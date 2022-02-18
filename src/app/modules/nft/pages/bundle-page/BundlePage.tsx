@@ -142,7 +142,7 @@ export const BundlePageContent = () => {
             }}>
               <Heading {...styles2.NameStyle}>{(order.make.assetType as IERC721BundleAssetType).bundleName}</Heading>
               <Box>
-                <BundleMenu />
+                <BundleMenu collectionAddress={uniqNFTs[selectedNFTIdx].collection?.address} tokenId={uniqNFTs[selectedNFTIdx].tokenId}/>
               </Box>
             </Flex>
 
