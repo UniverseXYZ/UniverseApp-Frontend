@@ -78,17 +78,17 @@ export const useSearchMyNfts = () => {
     AwesomeDebouncePromise(loadMoreNfts, debounceInterval)
   );
 
-  const search = useAsyncAbortable(
-    async (abortSignal) => {
-      const endpoint = buildMyNftsEndpointUrl(perPage * apiPage, perPage, inputText, collections);
-      if (apiPage === 0) {
-        return debouncedSearchCollectionNfts(endpoint, abortSignal);
-      }
-      return debouncedLoadMoreNfts(endpoint, abortSignal);
-    },
-    // Ensure a new request is made everytime the text changes (even if it's debounced)
-    [perPage, inputText, apiPage, collections, mintingNftsCount]
-  );
+  // const search = useAsyncAbortable(
+  //   async (abortSignal) => {
+  //     const endpoint = buildMyNftsEndpointUrl(perPage * apiPage, perPage, inputText, collections);
+  //     if (apiPage === 0) {
+  //       return debouncedSearchCollectionNfts(endpoint, abortSignal);
+  //     }
+  //     return debouncedLoadMoreNfts(endpoint, abortSignal);
+  //   },
+  //   // Ensure a new request is made everytime the text changes (even if it's debounced)
+  //   [perPage, inputText, apiPage, collections, mintingNftsCount]
+  // );
 
   useEffect(() => {
     (async () => {
@@ -104,7 +104,7 @@ export const useSearchMyNfts = () => {
     setInputText,
     apiPage,
     setApiPage,
-    search,
+    // search,
     results,
     isLastPage,
     setIsLastPage,

@@ -28,36 +28,41 @@ const NFTCard = React.memo(
     const { creator } = nft;
     const owner = location.pathname === '/my-nfts' ? loggedInArtist : nft.owner;
 
-    const sliderSettings = {
-      dots: true,
-      infinite: true,
-      speed: 500,
-      slidesToShow: 1,
-      slidesToScroll: 1,
-      nextArrow: <PendingPrevArrow />,
-      prevArrow: <PendingNextArrow />,
-    };
+    // const sliderSettings = {
+    //   dots: true,
+    //   infinite: true,
+    //   speed: 500,
+    //   slidesToShow: 1,
+    //   slidesToScroll: 1,
+    //   nextArrow: <PendingPrevArrow />,
+    //   prevArrow: <PendingNextArrow />,
+    // };
 
-    const handleSelectNFT = (id) => {
-      if (selectedNFTsIds.includes(id)) {
-        const findById = selectedNFTsIds.filter((i) => i !== id);
-        setSelectedNFTsIds([...findById]);
-      } else {
-        setSelectedNFTsIds([...selectedNFTsIds, id]);
-      }
-    };
+    // const handleSelectNFT = (id) => {
+    //   if (selectedNFTsIds.includes(id)) {
+    //     const findById = selectedNFTsIds.filter((i) => i !== id);
+    //     setSelectedNFTsIds([...findById]);
+    //   } else {
+    //     setSelectedNFTsIds([...selectedNFTsIds, id]);
+    //   }
+    // };
 
     const showNftImage = () => {
-      if (!nft.thumbnail_url) {
+      if (!nft.metadata?.image) {
         return <BrokenNFT />;
       }
 
-      if (nft.thumbnail_url.endsWith('.svg')) {
-        return <SVGImageLoader svgUrl={nft.thumbnail_url} />;
+      if (nft.metadata?.image.endsWith('.svg')) {
+        return <SVGImageLoader svgUrl={nft.metadata?.image} />;
       }
 
       return (
-        <LoadingImage className="nft--image" alt={nft.name} src={nft.thumbnail_url} showSpinner />
+        <LoadingImage
+          className="nft--image"
+          alt={nft.metadata?.name}
+          src={nft.metadata?.image}
+          showSpinner
+        />
       );
     };
 
@@ -71,11 +76,8 @@ const NFTCard = React.memo(
         <div className="nft--card--body" aria-hidden="true">
           {nft.artworkType !== 'bundles' ? (
             <Link
-              href={`/nft/${nft.collection?.address || collectionAddress}/${nft.tokenId}`}
-              to={`/nft/${nft.collection?.address || collectionAddress}/${nft.tokenId}`}
-              // onClick={() =>
-              //   history.push(`/nft/${nft.collection?.address || collectionAddress}/${nft.tokenId}`)
-              // }
+              href={`/nft/${nft.contractAddress}/${nft.tokenId}`}
+              to={`/nft/${nft.contractAddress}/${nft.tokenId}`}
             >
               {nft.artworkType !== 'audio/mpeg' && nft.artworkType !== 'mp4' && showNftImage()}
               {nft.artworkType === 'mp4' && (
@@ -194,7 +196,7 @@ const NFTCard = React.memo(
         </div>
         <div className="nft--card--footer">
           <div className="name--and--price">
-            <h4>{nft.name}</h4>
+            <h4>{nft.metadata?.name}</h4>
             {/* <div className="price--div">
             <img src={priceIcon} alt="Price" />
             <span>0.5</span>
