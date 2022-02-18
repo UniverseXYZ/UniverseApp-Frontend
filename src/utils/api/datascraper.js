@@ -18,8 +18,7 @@ const GET_TOKENS_PER_ADDRESS = (address, page, perPage) =>
  *  updatedAt,
  *  sentAt,
  *  externalDomainViewUrl,
- *  metadata: {description, name, image, attributes: []},
- *  external_url,
+ *  metadata: {description, name, image, attributes: [], external_url},
  *  sentForMediaAt
  *  ]
  */
