@@ -1,5 +1,5 @@
 const GET_TOKENS_PER_ADDRESS = (address, page, perPage) =>
-  `${process.env.REACT_APP_DATASCRAPER_API}/v1/users/${address}/tokens?page=${page}&size=${perPage}`;
+  `${process.env.REACT_APP_DATASCRAPER_BACKEND}/v1/users/${address}/tokens?page=${page}&size=${perPage}`;
 
 /**
  *
