@@ -18,6 +18,8 @@ import ReportIcon from '../../../../../assets/images/report.svg';
 import { NFTSharePopup } from '../nft-share-popup';
 
 interface IBundleMenuProps {
+  tokenId?: string;
+  collectionAddress?: string;
   showSell?: boolean;
   showTransfer?: boolean;
   showShare?: boolean;
@@ -42,6 +44,8 @@ export const BundleMenu = (
     showReport = true,
     onShare,
     onReport,
+    tokenId,
+    collectionAddress
   }: IBundleMenuProps
 ) => {
   const router = useHistory();
@@ -67,7 +71,7 @@ export const BundleMenu = (
           {showReport && (<MenuItem name={'Report'} icon={ReportIcon} redColor={true} onClick={handleReport} />)}
         </MenuList>
       </Menu>
-      <NFTReportPopup isOpen={isReportPopupOpened} onClose={() => setIsReportPopupOpened(false)} />
+      <NFTReportPopup isOpen={isReportPopupOpened} onClose={() => setIsReportPopupOpened(false)} tokenId={tokenId} collectionAddress={collectionAddress} />
       <NFTSharePopup isOpen={isSharePopupOpened} onClose={() => setIsSharePopupOpened(false)} />
     </>
   );

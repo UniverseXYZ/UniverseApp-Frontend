@@ -32,6 +32,8 @@ import * as styles from '../../styles';
 import * as styles2 from './styles';
 import { NFTLike } from '../../../../components/nft-item/components';
 import { NFTTransferPopup } from '../nft-transfer-popup';
+import {utils} from "ethers"
+import { sendRefreshMetadataRequest } from '../../../../../../../utils/api/marketplace';
 
 // TODO: hide metadata tab for not Polymorph NFT type
 export const NFTInfo = () => {
@@ -58,10 +60,19 @@ export const NFTInfo = () => {
     process.env.REACT_APP_POLYMORPHS_CONTRACT_ADDRESS,
     process.env.REACT_APP_LOBSTERS_CONTRACT_ADDRESS
   ].includes(NFT?.collection?.address ?? '');
+  
+  const handleRefresh = async () => {
+    try {
+      const request = await sendRefreshMetadataRequest(NFT?.collection?.address || "", NFT.tokenId);
+      
+      if (request.status === 204) {
+        console.log("Successfully sent refresh metadata request")
+      }
 
-  useEffect(() => {
-    console.log('order', order);
-  }, [order]);
+    } catch(err) {
+      console.log(err)
+    }
+  }
 
   return (
     <>
@@ -101,7 +112,10 @@ export const NFTInfo = () => {
                         showSell={!order}
                         showBurn={false}
                         showRemove={false}
+                        showHideUnhide={false}
+                        showTransfer={false}
                         onTransfer={() => setIsTransferOpened(true)}
+                        onRefresh={handleRefresh}
                       />
                     </Box>
                   </Flex>

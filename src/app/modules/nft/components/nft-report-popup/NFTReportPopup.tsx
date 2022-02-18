@@ -1,5 +1,4 @@
 import {
-  Button,
   Flex,
   FormControl,
   FormLabel,
@@ -11,17 +10,77 @@ import {
   ModalHeader,
   ModalOverlay,
   Text,
+  Button
 } from '@chakra-ui/react';
 import { Select } from '../../../../components';
+import ReCAPTCHA from "react-google-recaptcha";
+import { useFormik } from 'formik';
+import { ReportPopupValidationSchema } from './validation-schema';
+import { useEffect } from 'react';
+import { sendReportRequest } from '../../../../../utils/api/marketplace';
 
 interface INFTReportPopupProps {
   isOpen: boolean;
   onClose: () => void;
+  collectionAddress?: string;
+  tokenId?: string;
 }
 
-export const NFTReportPopup = ({ isOpen, onClose, }: INFTReportPopupProps) => {
+export const NFTReportPopup = ({ isOpen, onClose, collectionAddress, tokenId }: INFTReportPopupProps) => {
+
+  const submitReport = async (values: any) => {
+    try {
+      const requestData = {
+        ...values,
+        collectionAddress,
+        tokenId,
+      }
+      
+      const response = await sendReportRequest(requestData);
+
+      if (response.status === 201) {
+        console.log("Successfully submited a report")
+      }
+      onModalClose();
+    } catch(err) {
+      console.log(err);
+    }
+  }
+
+  const formik = useFormik<{
+    reason: string,
+    description: string,
+    captchaResponse: string
+  }>({
+    initialValues: {
+      reason: "",
+      description: "",
+      captchaResponse: "",
+    },
+    validationSchema: ReportPopupValidationSchema,
+    onSubmit: submitReport,
+  });
+  
+  const clearValues = () => {
+    formik.setValues({
+      reason: "",
+      description: "",
+      captchaResponse: ""
+    });
+  }
+
+  const onModalClose = () => {
+    clearValues();
+    onClose();
+  }
+
+  useEffect(() => {
+    // formik.isValid is true on componentMount
+    (() => formik.validateForm())();
+  }, []);
+  
   return (
-    <Modal isOpen={isOpen} onClose={onClose}>
+    <Modal isOpen={isOpen} onClose={onModalClose}>
       <ModalOverlay />
       <ModalContent maxW={'480px'}>
         <ModalHeader sx={{
@@ -47,7 +106,7 @@ export const NFTReportPopup = ({ isOpen, onClose, }: INFTReportPopupProps) => {
                 'Explict and sensitive content',
                 'Other',
               ]}
-              value={null}
+              value={formik.values.reason}
               buttonProps={{
                 size: 'lg',
                 width: '100%',
@@ -58,17 +117,31 @@ export const NFTReportPopup = ({ isOpen, onClose, }: INFTReportPopupProps) => {
               popoverContentProps={{
                 width: '100%',
               }}
+              onSelect={(value) => {
+                formik.setFieldValue("reason", value)
+              }}
             />
           </FormControl>
 
-          <FormControl mb={'72px'}>
+          <FormControl mb={'32px'}>
             <FormLabel>Message</FormLabel>
-            <Input placeholder='Tell us some details' />
+            <Input name="description"  value={formik.values.description} placeholder='Tell us some details' onChange={formik.handleChange} />
+          </FormControl>
+
+          <FormControl mb={'32px'} >
+            <Flex justifyContent={'center'} style={{marginTop: 30}}>
+              <ReCAPTCHA
+                sitekey={process.env.REACT_APP_CAPTCHA_ID || ""}
+                onChange={(value) => formik.setFieldValue("captchaResponse", value)}
+              />
+           </Flex>
           </FormControl>
 
           <Flex justifyContent={'center'}>
-            <Button variant={'outline'} mr={'15px'} onClick={onClose}>Cancel</Button>
-            <Button boxShadow={'lg'} onClick={onClose}>Report</Button>
+            <Button variant={'outline'} mr={'15px'} onClick={onModalClose}>Cancel</Button>
+            <Button disabled={!formik.isValid} boxShadow={'lg'} onClick={() => {
+              formik.submitForm();
+            }}>Report</Button>
           </Flex>
         </ModalBody>
       </ModalContent>
