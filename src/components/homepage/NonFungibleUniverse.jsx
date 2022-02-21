@@ -45,8 +45,8 @@ const NonFungibleUniverse = () => {
       description:
         'An NFT marketplace that is completely decentralized and rigged with multiple open source tools and features.',
       loaded: false,
-      action: 'Coming soon',
-      link: '',
+      action: 'Explore',
+      link: '/marketplace/browse',
       newTab: false,
     },
     {
@@ -117,16 +117,17 @@ const NonFungibleUniverse = () => {
                   height: '100%',
                   position: 'relative',
                 }}
+                onClick={() => (nfu.newTab ? window.open(nfu.link) : history.push(nfu.link))}
+                role="button"
+                tabIndex={0}
+                aria-hidden
               >
                 <AnimatedOnScroll animationIn="fadeIn">
                   <img src={nfu.icon} alt={nfu.title} onLoad={() => handleLoaded(index)} />
                   <h2 className="title">{nfu.title}</h2>
                   <p className="desc">{nfu.description}</p>
                   {nfu.action === 'Explore' ? (
-                    <button
-                      type="button"
-                      onClick={() => (nfu.newTab ? window.open(nfu.link) : history.push(nfu.link))}
-                    >
+                    <button type="button">
                       {nfu.action}
                       <img src={rightArrow} alt="Arrow" />
                     </button>
