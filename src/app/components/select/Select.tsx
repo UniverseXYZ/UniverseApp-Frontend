@@ -10,6 +10,7 @@ interface ISelectProps extends Omit<IDropdownProps, 'isOpened'> {
   containerProps?: BoxProps;
   popoverProps?: PopoverProps;
   popoverContentProps?: PopoverContentProps;
+  matchWidth?: boolean;
   renderItem?: (item: ISelectItem) => React.ReactNode;
   renderSelectedItem?: (item: ISelectItem) => React.ReactNode;
   onSelect?: (value: ISelectItem) => void;
@@ -23,6 +24,7 @@ export const Select = (
     containerProps,
     popoverProps,
     popoverContentProps,
+    matchWidth,
     renderItem,
     renderSelectedItem,
     onSelect,
@@ -54,6 +56,7 @@ export const Select = (
       popoverProps={popoverProps}
       popoverContentProps={popoverContentProps}
       renderValue={renderSelectedItem}
+      matchWidth={matchWidth}
       {...props}
     >
       {/*TODO: remove box & move styles to popoverContentProps*/}
