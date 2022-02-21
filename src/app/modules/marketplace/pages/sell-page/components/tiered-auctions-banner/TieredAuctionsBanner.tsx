@@ -49,7 +49,8 @@ export const TieredAuctionsBanner = () => {
             <Button
               boxShadow={'xl'}
               rightIcon={<Image src={arrowRight} />}
-            >Go to Universe auctions</Button>
+              disabled={true}
+            >Coming soon...</Button>
           </Box>
         </Center>
       </Box>
