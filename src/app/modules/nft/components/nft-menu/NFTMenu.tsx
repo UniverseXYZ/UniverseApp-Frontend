@@ -22,13 +22,15 @@ import ReportIcon from '../../../../../assets/images/report.svg';
 
 import { MenuItem } from './components';
 import * as styles from './styles';
-import { INFT } from '../../types';
+import { ICollection, INFT, IUser } from '../../types';
 import { NFTReportPopup } from '../nft-report-popup';
 import { NFTSharePopup } from '../nft-share-popup';
 import { useAuthContext } from '../../../../../contexts/AuthContext';
 
 interface INFTMenuProps {
-  nft: INFT;
+  NFT: INFT;
+  owner: IUser;
+  collectionAddress: string;
   showSell?: boolean;
   showTransfer?: boolean;
   showShare?: boolean;
@@ -50,7 +52,9 @@ interface INFTMenuProps {
 
 export const NFTMenu = (
   {
-    nft,
+    NFT,
+    owner,
+    collectionAddress,
     showSell = true,
     showTransfer = true,
     showShare = true,
@@ -77,8 +81,8 @@ export const NFTMenu = (
   const { address } = useAuthContext();
 
   const handleSell = useCallback(() => {
-    router.push(`/nft/${nft.collection?.address}/${nft.tokenId}/sell`)
-  }, [nft]);
+    router.push(`/nft/${collectionAddress}/${NFT.tokenId}/sell`)
+  }, [NFT]);
 
   const handleTransfer = useCallback(() => {
     if (onTransfer) {
@@ -134,7 +138,7 @@ export const NFTMenu = (
     }
   }, [onRefresh])
 
-  const isOwner = nft.owner?.address.toUpperCase() === `${address}`.toUpperCase();
+  const isOwner = owner?.address.toUpperCase() === `${address}`.toUpperCase();
 
   return (
     <>
@@ -146,8 +150,8 @@ export const NFTMenu = (
           {showSell && isOwner && (<MenuItem name={'Sell'} icon={SellIcon} onClick={handleSell} />)}
           {showTransfer && isOwner && (<MenuItem name={'Transfer'} icon={TransferIcon} onClick={handleTransfer} />)}
           {showShare && (<MenuItem name={'Share'} icon={ShareIcon} onClick={handleShare} />)}
-          {showHideUnhide && isOwner && !nft.hidden && (<MenuItem name={'Hide'} icon={HideIcon} onClick={handleHideUnhide} />)}
-          {showHideUnhide && isOwner && !!nft.hidden && (<MenuItem name={'Unhide'} icon={UnhideIcon} onClick={handleHideUnhide} />)}
+          {showHideUnhide && isOwner && !NFT.hidden && (<MenuItem name={'Hide'} icon={HideIcon} onClick={handleHideUnhide} />)}
+          {showHideUnhide && isOwner && !!NFT.hidden && (<MenuItem name={'Unhide'} icon={UnhideIcon} onClick={handleHideUnhide} />)}
           {showRefresh && isOwner && (<MenuItem name={'Refresh'} icon={RefreshIcon} onClick={handleRefresh} />)}
           {/*TODO: show edit*/}
           {/*{showEdit && isOwner && (<MenuItem name={'Edit'} icon={EditIcon} onClick={handleEdit} />)}*/}
@@ -156,7 +160,7 @@ export const NFTMenu = (
           {showReport && (<MenuItem name={'Report'} icon={ReportIcon} redColor={true} onClick={handleReport} />)}
         </MenuList>
       </Menu>
-      <NFTReportPopup isOpen={isReportPopupOpened} onClose={() => setIsReportPopupOpened(false)} collectionAddress={nft.collection?.address} tokenId={nft.tokenId}/>
+      <NFTReportPopup isOpen={isReportPopupOpened} onClose={() => setIsReportPopupOpened(false)} collectionAddress={collectionAddress} tokenId={NFT.tokenId}/>
       <NFTSharePopup isOpen={isSharePopupOpened} onClose={() => setIsSharePopupOpened(false)} />
     </>
   );

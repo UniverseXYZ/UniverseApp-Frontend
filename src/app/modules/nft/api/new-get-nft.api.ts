@@ -86,7 +86,7 @@ export const GetNFT2Api = async (collectionAddress: string, tokenId: string | nu
 };
 
 export const GetUserApi = async (address: string) => {
-  const url = `${process.env.REACT_APP_API_BASE_URL}/api/user/get-profile-info/${address}`;
+  const url = `${process.env.REACT_APP_API_BASE_URL}/api/user/get-profile-info/${address.toLowerCase()}`;
 
   const { data } = await axios.get<IUserBackend>(url, {
     headers: {
@@ -98,7 +98,7 @@ export const GetUserApi = async (address: string) => {
 };
 
 export const GetCollectionApi = async (address: string) => {
-  const url = `${process.env.REACT_APP_API_BASE_URL}/api/pages/collection/${address}`;
+  const url = `${process.env.REACT_APP_API_BASE_URL}/api/pages/collection/${address.toLowerCase()}`;
 
   const { data } = await axios.get<{ collection: ICollectionBackend; }>(url, {
     headers: {

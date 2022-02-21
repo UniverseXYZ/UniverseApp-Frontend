@@ -14,6 +14,7 @@ export interface INFTPageContext {
   creator: IUser;
   owner: IUser;
   collection: ICollection;
+  collectionAddress: string;
 }
 
 export const NFTPageContext = createContext<INFTPageContext>({} as INFTPageContext);
@@ -66,6 +67,7 @@ const NFTPageProvider: FC = ({ children }) => {
 
   const value: INFTPageContext = {
     order,
+    collectionAddress,
     creator: creator as IUser,
     owner: owner as IUser,
     collection: collection as ICollection,
