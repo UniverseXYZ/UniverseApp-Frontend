@@ -7,8 +7,13 @@ import { PolymorphPropertyTrait } from '..';
 import { PolymorphProperty } from '..';
 import popup from '../../../../../../../../../assets/images/popup.png';
 import './TabProperties.scss';
+import { INFTProperty } from '../../../../../../types';
 
-export const TabProperties = ({ properties = [] } : { properties: Array<Record<string, string>> }) => {
+interface ITabPropertiesProps {
+  properties: INFTProperty[];
+}
+
+export const TabProperties = ({ properties = [] } : ITabPropertiesProps) => {
   const { isPolymorph } = useNFTPageData();
 
   const polymorphProperties = useMemo(() => {
@@ -16,23 +21,23 @@ export const TabProperties = ({ properties = [] } : { properties: Array<Record<s
       return [];
     }
 
-    return properties.filter((property: any) => ['Rank', 'Rarity score'].includes(property.name))
+    return properties.filter((property) => ['Rank', 'Rarity score'].includes(property.traitType))
   }, [isPolymorph, properties]);
 
   return (
     <Box>
       {isPolymorph && (
         <Flex mb={'18px'}>
-          {polymorphProperties.map((property: any, i: number) => <PolymorphProperty key={i} {...property} />)}
+          {polymorphProperties.map((property, i: number) => <PolymorphProperty key={i} property={property} />)}
         </Flex>
       )}
       <SimpleGrid columns={2} spacing={'20px'}>
-        {properties.map((property: any, i: number) => (
+        {properties.map((property, i: number) => (
           isPolymorph
             ? !polymorphProperties.includes(property)
-              ? <PolymorphPropertyTrait key={i} {...property} />
+              ? <PolymorphPropertyTrait key={i} property={property} />
               : null
-            : <NFTProperty key={i} entity={property} />
+            : <NFTProperty key={i} property={property} />
         ))}
       </SimpleGrid>
         {

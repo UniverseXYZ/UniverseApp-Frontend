@@ -1,5 +1,4 @@
 export * from './bids';
-export * from './bindings';
 export * from './history';
 export * from './metadata';
 export * from './offers';

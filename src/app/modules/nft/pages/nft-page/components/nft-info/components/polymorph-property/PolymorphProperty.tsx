@@ -1,6 +1,6 @@
 import { Box, BoxProps, Text } from '@chakra-ui/react';
 
-import { INFTProperty } from '../nft-property';
+import { INFTPropertyProps } from '../nft-property';
 
 const PropertyStyle: BoxProps = {
   bg: 'rgba(0, 0, 0, 0.05)',
@@ -10,12 +10,12 @@ const PropertyStyle: BoxProps = {
   padding: '6px 16px',
 }
 
-export const PolymorphProperty = ({ name, value }: INFTProperty) => {
+export const PolymorphProperty = ({ property }: INFTPropertyProps) => {
   return (
     <Box {...PropertyStyle}>
       <Text fontSize={'14px'}>
-        {name}:
-        <Box as={'span'} fontWeight={700} ml={'6px'}>{value}</Box>
+        {property.traitType}:
+        <Box as={'span'} fontWeight={700} ml={'6px'}>{property.value}</Box>
       </Text>
     </Box>
   );

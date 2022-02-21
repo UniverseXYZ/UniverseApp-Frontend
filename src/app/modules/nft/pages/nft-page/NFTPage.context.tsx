@@ -2,8 +2,8 @@ import { FC, createContext, useContext } from 'react';
 import { useQuery } from 'react-query';
 import { useParams } from 'react-router-dom';
 
-import { IERC721AssetType, INFT, IOrder } from '../../types';
-import { GetNFTApi, GetOrdersApi } from '../../api';
+import { ICollection, IERC721AssetType, INFT, IOrder, IUser } from '../../types';
+import { GetCollectionApi, GetNFT2Api, GetNFTApi, GetOrdersApi, GetUserApi } from '../../api';
 import { OrderAssetClass } from '../../enums';
 
 export interface INFTPageContext {
@@ -11,6 +11,9 @@ export interface INFTPageContext {
   isLoading: boolean;
   isPolymorph: boolean;
   order?: IOrder;
+  creator: IUser;
+  owner: IUser;
+  collection: ICollection;
 }
 
 export const NFTPageContext = createContext<INFTPageContext>({} as INFTPageContext);
@@ -22,9 +25,28 @@ export function useNFTPageData(): INFTPageContext {
 const NFTPageProvider: FC = ({ children }) => {
   const { collectionAddress, tokenId } = useParams<{ collectionAddress: string; tokenId: string; }>();
 
-  const { data: NFT, isLoading: isLoadingNFT, error } = useQuery(
+  const { data: NFT, isLoading: isLoadingNFT } = useQuery(
     ['NFT', collectionAddress, tokenId],
-    () => GetNFTApi(collectionAddress, tokenId)
+    () => GetNFT2Api(collectionAddress, tokenId),
+    { onSuccess: (NFT) => console.log('NFT', NFT) },
+  );
+
+  const { data: creator } = useQuery(
+    ['user', NFT?._creatorAddress],
+    () => GetUserApi(`${NFT?._creatorAddress}`),
+    { enabled: !!NFT?.id, retry: false, },
+  );
+
+  const { data: owner } = useQuery(
+    ['user', NFT?._ownerAddress],
+    () => GetUserApi(`${NFT?._ownerAddress}`),
+    { enabled: !!NFT?.id, retry: false, },
+  );
+
+  const { data: collection } = useQuery(
+    ['user', NFT?._collectionAddress],
+    () => GetCollectionApi(`${NFT?._collectionAddress}`),
+    { enabled: !!NFT?.id, retry: false, onSuccess: (collection) => console.log('collection', collection) },
   );
 
   const { data: order, isLoading: isLoadingOrder } = useQuery<IOrder | undefined>(['NFT', collectionAddress, tokenId, 'order'], async () => {
@@ -44,9 +66,12 @@ const NFTPageProvider: FC = ({ children }) => {
 
   const value: INFTPageContext = {
     order,
+    creator: creator as IUser,
+    owner: owner as IUser,
+    collection: collection as ICollection,
     NFT: NFT as INFT,
     isLoading: isLoadingNFT || isLoadingOrder,
-    isPolymorph: false,
+    isPolymorph: NFT?._collectionAddress?.toUpperCase() === process.env.REACT_APP_POLYMORPHS_CONTRACT_ADDRESS?.toUpperCase(),
   };
 
   return (
