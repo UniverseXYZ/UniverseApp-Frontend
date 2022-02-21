@@ -54,12 +54,16 @@ const NFTsTab = React.memo(({ showMintPrompt, artistAddress }) => {
         }
         setShowSkeleton(false);
         setShowSpinner(false);
-        if (response.length) {
-          const shownNFTsClone = [...shownNFTs, ...response];
+        if (response.data) {
+          const shownNFTsClone = [...shownNFTs, ...response.data];
           setShownNFTs(shownNFTsClone);
-          setShowLoadMore(true);
+          // we need to add 2 to the page received from the response since for each page that is passed as a query param you get back the param - 1
+          setPage(response.page + 2);
+          setShowSpinner(false);
+          setShowLoadMore(response.total > shownNFTsClone.length);
         } else {
           setShowLoadMore(false);
+          setShowSpinner(false);
         }
       } catch (error) {
         console.error(error);
@@ -73,14 +77,13 @@ const NFTsTab = React.memo(({ showMintPrompt, artistAddress }) => {
   }, [artistAddress]);
 
   useEffect(async () => {
-    setShowSpinner(true);
     getMyNfts();
-  }, [page, address]);
+  }, [address]);
 
   let loadMoreButton = null;
 
   if (showLoadMore) {
-    loadMoreButton = <LoadMore page={page} setPage={setPage} pageAndSize />;
+    loadMoreButton = <LoadMore page={page} loadMore={getMyNfts} pageAndSize />;
   }
 
   return (
