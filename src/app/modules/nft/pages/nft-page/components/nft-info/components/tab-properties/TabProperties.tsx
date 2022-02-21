@@ -1,13 +1,14 @@
 import { Box, Flex, SimpleGrid } from '@chakra-ui/react';
 import React, { useMemo } from 'react';
 
+import PlaceholderImage from '../../../../../../../../../assets/images/popup.png';
+
 import { useNFTPageData } from '../../../../NFTPage.context';
 import { NFTProperty } from '..';
 import { PolymorphPropertyTrait } from '..';
 import { PolymorphProperty } from '..';
-import popup from '../../../../../../../../../assets/images/popup.png';
-import './TabProperties.scss';
 import { INFTProperty } from '../../../../../../types';
+import './TabProperties.scss';
 
 interface ITabPropertiesProps {
   properties: INFTProperty[];
@@ -43,7 +44,7 @@ export const TabProperties = ({ properties = [] } : ITabPropertiesProps) => {
         {
           properties.length == 0 ? 
           <div className='no-properties'>
-              <img id="popup-img" src={popup} alt="This NFT doesn't have any properties" />
+              <img id="popup-img" src={PlaceholderImage} alt="This NFT doesn't have any properties" />
             <div className="error-text">
               <span>This NFT doesn&apos;t have any properties</span>
             </div>
