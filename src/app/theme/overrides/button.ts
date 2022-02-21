@@ -27,6 +27,7 @@ export const Button = {
         _hover: {
           background: 'rgba(0, 0, 0, 0.1) !important',
           color: 'rgba(0, 0, 0, 0.4) !important',
+          cursor: 'not-allowed'
         }
       },
     },
