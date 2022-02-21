@@ -9,7 +9,7 @@ import ClockIcon from '../../../../../../../assets/images/clock.svg';
 import { useDateCountdown } from '../../../../../../hooks';
 import * as styles from './styles';
 import { HighestBid } from './components';
-import { INFT, IOrder } from '../../../../types';
+import { INFT, IOrder, IUser } from '../../../../types';
 import { NFTCheckoutPopup } from '../nft-checkout-popup';
 import { NFTPlaceABidPopup } from '../nft-place-a-bid-popup';
 import { NFTMakeAnOfferPopup } from '../nft-make-an-offer-popup';
@@ -23,12 +23,13 @@ import { TokenTicker } from '../../../../../../enums';
 
 interface INFTBuySectionProps {
   NFT?: INFT;
+  owner?: IUser;
   NFTs?: INFT[];
   order?: IOrder;
   onMeasureChange?: (measure: UseMeasureRect) => void;
 }
 
-export const NFTBuySection = ({ NFT, NFTs, order, onMeasureChange }: INFTBuySectionProps) => {
+export const NFTBuySection = ({ NFT, owner, NFTs, order, onMeasureChange }: INFTBuySectionProps) => {
   const [ref, measure] = useMeasure<HTMLDivElement>();
 
   const router = useHistory();
@@ -46,7 +47,7 @@ export const NFTBuySection = ({ NFT, NFTs, order, onMeasureChange }: INFTBuySect
       const address = (await signer.getAddress()) as string;
       if (!order) {
         if (NFT) {
-          if (address.toUpperCase() === NFT.owner?.address.toUpperCase()) {
+          if (address.toUpperCase() === owner?.address.toUpperCase()) {
             setState(BuyNFTSectionState.OWNER_PUT_ON_SALE);
           }
         }
@@ -63,7 +64,7 @@ export const NFTBuySection = ({ NFT, NFTs, order, onMeasureChange }: INFTBuySect
       }
     } catch (e) {
     }
-  }, [signer, NFT, order]);
+  }, [signer, NFT, order, owner]);
 
   useEffect(() => {
     onMeasureChange && onMeasureChange(measure);
