@@ -1,1 +1,1 @@
-export * from './wrapper.style';
+export * from './relation.style';

@@ -36,7 +36,7 @@ import {
   // TabOffers,
 } from '../nft-page/components';
 import { TabBids, TabHistory, TabOffers } from '../nft-page/components/nft-info/components';
-import { BundleMenu, NftItem, NFTPageRelation } from '../../components';
+import { BundleMenu, NftItem, NFTPageCreatorRelation, NFTPageRelation } from '../../components';
 import { LineTabList } from '../../../../components';
 import { useThemeContext } from '../../../../../contexts/ThemeContext';
 import { BundlePageProvider, useBundlePage } from './BundlePage.provider';
@@ -54,7 +54,7 @@ export const BundlePageContent = () => {
 
   const { setDarkMode } = useThemeContext() as any;
 
-  const { owner, NFTs, isLoading, moreFromCollection, order } = useBundlePage();
+  const { creator, NFTs, isLoading, moreFromCollection, order } = useBundlePage();
 
   const [selectedNFTIdx, setSelectedNFTIdx] = useState(0);
 
@@ -147,11 +147,7 @@ export const BundlePageContent = () => {
             </Flex>
 
             <Flex>
-              <NFTPageRelation
-                type={NFTRelationType.CREATOR}
-                image={owner.profileImageUrl ?? ''}
-                value={owner.displayName ?? ''}
-              />
+              <NFTPageCreatorRelation creator={creator} />
             </Flex>
 
             <Text mt={'24px'} {...styles.DescriptionStyle}>

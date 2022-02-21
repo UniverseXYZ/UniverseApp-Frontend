@@ -8,7 +8,7 @@ export interface IBundlePageContext {
   isLoading: boolean;
   order: IOrder;
   NFTs: INFT[];
-  owner: IUser;
+  creator: IUser;
   moreFromCollection?: INFT[];
 }
 
@@ -50,8 +50,8 @@ export const BundlePageProvider = ({ hash, children }: IBundlePageProviderProps)
     return await Promise.all(NFTsPromises);
   }, { enabled: !!order?.id })
 
-  const owner = NFTs ? NFTs[0].owner : {};
-  const moreFromCollection = NFTs ? NFTs[0].moreFromCollection?.map((NFT) => {
+  const creator = NFTs && NFTs.length ? NFTs[0].owner : {};
+  const moreFromCollection = NFTs && NFTs.length ? NFTs[0].moreFromCollection?.map((NFT) => {
     NFT.collection = NFTs[0].collection;
     return NFT;
   }) : [];
@@ -61,7 +61,7 @@ export const BundlePageProvider = ({ hash, children }: IBundlePageProviderProps)
     isLoading: isLoadingOrder || isLoadingNFTs,
     order: order || {} as IOrder,
     NFTs: NFTs || [],
-    owner: owner as IUser,
+    creator: creator as IUser,
   };
 
   return (

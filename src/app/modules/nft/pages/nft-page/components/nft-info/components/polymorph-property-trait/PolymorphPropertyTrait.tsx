@@ -1,15 +1,16 @@
 import { Box, Flex, Image } from '@chakra-ui/react';
 
-import { INFTProperty, NFTProperty } from '../nft-property';
+import { INFTPropertyProps, NFTProperty } from '../nft-property';
 import { bgColor, borderColor, icons } from './constants';
 import { PropertyTraitVariant } from './enums';
 
-interface IPolymorphPropertyTraitProps extends INFTProperty {
+interface IPolymorphPropertyTraitProps extends INFTPropertyProps {
   variant?: PropertyTraitVariant;
 }
 
 export const PolymorphPropertyTrait = (
   {
+    property,
     variant = PropertyTraitVariant.default,
     ...props
   }: IPolymorphPropertyTraitProps
@@ -57,7 +58,7 @@ export const PolymorphPropertyTrait = (
         }}
       >
         <NFTProperty
-          {...props}
+          property={property}
           sx={{
             bg: bgColor[variant],
             border: 0,

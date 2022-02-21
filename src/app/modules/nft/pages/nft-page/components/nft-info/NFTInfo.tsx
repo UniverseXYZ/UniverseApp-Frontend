@@ -4,27 +4,29 @@ import {
   Container,
   Flex,
   Heading,
-  Link,
   SimpleGrid,
   Tab,
   TabPanel,
   TabPanels,
   Tabs,
   Text,
-  TextProps,
-  LinkProps,
 } from '@chakra-ui/react';
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import ReadMoreAndLess from 'react-read-more-less';
 import { UseMeasureRect } from 'react-use/lib/useMeasure';
 import { useHistory } from 'react-router-dom';
 
-import { Bindings } from '../../mocks';
 import { LineTabList } from '../../../../../../components';
 import { NFTAssetImage, NFTAssetAudio, NFTBuySection, NFTAssetVideo } from '../';
 import { useNFTPageData } from '../../NFTPage.context';
 import { isNFTAssetAudio, isNFTAssetImage, isNFTAssetVideo } from '../../../../helpers';
-import { NftItem, NFTMenu } from '../../../../components';
+import {
+  NftItem,
+  NFTMenu,
+  NFTPageCollectionRelation,
+  NFTPageCreatorRelation,
+  NFTPageOwnerRelation,
+} from '../../../../components';
 import { TabBids, TabHistory, TabMetadata, TabOffers, TabOwners, TabProperties } from './components';
 import { CollectionPageLoader } from '../../../../../../../containers/collection/CollectionPageLoader';
 import NotFound from '../../../../../../../components/notFound/NotFound';
@@ -39,7 +41,7 @@ import { sendRefreshMetadataRequest } from '../../../../../../../utils/api/marke
 export const NFTInfo = () => {
   const router = useHistory();
 
-  const { NFT, isLoading, order } = useNFTPageData();
+  const { NFT, isLoading, order, creator, owner, collection } = useNFTPageData();
 
   const [buySectionMeasure, setBuySectionMeasure] = useState<UseMeasureRect>();
   const [isTransferOpened, setIsTransferOpened] = useState(false);
@@ -126,21 +128,12 @@ export const NFTInfo = () => {
                   </Text>
 
                   <Flex mb={'24px'}>
-                    {/*TODO: improve section in favor to NFTPageRelation */}
-                    {Bindings.map((binding, i) => !binding.getValue(NFT) ? null : (
-                      <Link key={i} href={binding.getLink(NFT)} {...styles2.BindingStyle}>
-                        <Flex alignItems={'center'} flex={1}>
-                          {binding.getImage(NFT)}
-                          <Box fontSize={'12px'} ml={'10px'} w={'110px'}>
-                            <Text color={'rgba(0, 0, 0, 0.4)'} fontWeight={500}>{binding.name}</Text>
-                            <Text isTruncated fontWeight={700}>{binding.getValue(NFT)}</Text>
-                          </Box>
-                        </Flex>
-                      </Link>
-                    ))}
+                    {creator && <NFTPageCreatorRelation creator={creator} />}
+                    {collection && <NFTPageCollectionRelation collection={collection} />}
+                    {owner && <NFTPageOwnerRelation owner={owner} />}
                   </Flex>
 
-                  <Text {...styles.DescriptionStyle}>
+                  <Box {...styles.DescriptionStyle}>
                     <ReadMoreAndLess
                       charLimit={150}
                       readMoreText="Read more"
@@ -148,7 +141,7 @@ export const NFTInfo = () => {
                     >
                       {NFT.description || ''}
                     </ReadMoreAndLess>
-                  </Text>
+                  </Box>
 
                   <Tabs>
                     <LineTabList>
@@ -161,7 +154,7 @@ export const NFTInfo = () => {
                     </LineTabList>
 
                     <TabPanels sx={{ '> div' : { px: 0, pb: 0, pt: '30px', }}}>
-                      <TabPanel><TabProperties properties={NFT.properties || []} /></TabPanel>
+                      <TabPanel><TabProperties properties={NFT?._properties ?? []} /></TabPanel>
                       {showMetadata && <TabPanel><TabMetadata /></TabPanel>}
                       <TabPanel><TabOwners /></TabPanel>
                       <TabPanel><TabBids /></TabPanel>
@@ -182,7 +175,6 @@ export const NFTInfo = () => {
                 <Heading {...styles.MoreNFTsTitleStyle}>More from this collection</Heading>
                 <Container
                   {...styles.MoreNFTsContainerStyle}
-                  /*TODO: move 1110px to styles*/
                   w={NFT.moreFromCollection.length < 4 ? `calc(1110px / 4 * ${NFT.moreFromCollection.length})` : '100%'}
                 >
                   <SimpleGrid

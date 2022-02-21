@@ -1,6 +1,7 @@
 export enum NFTArtworkType {
   JPG = 'jpg',
   JPEG = 'jpeg',
+  IMAGE = 'image',
   PNG = 'png',
   MP4 = 'mp4',
   MP3 = 'mp3',
@@ -56,7 +57,17 @@ export interface ICollectionBackend extends Omit<ICollection, 'createdAt' | 'upd
   updatedAt: string;
 }
 
+export interface INFTProperty {
+  traitType: string;
+  value: string;
+  displayType?: string;
+}
+
 export interface INFT {
+  _ownerAddress?: string;
+  _creatorAddress?: string;
+  _collectionAddress?: string;
+  _properties?: INFTProperty[];
   id: number;
   amount: number;
   artworkType: NFTArtworkType;
