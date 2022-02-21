@@ -19,6 +19,7 @@ export interface IDropdownProps {
   buttonProps?: ButtonProps;
   popoverProps?: PopoverProps;
   popoverContentProps?: PopoverContentProps;
+  matchWidth?: boolean;
   onOpen?: () => void;
   onClose?: () => void;
 }
@@ -35,6 +36,7 @@ export const Dropdown = (
     popoverContentProps,
     onOpen,
     onClose,
+    matchWidth,
     ...rest
   }: IDropdownProps
 ) => {
@@ -63,6 +65,7 @@ export const Dropdown = (
         isOpen={isOpened}
         onOpen={handleOpen}
         onClose={handleClose}
+        matchWidth={matchWidth}
         {...popoverProps}
       >
         <PopoverTrigger>

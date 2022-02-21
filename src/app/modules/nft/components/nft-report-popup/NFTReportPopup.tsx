@@ -100,6 +100,7 @@ export const NFTReportPopup = ({ isOpen, onClose, collectionAddress, tokenId }: 
           <FormControl mb={'20px'}>
             <FormLabel>Reason</FormLabel>
             <Select
+              matchWidth
               label={'Select a reason'}
               items={[
                 'Copyright infringement',
