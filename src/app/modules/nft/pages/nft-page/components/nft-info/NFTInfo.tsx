@@ -41,7 +41,7 @@ import { sendRefreshMetadataRequest } from '../../../../../../../utils/api/marke
 export const NFTInfo = () => {
   const router = useHistory();
 
-  const { NFT, isLoading, order, creator, owner, collection } = useNFTPageData();
+  const { NFT, isLoading, order, creator, owner, collection, collectionAddress,  } = useNFTPageData();
 
   const [buySectionMeasure, setBuySectionMeasure] = useState<UseMeasureRect>();
   const [isTransferOpened, setIsTransferOpened] = useState(false);
@@ -110,7 +110,9 @@ export const NFTInfo = () => {
                       {/*<NFTLike likes={[]} isLiked={true} {...styles.LikeButtonStyle} />*/}
 
                       <NFTMenu
-                        nft={NFT}
+                        NFT={NFT}
+                        owner={owner}
+                        collectionAddress={collectionAddress}
                         showSell={!order}
                         showBurn={false}
                         showRemove={false}
