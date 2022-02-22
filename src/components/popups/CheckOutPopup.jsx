@@ -53,21 +53,6 @@ const CheckOutPopup = ({ onClose }) => {
               <p>$208.39</p>
             </div>
           </div>
-          <div className="checkout__checkbox">
-            <div className="custom__checkbox">
-              <label htmlFor="toggleSelection">
-                <input
-                  id="toggleSelection"
-                  type="checkbox"
-                  onChange={() => setCheckoutDisabled(!checkoutDisabled)}
-                />
-                <i />
-              </label>
-            </div>
-            <p>
-              By checking this box, I agree to Universe&#39;s <span>Terms of Service</span>
-            </p>
-          </div>
           <div className="checkout__button">
             <button
               type="button"
