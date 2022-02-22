@@ -80,7 +80,7 @@ export const PriceRangeFilter = ({ value: _value, isDirty, onChange, onClear }: 
           />
         </Box>
 
-        <RangeSlider
+        {/* <RangeSlider
           aria-label={['min', 'max']}
           name={'price'}
           value={value.price}
@@ -91,7 +91,7 @@ export const PriceRangeFilter = ({ value: _value, isDirty, onChange, onClear }: 
           </RangeSliderTrack>
           <RangeSliderThumb index={0} />
           <RangeSliderThumb index={1} />
-        </RangeSlider>
+        </RangeSlider> */}
 
         <SimpleGrid columns={2} spacing={'24px'} mt={'24px'}>
           <Box position={'relative'}>

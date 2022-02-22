@@ -39,6 +39,7 @@ import { GetNFT2Api, GetNFTApi, GetOrdersApi } from '../../../nft/api';
 import { TokenTicker } from '../../../../enums';
 import { TOKENS_MAP } from '../../../../constants';
 import { useThemeContext } from '../../../../../contexts/ThemeContext';
+import { CollectionPageLoader } from '../../../../../containers/collection/CollectionPageLoader';
 
 export const BrowseNFTsPage = () => {
   const { setDarkMode } = useThemeContext() as any;
@@ -86,9 +87,61 @@ export const BrowseNFTsPage = () => {
     initialValues: [],
     onSubmit: () => {},
   });
+  const { data: ordersResult, fetchNextPage, hasNextPage, isFetching } = useInfiniteQuery([
+    'orders',
+    saleTypeFilterForm.values,
+    nftTypeFilterForm.values,
+    priceRangeFilterForm.values,
+    collectionsFilterForm.values
+  ], async ({ pageParam = 1 }) => {
+    console.log(collectionsFilterForm.values)
+    const apiFilters: any = { page: pageParam };
 
-  const { data: ordersResult, fetchNextPage, hasNextPage, isFetching } = useInfiniteQuery(['orders'], async ({ pageParam = 1 }) => {
-    const { orders, total } = await GetOrdersApi({ page: pageParam });
+    // Sale Filters
+    if (saleTypeFilterForm.values.buyNow) {
+      apiFilters['side'] = 0
+    }
+
+    if (saleTypeFilterForm.values.hasOffers) {
+      apiFilters['side'] = 1
+    }
+
+    if (saleTypeFilterForm.values.new) {
+      const utcDateTimestamp = Math.floor((new Date()).getTime() / 1000);
+      apiFilters['beforeTimestamp'] = utcDateTimestamp
+    }
+
+    // NFT Filters
+    if (nftTypeFilterForm.values.singleItem) {
+      apiFilters['assetClass'] = "ERC721";
+    }
+
+    if (nftTypeFilterForm.values.bundle) {
+      apiFilters['assetClass'] = "ERC721_BUNDLE";
+    }
+    
+    // Price Filters
+    if (priceRangeFilterForm.values.currency.token && priceRangeFilterForm.dirty) {
+      apiFilters['token'] = priceRangeFilterForm.values.currency.token;
+    }
+
+    const [minPrice, maxPrice] = priceRangeFilterForm.values.price;
+
+    if (minPrice) {
+      apiFilters['minPrice'] = minPrice; 
+    }
+
+    if (maxPrice && priceRangeFilterForm.dirty) {
+      apiFilters['maxPrice'] = maxPrice;
+    }
+
+    // Collection Filters
+    if (collectionsFilterForm.values.length) {
+      const collectionAddresses = collectionsFilterForm.values.map(collection => collection.address).join(',');
+      apiFilters['collections'] = collectionAddresses
+    }
+
+    const { orders, total } = await GetOrdersApi(apiFilters);
 
     const NFTsRequests: Array<any> = [];
 
@@ -252,11 +305,11 @@ export const BrowseNFTsPage = () => {
                 onChange={(values) => collectionsFilterForm.setValues(values)}
                 onClear={() => collectionsFilterForm.resetForm()}
               />
-              <ArtistsFilter
+              {/* <ArtistsFilter
                 value={artistsFilterForm.values}
                 onChange={(values) => artistsFilterForm.setValues(values)}
                 onClear={() => artistsFilterForm.resetForm()}
-              />
+              /> */}
               {
                 (
                   saleTypeFilterForm.dirty
@@ -290,13 +343,18 @@ export const BrowseNFTsPage = () => {
       </Box>
       <Box px={'20px'} pt={{ base: '20px', md: 0, }}>
         <Container maxW={'1360px'} pt={'0 !important'} position={'relative'}>
-          <SimpleGrid columns={{ base: 1, md: 2, lg: 4 }} spacingX={'20px'} spacingY={'30px'} mb={'40px'}>
-            {(ordersResult?.pages ?? []).map((page) => {
-              return page.data.map(({ order, NFTs }) => {
-                if (!NFTs.length) {
-                  return null;
-                }
-
+          {!isFetching && !ordersResult?.pages[0].data.length ?
+            <Container centerContent>
+              <div>No results found</div>
+            </Container>
+            :
+            <SimpleGrid columns={{ base: 1, md: 2, lg: 4 }} spacingX={'20px'} spacingY={'30px'} mb={'40px'}>
+              {(ordersResult?.pages ?? []).map((page) => {
+                return page.data.map(({ order, NFTs }) => {
+                  if (!NFTs.length) {
+                    return null; 
+                  }
+    
                 return order.make.assetType.assetClass === 'ERC721' ? (
                   <NftItem
                     key={order.id}
@@ -330,7 +388,13 @@ export const BrowseNFTsPage = () => {
               })
             })}
           </SimpleGrid>
-          {hasNextPage && (
+          }
+          {isFetching &&
+           <Container centerContent>
+              <CollectionPageLoader/>
+            </Container>
+          }
+          {hasNextPage && !isFetching && (
             <Button variant={'outline'} isFullWidth mb={'20px'} onClick={() => fetchNextPage()}>
               {isFetching ? 'Loading...' : 'Load More'}
             </Button>
