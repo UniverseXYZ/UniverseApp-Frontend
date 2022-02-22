@@ -66,7 +66,7 @@ export const GetNFT2Api = async (collectionAddress: string, tokenId: string | nu
     thumbnailUrl: data.metadata?.image_url, // TODO
     originalUrl: data.metadata?.image_url, // TODO
     optimizedUrl: data.metadata?.image_url, // TODO
-    artworkType: (data.alternativeMediaFiles.length ? data.alternativeMediaFiles[0].type : '') as NFTArtworkType,
+    artworkType: (data.alternativeMediaFiles && data.alternativeMediaFiles.length ? data.alternativeMediaFiles[0].type : '') as NFTArtworkType,
     amount: 0, // TODO
     txHash: null,
     collectionId: 0,

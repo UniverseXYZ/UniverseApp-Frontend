@@ -6,6 +6,7 @@ import { ICollectionsFilterProps, ICollectionsFilterValue } from './types';
 import { FilterCollectionsItems } from '../../../mocks/filter-collections';
 
 import collectionsIcon from '../../../../../../assets/images/marketplace/collections.svg';
+import { SearchSelect } from '../../../../../components/search-select';
 
 export const CollectionsFilter = ({ value: _value, onChange, onClear }: ICollectionsFilterProps) => {
   const [isOpened, setIsOpened] = useState(false);
@@ -15,7 +16,7 @@ export const CollectionsFilter = ({ value: _value, onChange, onClear }: ICollect
     // console.log('handleChange', value);
     setValue(value);
   }, []);
-
+  
   const handleSave = useCallback(() => {
     onChange(value);
     setIsOpened(false);
@@ -63,7 +64,7 @@ export const CollectionsFilter = ({ value: _value, onChange, onClear }: ICollect
         onSave={handleSave}
         onClear={handleClear}
       >
-        <MultiSelect
+        <SearchSelect
           inline={true}
           items={FilterCollectionsItems}
           value={value}
@@ -77,14 +78,4 @@ export const CollectionsFilter = ({ value: _value, onChange, onClear }: ICollect
     </Dropdown>
   );
 
-  // return (
-  //   <MultiSelect
-  //     items={FilterCollectionsItems}
-  //     label={'Collections'}
-  //     icon={collectionsIcon}
-  //     searchPlaceholder={'Search collections'}
-  //     onChange={handleSave}
-  //     onClear={handleClear}
-  //   />
-  // );
 }

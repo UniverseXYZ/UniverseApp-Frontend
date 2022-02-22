@@ -27,7 +27,7 @@ import arrowLeftIcon from '../../../../../../../../../assets/images/marketplace/
 import arrowRightIcon from '../../../../../../../../../assets/images/marketplace/bundles-right-arrow.svg';
 import closeWhiteIcon from '../../../../../../../../../assets/images/marketplace/v2/close-white.svg';
 
-import { SortNftsOptions } from '../../../../../../constants';
+import { SortOrderOptions } from '../../../../../../constants';
 import { InputShadow, Select } from '../../../../../../../../components';
 import { NftItem } from '../../../../../../../nft/components';
 import { INFT, INFTBackend } from '../../../../../../../nft/types';
@@ -244,7 +244,7 @@ export const SelectNFTs = ({}: ISelectNFTsProps) => {
         </InputGroup>
         <Select
           label={'Sort by'}
-          items={SortNftsOptions}
+          items={SortOrderOptions}
           value={sortBy}
           buttonProps={{
             mr: '12px',

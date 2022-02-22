@@ -12,31 +12,31 @@ export const NftTypeFilterOptions: INftTypeFilterOptions[] = [
         key: 'bundle',
         label: 'Bundle',
       },
-      {
-        key: 'composition',
-        label: 'Composition',
-      },
+      // {
+      //   key: 'composition',
+      //   label: 'Composition',
+      // },
     ],
   },
-  {
-    name: 'File format',
-    options: [
-      {
-        key: 'stillImage',
-        label: 'Still image',
-      },
-      {
-        key: 'gif',
-        label: 'GIF',
-      },
-      {
-        key: 'audio',
-        label: 'Audio',
-      },
-      {
-        key: 'video',
-        label: 'Video',
-      },
-    ],
-  },
+  // {
+  //   name: 'File format',
+  //   options: [
+  //     {
+  //       key: 'stillImage',
+  //       label: 'Still image',
+  //     },
+  //     {
+  //       key: 'gif',
+  //       label: 'GIF',
+  //     },
+  //     {
+  //       key: 'audio',
+  //       label: 'Audio',
+  //     },
+  //     {
+  //       key: 'video',
+  //       label: 'Video',
+  //     },
+  //   ],
+  // },
 ];

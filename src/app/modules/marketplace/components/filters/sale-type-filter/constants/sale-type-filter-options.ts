@@ -6,11 +6,11 @@ export const SaleTypeFilterOptions: ISaleTypeFilterOption[] = [
     label: 'Buy now',
     description: 'Fixed price sale',
   },
-  {
-    key: 'onAuction',
-    label: 'On auction',
-    description: 'You can place bids',
-  },
+  // {
+  //   key: 'onAuction',
+  //   label: 'On auction',
+  //   description: 'You can place bids',
+  // },
   {
     key: 'new',
     label: 'New',

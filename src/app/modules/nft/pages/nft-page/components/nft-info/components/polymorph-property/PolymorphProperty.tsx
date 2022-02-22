@@ -14,7 +14,7 @@ export const PolymorphProperty = ({ property }: INFTPropertyProps) => {
   return (
     <Box {...PropertyStyle}>
       <Text fontSize={'14px'}>
-        {property?.traitType}:
+      {property?.traitType}:
         <Box as={'span'} fontWeight={700} ml={'6px'}>{property?.value}</Box>
       </Text>
     </Box>

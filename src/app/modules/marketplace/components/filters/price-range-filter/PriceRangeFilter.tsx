@@ -47,7 +47,17 @@ export const PriceRangeFilter = ({ value: _value, isDirty, onChange, onClear }: 
     if (!isDirty) {
       return null;
     }
-    return `${_value.price[0]}-${_value.price[1]}${_value.price[1] === 100 ? '+' : ''} ${_value.currency.token}`;
+    const minPrice = _value.price[0];
+    const maxPrice = _value.price[1];
+    if (maxPrice && minPrice) {
+      return `${minPrice}-${maxPrice} ${_value.currency.token}`;
+    }
+    if (maxPrice) {
+      return `<${maxPrice} ${_value.currency.token}`
+    }
+    if (minPrice) {
+      return `>${minPrice} ${_value.currency.token}`
+    }
   }, [_value, isDirty]);
 
   useEffect(() => setValue(_value), [_value]);
@@ -80,7 +90,7 @@ export const PriceRangeFilter = ({ value: _value, isDirty, onChange, onClear }: 
           />
         </Box>
 
-        <RangeSlider
+        {/* <RangeSlider
           aria-label={['min', 'max']}
           name={'price'}
           value={value.price}
@@ -91,13 +101,11 @@ export const PriceRangeFilter = ({ value: _value, isDirty, onChange, onClear }: 
           </RangeSliderTrack>
           <RangeSliderThumb index={0} />
           <RangeSliderThumb index={1} />
-        </RangeSlider>
+        </RangeSlider> */}
 
         <SimpleGrid columns={2} spacing={'24px'} mt={'24px'}>
           <Box position={'relative'}>
             <NumberInput
-              min={0}
-              max={99}
               value={minPriceVal}
               onChange={(val) => setMinPriceVal(val)}
               onBlur={() => {
@@ -129,9 +137,7 @@ export const PriceRangeFilter = ({ value: _value, isDirty, onChange, onClear }: 
           </Box>
           <Box position={'relative'}>
             <NumberInput
-              min={1}
-              max={100}
-              value={!isMaxPriceFocused && value.price?.[1] === 100 ? `100+` : maxPriceVal}
+              value={maxPriceVal}
               onChange={(val) => setMaxPriceVal(val)}
               onFocus={() => setIsMaxPriceFocused(true)}
               onBlur={() => {
