@@ -2,6 +2,7 @@ import axios from 'axios';
 
 import { ICollectionBackend, INFT, INFTBackend, IUserBackend, NFTArtworkType, NFTStandard } from '../types';
 import { mapBackendCollection, mapBackendNft, mapBackendUser } from '../helpers';
+import { ethers } from 'ethers';
 
 interface IGetNFTResponse {
   _id: string;
@@ -46,7 +47,8 @@ interface IGetNFTResponse {
 }
 
 export const GetNFT2Api = async (collectionAddress: string, tokenId: string | number) => {
-  const url = `${process.env.REACT_APP_DATASCRAPER_BACKEND}/v1/tokens/${collectionAddress}/${tokenId}`;
+
+  const url = `${process.env.REACT_APP_DATASCRAPER_BACKEND}/v1/tokens/${ethers.utils.getAddress(collectionAddress)}/${tokenId}`;
 
   const { data } = await axios.get<IGetNFTResponse>(url);
 
@@ -54,7 +56,7 @@ export const GetNFT2Api = async (collectionAddress: string, tokenId: string | nu
     name: data.metadata?.name ?? '',
     tokenId: data.tokenId,
     standard: data.tokenType as NFTStandard,
-    collection: undefined,
+    collection: (await GetCollectionApi(data.contractAddress)),
     tokenIds: [data.tokenId], // TODO
     url: data.metadata?.external_url, // TODO
     id: 1, // TODO
@@ -94,7 +96,7 @@ export const GetUserApi = async (address: string) => {
     },
   });
 
-  return data ? mapBackendUser(data) : null;
+  return data ? mapBackendUser(data) : undefined;
 };
 
 export const GetCollectionApi = async (address: string) => {
@@ -106,5 +108,5 @@ export const GetCollectionApi = async (address: string) => {
     }
   });
 
-  return data ? mapBackendCollection(data.collection) : null;
+  return data ? mapBackendCollection(data.collection) : undefined;
 };
