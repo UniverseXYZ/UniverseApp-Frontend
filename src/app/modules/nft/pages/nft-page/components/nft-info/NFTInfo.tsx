@@ -169,6 +169,7 @@ export const NFTInfo = () => {
                   NFT={NFT}
                   owner={owner}
                   order={order}
+                  collection={collection}
                   onMeasureChange={(measure) => setBuySectionMeasure(measure)}
                 />
               </Box>

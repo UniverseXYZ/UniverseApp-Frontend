@@ -2,6 +2,7 @@ import axios from 'axios';
 
 import { ICollectionBackend, INFT, INFTBackend, IUserBackend, NFTArtworkType, NFTStandard } from '../types';
 import { mapBackendCollection, mapBackendNft, mapBackendUser } from '../helpers';
+import {utils} from 'ethers';
 
 interface IGetNFTResponse {
   _id: string;
@@ -46,7 +47,8 @@ interface IGetNFTResponse {
 }
 
 export const GetNFT2Api = async (collectionAddress: string, tokenId: string | number) => {
-  const url = `${process.env.REACT_APP_DATASCRAPER_BACKEND}/v1/tokens/${collectionAddress}/${tokenId}`;
+  const checkedCollectionAddress: string = utils.getAddress(collectionAddress);
+  const url = `${process.env.REACT_APP_DATASCRAPER_BACKEND}/v1/tokens/${checkedCollectionAddress}/${tokenId}`;
 
   const { data } = await axios.get<IGetNFTResponse>(url);
 

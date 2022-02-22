@@ -9,7 +9,7 @@ import ClockIcon from '../../../../../../../assets/images/clock.svg';
 import { useDateCountdown } from '../../../../../../hooks';
 import * as styles from './styles';
 import { HighestBid } from './components';
-import { INFT, IOrder, IUser } from '../../../../types';
+import { INFT, IOrder, IUser, ICollection } from '../../../../types';
 import { NFTCheckoutPopup } from '../nft-checkout-popup';
 import { NFTPlaceABidPopup } from '../nft-place-a-bid-popup';
 import { NFTMakeAnOfferPopup } from '../nft-make-an-offer-popup';
@@ -26,10 +26,11 @@ interface INFTBuySectionProps {
   owner?: IUser;
   NFTs?: INFT[];
   order?: IOrder;
+  collection?: ICollection;
   onMeasureChange?: (measure: UseMeasureRect) => void;
 }
 
-export const NFTBuySection = ({ NFT, owner, NFTs, order, onMeasureChange }: INFTBuySectionProps) => {
+export const NFTBuySection = ({ NFT, owner, collection, NFTs, order, onMeasureChange }: INFTBuySectionProps) => {
   const [ref, measure] = useMeasure<HTMLDivElement>();
 
   const router = useHistory();
@@ -135,7 +136,7 @@ export const NFTBuySection = ({ NFT, owner, NFTs, order, onMeasureChange }: INFT
         )}
         {state === BuyNFTSectionState.OWNER_PUT_ON_SALE && (
           <>
-            <Button boxShadow={'lg'} w={'100%'} onClick={() => router.push(`/nft/${NFT?.collection?.address}/${NFT?.tokenId}/sell`)}>Put on sale</Button>
+            <Button boxShadow={'lg'} w={'100%'} onClick={() => router.push(`/nft/${collection?.address}/${NFT?.tokenId}/sell`)}>Put on sale</Button>
             <Text {...styles.ContentFeeLabelStyle} textAlign={'center'} mt={'12px'} color={'rgba(0, 0, 0, 0.4)'}>
               This NFT is on your wallet
             </Text>
