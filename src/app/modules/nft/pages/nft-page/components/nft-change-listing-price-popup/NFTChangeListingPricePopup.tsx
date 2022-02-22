@@ -24,15 +24,23 @@ import {
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
+import { useMutation, useQuery } from 'react-query';
 
 import * as styles from './styles';
-import { TOKENS, TOKENS_MAP } from '../../../../../../constants';
+import { TOKENS, TOKENS_MAP, ZERO_ADDRESS } from '../../../../../../constants';
 import { Loading, TokenIcon } from '../../../../../../components';
-import { IOrder } from '../../../../types';
+import { INFT, IOrder } from '../../../../types';
 import { TokenTicker } from '../../../../../../enums';
 
 import ArrowIcon from '../../../../../../../assets/images/arrow-down.svg';
 import SuccessIcon from '../../../../../../../assets/images/bid-submitted.png';
+import { EncodeOrderApi, GetSaltApi, IEncodeOrderApiData } from '../../../../../../api';
+import { useAuthContext } from '../../../../../../../contexts/AuthContext';
+import axios from 'axios';
+import { GetNFT2Api } from '../../../../api';
+import { SellAmountType } from '../../../../../marketplace/pages/sell-page/enums';
+import { ethers } from 'ethers';
+import { sign } from '../../../../../../helpers';
 
 export enum ChangeListingPriceState {
   FORM,
@@ -46,17 +54,28 @@ export const NFTChangeListingPriceValidationSchema = Yup.object().shape({
 });
 
 interface INFTChangeListingPricePopupProps {
+  nft?: INFT;
   order?: IOrder;
   isOpen: boolean;
   onClose: () => void;
 }
 
-export const NFTChangeListingPricePopup = ({ order, isOpen, onClose, }: INFTChangeListingPricePopupProps) => {
+export const NFTChangeListingPricePopup = ({ nft, order, isOpen, onClose, }: INFTChangeListingPricePopupProps) => {
   const tokensBtnRef = useRef<HTMLButtonElement>(null);
 
   const [state, setState] = useState<ChangeListingPriceState>(ChangeListingPriceState.FORM);
 
   const tokens = useMemo(() => TOKENS.filter((token) => ![TOKENS_MAP.ETH.ticker].includes(token.ticker)), []);
+
+  const { signer, web3Provider } = useAuthContext() as any;
+
+  const getSaltMutation = useMutation(GetSaltApi);
+
+  const encodeOrderMutation = useMutation(EncodeOrderApi);
+
+  const createOrderMutation = useMutation((data: any) => {
+    return axios.post(`${process.env.REACT_APP_MARKETPLACE_BACKEND}/v1/orders/order`, data);
+  });
 
   const formik = useFormik<{ amount: string; token: TokenTicker }>({
     initialValues: {
@@ -65,13 +84,65 @@ export const NFTChangeListingPricePopup = ({ order, isOpen, onClose, }: INFTChan
     },
     validationSchema: NFTChangeListingPriceValidationSchema,
     onSubmit: async (value) => {
-      console.log('onSubmit(value)', value);
-
-      setState(ChangeListingPriceState.PROCESSING);
-
-      setTimeout(() => setState(ChangeListingPriceState.SUCCESS), 3000);
+      
+      updateListing(value);
     },
   });
+
+  const updateListing = async (value: any) => {
+    if(nft == undefined || order == undefined) {
+      return;
+    }
+
+    // TODO - if the value goes up we should trigger another modal to cancel the listing 
+
+    setState(ChangeListingPriceState.PROCESSING);
+    const network = await web3Provider.getNetwork();
+    const address = await signer.getAddress();
+
+    const salt = (await getSaltMutation.mutateAsync(address)).data.salt;
+
+    const make: any = {
+      assetType: {
+        assetClass: nft?.standard,
+        contract: nft?.collection?.address,
+        tokenId: nft.tokenId,
+      },
+      value: '1',
+    };
+
+    // TODO Refactor - add logic for bundles
+
+    const orderData: IEncodeOrderApiData = {
+      salt: salt,
+      maker: order.maker,
+      make: make,
+      taker: order.taker,
+      take: order.take,
+      type: order.type,
+      start: order.start,
+      end: order.end,
+      data: order.data,
+    };
+    orderData.take.value = ethers.utils.parseUnits(
+      `${value.amount}`,
+      `${TOKENS_MAP[value.token as TokenTicker].decimals}`
+    ).toString()
+
+    const { data: encodedOrder } = (await encodeOrderMutation.mutateAsync(orderData as IEncodeOrderApiData));
+
+    const signature = await sign(
+      web3Provider.provider,
+      encodedOrder,
+      address,
+      `${network.chainId}`,
+      `${process.env.REACT_APP_MARKETPLACE_CONTRACT}`
+    );
+
+    const createOrderResponse = (await createOrderMutation.mutateAsync({ ...orderData, signature })).data;
+
+    setState(ChangeListingPriceState.SUCCESS)
+  }
 
   useEffect(() => {
     formik.resetForm();

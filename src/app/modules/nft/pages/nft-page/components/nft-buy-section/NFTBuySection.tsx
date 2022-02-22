@@ -137,7 +137,7 @@ export const NFTBuySection = ({ NFT, owner, NFTs, order, onMeasureChange }: INFT
           <>
             <Button boxShadow={'lg'} w={'100%'} onClick={() => router.push(`/nft/${NFT?.collection?.address}/${NFT?.tokenId}/sell`)}>Put on sale</Button>
             <Text {...styles.ContentFeeLabelStyle} textAlign={'center'} mt={'12px'} color={'rgba(0, 0, 0, 0.4)'}>
-              This NFT is on your wallet
+              This NFT is in your wallet
             </Text>
           </>
         )}
@@ -152,14 +152,14 @@ export const NFTBuySection = ({ NFT, owner, NFTs, order, onMeasureChange }: INFT
         )}
         {state === BuyNFTSectionState.OWNER_FIXED_LISTING_CHANGE_PRICE && (
           <>
-            {/*TODO: show if highest bid exist, if not show message (below) "This NFT is on your wallet" */}
+            {/*TODO: show if highest bid exist, if not show message (below) "This NFT is in your wallet" */}
             {/*<HighestBid />*/}
             <SimpleGrid columns={2} spacingX={'12px'}>
               <Button boxShadow={'lg'} onClick={() => setIsChangeListingPricePopupOpened(true)}>Change price</Button>
               <Button variant={'outline'} onClick={() => setIsCancelListingPopupOpened(true)}>Cancel listing</Button>
             </SimpleGrid>
             <Text {...styles.ContentFeeLabelStyle} textAlign={'center'} mt={'12px'}>
-              This NFT is on your wallet
+              This NFT is in your wallet
             </Text>
           </>
         )}
@@ -187,6 +187,7 @@ export const NFTBuySection = ({ NFT, owner, NFTs, order, onMeasureChange }: INFT
         onClose={() => setIsCancelListingPopupOpened(false)}
       />
       <NFTChangeListingPricePopup
+        nft={NFT}
         order={order}
         isOpen={isChangeListingPricePopupOpened}
         onClose={() => setIsChangeListingPricePopupOpened(false)}

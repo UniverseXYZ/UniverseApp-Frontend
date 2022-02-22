@@ -29,7 +29,7 @@ import { sign } from '../../../../helpers';
 import { useAuthContext } from '../../../../../contexts/AuthContext';
 import { TOKENS_MAP, ZERO_ADDRESS } from '../../../../constants';
 import { TokenTicker } from '../../../../enums';
-import { GetNFTApi } from '../../../nft/api';
+import { GetNFT2Api, GetNFTApi } from '../../../nft/api';
 import { INFT } from '../../../nft/types';
 import { EncodeOrderApi, GetSaltApi, IEncodeOrderApiData } from '../../../../api';
 import Contracts from '../../../../../contracts/contracts.json';
@@ -66,7 +66,7 @@ export const SellPage = () => {
 
   const { data: nft } = useQuery(
     ['sell-nft', params.collectionAddress, params.tokenId],
-    () => GetNFTApi(params.collectionAddress, params.tokenId)
+    () => GetNFT2Api(params.collectionAddress, params.tokenId)
   );
 
   const getSaltMutation = useMutation(GetSaltApi);
