@@ -18,6 +18,7 @@ import Contracts from '../../../../../../../contracts/contracts.json';
 import * as styles from './styles';
 import { IOrder } from '../../../../types';
 import { useAuthContext } from '../../../../../../../contexts/AuthContext';
+import { useLoadingPopupContext } from '../../../../../../providers/LoadingProvider';
 import { EncodeOrderApi } from '../../../../../../api';
 
 // @ts-ignore
@@ -32,6 +33,7 @@ interface INFTCancelListingPopupProps {
 export const NFTCancelListingPopup = ({ order, isOpen, onClose, }: INFTCancelListingPopupProps) => {
 
   const { signer } = useAuthContext();
+  const { setShowLoading,  setLoadingTitle, closeLoading, setTransactions } = useLoadingPopupContext();
 
   const contract = useMemo(
     () => new Contract(`${process.env.REACT_APP_MARKETPLACE_CONTRACT}`, contractsData.Marketplace.abi, signer),
@@ -61,10 +63,16 @@ export const NFTCancelListingPopup = ({ order, isOpen, onClose, }: INFTCancelLis
     }));
 
     const cancelResponse = await contract.cancel(encodedOrderData);
-
-    console.log('cancelResponse', cancelResponse);
-
+    // Close the cancel listing modal
     onClose();
+
+    // Show loading modal
+    setShowLoading(true);
+    setTransactions([cancelResponse.hash]);
+
+    await cancelResponse.wait();
+    // Close loading modal
+    closeLoading();
   }, [contract, order, onClose]);
 
   return (
