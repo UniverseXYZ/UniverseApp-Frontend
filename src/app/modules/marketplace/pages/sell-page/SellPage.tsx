@@ -6,6 +6,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useMutation, useQuery } from 'react-query';
 import * as Yup from 'yup';
+import { Contract } from 'ethers';
 
 import bg from '../../../../../assets/images/marketplace/v2/bg.png';
 import arrow from '../../../../../assets/images/arrow.svg';
@@ -31,6 +32,10 @@ import { TokenTicker } from '../../../../enums';
 import { GetNFTApi } from '../../../nft/api';
 import { INFT } from '../../../nft/types';
 import { EncodeOrderApi, GetSaltApi, IEncodeOrderApiData } from '../../../../api';
+import Contracts from '../../../../../contracts/contracts.json';
+
+// @ts-ignore
+const { contracts: contractsData } = Contracts[process.env.REACT_APP_NETWORK_CHAIN_ID];
 
 const getValidationSchema = (amountType?: SellAmountType, sellMethod?: SellMethod) => {
   switch (sellMethod) {
@@ -142,6 +147,11 @@ export const SellPage = () => {
 
       const { data: encodedOrder } = (await encodeOrderMutation.mutateAsync(orderData));
 
+      const contract = new Contract(make.assetType.contract, contractsData[make.assetType.assetClass].abi, signer);
+      const approveTx = await contract.approve(process.env.REACT_APP_MARKETPLACE_CONTRACT, make.assetType.tokenId)
+
+      const rec = await approveTx.wait();
+
       const signature = await sign(
         web3Provider.provider,
         encodedOrder,
@@ -150,9 +160,8 @@ export const SellPage = () => {
         `${process.env.REACT_APP_MARKETPLACE_CONTRACT}`
       );
 
-      const createOrderResponse = (await createOrderMutation.mutateAsync({ ...encodedOrder, signature })).data;
+      const createOrderResponse = (await createOrderMutation.mutateAsync({ ...orderData, signature })).data;
 
-      console.log('createOrderResponse', createOrderResponse);
       setIsPosted(true);
     },
   });
