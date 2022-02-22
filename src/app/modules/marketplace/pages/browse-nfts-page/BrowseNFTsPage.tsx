@@ -139,8 +139,7 @@ export const BrowseNFTsPage = () => {
 
     // Collection Filters
     if (collectionsFilterForm.values.length) {
-      const collectionAddresses = collectionsFilterForm.values.map(collection => collection.address).join(',');
-      apiFilters['collections'] = collectionAddresses
+      apiFilters['collection'] = collectionsFilterForm.values[0].address
     }
 
     // Sorting

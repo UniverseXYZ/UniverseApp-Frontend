@@ -19,6 +19,8 @@ interface ISearchInputProps {
   iconProps?: ImageProps;
   inputProps?: InputProps;
   shadowProps?: BoxProps;
+  onChange?: (value: any) => void;
+  value?: string;
 }
 
 export const SearchInput = (props: ISearchInputProps) => (
@@ -31,6 +33,8 @@ export const SearchInput = (props: ISearchInputProps) => (
         pl={'50px'}
         {...props.inputProps}
         placeholder={props.inputProps?.placeholder ?? 'Search'}
+        onChange={props.onChange}
+        value={props.value}
       />
     </InputShadow>
   </InputGroup>
