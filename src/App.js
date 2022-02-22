@@ -52,11 +52,14 @@ import { MarketplaceContextProvider } from './contexts/MarketplaceContext';
 import { useAuthContext } from './contexts/AuthContext';
 import ErrorPopup from './components/popups/ErrorPopup';
 import { useErrorContext } from './contexts/ErrorContext';
+import { useLoadingPopupContext } from './app/providers/LoadingProvider';
 import Minting from './components/products/minting/Minting';
 import { App as NewApp } from './app/App';
 import { SellPage, BrowseNFTsPage } from './app/modules/marketplace/pages';
 import { LayoutProvider } from './app/providers';
 import { BundlePage, NFTPage } from './app/modules/nft';
+// When the Whole App becomes TypeScript compatible, move this Popup in more appropriate place.
+import { LoadingPopup } from './app/modules/marketplace/components/popups/loading-popup';
 
 class UniverseRoute {
   constructor(
@@ -133,6 +136,8 @@ const App = () => {
   const location = useLocation();
   const { showWrongNetworkPopup, setShowWrongNetworkPopup } = useAuthContext();
   const { showError, closeError } = useErrorContext();
+  const { showLoading, closeLoading, loadingTitle, loadingBody, transactions } =
+    useLoadingPopupContext();
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -161,6 +166,13 @@ const App = () => {
                           ) : (
                             <NewApp>
                               <Component {...componentProps} />
+                              <LoadingPopup
+                                isOpen={showLoading}
+                                onClose={closeLoading}
+                                heading={loadingTitle}
+                                text={loadingBody}
+                                transactions={transactions}
+                              />
                             </NewApp>
                           )}
                         </RouteComponent>

@@ -5,6 +5,7 @@ import App from './App';
 import { AuthContextProvider } from './contexts/AuthContext';
 import { ThemeContextProvider } from './contexts/ThemeContext';
 import { ErrorContextProvider } from './contexts/ErrorContext';
+import { LoadingPopupContextProvider } from './app/providers/LoadingProvider';
 
 ReactDOM.render(
   <BrowserRouter
@@ -12,13 +13,15 @@ ReactDOM.render(
       /* Empty callback to block the default browser prompt */
     }}
   >
-    <ErrorContextProvider>
-      <AuthContextProvider>
-        <ThemeContextProvider>
-          <App />
-        </ThemeContextProvider>
-      </AuthContextProvider>
-    </ErrorContextProvider>
+    <LoadingPopupContextProvider>
+      <ErrorContextProvider>
+        <AuthContextProvider>
+          <ThemeContextProvider>
+            <App />
+          </ThemeContextProvider>
+        </AuthContextProvider>
+      </ErrorContextProvider>
+    </LoadingPopupContextProvider>
   </BrowserRouter>,
   document.getElementById('root')
 );
