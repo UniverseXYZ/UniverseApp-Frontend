@@ -1,4 +1,5 @@
 export const FilterCollectionsItems = [
+  {id: 35, address: "0xb67E6711C3bB2AA968bE26703dE20152d4948b38", name: "Universe Signularity", image:"https://universeapp-assets-dev.s3.amazonaws.com/1587a04f1c82f5740e53b679e8e15658f33fe5ea825f86ab.jpeg"},
   {id: 1,  address: "0xCcc441ac31f02cD96C153DB6fd5Fe0a2F4e6A68d", name: "FLUF World", image:"https://lh3.googleusercontent.com/6A_zAw2qtq91-5x8yuJUwuV6ttgD2G__RWVApFWfUcH8Qb8oLhW3uP9MkonFAaHRnE4XodwYHCgESxQ3xdQlQrjTros61gPaG3qf2nQ=s0"},
   {id: 2,  address: "0x35471f47c3C0BC5FC75025b97A19ECDDe00F78f8", name: "PartyBear", image:"https://lh3.googleusercontent.com/Pq4am5kMfPJxybtOv9OUcAIkYh6nn-A99Z_HcGnDk_G86qKm4P1yGTXEq2RBXsNirSXVJj0LxYIRKkx0wUNr_K8fPrEoRzc1M66lQQ=s0"},
   {id: 3,  address: "0x26437d312fB36BdD7AC9F322A6D4cCFe0c4FA313", name: "ASM AIFA Genesis", image:"https://lh3.googleusercontent.com/1zBGv7flcBW0Kh8lRdJlZxmiP6F7hPel2XHVFGJDytrz4IBveQPR7B6DSrGMSkxCw1LErUWYVAOPUIvgVDaUOzEcaoEpx9BOpOE98NE=s0"},
