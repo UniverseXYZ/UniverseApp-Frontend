@@ -9,6 +9,7 @@ import { PolymorphPropertyTrait } from '..';
 import { PolymorphProperty } from '..';
 import { INFTProperty } from '../../../../../../types';
 import './TabProperties.scss';
+import { INFTProperty } from '../../../../../../types';
 
 interface ITabPropertiesProps {
   properties: INFTProperty[];

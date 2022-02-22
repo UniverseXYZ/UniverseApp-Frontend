@@ -35,8 +35,8 @@ export interface INFTPropertyProps extends Omit<BoxProps, 'property'> {
 export const NFTProperty = ({ property, ...props }: INFTPropertyProps) => {
   return (
     <Box {...PropertyContainerStyles} {...props}>
-      <Text {...PropertyNameStyles}>{property?.traitType}</Text>
-      <Text {...PropertyValueStyles}>{property?.value}</Text>
+      <Text {...PropertyNameStyles}>{property.traitType}</Text>
+      <Text {...PropertyValueStyles}>{property.value}</Text>
       {/*{description && (<Text {...PropertyDescriptionStyles}>{description}</Text>)}*/}
     </Box>
   );

@@ -50,8 +50,8 @@ export const BundlePageProvider = ({ hash, children }: IBundlePageProviderProps)
     return await Promise.all(NFTsPromises);
   }, { enabled: !!order?.id })
 
-  const creator = NFTs && NFTs.length ? NFTs[0].owner : {};
-  const moreFromCollection = NFTs && NFTs.length ? NFTs[0].moreFromCollection?.map((NFT) => {
+  const creator = NFTs ? NFTs[0].owner : {};
+  const moreFromCollection = NFTs ? NFTs[0].moreFromCollection?.map((NFT) => {
     NFT.collection = NFTs[0].collection;
     return NFT;
   }) : [];
