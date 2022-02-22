@@ -35,7 +35,7 @@ import { IERC721AssetType, IERC721BundleAssetType, INFT, IOrder } from '../../..
 import { useStickyHeader2 } from '../../../../hooks';
 import { coins } from '../../../../mocks';
 import { ORDERS_PER_PAGE } from './constants';
-import { GetNFTApi, GetOrdersApi } from '../../../nft/api';
+import { GetNFT2Api, GetNFTApi, GetOrdersApi } from '../../../nft/api';
 import { TokenTicker } from '../../../../enums';
 import { TOKENS_MAP } from '../../../../constants';
 import { useThemeContext } from '../../../../../contexts/ThemeContext';
@@ -96,13 +96,13 @@ export const BrowseNFTsPage = () => {
       switch (order.make.assetType.assetClass) {
         case 'ERC721':
           const assetType = order.make.assetType as IERC721AssetType;
-          NFTsRequests.push(GetNFTApi(assetType.contract, assetType.tokenId))
+          NFTsRequests.push(GetNFT2Api(assetType.contract, assetType.tokenId))
           break;
         case 'ERC721_BUNDLE':
           const assetTypeBundle = order.make.assetType as IERC721BundleAssetType;
           for (let i = 0; i < assetTypeBundle.contracts.length; i++) {
             for (const tokenId of assetTypeBundle.tokenIds[i]) {
-              NFTsRequests.push(GetNFTApi(assetTypeBundle.contracts[i], tokenId))
+              NFTsRequests.push(GetNFT2Api(assetTypeBundle.contracts[i], tokenId))
             }
           }
           break;
