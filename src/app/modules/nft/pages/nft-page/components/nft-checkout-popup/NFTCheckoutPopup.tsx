@@ -16,7 +16,7 @@ import {
 } from '@chakra-ui/react';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import { utils } from 'ethers';
+import { BigNumber, Signer, utils } from 'ethers';
 
 import WarningSVGIcon from '../../../../../../../assets/images/yellowIcon.svg';
 import ArrowSVGIcon from '../../../../../../../assets/images/arrow.svg';
@@ -34,6 +34,7 @@ import { TOKENS_MAP } from '../../../../../../constants';
 import { TokenTicker } from '../../../../../../enums';
 import { useMutation } from 'react-query';
 import axios from 'axios';
+import { Web3Provider } from '@ethersproject/providers';
 
 interface INFTCheckoutPopupProps {
   NFT?: INFT;
@@ -46,7 +47,7 @@ interface INFTCheckoutPopupProps {
 export const NFTCheckoutPopup = ({ NFT, NFTs, order, isOpen, onClose }: INFTCheckoutPopupProps) => {
   const router = useHistory();
 
-  const { address } = useAuthContext();
+  const { address, signer, web3Provider } = useAuthContext() as any;
 
   const { onCopy } = useClipboard(address);
 
@@ -69,8 +70,26 @@ export const NFTCheckoutPopup = ({ NFT, NFTs, order, isOpen, onClose }: INFTChec
       },
     });
     console.log('response', response);
-    // setState(CheckoutState.CONGRATULATIONS);
+
+    const {data, from, to, value} = response.data;
+
+    await sendSellTransaction(data, from, to, BigNumber.from(value.hex)); // TODO Test after new version of contracts and backend redeployed
+    setState(CheckoutState.CONGRATULATIONS);
+    
   }, [order, address]);
+
+  const sendSellTransaction = async (data: string, from: string, to: string, value: BigNumber ) => {
+
+    const sellTx = await (signer as Signer).sendTransaction({
+      data,
+      from,
+      to,
+      value
+    })
+
+    return sellTx.wait();
+    
+  }
 
   const handleMyNFTsClick = useCallback(() => {
     router.push('/my-nfts');
