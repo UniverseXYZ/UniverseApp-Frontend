@@ -52,10 +52,8 @@ export const NFTCheckoutPopup = ({ NFT, NFTs, order, isOpen, onClose }: INFTChec
   const { onCopy } = useClipboard(address);
 
   const [state, setState] = useState<CheckoutState>(CheckoutState.CHECKOUT);
-  const [agree, setAgree] = useState(false);
   const [reviewedByUniverse, setReviewedByUniverse] = useState(false);
   const [isNFTAudio] = useState(false);
-  const [agreeBundle, setAgreeBundle] = useState(false);
 
   const prepareMutation = useMutation(({ hash, data }: { hash: string, data: any }) => {
     return axios.post(`${process.env.REACT_APP_MARKETPLACE_BACKEND}/v1/orders/${hash}/prepare`, data);
@@ -109,8 +107,6 @@ export const NFTCheckoutPopup = ({ NFT, NFTs, order, isOpen, onClose }: INFTChec
 
   useEffect(() => {
     setState(CheckoutState.CHECKOUT);
-    setAgree(false);
-    setAgreeBundle(!NFTs);
   }, [isOpen, NFTs]);
 
   if (!order) {
@@ -172,16 +168,8 @@ export const NFTCheckoutPopup = ({ NFT, NFTs, order, isOpen, onClose }: INFTChec
                 </Box>
               </Flex>
 
-              {!!NFTs && (
-                <Checkbox mb={'20px'} size={'lg'} isChecked={agreeBundle} onChange={(e) => setAgreeBundle(e.target.checked)}>
-                  <Text fontSize={'12px'} fontWeight={400}>
-                    By checking this box, I acknowledge that this bundle contains an item that has now been reviewed or approved by Universe.
-                  </Text>
-                </Checkbox>
-              )}
-
               <Box {...styles.ButtonsContainerStyle}>
-                <Button boxShadow={'lg'} onClick={handleCheckoutClick} disabled={!agree || !agreeBundle}>Checkout</Button>
+                <Button boxShadow={'lg'} onClick={handleCheckoutClick}>Checkout</Button>
                 <Button variant={'outline'} onClick={handleAddFundsClick}>Add Funds</Button>
               </Box>
             </>
