@@ -22,7 +22,7 @@ import {
   PriceRangeFilter,
   SaleTypeFilter,
 } from '../../components';
-import { SortNftsOptions } from '../../constants';
+import { SortOrderOptions, SortOrderOptionsEnum } from '../../constants';
 import { BackToTopButton, Select } from '../../../../components';
 import {
   NftItem,
@@ -45,6 +45,8 @@ export const BrowseNFTsPage = () => {
   const { setDarkMode } = useThemeContext() as any;
 
   const router = useHistory();
+
+  const [sortBy, setSortBy] = useState('');
 
   const saleTypeFilterForm = useFormik<ISaleTypeFilterValue>({
     initialValues: {
@@ -72,7 +74,7 @@ export const BrowseNFTsPage = () => {
   const priceRangeFilterForm = useFormik<IPriceRangeFilterValue>({
     initialValues: {
       currency: coins[0],
-      price: [0, 100],
+      price: [0, 0],
     },
     onSubmit: () => {},
   });
@@ -92,17 +94,17 @@ export const BrowseNFTsPage = () => {
     saleTypeFilterForm.values,
     nftTypeFilterForm.values,
     priceRangeFilterForm.values,
-    collectionsFilterForm.values
+    collectionsFilterForm.values,
+    sortBy
   ], async ({ pageParam = 1 }) => {
-    console.log(collectionsFilterForm.values)
-    const apiFilters: any = { page: pageParam };
+    const apiFilters: any = { page: pageParam, side: 1 };
 
     // Sale Filters
-    if (saleTypeFilterForm.values.buyNow) {
-      apiFilters['side'] = 0
+    if (saleTypeFilterForm.values.hasOffers) {
+      apiFilters['hasOffers'] = true
     }
 
-    if (saleTypeFilterForm.values.hasOffers) {
+    if (saleTypeFilterForm.values.buyNow) {
       apiFilters['side'] = 1
     }
 
@@ -139,6 +141,28 @@ export const BrowseNFTsPage = () => {
     if (collectionsFilterForm.values.length) {
       const collectionAddresses = collectionsFilterForm.values.map(collection => collection.address).join(',');
       apiFilters['collections'] = collectionAddresses
+    }
+
+    // Sorting
+    if (sortBy) {
+      let sortFilter = 0
+      switch (sortBy) {
+        case SortOrderOptionsEnum.EndingSoon:
+          sortFilter = 1
+          break;
+        case SortOrderOptionsEnum.HighestPrice:
+          sortFilter = 2
+          break;
+        case SortOrderOptionsEnum.LowestPrice:
+          sortFilter = 3
+          break;
+        case SortOrderOptionsEnum.RecentlyListed:
+          sortFilter = 4
+          break;
+        default:
+          break;
+      }
+      apiFilters['sortBy'] = sortFilter;
     }
 
     const { orders, total } = await GetOrdersApi(apiFilters);
@@ -222,7 +246,6 @@ export const BrowseNFTsPage = () => {
     }
   });
 
-  const [sortBy, setSortBy] = useState();
 
   const filtersRef = useRef(null);
 
@@ -331,7 +354,7 @@ export const BrowseNFTsPage = () => {
             </Box>
             <Select
               label={'Sort by'}
-              items={SortNftsOptions}
+              items={SortOrderOptions}
               value={sortBy}
               buttonProps={{
                 justifyContent: 'space-between',

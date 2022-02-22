@@ -15,7 +15,7 @@ export const CollectionsFilter = ({ value: _value, onChange, onClear }: ICollect
     // console.log('handleChange', value);
     setValue(value);
   }, []);
-  console.log(value)
+  
   const handleSave = useCallback(() => {
     onChange(value);
     setIsOpened(false);
