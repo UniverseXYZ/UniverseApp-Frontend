@@ -129,22 +129,7 @@ const NFTPlaceBid = ({ close, setSelectedTokenIndex, selectedTokenIndex }) => {
               </div>
             </div>
             {!bidAmount && <p className="error">This field is required</p>}
-            <div className="checkout__checkbox">
-              <div className="custom__checkbox">
-                <label htmlFor="toggleSelection">
-                  <input
-                    id="toggleSelection"
-                    type="checkbox"
-                    value={checkboxValue}
-                    onChange={() => setCheckboxValue(!checkboxValue)}
-                  />
-                  <i />
-                </label>
-              </div>
-              <p>
-                By checking this box, I agree to Universe&#39;s <span>Terms of Service</span>
-              </p>
-            </div>
+
             <div className="actions">
               <Button
                 className="light-button"
