@@ -149,8 +149,9 @@ export const NFTInfo = () => {
                     <LineTabList>
                       <Tab>Properties</Tab>
                       {showMetadata && <Tab>Metadata</Tab>}
-                      <Tab>Owners</Tab>
-                      <Tab>Bids</Tab>
+                      {/* TODO: Add implementation after release */}
+                      {/* <Tab>Owners</Tab> */}
+                      {/* <Tab>Bids</Tab> */}
                       <Tab>Offers</Tab>
                       <Tab>History</Tab>
                     </LineTabList>
@@ -158,8 +159,9 @@ export const NFTInfo = () => {
                     <TabPanels sx={{ '> div' : { px: 0, pb: 0, pt: '30px', }}}>
                     <TabPanel><TabProperties properties={NFT?._properties ?? []} /></TabPanel>
                       {showMetadata && <TabPanel><TabMetadata /></TabPanel>}
-                      <TabPanel><TabOwners /></TabPanel>
-                      <TabPanel><TabBids /></TabPanel>
+                      {/* TODO: Add implementation after release */}
+                      {/* <TabPanel><TabOwners /></TabPanel> */}
+                      {/* <TabPanel><TabBids /></TabPanel> */}
                       <TabPanel><TabOffers /></TabPanel>
                       <TabPanel><TabHistory /></TabPanel>
                     </TabPanels>
