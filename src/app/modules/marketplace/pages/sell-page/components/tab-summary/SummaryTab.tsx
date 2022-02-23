@@ -3,6 +3,7 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Navigation } from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/react/swiper-react';
 import { useUpdate } from 'react-use';
+import { useParams } from 'react-router-dom';
 
 import 'swiper/swiper-bundle.min.css';
 import 'swiper/swiper.min.css';
@@ -32,7 +33,8 @@ import { useMyNftsContext } from '../../../../../../../contexts/MyNFTsContext';
 import { useAuthContext } from '../../../../../../../contexts/AuthContext';
 import { SwiperArrowButton } from '../../../../../../components/swiper-arrow-button';
 import Contracts from '../../../../../../../contracts/contracts.json';
-import { Contract } from 'ethers';
+import { Contract, BigNumber } from 'ethers';
+import {getCollectionRoyaltiesFromRegistry} from '../../../../../../../utils/api/royaltyRegistry';
 
 interface IApproveCollection {
   approved: boolean;
@@ -51,9 +53,13 @@ export const SummaryTab = () => {
   const { signer } = useAuthContext() as any;
   const { myNFTs } = useMyNftsContext() as any;
   const { loggedInArtist } = useAuthContext();
+  const params = useParams<{ collectionAddress: string; tokenId: string; }>();
 
   const [activeIndex, setActiveIndex] = useState(0);
   const [collections, setCollections] = useState<IApproveCollection[]>([]);
+  const [creatorRoyalties, setCreatorRoyalties] = useState(0);
+  const [collectionRoyalties, setCollectionRoyalties] = useState(0);
+  const [totalFees, setTotalFees] = useState(0);
 
   const { nft, isPosted, form, sellMethod, amountType, goBack } = useMarketplaceSellData();
 
@@ -89,7 +95,7 @@ export const SummaryTab = () => {
   }, [form.values]);
 
   const totalPrice = useMemo(() => {
-    return parseFloat((price - (price * totalFee / 100)).toFixed(5));
+    return parseFloat((price - (price * totalFees / 100)).toFixed(5));
   }, [form.values, price]);
 
   const NFTsForPreview = useMemo<INFT[]>(() => {
@@ -111,6 +117,44 @@ export const SummaryTab = () => {
   const isAllCollectionApproved = useMemo(() => {
     return collections.every((collectionItem) => collectionItem.approved);
   }, [collections]);
+
+    const fetchRoyaltyRegistry = async () => {
+    try {
+      const [ ,royalties] = await getCollectionRoyaltiesFromRegistry(
+        params.collectionAddress,
+        signer,
+        Number(params.tokenId)
+      );
+
+      // Index 0 is nft royalties
+      if (royalties.length && royalties[0].length) {
+        const nftRoyalties = royalties[0].map((royalty: [string, BigNumber]) => ({
+          address: royalty[0],
+          amount: BigNumber.from(royalty[1]).div(100),
+        }));
+       setCreatorRoyalties(+nftRoyalties[0].amount || 0)
+      }
+
+      // Index 1 is collection royalties
+      if (royalties.length && royalties[1].length) {
+        const collectionRoyalties = royalties[1].map((royalty: [string, BigNumber]) => ({
+          address: royalty[0],
+          amount: BigNumber.from(royalty[1]).div(100).toString(),
+        }));
+       setCollectionRoyalties(+collectionRoyalties[0].amount || 0)
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  useEffect(() => {
+    setTotalFees(creatorRoyalties + collectionRoyalties);
+  }, [creatorRoyalties, collectionRoyalties])
+
+  useEffect(() => {
+    fetchRoyaltyRegistry();
+  }, [])
 
   useEffect(() => {
     if (isPosted) {
@@ -241,9 +285,9 @@ export const SummaryTab = () => {
             </Text>
 
             <Box layerStyle={'grey'} {...styles.FeesContainerStyle}>
-              <Fee name={'To Universe'} amount={fees.universe} />
-              <Fee name={'To creator'} amount={fees.creator} />
-              <Fee name={'Total'} amount={totalFee} />
+              <Fee name={'To Universe'} amount={collectionRoyalties} />
+              <Fee name={'To creator'} amount={creatorRoyalties} />
+              <Fee name={'Total'} amount={totalFees} />
             </Box>
 
             <Heading as={'h4'} mb={'0 !important'}>

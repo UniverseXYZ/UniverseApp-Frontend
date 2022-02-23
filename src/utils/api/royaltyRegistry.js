@@ -1,7 +1,11 @@
 import { Contract } from 'ethers';
 import Contracts from '../../contracts/contracts.json';
 
-export const getCollectionRoyaltiesFromRegistry = async (collectionAddress, signer) => {
+export const getCollectionRoyaltiesFromRegistry = async (
+  collectionAddress,
+  signer,
+  tokenId = 0
+) => {
   const { contracts } = Contracts[process.env.REACT_APP_NETWORK_CHAIN_ID];
   const contract = new Contract(
     process.env.REACT_APP_ROYALTY_REGISTRY_CONTRACT,
@@ -9,7 +13,7 @@ export const getCollectionRoyaltiesFromRegistry = async (collectionAddress, sign
     signer
   );
 
-  const royalties = await contract.callStatic.getRoyalties(collectionAddress, 0);
+  const royalties = await contract.callStatic.getRoyalties(collectionAddress, tokenId);
 
   return [contract, royalties];
 };
