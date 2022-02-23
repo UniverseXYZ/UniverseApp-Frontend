@@ -46,6 +46,8 @@ const getValidationSchema = (amountType?: SellAmountType, sellMethod?: SellMetho
         .typeError('Invalid price')
         .required('Required')
         .moreThan(0, 'Price must be greater than 0'),
+      startDate: Yup.date().required('Required'),
+      endDate: Yup.date().required('Required')
     });
     default: return Yup.object().shape({});
   }
