@@ -1,5 +1,7 @@
 import React, { useContext, useEffect, useState, useRef } from 'react';
+import { Contract } from 'ethers';
 import { useHistory, useParams, useLocation } from 'react-router-dom';
+import Contracts from '../../contracts/contracts.json';
 import NotFound from '../../components/notFound/NotFound.jsx';
 import './Collection.scss';
 import Cover from '../../components/collection/Cover.jsx';
@@ -24,7 +26,7 @@ import EmptyData from '../../components/collection/EmptyData.jsx';
 const Collection = () => {
   const tabs = ['Items', 'Description'];
   const [selectedTabIndex, setSelectedTabIndex] = useState(0);
-  const { address } = useAuthContext();
+  const { address, signer } = useAuthContext();
   const { setDarkMode } = useThemeContext();
   const { collectionAddress } = useParams();
   const history = useHistory();
@@ -54,12 +56,36 @@ const Collection = () => {
 
   const [isDropdownOpened, setIsDropdownOpened] = useState(false);
   const [ownersCount, setOwnersCount] = useState(0);
+  const [collectionOwner, setCollectionOwner] = useState('');
 
   const nftsContainerRef = useRef(null);
 
-  useEffect(async () => {
+  const fetchCollectionOwner = async () => {
+    try {
+      const { contracts } = Contracts[process.env.REACT_APP_NETWORK_CHAIN_ID];
+      // We use the UniserveERC721Core ABI because it implements the Ownable interface
+      const collectionContract = new Contract(
+        collectionData.collection.address,
+        contracts.UniverseERC721Core.abi,
+        signer
+      );
+
+      const owner = await collectionContract.owner();
+      setCollectionOwner(owner.toLowerCase());
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  useEffect(() => {
     setDarkMode(false);
   }, []);
+
+  useEffect(() => {
+    if (collectionData && collectionData.collection && collectionData.collection.address) {
+      fetchCollectionOwner();
+    }
+  }, [collectionData]);
 
   useEffect(() => {
     if (results.collection) {
@@ -127,7 +153,7 @@ const Collection = () => {
               />
             </div>
             <div className="collection__details__header__tp__right">
-              {address === collectionData?.collection?.owner ? ( //
+              {address.toLowerCase() === collectionOwner ? ( //
                 <div className="collection__vote__edit">
                   {/* <div>
                     <Button className="light-button">

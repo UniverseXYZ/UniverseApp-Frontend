@@ -1,6 +1,7 @@
 /* eslint-disable no-await-in-loop */
 import React, { useState, useRef, useEffect, useMemo } from 'react';
 import PropTypes from 'prop-types';
+import { BigNumber } from 'ethers';
 import Popup from 'reactjs-popup';
 import { useHistory, useLocation } from 'react-router-dom';
 import Input from '../../input/Input.jsx';
@@ -17,8 +18,6 @@ import { RouterPrompt } from '../../../utils/routerPrompt.js';
 import {
   editCollection,
   editCollectionImage,
-  getMyMintingCollections,
-  getMyMintedCollections,
   saveCollection,
   attachTxHashToCollection,
 } from '../../../utils/api/mintNFT';
@@ -27,6 +26,8 @@ import { useAuthContext } from '../../../contexts/AuthContext.jsx';
 import { useErrorContext } from '../../../contexts/ErrorContext';
 import RevenueSplits from '../revenueSplits/RevenueSplits.jsx';
 import SocialConnections from '../socialConnections/SocialConnections.jsx';
+import { formatRoyaltiesForMinting } from '../../../utils/helpers/contractInteraction.js';
+import { getCollectionRoyaltiesFromRegistry } from '../../../utils/api/royaltyRegistry';
 
 const MAX_FIELD_CHARS_LENGTH = {
   name: 32,
@@ -37,18 +38,12 @@ const MAX_FIELD_CHARS_LENGTH = {
 const NFTCollectionForm = ({ showCollectible, setShowCollectible, scrollToTop }) => {
   const {
     myNFTs,
-    setMyNFTs,
-    collectionMintingTxHash,
     activeTxHashes,
     setActiveTxHashes,
-    setMyMintingCollections,
-    mintingCollectionsCount,
-    setMintingCollectionsCount,
     setMyNFTsSelectedTabIndex,
     myMintableCollections,
-    setMyMintableCollections,
   } = useMyNftsContext();
-  const { setDeployedCollections, universeERC721FactoryContract } = useAuthContext();
+  const { universeERC721FactoryContract, signer } = useAuthContext();
   const { setShowError, setErrorTitle, setErrorBody } = useErrorContext();
   const [showPrompt, setShowPrompt] = useState(false);
   const location = useLocation();
@@ -61,7 +56,6 @@ const NFTCollectionForm = ({ showCollectible, setShowCollectible, scrollToTop })
   const [collectionName, setCollectionName] = useState('');
   const [tokenName, setTokenName] = useState('');
   const [description, setDescription] = useState('');
-  const [inputClass, setInputClass] = useState('inp empty');
   const [collectionNFTs, setCollectionNFTs] = useState([]);
   const [collectionNFTsID, setCollectionNFTsID] = useState(null);
   const [mintNowClick, setMintNowClick] = useState(false);
@@ -76,13 +70,15 @@ const NFTCollectionForm = ({ showCollectible, setShowCollectible, scrollToTop })
     shorturl: '',
   });
   const [showRevenueSplits, setShowRevenueSplits] = useState(true);
-  const [revenueSplits, setRevenueSplits] = useState([{ walletAddress: '', amount: '10' }]);
+  const [revenueSplits, setRevenueSplits] = useState([{ address: '', amount: '' }]);
+  const [initialRevenueSplits, setInitialsRevenueSplits] = useState([{ address: '', amount: '' }]);
   const [revenueSplitsValidAddress, setRevenueSplitsValidAddress] = useState(true);
   const [siteLink, setSiteLink] = useState('');
   const [discordLink, setDiscordLink] = useState('');
   const [instagramLink, setInstagramLink] = useState('');
   const [mediumLink, setMediumLink] = useState('');
   const [telegramLink, setTelegramLink] = useState('');
+  const [registryContract, setRegistryContract] = useState(null);
 
   const validateFile = (file) => {
     setMintNowClick(false);
@@ -125,8 +121,6 @@ const NFTCollectionForm = ({ showCollectible, setShowCollectible, scrollToTop })
     });
   };
 
-  const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
-
   const handleMinting = () => {
     setMintNowClick(true);
     if (!collectionName || !tokenName || !coverImage) {
@@ -136,11 +130,6 @@ const NFTCollectionForm = ({ showCollectible, setShowCollectible, scrollToTop })
         collectible: '',
         coverImage: 'File format must be PNG, JPEG, GIF (Max Size: 1mb)',
       });
-      if (errors.shorturl.length > 0) {
-        setInputClass('empty__error');
-      } else {
-        setInputClass('inp');
-      }
     } else {
       const collectionNameExists = myMintableCollections.length
         ? myMintableCollections.filter(
@@ -171,10 +160,6 @@ const NFTCollectionForm = ({ showCollectible, setShowCollectible, scrollToTop })
   const onMintCollection = async () => {
     try {
       setShowLoading(true);
-
-      const mintingFlowContext = {
-        universeERC721FactoryContract,
-      };
 
       const collectionData = {
         file: coverImage,
@@ -210,6 +195,19 @@ const NFTCollectionForm = ({ showCollectible, setShowCollectible, scrollToTop })
             res = await editCollectionImage(coverImage, location.state?.collection?.id);
           }
         }
+
+        // Compare new and existing royalties for changes
+        // This can be improved to be case and order insensitive
+        const areRevenueSplitsDifferent =
+          JSON.stringify(revenueSplits) !== JSON.stringify(initialRevenueSplits);
+        if (areRevenueSplitsDifferent && registryContract) {
+          const formattedRoyalties = formatRoyaltiesForMinting(revenueSplits);
+          const royaltyTx = await registryContract.setRoyaltiesByToken(
+            location.state?.collection?.address,
+            formattedRoyalties
+          );
+          const txReceipt = await royaltyTx.wait();
+        }
       } else {
         // Create the collection
         const saveRequestPromise = saveCollection(collectionData);
@@ -224,7 +222,6 @@ const NFTCollectionForm = ({ showCollectible, setShowCollectible, scrollToTop })
         const [save, tx] = await Promise.all([saveRequestPromise, txReqPromise]);
         res = await attachTxHashToCollection(tx.hash, save.id);
       }
-
       setShowLoading(false);
       setShowPrompt(false);
       if (res) {
@@ -295,9 +292,40 @@ const NFTCollectionForm = ({ showCollectible, setShowCollectible, scrollToTop })
     }
   }, [errors]);
 
+  const fetchRoyaltyRegistry = async () => {
+    try {
+      const [contract, royalties] = await getCollectionRoyaltiesFromRegistry(
+        location.state.collection.address,
+        signer
+      );
+      setRegistryContract(contract);
+      // Index 1 is collection royalties
+      if (royalties.length && royalties[1].length) {
+        const collectionRoyalties = royalties[1].map((royalty) => ({
+          address: royalty[0],
+          amount: BigNumber.from(royalty[1]).div(100).toString(),
+        }));
+        setRevenueSplits(collectionRoyalties);
+        setInitialsRevenueSplits(collectionRoyalties);
+      }
+      console.log(royalties);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  useEffect(() => {
+    if (signer && location.state.collection.address) {
+      fetchRoyaltyRegistry();
+    }
+  }, [signer, location.state.collection.address]);
+
   useEffect(() => {
     // It means we have opened a collection for EDIT
     if (location.state?.collection?.id) {
+      if (location.state.collection.address) {
+        fetchRoyaltyRegistry();
+      }
       const res = location.state?.collection;
       setCollectionName(res.name);
       // An already deployed collection should have a coverUrl
@@ -469,15 +497,17 @@ const NFTCollectionForm = ({ showCollectible, setShowCollectible, scrollToTop })
           {description ? description.length : 0}/{MAX_FIELD_CHARS_LENGTH.description}
         </p>
       </div>
-      <RevenueSplits
-        showRevenueSplits={showRevenueSplits}
-        setShowRevenueSplits={setShowRevenueSplits}
-        revenueSplits={revenueSplits}
-        setRevenueSplits={setRevenueSplits}
-        revenueSplitsValidAddress={revenueSplitsValidAddress}
-        setRevenueSplitsValidAddress={setRevenueSplitsValidAddress}
-        disabled
-      />
+      {location.state.collection && location.state.collection.id && (
+        <RevenueSplits
+          showRevenueSplits={showRevenueSplits}
+          setShowRevenueSplits={setShowRevenueSplits}
+          revenueSplits={revenueSplits}
+          setRevenueSplits={setRevenueSplits}
+          revenueSplitsValidAddress={revenueSplitsValidAddress}
+          setRevenueSplitsValidAddress={setRevenueSplitsValidAddress}
+          maxRevenueSplitsPercent={100}
+        />
+      )}
       <SocialConnections
         siteLink={siteLink}
         setSiteLink={setSiteLink}
@@ -518,7 +548,7 @@ const NFTCollectionForm = ({ showCollectible, setShowCollectible, scrollToTop })
             <Button
               className="light-button"
               onClick={handleMinting}
-              disabled={!collectionName || !tokenName}
+              disabled={!collectionName || !tokenName || !revenueSplitsValidAddress}
             >
               Submit changes
             </Button>
