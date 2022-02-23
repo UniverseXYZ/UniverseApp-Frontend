@@ -38,12 +38,14 @@ interface IDateTimePickerProps {
   // TODO: add nowAsDefault(boolean)
   modalName: string;
   value: Date | null,
+  minDate?: Date,
+  disabled?: boolean,
   onChange?: (val: Date) => void,
   onOpen?: () => void,
   onClose?: () => void,
 }
 
-export const DateTimePicker = ({ value, onChange, onOpen, onClose, ...props }: IDateTimePickerProps) => {
+export const DateTimePicker = ({ value, onChange, onOpen, onClose, minDate, disabled, ...props }: IDateTimePickerProps) => {
   const { isOpen, onOpen: openDisclosure, onClose: closeDisclosure } = useDisclosure();
 
   const formik = useFormik<{
@@ -82,9 +84,12 @@ export const DateTimePicker = ({ value, onChange, onOpen, onClose, ...props }: I
     onClose && onClose();
   }, [onClose]);
 
+  const saveDisabled = !(formik.values.date && formik.values.hours && formik.values.minutes);
+
   return (
     <>
       <Button
+        isDisabled={disabled}
         rightIcon={<Image src={calendarIcon} width={'16px'} />}
         sx={styles.dateTimeInput}
         onClick={handleOpen}
@@ -115,6 +120,7 @@ export const DateTimePicker = ({ value, onChange, onOpen, onClose, ...props }: I
               useWeekdaysShort={false}
               formatWeekDay={(d) => d.charAt(0)}
               renderCustomHeader={DateTimePickerHeader}
+              minDate={minDate}
             />
             <Flex sx={styles.timeLabels}>
               <Text fontSize={'14px'} fontWeight={700}>Select time</Text>
@@ -141,7 +147,7 @@ export const DateTimePicker = ({ value, onChange, onOpen, onClose, ...props }: I
 
           <ModalFooter sx={styles.modalFooter}>
             <Button ml={0} variant="outline" onClick={handleClose}>Cancel</Button>
-            <Button mr={0} boxShadow={'lg'} onClick={formik.submitForm}>Save</Button>
+            <Button isDisabled={saveDisabled} mr={0} boxShadow={'lg'} onClick={formik.submitForm}>Save</Button>
           </ModalFooter>
         </ModalContent>
       </Modal>
