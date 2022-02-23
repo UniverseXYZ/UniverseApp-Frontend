@@ -51,8 +51,6 @@ export const SettingsTabFixedListing = () => {
     return null;
   }
 
-  console.log(form.values.startDate)
-
   return (
     <>
       { amountType === SellAmountType.BUNDLE && (<BundleForm />) }
