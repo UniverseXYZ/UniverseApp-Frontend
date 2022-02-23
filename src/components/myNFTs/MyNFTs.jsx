@@ -26,6 +26,7 @@ import { sendBatchMintRequest, sendMintRequest } from '../../userFlows/api/Contr
 import { createMintingNFT, getMetaForSavedNft } from '../../utils/api/mintNFT';
 import { formatRoyaltiesForMinting } from '../../utils/helpers/contractInteraction';
 import useStateIfMounted from '../../utils/hooks/useStateIfMounted';
+import { getNftsPerAddress } from '../../utils/api/marketplace.ts';
 
 const MyNFTs = () => {
   const tabs = ['Wallet', 'Collections', 'Saved NFTs', 'Universe NFTs'];
@@ -40,6 +41,7 @@ const MyNFTs = () => {
     setActiveTxHashes,
     nftSummary,
     fetchNftSummary,
+    setNftSummary,
   } = useMyNftsContext();
 
   const { userLobsters } = useLobsterContext();
@@ -89,9 +91,20 @@ const MyNFTs = () => {
     };
   }, []);
 
-  useEffect(() => {
-    fetchNftSummary();
-  }, []);
+  useEffect(async () => {
+    if (address) {
+      const summary = await fetchNftSummary();
+      const { total: totalNFTs } = await getNftsPerAddress(utils.getAddress(address), 1, 1);
+      const summaryCopy = { ...summary };
+
+      // Update total NFTs with the new Scraper Data
+      if (totalNFTs) {
+        summaryCopy.nfts = totalNFTs;
+      }
+
+      setNftSummary(summaryCopy);
+    }
+  }, [address]);
 
   const handleMintSelected = async () => {
     setShowLoading(true);
