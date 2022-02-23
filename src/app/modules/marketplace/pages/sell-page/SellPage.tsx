@@ -29,7 +29,7 @@ import { sign } from '../../../../helpers';
 import { useAuthContext } from '../../../../../contexts/AuthContext';
 import { TOKENS_MAP, ZERO_ADDRESS } from '../../../../constants';
 import { TokenTicker } from '../../../../enums';
-import { GetNFT2Api, GetNFTApi } from '../../../nft/api';
+import { GetNFT2Api } from '../../../nft/api';
 import { INFT } from '../../../nft/types';
 import { EncodeOrderApi, GetSaltApi, IEncodeOrderApiData } from '../../../../api';
 import Contracts from '../../../../../contracts/contracts.json';
