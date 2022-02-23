@@ -103,7 +103,7 @@ export const SettingsTabFixedListing = () => {
           </SimpleGrid>
         </Flex>
       </Flex>
-      <Flex data-checkbox sx={styles.settingsItem}>
+      {/* <Flex data-checkbox sx={styles.settingsItem}>
         <Box>
           <Heading as={'h5'}>Privacy</Heading>
           <Text>You can keep your listing public, or you can specify one address that’s allowed to buy it.</Text>
@@ -128,7 +128,7 @@ export const SettingsTabFixedListing = () => {
             </InputShadow>
           </Box>
         )}
-      </Flex>
+      </Flex> */}
     </>
   );
 };
