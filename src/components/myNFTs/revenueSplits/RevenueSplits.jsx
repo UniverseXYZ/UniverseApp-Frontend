@@ -15,8 +15,6 @@ const REVENUE_SPLITS_COUNT = 5;
 
 const ADDRESS_PLACEHOLDER = '0x89205A3A3b2A69De6Dbf7f01ED13B2108B2c43e7';
 
-const MAX_REVENUE_SPLITS_PERCENT = 20;
-
 const INVALID_ADDRESS_TEXT = 'Please enter valid address or ENS';
 
 const RevenueSplits = (props) => {
@@ -29,6 +27,7 @@ const RevenueSplits = (props) => {
     revenueSplitsValidAddress,
     setRevenueSplitsValidAddress,
     disabled,
+    maxRevenueSplitsPercent,
   } = props;
 
   const [revenueSplitsMapIndexes, setRevenueSplitsMapIndexes] = useState(
@@ -120,7 +119,7 @@ const RevenueSplits = (props) => {
       (accumulator, current) => accumulator + Number(current.amount),
       0
     );
-    if (result <= MAX_REVENUE_SPLITS_PERCENT && val >= 0) {
+    if (result <= maxRevenueSplitsPercent && val >= 0) {
       setRevenueSplits(newRevenueSplits);
     }
   };
@@ -251,10 +250,12 @@ RevenueSplits.propTypes = {
   revenueSplitsValidAddress: PropTypes.bool.isRequired,
   setRevenueSplitsValidAddress: PropTypes.func.isRequired,
   disabled: PropTypes.bool,
+  maxRevenueSplitsPercent: PropTypes.number,
 };
 
 RevenueSplits.defaultProps = {
   disabled: false,
+  maxRevenueSplitsPercent: 20,
 };
 
 export default RevenueSplits;

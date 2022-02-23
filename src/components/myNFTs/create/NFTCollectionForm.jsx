@@ -505,6 +505,7 @@ const NFTCollectionForm = ({ showCollectible, setShowCollectible, scrollToTop })
           setRevenueSplits={setRevenueSplits}
           revenueSplitsValidAddress={revenueSplitsValidAddress}
           setRevenueSplitsValidAddress={setRevenueSplitsValidAddress}
+          maxRevenueSplitsPercent={100}
         />
       )}
       <SocialConnections
