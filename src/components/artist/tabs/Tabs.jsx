@@ -29,8 +29,6 @@ const Tabs = ({ username, artistAddress }) => {
       }
 
       setNftSummary(summaryCopy);
-
-      console.log(summaryCopy);
     }
   }, [address]);
 
