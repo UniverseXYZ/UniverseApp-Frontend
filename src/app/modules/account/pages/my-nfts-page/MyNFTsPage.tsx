@@ -1,5 +1,5 @@
 import { useHistory } from 'react-router-dom';
-import { Contract } from 'ethers';
+import { Contract, utils } from 'ethers';
 import React, { useEffect, useRef } from 'react';
 import Popup from 'reactjs-popup';
 
@@ -26,6 +26,7 @@ import LikedNFTs from '../../../../../components/myNFTs/LikedNFTs';
 import NFTsActivity from '../../../../../components/myNFTs/NFTsActivity';
 import { useClickAway, useTitle } from 'react-use';
 import { WalletTab } from './components';
+import { getNftsPerAddress } from '../../../../../utils/api/marketplace';
 
 export const MyNFTsPage = () => {
   const tabs = ['Wallet', 'Collections', 'Saved NFTs', 'Universe NFTs'];
@@ -40,6 +41,7 @@ export const MyNFTsPage = () => {
     setActiveTxHashes,
     nftSummary,
     fetchNftSummary,
+    setNftSummary,
   } = useMyNftsContext() as any;
 
   const { userLobsters } = useLobsterContext() as any;
@@ -79,6 +81,22 @@ export const MyNFTsPage = () => {
     setDarkMode(false);
     fetchNftSummary();
   }, []);
+
+  // @ts-ignore
+  useEffect(async () => {
+    if (address) {
+      const summary = await fetchNftSummary();
+      const { total: totalNFTs } = await getNftsPerAddress(utils.getAddress(address), 1, 1);
+      const summaryCopy = { ...summary };
+
+      // Update total NFTs with the new Scraper Data
+      if (totalNFTs) {
+        summaryCopy.nfts = totalNFTs;
+      }
+
+      setNftSummary(summaryCopy);
+    }
+  }, [address]);
 
   const handleMintSelected = async () => {
     setShowLoading(true);
