@@ -9,7 +9,7 @@ import 'swiper/swiper.min.css';
 import { IERC721BundleAssetType, INFT, IOrder } from '../../types';
 import { ItemWrapper } from '../../../../components';
 import * as styles from '../nft-item/styles';
-import { NFTItemAsset, NFTItemFooter, NFTItemRelation } from '../nft-item/components';
+import { NFTItemAsset, NFTItemFooter, NFTItemFooterBundleLabel, NFTItemRelation } from '../nft-item/components';
 import { NFTRelationType } from '../../enums';
 
 interface IBundleItemProps {
@@ -25,9 +25,6 @@ interface IBundleItemProps {
   renderContent?: ((NFTs: INFT[], order: IOrder) => React.ReactNode) | null;
   renderFooter?: ((NFTs: INFT[], order: IOrder) => React.ReactNode) | null;
 
-  // TODO: remove
-  renderNFTAdditions?: React.ReactNode | null;
-
   onClick?: (e: React.MouseEvent<HTMLElement>, NFTs: INFT[], order: IOrder) => void;
 }
 
@@ -42,7 +39,6 @@ export const BundleItem = (
     renderAsset,
     renderContent,
     renderFooter,
-    renderNFTAdditions,
     onClick,
   }: IBundleItemProps
 ) => {
@@ -118,11 +114,9 @@ export const BundleItem = (
 
             {renderFooter === null ? null :
               renderFooter ? renderFooter(NFTs, order) : (
-                <NFTItemFooter
-                  NFT={NFTs[0]}
-                  renderNFTAdditions={renderNFTAdditions}
-                  bundleNFTsLength={NFTs.length}
-                />
+                <NFTItemFooter>
+                  <NFTItemFooterBundleLabel count={NFTs.length} />
+                </NFTItemFooter>
               )
             }
           </Box>
