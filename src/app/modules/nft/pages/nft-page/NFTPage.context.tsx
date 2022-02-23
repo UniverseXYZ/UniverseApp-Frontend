@@ -45,7 +45,7 @@ const NFTPageProvider: FC = ({ children }) => {
   );
 
   const { data: collection } = useQuery(
-    ['user', NFT?._collectionAddress],
+    ['collection', NFT?._collectionAddress],
     () => GetCollectionApi(`${NFT?._collectionAddress}`),
     { enabled: !!NFT?.id, retry: false, onSuccess: (collection) => console.log('collection', collection) },
   );

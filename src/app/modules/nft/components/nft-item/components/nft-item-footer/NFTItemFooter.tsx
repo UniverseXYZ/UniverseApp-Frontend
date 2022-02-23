@@ -1,41 +1,48 @@
-import { Box, Button, Flex } from '@chakra-ui/react';
+import { Box, BoxProps, Flex } from '@chakra-ui/react';
 import React from 'react';
 
 import { INFT } from '../../../../types';
-import { NFTItemCompositionLabel, NFTItemBundleLabel } from '../nft-item-type-labels';
 import { NFTLike } from '../nft-like';
-import { NFTItemEditionsLabel } from '../nft-item-editions-label';
 import * as styles from './styles';
+import {
+  NFTItemFooterEditionsLabel,
+  NFTItemFooterStandardLabel,
+  NFTItemFooterBundleLabel,
+  NFTItemFooterCompositionLabel,
+} from './components';
 
-interface INFTItemFooterProps {
-  NFT: INFT;
-  renderNFTAdditions?: React.ReactNode | null;
-  bundleNFTsLength?: number;
+interface INFTItemFooterProps extends BoxProps {
+  NFT?: INFT;
 }
 
 export const NFTItemFooter = (
   {
     NFT,
-    renderNFTAdditions,
-    bundleNFTsLength = 0,
+    children,
+    ...rest
   }: INFTItemFooterProps
 ) => {
-  return (
-    <Flex {...styles.WrapperStyle}>
-      <Flex>
-        {/*<Button size={'sm'} mr={'5px'} borderRadius={'8px'}>Buy now</Button>*/}
-        {renderNFTAdditions || renderNFTAdditions === null ? renderNFTAdditions : (
-          <NFTItemEditionsLabel nft={NFT} mr={'6px'} />
-        )}
-        {bundleNFTsLength ? (<NFTItemBundleLabel count={bundleNFTsLength} mr={'6px'} />) : null}
-        {/*TODO: composition*/}
-        {/*{NFT.assets?.length && (<NFTItemCompositionLabel count={NFT.assets.length ?? 0} mr={'6px'} />)}*/}
-      </Flex>
+  const showLikes = false;
 
-      <Box>
-        {/*TODO: likes*/}
-        {/*<NFTLike likes={[]} isLiked={true} />*/}
-      </Box>
+  return (
+    <Flex {...styles.WrapperStyle} {...rest}>
+      {children ? children : (
+        <>
+          <Flex>
+            <Box sx={{ '> div': { mr: '6px', _last: { mr: 0 } } }}>
+              {NFT && <NFTItemFooterStandardLabel NFT={NFT} />}
+              {NFT && <NFTItemFooterEditionsLabel NFT={NFT} />}
+              {/*TODO: composition*/}
+              {/*{NFT.assets?.length && (<NFTItemFooterCompositionLabel count={NFT.assets.length ?? 0} mr={'6px'} />)}*/}
+            </Box>
+          </Flex>
+
+          <Box>
+            {/*TODO: likes*/}
+            {showLikes && <NFTLike likes={[]} isLiked={true} />}
+          </Box>
+        </>
+      )}
     </Flex>
   );
 };

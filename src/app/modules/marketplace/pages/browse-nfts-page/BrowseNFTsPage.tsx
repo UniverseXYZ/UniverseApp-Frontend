@@ -381,14 +381,16 @@ export const BrowseNFTsPage = () => {
                   <NftItem
                     key={order.id}
                     NFT={NFTs[0]}
+                    collection={`${NFTs[0].collection?.address}`}
                     renderContent={() => (
                       <NFTItemContentWithPrice
                         name={NFTs[0].name}
                         creator={NFTs[0].creator}
                         collection={NFTs[0].collection}
                         owner={NFTs[0].owner}
-                        price={+utils.formatUnits(order.take.value, `${TOKENS_MAP[order.take.assetType.assetClass as TokenTicker].decimals}`)}
-                        priceToken={order.take.assetType.assetClass as TokenTicker}
+                        order={order}
+                        // price={+utils.formatUnits(order.take.value, `${TOKENS_MAP[order.take.assetType.assetClass as TokenTicker].decimals}`)}
+                        // priceToken={order.take.assetType.assetClass as TokenTicker}
                       />
                     )}
                   />
@@ -401,8 +403,9 @@ export const BrowseNFTsPage = () => {
                       <NFTItemContentWithPrice
                         name={(order.make.assetType as IERC721BundleAssetType).bundleName}
                         creator={NFTs[0].creator}
-                        price={+utils.formatUnits(order.take.value, `${TOKENS_MAP[order.take.assetType.assetClass as TokenTicker].decimals}`)}
-                        priceToken={order.take.assetType.assetClass as TokenTicker}
+                        order={order}
+                        // price={+utils.formatUnits(order.take.value, `${TOKENS_MAP[order.take.assetType.assetClass as TokenTicker].decimals}`)}
+                        // priceToken={order.take.assetType.assetClass as TokenTicker}
                       />
                     )}
                   />

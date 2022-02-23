@@ -42,7 +42,6 @@ import {
   PriceRangeFilter,
   SaleTypeFilter,
 } from '../../../../../../components';
-import { NFTItemEditionsLabel } from '../../../../../../../nft/components/nft-item/components';
 import { FilterCollectionsItems } from '../../../../../../mocks/filter-collections';
 import { FilterArtistsItems } from '../../../../../../mocks/filter-artists';
 import { useMyNftsContext } from '../../../../../../../../../contexts/MyNFTsContext';
@@ -55,6 +54,7 @@ import {
   mapBackendNft,
   mapBackendUser,
 } from '../../../../../../../nft';
+import { NFTItemFooter, NFTItemFooterEditionsLabel } from '../../../../../../../nft/components/nft-item/components';
 
 interface IActionBarNFTItemProps {
   nft: INFT;
@@ -321,21 +321,26 @@ export const SelectNFTs = ({}: ISelectNFTsProps) => {
               <NftItem
                 key={nft.id}
                 NFT={nft}
+                collection={`${nft.collection?.address}`}
                 isSelected={!!selectedEditions.length}
                 selectedLabel={isMultipleEditions ? `${selectedEditions.length} / ${tokensNumber}` : undefined}
-                renderNFTAdditions={isMultipleEditions
-                  ? (
-                    <SelectEditionsDropdown
-                      NFT={nft}
-                      selectedEditions={selectedEditions}
-                      onChange={(editions) => handleCheckNFT(nft, editions)}
-                    />
-                  )
-                  : (
-                    <NFTItemEditionsLabel nft={nft} mr={'6px'}>
-                      {nft.tokenIds ? `#${nft.tokenIds[0]}` : ''}
-                    </NFTItemEditionsLabel>)
-                }
+                renderFooter={() => (
+                  <NFTItemFooter>
+                    {isMultipleEditions
+                      ? (
+                        <SelectEditionsDropdown
+                          NFT={nft}
+                          selectedEditions={selectedEditions}
+                          onChange={(editions) => handleCheckNFT(nft, editions)}
+                        />
+                      )
+                      : (
+                        <Box layerStyle={'nft-card-footer-label'} mr={'6px'}>
+                          {nft.tokenIds ? `#${nft.tokenIds[0]}` : ''}
+                        </Box>
+                      )}
+                  </NFTItemFooter>
+                )}
                 onClick={isMultipleEditions
                   ? () => {}
                   : () => handleCheckNFT(nft, !!selectedEditions.length ? [] : [nft.tokenId])

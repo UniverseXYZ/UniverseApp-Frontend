@@ -2,23 +2,33 @@ import { Box, Flex, Text } from '@chakra-ui/react';
 import React, { useMemo } from 'react';
 
 import { NFTItemRelation } from '../nft-item-relation';
-import { NFTRelationType } from '../../../../enums';
-import { ICollection, IUser } from '../../../../types';
+import { NFTRelationType, OrderAssetClass } from '../../../../enums';
+import { ICollection, IERC721AssetType, IOrder, IUser } from '../../../../types';
 import { TokenTicker } from '../../../../../../enums';
 import { TokenIcon } from '../../../../../../components';
 import { TOKENS_MAP } from '../../../../../../constants';
+import { useQuery } from 'react-query';
+import { GetNFT2Api, GetOrdersApi } from '../../../../api';
+import { utils } from 'ethers';
+
+type IOrderFetchPayload = {
+  assetClass: OrderAssetClass,
+  collectionAddress: string;
+  tokenId: string;
+}
 
 export interface INFTItemContentWithPriceProps {
   name: string;
   creator?: IUser;
   collection?: ICollection;
   owner?: IUser;
-  price: number;
-  priceToken: TokenTicker;
-  offerPrice?: number | string;
-  offerPriceToken?: TokenTicker;
-  lastPrice?: number | string;
-  lastPriceToken?: TokenTicker;
+  order: IOrder | IOrderFetchPayload;
+  // price: number;
+  // priceToken: TokenTicker;
+  // offerPrice?: number | string;
+  // offerPriceToken?: TokenTicker;
+  // lastPrice?: number | string;
+  // lastPriceToken?: TokenTicker;
 }
 
 export const NFTItemContentWithPrice = (
@@ -27,28 +37,70 @@ export const NFTItemContentWithPrice = (
     creator,
     collection,
     owner,
-    price,
-    priceToken,
-    offerPrice,
-    offerPriceToken,
-    lastPrice,
-    lastPriceToken,
+    order: _order,
+    // price,
+    // priceToken,
+    // offerPrice,
+    // offerPriceToken,
+    // lastPrice,
+    // lastPriceToken,
   }: INFTItemContentWithPriceProps
 ) => {
+
+  const { data: order, isLoading: isLoadingOrder } = useQuery(
+    (_order as IOrder).id
+      ? ['order', (_order as IOrder).id]
+      : ['NFT', (_order as IOrderFetchPayload).collectionAddress, (_order as IOrderFetchPayload).tokenId, 'order'],
+    async () => {
+      const collectionAddress = (_order as IOrderFetchPayload).collectionAddress.toLowerCase();
+
+      const { orders } = await GetOrdersApi({
+        assetClass: (_order as IOrderFetchPayload).assetClass,
+        collection: collectionAddress,
+        // tokenId,
+        side: 1,
+      });
+
+      return orders.find((order) => {
+        const assetType = order.make.assetType as IERC721AssetType;
+        return assetType.contract === collectionAddress
+          && +assetType.tokenId === +(_order as IOrderFetchPayload).tokenId
+          && !order.cancelledTxHash;
+      });
+    },
+    {
+      retry: false,
+      staleTime: !(_order as IOrder).id ? 0 : Infinity,
+      initialData: !(_order as IOrder).id ? undefined : (_order as IOrder),
+    },
+  );
 
   const [additionPriceLabel, additionPriceValue, additionPriceToken] = useMemo(() => {
     const defaultTicker = TOKENS_MAP.ETH.ticker;
 
-    if (offerPrice) {
-      return ['Offer for', offerPrice, offerPriceToken ?? defaultTicker];
-    }
-
-    if (lastPrice) {
-      return ['Last', lastPrice, lastPriceToken ?? defaultTicker];
-    }
+    // TODO
+    // if (offerPrice) {
+    //   return ['Offer for', offerPrice, offerPriceToken ?? defaultTicker];
+    // }
+    //
+    // if (lastPrice) {
+    //   return ['Last', lastPrice, lastPriceToken ?? defaultTicker];
+    // }
 
     return [null, null, defaultTicker];
-  }, [offerPrice, lastPrice]);
+  }, [] /*[offerPrice, lastPrice]*/);
+
+  const price = useMemo(() => {
+    if (!order) {
+      return null;
+    }
+
+    return +utils.formatUnits(order.take.value, `${TOKENS_MAP[order.take.assetType.assetClass as TokenTicker].decimals}`);
+  }, [order]);
+
+  const priceToken = useMemo(() => {
+    return (order?.take.assetType.assetClass as TokenTicker) ?? null;
+  }, [order]);
 
   return (
     <>
@@ -56,15 +108,19 @@ export const NFTItemContentWithPrice = (
         <Text>{name}</Text>
         <Text>
           {/*TODO: provide text "top bit" | "min bit" in case of auction*/}
-          <TokenIcon
-            ticker={priceToken}
-            display={'inline'}
-            mx={'4px'}
-            position={'relative'}
-            top={'-2px'}
-            width={'20px'}
-          />
-          {price}
+          {order && (
+            <>
+              <TokenIcon
+                ticker={priceToken}
+                display={'inline'}
+                mx={'4px'}
+                position={'relative'}
+                top={'-2px'}
+                width={'20px'}
+              />
+              {price}
+            </>
+          )}
         </Text>
       </Flex>
 

@@ -19,6 +19,14 @@ const theme = extendTheme({
       border: '1px solid rgba(0, 0, 0, 0.1)',
       borderRadius: '10px',
     },
+    'nft-card-footer-label': {
+      bg: 'rgba(0, 0, 0, 0.05)',
+      borderRadius: '8px',
+      color: 'rgba(0, 0, 0, 0.4)',
+      display: 'inline-block',
+      padding: '10px',
+      lineHeight: '12px',
+    },
   },
 });
 
