@@ -31,7 +31,7 @@ export const getUserNFTsApi = async (address: string, page: string | number, siz
         thumbnailUrl: nft.metadata?.image_url, // TODO
         originalUrl: nft.metadata?.image_url, // TODO
         optimizedUrl: nft.metadata?.image_url, // TODO
-        artworkType: extParts.length ? extParts[extParts.length - 1] as NFTArtworkType : '',
+        artworkType: extParts?.length ? extParts[extParts.length - 1] as NFTArtworkType : '',
         amount: 0, // TODO
         txHash: null,
         collectionId: 0,
