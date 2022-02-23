@@ -38,6 +38,7 @@ const MyNFTsContextProvider = ({ children }) => {
   const fetchNftSummary = async () => {
     const summary = await getNftSummary();
     setNftSummary(summary);
+    return summary;
   };
 
   const navigateToMyUniverseNFTsTab = (characterFilter) => {
@@ -95,6 +96,7 @@ const MyNFTsContextProvider = ({ children }) => {
         setMyMintableCollections,
         fetchNftSummary,
         nftSummary,
+        setNftSummary,
         userPageNftsCount,
         setUserPageNftsCount,
       }}
