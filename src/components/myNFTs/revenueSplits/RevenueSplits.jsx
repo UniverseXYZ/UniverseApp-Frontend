@@ -56,15 +56,15 @@ const RevenueSplits = (props) => {
     try {
       const ens = await web3Provider.resolveName(val);
       const ensToAddress = utils.isAddress(ens);
-      prevProperties[index].walletAddress = ensToAddress ? ens.toLowerCase() : val;
+      prevProperties[index].address = ensToAddress ? ens.toLowerCase() : val;
       prevProperties[index].error = !ensToAddress ? INVALID_ADDRESS_TEXT : '';
     } catch (e) {
-      prevProperties[index].walletAddress = val.toLowerCase();
+      prevProperties[index].address = val.toLowerCase();
       prevProperties[index].error = !utils.isAddress(val) ? INVALID_ADDRESS_TEXT : '';
     }
 
     const addressErrors = prevProperties.filter((prop) => prop.error);
-    const lastAddress = prevProperties[index].walletAddress;
+    const lastAddress = prevProperties[index].address;
 
     // eslint-disable-next-line no-restricted-syntax
     for (const r in revenueSplitsMapIndexes) {
@@ -87,7 +87,7 @@ const RevenueSplits = (props) => {
         revenueSplitsMapIndexes[lastAddress].splice(revenueSplitsMapIndexes[r].indexOf(index), 1);
       }
     }
-    const value = prevProperties[index].walletAddress;
+    const value = prevProperties[index].address;
     if (revenueSplitsMapIndexes[value] && !revenueSplitsMapIndexes[value].includes(index)) {
       revenueSplitsMapIndexes[value].push(index);
     } else {
@@ -126,12 +126,20 @@ const RevenueSplits = (props) => {
   };
 
   const removeRevenueSplit = (index) => {
+    // If remove is pressed on the last revenue split
+    if (index === 0 && revenueSplits.length === 1) {
+      setShowRevenueSplits(false);
+      setRevenueSplits([{ address: '', amount: '' }]);
+      setRevenueSplitsValidAddress(true);
+      return;
+    }
+
     const temp = [...revenueSplits];
     const removed = temp.splice(index, 1)[0];
     setRevenueSplits(temp);
 
     const tempIndexes = { ...revenueSplitsMapIndexes };
-    const occuranceArray = tempIndexes[removed.walletAddress];
+    const occuranceArray = tempIndexes[removed.address];
     if (occuranceArray) occuranceArray?.pop();
     setRevenueSplitsMapIndexes(tempIndexes);
 
@@ -145,7 +153,7 @@ const RevenueSplits = (props) => {
 
   const addRevenueSplit = () => {
     const newRevenueSplit = [...revenueSplits];
-    const temp = { walletAddress: '', amount: '' };
+    const temp = { address: '', amount: '' };
     newRevenueSplit.push(temp);
     setRevenueSplits(newRevenueSplit);
   };
@@ -174,7 +182,7 @@ const RevenueSplits = (props) => {
       {showRevenueSplits &&
         !disabled &&
         revenueSplits.map((elm, i) => {
-          const error = elm.error || hasAddressError(elm.walletAddress, i);
+          const error = elm.error || hasAddressError(elm.address, i);
 
           return (
             // eslint-disable-next-line react/no-array-index-key
@@ -185,7 +193,7 @@ const RevenueSplits = (props) => {
                   debounceTimeout={150}
                   className={`${error ? 'error-inp inp' : 'inp'}`}
                   placeholder={ADDRESS_PLACEHOLDER}
-                  value={elm.walletAddress}
+                  value={elm.address}
                   onChange={(e) => handleWalletAddressChange(i, e.target.value)}
                 />
                 {error && <p className="error-message">{error}</p>}
