@@ -24,15 +24,24 @@ import {
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
+import { useMutation, useQuery } from 'react-query';
 
 import * as styles from './styles';
-import { TOKENS, TOKENS_MAP } from '../../../../../../constants';
+import { TOKENS, TOKENS_MAP, ZERO_ADDRESS } from '../../../../../../constants';
 import { Loading, TokenIcon } from '../../../../../../components';
-import { IOrder } from '../../../../types';
+import { INFT, IOrder } from '../../../../types';
 import { TokenTicker } from '../../../../../../enums';
 
 import ArrowIcon from '../../../../../../../assets/images/arrow-down.svg';
 import SuccessIcon from '../../../../../../../assets/images/bid-submitted.png';
+import { EncodeOrderApi, GetSaltApi, IEncodeOrderApiData } from '../../../../../../api';
+import { useAuthContext } from '../../../../../../../contexts/AuthContext';
+import axios from 'axios';
+import { GetNFT2Api } from '../../../../api';
+import { SellAmountType } from '../../../../../marketplace/pages/sell-page/enums';
+import { BigNumber, ethers } from 'ethers';
+import { sign } from '../../../../../../helpers';
+import { NFTCancelListingPopup } from '..';
 
 export enum ChangeListingPriceState {
   FORM,
@@ -46,32 +55,101 @@ export const NFTChangeListingPriceValidationSchema = Yup.object().shape({
 });
 
 interface INFTChangeListingPricePopupProps {
+  nft?: INFT;
   order?: IOrder;
   isOpen: boolean;
   onClose: () => void;
 }
 
-export const NFTChangeListingPricePopup = ({ order, isOpen, onClose, }: INFTChangeListingPricePopupProps) => {
+export const NFTChangeListingPricePopup = ({ nft, order, isOpen, onClose, }: INFTChangeListingPricePopupProps) => {
   const tokensBtnRef = useRef<HTMLButtonElement>(null);
 
   const [state, setState] = useState<ChangeListingPriceState>(ChangeListingPriceState.FORM);
+  const [isCancelListingPopupOpened, setIsCancelListingPopupOpened] = useState(false);
+  const [isMarkedForCancel, setIsMarkedForCancel] = useState(true);
 
   const tokens = useMemo(() => TOKENS.filter((token) => ![TOKENS_MAP.ETH.ticker].includes(token.ticker)), []);
 
+  const { signer, web3Provider } = useAuthContext() as any;
+
+  const getSaltMutation = useMutation(GetSaltApi);
+
+  const encodeOrderMutation = useMutation(EncodeOrderApi);
+
+  const createOrderMutation = useMutation((data: any) => {
+    return axios.post(`${process.env.REACT_APP_MARKETPLACE_BACKEND}/v1/orders/order`, data);
+  });
+
   const formik = useFormik<{ amount: string; token: TokenTicker }>({
     initialValues: {
-      amount: '',
-      token: TOKENS_MAP.WETH.ticker,
+      amount: ethers.utils.formatEther(BigNumber.from(order?.take?.value || 0)),
+      token: TOKENS_MAP.ETH.ticker,
     },
     validationSchema: NFTChangeListingPriceValidationSchema,
     onSubmit: async (value) => {
-      console.log('onSubmit(value)', value);
-
-      setState(ChangeListingPriceState.PROCESSING);
-
-      setTimeout(() => setState(ChangeListingPriceState.SUCCESS), 3000);
+      if(nft == undefined || order == undefined) {
+        return;
+      }
+      if (BigNumber.from(ethers.utils.parseUnits(`${value.amount}`,`${TOKENS_MAP[value.token as TokenTicker].decimals}`)).gt(BigNumber.from(order.take.value)) && isMarkedForCancel) {
+        setIsCancelListingPopupOpened(true);
+      } else {
+        updateListing(value);
+      }
     },
   });
+
+  const updateListing = async (value: any) => {
+    if(nft == undefined || order == undefined) {
+      return;
+    }
+
+    setState(ChangeListingPriceState.PROCESSING);
+    const network = await web3Provider.getNetwork();
+    const address = await signer.getAddress();
+
+    const salt = (await getSaltMutation.mutateAsync(address)).data.salt;
+
+    const make: any = {
+      assetType: {
+        assetClass: nft?.standard,
+        contract: nft?.collection?.address,
+        tokenId: nft.tokenId,
+      },
+      value: '1',
+    };
+
+    // TODO Refactor - add logic for bundles
+
+    const orderData: IEncodeOrderApiData = {
+      salt: salt,
+      maker: order.maker,
+      make: make,
+      taker: order.taker,
+      take: order.take,
+      type: order.type,
+      start: order.start,
+      end: order.end,
+      data: order.data,
+    };
+    orderData.take.value = ethers.utils.parseUnits(
+      `${value.amount}`,
+      `${TOKENS_MAP[value.token as TokenTicker].decimals}`
+    ).toString()
+
+    const { data: encodedOrder } = (await encodeOrderMutation.mutateAsync(orderData as IEncodeOrderApiData));
+
+    const signature = await sign(
+      web3Provider.provider,
+      encodedOrder,
+      address,
+      `${network.chainId}`,
+      `${process.env.REACT_APP_MARKETPLACE_CONTRACT}`
+    );
+
+    const createOrderResponse = (await createOrderMutation.mutateAsync({ ...orderData, signature })).data;
+
+    setState(ChangeListingPriceState.SUCCESS)
+  }
 
   useEffect(() => {
     formik.resetForm();
@@ -88,6 +166,10 @@ export const NFTChangeListingPricePopup = ({ order, isOpen, onClose, }: INFTChan
           {state === ChangeListingPriceState.FORM && (
             <Box>
               <Heading {...styles.TitleStyle} mb={'40px'}>Change the listing price</Heading>
+              <Text color={'rgba(0, 0, 0, 0.6)'} textAlign={'center'}>
+                Please, be aware in case you increase your listing price, you have to cancel the current order.
+              </Text>
+              <br></br>
 
               <FormControl mb={'30px'} isInvalid={!!(formik.touched.amount && formik.errors.amount)}>
                 {/*TODO: improve currency select & currency input components */}
@@ -182,6 +264,12 @@ export const NFTChangeListingPricePopup = ({ order, isOpen, onClose, }: INFTChan
           )}
         </ModalBody>
       </ModalContent>
+      <NFTCancelListingPopup
+        order={order}
+        isOpen={isCancelListingPopupOpened}
+        onClose={() => setIsCancelListingPopupOpened(false)}
+        handleCancel={() => setIsMarkedForCancel(false)}
+      />
     </Modal>
   );
 };

@@ -28,9 +28,10 @@ interface INFTCancelListingPopupProps {
   order?: IOrder;
   isOpen: boolean;
   onClose: () => void;
+  handleCancel: () => void;
 }
 
-export const NFTCancelListingPopup = ({ order, isOpen, onClose, }: INFTCancelListingPopupProps) => {
+export const NFTCancelListingPopup = ({ order, isOpen, onClose, handleCancel }: INFTCancelListingPopupProps) => {
 
   const { signer } = useAuthContext();
   const { setShowLoading,  setLoadingTitle, closeLoading, setTransactions } = useLoadingPopupContext();
@@ -73,7 +74,8 @@ export const NFTCancelListingPopup = ({ order, isOpen, onClose, }: INFTCancelLis
     await cancelResponse.wait();
     // Close loading modal
     closeLoading();
-  }, [contract, order, onClose]);
+    handleCancel();
+  }, [contract, order, onClose, handleCancel]);
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} isCentered>
