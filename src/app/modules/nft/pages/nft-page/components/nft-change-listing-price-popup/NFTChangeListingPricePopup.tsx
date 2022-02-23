@@ -39,8 +39,9 @@ import { useAuthContext } from '../../../../../../../contexts/AuthContext';
 import axios from 'axios';
 import { GetNFT2Api } from '../../../../api';
 import { SellAmountType } from '../../../../../marketplace/pages/sell-page/enums';
-import { ethers } from 'ethers';
+import { BigNumber, ethers } from 'ethers';
 import { sign } from '../../../../../../helpers';
+import { NFTCancelListingPopup } from '..';
 
 export enum ChangeListingPriceState {
   FORM,
@@ -64,6 +65,8 @@ export const NFTChangeListingPricePopup = ({ nft, order, isOpen, onClose, }: INF
   const tokensBtnRef = useRef<HTMLButtonElement>(null);
 
   const [state, setState] = useState<ChangeListingPriceState>(ChangeListingPriceState.FORM);
+  const [isCancelListingPopupOpened, setIsCancelListingPopupOpened] = useState(false);
+  const [isMarkedForCancel, setIsMarkedForCancel] = useState(true);
 
   const tokens = useMemo(() => TOKENS.filter((token) => ![TOKENS_MAP.ETH.ticker].includes(token.ticker)), []);
 
@@ -79,13 +82,19 @@ export const NFTChangeListingPricePopup = ({ nft, order, isOpen, onClose, }: INF
 
   const formik = useFormik<{ amount: string; token: TokenTicker }>({
     initialValues: {
-      amount: '',
-      token: TOKENS_MAP.WETH.ticker,
+      amount: ethers.utils.formatEther(BigNumber.from(order?.take?.value || 0)),
+      token: TOKENS_MAP.ETH.ticker,
     },
     validationSchema: NFTChangeListingPriceValidationSchema,
     onSubmit: async (value) => {
-      
-      updateListing(value);
+      if(nft == undefined || order == undefined) {
+        return;
+      }
+      if (BigNumber.from(ethers.utils.parseUnits(`${value.amount}`,`${TOKENS_MAP[value.token as TokenTicker].decimals}`)).gt(BigNumber.from(order.take.value)) && isMarkedForCancel) {
+        setIsCancelListingPopupOpened(true);
+      } else {
+        updateListing(value);
+      }
     },
   });
 
@@ -93,8 +102,6 @@ export const NFTChangeListingPricePopup = ({ nft, order, isOpen, onClose, }: INF
     if(nft == undefined || order == undefined) {
       return;
     }
-
-    // TODO - if the value goes up we should trigger another modal to cancel the listing 
 
     setState(ChangeListingPriceState.PROCESSING);
     const network = await web3Provider.getNetwork();
@@ -159,6 +166,10 @@ export const NFTChangeListingPricePopup = ({ nft, order, isOpen, onClose, }: INF
           {state === ChangeListingPriceState.FORM && (
             <Box>
               <Heading {...styles.TitleStyle} mb={'40px'}>Change the listing price</Heading>
+              <Text color={'rgba(0, 0, 0, 0.6)'} textAlign={'center'}>
+                Please, be aware in case you increase your listing price, you have to cancel the current order.
+              </Text>
+              <br></br>
 
               <FormControl mb={'30px'} isInvalid={!!(formik.touched.amount && formik.errors.amount)}>
                 {/*TODO: improve currency select & currency input components */}
@@ -253,6 +264,12 @@ export const NFTChangeListingPricePopup = ({ nft, order, isOpen, onClose, }: INF
           )}
         </ModalBody>
       </ModalContent>
+      <NFTCancelListingPopup
+        order={order}
+        isOpen={isCancelListingPopupOpened}
+        onClose={() => setIsCancelListingPopupOpened(false)}
+        handleCancel={() => setIsMarkedForCancel(false)}
+      />
     </Modal>
   );
 };

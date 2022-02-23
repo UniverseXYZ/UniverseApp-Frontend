@@ -185,6 +185,7 @@ export const NFTBuySection = ({ NFT, owner, NFTs, order, onMeasureChange }: INFT
         order={order}
         isOpen={isCancelListingPopupOpened}
         onClose={() => setIsCancelListingPopupOpened(false)}
+        handleCancel={() => setIsCancelListingPopupOpened(false)}
       />
       <NFTChangeListingPricePopup
         nft={NFT}
