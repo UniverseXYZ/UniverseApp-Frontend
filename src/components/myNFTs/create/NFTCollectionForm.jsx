@@ -315,10 +315,10 @@ const NFTCollectionForm = ({ showCollectible, setShowCollectible, scrollToTop })
   };
 
   useEffect(() => {
-    if (signer && location.state.collection.address) {
+    if (signer && location.state.collection && location.state.collection.address) {
       fetchRoyaltyRegistry();
     }
-  }, [signer, location.state.collection.address]);
+  }, [signer, location.state?.collection?.address]);
 
   useEffect(() => {
     // It means we have opened a collection for EDIT
