@@ -47,11 +47,13 @@ const AuthContextProvider = ({ children }) => {
   const [contracts, setContracts] = useState(false);
   const [deployedCollections, setDeployedCollections] = useState([]);
   const history = useHistory();
+  const [usdPrice, setUsdPrice] = useState(0);
   // Getters
   const getEthPriceData = async (balance) => {
     const ethUsdPice = await getEthPriceCoingecko();
     setUsdEthBalance(ethUsdPice?.market_data?.current_price?.usd * balance);
     setEthPrice(ethUsdPice);
+    setUsdPrice(ethUsdPice?.market_data?.current_price?.usd);
   };
 
   useEffect(() => {
@@ -369,6 +371,7 @@ const AuthContextProvider = ({ children }) => {
         connectWithMetaMask,
         connectWeb3,
         connectWithWalletConnect,
+        usdPrice,
       }}
     >
       {children}
