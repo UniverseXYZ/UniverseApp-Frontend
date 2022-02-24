@@ -162,7 +162,7 @@ export const NFTInfo = () => {
                       {/* TODO: Add implementation after release */}
                       {/* <TabPanel><TabOwners /></TabPanel> */}
                       {/* <TabPanel><TabBids /></TabPanel> */}
-                      <TabPanel><TabOffers /></TabPanel>
+                      <TabPanel><TabOffers nft={NFT} order={order}/></TabPanel>
                       <TabPanel><TabHistory /></TabPanel>
                     </TabPanels>
                   </Tabs>

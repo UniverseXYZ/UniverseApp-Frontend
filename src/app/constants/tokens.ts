@@ -14,30 +14,39 @@ export const TOKENS_MAP: Record<TokenTicker, IToken> = {
     decimals: 18,
     name: 'Ethereum',
     icons: [ETHWhiteIcon, ETHIcon],
+    coingeckoId: 'ethereum'
   },
   [TokenTicker.USDC]: {
     ticker: TokenTicker.USDC,
     decimals: 6,
     name: 'USDC Coin',
     icons: [USDCIcon],
+    contractName: 'USDC',
+    coingeckoId: 'usd-coin'
   },
   [TokenTicker.DAI]: {
     ticker: TokenTicker.DAI,
     decimals: 18,
     name: 'DAI Stablecoin',
     icons: [DAIIcon],
+    contractName: 'DAI',
+    coingeckoId: 'dai'
   },
   [TokenTicker.XYZ]: {
     ticker: TokenTicker.XYZ,
     decimals: 18,
     name: 'XYZ Governance Token',
     icons: [XYZIcon],
+    contractName: 'XYZ',
+    coingeckoId: 'universe-xyz'
   },
   [TokenTicker.WETH]: {
     ticker: TokenTicker.WETH,
     decimals: 18,
     name: 'Wrapped Ether',
     icons: [WETHIcon],
+    contractName: 'WrappedEther',
+    coingeckoId: 'ethereum'
   },
 };
 

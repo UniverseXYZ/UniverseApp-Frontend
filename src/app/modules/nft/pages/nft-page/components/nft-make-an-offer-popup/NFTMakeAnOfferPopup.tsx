@@ -25,7 +25,7 @@ import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useFormik } from 'formik';
 import { useMutation } from 'react-query';
 import axios from 'axios';
-import { utils } from 'ethers';
+import { Contract, ethers, utils } from 'ethers';
 import { default as dayjs } from 'dayjs';
 import * as Yup from 'yup';
 
@@ -42,10 +42,21 @@ import ArrowIcon from '../../../../../../../assets/images/arrow-down.svg';
 import SuccessIcon from '../../../../../../../assets/images/bid-submitted.png';
 import { IToken } from '../../../../../../types';
 import { GetSaltApi } from '../../../../../../api';
+import { OrderAssetClass } from '../../../../enums';
+
+import Contracts from '../../../../../../../contracts/contracts.json';
+import { useNFTPageData } from '../../NFTPage.context';
+
+import { getEtherscanTxUrl} from '../../../../../../../utils/helpers';
+import { formatAddress } from '../../../../../../../utils/helpers/format';
+
+// @ts-ignore
+const { contracts: contractsData } = Contracts[process.env.REACT_APP_NETWORK_CHAIN_ID];
 
 export enum MakeAnOfferState {
   FORM,
   PROCESSING,
+  APPROVAL,
   SUCCESS,
 }
 
@@ -65,11 +76,17 @@ export const NFTMakeAnOfferPopup = ({ order, isOpen, onClose, }: INFTMakeAnOffer
   const tokensBtnRef = useRef<HTMLButtonElement>(null);
 
   const { signer, web3Provider } = useAuthContext() as any;
+  const { setRefetchOffers } = useNFTPageData();
 
   const [state, setState] = useState<MakeAnOfferState>(MakeAnOfferState.FORM);
-  const [agree, setAgree] = useState(false);
+  const [tokenPrice, setTokenPrice] = useState(0);
+  const [approveTx, setApproveTx] = useState<string>('')
 
   const tokens = useMemo(() => TOKENS.filter((token) => ![TOKENS_MAP.ETH.ticker].includes(token.ticker)), []);
+
+  const getPriceMutation = useMutation((coingeckoId: any) => {
+    return axios.get(`https://api.coingecko.com/api/v3/simple/price?ids=${coingeckoId}&vs_currencies=usd`);
+  });
 
   const encodeDataMutation = useMutation((data: any) => {
     return axios.post(`${process.env.REACT_APP_MARKETPLACE_BACKEND}/v1/orders/encoder/order`, data);
@@ -81,65 +98,100 @@ export const NFTMakeAnOfferPopup = ({ order, isOpen, onClose, }: INFTMakeAnOffer
 
   const getSaltMutation = useMutation(GetSaltApi);
 
+  const threeDaysAway = new Date();
+  threeDaysAway.setDate(threeDaysAway.getDate()+3);
+
   const formik = useFormik<{ amount: string; token: TokenTicker, expireAt: Date | null; }>({
+
     initialValues: {
       amount: '',
       token: TOKENS_MAP.WETH.ticker,
-      expireAt: null,
+      expireAt: threeDaysAway,
     },
     validationSchema: NFTMakeAnOfferValidationSchema,
     onSubmit: async (value) => {
-      setState(MakeAnOfferState.PROCESSING);
-
-      const address = await signer.getAddress();
-      const network = await web3Provider.getNetwork();
-
-      const salt = (await getSaltMutation.mutateAsync(address)).data.salt;
-
-      const offerData = {
-        type: 'UNIVERSE_V1',
-        maker: address,
-        taker: order?.maker,
-        make: {
-          assetType: {
-            assetClass: value.token,
+      try {
+        setState(MakeAnOfferState.PROCESSING);
+  
+        const address = await signer.getAddress();
+        const network = await web3Provider.getNetwork();
+  
+        const salt = (await getSaltMutation.mutateAsync(address)).data.salt;
+  
+        const paymentToken = TOKENS_MAP[value.token as TokenTicker];
+        const paymentAmount = utils.parseUnits(
+          `${value.amount}`,
+          `${paymentToken.decimals}`
+        );
+  
+        const offerData = {
+          type: 'UNIVERSE_V1',
+          maker: address,
+          taker: order?.maker,
+          make: {
+            assetType: {
+              assetClass: OrderAssetClass.ERC20,
+              contract: contractsData[paymentToken.contractName].address
+            },
+            value: paymentAmount.toString(),
           },
-          value: utils.parseUnits(
-            `${value.amount}`,
-            `${TOKENS_MAP[value.token as TokenTicker].decimals}`
-          ).toString(),
-        },
-        take: order?.make,
-        side: 0,
-        salt: salt,
-        start: 0,
-        end: (value.expireAt as Date).getTime(),
-        data: order?.data,
-      };
+          take: order?.make,
+          salt: salt,
+          start: 0,
+          end: (value.expireAt as Date).getTime(),
+          data: order?.data,
+        };
+  
+        const response = (await encodeDataMutation.mutateAsync(offerData)).data;
+  
+        const contract = new Contract(contractsData[paymentToken.contractName].address, contractsData[paymentToken.contractName].abi, signer);
+  
+        const allowance = await contract.allowance(address, process.env.REACT_APP_MARKETPLACE_CONTRACT);
 
-      const response = (await encodeDataMutation.mutateAsync(offerData)).data;
-
-      const signature = await sign(
-        web3Provider.provider,
-        response,
-        address,
-        `${network.chainId}`,
-        `${process.env.REACT_APP_MARKETPLACE_CONTRACT}`
-      );
-
-      const createOrderResponse = (await createOfferMutation.mutateAsync({ ...offerData, signature })).data;
-
-      setState(MakeAnOfferState.SUCCESS);
-
-      console.log('createOrderResponse', createOrderResponse);
+        if(paymentAmount.gt(allowance)) {
+          setState(MakeAnOfferState.APPROVAL);
+  
+          const approveTx = await contract.approve(process.env.REACT_APP_MARKETPLACE_CONTRACT, ethers.constants.MaxUint256);
+          setApproveTx(approveTx?.hash);
+  
+          await approveTx.wait();
+  
+          setState(MakeAnOfferState.PROCESSING);
+        }
+  
+        const signature = await sign(
+          web3Provider.provider,
+          response,
+          address,
+          `${network.chainId}`,
+          `${process.env.REACT_APP_MARKETPLACE_CONTRACT}`
+        );
+  
+        const createOrderResponse = (await createOfferMutation.mutateAsync({ ...offerData, signature })).data;
+  
+        setState(MakeAnOfferState.SUCCESS);
+        setRefetchOffers(true);
+        setApproveTx('');
+        } catch(err) {
+        setState(MakeAnOfferState.FORM);
+        console.log(err)
+      }
     },
   });
+
+  useEffect(()=> {
+    const loadPrice = async () => {
+      const token = formik.values.token as TokenTicker;
+      const response = (await getPriceMutation.mutateAsync(TOKENS_MAP[token].coingeckoId)).data
+      setTokenPrice(response[TOKENS_MAP[token].coingeckoId]['usd']);
+    }
+    loadPrice();
+  },[formik.values.token])
 
   useEffect(() => {
     formik.resetForm();
     formik.validateForm();
     setState(MakeAnOfferState.FORM);
-    setAgree(false);
   }, [isOpen]);
 
   return (
@@ -187,7 +239,7 @@ export const NFTMakeAnOfferPopup = ({ order, isOpen, onClose, }: INFTMakeAnOffer
                     onBlur={formik.handleBlur}
                   />
                   <InputRightAddon>
-                    $ {!formik.values.amount ? '0.00' : (+formik.values.amount * ETH_USD_RATE).toFixed(2)}
+                    $ {!formik.values.amount ? '0.00' : (+formik.values.amount * tokenPrice).toFixed(2)}
                   </InputRightAddon>
                 </InputGroup>
                 <FormErrorMessage>{formik.errors.amount}</FormErrorMessage>
@@ -200,6 +252,7 @@ export const NFTMakeAnOfferPopup = ({ order, isOpen, onClose, }: INFTMakeAnOffer
                   modalName={'Offer Expiration'}
                   onChange={(date) => formik.setFieldValue('expireAt', date)}
                   onClose={() => formik.setFieldTouched('expireAt', true)}
+                  minDate={dayjs().toDate()}
                 />
                 <FormErrorMessage>{formik.errors.expireAt}</FormErrorMessage>
               </FormControl>
@@ -207,7 +260,7 @@ export const NFTMakeAnOfferPopup = ({ order, isOpen, onClose, }: INFTMakeAnOffer
               <Box {...styles.ButtonsContainerStyle}>
                 <Button
                   boxShadow={'lg'}
-                  disabled={!(agree && formik.isValid)}
+                  disabled={!formik.isValid}
                   onClick={() => formik.submitForm()}
                 >Make an Offer</Button>
                 {/*<Button variant={'outline'}>Convert ETH</Button>*/}
@@ -224,6 +277,29 @@ export const NFTMakeAnOfferPopup = ({ order, isOpen, onClose, }: INFTMakeAnOffer
               </Text>
 
               <Loading my={'64px'} />
+            </Box>
+          )}
+
+          {state === MakeAnOfferState.APPROVAL && (
+            <Box>
+              <Heading {...styles.TitleStyle} mb={'20px'}>Making an offer...</Heading>
+
+              <Text fontSize={'14px'} mx={'auto'} maxW={'260px'} textAlign={'center'}>
+                Please give an approval for the specified amount ..
+              </Text>
+
+              <Loading my={'64px'} />
+
+
+              {approveTx && (
+                <Text color={'rgba(0, 0, 0, 0.6)'} textAlign={'center'} key={approveTx}>
+                  Transaction hash #{1}:{' '}
+                  <a target="_blank" href={getEtherscanTxUrl(approveTx)} rel="noreferrer" style={{color: 'blue'}}>
+                    {formatAddress(approveTx)}
+                  </a>
+                </Text>
+              )}
+
             </Box>
           )}
 

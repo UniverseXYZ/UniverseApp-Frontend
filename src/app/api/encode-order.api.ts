@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { OrderAssetClass } from '../modules/nft/enums';
 
-export type IAssetClass = OrderAssetClass.ERC721 | OrderAssetClass.ERC721_BUNDLE;
+export type IAssetClass = OrderAssetClass.ERC721 | OrderAssetClass.ERC721_BUNDLE | OrderAssetClass.ERC20;
 
 export interface IOrderAssetBackend {
   assetType: {

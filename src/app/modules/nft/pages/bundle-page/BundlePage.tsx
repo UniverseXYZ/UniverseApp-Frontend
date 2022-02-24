@@ -170,7 +170,7 @@ export const BundlePageContent = () => {
 
               <TabPanels sx={{ '> div' : { px: 0, pb: 0 }}}>
                 <TabPanel><TabNFTs NFTs={NFTs} /></TabPanel>
-                <TabPanel><TabBids /></TabPanel>
+                {/* <TabPanel><TabBids /></TabPanel> */}
                 <TabPanel><TabOffers /></TabPanel>
                 <TabPanel><TabHistory /></TabPanel>
               </TabPanels>
