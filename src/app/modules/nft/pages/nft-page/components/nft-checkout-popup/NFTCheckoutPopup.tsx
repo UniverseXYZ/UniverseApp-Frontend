@@ -65,7 +65,7 @@ export const NFTCheckoutPopup = ({ NFT, NFTs, order, isOpen, onClose }: INFTChec
 
   const tokenDecimals = TOKENS_MAP[tokenTicker]?.decimals ?? 18
 
-  const listingPrice = Number(utils.formatUnits(order?.take.value, tokenDecimals))
+  const listingPrice = Number(utils.formatUnits(order?.take.value || 0, tokenDecimals))
 
   const usdListingPrice = Math.round(listingPrice * usdPrice)
 
