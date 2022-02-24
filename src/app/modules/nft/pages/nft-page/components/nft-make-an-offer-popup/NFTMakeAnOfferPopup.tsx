@@ -110,67 +110,72 @@ export const NFTMakeAnOfferPopup = ({ order, isOpen, onClose, }: INFTMakeAnOffer
     },
     validationSchema: NFTMakeAnOfferValidationSchema,
     onSubmit: async (value) => {
-      setState(MakeAnOfferState.PROCESSING);
-
-      const address = await signer.getAddress();
-      const network = await web3Provider.getNetwork();
-
-      const salt = (await getSaltMutation.mutateAsync(address)).data.salt;
-
-      const paymentToken = TOKENS_MAP[value.token as TokenTicker];
-      const paymentAmount = utils.parseUnits(
-        `${value.amount}`,
-        `${paymentToken.decimals}`
-      );
-
-      const offerData = {
-        type: 'UNIVERSE_V1',
-        maker: address,
-        taker: order?.maker,
-        make: {
-          assetType: {
-            assetClass: OrderAssetClass.ERC20,
-            contract: contractsData[paymentToken.contractName].address
-          },
-          value: paymentAmount.toString(),
-        },
-        take: order?.make,
-        salt: salt,
-        start: 0,
-        end: (value.expireAt as Date).getTime(),
-        data: order?.data,
-      };
-
-      const response = (await encodeDataMutation.mutateAsync(offerData)).data;
-
-      const contract = new Contract(contractsData[paymentToken.contractName].address, contractsData[paymentToken.contractName].abi, signer);
-
-      const allowance = await contract.allowance(address, process.env.REACT_APP_MARKETPLACE_CONTRACT);
-
-      if(paymentAmount.gt(allowance)) {
-        setState(MakeAnOfferState.APPROVAL);
-
-        const approveTx = await contract.approve(process.env.REACT_APP_MARKETPLACE_CONTRACT, ethers.constants.MaxUint256);
-        setApproveTx(approveTx?.hash);
-
-        await approveTx.wait();
-
+      try {
         setState(MakeAnOfferState.PROCESSING);
+  
+        const address = await signer.getAddress();
+        const network = await web3Provider.getNetwork();
+  
+        const salt = (await getSaltMutation.mutateAsync(address)).data.salt;
+  
+        const paymentToken = TOKENS_MAP[value.token as TokenTicker];
+        const paymentAmount = utils.parseUnits(
+          `${value.amount}`,
+          `${paymentToken.decimals}`
+        );
+  
+        const offerData = {
+          type: 'UNIVERSE_V1',
+          maker: address,
+          taker: order?.maker,
+          make: {
+            assetType: {
+              assetClass: OrderAssetClass.ERC20,
+              contract: contractsData[paymentToken.contractName].address
+            },
+            value: paymentAmount.toString(),
+          },
+          take: order?.make,
+          salt: salt,
+          start: 0,
+          end: (value.expireAt as Date).getTime(),
+          data: order?.data,
+        };
+  
+        const response = (await encodeDataMutation.mutateAsync(offerData)).data;
+  
+        const contract = new Contract(contractsData[paymentToken.contractName].address, contractsData[paymentToken.contractName].abi, signer);
+  
+        const allowance = await contract.allowance(address, process.env.REACT_APP_MARKETPLACE_CONTRACT);
+
+        if(paymentAmount.gt(allowance)) {
+          setState(MakeAnOfferState.APPROVAL);
+  
+          const approveTx = await contract.approve(process.env.REACT_APP_MARKETPLACE_CONTRACT, ethers.constants.MaxUint256);
+          setApproveTx(approveTx?.hash);
+  
+          await approveTx.wait();
+  
+          setState(MakeAnOfferState.PROCESSING);
+        }
+  
+        const signature = await sign(
+          web3Provider.provider,
+          response,
+          address,
+          `${network.chainId}`,
+          `${process.env.REACT_APP_MARKETPLACE_CONTRACT}`
+        );
+  
+        const createOrderResponse = (await createOfferMutation.mutateAsync({ ...offerData, signature })).data;
+  
+        setState(MakeAnOfferState.SUCCESS);
+        setRefetchOffers(true);
+        setApproveTx('');
+        } catch(err) {
+        setState(MakeAnOfferState.FORM);
+        console.log(err)
       }
-
-      const signature = await sign(
-        web3Provider.provider,
-        response,
-        address,
-        `${network.chainId}`,
-        `${process.env.REACT_APP_MARKETPLACE_CONTRACT}`
-      );
-
-      const createOrderResponse = (await createOfferMutation.mutateAsync({ ...offerData, signature })).data;
-
-      setState(MakeAnOfferState.SUCCESS);
-      setRefetchOffers(true);
-      setApproveTx('');
     },
   });
 

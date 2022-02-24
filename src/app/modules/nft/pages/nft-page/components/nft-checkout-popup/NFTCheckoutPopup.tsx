@@ -60,19 +60,24 @@ export const NFTCheckoutPopup = ({ NFT, NFTs, order, isOpen, onClose }: INFTChec
   });
 
   const handleCheckoutClick = useCallback(async () => {
-    const response = await prepareMutation.mutateAsync({
-      hash: order.hash,
-      data: {
-        maker: address,
-        amount: order.make.value,
-      },
-    });
-    console.log('response', response);
+    try {
+      const response = await prepareMutation.mutateAsync({
+        hash: order.hash,
+        data: {
+          maker: address,
+          amount: order.make.value,
+        },
+      });
+      console.log('response', response);
+  
+      const {data, from, to, value} = response.data;
+  
+      await sendSellTransaction(data, from, to, BigNumber.from(value.hex)); // TODO Test after new version of contracts and backend redeployed
+      setState(CheckoutState.CONGRATULATIONS);
 
-    const {data, from, to, value} = response.data;
-
-    await sendSellTransaction(data, from, to, BigNumber.from(value.hex)); // TODO Test after new version of contracts and backend redeployed
-    setState(CheckoutState.CONGRATULATIONS);
+    } catch(err) {
+      console.log(err)      
+    }
     
   }, [order, address]);
 
