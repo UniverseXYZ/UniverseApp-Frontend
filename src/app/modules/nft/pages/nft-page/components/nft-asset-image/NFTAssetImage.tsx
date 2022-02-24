@@ -5,8 +5,8 @@ import { NFTAssetFullscreen } from '../nft-asset-full-screen';
 const ImageStyle: ImageProps = {
   borderRadius: '12px',
   objectFit: 'cover',
-  maxH: '600px',
-  maxW: '600px',
+  maxH: {sm: '335px', md: '600px'},
+  maxW: {sm: '335px', md: '600px'},
   h: 'calc(100vh - 84px - 120px)',
   w: 'calc(100vh - 84px - 120px)',
 }

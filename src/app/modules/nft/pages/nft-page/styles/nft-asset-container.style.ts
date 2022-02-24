@@ -2,10 +2,10 @@ import { BoxProps } from '@chakra-ui/react';
 
 export const NFTAssetContainerStyle: BoxProps = {
   display: 'flex',
-  float: 'left',
+  float: {xl: 'left' },
   justifyContent: 'center',
-  position: 'sticky',
-  py: '60px',
+  position: {xl: 'sticky'},
+  py: {sm: '40px', md: '60px'},
   top: '84px',
-  w: 'calc(100% - 550px)',
+  w: {xl: 'calc(100% - 550px)'},
 }
