@@ -119,33 +119,36 @@ export const SummaryTab = () => {
   }, [collections]);
 
     const fetchRoyaltyRegistry = async () => {
-    try {
-      const [ ,royalties] = await fetchRoyalties(
-        params.collectionAddress,
-        params.tokenId,
-        signer
-      );
+      if (params.collectionAddress && params.tokenId && signer) {
+        try {
+          const [ ,royalties] = await fetchRoyalties(
+            params.collectionAddress,
+            signer,
+            params.tokenId
+          );
+    
+          // Index 0 is nft royalties
+          if (royalties.length && royalties[0].length) {
+            const nftRoyalties = royalties[0].map((royalty: [string, BigNumber]) => ({
+              address: royalty[0],
+              amount: BigNumber.from(royalty[1]).div(100),
+            }));
+           setCreatorRoyalties(+nftRoyalties[0].amount || 0)
+          }
+    
+          // Index 1 is collection royalties
+          if (royalties.length && royalties[1].length) {
+            const collectionRoyalties = royalties[1].map((royalty: [string, BigNumber]) => ({
+              address: royalty[0],
+              amount: BigNumber.from(royalty[1]).div(100).toString(),
+            }));
+           setCollectionRoyalties(+collectionRoyalties[0].amount || 0)
+          }
+        } catch (err) {
+          console.log(err);
+        }
 
-      // Index 0 is nft royalties
-      if (royalties.length && royalties[0].length) {
-        const nftRoyalties = royalties[0].map((royalty: [string, BigNumber]) => ({
-          address: royalty[0],
-          amount: BigNumber.from(royalty[1]).div(100),
-        }));
-       setCreatorRoyalties(+nftRoyalties[0].amount || 0)
       }
-
-      // Index 1 is collection royalties
-      if (royalties.length && royalties[1].length) {
-        const collectionRoyalties = royalties[1].map((royalty: [string, BigNumber]) => ({
-          address: royalty[0],
-          amount: BigNumber.from(royalty[1]).div(100).toString(),
-        }));
-       setCollectionRoyalties(+collectionRoyalties[0].amount || 0)
-      }
-    } catch (err) {
-      console.log(err);
-    }
   };
 
   useEffect(() => {
@@ -154,7 +157,7 @@ export const SummaryTab = () => {
 
   useEffect(() => {
     fetchRoyaltyRegistry();
-  }, [])
+  }, [params.collectionAddress, params.tokenId, signer])
 
   useEffect(() => {
     if (isPosted) {
