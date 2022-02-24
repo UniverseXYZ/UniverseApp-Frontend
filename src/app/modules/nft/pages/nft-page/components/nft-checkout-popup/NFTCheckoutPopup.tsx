@@ -47,7 +47,7 @@ interface INFTCheckoutPopupProps {
 export const NFTCheckoutPopup = ({ NFT, NFTs, order, isOpen, onClose }: INFTCheckoutPopupProps) => {
   const router = useHistory();
 
-  const { address, signer, web3Provider } = useAuthContext() as any;
+  const { address, signer, web3Provider, usdPrice } = useAuthContext() as any;
 
   const { onCopy } = useClipboard(address);
 
@@ -58,6 +58,16 @@ export const NFTCheckoutPopup = ({ NFT, NFTs, order, isOpen, onClose }: INFTChec
   const prepareMutation = useMutation(({ hash, data }: { hash: string, data: any }) => {
     return axios.post(`${process.env.REACT_APP_MARKETPLACE_BACKEND}/v1/orders/${hash}/prepare`, data);
   });
+
+  console.log("rerender");
+
+  const tokenTicker = order?.take.assetType.assetClass as TokenTicker
+
+  const tokenDecimals = TOKENS_MAP[tokenTicker]?.decimals ?? 18
+
+  const listingPrice = Number(utils.formatUnits(order?.take.value, tokenDecimals))
+
+  const usdListingPrice = Math.round(listingPrice * usdPrice)
 
   const handleCheckoutClick = useCallback(async () => {
     try {
@@ -155,10 +165,10 @@ export const NFTCheckoutPopup = ({ NFT, NFTs, order, isOpen, onClose }: INFTChec
                 </Box>
                 <Box {...styles.PriceContainerStyle}>
                   <Text fontSize={'14px'}>
-                    <TokenIcon ticker={order?.take.assetType.assetClass as TokenTicker} display={'inline'} size={20} mr={'6px'} mt={'-3px'} />
-                    {utils.formatUnits(order.take.value, `${TOKENS_MAP[order?.take.assetType.assetClass as TokenTicker].decimals}`)}
+                    <TokenIcon ticker={tokenTicker} display={'inline'} size={20} mr={'6px'} mt={'-3px'} />
+                    {listingPrice}
                   </Text>
-                  <Text {...styles.PriceUSDStyle}>$1 408.39</Text>
+                  <Text {...styles.PriceUSDStyle}>${usdListingPrice}</Text>
                 </Box>
               </Flex>
 
@@ -166,10 +176,10 @@ export const NFTCheckoutPopup = ({ NFT, NFTs, order, isOpen, onClose }: INFTChec
                 <Text>Total</Text>
                 <Box {...styles.PriceContainerStyle}>
                   <Text fontSize={'18px'}>
-                    <TokenIcon ticker={order?.take.assetType.assetClass as TokenTicker} display={'inline'} size={24} mr={'6px'} mt={'-3px'} />
-                    {utils.formatUnits(order.take.value, `${TOKENS_MAP[order?.take.assetType.assetClass as TokenTicker].decimals}`)}
+                    <TokenIcon ticker={tokenTicker} display={'inline'} size={24} mr={'6px'} mt={'-3px'} />
+                    {listingPrice}
                   </Text>
-                  <Text {...styles.PriceUSDStyle}>$208.39</Text>
+                  <Text {...styles.PriceUSDStyle}>${usdListingPrice}</Text>
                 </Box>
               </Flex>
 
