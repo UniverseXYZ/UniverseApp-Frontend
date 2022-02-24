@@ -21,7 +21,7 @@ export const TokenIcon = (
   }: ITokenIconProps
 ) => {
   const iconIndex = useMemo(() => {
-    if (variant < 0 || variant > TOKENS_MAP[ticker].icons.length) {
+    if (variant < 0 || variant > TOKENS_MAP[ticker]?.icons.length) {
       return 0;
     }
     return variant;
@@ -55,7 +55,7 @@ export const TokenIcon = (
     }
   }, [_width, size]);
 
-  return (
+  return !TOKENS_MAP[ticker] ? null : (
     <Image
       src={TOKENS_MAP[ticker].icons[iconIndex]}
       alt={TOKENS_MAP[ticker].name}

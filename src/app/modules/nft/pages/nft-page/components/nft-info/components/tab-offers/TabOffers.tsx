@@ -6,7 +6,7 @@ import { ETH_USD_RATE } from '../../../../../../../../mocks';
 import { NFTTabItemWrapper } from '..';
 import { Offers } from '../../../../mocks';
 import * as styles from './styles';
-import { OffersEmpty } from './components';
+import { NFTAcceptOfferPopup, OffersEmpty } from './components';
 import { GetOrdersApi, GetUserApi } from '../../../../../../api';
 import { INFT, IOrder, IUser } from '../../../../../../types';
 import { BigNumber, ethers } from 'ethers';
@@ -24,6 +24,8 @@ export const TabOffers:React.FC<ITabOffersProps> = ({nft, order}) => {
   const [offerUsersMap, setUsersMap] = useState<Record<string, IUser>>({});
   const { address, usdPrice } = useAuthContext();
   const { refetchOffers, setRefetchOffers } = useNFTPageData();
+
+  const [offerForAccept, setOfferForAccept] = useState<IOrder | null>(null);
 
   const fetchOrderOffers = async () => {
     if(nft && nft.tokenId && nft._collectionAddress) {
@@ -71,7 +73,7 @@ export const TabOffers:React.FC<ITabOffersProps> = ({nft, order}) => {
   }
 
   useEffect(() => {
-      fetchOrderOffers();
+    fetchOrderOffers();
   }, [nft?.tokenId, nft?._collectionAddress, refetchOffers])
   
   return !offers.length ? <OffersEmpty /> : (
@@ -112,11 +114,28 @@ export const TabOffers:React.FC<ITabOffersProps> = ({nft, order}) => {
                 <Text {...styles.PriceStyle}>{formattedPrice} {offer.make.assetType.assetClass}</Text>
                 <Text {...styles.PriceUSDStyle}>${(formattedPrice * usdPrice).toFixed(2)}</Text>
               </Box>
-              { canAcceptsOffers && (<Button {...styles.AcceptButtonStyle}>Accept</Button>)}
+              { canAcceptsOffers && (
+                <Button
+                  {...styles.AcceptButtonStyle}
+                  onClick={() => {
+                    console.log('offer', offer);
+                    setOfferForAccept(offer);
+                  }}
+                >Accept</Button>
+              )}
             </Flex>
           </NFTTabItemWrapper>
         );
       })}
+      {/*TODO: add support of bundle*/}
+      {offerForAccept && (
+        <NFTAcceptOfferPopup
+          NFT={nft as INFT}
+          order={offerForAccept}
+          isOpen={!!offerForAccept}
+          onClose={() => setOfferForAccept(null)}
+        />
+      )}
     </Box>
   );
 }
