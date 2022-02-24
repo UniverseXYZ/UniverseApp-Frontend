@@ -47,12 +47,16 @@ import { OrderAssetClass } from '../../../../enums';
 import Contracts from '../../../../../../../contracts/contracts.json';
 import { useNFTPageData } from '../../NFTPage.context';
 
+import { getEtherscanTxUrl} from '../../../../../../../utils/helpers';
+import { formatAddress } from '../../../../../../../utils/helpers/format';
+
 // @ts-ignore
 const { contracts: contractsData } = Contracts[process.env.REACT_APP_NETWORK_CHAIN_ID];
 
 export enum MakeAnOfferState {
   FORM,
   PROCESSING,
+  APPROVAL,
   SUCCESS,
 }
 
@@ -76,6 +80,7 @@ export const NFTMakeAnOfferPopup = ({ order, isOpen, onClose, }: INFTMakeAnOffer
 
   const [state, setState] = useState<MakeAnOfferState>(MakeAnOfferState.FORM);
   const [tokenPrice, setTokenPrice] = useState(0);
+  const [approveTx, setApproveTx] = useState<string>('')
 
   const tokens = useMemo(() => TOKENS.filter((token) => ![TOKENS_MAP.ETH.ticker].includes(token.ticker)), []);
 
@@ -143,11 +148,14 @@ export const NFTMakeAnOfferPopup = ({ order, isOpen, onClose, }: INFTMakeAnOffer
       const allowance = await contract.allowance(address, process.env.REACT_APP_MARKETPLACE_CONTRACT);
 
       if(paymentAmount.gt(allowance)) {
+        setState(MakeAnOfferState.APPROVAL);
 
         const approveTx = await contract.approve(process.env.REACT_APP_MARKETPLACE_CONTRACT, ethers.constants.MaxUint256);
+        setApproveTx(approveTx?.hash);
 
         await approveTx.wait();
 
+        setState(MakeAnOfferState.PROCESSING);
       }
 
       const signature = await sign(
@@ -162,6 +170,7 @@ export const NFTMakeAnOfferPopup = ({ order, isOpen, onClose, }: INFTMakeAnOffer
 
       setState(MakeAnOfferState.SUCCESS);
       setRefetchOffers(true);
+      setApproveTx('');
     },
   });
 
@@ -238,6 +247,7 @@ export const NFTMakeAnOfferPopup = ({ order, isOpen, onClose, }: INFTMakeAnOffer
                   modalName={'Offer Expiration'}
                   onChange={(date) => formik.setFieldValue('expireAt', date)}
                   onClose={() => formik.setFieldTouched('expireAt', true)}
+                  minDate={dayjs().toDate()}
                 />
                 <FormErrorMessage>{formik.errors.expireAt}</FormErrorMessage>
               </FormControl>
@@ -262,6 +272,29 @@ export const NFTMakeAnOfferPopup = ({ order, isOpen, onClose, }: INFTMakeAnOffer
               </Text>
 
               <Loading my={'64px'} />
+            </Box>
+          )}
+
+          {state === MakeAnOfferState.APPROVAL && (
+            <Box>
+              <Heading {...styles.TitleStyle} mb={'20px'}>Making an offer...</Heading>
+
+              <Text fontSize={'14px'} mx={'auto'} maxW={'260px'} textAlign={'center'}>
+                Please give an approval for the specified amount ..
+              </Text>
+
+              <Loading my={'64px'} />
+
+
+              {approveTx && (
+                <Text color={'rgba(0, 0, 0, 0.6)'} textAlign={'center'} key={approveTx}>
+                  Transaction hash #{1}:{' '}
+                  <a target="_blank" href={getEtherscanTxUrl(approveTx)} rel="noreferrer" style={{color: 'blue'}}>
+                    {formatAddress(approveTx)}
+                  </a>
+                </Text>
+              )}
+
             </Box>
           )}
 
