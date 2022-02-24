@@ -1,5 +1,5 @@
-import { Box, Button, Image, SimpleGrid, Text } from '@chakra-ui/react';
-import React, { useCallback, useEffect, useState } from 'react';
+import { Box, Button, Image, Popover, PopoverBody, PopoverContent, PopoverTrigger, SimpleGrid, Text, Tooltip } from '@chakra-ui/react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useMeasure } from 'react-use';
 import { UseMeasureRect } from 'react-use/lib/useMeasure';
@@ -20,6 +20,7 @@ import { BuyNFTSectionState } from './enums';
 import { utils } from 'ethers';
 import { TOKENS_MAP } from '../../../../../../constants';
 import { TokenTicker } from '../../../../../../enums';
+import { getRoyaltiesFromRegistry } from '../../../../../../../utils/marketplace/utils';
 
 interface INFTBuySectionProps {
   NFT?: INFT;
@@ -66,6 +67,13 @@ export const NFTBuySection = ({ NFT, owner, NFTs, order, onMeasureChange }: INFT
     }
   }, [signer, NFT, order, owner]);
 
+  const fetchNftRoyalties = async () => {
+    if (NFT?._collectionAddress && NFT.tokenId && signer) {
+      const { nftRoyaltiesPercent } = await getRoyaltiesFromRegistry(NFT._collectionAddress, NFT.tokenId, signer);
+      setNftRoyalties(nftRoyaltiesPercent.toNumber())
+    }
+  };
+
   useEffect(() => {
     onMeasureChange && onMeasureChange(measure);
   }, [measure]);
@@ -74,13 +82,41 @@ export const NFTBuySection = ({ NFT, owner, NFTs, order, onMeasureChange }: INFT
     updateSectionState();
   }, [signer, NFT, order, updateSectionState]);
 
-  const { countDownString } = useDateCountdown(new Date(new Date().setDate(new Date().getDate() + 1)));
+  useEffect(() => {
+    fetchNftRoyalties();
+  }, [signer, NFT?._collectionAddress, NFT?.tokenId])
+
+  // const { countDownString } = useDateCountdown(new Date(new Date().setDate(new Date().getDate() + 1)));
 
   const [isCheckoutPopupOpened, setIsCheckoutPopupOpened] = useState(false);
   const [isPlaceABidPopupOpened, setIsPlaceABidPopupOpened] = useState(false);
   const [isMakeAnOfferPopupOpened, setIsMakeAnOfferPopupOpened] = useState(false);
   const [isCancelListingPopupOpened, setIsCancelListingPopupOpened] = useState(false);
   const [isChangeListingPricePopupOpened, setIsChangeListingPricePopupOpened] = useState(false);
+  const [nftRoyalties, setNftRoyalties] = useState(0);
+
+  const utcTimestamp = Math.floor(new Date().getTime() / 1000);
+
+  const canCheckoutOrder = 
+    (!order?.start && !order?.end) || // Order doesn't have start and end
+    (order.start && order.end && utcTimestamp > order.start && utcTimestamp < order.end) || // Order has both start & end
+    (order.start && !order.end && utcTimestamp > order.start) || // Order has only start
+    (!order.start && order.end && utcTimestamp < order.end ) // Order has only end 
+  ;
+
+  const token = order?.take.assetType.assetClass as TokenTicker;
+  const tokenDecimals = TOKENS_MAP[token]?.decimals;
+  const listingPrice = utils.formatUnits(order?.take.value ?? 0, tokenDecimals);
+  
+  const buyNowButton = () => (
+    <Tooltip label={"Can't buy this NFT. It's either not available yet or already expired."} isDisabled={!!canCheckoutOrder} hasArrow shouldWrapChildren placement='top'>
+      <Button boxShadow={'lg'} onClick={() => setIsCheckoutPopupOpened(true)} disabled={!canCheckoutOrder} style={{"width": "100%"}}>
+        Buy for {listingPrice} {order?.take.assetType.assetClass}
+      </Button>
+    </Tooltip>
+  );
+
+  const royaltiesText = () => <Text {...styles.ContentFeeLabelStyle} textAlign={'center'} mt={'12px'}>({nftRoyalties}% of sales will go to creator)</Text>;
 
   if (state === undefined) {
     return <Box ref={ref}></Box>;
@@ -110,27 +146,24 @@ export const NFTBuySection = ({ NFT, owner, NFTs, order, onMeasureChange }: INFT
         )}
         {state === BuyNFTSectionState.BUYER_FIXED_LISTING_BUY_N_OFFER && (
           <>
-            <HighestBid />
+            {/* <HighestBid /> */}
             <SimpleGrid columns={2} spacingX={'12px'}>
-              <Button boxShadow={'lg'} onClick={() => setIsCheckoutPopupOpened(true)}>
-                Buy for {utils.formatUnits(order?.take.value ?? '', `${TOKENS_MAP[order?.take.assetType.assetClass as TokenTicker]?.decimals}`)} {order?.take.assetType.assetClass}
-              </Button>
+              {buyNowButton()}
               <Button variant={'outline'} onClick={() => setIsMakeAnOfferPopupOpened(true)}>Make offer</Button>
             </SimpleGrid>
+            {!!nftRoyalties && royaltiesText()}
           </>
         )}
         {state === BuyNFTSectionState.BUYER_FIXED_LISTING_BUY && (
           <>
-            <Button boxShadow={'lg'} w={'100%'} onClick={() => setIsCheckoutPopupOpened(true)}>
-              Buy for {utils.formatUnits(order?.take.value ?? '', `${TOKENS_MAP[order?.take.assetType.assetClass as TokenTicker]?.decimals}`)} {order?.take.assetType.assetClass}
-            </Button>
-            <Text {...styles.ContentFeeLabelStyle} textAlign={'center'} mt={'12px'}>(10% of sales will go to creator)</Text>
+            {buyNowButton()}
+            {!!nftRoyalties && royaltiesText()}
           </>
         )}
         {state === BuyNFTSectionState.BUYER_AUCTION_BID && (
           <>
             <Button boxShadow={'lg'} w={'100%'} onClick={() => setIsPlaceABidPopupOpened(true)}>Place a bid</Button>
-            <Text {...styles.ContentFeeLabelStyle} textAlign={'center'} mt={'12px'}>(10% of sales will go to creator)</Text>
+            {!!nftRoyalties && royaltiesText()}
           </>
         )}
         {state === BuyNFTSectionState.OWNER_PUT_ON_SALE && (
