@@ -45,6 +45,7 @@ import { GetSaltApi } from '../../../../../../api';
 import { OrderAssetClass } from '../../../../enums';
 
 import Contracts from '../../../../../../../contracts/contracts.json';
+import { useNFTPageData } from '../../NFTPage.context';
 
 // @ts-ignore
 const { contracts: contractsData } = Contracts[process.env.REACT_APP_NETWORK_CHAIN_ID];
@@ -71,6 +72,7 @@ export const NFTMakeAnOfferPopup = ({ order, isOpen, onClose, }: INFTMakeAnOffer
   const tokensBtnRef = useRef<HTMLButtonElement>(null);
 
   const { signer, web3Provider } = useAuthContext() as any;
+  const { setRefetchOffers } = useNFTPageData();
 
   const [state, setState] = useState<MakeAnOfferState>(MakeAnOfferState.FORM);
   const [tokenPrice, setTokenPrice] = useState(0);
@@ -159,6 +161,7 @@ export const NFTMakeAnOfferPopup = ({ order, isOpen, onClose, }: INFTMakeAnOffer
       const createOrderResponse = (await createOfferMutation.mutateAsync({ ...offerData, signature })).data;
 
       setState(MakeAnOfferState.SUCCESS);
+      setRefetchOffers(true);
     },
   });
 

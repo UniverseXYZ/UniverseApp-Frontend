@@ -13,6 +13,7 @@ import { BigNumber, ethers } from 'ethers';
 import Blockies from 'react-blockies';
 import { shortenEthereumAddress } from '../../../../../../../../../utils/helpers/format';
 import { useAuthContext } from '../../../../../../../../../contexts/AuthContext';
+import { useNFTPageData } from '../../../../NFTPage.context';
 
 interface ITabOffersProps {
   nft?: INFT;
@@ -21,7 +22,8 @@ interface ITabOffersProps {
 export const TabOffers:React.FC<ITabOffersProps> = ({nft, order}) => {
   const [offers, setOffers] = useState<IOrder[]>([]);
   const [offerUsersMap, setUsersMap] = useState<Record<string, IUser>>({});
-  const {address, usdPrice} = useAuthContext();
+  const { address, usdPrice } = useAuthContext();
+  const { refetchOffers, setRefetchOffers } = useNFTPageData();
 
   const fetchOrderOffers = async () => {
     if(nft && nft.tokenId && nft._collectionAddress) {
@@ -30,8 +32,21 @@ export const TabOffers:React.FC<ITabOffersProps> = ({nft, order}) => {
           side: 0,
           tokenId: Number(nft.tokenId),
           collection: nft._collectionAddress.toLowerCase()
-        })
+        });
 
+        orders.sort((a,b) => {
+          const difference = BigNumber.from(b.make.value).sub(a.make.value).toString();
+          if (difference === "0") {
+            return 0;
+          }
+          // '-' means the difference is negative
+          if (difference.includes('-')) {
+            return -1;
+          }
+
+          return 1;
+        })
+        
         const userRequests: Array<any> = [];
         for (const order of orders) {
           userRequests.push(GetUserApi(order.maker))
@@ -48,6 +63,7 @@ export const TabOffers:React.FC<ITabOffersProps> = ({nft, order}) => {
         }, {});
         setUsersMap(usersMap)
         setOffers(orders);
+        setRefetchOffers(false);
       }catch(err) {
         console.error(err);
       }
@@ -56,7 +72,7 @@ export const TabOffers:React.FC<ITabOffersProps> = ({nft, order}) => {
 
   useEffect(() => {
       fetchOrderOffers();
-  }, [nft?.tokenId, nft?._collectionAddress])
+  }, [nft?.tokenId, nft?._collectionAddress, refetchOffers])
   
   return !offers.length ? <OffersEmpty /> : (
     <Box>
@@ -68,11 +84,13 @@ export const TabOffers:React.FC<ITabOffersProps> = ({nft, order}) => {
         const offerUser = offerUsersMap[offer.maker];
         const canAcceptsOffers = order && order.maker === address && !isExpired;
         return (
-          <NFTTabItemWrapper key={i}>
+          <NFTTabItemWrapper key={offer.id}>
             <Flex>
               {offerUser && offerUser.profileImageUrl
               ? <Image src={offerUser.profileImageUrl} {...styles.ImageStyle} />
-              : <Blockies className="blockie-details" seed={offer.maker} style={{"border-radius": "50%"}} />
+              : <Box style={{ borderRadius: '50%', overflow: 'hidden'}} {...styles.ImageStyle} >
+                  <Blockies seed={offer.maker} size={9} scale={5} />
+                </Box>
               }
               <Box>
                 <Text {...styles.NameStyle}>
