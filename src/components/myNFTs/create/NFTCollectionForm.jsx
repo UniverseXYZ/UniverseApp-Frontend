@@ -27,7 +27,7 @@ import { useErrorContext } from '../../../contexts/ErrorContext';
 import RevenueSplits from '../revenueSplits/RevenueSplits.jsx';
 import SocialConnections from '../socialConnections/SocialConnections.jsx';
 import { formatRoyaltiesForMinting } from '../../../utils/helpers/contractInteraction.js';
-import { getCollectionRoyaltiesFromRegistry } from '../../../utils/api/royaltyRegistry';
+import { fetchRoyalties } from '../../../utils/api/royaltyRegistry';
 
 const MAX_FIELD_CHARS_LENGTH = {
   name: 32,
@@ -294,10 +294,7 @@ const NFTCollectionForm = ({ showCollectible, setShowCollectible, scrollToTop })
 
   const fetchRoyaltyRegistry = async () => {
     try {
-      const [contract, royalties] = await getCollectionRoyaltiesFromRegistry(
-        location.state.collection.address,
-        signer
-      );
+      const [contract, royalties] = await fetchRoyalties(location.state.collection.address, signer);
       setRegistryContract(contract);
       // Index 1 is collection royalties
       if (royalties.length && royalties[1].length) {

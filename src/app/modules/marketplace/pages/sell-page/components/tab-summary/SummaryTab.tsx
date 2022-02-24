@@ -34,7 +34,7 @@ import { useAuthContext } from '../../../../../../../contexts/AuthContext';
 import { SwiperArrowButton } from '../../../../../../components/swiper-arrow-button';
 import Contracts from '../../../../../../../contracts/contracts.json';
 import { Contract, BigNumber } from 'ethers';
-import {getCollectionRoyaltiesFromRegistry} from '../../../../../../../utils/api/royaltyRegistry';
+import { fetchRoyalties } from '../../../../../../../utils/api/royaltyRegistry';
 
 interface IApproveCollection {
   approved: boolean;
@@ -120,10 +120,10 @@ export const SummaryTab = () => {
 
     const fetchRoyaltyRegistry = async () => {
     try {
-      const [ ,royalties] = await getCollectionRoyaltiesFromRegistry(
+      const [ ,royalties] = await fetchRoyalties(
         params.collectionAddress,
-        signer,
-        Number(params.tokenId)
+        params.tokenId,
+        signer
       );
 
       // Index 0 is nft royalties

@@ -28,7 +28,7 @@ import { isNFTAssetAudio, isNFTAssetImage, isNFTAssetVideo } from '../../../../.
 import { TOKENS_MAP } from '../../../../../../../../../../constants';
 import { TokenTicker } from '../../../../../../../../../../enums';
 import { Fee } from '../../../../../../../../../marketplace/pages/sell-page/components/tab-summary/compoents';
-import { getCollectionNftRoyaltiesFromRegistry } from '../../../../../../../../../../../utils/api/royaltyRegistry';
+import { getRoyaltiesFromRegistry } from '../../../../../../../../../../../utils/marketplace/utils';
 
 interface INFTAcceptOfferPopupProps {
   NFT?: INFT;
@@ -97,28 +97,13 @@ export const NFTAcceptOfferPopup = ({ NFT, NFTs, order, isOpen, onClose }: INFTA
   const fetchNftRoyalties =  async () => {
     if (NFT?._collectionAddress && NFT.tokenId) {
       try {
-        const [_, royalties] = await getCollectionNftRoyaltiesFromRegistry(NFT._collectionAddress, NFT.tokenId, signer)
+        const { nftRoyaltiesPercent, collectionRoyaltiesPercent } = await getRoyaltiesFromRegistry(NFT._collectionAddress, NFT.tokenId, signer);
         
-        let nftRoyaltiesSum = BigNumber.from(0);
-        let collRoyaltiesSum = BigNumber.from(0);
-
-        if (royalties.length) {
-          const nftRoyalties = royalties[0];
-          if (nftRoyalties.length) {
-            const nftRoyaltiesSum = nftRoyalties.reduce((acc: any, curr: any) => acc.add(curr[1]) , BigNumber.from(0))
-            setNftRoyalties(nftRoyaltiesSum.div(100));
-          }
-
-          const collectionRoyalties = royalties[1];
-          if (collectionRoyalties.length) {
-            const collRoyaltiesSum = collectionRoyalties.reduce((acc:any, curr:any) => acc.add(curr[1]) , BigNumber.from(0))
-            setCollectionRoyalties(collRoyaltiesSum.div(100));
-          }
-        }
-
+        setNftRoyalties(nftRoyaltiesPercent);
+        setCollectionRoyalties(collectionRoyaltiesPercent);
         
         const royaltiesSum = 
-        Math.round(nftRoyaltiesSum.add(collRoyaltiesSum).toNumber() + UNIVERSE_FEE);
+        Math.round(nftRoyaltiesPercent.add(collectionRoyaltiesPercent).toNumber() + UNIVERSE_FEE);
 
         const cutPercentage = 1 - royaltiesSum / 100;
         
