@@ -99,7 +99,7 @@ export const NFTInfo = () => {
                 }
               </Box>
               <Box {...styles.NFTDetailsContainerStyle}>
-                <Box sx={{ p: '60px 40px', minH: `calc(100vh - 80px - ${buySectionMeasure?.height}px)`, }}>
+                <Box sx={{ p: {sm: '40px 20px', md: '60px 40px'}, minH: `calc(100vh - 80px - ${buySectionMeasure?.height}px)`, }}>
                   <Flex sx={{
                     alignItems: 'center',
                     mb: '12px',
@@ -129,7 +129,7 @@ export const NFTInfo = () => {
                     {`${editionNumber}/${NFT.numberOfEditions || editions.length}`}
                   </Text>
 
-                  <Flex mb={'24px'}>
+                  <Flex mb={'24px'} flexWrap={{ sm: 'wrap', md: 'nowrap' }}>
                     {creator && <NFTPageCreatorRelation creator={creator} />}
                     {collection && <NFTPageCollectionRelation collection={collection} />}
                     {owner && <NFTPageOwnerRelation owner={owner} />}
