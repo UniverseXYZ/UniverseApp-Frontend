@@ -15,7 +15,7 @@ import { Status, Status as PostingPopupStatus } from './compoents/posting-popup/
 import { useMarketplaceSellData } from '../../hooks';
 import { Fee, PostingPopup } from './compoents';
 import { fees, totalFee } from './constants';
-import { SellMethod } from '../../enums';
+import { SellAmountType, SellMethod } from '../../enums';
 import { IFixedListingForm } from '../../types';
 import { TokenTicker } from '../../../../../../enums';
 import { TokenIcon } from '../../../../../../components';
@@ -50,7 +50,7 @@ export const SummaryTab = () => {
   const prevRef = useRef(null);
   const nextRef = useRef(null);
 
-  const { signer } = useAuthContext() as any;
+  const { signer, address} = useAuthContext() as any;
   const { myNFTs } = useMyNftsContext() as any;
   const { loggedInArtist } = useAuthContext();
   const params = useParams<{ collectionAddress: string; tokenId: string; }>();
@@ -59,6 +59,7 @@ export const SummaryTab = () => {
   const [collections, setCollections] = useState<IApproveCollection[]>([]);
   const [creatorRoyalties, setCreatorRoyalties] = useState(0);
   const [collectionRoyalties, setCollectionRoyalties] = useState(0);
+  const [collectionIsAppovedForAll, setCollectionIsApprovedForAll] = useState(false);
   const [totalFees, setTotalFees] = useState(0);
 
   const { nft, isPosted, form, sellMethod, amountType, goBack } = useMarketplaceSellData();
@@ -75,7 +76,11 @@ export const SummaryTab = () => {
   const handleApproveCollection = useCallback(async ({ collection, standard, tokenIds }: IApproveCollection) => {
     const contract = new Contract(`${collection.address}`, contractsData[standard].abi, signer);
 
-    await Promise.all(tokenIds.map(tokenId => contract.approve(process.env.REACT_APP_MARKETPLACE_CONTRACT, tokenId)));
+    const approveTx = await contract.setApprovalForAll(process.env.REACT_APP_MARKETPLACE_CONTRACT, true)
+
+    await approveTx.wait();
+
+    setCollectionIsApprovedForAll(true);
 
     setCollections(collections.map((collectionItem) => {
       return collectionItem.collection.address !== collection.address
@@ -99,19 +104,23 @@ export const SummaryTab = () => {
   }, [form.values, price]);
 
   const NFTsForPreview = useMemo<INFT[]>(() => {
-    const selectedIds = [`${nft.id}`, ...form.values.bundleSelectedNFTs.map((key) => key.split(':')[0])];
-
-    return selectedIds.reduce<INFT[]>((acc, id) => {
-      const _myNFT = (myNFTs as INFTBackend[]).find((_myNFT) => `${_myNFT.id}` === id);
-
-      if (_myNFT) {
-        const myNFT = mapBackendNft(_myNFT);
-        myNFT.owner = mapBackendUser(loggedInArtist);
-        acc.push(myNFT);
+    switch(amountType) {
+      case SellAmountType.BUNDLE: {
+        const selectedIds = [`${nft.tokenId}`, ...form.values.bundleSelectedNFTs.map((key) => key.split(':')[0])];
+        return selectedIds.reduce<INFT[]>((acc, id) => {
+          const _myNFT = (myNFTs as INFTBackend[]).find((_myNFT) => `${_myNFT.id}` === id);
+          if (_myNFT) {
+            const myNFT = mapBackendNft(_myNFT);
+            myNFT.owner = mapBackendUser(loggedInArtist);
+            acc.push(myNFT);
+          }
+          return acc;
+        }, []);
       }
-
-      return acc;
-    }, []);
+      case SellAmountType.SINGLE: {
+        return [nft];
+      }
+    }
   }, [myNFTs, nft, form.values]);
 
   const isAllCollectionApproved = useMemo(() => {
@@ -151,6 +160,12 @@ export const SummaryTab = () => {
       }
   };
 
+  const fetchIsApprovedForAll = async () => {
+      const contract = new Contract(`${nft.collection?.address}`, contractsData[nft.standard].abi, signer);
+      const isApprovedForAll = await contract.isApprovedForAll(address, process.env.REACT_APP_MARKETPLACE_CONTRACT);
+      setCollectionIsApprovedForAll(isApprovedForAll);
+  } 
+
   useEffect(() => {
     setTotalFees(creatorRoyalties + collectionRoyalties);
   }, [creatorRoyalties, collectionRoyalties])
@@ -158,6 +173,10 @@ export const SummaryTab = () => {
   useEffect(() => {
     fetchRoyaltyRegistry();
   }, [params.collectionAddress, params.tokenId, signer])
+
+  useEffect(() => {
+    fetchIsApprovedForAll();
+  }, [collectionIsAppovedForAll])
 
   useEffect(() => {
     if (isPosted) {
@@ -171,7 +190,7 @@ export const SummaryTab = () => {
         if (NFT.collection?.address) {
           if (!collectionsMap.hasOwnProperty(NFT.collection.address)) {
             collectionsMap[NFT.collection.address] = {
-              approved: false,
+              approved: collectionIsAppovedForAll,
               standard: NFT.standard,
               tokenIds: [],
               collection: NFT.collection,
@@ -185,7 +204,7 @@ export const SummaryTab = () => {
     );
 
     setCollections(collections);
-  }, [NFTsForPreview]);
+  }, [NFTsForPreview, collectionIsAppovedForAll]);
 
   useEffect(() => {
     update();
