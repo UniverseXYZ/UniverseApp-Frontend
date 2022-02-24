@@ -1,5 +1,5 @@
-import { Box, Button, Image, SimpleGrid, Text } from '@chakra-ui/react';
-import React, { useCallback, useEffect, useState } from 'react';
+import { Box, Button, Image, Popover, PopoverBody, PopoverContent, PopoverTrigger, SimpleGrid, Text, Tooltip } from '@chakra-ui/react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useMeasure } from 'react-use';
 import { UseMeasureRect } from 'react-use/lib/useMeasure';
@@ -59,7 +59,7 @@ export const NFTBuySection = ({ NFT, owner, NFTs, order, onMeasureChange }: INFT
           // TODO: case with NFTBuyNFTSectionState.BUYER_FIXED_LISTING_BUY
           // TODO: case with NFTBuyNFTSectionState.BUYER_AUCTION_BID
           // TODO: case with NFTBuyNFTSectionState.BUYER_AUCTION_BID_N_OFFER
-          setState(BuyNFTSectionState.BUYER_FIXED_LISTING_BUY_N_OFFER);
+          setState(BuyNFTSectionState.BUYER_FIXED_LISTING_BUY);
         }
       }
     } catch (e) {
@@ -74,7 +74,7 @@ export const NFTBuySection = ({ NFT, owner, NFTs, order, onMeasureChange }: INFT
     updateSectionState();
   }, [signer, NFT, order, updateSectionState]);
 
-  const { countDownString } = useDateCountdown(new Date(new Date().setDate(new Date().getDate() + 1)));
+  // const { countDownString } = useDateCountdown(new Date(new Date().setDate(new Date().getDate() + 1)));
 
   const [isCheckoutPopupOpened, setIsCheckoutPopupOpened] = useState(false);
   const [isPlaceABidPopupOpened, setIsPlaceABidPopupOpened] = useState(false);
@@ -82,9 +82,29 @@ export const NFTBuySection = ({ NFT, owner, NFTs, order, onMeasureChange }: INFT
   const [isCancelListingPopupOpened, setIsCancelListingPopupOpened] = useState(false);
   const [isChangeListingPricePopupOpened, setIsChangeListingPricePopupOpened] = useState(false);
 
+  const utcTimestamp = Math.floor(new Date().getTime() / 1000);
+
+  const canCheckoutOrder = 
+    (!order?.start && !order?.end) || // Order doesn't have start and end
+    (order.start && order.end && utcTimestamp > order.start && utcTimestamp < order.end) || // Order has both start & end
+    (order.start && !order.end && utcTimestamp > order.start) || // Order has only start
+    (!order.start && order.end && utcTimestamp < order.end ) // Order has only end 
+  ;
+
   if (state === undefined) {
     return <Box ref={ref}></Box>;
   }
+  const token = order?.take.assetType.assetClass as TokenTicker;
+  const tokenDecimals = TOKENS_MAP[token]?.decimals;
+  const listingPrice = utils.formatUnits(order?.take.value ?? '', tokenDecimals);
+  
+  const buyNowButton = () => (
+    <Tooltip label={"Can't buy this NFT. It's either not available yet or already expired."} isDisabled={!!canCheckoutOrder} hasArrow shouldWrapChildren placement='top'>
+      <Button boxShadow={'lg'} onClick={() => setIsCheckoutPopupOpened(true)} disabled={!canCheckoutOrder} style={{"width": "100%"}}>
+        Buy for {listingPrice} {order?.take.assetType.assetClass}
+      </Button>
+    </Tooltip>
+  )
 
   return (
     <Box {...styles.WrapperStyle} ref={ref}>
@@ -110,20 +130,16 @@ export const NFTBuySection = ({ NFT, owner, NFTs, order, onMeasureChange }: INFT
         )}
         {state === BuyNFTSectionState.BUYER_FIXED_LISTING_BUY_N_OFFER && (
           <>
-            <HighestBid />
+            {/* <HighestBid /> */}
             <SimpleGrid columns={2} spacingX={'12px'}>
-              <Button boxShadow={'lg'} onClick={() => setIsCheckoutPopupOpened(true)}>
-                Buy for {utils.formatUnits(order?.take.value ?? '', `${TOKENS_MAP[order?.take.assetType.assetClass as TokenTicker]?.decimals}`)} {order?.take.assetType.assetClass}
-              </Button>
+              {buyNowButton()}
               <Button variant={'outline'} onClick={() => setIsMakeAnOfferPopupOpened(true)}>Make offer</Button>
             </SimpleGrid>
           </>
         )}
         {state === BuyNFTSectionState.BUYER_FIXED_LISTING_BUY && (
           <>
-            <Button boxShadow={'lg'} w={'100%'} onClick={() => setIsCheckoutPopupOpened(true)}>
-              Buy for {utils.formatUnits(order?.take.value ?? '', `${TOKENS_MAP[order?.take.assetType.assetClass as TokenTicker]?.decimals}`)} {order?.take.assetType.assetClass}
-            </Button>
+            {buyNowButton()}
             <Text {...styles.ContentFeeLabelStyle} textAlign={'center'} mt={'12px'}>(10% of sales will go to creator)</Text>
           </>
         )}
