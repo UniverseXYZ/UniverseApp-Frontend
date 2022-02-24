@@ -73,8 +73,13 @@ export const NFTMakeAnOfferPopup = ({ order, isOpen, onClose, }: INFTMakeAnOffer
   const { signer, web3Provider } = useAuthContext() as any;
 
   const [state, setState] = useState<MakeAnOfferState>(MakeAnOfferState.FORM);
+  const [tokenPrice, setTokenPrice] = useState(0);
 
   const tokens = useMemo(() => TOKENS.filter((token) => ![TOKENS_MAP.ETH.ticker].includes(token.ticker)), []);
+
+  const getPriceMutation = useMutation((coingeckoId: any) => {
+    return axios.get(`https://api.coingecko.com/api/v3/simple/price?ids=${coingeckoId}&vs_currencies=usd`);
+  });
 
   const encodeDataMutation = useMutation((data: any) => {
     return axios.post(`${process.env.REACT_APP_MARKETPLACE_BACKEND}/v1/orders/encoder/order`, data);
@@ -157,6 +162,15 @@ export const NFTMakeAnOfferPopup = ({ order, isOpen, onClose, }: INFTMakeAnOffer
     },
   });
 
+  useEffect(()=> {
+    const loadPrice = async () => {
+      const token = formik.values.token as TokenTicker;
+      const response = (await getPriceMutation.mutateAsync(TOKENS_MAP[token].coingeckoId)).data
+      setTokenPrice(response[TOKENS_MAP[token].coingeckoId]['usd']);
+    }
+    loadPrice();
+  },[formik.values.token])
+
   useEffect(() => {
     formik.resetForm();
     formik.validateForm();
@@ -208,7 +222,7 @@ export const NFTMakeAnOfferPopup = ({ order, isOpen, onClose, }: INFTMakeAnOffer
                     onBlur={formik.handleBlur}
                   />
                   <InputRightAddon>
-                    $ {!formik.values.amount ? '0.00' : (+formik.values.amount * ETH_USD_RATE).toFixed(2)}
+                    $ {!formik.values.amount ? '0.00' : (+formik.values.amount * tokenPrice).toFixed(2)}
                   </InputRightAddon>
                 </InputGroup>
                 <FormErrorMessage>{formik.errors.amount}</FormErrorMessage>
