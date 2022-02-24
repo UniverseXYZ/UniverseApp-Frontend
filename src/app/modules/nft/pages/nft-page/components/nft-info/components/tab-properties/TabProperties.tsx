@@ -1,7 +1,7 @@
-import { Box, Flex, SimpleGrid } from '@chakra-ui/react';
+import { Box, Flex, Image, SimpleGrid, Text } from '@chakra-ui/react';
 import React, { useMemo } from 'react';
 
-import PlaceholderImage from '../../../../../../../../../assets/images/popup.png';
+import TextBubbleImage from '../../../../../../../../../assets/images/text-bubble.png';
 
 import { useNFTPageData } from '../../../../NFTPage.context';
 import { NFTProperty } from '..';
@@ -43,12 +43,12 @@ export const TabProperties = ({ properties = [] } : ITabPropertiesProps) => {
       </SimpleGrid>
         {
           properties.length == 0 ? 
-          <div className='no-properties'>
-              <img id="popup-img" src={PlaceholderImage} alt="This NFT doesn't have any properties" />
-            <div className="error-text">
-              <span>This NFT doesn&apos;t have any properties</span>
-            </div>
-        </div> : null
+          <Flex align={'center'} color={'rgba(0, 0, 0, 0.4)'} flexDir={'column'}>
+            <Image src={TextBubbleImage} mt={'20px'} mb={'30px'} h={'70px'} w={'100px'} />
+            <Text fontSize={'18px'} fontWeight={500} mb={'6px'}>This NFT doesn&apos;t have any properties.</Text>
+          </Flex>
+ 
+        : null
         }
     </Box>
   );
