@@ -148,11 +148,6 @@ export const SellPage = () => {
 
       const { data: encodedOrder } = (await encodeOrderMutation.mutateAsync(orderData));
 
-      const contract = new Contract(make.assetType.contract, contractsData[make.assetType.assetClass].abi, signer);
-      const approveTx = await contract.approve(process.env.REACT_APP_MARKETPLACE_CONTRACT, make.assetType.tokenId)
-
-      const rec = await approveTx.wait();
-
       const signature = await sign(
         web3Provider.provider,
         encodedOrder,
