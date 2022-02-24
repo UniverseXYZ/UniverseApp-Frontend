@@ -25,7 +25,7 @@ import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useFormik } from 'formik';
 import { useMutation } from 'react-query';
 import axios from 'axios';
-import { utils } from 'ethers';
+import { Contract, ethers, utils } from 'ethers';
 import { default as dayjs } from 'dayjs';
 import * as Yup from 'yup';
 
@@ -42,6 +42,12 @@ import ArrowIcon from '../../../../../../../assets/images/arrow-down.svg';
 import SuccessIcon from '../../../../../../../assets/images/bid-submitted.png';
 import { IToken } from '../../../../../../types';
 import { GetSaltApi } from '../../../../../../api';
+import { OrderAssetClass } from '../../../../enums';
+
+import Contracts from '../../../../../../../contracts/contracts.json';
+
+// @ts-ignore
+const { contracts: contractsData } = Contracts[process.env.REACT_APP_NETWORK_CHAIN_ID];
 
 export enum MakeAnOfferState {
   FORM,
@@ -67,7 +73,6 @@ export const NFTMakeAnOfferPopup = ({ order, isOpen, onClose, }: INFTMakeAnOffer
   const { signer, web3Provider } = useAuthContext() as any;
 
   const [state, setState] = useState<MakeAnOfferState>(MakeAnOfferState.FORM);
-  const [agree, setAgree] = useState(false);
 
   const tokens = useMemo(() => TOKENS.filter((token) => ![TOKENS_MAP.ETH.ticker].includes(token.ticker)), []);
 
@@ -81,11 +86,15 @@ export const NFTMakeAnOfferPopup = ({ order, isOpen, onClose, }: INFTMakeAnOffer
 
   const getSaltMutation = useMutation(GetSaltApi);
 
+  const threeDaysAway = new Date();
+  threeDaysAway.setDate(threeDaysAway.getDate()+3);
+
   const formik = useFormik<{ amount: string; token: TokenTicker, expireAt: Date | null; }>({
+
     initialValues: {
       amount: '',
       token: TOKENS_MAP.WETH.ticker,
-      expireAt: null,
+      expireAt: threeDaysAway,
     },
     validationSchema: NFTMakeAnOfferValidationSchema,
     onSubmit: async (value) => {
@@ -96,21 +105,24 @@ export const NFTMakeAnOfferPopup = ({ order, isOpen, onClose, }: INFTMakeAnOffer
 
       const salt = (await getSaltMutation.mutateAsync(address)).data.salt;
 
+      const paymentToken = TOKENS_MAP[value.token as TokenTicker];
+      const paymentAmount = utils.parseUnits(
+        `${value.amount}`,
+        `${paymentToken.decimals}`
+      );
+
       const offerData = {
         type: 'UNIVERSE_V1',
         maker: address,
         taker: order?.maker,
         make: {
           assetType: {
-            assetClass: value.token,
+            assetClass: OrderAssetClass.ERC20,
+            contract: contractsData[paymentToken.contractName].address
           },
-          value: utils.parseUnits(
-            `${value.amount}`,
-            `${TOKENS_MAP[value.token as TokenTicker].decimals}`
-          ).toString(),
+          value: paymentAmount.toString(),
         },
         take: order?.make,
-        side: 0,
         salt: salt,
         start: 0,
         end: (value.expireAt as Date).getTime(),
@@ -118,6 +130,18 @@ export const NFTMakeAnOfferPopup = ({ order, isOpen, onClose, }: INFTMakeAnOffer
       };
 
       const response = (await encodeDataMutation.mutateAsync(offerData)).data;
+
+      const contract = new Contract(contractsData[paymentToken.contractName].address, contractsData[paymentToken.contractName].abi, signer);
+
+      const allowance = await contract.allowance(address, process.env.REACT_APP_MARKETPLACE_CONTRACT);
+
+      if(paymentAmount.gt(allowance)) {
+
+        const approveTx = await contract.approve(process.env.REACT_APP_MARKETPLACE_CONTRACT, ethers.constants.MaxUint256);
+
+        await approveTx.wait();
+
+      }
 
       const signature = await sign(
         web3Provider.provider,
@@ -130,8 +154,6 @@ export const NFTMakeAnOfferPopup = ({ order, isOpen, onClose, }: INFTMakeAnOffer
       const createOrderResponse = (await createOfferMutation.mutateAsync({ ...offerData, signature })).data;
 
       setState(MakeAnOfferState.SUCCESS);
-
-      console.log('createOrderResponse', createOrderResponse);
     },
   });
 
@@ -139,7 +161,6 @@ export const NFTMakeAnOfferPopup = ({ order, isOpen, onClose, }: INFTMakeAnOffer
     formik.resetForm();
     formik.validateForm();
     setState(MakeAnOfferState.FORM);
-    setAgree(false);
   }, [isOpen]);
 
   return (
@@ -207,7 +228,7 @@ export const NFTMakeAnOfferPopup = ({ order, isOpen, onClose, }: INFTMakeAnOffer
               <Box {...styles.ButtonsContainerStyle}>
                 <Button
                   boxShadow={'lg'}
-                  disabled={!(agree && formik.isValid)}
+                  disabled={!formik.isValid}
                   onClick={() => formik.submitForm()}
                 >Make an Offer</Button>
                 {/*<Button variant={'outline'}>Convert ETH</Button>*/}

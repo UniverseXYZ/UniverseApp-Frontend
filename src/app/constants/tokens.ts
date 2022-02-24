@@ -20,24 +20,28 @@ export const TOKENS_MAP: Record<TokenTicker, IToken> = {
     decimals: 6,
     name: 'USDC Coin',
     icons: [USDCIcon],
+    // TODO add contractName
   },
   [TokenTicker.DAI]: {
     ticker: TokenTicker.DAI,
     decimals: 18,
     name: 'DAI Stablecoin',
     icons: [DAIIcon],
+    // TODO add contractName
   },
   [TokenTicker.XYZ]: {
     ticker: TokenTicker.XYZ,
     decimals: 18,
     name: 'XYZ Governance Token',
     icons: [XYZIcon],
+    // TODO add contractName
   },
   [TokenTicker.WETH]: {
     ticker: TokenTicker.WETH,
     decimals: 18,
     name: 'Wrapped Ether',
     icons: [WETHIcon],
+    contractName: 'WrappedEther'
   },
 };
 

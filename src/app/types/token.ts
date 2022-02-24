@@ -5,4 +5,5 @@ export interface IToken {
   decimals: number;
   name: string;
   icons: string[];
+  contractName?: string;
 }
