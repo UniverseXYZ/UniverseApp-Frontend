@@ -3,6 +3,14 @@ import { utils } from 'ethers';
 const GET_TOKENS_PER_ADDRESS = (address: string, page: number, perPage: number) =>
   `${process.env.REACT_APP_DATASCRAPER_BACKEND}/v1/users/${address}/tokens?page=${page}&size=${perPage}`;
 
+const GET_NFTS_PER_COLLECTION = (address: string, page: number) =>
+  `${process.env.REACT_APP_DATA_SCRAPER}/v1/collections/${utils.getAddress(
+    address
+  )}/tokens?page=${page}&size=8`;
+
+const GET_COLLECTION_DATA = (address: String) =>
+  `${process.env.REACT_APP_API_BASE_URL}/api/pages/collection/${address}`;
+
 /**
  *
  * @param {string} address
@@ -24,6 +32,16 @@ const GET_TOKENS_PER_ADDRESS = (address: string, page: number, perPage: number) 
  *  sentForMediaAt
  *  ]
  */
+
+export const getCollectionData = async (address: string, page: number) => {
+  const request = await fetch(GET_COLLECTION_DATA(address));
+  const result = await request.json();
+
+  const nfts = await fetch(GET_NFTS_PER_COLLECTION(address, page));
+  result.nfts = await nfts.json();
+
+  return result;
+};
 
 export const getNftsPerAddress = async (address: string, page: number, perPage: number) => {
   const request = await fetch(GET_TOKENS_PER_ADDRESS(address, page, perPage));
