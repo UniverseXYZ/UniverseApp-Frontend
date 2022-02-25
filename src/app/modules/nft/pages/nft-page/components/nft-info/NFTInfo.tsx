@@ -36,6 +36,7 @@ import { NFTLike } from '../../../../components/nft-item/components';
 import { NFTTransferPopup } from '../nft-transfer-popup';
 import {utils} from "ethers"
 import { sendRefreshMetadataRequest } from '../../../../../../../utils/api/marketplace';
+import BGImage from '../../../../../../../assets/images/v2/stone_bg.jpg';
 
 // TODO: hide metadata tab for not Polymorph NFT type
 export const NFTInfo = () => {
@@ -86,7 +87,9 @@ export const NFTInfo = () => {
         )
       : NFT ? (
           <>
-            <Box>
+            <Box sx={{
+              bg: `url(${BGImage}) center / cover`
+            }}>
               <Box {...styles.NFTAssetContainerStyle}>
                 {isNFTAssetImage(NFT.artworkType) &&
                   <NFTAssetImage image={NFT.originalUrl || NFT.optimizedUrl} />
@@ -105,7 +108,7 @@ export const NFTInfo = () => {
                     mb: '12px',
                     justifyContent: 'space-between'
                   }}>
-                    <Heading as={'h2'} sx={{ fontSize: '26px', }}>{NFT.name}</Heading>
+                    <Heading as={'h2'} sx={{ fontSize: '26px', color: 'transparent', background: 'black', backgroundClip: 'text', textShadow: '2px 2px 5px rgba(255, 255, 255, 0.3)' }}>{NFT.name}</Heading>
                     <Box>
                       {/*<NFTLike likes={[]} isLiked={true} {...styles.LikeButtonStyle} />*/}
 
