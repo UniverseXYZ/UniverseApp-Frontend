@@ -49,6 +49,7 @@ import { useNFTPageData } from '../../NFTPage.context';
 
 import { getEtherscanTxUrl} from '../../../../../../../utils/helpers';
 import { formatAddress } from '../../../../../../../utils/helpers/format';
+import { NFTCustomError } from '../nft-custom-error/NFTCustomError';
 
 // @ts-ignore
 const { contracts: contractsData } = Contracts[process.env.REACT_APP_NETWORK_CHAIN_ID];
@@ -275,12 +276,10 @@ export const NFTMakeAnOfferPopup = ({ order, isOpen, onClose, }: INFTMakeAnOffer
           )}
 
           {state === MakeAnOfferState.INSUFFICIENT_BALANCE && (
-            <Box>
-              <Heading {...styles.TitleStyle} mb={'20px'}>Insufficient balance</Heading>
-              <Text fontSize={'14px'} mx={'auto'} maxW={'260px'} textAlign={'center'}>
-                You do not have enough {TOKENS_MAP[formik.values.token].ticker} in your wallet!
-              </Text>
-            </Box>
+            <NFTCustomError
+              title={`Insufficient balance`}
+              message={`You do not have enough ${TOKENS_MAP[formik.values.token].ticker} in your wallet!`}
+            ></NFTCustomError>
           )}
 
           {state === MakeAnOfferState.PROCESSING && (
