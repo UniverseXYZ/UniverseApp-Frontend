@@ -34,7 +34,7 @@ import { useAuthContext } from '../../../../../../../contexts/AuthContext';
 import { SwiperArrowButton } from '../../../../../../components/swiper-arrow-button';
 import Contracts from '../../../../../../../contracts/contracts.json';
 import { Contract, BigNumber } from 'ethers';
-import { fetchRoyalties } from '../../../../../../../utils/api/royaltyRegistry';
+import { fetchRoyalties, fetchDAOFee } from '../../../../../../../utils/api/royaltyRegistry';
 import { default as dayjs } from 'dayjs';
 import { default as UTC } from 'dayjs/plugin/utc';
 
@@ -63,6 +63,7 @@ export const SummaryTab = () => {
   const [collections, setCollections] = useState<IApproveCollection[]>([]);
   const [creatorRoyalties, setCreatorRoyalties] = useState(0);
   const [collectionRoyalties, setCollectionRoyalties] = useState(0);
+  const [daoFee, setDaoFee] = useState(0);
   const [collectionIsAppovedForAll, setCollectionIsApprovedForAll] = useState(false);
   const [totalFees, setTotalFees] = useState(0);
 
@@ -118,8 +119,8 @@ export const SummaryTab = () => {
   }, [form.values]);
 
   const totalPrice = useMemo(() => {
-    return parseFloat((price - (price * totalFees / 100)).toFixed(5));
-  }, [form.values, price]);
+    return parseFloat((price - (price * totalFees / 100)).toFixed(6));
+  }, [form.values, price, totalFees]);
 
   const NFTsForPreview = useMemo<INFT[]>(() => {
     switch(amountType) {
@@ -158,19 +159,27 @@ export const SummaryTab = () => {
           if (royalties.length && royalties[0].length) {
             const nftRoyalties = royalties[0].map((royalty: [string, BigNumber]) => ({
               address: royalty[0],
-              amount: BigNumber.from(royalty[1]).div(100),
+              amount: BigNumber.from(royalty[1]),
             }));
-           setCreatorRoyalties(+nftRoyalties[0].amount || 0)
+           setCreatorRoyalties(+nftRoyalties[0].amount / 100 || 0)
           }
     
           // Index 1 is collection royalties
           if (royalties.length && royalties[1].length) {
             const collectionRoyalties = royalties[1].map((royalty: [string, BigNumber]) => ({
               address: royalty[0],
-              amount: BigNumber.from(royalty[1]).div(100).toString(),
+              amount: BigNumber.from(royalty[1]),
             }));
-           setCollectionRoyalties(+collectionRoyalties[0].amount || 0)
+           setCollectionRoyalties(+collectionRoyalties[0].amount / 100 || 0)
           }
+        } catch (err) {
+          console.log(err);
+        }
+
+        try {
+          const [ ,_daoFee] = await fetchDAOFee(signer);
+          setDaoFee(+BigNumber.from(_daoFee) / 100 || 0);
+
         } catch (err) {
           console.log(err);
         }
@@ -185,8 +194,8 @@ export const SummaryTab = () => {
   } 
 
   useEffect(() => {
-    setTotalFees(creatorRoyalties + collectionRoyalties);
-  }, [creatorRoyalties, collectionRoyalties])
+    setTotalFees(creatorRoyalties + collectionRoyalties + daoFee);
+  }, [creatorRoyalties, collectionRoyalties, daoFee])
 
   useEffect(() => {
     fetchRoyaltyRegistry();
@@ -325,8 +334,9 @@ export const SummaryTab = () => {
             </Text>
 
             <Box layerStyle={'grey'} {...styles.FeesContainerStyle}>
-              <Fee name={'To Universe'} amount={collectionRoyalties} />
-              <Fee name={'To creator'} amount={creatorRoyalties} />
+              <Fee name={'To Universe'} amount={daoFee} />
+              <Fee name={'To Collection'} amount={collectionRoyalties} />
+              <Fee name={'To Creator'} amount={creatorRoyalties} />
               <Fee name={'Total'} amount={totalFees} />
             </Box>
 
