@@ -13,6 +13,7 @@ import {
 import { useState, useEffect } from 'react';
 import { FormikProps } from 'formik';
 import { default as dayjs } from 'dayjs';
+import { default as isSameOrAfter } from 'dayjs/plugin/isSameOrAfter'
 
 import { useMarketplaceSellData } from '../../../../hooks';
 import { SellAmountType, SellMethod } from '../../../../enums';
@@ -21,25 +22,24 @@ import { CurrencyInput, DateTimePicker, InputShadow } from '../../../../../../..
 import { IFixedListingForm, IMarketplaceSellContextData } from '../../../../types';
 import { BundleForm } from '../../../bundle-form';
 
+dayjs.extend(isSameOrAfter);
+
 interface IMarketplaceSellContextDataOverride extends Omit<IMarketplaceSellContextData, 'form'> {
   form: FormikProps<IFixedListingForm>;
 }
 
 export const SettingsTabFixedListing = () => {
   const [minEndDate, setMinEndDate] = useState(dayjs().add(1, 'day').toDate());
-  const [endDateDisabled, setEndDateDisabled] = useState(false);
   const { form, sellMethod, amountType } = useMarketplaceSellData() as IMarketplaceSellContextDataOverride;
 
   const {values: { startDate, endDate }} = form;
 
   useEffect(() => {
-    // disable end date initialy
-    setEndDateDisabled(!startDate);
     // set the end date + 1 day and set the minimum end date
-    const _endDate = dayjs(startDate).add(1, 'day').toDate();
+    const _endDate = dayjs(startDate || dayjs()).add(1, 'day').toDate();
     setMinEndDate(_endDate);
 
-    const isStartAfterEnd = dayjs(startDate).isAfter(dayjs(endDate))
+    const isStartAfterEnd = dayjs(startDate).isSameOrAfter(dayjs(endDate));
 
     if(isStartAfterEnd) {
       // if the user sets the start date to be after the end date - set the end date + 1 day
@@ -88,6 +88,7 @@ export const SettingsTabFixedListing = () => {
                 modalName={'Start date'}
                 minDate={dayjs().toDate()}
                 onChange={(val) => form.setFieldValue('startDate', val)}
+                validateListing
               />
             </FormControl>
             <FormControl>
@@ -96,8 +97,8 @@ export const SettingsTabFixedListing = () => {
                 value={form.values.endDate}
                 modalName={'End date'}
                 minDate={minEndDate}
-                disabled={endDateDisabled}
                 onChange={(val) => form.setFieldValue('endDate', val)}
+                validateListing
               />
             </FormControl>
           </SimpleGrid>

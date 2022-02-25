@@ -35,6 +35,10 @@ import { SwiperArrowButton } from '../../../../../../components/swiper-arrow-but
 import Contracts from '../../../../../../../contracts/contracts.json';
 import { Contract, BigNumber } from 'ethers';
 import { fetchRoyalties } from '../../../../../../../utils/api/royaltyRegistry';
+import { default as dayjs } from 'dayjs';
+import { default as UTC } from 'dayjs/plugin/utc';
+
+dayjs.extend(UTC);
 
 interface IApproveCollection {
   approved: boolean;
@@ -70,6 +74,20 @@ export const SummaryTab = () => {
 
   const handleSave = useCallback(() => {
     setPostingPopupStatus(PostingPopupStatus.PROCESSING)
+    // @ts-ignore
+    let start = form.values.startDate;
+    // @ts-ignore
+    let end = form.values.endDate;
+    if(start) {
+      start = dayjs(start).utc().toDate();
+    }
+    if(end) {
+      dayjs(end).utc().toDate();
+    }
+     // @ts-ignore
+    form.values.startDate = start;
+     // @ts-ignore
+    form.values.endDate = end;
     form.submitForm();
   }, [nft]);
 

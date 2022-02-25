@@ -17,12 +17,13 @@ import {
   NumberInputField,
 } from '@chakra-ui/react';
 import { useFormik } from 'formik';
-import { useCallback } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import DatePicker from 'react-datepicker';
 import { default as dayjs } from 'dayjs';
 import { default as UTC } from 'dayjs/plugin/utc';
 import { default as Timezone } from 'dayjs/plugin/timezone';
 import { default as AdvancedFormat } from 'dayjs/plugin/advancedFormat';
+import { listingValidation } from './listingValidation';
 
 import calendarIcon from '../../../assets/images/calendar-small.svg';
 import { DateTimePickerHeader } from './components';
@@ -39,14 +40,15 @@ interface IDateTimePickerProps {
   modalName: string;
   value: Date | null,
   minDate?: Date,
-  disabled?: boolean,
+  validateListing?: boolean,
   onChange?: (val: Date) => void,
   onOpen?: () => void,
   onClose?: () => void,
 }
 
-export const DateTimePicker = ({ value, onChange, onOpen, onClose, minDate, disabled, ...props }: IDateTimePickerProps) => {
+export const DateTimePicker = ({ value, onChange, onOpen, onClose, minDate, validateListing, ...props }: IDateTimePickerProps) => {
   const { isOpen, onOpen: openDisclosure, onClose: closeDisclosure } = useDisclosure();
+  const [timeError, setTimeError] = useState('');
 
   const formik = useFormik<{
     date?: Date | null,
@@ -84,12 +86,34 @@ export const DateTimePicker = ({ value, onChange, onOpen, onClose, minDate, disa
     onClose && onClose();
   }, [onClose]);
 
-  const saveDisabled = !(formik.values.date && formik.values.hours && formik.values.minutes);
+  useEffect(() => {
+    if(validateListing && formik.values) {
+      const {values: { date, hours, minutes }, isValid, touched} = formik;
+      // @ts-ignore
+      listingValidation(date, isValid, hours, minutes, touched, setTimeError);
+    }
+  }, [formik.values.date, formik.values.hours, formik.values.minutes, formik.isValid])
+
+  const saveDisabled = !(formik.values.date && formik.values.hours && formik.values.minutes) || !!timeError;
+  const offset = new Date().getTimezoneOffset();
+  const timezone = offset / -60;
+
+
+  const determineSign = (offset: number): string => {
+    let sign = '';
+    if(offset > 0) {
+      sign = '-';
+    } else if (offset < 0) {
+      sign = '+';
+    }
+    return sign;
+  }
+
+  const sign = determineSign(offset);
 
   return (
     <>
       <Button
-        isDisabled={disabled}
         rightIcon={<Image src={calendarIcon} width={'16px'} />}
         sx={styles.dateTimeInput}
         onClick={handleOpen}
@@ -124,7 +148,7 @@ export const DateTimePicker = ({ value, onChange, onOpen, onClose, minDate, disa
             />
             <Flex sx={styles.timeLabels}>
               <Text fontSize={'14px'} fontWeight={700}>Select time</Text>
-              <Text fontSize={'12px'} color={'rgba(0, 0, 0, 0.4)'}>Your time zone is UTC+3</Text>
+              <Text fontSize={'12px'} color={'rgba(0, 0, 0, 0.4)'}>{`Your time zone is UTC${sign}${timezone}`}</Text>
             </Flex>
 
             <Flex
@@ -135,14 +159,15 @@ export const DateTimePicker = ({ value, onChange, onOpen, onClose, minDate, disa
                   : 'rgba(0, 0, 0, 0.1) !important'
               }
             >
-              <NumberInput min={0} max={23} name="hours" value={formik.values.hours}>
+              <NumberInput min={Number(formik.values.hours)} max={23} name="hours" value={formik.values.hours}>
                 <NumberInputField onChange={formik.handleChange} onBlur={formik.handleBlur} />
               </NumberInput>
               <Text fontSize={'16px'} fontWeight={700}>:</Text>
-              <NumberInput min={0} max={59} name="minutes" value={formik.values.minutes}>
+              <NumberInput min={Number(formik.values.minutes)} max={59} name="minutes" value={formik.values.minutes}>
                 <NumberInputField onChange={formik.handleChange} onBlur={formik.handleBlur} />
               </NumberInput>
             </Flex>
+            {timeError && <Text fontSize={'12px'} align={'center'} color={'red'}>{timeError}</Text>}
           </ModalBody>
 
           <ModalFooter sx={styles.modalFooter}>
