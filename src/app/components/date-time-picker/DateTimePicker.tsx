@@ -17,7 +17,7 @@ import {
   NumberInputField,
 } from '@chakra-ui/react';
 import { useFormik } from 'formik';
-import { useCallback } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import DatePicker from 'react-datepicker';
 import { default as dayjs } from 'dayjs';
 import { default as UTC } from 'dayjs/plugin/utc';
@@ -39,14 +39,15 @@ interface IDateTimePickerProps {
   modalName: string;
   value: Date | null,
   minDate?: Date,
-  disabled?: boolean,
+  startDate?: boolean,
   onChange?: (val: Date) => void,
   onOpen?: () => void,
   onClose?: () => void,
 }
 
-export const DateTimePicker = ({ value, onChange, onOpen, onClose, minDate, disabled, ...props }: IDateTimePickerProps) => {
+export const DateTimePicker = ({ value, onChange, onOpen, onClose, minDate, startDate, ...props }: IDateTimePickerProps) => {
   const { isOpen, onOpen: openDisclosure, onClose: closeDisclosure } = useDisclosure();
+  const [timeError, setTimeError] = useState('');
 
   const formik = useFormik<{
     date?: Date | null,
@@ -84,12 +85,32 @@ export const DateTimePicker = ({ value, onChange, onOpen, onClose, minDate, disa
     onClose && onClose();
   }, [onClose]);
 
-  const saveDisabled = !(formik.values.date && formik.values.hours && formik.values.minutes);
+  useEffect(() => {
+    if(startDate && formik.values.hours && formik.values.minutes) {
+      const now = new Date();
+      const year = now.getFullYear();
+      const month = now.getMonth();
+      const date = now.getDate();
+
+      const start = new Date(year, month, date, Number(formik.values.hours), Number(formik.values.minutes))
+      const startTimeTimestamp = Math.floor(start.getTime() / 1000)
+      const nowTimestamp = Math.floor(new Date().getTime() / 1000);
+
+      if((startTimeTimestamp < nowTimestamp || !formik.isValid)) {
+        setTimeError('Please, set a valid start time');
+        return;
+      }
+
+      setTimeError('')
+    }
+
+  }, [formik.values.hours, formik.values.minutes])
+
+  const saveDisabled = !(formik.values.date && formik.values.hours && formik.values.minutes) || !!timeError;
 
   return (
     <>
       <Button
-        isDisabled={disabled}
         rightIcon={<Image src={calendarIcon} width={'16px'} />}
         sx={styles.dateTimeInput}
         onClick={handleOpen}
@@ -135,14 +156,15 @@ export const DateTimePicker = ({ value, onChange, onOpen, onClose, minDate, disa
                   : 'rgba(0, 0, 0, 0.1) !important'
               }
             >
-              <NumberInput min={0} max={23} name="hours" value={formik.values.hours}>
+              <NumberInput min={Number(formik.values.hours)} max={23} name="hours" value={formik.values.hours}>
                 <NumberInputField onChange={formik.handleChange} onBlur={formik.handleBlur} />
               </NumberInput>
               <Text fontSize={'16px'} fontWeight={700}>:</Text>
-              <NumberInput min={0} max={59} name="minutes" value={formik.values.minutes}>
+              <NumberInput min={Number(formik.values.minutes)} max={59} name="minutes" value={formik.values.minutes}>
                 <NumberInputField onChange={formik.handleChange} onBlur={formik.handleBlur} />
               </NumberInput>
             </Flex>
+            {timeError && <Text fontSize={'12px'} align={'center'} color={'red'}>{timeError}</Text>}
           </ModalBody>
 
           <ModalFooter sx={styles.modalFooter}>

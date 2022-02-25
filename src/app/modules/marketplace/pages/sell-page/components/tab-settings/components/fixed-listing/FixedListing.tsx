@@ -27,16 +27,13 @@ interface IMarketplaceSellContextDataOverride extends Omit<IMarketplaceSellConte
 
 export const SettingsTabFixedListing = () => {
   const [minEndDate, setMinEndDate] = useState(dayjs().add(1, 'day').toDate());
-  const [endDateDisabled, setEndDateDisabled] = useState(false);
   const { form, sellMethod, amountType } = useMarketplaceSellData() as IMarketplaceSellContextDataOverride;
 
   const {values: { startDate, endDate }} = form;
 
   useEffect(() => {
-    // disable end date initialy
-    setEndDateDisabled(!startDate);
     // set the end date + 1 day and set the minimum end date
-    const _endDate = dayjs(startDate).add(1, 'day').toDate();
+    const _endDate = dayjs().add(1, 'day').toDate();
     setMinEndDate(_endDate);
 
     const isStartAfterEnd = dayjs(startDate).isAfter(dayjs(endDate))
@@ -88,6 +85,7 @@ export const SettingsTabFixedListing = () => {
                 modalName={'Start date'}
                 minDate={dayjs().toDate()}
                 onChange={(val) => form.setFieldValue('startDate', val)}
+                startDate
               />
             </FormControl>
             <FormControl>
@@ -96,7 +94,6 @@ export const SettingsTabFixedListing = () => {
                 value={form.values.endDate}
                 modalName={'End date'}
                 minDate={minEndDate}
-                disabled={endDateDisabled}
                 onChange={(val) => form.setFieldValue('endDate', val)}
               />
             </FormControl>
