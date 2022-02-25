@@ -75,7 +75,7 @@ export const WalletTab = () => {
       </SimpleGrid>
       {isFetching && <CollectionPageLoader />}
       {!isFetching && hasNextPage && (
-        <Button variant={'outline'} isFullWidth={true} onClick={() => fetchNextPage()}>Load more</Button>
+        <Button variant={'outline'} isFullWidth={true} mt={10} onClick={() => fetchNextPage()}>Load more</Button>
       )}
     </>
   ) : !isIdle ? <NoNftsFound /> : null;
