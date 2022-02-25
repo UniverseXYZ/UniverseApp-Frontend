@@ -3,7 +3,7 @@ import { useQuery } from 'react-query';
 import { useParams } from 'react-router-dom';
 
 import { ICollection, IERC721AssetType, INFT, IOrder, IUser } from '../../types';
-import { GetCollectionApi, GetNFT2Api, GetNFTApi, GetOrdersApi, GetUserApi } from '../../api';
+import { GetCollectionApi, GetNFT2Api, GetHistoryApi, GetOrdersApi, GetUserApi } from '../../api';
 import { OrderAssetClass } from '../../enums';
 
 export interface INFTPageContext {
@@ -17,6 +17,7 @@ export interface INFTPageContext {
   collectionAddress: string;
   refetchOffers: boolean;
   setRefetchOffers: React.Dispatch<React.SetStateAction<boolean>>;
+  history: IOrder[] | undefined;
 }
 
 export const NFTPageContext = createContext<INFTPageContext>({} as INFTPageContext);
@@ -33,6 +34,12 @@ const NFTPageProvider: FC = ({ children }) => {
     ['NFT', collectionAddress, tokenId],
     () => GetNFT2Api(collectionAddress, tokenId),
     { onSuccess: (NFT) => console.log('NFT', NFT) },
+  );
+
+  const { data: history } = useQuery(
+    ['history', collectionAddress, tokenId],
+    () => GetHistoryApi(collectionAddress, tokenId),
+    { onSuccess: (history) => console.log('history', history) },
   );
 
   const { data: creator } = useQuery(
@@ -78,7 +85,8 @@ const NFTPageProvider: FC = ({ children }) => {
     isLoading: isLoadingNFT || isLoadingOrder,
     isPolymorph: NFT?._collectionAddress?.toUpperCase() === process.env.REACT_APP_POLYMORPHS_CONTRACT_ADDRESS?.toUpperCase(),
     refetchOffers,
-    setRefetchOffers
+    setRefetchOffers,
+    history,
   };
 
   return (

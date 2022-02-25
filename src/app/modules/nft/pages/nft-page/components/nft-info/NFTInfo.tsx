@@ -42,7 +42,7 @@ import BGImage from '../../../../../../../assets/images/v2/stone_bg.jpg';
 export const NFTInfo = () => {
   const router = useHistory();
 
-  const { NFT, isLoading, order, creator, owner, collection, collectionAddress,  } = useNFTPageData();
+  const { NFT, isLoading, order, creator, owner, collection, collectionAddress, history } = useNFTPageData();
 
   const [buySectionMeasure, setBuySectionMeasure] = useState<UseMeasureRect>();
   const [isTransferOpened, setIsTransferOpened] = useState(false);
@@ -166,7 +166,7 @@ export const NFTInfo = () => {
                       {/* <TabPanel><TabOwners /></TabPanel> */}
                       {/* <TabPanel><TabBids /></TabPanel> */}
                       <TabPanel><TabOffers nft={NFT} order={order}/></TabPanel>
-                      <TabPanel><TabHistory /></TabPanel>
+                      <TabPanel><TabHistory historyData={history}/></TabPanel>
                     </TabPanels>
                   </Tabs>
                 </Box>
