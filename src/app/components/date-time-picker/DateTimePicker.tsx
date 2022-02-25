@@ -23,6 +23,7 @@ import { default as dayjs } from 'dayjs';
 import { default as UTC } from 'dayjs/plugin/utc';
 import { default as Timezone } from 'dayjs/plugin/timezone';
 import { default as AdvancedFormat } from 'dayjs/plugin/advancedFormat';
+import { listingValidation } from './listingValidation';
 
 import calendarIcon from '../../../assets/images/calendar-small.svg';
 import { DateTimePickerHeader } from './components';
@@ -39,13 +40,13 @@ interface IDateTimePickerProps {
   modalName: string;
   value: Date | null,
   minDate?: Date,
-  startDate?: boolean,
+  validateListing?: boolean,
   onChange?: (val: Date) => void,
   onOpen?: () => void,
   onClose?: () => void,
 }
 
-export const DateTimePicker = ({ value, onChange, onOpen, onClose, minDate, startDate, ...props }: IDateTimePickerProps) => {
+export const DateTimePicker = ({ value, onChange, onOpen, onClose, minDate, validateListing, ...props }: IDateTimePickerProps) => {
   const { isOpen, onOpen: openDisclosure, onClose: closeDisclosure } = useDisclosure();
   const [timeError, setTimeError] = useState('');
 
@@ -86,37 +87,15 @@ export const DateTimePicker = ({ value, onChange, onOpen, onClose, minDate, star
   }, [onClose]);
 
   useEffect(() => {
-    if(!formik.isValid) {
-       setTimeError('Please, set a valid time');
-       return;
+    if(validateListing && formik.values) {
+      const {values: { date, hours, minutes }, isValid, touched} = formik;
+      // @ts-ignore
+      listingValidation(date, isValid, hours, minutes, touched, setTimeError);
     }
-
-    if(startDate && formik.values.hours && formik.values.minutes) {
-      const now = new Date();
-      const year = now.getFullYear();
-      const month = now.getMonth();
-      const date = now.getDate();
-
-      const start = new Date(year, month, date, Number(formik.values.hours), Number(formik.values.minutes))
-      const startTimeTimestamp = Math.floor(start.getTime() / 1000)
-      const nowTimestamp = Math.floor(new Date().getTime() / 1000);
-
-      if((startTimeTimestamp < nowTimestamp || !formik.isValid)) {
-        setTimeError('Please, set a valid start time');
-      } else {
-        setTimeError('')
-      }
-    } else {
-        if(!formik.isValid) {
-          setTimeError('Please, set a valid time');
-      } else {
-          setTimeError('')
-      }
-    }
-
-  }, [formik.values.hours, formik.values.minutes, formik.isValid])
+  }, [formik.values.date, formik.values.hours, formik.values.minutes, formik.isValid])
 
   const saveDisabled = !(formik.values.date && formik.values.hours && formik.values.minutes) || !!timeError;
+  const timezone = new Date().getTimezoneOffset() / -60;
 
   return (
     <>
@@ -155,7 +134,7 @@ export const DateTimePicker = ({ value, onChange, onOpen, onClose, minDate, star
             />
             <Flex sx={styles.timeLabels}>
               <Text fontSize={'14px'} fontWeight={700}>Select time</Text>
-              <Text fontSize={'12px'} color={'rgba(0, 0, 0, 0.4)'}>Your time zone is UTC+3</Text>
+              <Text fontSize={'12px'} color={'rgba(0, 0, 0, 0.4)'}>{`Your time zone is UTC+${timezone}`}</Text>
             </Flex>
 
             <Flex
