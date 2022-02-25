@@ -431,7 +431,7 @@ export const BrowseNFTsPage = () => {
             position: 'relative',
             filter: 'drop-shadow(0px 10px 36px rgba(136, 120, 172, 0.14))',
             mt: '60px',
-            p: '60px',
+            p: {sm: '30px', md: '60px'},
             _before: {
               bg: `url(${NoiseTextureImage}) center / 20%, linear-gradient(92.86deg, #D5ACFD -3.25%, #ABB3FC 49.31%, #81EEBF 104.41%)`,
               borderRadius: 'inherit',
@@ -446,12 +446,12 @@ export const BrowseNFTsPage = () => {
               zIndex: -1,
             },
           }}>
-            <Flex alignItems={'center'} justifyContent={'space-between'}>
+            <Flex alignItems={'center'} justifyContent={'space-between'} flexWrap={{ sm: 'wrap', md: 'nowrap' }}>
               <Box>
-                <Heading fontSize={'26px'} mb={'10px'}>List your NFTs</Heading>
+                <Heading fontSize={{ sm: '20px', md: '26px' }} mb={'10px'}>List your NFTs</Heading>
                 <Text fontSize={'14px'}>Choose the NFT you’d like to list from your wallet and put them on sale for FREE.</Text>
               </Box>
-              <Button variant={'black'} onClick={() => router.push('/my-nfts')}>List an NFT</Button>
+              <Button sx={{ width: {sm: '100%', md: 'auto'}, marginTop: {sm: '20px', md: '0'} }} variant={'black'} onClick={() => router.push('/my-nfts')}>List an NFT</Button>
             </Flex>
           </Box>
 
