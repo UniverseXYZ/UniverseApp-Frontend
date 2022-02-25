@@ -59,14 +59,14 @@ export const GetNFT2Api = async (collectionAddress: string, tokenId: string | nu
     collection: (await GetCollectionApi(data.contractAddress)),
     tokenIds: [data.tokenId], // TODO
     url: data.metadata?.external_url, // TODO
-    id: 1, // TODO
+    id: data._id.toString(),
     createdAt: new Date(data.createdAt),
     description: data.metadata?.description,
     updatedAt: new Date(data.updatedAt),
-    thumbnailUrl: data.metadata?.image_url, // TODO
-    originalUrl: data.metadata?.image_url, // TODO
-    optimizedUrl: data.metadata?.image_url, // TODO
-    artworkType: (data.alternativeMediaFiles && data.alternativeMediaFiles.length ? data.alternativeMediaFiles[0].type : '') as NFTArtworkType,
+    thumbnailUrl: data.metadata?.image_thumbnail_url,
+    originalUrl: data.metadata?.image_original_url,
+    optimizedUrl: data.metadata?.image_preview_url, 
+    artworkType: tryGetArtworkType(data),
     amount: 0, // TODO
     txHash: null,
     collectionId: 0,
@@ -86,6 +86,21 @@ export const GetNFT2Api = async (collectionAddress: string, tokenId: string | nu
 
   return NFT;
 };
+
+const tryGetArtworkType = (data: IGetNFTResponse) => {
+  if (data.alternativeMediaFiles && data.alternativeMediaFiles.length && data.alternativeMediaFiles[0].type) {
+    return data.alternativeMediaFiles[0].type as NFTArtworkType;
+  }
+
+  const url = data.metadata.image_preview_url || data.metadata.image_thumbnail_url || data.metadata.image_thumbnail_url;
+  if (url) {
+    const urlComponents = url.split(/[.]+/);
+    const extension =  urlComponents[urlComponents.length - 1];
+    return extension as NFTArtworkType;
+  }
+  
+  return "" as NFTArtworkType;
+}
 
 export const GetUserApi = async (address: string) => {
   const url = `${process.env.REACT_APP_API_BASE_URL}/api/user/get-profile-info/${address.toLowerCase()}`;

@@ -37,6 +37,8 @@ import { NFTTransferPopup } from '../nft-transfer-popup';
 import {utils} from "ethers"
 import { sendRefreshMetadataRequest } from '../../../../../../../utils/api/marketplace';
 import BGImage from '../../../../../../../assets/images/v2/stone_bg.jpg';
+import BrokenNFT from '../../../../../../../components/marketplaceNFT/BrokenNFT';
+import { NFTAssetBroken } from '../nft-asset-broken';
 
 // TODO: hide metadata tab for not Polymorph NFT type
 export const NFTInfo = () => {
@@ -91,14 +93,15 @@ export const NFTInfo = () => {
               bg: `url(${BGImage}) center / cover`
             }}>
               <Box {...styles.NFTAssetContainerStyle}>
+                {!NFT.artworkType && <NFTAssetBroken/>}
                 {isNFTAssetImage(NFT.artworkType) &&
-                  <NFTAssetImage image={NFT.originalUrl || NFT.optimizedUrl} />
+                  <NFTAssetImage image={NFT.optimizedUrl || NFT.originalUrl} />
                 }
                 {isNFTAssetVideo(NFT.artworkType) &&
-                  <NFTAssetVideo video={NFT.originalUrl || NFT.optimizedUrl} />
+                  <NFTAssetVideo video={NFT.optimizedUrl || NFT.originalUrl} />
                 }
                 {isNFTAssetAudio(NFT.artworkType) &&
-                  <NFTAssetAudio audio={NFT.originalUrl || NFT.optimizedUrl} />
+                  <NFTAssetAudio audio={NFT.optimizedUrl || NFT.originalUrl} />
                 }
               </Box>
               <Box {...styles.NFTDetailsContainerStyle}>

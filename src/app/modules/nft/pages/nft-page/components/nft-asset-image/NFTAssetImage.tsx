@@ -1,5 +1,6 @@
 import { Image, ImageProps } from '@chakra-ui/react';
 import React, { useState } from 'react';
+import BrokenNFT from '../../../../../../../components/marketplaceNFT/BrokenNFT';
 import { NFTAssetFullscreen } from '../nft-asset-full-screen';
 
 const ImageStyle: ImageProps = {
@@ -18,8 +19,9 @@ interface INFTAssetImageProps extends ImageProps {
 
 export const NFTAssetImage = ({ image, allowFullscreen = true, ...rest }: INFTAssetImageProps) => {
   const [fullscreen, setFullscreen] = useState(false);
+  const [showError, setShowError] = useState(false);
 
-  return (
+  return showError ? <BrokenNFT /> : (
     <>
       <Image
         src={image}
@@ -27,19 +29,22 @@ export const NFTAssetImage = ({ image, allowFullscreen = true, ...rest }: INFTAs
         cursor={allowFullscreen ? 'zoom-in' : 'default'}
         onClick={() => allowFullscreen && setFullscreen(true)}
         {...rest}
+        onError={() => setShowError(true)}
       />
-      <NFTAssetFullscreen isOpen={fullscreen}>
-        <Image
-          src={image}
-          borderRadius={0}
-          cursor={'zoom-out'}
-          maxH={'max'}
-          maxW={'max'}
-          objectFit={'contain'}
-          height={'100vh'}
-          width={'100vw'}
-          onClick={() => setFullscreen(false)} />
-      </NFTAssetFullscreen>
+      {!showError &&
+        <NFTAssetFullscreen isOpen={fullscreen}>
+          <Image
+            src={image}
+            borderRadius={0}
+            cursor={'zoom-out'}
+            maxH={'max'}
+            maxW={'max'}
+            objectFit={'contain'}
+            height={'100vh'}
+            width={'100vw'}
+            onClick={() => setFullscreen(false)} />
+        </NFTAssetFullscreen>
+      }
     </>
   )
 }

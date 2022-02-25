@@ -8,12 +8,13 @@ import { Offers } from '../../../../mocks';
 import * as styles from './styles';
 import { NFTAcceptOfferPopup, OffersEmpty } from './components';
 import { GetOrdersApi, GetUserApi } from '../../../../../../api';
-import { INFT, IOrder, IUser } from '../../../../../../types';
+import { IERC721AssetType, INFT, IOrder, IUser } from '../../../../../../types';
 import { BigNumber, ethers } from 'ethers';
 import Blockies from 'react-blockies';
 import { shortenEthereumAddress } from '../../../../../../../../../utils/helpers/format';
 import { useAuthContext } from '../../../../../../../../../contexts/AuthContext';
 import { useNFTPageData } from '../../../../NFTPage.context';
+import { getTokenByAddress } from '../../../../../../../../constants';
 
 interface ITabOffersProps {
   nft?: INFT;
@@ -111,7 +112,7 @@ export const TabOffers:React.FC<ITabOffersProps> = ({nft, order}) => {
             </Flex>
             <Flex>
               <Box textAlign={'right'}>
-                <Text {...styles.PriceStyle}>{formattedPrice} {offer.make.assetType.assetClass}</Text>
+                <Text {...styles.PriceStyle}>{formattedPrice} {getTokenByAddress((offer.make.assetType as IERC721AssetType).contract).ticker}</Text>
                 <Text {...styles.PriceUSDStyle}>${(formattedPrice * usdPrice).toFixed(2)}</Text>
               </Box>
               { canAcceptsOffers && (

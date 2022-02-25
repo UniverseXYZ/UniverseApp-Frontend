@@ -7,6 +7,7 @@ import USDCIcon from './../../assets/images/v2/tokens/USDC.svg';
 import DAIIcon from './../../assets/images/v2/tokens/DAI.svg';
 import XYZIcon from './../../assets/images/v2/tokens/XYZ.svg';
 import WETHIcon from './../../assets/images/v2/tokens/WETH.svg';
+import Contracts from '../../contracts/contracts.json';
 
 export const TOKENS_MAP: Record<TokenTicker, IToken> = {
   [TokenTicker.ETH]: {
@@ -51,3 +52,19 @@ export const TOKENS_MAP: Record<TokenTicker, IToken> = {
 };
 
 export const TOKENS = Object.keys(TOKENS_MAP).map((ticker) => TOKENS_MAP[ticker as TokenTicker]);
+
+export const getTokenByAddress = (tokenAddress: string) => {
+  // @ts-ignore
+  const { contracts: contractsData } = Contracts[process.env.REACT_APP_NETWORK_CHAIN_ID];
+  let token = undefined;
+
+  Object.keys(contractsData).forEach((contractName: string) => {
+    const contract = contractsData[contractName];
+
+    if (contract.address && contract.address.toLowerCase() === tokenAddress.toLowerCase()) {
+      token =  TOKENS_MAP[contractName as TokenTicker];
+    }
+  })
+
+  return token || TOKENS_MAP[TokenTicker.WETH];
+}

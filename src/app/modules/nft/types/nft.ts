@@ -68,7 +68,7 @@ export interface INFT {
   _creatorAddress?: string;
   _collectionAddress?: string;
   _properties?: INFTProperty[];
-  id: number;
+  id: string;
   amount: number;
   artworkType: NFTArtworkType;
   collectionId: number;
