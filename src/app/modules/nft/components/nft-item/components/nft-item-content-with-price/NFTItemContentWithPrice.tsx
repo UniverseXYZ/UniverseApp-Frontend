@@ -77,11 +77,11 @@ export const NFTItemContentWithPrice = (
   const [additionPriceLabel, additionPriceValue, additionPriceToken] = useMemo(() => {
     const defaultTicker = TOKENS_MAP.ETH.ticker;
 
-    if (bestOfferPrice) {
+    if (Number(bestOfferPrice)) {
       return ['Offer for', bestOfferPrice, bestOfferPriceToken ?? defaultTicker];
     }
     
-    if (lastOfferPrice) {
+    if (Number(lastOfferPrice)) {
       return ['Last', lastOfferPrice, lastOfferPriceToken ?? defaultTicker];
     }
 
