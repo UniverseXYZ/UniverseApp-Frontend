@@ -18,7 +18,7 @@ export const useDateCountdown = (_initialDate: Date, onCountDownEnd?: () => void
 
     const days = targetDate.diff(now, 'd');
     const hours = targetDate.diff(now, 'h') - days * 24;
-    const minutes = targetDate.diff(now, 'm') - hours * 60;
+    const minutes = targetDate.diff(now, 'm') - targetDate.diff(now, 'h') * 60;
     const seconds = targetDate.diff(now, 's') - targetDate.diff(now, 'm') * 60;
 
     const daysString = days ? `${days}d` : '';

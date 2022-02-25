@@ -40,6 +40,7 @@ import { TokenTicker } from '../../../../enums';
 import { TOKENS_MAP } from '../../../../constants';
 import { useThemeContext } from '../../../../../contexts/ThemeContext';
 import { CollectionPageLoader } from '../../../../../containers/collection/CollectionPageLoader';
+import { OrderAssetClass } from '../../../nft/enums';
 
 export const BrowseNFTsPage = () => {
   const { setDarkMode } = useThemeContext() as any;
@@ -376,21 +377,27 @@ export const BrowseNFTsPage = () => {
                   if (!NFTs.length) {
                     return null; 
                   }
-    
                 return order.make.assetType.assetClass === 'ERC721' ? (
                   <NftItem
                     key={order.id}
                     NFT={NFTs[0]}
                     collection={`${NFTs[0].collection?.address}`}
-                    renderContent={() => (
+                    orderEnd={order.end}
+                    renderContent={({ NFT, collection, creator, owner, bestOfferPrice, bestOfferPriceToken, lastOfferPrice, lastOfferPriceToken }) => (
                       <NFTItemContentWithPrice
-                        name={NFTs[0].name}
-                        creator={NFTs[0].creator}
-                        collection={NFTs[0].collection}
-                        owner={NFTs[0].owner}
-                        order={order}
-                        // price={+utils.formatUnits(order.take.value, `${TOKENS_MAP[order.take.assetType.assetClass as TokenTicker].decimals}`)}
-                        // priceToken={order.take.assetType.assetClass as TokenTicker}
+                      name={NFT.name}
+                      collection={collection}
+                      creator={creator || undefined}
+                      owner={owner || undefined}
+                      order={{
+                        assetClass: OrderAssetClass.ERC721,
+                        collectionAddress: `${NFT._collectionAddress}`,
+                        tokenId: `${NFT.tokenId}`,
+                      }}
+                      bestOfferPrice={bestOfferPrice || 0}
+                      bestOfferPriceToken={bestOfferPriceToken || undefined}
+                      lastOfferPrice={lastOfferPrice || 0}
+                      lastOfferPriceToken={lastOfferPriceToken || undefined}
                       />
                     )}
                   />

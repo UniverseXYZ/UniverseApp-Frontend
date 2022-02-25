@@ -2,12 +2,15 @@ import { Box, LinkBox, LinkOverlay, Text } from '@chakra-ui/react';
 import React from 'react';
 import { useQuery } from 'react-query';
 
-import { ICollection, INFT, IUser } from '../../types';
+import { ICollection, IERC721AssetType, INFT, IUser } from '../../types';
 import { NFTItemAsset, NFTItemFooter, NFTItemRelation } from './components';
 import { ItemWrapper } from '../../../../components';
 import * as styles from './styles';
 import { NFTRelationType } from '../../enums';
-import { GetCollectionApi, GetNFT2Api, GetUserApi } from '../../api';
+import { GetBestAndLastOffer, GetCollectionApi, GetNFT2Api, GetUserApi } from '../../api';
+import { TokenTicker } from '../../../../enums';
+import { utils } from 'ethers';
+import { getTokenByAddress } from '../../../../constants';
 
 type IRenderFuncProps = {
   NFT: INFT;
@@ -18,6 +21,10 @@ type IRenderFuncProps = {
   isLoadingCollection: boolean;
   isLoadingCreator: boolean;
   isLoadingOwner: boolean;
+  bestOfferPrice?: number | string;
+  bestOfferPriceToken?: TokenTicker;
+  lastOfferPrice?: number | string;
+  lastOfferPriceToken?: TokenTicker;
 };
 
 type IRenderFunc = ((props: IRenderFuncProps) => React.ReactNode) | null;
@@ -25,6 +32,7 @@ type IRenderFunc = ((props: IRenderFuncProps) => React.ReactNode) | null;
 export interface INftItemProps {
   collection: ICollection | string;
   NFT: INFT | string;
+  orderEnd?: number;
 
   isSelected?: boolean;
   selectedLabel?: string;
@@ -49,7 +57,7 @@ export const NftItem = (
     renderAsset,
     renderContent,
     renderFooter,
-
+    orderEnd,
     onClick,
   }: INftItemProps
 ) => {
@@ -93,6 +101,21 @@ export const NftItem = (
     },
   );
 
+  const { data, isLoading: isLoadingOffers } = useQuery(
+    ['offer', NFT?._collectionAddress, NFT?.tokenId],
+    () => GetBestAndLastOffer(NFT?._collectionAddress || '', NFT?.tokenId || ''),
+    {
+      enabled: !!NFT?._collectionAddress && !!NFT?.tokenId,
+      retry: false,
+    },
+  );
+
+  const bestOfferPriceToken = !data?.bestOffer ? null : getTokenByAddress((data?.bestOffer.make.assetType as IERC721AssetType).contract)
+  const bestOfferPrice = !bestOfferPriceToken ? null : utils.formatUnits(data?.bestOffer.make.value || 0, bestOfferPriceToken.decimals ?? 18)
+
+  const lastOfferPriceToken = !data?.lastOffer ? null : getTokenByAddress((data?.lastOffer.make.assetType as IERC721AssetType).contract)
+  const lastOfferPrice = !lastOfferPriceToken ? null : utils.formatUnits(data?.lastOffer.make.value || 0, lastOfferPriceToken.decimals ?? 18)
+
   return (
     <ItemWrapper
       isBundle={NFT && NFT.numberOfEditions > 1}
@@ -133,7 +156,7 @@ export const NftItem = (
                 isLoadingCreator,
                 isLoadingOwner,
               }) : (
-                <NFTItemAsset NFT={NFT as INFT} />
+                <NFTItemAsset NFT={NFT as INFT} orderEnd={orderEnd || 0} />
               )
             }
           </Box>
@@ -148,6 +171,11 @@ export const NftItem = (
                 isLoadingCollection,
                 isLoadingCreator,
                 isLoadingOwner,
+                bestOfferPrice: bestOfferPrice || "0",
+                bestOfferPriceToken: bestOfferPriceToken?.ticker, 
+                lastOfferPrice: lastOfferPrice || "0",
+                lastOfferPriceToken: lastOfferPriceToken?.ticker,   
+                
               }) : (
                 <>
                   <Text fontSize={'14px'} fontWeight={700} mb={'12px'}>{NFT?.name}</Text>

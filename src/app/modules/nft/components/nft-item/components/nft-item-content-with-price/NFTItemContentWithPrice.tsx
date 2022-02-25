@@ -25,10 +25,10 @@ export interface INFTItemContentWithPriceProps {
   order: IOrder | IOrderFetchPayload;
   // price: number;
   // priceToken: TokenTicker;
-  // offerPrice?: number | string;
-  // offerPriceToken?: TokenTicker;
-  // lastPrice?: number | string;
-  // lastPriceToken?: TokenTicker;
+  bestOfferPrice?: number | string;
+  bestOfferPriceToken?: TokenTicker;
+  lastOfferPrice?: number | string;
+  lastOfferPriceToken?: TokenTicker;
 }
 
 export const NFTItemContentWithPrice = (
@@ -40,13 +40,12 @@ export const NFTItemContentWithPrice = (
     order: _order,
     // price,
     // priceToken,
-    // offerPrice,
-    // offerPriceToken,
-    // lastPrice,
-    // lastPriceToken,
+    bestOfferPrice,
+    bestOfferPriceToken,
+    lastOfferPrice,
+    lastOfferPriceToken,
   }: INFTItemContentWithPriceProps
 ) => {
-
   const { data: order, isLoading: isLoadingOrder } = useQuery(
     (_order as IOrder).id
       ? ['order', (_order as IOrder).id]
@@ -78,24 +77,23 @@ export const NFTItemContentWithPrice = (
   const [additionPriceLabel, additionPriceValue, additionPriceToken] = useMemo(() => {
     const defaultTicker = TOKENS_MAP.ETH.ticker;
 
-    // TODO
-    // if (offerPrice) {
-    //   return ['Offer for', offerPrice, offerPriceToken ?? defaultTicker];
-    // }
-    //
-    // if (lastPrice) {
-    //   return ['Last', lastPrice, lastPriceToken ?? defaultTicker];
-    // }
+    if (bestOfferPrice) {
+      return ['Offer for', bestOfferPrice, bestOfferPriceToken ?? defaultTicker];
+    }
+    
+    if (lastOfferPrice) {
+      return ['Last', lastOfferPrice, lastOfferPriceToken ?? defaultTicker];
+    }
 
     return [null, null, defaultTicker];
-  }, [] /*[offerPrice, lastPrice]*/);
+  }, [bestOfferPrice, bestOfferPriceToken, lastOfferPrice, lastOfferPriceToken]);
 
   const price = useMemo(() => {
     if (!order) {
       return null;
     }
 
-    return +utils.formatUnits(order.take.value, `${TOKENS_MAP[order.take.assetType.assetClass as TokenTicker].decimals}`);
+    return utils.formatUnits(order.take.value, `${TOKENS_MAP[order.take.assetType.assetClass as TokenTicker].decimals}`);
   }, [order]);
 
   const priceToken = useMemo(() => {

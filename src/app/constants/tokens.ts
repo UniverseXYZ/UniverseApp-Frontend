@@ -56,14 +56,15 @@ export const TOKENS = Object.keys(TOKENS_MAP).map((ticker) => TOKENS_MAP[ticker 
 export const getTokenByAddress = (tokenAddress: string) => {
   // @ts-ignore
   const { contracts: contractsData } = Contracts[process.env.REACT_APP_NETWORK_CHAIN_ID];
+  let token = undefined;
 
   Object.keys(contractsData).forEach((contractName: string) => {
     const contract = contractsData[contractName];
 
     if (contract.address && contract.address.toLowerCase() === tokenAddress.toLowerCase()) {
-      return TOKENS_MAP[contractName as TokenTicker];
+      token =  TOKENS_MAP[contractName as TokenTicker];
     }
   })
 
-  return TOKENS_MAP[TokenTicker.WETH];
+  return token || TOKENS_MAP[TokenTicker.WETH];
 }

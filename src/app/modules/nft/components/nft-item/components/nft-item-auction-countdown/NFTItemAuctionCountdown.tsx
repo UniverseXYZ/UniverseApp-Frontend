@@ -21,7 +21,7 @@ export const NFTItemAuctionCountdown = ({ auctionExpireDate, onAuctionTimeOut }:
 
   return !showAuctionTimer ? null : (
     <Flex {...styles.WrapperStyle}>
-      {isRunning && (
+      {isRunning && countDownString && (
         <Box {...styles.ContainerStyle}>
           <Text  {...styles.TextStyle}>
             <Image src={GreenClockIcon} {...styles.IconStyle} />
