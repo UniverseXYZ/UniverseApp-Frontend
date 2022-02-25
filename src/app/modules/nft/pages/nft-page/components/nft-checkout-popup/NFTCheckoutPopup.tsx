@@ -52,7 +52,6 @@ export const NFTCheckoutPopup = ({ NFT, NFTs, order, isOpen, onClose }: INFTChec
   const { onCopy } = useClipboard(address);
 
   const [state, setState] = useState<CheckoutState>(CheckoutState.CHECKOUT);
-  const [reviewedByUniverse, setReviewedByUniverse] = useState(false);
   const [isNFTAudio] = useState(false);
 
   const prepareMutation = useMutation(({ hash, data }: { hash: string, data: any }) => {
@@ -137,14 +136,6 @@ export const NFTCheckoutPopup = ({ NFT, NFTs, order, isOpen, onClose }: INFTChec
           {state === CheckoutState.CHECKOUT && (
             <>
               <Heading {...styles.TitleStyle}>Checkout</Heading>
-              {!reviewedByUniverse && (
-                <Box {...styles.WarningStyle}>
-                  <Text>
-                    <Image src={WarningSVGIcon} />
-                    This Item has not been reviewed by Universe
-                  </Text>
-                </Box>
-              )}
               <Flex {...styles.TitlesContainerStyle}>
                 <Text>Item</Text>
                 <Text>Subtotal</Text>
