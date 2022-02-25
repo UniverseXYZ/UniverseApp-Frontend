@@ -532,15 +532,15 @@ const TabletView = (props) => {
                   <div>
                     <button
                       type="button"
-                      className="disable"
+                      // className="disable"
                       onClick={() => {
-                        // setShowMenu(false);
-                        // history.push('/marketplace');
+                        setShowMenu(false);
+                        history.push('/marketplace/browse');
                       }}
                     >
                       <img src={marketplaceIcon} alt="NFT Marketplace" />
                       <span>NFT marketplace</span>
-                      <span className="tooltiptext">Coming soon</span>
+                      {/* <span className="tooltiptext">Coming soon</span> */}
                     </button>
                   </div>
                   <div>
