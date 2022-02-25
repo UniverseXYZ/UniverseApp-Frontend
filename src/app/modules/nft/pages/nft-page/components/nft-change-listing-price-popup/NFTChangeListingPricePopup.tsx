@@ -68,7 +68,7 @@ export const NFTChangeListingPricePopup = ({ nft, order, isOpen, onClose, }: INF
   const [isCancelListingPopupOpened, setIsCancelListingPopupOpened] = useState(false);
   const [isMarkedForCancel, setIsMarkedForCancel] = useState(true);
 
-  const tokens = useMemo(() => TOKENS.filter((token) => ![TOKENS_MAP.ETH.ticker].includes(token.ticker)), []);
+  const tokens = useMemo(() => TOKENS, []);
 
   const { signer, web3Provider } = useAuthContext() as any;
 
