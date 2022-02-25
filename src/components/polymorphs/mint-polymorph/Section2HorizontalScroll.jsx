@@ -5,7 +5,7 @@ import './styles/Section2HorizontalScroll.scss';
 
 const child = (data) =>
   data.map((elem, index) => (
-    <div className={`child--scroll child--scroll--${index + 1}`} key={index.toString()}>
+    <div className={`child--scroll child--scroll--${index + 1}`} key={elem}>
       <img alt="img" src={elem.img} />
       <p>{elem.name}</p>
     </div>

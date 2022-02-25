@@ -17,7 +17,7 @@ const Section4 = (props) => {
         <AnimatedOnScroll animationIn="fadeIn" animationInDelay={500}>
           <div className="characters--parent--block">
             {mythical.map((elem, index) => (
-              <Section2Card {...elem} key={index.toString()} />
+              <Section2Card {...elem} key={elem} />
             ))}
           </div>
         </AnimatedOnScroll>

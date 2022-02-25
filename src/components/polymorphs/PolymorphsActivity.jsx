@@ -16,9 +16,9 @@ const tableHead = [
 ];
 
 const getRows = (dataObject, dataKeys, ethPrice) =>
-  dataKeys.map((elem, index) => {
+  dataKeys.map((elem) => {
     const item = dataObject[elem];
-    return <PolymorphsActivityTableRow data={item} key={index.toString()} ethPrice={ethPrice} />;
+    return <PolymorphsActivityTableRow data={item} key={elem} ethPrice={ethPrice} />;
   });
 
 const convertArrayToObject = (array, key) => {
@@ -51,15 +51,9 @@ const PolymorphsActivity = (props) => {
       )}
       {mobile && (
         <div className="mobile--table--polymorphs--activity">
-          {dataKeys.slice(offset, offset + 5).map((elem, index) => {
+          {dataKeys.slice(offset, offset + 5).map((elem) => {
             const item = morphEntitiesData[elem];
-            return (
-              <PolymorphsActivityTableRowMobile
-                data={item}
-                key={index.toString()}
-                ethPrice={ethPrice}
-              />
-            );
+            return <PolymorphsActivityTableRowMobile data={item} key={elem} ethPrice={ethPrice} />;
           })}
         </div>
       )}

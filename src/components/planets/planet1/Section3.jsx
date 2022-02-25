@@ -16,8 +16,8 @@ const Section3 = (props) => {
         </div>
         <AnimatedOnScroll animationIn="fadeIn" animationInDelay={500}>
           <div className="characters--parent--block">
-            {fabled.map((elem, index) => (
-              <Section2Card {...elem} key={index.toString()} />
+            {fabled.map((elem) => (
+              <Section2Card {...elem} key={elem} />
             ))}
           </div>
         </AnimatedOnScroll>
