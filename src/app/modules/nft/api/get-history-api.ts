@@ -33,7 +33,6 @@ export const GetHistoryApi = async (collectionAddress: string, tokenId: string |
         order.makerData = await GetUserApi(order.to);
       }
     });
-    console.log(data, mintData);
 
     return historyCopy
 };
