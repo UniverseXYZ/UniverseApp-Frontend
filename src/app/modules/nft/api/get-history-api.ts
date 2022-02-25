@@ -13,7 +13,7 @@ const getMintData = async (collectionAddress: string, tokenId: string | number) 
 }
 
 export const GetHistoryApi = async (collectionAddress: string, tokenId: string | number): Promise<IOrder[]> => {
-    const url = `${process.env.REACT_APP_MARKETPLACE_BACKEND}/v1/orders?collection=${collectionAddress}&tokenId=${tokenId}&hasOffers=false`;
+    const url = `${process.env.REACT_APP_MARKETPLACE_BACKEND}/v1/orders?collection=${collectionAddress}&tokenId=${tokenId}`;
     const mintData = (await getMintData(collectionAddress, tokenId)).data[0];
 
     const { data } = await axios.get(url, {
@@ -33,6 +33,7 @@ export const GetHistoryApi = async (collectionAddress: string, tokenId: string |
         order.makerData = await GetUserApi(order.to);
       }
     });
+    console.log(data, mintData);
 
     return historyCopy
 };
