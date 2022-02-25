@@ -55,6 +55,7 @@ const { contracts: contractsData } = Contracts[process.env.REACT_APP_NETWORK_CHA
 
 export enum MakeAnOfferState {
   FORM,
+  INSUFFICIENT_BALANCE,
   PROCESSING,
   APPROVAL,
   SUCCESS,
@@ -123,6 +124,13 @@ export const NFTMakeAnOfferPopup = ({ order, isOpen, onClose, }: INFTMakeAnOffer
           `${value.amount}`,
           `${paymentToken.decimals}`
         );
+        const contract = new Contract(contractsData[paymentToken.contractName].address, contractsData[paymentToken.contractName].abi, signer);
+        const balance = await contract.balanceOf(address);
+
+        if (paymentAmount.gt(balance)) {
+          setState(MakeAnOfferState.INSUFFICIENT_BALANCE);
+          return;
+        }
   
         const offerData = {
           type: 'UNIVERSE_V1',
@@ -143,8 +151,6 @@ export const NFTMakeAnOfferPopup = ({ order, isOpen, onClose, }: INFTMakeAnOffer
         };
   
         const response = (await encodeDataMutation.mutateAsync(offerData)).data;
-  
-        const contract = new Contract(contractsData[paymentToken.contractName].address, contractsData[paymentToken.contractName].abi, signer);
   
         const allowance = await contract.allowance(address, process.env.REACT_APP_MARKETPLACE_CONTRACT);
 
@@ -265,6 +271,15 @@ export const NFTMakeAnOfferPopup = ({ order, isOpen, onClose, }: INFTMakeAnOffer
                 >Make an Offer</Button>
                 {/*<Button variant={'outline'}>Convert ETH</Button>*/}
               </Box>
+            </Box>
+          )}
+
+          {state === MakeAnOfferState.INSUFFICIENT_BALANCE && (
+            <Box>
+              <Heading {...styles.TitleStyle} mb={'20px'}>Insufficient balance</Heading>
+              <Text fontSize={'14px'} mx={'auto'} maxW={'260px'} textAlign={'center'}>
+                You do not have enough {TOKENS_MAP[formik.values.token].ticker} in your wallet!
+              </Text>
             </Box>
           )}
 
