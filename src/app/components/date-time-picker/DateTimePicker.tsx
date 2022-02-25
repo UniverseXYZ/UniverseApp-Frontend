@@ -95,7 +95,21 @@ export const DateTimePicker = ({ value, onChange, onOpen, onClose, minDate, vali
   }, [formik.values.date, formik.values.hours, formik.values.minutes, formik.isValid])
 
   const saveDisabled = !(formik.values.date && formik.values.hours && formik.values.minutes) || !!timeError;
-  const timezone = new Date().getTimezoneOffset() / -60;
+  const offset = new Date().getTimezoneOffset();
+  const timezone = offset / -60;
+
+
+  const determineSign = (offset: number): string => {
+    let sign = '';
+    if(offset > 0) {
+      sign = '-';
+    } else if (offset < 0) {
+      sign = '+';
+    }
+    return sign;
+  }
+
+  const sign = determineSign(offset);
 
   return (
     <>
@@ -134,7 +148,7 @@ export const DateTimePicker = ({ value, onChange, onOpen, onClose, minDate, vali
             />
             <Flex sx={styles.timeLabels}>
               <Text fontSize={'14px'} fontWeight={700}>Select time</Text>
-              <Text fontSize={'12px'} color={'rgba(0, 0, 0, 0.4)'}>{`Your time zone is UTC+${timezone}`}</Text>
+              <Text fontSize={'12px'} color={'rgba(0, 0, 0, 0.4)'}>{`Your time zone is UTC${sign}${timezone}`}</Text>
             </Flex>
 
             <Flex
