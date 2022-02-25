@@ -86,22 +86,10 @@ export const DateTimePicker = ({ value, onChange, onOpen, onClose, minDate, star
   }, [onClose]);
 
   useEffect(() => {
-
-    //  if (formik.values.hours) {
-    //   if (formik.values.hours.toString().length > 2) {
-    //     setTimeError('Please, set a valid start time');
-    //   } else {
-    //     setTimeError('')
-    //  }
-    // }
-
-    //  if (formik.values.minutes) {
-    //   if (formik.values.minutes.toString().length > 2) {
-    //     setTimeError('Please, set a valid start time');
-    //   } else {
-    //     setTimeError('')
-    //  }
-    // }
+    if(!formik.isValid) {
+       setTimeError('Please, set a valid time');
+       return;
+    }
 
     if(startDate && formik.values.hours && formik.values.minutes) {
       const now = new Date();
@@ -120,13 +108,13 @@ export const DateTimePicker = ({ value, onChange, onOpen, onClose, minDate, star
       }
     } else {
         if(!formik.isValid) {
-          setTimeError('Please, set a valid start time');
+          setTimeError('Please, set a valid time');
       } else {
           setTimeError('')
       }
     }
 
-  }, [formik.values.hours, formik.values.minutes])
+  }, [formik.values.hours, formik.values.minutes, formik.isValid])
 
   const saveDisabled = !(formik.values.date && formik.values.hours && formik.values.minutes) || !!timeError;
 
