@@ -56,7 +56,7 @@ export const WalletTab = () => {
               key={NFT.id}
               NFT={NFT}
               collection={`${NFT._collectionAddress}`}
-              renderContent={({ NFT, collection, creator, owner }) => (
+              renderContent={({ NFT, collection, creator, owner, bestOfferPrice, bestOfferPriceToken, lastOfferPrice, lastOfferPriceToken }) => (
                 <NFTItemContentWithPrice
                   name={NFT.name}
                   collection={collection}
@@ -67,6 +67,11 @@ export const WalletTab = () => {
                     collectionAddress: `${NFT._collectionAddress}`,
                     tokenId: `${NFT.tokenId}`,
                   }}
+                  bestOfferPrice={bestOfferPrice || 0}
+                  bestOfferPriceToken={bestOfferPriceToken || undefined}
+                  lastOfferPrice={lastOfferPrice || 0}
+                  lastOfferPriceToken={lastOfferPriceToken || undefined}
+
                 />
               )}
             />
