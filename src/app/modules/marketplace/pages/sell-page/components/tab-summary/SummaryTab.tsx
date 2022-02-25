@@ -119,8 +119,8 @@ export const SummaryTab = () => {
   }, [form.values]);
 
   const totalPrice = useMemo(() => {
-    return parseFloat((price - (price * totalFees / 100)).toFixed(5));
-  }, [form.values, price]);
+    return parseFloat((price - (price * totalFees / 100)).toFixed(6));
+  }, [form.values, price, totalFees]);
 
   const NFTsForPreview = useMemo<INFT[]>(() => {
     switch(amountType) {
@@ -159,18 +159,18 @@ export const SummaryTab = () => {
           if (royalties.length && royalties[0].length) {
             const nftRoyalties = royalties[0].map((royalty: [string, BigNumber]) => ({
               address: royalty[0],
-              amount: BigNumber.from(royalty[1]).div(100),
+              amount: BigNumber.from(royalty[1]),
             }));
-           setCreatorRoyalties(+nftRoyalties[0].amount || 0)
+           setCreatorRoyalties(+nftRoyalties[0].amount / 100 || 0)
           }
     
           // Index 1 is collection royalties
           if (royalties.length && royalties[1].length) {
             const collectionRoyalties = royalties[1].map((royalty: [string, BigNumber]) => ({
               address: royalty[0],
-              amount: BigNumber.from(royalty[1]).div(100).toString(),
+              amount: BigNumber.from(royalty[1]),
             }));
-           setCollectionRoyalties(+collectionRoyalties[0].amount || 0)
+           setCollectionRoyalties(+collectionRoyalties[0].amount / 100 || 0)
           }
         } catch (err) {
           console.log(err);
@@ -178,7 +178,7 @@ export const SummaryTab = () => {
 
         try {
           const [ ,_daoFee] = await fetchDAOFee(signer);
-          setDaoFee(+BigNumber.from(_daoFee).div(100).toString() || 0);
+          setDaoFee(+BigNumber.from(_daoFee) / 100 || 0);
 
         } catch (err) {
           console.log(err);
