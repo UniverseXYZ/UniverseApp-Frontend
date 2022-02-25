@@ -14,13 +14,19 @@ import * as styles from './styles';
 import EtherScanIcon from './../../../../../../../../../assets/images/etherscan.svg';
 import { TokenTicker } from '../../../../../../../../enums';
 import { useAuthContext } from '../../../../../../../../../contexts/AuthContext';
+import { shortenEthereumAddress } from '../../../../../../../../../utils/helpers/format';
+import { IOrder } from '../../../../../../types';
 
-export const TabHistory = ({ historyData }: any) => {
+interface ITabHistoryProps {
+  historyData?: IOrder[];
+}
+
+export const TabHistory = ({ historyData = [] }: ITabHistoryProps) => {
   const { ethPrice } = useAuthContext() as any;
 
   return (
     <Box>
-      {historyData.map((transfer: any, i: any): any => {
+      {historyData.map((transfer: IOrder, i: number) => {
         let type: HistoryType = HistoryType.MINTED;
         let price: number = -1;
 
@@ -30,7 +36,7 @@ export const TabHistory = ({ historyData }: any) => {
           type = (side === 1 && status === 2) ? HistoryType.BOUGHT : (side === 1 && status === 0) ? HistoryType.LISTED : HistoryType.OFFER;
 
           if (side === 0) {
-            price = +utils.formatUnits(transfer.make.value, `${TOKENS_MAP[transfer.make.assetType.assetClass as TokenTicker] ? TOKENS_MAP[transfer.make.assetType.assetClass as TokenTicker]?.decimals : 18}`);
+            price = +utils.formatUnits(transfer.make.value, `${TOKENS_MAP[transfer.make.assetType.assetClass as any as TokenTicker] ? TOKENS_MAP[transfer.make.assetType.assetClass as any as TokenTicker]?.decimals : 18}`);
           } else {
             price = +utils.formatUnits(transfer.take.value, `${TOKENS_MAP[transfer.take.assetType.assetClass as TokenTicker] ? TOKENS_MAP[transfer.take.assetType.assetClass as TokenTicker]?.decimals : 18}`);
           }
@@ -44,7 +50,7 @@ export const TabHistory = ({ historyData }: any) => {
               <Box {...styles.ActionIconStyle} bg={actionIcon[type]} />
               <Box>
                 <Text {...styles.NameStyle}>
-                  <Box {...styles.ActionLabelStyle}>{nameLabels[type]} </Box>{ transfer.makerData?.displayName ? transfer.makerData?.displayName : transfer.makerData?.address }
+                  <Box {...styles.ActionLabelStyle}>{nameLabels[type]} </Box>{ transfer.makerData && (transfer.makerData.displayName ? transfer.makerData.displayName : shortenEthereumAddress(transfer.makerData.address)) }
                 </Text>
                 <Text {...styles.AddedLabelStyle}>
                   {getAddedAtLabel(transfer.createdAt)}

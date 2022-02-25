@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { utils } from 'ethers';
 import { GetUserApi } from '../api';
+import { IOrder } from '../types';
 
 // Call to the scraper to get nft transfers and use the first one(mint)
 const getMintData = async (collectionAddress: string, tokenId: string | number) => {
@@ -11,7 +12,7 @@ const getMintData = async (collectionAddress: string, tokenId: string | number) 
   return data;
 }
 
-export const GetHistoryApi = async (collectionAddress: string, tokenId: string | number) => {
+export const GetHistoryApi = async (collectionAddress: string, tokenId: string | number): Promise<IOrder[]> => {
     const url = `${process.env.REACT_APP_MARKETPLACE_BACKEND}/v1/orders?collection=${collectionAddress}&tokenId=${tokenId}&hasOffers=false`;
     const mintData = (await getMintData(collectionAddress, tokenId)).data[0];
 
@@ -22,10 +23,10 @@ export const GetHistoryApi = async (collectionAddress: string, tokenId: string |
     });
 
     const history = data[0];
-    const historyCopy = [...history, mintData];
+    const historyCopy: IOrder[] = [...history, mintData];
 
     // Api call to get the order creator or the minter data
-    historyCopy.forEach(async (order: any) => {
+    historyCopy.forEach(async (order: IOrder) => {
       if (order.maker) {
         order.makerData = await GetUserApi(order.maker);
       } else {
@@ -33,5 +34,5 @@ export const GetHistoryApi = async (collectionAddress: string, tokenId: string |
       }
     });
 
-    return historyCopy;
+    return historyCopy
 };

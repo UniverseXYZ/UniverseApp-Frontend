@@ -1,3 +1,4 @@
+import { IUser } from '.';
 import { OrderAssetClass } from '../enums';
 
 export interface IERC721AssetType {
@@ -26,6 +27,7 @@ export interface IOrder {
   };
   end: number;
   fill: string;
+  from: string;
   hash: string;
   id: string;
   make: {
@@ -35,6 +37,7 @@ export interface IOrder {
   makeBalance: string;
   makeStock: string;
   maker: string;
+  makerData: IUser | undefined;
   matchedTxHash: null | string;
   salt: number;
   side: number;
@@ -49,6 +52,7 @@ export interface IOrder {
   };
   taker: string;
   type: string;
+  to: string;
   updatedAt: Date;
 }
 

@@ -17,7 +17,7 @@ export interface INFTPageContext {
   collectionAddress: string;
   refetchOffers: boolean;
   setRefetchOffers: React.Dispatch<React.SetStateAction<boolean>>;
-  history: any;
+  history: IOrder[] | undefined;
 }
 
 export const NFTPageContext = createContext<INFTPageContext>({} as INFTPageContext);
