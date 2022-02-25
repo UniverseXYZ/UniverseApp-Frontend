@@ -28,7 +28,7 @@ const GallerySection = (props) => {
       {!!gallery.length && (
         <div className="gallery--content">
           {gallery.slice(0, showItems).map((elem, index) => (
-            <GalleryPhotoItem {...elem} key={index.toString()} index={index} />
+            <GalleryPhotoItem {...elem} key={elem} index={index} />
           ))}
         </div>
       )}

@@ -92,7 +92,7 @@ const NewTabs = (props) => {
                         history.push(route);
                       }
                     }}
-                    key={index.toString()}
+                    key={elem}
                     style={{
                       width: `${tabHeaderElemWidth}%`,
                       left: '0',
@@ -131,7 +131,7 @@ const NewTabs = (props) => {
           <Switch>
             {tabData.map((elem, index) => {
               const { route, content } = elem;
-              return <Route exact path={route} component={() => content} key={index.toString()} />;
+              return <Route exact path={route} component={() => content} key={elem} />;
             })}
             <Route path="*">
               <Redirect to={tabData.find((elem) => elem.home === true).route} />
