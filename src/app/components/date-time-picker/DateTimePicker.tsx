@@ -86,6 +86,23 @@ export const DateTimePicker = ({ value, onChange, onOpen, onClose, minDate, star
   }, [onClose]);
 
   useEffect(() => {
+
+    //  if (formik.values.hours) {
+    //   if (formik.values.hours.toString().length > 2) {
+    //     setTimeError('Please, set a valid start time');
+    //   } else {
+    //     setTimeError('')
+    //  }
+    // }
+
+    //  if (formik.values.minutes) {
+    //   if (formik.values.minutes.toString().length > 2) {
+    //     setTimeError('Please, set a valid start time');
+    //   } else {
+    //     setTimeError('')
+    //  }
+    // }
+
     if(startDate && formik.values.hours && formik.values.minutes) {
       const now = new Date();
       const year = now.getFullYear();
@@ -98,10 +115,15 @@ export const DateTimePicker = ({ value, onChange, onOpen, onClose, minDate, star
 
       if((startTimeTimestamp < nowTimestamp || !formik.isValid)) {
         setTimeError('Please, set a valid start time');
-        return;
+      } else {
+        setTimeError('')
       }
-
-      setTimeError('')
+    } else {
+        if(!formik.isValid) {
+          setTimeError('Please, set a valid start time');
+      } else {
+          setTimeError('')
+      }
     }
 
   }, [formik.values.hours, formik.values.minutes])
