@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import Popup from 'reactjs-popup';
 import './DesktopView.scss';
@@ -54,6 +54,7 @@ const DesktopView = ({
   const [isDAODropdownOpened, setIsDAODropdownOpened] = useState(false);
   const [copied, setCopied] = useState(false);
   const history = useHistory();
+  const location = useLocation();
   const {
     address,
     isAuthenticated,
@@ -102,7 +103,9 @@ const DesktopView = ({
                 // className="disable"
                 onClick={() => {
                   setIsMintingDropdownOpened(false);
-                  history.push('/marketplace/browse');
+                  if (location.pathname !== '/marketplace/browse') {
+                    history.push('/marketplace/browse');
+                  }
                 }}
               >
                 <img src={marketplaceIcon} alt="NFT Marketplace" />

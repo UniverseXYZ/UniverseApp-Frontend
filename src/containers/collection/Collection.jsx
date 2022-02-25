@@ -22,6 +22,7 @@ import EditIcon from '../../components/svgs/EditIcon.jsx';
 import Statistics from '../../components/collection/Statistics.jsx';
 import Tabs from '../../components/tabs/Tabs.jsx';
 import EmptyData from '../../components/collection/EmptyData.jsx';
+import LoadMore from '../../components/pagination/LoadMore';
 
 const Collection = () => {
   const tabs = ['Items', 'Description'];
@@ -53,6 +54,7 @@ const Collection = () => {
   const [page, setPage] = useState(0);
   const [offset, setOffset] = useState(0);
   const [isSearching, setIsSearching] = useState(false);
+  const [showLoadMore, setShowLoadMore] = useState(false);
 
   const [isDropdownOpened, setIsDropdownOpened] = useState(false);
   const [ownersCount, setOwnersCount] = useState(0);
@@ -91,6 +93,9 @@ const Collection = () => {
     if (results.collection) {
       setCollectionData(results);
       setIsSearching(false);
+      setShowLoadMore(true);
+    } else {
+      setShowLoadMore(false);
     }
   }, [results]);
 
@@ -126,9 +131,19 @@ const Collection = () => {
     setPerPage(newPerPage);
   };
 
-  useEffect(() => {
-    scrollToNftContainer();
-  }, [page, perPage]);
+  const loadMore = () => {
+    setApiPage(apiPage + 1);
+  };
+
+  // useEffect(() => {
+  //   scrollToNftContainer();
+  // }, [page, perPage]);
+
+  let loadMoreButton = null;
+
+  if (showLoadMore) {
+    loadMoreButton = <LoadMore loadMore={loadMore} pageAndSize />;
+  }
 
   return !collectionData && !notFound ? (
     <div className="loader-wrapper">
@@ -176,10 +191,7 @@ const Collection = () => {
             </div>
           </div>
           <div className="collection__details__header__bp">
-            <Statistics
-              nftsCount={collectionData?.pagination?.totalCount}
-              ownersCount={ownersCount}
-            />
+            <Statistics nftsCount={collectionData?.nfts?.total} ownersCount={ownersCount} />
           </div>
         </div>
         <div className="collection--nfts--container">
@@ -199,24 +211,29 @@ const Collection = () => {
               />
               {isSearching ? (
                 <CollectionPageLoader />
-              ) : collectionData?.nfts?.filter((nft) => !nft.hidden).length ? (
+              ) : collectionData?.nfts?.data.filter((nft) => !nft.hidden).length ? (
                 <>
                   <div className="nfts__lists" ref={nftsContainerRef}>
-                    {collectionData?.nfts
-                      .slice(offset, offset + perPage)
+                    {collectionData?.nfts?.data
+                      // .slice(offset, offset + perPage)
                       .filter((nft) => !nft.hidden)
-                      .map((nft) => (
-                        <NFTCard
-                          key={nft.id}
-                          nft={{
-                            ...nft,
-                            collection: collectionData.collection,
-                          }}
-                          collectionAddress={collectionAddress}
-                        />
-                      ))}
+                      .map((nft) => {
+                        if (nft.metadata) {
+                          nft.metadata.image = nft.metadata?.image_thumbnail_url;
+                        }
+                        return (
+                          <NFTCard
+                            key={nft.id}
+                            nft={{
+                              ...nft,
+                              collection: collectionData.collection,
+                            }}
+                            collectionAddress={collectionAddress}
+                          />
+                        );
+                      })}
                   </div>
-
+                  {/* Replaced pagination with load more button
                   {isLastPage ? <CollectionPageLoader /> : <></>}
 
                   <div className="pagination__container">
@@ -240,7 +257,8 @@ const Collection = () => {
                       page={page}
                       changePerPage={changePerPage}
                     />
-                  </div>
+                  </div> */}
+                  {loadMoreButton}
                 </>
               ) : (
                 <EmptyData text="No items found" />
