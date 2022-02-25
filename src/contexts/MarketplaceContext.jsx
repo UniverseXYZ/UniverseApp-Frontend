@@ -70,6 +70,8 @@ const MarketplaceContextProvider = ({ children }) => {
       location.pathname === '/marketplace'
     ) {
       document.querySelector('header').style.position = 'absolute';
+    } else if (location.pathname === '/marketplace/browse') {
+      document.querySelector('header').style.position = 'sticky';
     } else {
       document.querySelector('header').style.position = 'fixed';
     }
