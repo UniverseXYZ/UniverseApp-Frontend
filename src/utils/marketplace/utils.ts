@@ -1,10 +1,11 @@
 import { BigNumber, Contract } from 'ethers';
-import { fetchRoyalties } from '../api/royaltyRegistry';
+import { fetchDAOFee, fetchRoyalties } from '../api/royaltyRegistry';
 
 export interface IRoyalties {
   regitstyContract: Contract;
   collectionRoyaltiesPercent: BigNumber;
   nftRoyaltiesPercent: BigNumber;
+  daoFee: BigNumber;
 }
 export const getRoyaltiesFromRegistry = async (
   collectionAddress: string,
@@ -12,6 +13,7 @@ export const getRoyaltiesFromRegistry = async (
   signer: any
 ): Promise<IRoyalties> => {
   const [regitstyContract, royalties] = await fetchRoyalties(collectionAddress, signer, tokenId);
+  const [, daoFee] = await fetchDAOFee(signer);
 
   let nftRoyaltiesSum = BigNumber.from(0);
   let collRoyaltiesSum = BigNumber.from(0);
@@ -23,7 +25,6 @@ export const getRoyaltiesFromRegistry = async (
         (acc: any, curr: any) => acc.add(curr[1]),
         BigNumber.from(0)
       );
-      nftRoyaltiesSum = nftRoyaltiesSum.div(100);
     }
 
     const collectionRoyalties = royalties[1];
@@ -32,12 +33,12 @@ export const getRoyaltiesFromRegistry = async (
         (acc: any, curr: any) => acc.add(curr[1]),
         BigNumber.from(0)
       );
-      collRoyaltiesSum.div(100);
     }
   }
   return {
     regitstyContract,
     collectionRoyaltiesPercent: collRoyaltiesSum,
     nftRoyaltiesPercent: nftRoyaltiesSum,
+    daoFee,
   };
 };

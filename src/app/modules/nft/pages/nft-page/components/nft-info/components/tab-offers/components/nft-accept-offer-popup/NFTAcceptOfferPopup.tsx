@@ -25,7 +25,7 @@ import { AcceptState } from './enums';
 import * as styles from './styles';
 import { INFT, IOrder } from '../../../../../../../../types';
 import { isNFTAssetAudio, isNFTAssetImage, isNFTAssetVideo } from '../../../../../../../../helpers';
-import { TOKENS_MAP } from '../../../../../../../../../../constants';
+import { TOKENS_MAP, getTokenByAddress } from '../../../../../../../../../../constants';
 import { TokenTicker } from '../../../../../../../../../../enums';
 import { Fee } from '../../../../../../../../../marketplace/pages/sell-page/components/tab-summary/compoents';
 import { getRoyaltiesFromRegistry } from '../../../../../../../../../../../utils/marketplace/utils';
@@ -43,17 +43,23 @@ export const NFTAcceptOfferPopup = ({ NFT, NFTs, order, isOpen, onClose }: INFTA
   const { address, signer, usdPrice } = useAuthContext() as any;
 
   const [state, setState] = useState<AcceptState>(AcceptState.CHECKOUT);
-  const [nftRoyalties, setNftRoyalties] = useState(BigNumber.from(0));
-  const [collectionRoyalties, setCollectionRoyalties] = useState(BigNumber.from(0));
+  const [nftRoyalties, setNftRoyalties] = useState(0);
+  const [collectionRoyalties, setCollectionRoyalties] = useState(0);
+  const [daoFee, setDaoFee] = useState(0);
   const [totalRoyalties, setTotalRoyalties] = useState(0);
-  const [finalPrice, setFinalPrice] = useState(0);
   const [isNFTAudio] = useState(false);
   
-  const tokenTicker = useCallback(() => (order as any).make.assetType.assetClass as TokenTicker, [order]);
+  const tokenTicker = useMemo(() => {
+    return getTokenByAddress((order as any).make.assetType.contract).ticker as TokenTicker
+  }, [order]);
 
-  const tokenDecimals = useCallback(() => TOKENS_MAP[tokenTicker()]?.decimals ?? 18, [tokenTicker]);
+  const tokenDecimals = useMemo(() => {
+    return TOKENS_MAP[tokenTicker]?.decimals ?? 18
+  }, [tokenTicker]);
 
-  const listingPrice = useCallback(() => Number(utils.formatUnits((order as any).make.value, tokenDecimals())), [tokenDecimals])
+  const listingPrice = useMemo(() => {
+    return Number(utils.formatUnits((order as any).make.value, tokenDecimals))
+  }, [tokenDecimals]);
 
   const prepareMutation = useMutation(({ hash, data }: { hash: string, data: any }) => {
     return axios.post(`${process.env.REACT_APP_MARKETPLACE_BACKEND}/v1/orders/${hash}/prepare`, data);
@@ -97,31 +103,28 @@ export const NFTAcceptOfferPopup = ({ NFT, NFTs, order, isOpen, onClose }: INFTA
   const fetchNftRoyalties =  async () => {
     if (NFT?._collectionAddress && NFT.tokenId) {
       try {
-        const { nftRoyaltiesPercent, collectionRoyaltiesPercent } = await getRoyaltiesFromRegistry(NFT._collectionAddress, NFT.tokenId, signer);
-        
-        setNftRoyalties(nftRoyaltiesPercent);
-        setCollectionRoyalties(collectionRoyaltiesPercent);
-        
-        const royaltiesSum = 
-        Math.round(nftRoyaltiesPercent.add(collectionRoyaltiesPercent).toNumber() + UNIVERSE_FEE);
-
-        const cutPercentage = 1 - royaltiesSum / 100;
-        
-        const formatedPrice = Number(utils.formatUnits((order as any).make.value, tokenDecimals()));
-
-        const finalPrice = formatedPrice * cutPercentage;
-
-        setTotalRoyalties(royaltiesSum);
-        setFinalPrice(finalPrice)
+        const { nftRoyaltiesPercent, collectionRoyaltiesPercent, daoFee } = await getRoyaltiesFromRegistry(NFT._collectionAddress, NFT.tokenId, signer);
+        setNftRoyalties(+nftRoyaltiesPercent / 100);
+        setCollectionRoyalties(+collectionRoyaltiesPercent / 100);
+        setDaoFee(+daoFee / 100);
       } catch(err) {
         console.log(err)
       }
     }
   }
 
+  const finalPrice = useMemo(() => {
+    const price = Number(utils.formatUnits((order as any).make.value, tokenDecimals));
+    return parseFloat((price - (price * totalRoyalties / 100)).toFixed(6));
+  }, [order, totalRoyalties]);
+
   useEffect(() => {
     fetchNftRoyalties()
-  }, [NFT?._collectionAddress && NFT.tokenId])
+  }, [NFT?._collectionAddress, NFT?.tokenId, signer])
+
+  useEffect(() => {
+    setTotalRoyalties(nftRoyalties + collectionRoyalties + daoFee);
+  }, [nftRoyalties, collectionRoyalties, daoFee])
 
   const previewNFT = useMemo(() => {
     return NFT || (NFTs as INFT[])[0];
@@ -164,10 +167,10 @@ export const NFTAcceptOfferPopup = ({ NFT, NFTs, order, isOpen, onClose }: INFTA
                 </Box>
                 <Box {...styles.PriceContainerStyle}>
                   <Text fontSize={'14px'}>
-                    <TokenIcon ticker={tokenTicker()} display={'inline'} size={20} mr={'6px'} mt={'-3px'} />
+                    <TokenIcon ticker={tokenTicker} display={'inline'} size={20} mr={'6px'} mt={'-3px'} />
                     {listingPrice}
                   </Text>
-                  <Text {...styles.PriceUSDStyle}>${listingPrice() * usdPrice}</Text>
+                  <Text {...styles.PriceUSDStyle}>${listingPrice * usdPrice}</Text>
                 </Box>
               </Flex>
 
@@ -175,8 +178,8 @@ export const NFTAcceptOfferPopup = ({ NFT, NFTs, order, isOpen, onClose }: INFTA
                 <Text fontSize={'16px'} fontWeight={700}>Fees</Text>
                 <Box layerStyle={'grey'} {...styles.FeesContainerStyle}>
                   <Fee name={'To Universe'} amount={UNIVERSE_FEE} />
-                  {!!collectionRoyalties.toNumber() && <Fee name={'To collection'} amount={collectionRoyalties.toNumber()} />}
-                  {!!nftRoyalties.toNumber() && <Fee name={'To creator'} amount={nftRoyalties.toNumber()} />}
+                  <Fee name={'To collection'} amount={collectionRoyalties} />
+                  <Fee name={'To creator'} amount={nftRoyalties} />
                   <Fee name={'Total'} amount={totalRoyalties} />
                 </Box>
               </Box>
@@ -185,7 +188,7 @@ export const NFTAcceptOfferPopup = ({ NFT, NFTs, order, isOpen, onClose }: INFTA
                 <Text>Total</Text>
                 <Box {...styles.PriceContainerStyle}>
                   <Text fontSize={'18px'}>
-                    <TokenIcon ticker={tokenTicker()} display={'inline'} size={24} mr={'6px'} mt={'-3px'} />
+                    <TokenIcon ticker={tokenTicker} display={'inline'} size={24} mr={'6px'} mt={'-3px'} />
                     {finalPrice}
                   </Text>
                   <Text {...styles.PriceUSDStyle}>${Math.round(finalPrice * usdPrice)}</Text>
