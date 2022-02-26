@@ -1,7 +1,16 @@
 import axios from 'axios';
 
-import { ICollectionBackend, INFT, INFTBackend, IUserBackend, NFTArtworkType, NFTStandard } from '../types';
-import { mapBackendCollection, mapBackendNft, mapBackendUser } from '../helpers';
+import {
+  ICollectionBackend,
+  INFT,
+  INFTBackend,
+  IUserBackend,
+  NFTArtworkType,
+  NFTStandard,
+  ICollectionScrapper,
+  ISearchBarDropdownCollection
+} from '../types';
+import { mapBackendCollection, mapBackendNft, mapBackendUser, mapDropdownCollection } from '../helpers';
 import { ethers } from 'ethers';
 
 interface IGetNFTResponse {
@@ -114,14 +123,46 @@ export const GetUserApi = async (address: string) => {
   return data ? mapBackendUser(data) : undefined;
 };
 
+/**
+ * Fetch collection Information from the Universe Backend API
+ * @param address :string
+ * @returns ICollectionBackend
+ */
 export const GetCollectionApi = async (address: string) => {
   const url = `${process.env.REACT_APP_API_BASE_URL}/api/pages/collection/${address.toLowerCase()}`;
 
-  const { data } = await axios.get<{ collection: ICollectionBackend; }>(url, {
-    headers: {
-      'Content-Type': 'application/json; charset=UTF-8',
-    }
-  });
+  try {
+    const { data } = await axios.get<{ collection: ICollectionBackend; }>(url, {
+      headers: {
+        'Content-Type': 'application/json; charset=UTF-8',
+      }
+    });
 
-  return data ? mapBackendCollection(data.collection) : undefined;
+    return data ? mapBackendCollection(data.collection) : undefined;
+  } catch (e) {
+    console.error(e);
+    return undefined;
+  }
+};
+
+
+/**
+ * Fetch collection information from the Datascraper API
+ * @param search :string
+ * @returns ISearchBarDropdownCollection
+ */
+export const GetCollectionsFromScraperApi = async (search: string) : Promise<ISearchBarDropdownCollection[]> => {
+  // const url = `${process.env.REACT_APP_DATASCRAPER_BACKEND}/v1/collections/search?search=${search}`;
+  const url = `http://localhost:8080/v1/collections/search?search=${search}`;
+
+  try {
+    const { data } = await axios.get<ICollectionScrapper[]>(url);
+
+    const mappedData: ISearchBarDropdownCollection[] = data.map((item) => mapDropdownCollection(item));
+
+    return mappedData;
+  } catch (e) {
+    console.error(e);
+    return [];
+  }
 };

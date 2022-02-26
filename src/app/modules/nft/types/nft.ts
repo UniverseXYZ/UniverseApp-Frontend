@@ -57,6 +57,27 @@ export interface ICollectionBackend extends Omit<ICollection, 'createdAt' | 'upd
   updatedAt: string;
 }
 
+export interface ICollectionScrapper {
+  contractAddress: string;
+  createdAt: string;
+  createdAtBlock: number;
+  firstProcessedBlock: number;
+  isProcessing: boolean;
+  lastProcessedBlock: number;
+  name: string;
+  sentAt: string;
+  tokenType: string;
+  updatedAt: string;
+  _id: string;
+}
+
+export interface ISearchBarDropdownCollection {
+  id: string | number;
+  address: string;
+  name: string;
+  image: string | null;
+}
+
 export interface INFTProperty {
   traitType: string;
   value: string;

@@ -10,6 +10,7 @@ import IntroDesktopBGImage from './../../../../../assets/images/v2/marketplace/i
 import IntroTabletBGImage from './../../../../../assets/images/v2/marketplace/img_hero_tablet.png';
 import IntroMobileBGImage from './../../../../../assets/images/v2/marketplace/img_hero_mobile.png';
 import BGImage from './../../../../../assets/images/v2/stone_bg.jpg';
+import { ICollectionBackend, ISearchBarDropdownCollection } from '../../../nft/types';
 
 import {
   ArtistsFilter,
@@ -21,6 +22,8 @@ import {
   NFTTypeFilter,
   PriceRangeFilter,
   SaleTypeFilter,
+  SearchBar,
+  ISearchBarValue,
 } from '../../components';
 import { SortOrderOptions, SortOrderOptionsEnum } from '../../constants';
 import { BackToTopButton, Select } from '../../../../components';
@@ -35,7 +38,13 @@ import { IERC721AssetType, IERC721BundleAssetType, INFT, IOrder } from '../../..
 import { useStickyHeader2 } from '../../../../hooks';
 import { coins } from '../../../../mocks';
 import { ORDERS_PER_PAGE } from './constants';
-import { GetNFT2Api, GetNFTApi, GetOrdersApi } from '../../../nft/api';
+import {
+  GetNFT2Api,
+  GetNFTApi,
+  GetOrdersApi,
+  GetCollectionsFromScraperApi,
+  GetCollectionApi
+} from '../../../nft/api';
 import { TokenTicker } from '../../../../enums';
 import { TOKENS_MAP } from '../../../../constants';
 import { useThemeContext } from '../../../../../contexts/ThemeContext';
@@ -83,6 +92,61 @@ export const BrowseNFTsPage = () => {
   const collectionsFilterForm = useFormik<ICollectionsFilterValue>({
     initialValues: [],
     onSubmit: () => {},
+  });
+
+  const searchBarForm = useFormik<ISearchBarValue>({
+    initialValues: {
+      searchValue: '',
+    },
+    onSubmit: () => {},
+  });
+
+  const handleSearchBarItemSelect = (address: string) => {
+    // Clear all the current filters
+    handleClear();
+
+    // Refetch the orders based on the new address
+    collectionsFilterForm.setValues([{address: address}]);
+  }
+
+  const { data: collectionsResult, isFetching: isFetchingCollections } = useInfiniteQuery([
+    'collections',
+    searchBarForm.values,
+    sortBy
+  ], async () => {
+
+    const searchQuery = searchBarForm.values;
+
+    // The Input field is empty, no need to send request to the Scraper.
+    if (!searchQuery?.searchValue) return;
+
+    // Get the collections data
+    const scraperData = await GetCollectionsFromScraperApi(searchQuery.searchValue);
+
+    // The scraper doesn't return off chain info like (images, etc.) so we need to call the Universe Backend App for more info.
+
+    // Fetch collection (off chain) data from the Universe API
+    const getOffChainCollectionDataPromises = scraperData.map(async (c: ISearchBarDropdownCollection) => {
+      const copy: ISearchBarDropdownCollection  = { ...c };
+      const offChainData = await GetCollectionApi(copy.address);
+
+      // Mutate the copy
+      if (offChainData) {
+        copy.image = offChainData.coverUrl ?? null;
+      }
+
+      return copy;
+    })
+
+    const fullCollectionData = await Promise.all(getOffChainCollectionDataPromises);
+
+    // TODO:: Fetch the items count from the Scrapper API (ако има време !)
+    return { data: fullCollectionData };
+  }, {
+    retry: false,
+    onSuccess: (result) => {
+      console.log('Get collections Success', result);
+    }
   });
 
   // TODO
@@ -246,7 +310,6 @@ export const BrowseNFTsPage = () => {
     }
   });
 
-
   const filtersRef = useRef(null);
 
   const isStickiedFilters = useStickyHeader2(filtersRef);
@@ -275,8 +338,9 @@ export const BrowseNFTsPage = () => {
           },
           color: 'black',
           justifyContent: 'center',
-          h: '250px',
-          minH: '250px',
+          pt: '100px',
+          h: '150px',
+          minH: '150px',
           textAlign: 'center',
         }}
       >
@@ -285,6 +349,29 @@ export const BrowseNFTsPage = () => {
           <Heading as={'h1'} fontSize={'36px'}>Marketplace</Heading>
         </Box>
       </Flex>
+
+      <Flex
+        sx={{
+          alignItems: 'center',
+          justifyContent: 'center',
+          textAlign: 'center',
+        }}
+      >
+        <Box mt={'50px'} w={'600px'}>
+          <SearchBar
+            collections={collectionsResult?.pages[0]?.data || []}
+            isFetchingCollections={isFetchingCollections}
+            value={searchBarForm.values}
+            onChange={(value) => searchBarForm.setValues(value)}
+            onClear={() => {
+              handleClear();
+              searchBarForm.resetForm();
+            }}
+            onItemSelect={(value) => handleSearchBarItemSelect(value)}
+          />
+        </Box>
+      </Flex>
+
       <Box
         ref={filtersRef}
         sx={{
@@ -323,11 +410,11 @@ export const BrowseNFTsPage = () => {
                 onChange={(values) => priceRangeFilterForm.setValues(values)}
                 onClear={() => priceRangeFilterForm.resetForm()}
               />
-              <CollectionsFilter
+              {/* <CollectionsFilter
                 value={collectionsFilterForm.values}
                 onChange={(values) => collectionsFilterForm.setValues(values)}
                 onClear={() => collectionsFilterForm.resetForm()}
-              />
+              /> */}
               {/* <ArtistsFilter
                 value={artistsFilterForm.values}
                 onChange={(values) => artistsFilterForm.setValues(values)}
@@ -375,7 +462,7 @@ export const BrowseNFTsPage = () => {
               {(ordersResult?.pages ?? []).map((page) => {
                 return page.data.map(({ order, NFTs }) => {
                   if (!NFTs.length) {
-                    return null; 
+                    return null;
                   }
                 return order.make.assetType.assetClass === 'ERC721' ? (
                   <NftItem
