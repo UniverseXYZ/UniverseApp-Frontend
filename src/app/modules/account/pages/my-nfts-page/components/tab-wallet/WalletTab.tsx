@@ -47,7 +47,7 @@ export const WalletTab = () => {
     );
   }
 
-  return NFTsPages?.pages?.length ? (
+  return NFTsPages?.pages?.length && NFTsPages.pages[0].data?.length ? (
     <>
       <SimpleGrid columns={4} spacing={'30px'}>
         {(NFTsPages?.pages ?? []).map((page) => {
