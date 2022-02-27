@@ -50,6 +50,8 @@ export const NFTBuySection = ({ NFT, owner, NFTs, order, onMeasureChange }: INFT
         if (NFT) {
           if (address.toUpperCase() === owner?.address.toUpperCase()) {
             setState(BuyNFTSectionState.OWNER_PUT_ON_SALE);
+          } else {
+            setState(BuyNFTSectionState.BUYER_NO_LISTING_OFFER);
           }
         }
       } else {
@@ -166,6 +168,13 @@ export const NFTBuySection = ({ NFT, owner, NFTs, order, onMeasureChange }: INFT
             {!!nftRoyalties && royaltiesText()}
           </>
         )}
+        {state === BuyNFTSectionState.BUYER_NO_LISTING_OFFER && (
+          <>
+          <SimpleGrid columns={1} spacingX={'12px'}>
+            <Button variant={'outline'} onClick={() => setIsMakeAnOfferPopupOpened(true)}>Make offer</Button>
+          </SimpleGrid>
+        </>
+        )}
         {state === BuyNFTSectionState.OWNER_PUT_ON_SALE && (
           <>
             <Button boxShadow={'lg'} w={'100%'} onClick={() => router.push(`/nft/${NFT?.collection?.address}/${NFT?.tokenId}/sell`)}>Put on sale</Button>
@@ -210,6 +219,7 @@ export const NFTBuySection = ({ NFT, owner, NFTs, order, onMeasureChange }: INFT
         onClose={() => setIsPlaceABidPopupOpened(false)}
       />
       <NFTMakeAnOfferPopup
+        nft={NFT}
         order={order}
         isOpen={isMakeAnOfferPopupOpened}
         onClose={() => setIsMakeAnOfferPopupOpened(false)}
