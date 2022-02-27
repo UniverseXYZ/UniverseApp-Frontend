@@ -6,6 +6,7 @@ export const getShareButtonStyle: (icon: string) => BoxProps = (icon) => ({
   cursor: 'pointer',
   h: '62px',
   display: 'block',
+  m: 'auto',
   mb: '16px',
   position: 'relative',
   w: '62px',
