@@ -37,6 +37,8 @@ import { Contract, BigNumber } from 'ethers';
 import { fetchRoyalties, fetchDAOFee } from '../../../../../../../utils/api/royaltyRegistry';
 import { default as dayjs } from 'dayjs';
 import { default as UTC } from 'dayjs/plugin/utc';
+import { CollectionPageLoader } from '../../../../../../../containers/collection/CollectionPageLoader';
+import './SummaryTab.scss';
 
 dayjs.extend(UTC);
 
@@ -66,6 +68,7 @@ export const SummaryTab = () => {
   const [daoFee, setDaoFee] = useState(0);
   const [collectionIsAppovedForAll, setCollectionIsApprovedForAll] = useState(false);
   const [totalFees, setTotalFees] = useState(0);
+  const [isApproving, setIsApproving] = useState(false);
 
   const { nft, isPosted, form, sellMethod, amountType, goBack } = useMarketplaceSellData();
 
@@ -96,10 +99,12 @@ export const SummaryTab = () => {
     const contract = new Contract(`${collection.address}`, contractsData[standard].abi, signer);
 
     const approveTx = await contract.setApprovalForAll(process.env.REACT_APP_MARKETPLACE_CONTRACT, true)
+    setIsApproving(true);
 
     await approveTx.wait();
 
     setCollectionIsApprovedForAll(true);
+    setIsApproving(false);
 
     setCollections(collections.map((collectionItem) => {
       return collectionItem.collection.address !== collection.address
@@ -365,11 +370,16 @@ export const SummaryTab = () => {
               }}
             >
               <Image src={collectionItem.collection?.coverUrl} borderRadius={'50%'} objectFit={'cover'} h={'80px'} w={'80px'} />
-              <Box ml={'20px'}>
-                <Heading as={'h4'} mb={'16px'}>{collectionItem.collection?.name}</Heading>
-                {!collectionItem.approved
-                  ? <Button onClick={() => handleApproveCollection(collectionItem)}>Approve</Button>
-                  : <Button variant={'simpleOutline'} disabled={true} rightIcon={<Image src={CheckBlackIcon} />}>Approved</Button>
+              <Box ml={'20px'} className="approve-section">
+                <Heading as={'h4'}>{collectionItem.collection?.name}</Heading>
+                {isApproving && <CollectionPageLoader />}
+                
+                {!collectionItem.approved && !isApproving &&
+                  <Button onClick={() => handleApproveCollection(collectionItem)}>Approve</Button>
+                }
+                
+                {collectionItem.approved && !isApproving &&
+                   <Button variant={'simpleOutline'} disabled={true} rightIcon={<Image src={CheckBlackIcon} />}>Approved</Button>
                 }
               </Box>
             </Flex>
