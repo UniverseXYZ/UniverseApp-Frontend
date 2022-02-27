@@ -42,7 +42,7 @@ export const NFTItemFooter = (
    const isOwner = address?.toLowerCase() === NFT?._ownerAddress?.toLowerCase();
 
   return (
-    <Flex {...styles.WrapperStyle} {...rest} className="test-bace">
+    <Flex {...styles.WrapperStyle} {...rest}>
       {children ? children : (
         <>
           <Flex>
