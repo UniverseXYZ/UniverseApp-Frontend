@@ -222,7 +222,7 @@ export const NFTMakeAnOfferPopup = ({ nft, order, isOpen, onClose, }: INFTMakeAn
   }, [isOpen]);
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose}>
+    <Modal isCentered isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
       <ModalContent maxW={'480px'}>
         <ModalCloseButton />

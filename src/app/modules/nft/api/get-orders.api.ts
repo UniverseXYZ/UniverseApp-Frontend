@@ -29,12 +29,21 @@ export type IGetOrdersApiFn = (params: Partial<IGetOrdersApiParams>) => Promise<
 export type IGetBestAndLastApiFn = (collection:string, tokenId:string) => Promise<IGetBestAndLastOfferResponse>;
 
 export const GetOrdersApi: IGetOrdersApiFn = async (params = {}) => {
-  const url = `${process.env.REACT_APP_MARKETPLACE_BACKEND}/v1/orders/`;
+  const url = `${process.env.REACT_APP_MARKETPLACE_BACKEND}/v1/orders`;
 
   const { data: [orders, total] } = await axios.get<IGetOrdersApiResponse>(url, { params });
 
   return { total, orders: orders.map((order) => mapBackendOrder(order)) };
 };
+
+export const GetActiveSellOrdersApi: IGetOrdersApiFn = async (params = {}) => {
+  const url = `${process.env.REACT_APP_MARKETPLACE_BACKEND}/v1/orders/browse`;
+
+  const { data: [orders, total] } = await axios.get<IGetOrdersApiResponse>(url, { params });
+
+  return { total, orders: orders.map((order) => mapBackendOrder(order)) };
+};
+
 
 export const GetBestAndLastOffer: IGetBestAndLastApiFn = async (collection:string, tokenId:string) => {
   const url = `${process.env.REACT_APP_MARKETPLACE_BACKEND}/v1/orders/card/${collection.toLowerCase()}/${tokenId}`;

@@ -41,7 +41,7 @@ import { ORDERS_PER_PAGE } from './constants';
 import {
   GetNFT2Api,
   GetNFTApi,
-  GetOrdersApi,
+  GetActiveSellOrdersApi,
   GetCollectionsFromScraperApi,
   GetCollectionApi
 } from '../../../nft/api';
@@ -229,7 +229,7 @@ export const BrowseNFTsPage = () => {
       apiFilters['sortBy'] = sortFilter;
     }
 
-    const { orders, total } = await GetOrdersApi(apiFilters);
+    const { orders, total } = await GetActiveSellOrdersApi(apiFilters);
 
     const NFTsRequests: Array<any> = [];
 
