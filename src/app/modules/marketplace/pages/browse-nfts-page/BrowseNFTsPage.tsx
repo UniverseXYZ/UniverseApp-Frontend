@@ -466,6 +466,7 @@ export const BrowseNFTsPage = () => {
                   }
                 return order.make.assetType.assetClass === 'ERC721' ? (
                   <NftItem
+                    order={order}
                     key={order.id}
                     NFT={NFTs[0]}
                     collection={`${NFTs[0].collection?.address}`}

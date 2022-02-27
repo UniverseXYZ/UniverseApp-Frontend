@@ -58,8 +58,6 @@ export const NFTCheckoutPopup = ({ NFT, NFTs, order, isOpen, onClose }: INFTChec
     return axios.post(`${process.env.REACT_APP_MARKETPLACE_BACKEND}/v1/orders/${hash}/prepare`, data);
   });
 
-  console.log("rerender");
-
   const tokenTicker = order?.take.assetType.assetClass as TokenTicker
 
   const tokenDecimals = TOKENS_MAP[tokenTicker]?.decimals ?? 18

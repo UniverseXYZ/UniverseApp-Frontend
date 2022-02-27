@@ -54,6 +54,12 @@ const useStyles: (isBundle: boolean) => Record<
         background: 'transparent',
         border: 0,
       },
+      '& .buy-now': {
+        display: 'block'
+      },
+      '& .nft-label': {
+        display: 'none'
+      }
     },
   }), [isBundle]);
 

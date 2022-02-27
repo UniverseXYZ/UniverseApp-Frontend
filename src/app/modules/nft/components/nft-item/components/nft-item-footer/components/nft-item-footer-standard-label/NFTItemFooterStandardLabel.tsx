@@ -10,11 +10,13 @@ const STANDARDS_LABELS: Record<NFTStandard, string> = {
 
 interface INFTItemFooterStandardLabelProps extends BoxProps {
   NFT: INFT;
+  isOwner: boolean;
 }
 
-export const NFTItemFooterStandardLabel = ({ NFT, children, ...rest }: INFTItemFooterStandardLabelProps) => {
+export const NFTItemFooterStandardLabel = ({ NFT, children, isOwner, ...rest }: INFTItemFooterStandardLabelProps) => {
+  const boxClassName = !isOwner ? 'nft-label' : '';
   return (
-    <Box layerStyle={'nft-card-footer-label'} {...rest}>
+    <Box className={boxClassName} layerStyle={'nft-card-footer-label'} {...rest}>
       <Text>{`${STANDARDS_LABELS[NFT.standard]}`}</Text>
     </Box>
   );
