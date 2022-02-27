@@ -66,7 +66,11 @@ export const SettingsTabFixedListing = () => {
               name={'price'}
               value={form.values.price}
               currencyValue={form.values.priceCurrency}
-              onChange={(value) => form.setFieldValue('price', value)}
+              onChange={(value) => {
+                if (Number(value) > -1 && value.length < 21) {
+                  return form.setFieldValue('price', value);
+                }
+              }}
               onChangeCurrency={(value) => form.setFieldValue('priceCurrency', value)}
               onBlur={form.handleBlur}
             />

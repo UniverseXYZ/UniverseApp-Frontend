@@ -24,6 +24,7 @@ import WalletImage from '../../../../../../../assets/images/v2/wallet.png';
 import AudioNFTPreviewImage from '../../../../../../../assets/images/v2/audio-nft-preview.png';
 
 import { useAuthContext } from '../../../../../../../contexts/AuthContext';
+import { useErrorContext } from '../../../../../../../contexts/ErrorContext';
 import { Checkbox, InputShadow, TokenIcon } from '../../../../../../components';
 import { NFTType } from './components';
 import { CheckoutState } from './enums';
@@ -48,7 +49,7 @@ export const NFTCheckoutPopup = ({ NFT, NFTs, order, isOpen, onClose }: INFTChec
   const router = useHistory();
 
   const { address, signer, web3Provider, usdPrice } = useAuthContext() as any;
-
+  const { setShowError } = useErrorContext() as any;
   const { onCopy } = useClipboard(address);
 
   const [state, setState] = useState<CheckoutState>(CheckoutState.CHECKOUT);
@@ -84,6 +85,7 @@ export const NFTCheckoutPopup = ({ NFT, NFTs, order, isOpen, onClose }: INFTChec
 
     } catch(err) {
       console.log(err)      
+      setShowError(true)
     }
     
   }, [order, address]);
@@ -126,7 +128,7 @@ export const NFTCheckoutPopup = ({ NFT, NFTs, order, isOpen, onClose }: INFTChec
   }
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose}>
+    <Modal isCentered isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
       <ModalContent maxW={'480px'}>
         <ModalCloseButton />
