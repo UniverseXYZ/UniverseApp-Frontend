@@ -1,8 +1,8 @@
 import { Box, LinkBox, LinkOverlay, Text } from '@chakra-ui/react';
-import React from 'react';
+import React, { useState } from 'react';
 import { useQuery } from 'react-query';
 
-import { ICollection, IERC721AssetType, INFT, IUser } from '../../types';
+import { ICollection, IERC721AssetType, INFT, IUser, IOrder } from '../../types';
 import { NFTItemAsset, NFTItemFooter, NFTItemRelation } from './components';
 import { ItemWrapper } from '../../../../components';
 import * as styles from './styles';
@@ -11,6 +11,7 @@ import { GetBestAndLastOffer, GetCollectionApi, GetNFT2Api, GetUserApi } from '.
 import { TokenTicker } from '../../../../enums';
 import { utils } from 'ethers';
 import { getTokenByAddress } from '../../../../constants';
+import { NFTCheckoutPopup } from '../../../nft/pages/nft-page/components/nft-checkout-popup';
 
 type IRenderFuncProps = {
   NFT: INFT;
@@ -33,7 +34,7 @@ export interface INftItemProps {
   collection: ICollection | string;
   NFT: INFT | string;
   orderEnd?: number;
-
+  order?: IOrder;
   isSelected?: boolean;
   selectedLabel?: string;
 
@@ -49,7 +50,7 @@ export const NftItem = (
   {
     collection: _collection,
     NFT: _tokenIdOrNFT,
-
+    order,
     isSelected,
     selectedLabel,
 
@@ -61,6 +62,8 @@ export const NftItem = (
     onClick,
   }: INftItemProps
 ) => {
+  const [isCheckoutPopupOpened, setIsCheckoutPopupOpened] = useState(false);
+
 
   const { data: collection, isLoading: isLoadingCollection } = useQuery(
     ['collection', typeof _collection === 'string' ? _collection : _collection.address],
@@ -117,6 +120,7 @@ export const NftItem = (
   const lastOfferPrice = !lastOfferPriceToken ? null : utils.formatUnits(data?.lastOffer.make.value || 0, lastOfferPriceToken.decimals ?? 18)
 
   return (
+    <>
     <ItemWrapper
       isBundle={NFT && NFT.numberOfEditions > 1}
       isSelected={isSelected}
@@ -217,12 +221,19 @@ export const NftItem = (
                 isLoadingCreator,
                 isLoadingOwner,
               }) : (
-                <NFTItemFooter NFT={NFT as INFT} />
+                <NFTItemFooter isCheckoutPopupOpened={isCheckoutPopupOpened} setIsCheckoutPopupOpened={setIsCheckoutPopupOpened} NFT={NFT as INFT} />
               )
             }
           </Box>
         </LinkOverlay>
       </LinkBox>
     </ItemWrapper>
+     <NFTCheckoutPopup
+        NFT={NFT}
+        order={order as IOrder}
+        isOpen={isCheckoutPopupOpened}
+        onClose={() => setIsCheckoutPopupOpened(false)}
+      />
+    </>
   );
 };
