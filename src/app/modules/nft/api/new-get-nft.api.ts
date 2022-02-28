@@ -152,8 +152,7 @@ export const GetCollectionApi = async (address: string) => {
  * @returns ISearchBarDropdownCollection
  */
 export const GetCollectionsFromScraperApi = async (search: string) : Promise<ISearchBarDropdownCollection[]> => {
-  // const url = `${process.env.REACT_APP_DATASCRAPER_BACKEND}/v1/collections/search?search=${search}`;
-  const url = `http://localhost:8080/v1/collections/search?search=${search}`;
+  const url = `${process.env.REACT_APP_DATASCRAPER_BACKEND}/v1/collections/search?search=${search}`;
 
   try {
     const { data } = await axios.get<ICollectionScrapper[]>(url);
