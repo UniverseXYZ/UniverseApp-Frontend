@@ -10,6 +10,11 @@
   .empty__nfts {
     width: 100%;
 
+    .image-bubble {
+      display: flex;
+      justify-content: center;
+    }
+
     h1.title {
       font-family: $sharpGroteskSemiBoldFont;
       font-style: normal;
@@ -47,6 +52,11 @@
       color: rgba(0, 0, 0, 0.6);
       max-width: 440px;
       margin: 16px auto 40px;
+    }
+
+    .create--nft--dropdown {
+      display: flex;
+      margin: 0 auto;
     }
 
     button.mint__btn {
