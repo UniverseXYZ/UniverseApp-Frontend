@@ -1,8 +1,10 @@
 import axios from 'axios';
+import { ethers } from 'ethers';
 
 import { OrderAssetClass } from '../enums';
 import { IOrder, IOrderBackend } from '../types';
 import { mapBackendOrder } from '../helpers';
+
 
 export interface IGetOrdersApiParams {
   page: number;
@@ -38,6 +40,10 @@ export const GetOrdersApi: IGetOrdersApiFn = async (params = {}) => {
 
 export const GetActiveSellOrdersApi: IGetOrdersApiFn = async (params = {}) => {
   const url = `${process.env.REACT_APP_MARKETPLACE_BACKEND}/v1/orders/browse`;
+
+  if (params.collection) {
+    params.collection = ethers.utils.getAddress(params.collection);
+  }
 
   const { data: [orders, total] } = await axios.get<IGetOrdersApiResponse>(url, { params });
 

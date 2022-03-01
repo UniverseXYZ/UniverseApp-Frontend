@@ -6,6 +6,8 @@ import { ISearchBarValue } from './types';
 import { ISearchBarDropdownCollection } from '../../../nft/types';
 import { Loading } from '../../../../components';
 import { getCollectionBackgroundColor } from '../../../../../utils/helpers';
+
+const MIN_CHARS_LENGTH = 3;
 interface IStyles {
   selectedItemsContainer: BoxProps;
   selectedItem: BoxProps;
@@ -142,7 +144,10 @@ export const SearchSelect = (props: ISearchSelectProps) => {
       searchValue: searchedValue.target.value
     };
     setValue(result);
-    onChange(result);
+
+    if (result.searchValue.length > MIN_CHARS_LENGTH) {
+      onChange(result);
+    }
   };
 
   const getRandomInt = useCallback((max) => {
