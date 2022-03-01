@@ -27,13 +27,16 @@ export const NFTItemAsset = ({ NFT, renderAssetLabel, orderEnd }: INFTItemAssetP
 
   return (
     <Box ref={ref} pos={'relative'}>
-
-      <Box {...styles.AssetStyle(width)}>
-        {!NFT.artworkType && <NFTAssetBroken/>}
-        {isImage && (<Image src={NFT.thumbnailUrl} alt={NFT.name} />)}
-        {isVideo && (<video src={NFT.thumbnailUrl} />)}
-        {isAudio && (<Image src={AudioNFTPreviewImage} alt={NFT.name} />)}
-      </Box>
+      {NFT.artworkType ? 
+        <Box {...styles.AssetStyle(width)}>
+          {isImage && (<Image src={NFT.thumbnailUrl} alt={NFT.name} />)}
+          {isVideo && (<video src={NFT.thumbnailUrl} />)}
+          {isAudio && (<Image src={AudioNFTPreviewImage} alt={NFT.name} />)}
+        </Box> : 
+        <Box {...styles.BrokenAssetStyle(width)}>
+          <NFTAssetBroken />
+        </Box>
+      }
 
       {renderAssetLabel === null ? null :
         renderAssetLabel ? renderAssetLabel(NFT) : (<NFTItemAssetType NFT={NFT} />)
