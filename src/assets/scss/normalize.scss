@@ -339,6 +339,38 @@ html {
   left: 12px;
 }
 
+.mobile--filters {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  z-index: 111;
+  display: none;
+  button {
+    padding: 15px 18px;
+  }
+  .count {
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    font-family: $spaceGroteskFont;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 12px;
+    line-height: 150%;
+    color: $white;
+    min-width: 20px;
+    min-height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: $black;
+    border-radius: 50%;
+  }
+  @include md {
+    display: block;
+  }
+}
+
 @media (min-width: $screen-md-max) {
   .container {
     width: 750px;

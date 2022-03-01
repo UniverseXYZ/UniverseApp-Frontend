@@ -4,12 +4,14 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useInfiniteQuery } from 'react-query';
 import { useHistory } from 'react-router-dom';
 import { utils } from 'ethers';
+import Popup from 'reactjs-popup';
 
 import NoiseTextureImage from './../../../../../assets/images/v2/marketplace/noise_texture.png';
 import IntroDesktopBGImage from './../../../../../assets/images/v2/marketplace/img_hero_desktop.png';
 import IntroTabletBGImage from './../../../../../assets/images/v2/marketplace/img_hero_tablet.png';
 import IntroMobileBGImage from './../../../../../assets/images/v2/marketplace/img_hero_mobile.png';
 import BGImage from './../../../../../assets/images/v2/stone_bg.jpg';
+import filterIcon from './../../../../../assets/images/marketplace/filters.svg';
 import { ICollectionBackend, ISearchBarDropdownCollection } from '../../../nft/types';
 
 import {
@@ -50,6 +52,7 @@ import { TOKENS_MAP } from '../../../../constants';
 import { useThemeContext } from '../../../../../contexts/ThemeContext';
 import { CollectionPageLoader } from '../../../../../containers/collection/CollectionPageLoader';
 import { OrderAssetClass } from '../../../nft/enums';
+import BrowseFilterPopup from '../../../../../components/popups/BrowseFiltersPopup';
 
 export const BrowseNFTsPage = () => {
   const { setDarkMode } = useThemeContext() as any;
@@ -339,8 +342,8 @@ export const BrowseNFTsPage = () => {
           color: 'black',
           justifyContent: 'center',
           pt: '100px',
-          h: '150px',
-          minH: '150px',
+          h: '250px',
+          minH: '250px',
           textAlign: 'center',
         }}
       >
@@ -357,7 +360,7 @@ export const BrowseNFTsPage = () => {
           textAlign: 'center',
         }}
       >
-        <Box mt={'50px'} w={'600px'}>
+        <Box mb={'60px'} w={{ sm: '100%', md: '600px' }} ml={{ sm: '20px', md: 'auto' }} mr={{ sm: '20px', md: 'auto' }}>
           <SearchBar
             collections={collectionsResult?.pages[0]?.data || []}
             isFetchingCollections={isFetchingCollections}
@@ -451,6 +454,36 @@ export const BrowseNFTsPage = () => {
           </Flex>
         </Container>
       </Box>
+      <div className="mobile--filters">
+        <Popup
+          trigger={
+            <button type="button" className="light-button">
+              <img src={filterIcon} alt="Filter" />
+            </button>
+          }
+        >
+          {(close: any) => (
+            // TODO: need to convert this old functional with the new one -> useFormik
+            <BrowseFilterPopup
+              onClose={close}
+              // saleTypeButtons={saleTypeButtons}
+              // setSaleTypeButtons={setSaleTypeButtons}
+              // setSelectedPrice={setSelectedPrice}
+              // selectedTokenIndex={selectedTokenIndex}
+              // setSelectedTokenIndex={setSelectedTokenIndex}
+              // selectedCollections={selectedCollections}
+              // setSelectedCollections={setSelectedCollections}
+              // savedCollections={savedCollections}
+              // setSavedCollections={setSavedCollections}
+              // selectedCreators={selectedCreators}
+              // setSelectedCreators={setSelectedCreators}
+              // savedCreators={savedCreators}
+              // setSavedCreators={setSavedCreators}
+            />
+          )}
+        </Popup>
+        {/* {selectedFiltersLength !== 0 && <div className="count">{selectedFiltersLength}</div>} */}
+      </div>
       <Box px={'20px'} pt={{ base: '20px', md: 0, }}>
         <Container maxW={'1360px'} pt={'0 !important'} position={'relative'}>
           {!isFetching && !ordersResult?.pages[0].data.length ?
