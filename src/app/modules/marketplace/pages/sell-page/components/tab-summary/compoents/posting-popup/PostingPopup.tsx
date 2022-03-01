@@ -17,6 +17,9 @@ import { useMarketplaceSellData } from '../../../../hooks';
 import { Status } from './enums';
 import * as styles from './styles';
 import { Loading } from '../../../../../../../../components';
+import { isNFTAssetAudio, isNFTAssetImage, isNFTAssetVideo } from '../../../../../../../nft/helpers';
+import { NFTAssetVideo } from '../../../../../../../nft/pages/nft-page/components/nft-asset-video';
+import AudioNFTPreviewImage from '../../../../../../../../../assets/images/v2/audio-nft-preview.png';
 
 interface IPostingPopupProps {
   status: Status;
@@ -25,7 +28,9 @@ interface IPostingPopupProps {
 
 export const PostingPopup = ({ status, onClose }: IPostingPopupProps) => {
   const { nft } = useMarketplaceSellData();
-
+  const isImage = isNFTAssetImage(nft.artworkType);
+  const isVideo = isNFTAssetVideo(nft.artworkType);
+  const isAudio = isNFTAssetAudio(nft.artworkType);
   const router = useHistory();
 
   const handleClickViewListing = useCallback(() => {
@@ -37,7 +42,7 @@ export const PostingPopup = ({ status, onClose }: IPostingPopupProps) => {
   }, []);
 
   return (
-    <Modal isOpen={status !== Status.HIDDEN} onClose={onClose}>
+    <Modal isCentered isOpen={status !== Status.HIDDEN} onClose={onClose}>
       <ModalOverlay />
       <ModalContent maxW={'480px'}>
         <ModalCloseButton />
@@ -52,9 +57,11 @@ export const PostingPopup = ({ status, onClose }: IPostingPopupProps) => {
           {status === Status.SUCCESS && (
             <>
               <Heading {...styles.TitleStyle} mb={'10px'}>Congratulations!</Heading>
-              <Text color={'rgba(0, 0, 0, 0.6)'} textAlign={'center'}>You have successfully bought the NFT</Text>
+              <Text color={'rgba(0, 0, 0, 0.6)'} textAlign={'center'}>You have successfully posted your listing</Text>
 
-              <Image src={nft.thumbnailUrl} {...styles.AssetCongratsStyle} />
+              {isImage && (<Image src={nft.thumbnailUrl} {...styles.AssetCongratsStyle} alt={nft.name} />)}
+              {isVideo && (<NFTAssetVideo video={nft.thumbnailUrl} {...styles.AssetCongratsStyle}/>)}
+              {isAudio && (<Image src={AudioNFTPreviewImage} {...styles.AssetCongratsStyle} alt={nft.name} />)}
 
               <Box {...styles.ButtonsContainerStyle}>
                 <Button boxShadow={'lg'} onClick={handleClickViewListing}>View listing</Button>
