@@ -9,6 +9,7 @@ import { isNFTAssetAudio, isNFTAssetImage, isNFTAssetVideo } from '../../../../h
 import * as styles from './styles';
 import { NFTItemAuctionCountdown } from '..';
 import { NFTItemAssetType } from './components';
+import { NFTAssetBroken } from '../../../../pages/nft-page/components/nft-asset-broken';
 
 interface INFTItemAssetProps {
   NFT: INFT;
@@ -26,7 +27,9 @@ export const NFTItemAsset = ({ NFT, renderAssetLabel, orderEnd }: INFTItemAssetP
 
   return (
     <Box ref={ref} pos={'relative'}>
+
       <Box {...styles.AssetStyle(width)}>
+        {!NFT.artworkType && <NFTAssetBroken/>}
         {isImage && (<Image src={NFT.thumbnailUrl} alt={NFT.name} />)}
         {isVideo && (<video src={NFT.thumbnailUrl} />)}
         {isAudio && (<Image src={AudioNFTPreviewImage} alt={NFT.name} />)}

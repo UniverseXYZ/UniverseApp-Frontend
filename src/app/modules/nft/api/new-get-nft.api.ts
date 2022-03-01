@@ -56,44 +56,49 @@ interface IGetNFTResponse {
 }
 
 export const GetNFT2Api = async (collectionAddress: string, tokenId: string | number) => {
+  try {
+    const url = `${process.env.REACT_APP_DATASCRAPER_BACKEND}/v1/tokens/${ethers.utils.getAddress(collectionAddress)}/${tokenId}`;
 
-  const url = `${process.env.REACT_APP_DATASCRAPER_BACKEND}/v1/tokens/${ethers.utils.getAddress(collectionAddress)}/${tokenId}`;
+    const { data } = await axios.get<IGetNFTResponse>(url);
+    const collectionData = await GetCollectionApi(data.contractAddress);
 
-  const { data } = await axios.get<IGetNFTResponse>(url);
+    const NFT: INFT = {
+      name: data?.metadata?.name ?? '',
+      tokenId: data.tokenId,
+      standard: data.tokenType as NFTStandard,
+      collection: collectionData,
+      tokenIds: [data.tokenId],
+      url: data?.metadata?.external_url,
+      id: data._id.toString(),
+      createdAt: new Date(data.createdAt),
+      description: data?.metadata?.description,
+      updatedAt: new Date(data.updatedAt),
+      thumbnailUrl: data?.metadata?.image_thumbnail_url,
+      originalUrl: data?.metadata?.image_original_url,
+      optimizedUrl: data?.metadata?.image_preview_url,
+      artworkType: tryGetArtworkType(data),
+      amount: 0, // TODO
+      txHash: null,
+      collectionId: 0,
+      numberOfEditions: 1,
+      properties: [],
+      tokenUri: '',
+      royalties: [],
+      _ownerAddress: data?.owners?.length ? data.owners[data.owners.length - 1].address : undefined,
+      _creatorAddress: data.firstOwner,
+      _collectionAddress: data.contractAddress,
+      _properties: data?.metadata?.attributes?.length ? data.metadata.attributes.map((attribute) => ({
+        traitType: attribute.trait_type,
+        value: attribute.value,
+        displayType: attribute.display_type,
+      })) : undefined,
+    };
 
-  const NFT: INFT = {
-    name: data.metadata?.name ?? '',
-    tokenId: data.tokenId,
-    standard: data.tokenType as NFTStandard,
-    collection: (await GetCollectionApi(data.contractAddress)),
-    tokenIds: [data.tokenId], // TODO
-    url: data.metadata?.external_url, // TODO
-    id: data._id.toString(),
-    createdAt: new Date(data.createdAt),
-    description: data.metadata?.description,
-    updatedAt: new Date(data.updatedAt),
-    thumbnailUrl: data.metadata?.image_thumbnail_url,
-    originalUrl: data.metadata?.image_original_url,
-    optimizedUrl: data.metadata?.image_preview_url, 
-    artworkType: tryGetArtworkType(data),
-    amount: 0, // TODO
-    txHash: null,
-    collectionId: 0,
-    numberOfEditions: 1,
-    properties: [],
-    tokenUri: '',
-    royalties: [],
-    _ownerAddress: data.owners?.length ? data.owners[data.owners.length - 1].address : undefined,
-    _creatorAddress: data.firstOwner,
-    _collectionAddress: data.contractAddress,
-    _properties: data?.metadata?.attributes?.length ? data.metadata.attributes.map((attribute) => ({
-      traitType: attribute.trait_type,
-      value: attribute.value,
-      displayType: attribute.display_type,
-    })) : undefined,
-  };
-
-  return NFT;
+    return NFT;
+  } catch (e) {
+    console.log(e);
+    return {} as INFT;
+  }
 };
 
 const tryGetArtworkType = (data: IGetNFTResponse) => {
@@ -101,13 +106,13 @@ const tryGetArtworkType = (data: IGetNFTResponse) => {
     return data.alternativeMediaFiles[0].type as NFTArtworkType;
   }
 
-  const url = data.metadata.image_preview_url || data.metadata.image_thumbnail_url || data.metadata.image_thumbnail_url;
+  const url = data?.metadata?.image_preview_url || data?.metadata?.image_thumbnail_url || data?.metadata?.image_thumbnail_url;
   if (url) {
     const urlComponents = url.split(/[.]+/);
     const extension =  urlComponents[urlComponents.length - 1];
     return extension as NFTArtworkType;
   }
-  
+
   return "" as NFTArtworkType;
 }
 
@@ -140,7 +145,7 @@ export const GetCollectionApi = async (address: string) => {
 
     return data ? mapBackendCollection(data.collection) : undefined;
   } catch (e) {
-    console.error(e);
+    console.log(e);
     return undefined;
   }
 };
@@ -161,7 +166,7 @@ export const GetCollectionsFromScraperApi = async (search: string) : Promise<ISe
 
     return mappedData;
   } catch (e) {
-    console.error(e);
+    console.log(e);
     return [];
   }
 };

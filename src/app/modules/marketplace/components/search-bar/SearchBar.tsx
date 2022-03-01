@@ -6,7 +6,6 @@ import { ISearchBarDropdownCollection } from '../../../nft/types';
 import collectionsIcon from '../../../../../assets/images/marketplace/collections.svg';
 import { SearchSelect } from './SelectSearch';
 import { FilterCollectionsItems } from '../../mocks/filter-collections';
-import { values } from 'lodash';
 
 const DEFAULT_COLLECTIONS: ISearchBarDropdownCollection[] = FilterCollectionsItems;
 
