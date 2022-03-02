@@ -61,7 +61,7 @@ export const getTokenByAddress = (tokenAddress: string) => {
   Object.keys(contractsData).forEach((contractName: string) => {
     const contract = contractsData[contractName];
 
-    if (contract.address && contract.address.toLowerCase() === tokenAddress.toLowerCase()) {
+    if (tokenAddress && contract.address && contract.address.toLowerCase() === tokenAddress.toLowerCase()) {
       token =  TOKENS_MAP[contractName as TokenTicker];
     }
   })

@@ -1,9 +1,9 @@
-import { FC, createContext, useContext, useState } from 'react';
+import { FC, createContext, useContext, useState, useEffect } from 'react';
 import { useQuery } from 'react-query';
 import { useParams } from 'react-router-dom';
 
 import { ICollection, IERC721AssetType, INFT, IOrder, IUser } from '../../types';
-import { GetCollectionApi, GetNFT2Api, GetHistoryApi, GetOrdersApi, GetUserApi } from '../../api';
+import { GetCollectionApi, GetNFT2Api, GetHistoryApi, GetOrdersApi, GetUserApi, INFTHistory } from '../../api';
 import { OrderAssetClass } from '../../enums';
 
 export interface INFTPageContext {
@@ -17,7 +17,7 @@ export interface INFTPageContext {
   collectionAddress: string;
   refetchOffers: boolean;
   setRefetchOffers: React.Dispatch<React.SetStateAction<boolean>>;
-  history: IOrder[] | undefined;
+  history: INFTHistory | undefined;
 }
 
 export const NFTPageContext = createContext<INFTPageContext>({} as INFTPageContext);
@@ -36,7 +36,7 @@ const NFTPageProvider: FC = ({ children }) => {
     { onSuccess: (NFT) => console.log('NFT', NFT) },
   );
 
-  const { data: history } = useQuery(
+  const { data: history, refetch: refetchHistory } = useQuery(
     ['history', collectionAddress, tokenId],
     () => GetHistoryApi(collectionAddress, tokenId),
     { onSuccess: (history) => console.log('history', history) },
@@ -74,6 +74,15 @@ const NFTPageProvider: FC = ({ children }) => {
       return assetType.contract === collectionAddress && +assetType.tokenId === +tokenId && !order.cancelledTxHash;
     });
   }, { enabled: !!NFT?.id });
+
+  useEffect(() => {
+    if(refetchOffers) {
+      refetchHistory();
+      setRefetchOffers(false);
+    }
+  
+  }, [refetchOffers])
+  
 
   const value: INFTPageContext = {
     order,
