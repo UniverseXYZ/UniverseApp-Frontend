@@ -18,6 +18,7 @@ export interface INFTPageContext {
   refetchOffers: boolean;
   setRefetchOffers: React.Dispatch<React.SetStateAction<boolean>>;
   history: INFTHistory | undefined;
+  offers: { orders: IOrder[]; total: number; } | undefined;
 }
 
 export const NFTPageContext = createContext<INFTPageContext>({} as INFTPageContext);
@@ -40,6 +41,16 @@ const NFTPageProvider: FC = ({ children }) => {
     ['history', collectionAddress, tokenId],
     () => GetHistoryApi(collectionAddress, tokenId),
     { onSuccess: (history) => console.log('history', history) },
+  );
+
+  const { data: offers, refetch: refetchNFTOffers } = useQuery(
+    ['offers', collectionAddress, tokenId],
+    () => GetOrdersApi({
+      side: 0, 
+      tokenId: tokenId as unknown as number, 
+      collection: collectionAddress 
+    }),
+    { onSuccess: (offers) => console.log('offers', offers) },
   );
 
   const { data: creator } = useQuery(
@@ -78,6 +89,7 @@ const NFTPageProvider: FC = ({ children }) => {
   useEffect(() => {
     if(refetchOffers) {
       refetchHistory();
+      refetchNFTOffers();
       setRefetchOffers(false);
     }
   
@@ -96,6 +108,7 @@ const NFTPageProvider: FC = ({ children }) => {
     refetchOffers,
     setRefetchOffers,
     history,
+    offers
   };
 
   return (
