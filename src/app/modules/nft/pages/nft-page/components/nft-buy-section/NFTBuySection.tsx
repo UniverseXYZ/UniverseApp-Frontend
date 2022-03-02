@@ -210,7 +210,7 @@ export const NFTBuySection = ({ NFT, owner, NFTs, order, highestOffer, onMeasure
               <Button variant={'outline'} onClick={() => setIsCancelListingPopupOpened(true)}>Cancel listing</Button>
             </SimpleGrid>
             <Text {...styles.ContentFeeLabelStyle} textAlign={'center'} mt={'12px'}>
-              This NFT is in your wallet
+              This NFT is in your wallet and listed for <strong>{listingPrice} {order?.take.assetType.assetClass}</strong>
             </Text>
           </>
         )}
