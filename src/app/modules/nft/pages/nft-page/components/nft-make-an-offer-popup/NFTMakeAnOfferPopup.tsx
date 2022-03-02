@@ -24,11 +24,11 @@ import {
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useFormik } from 'formik';
 import { useMutation } from 'react-query';
+import { BigNumber } from 'bignumber.js';
 import axios from 'axios';
 import { Contract, ethers, utils } from 'ethers';
 import { default as dayjs } from 'dayjs';
 import * as Yup from 'yup';
-
 import * as styles from './styles';
 import { TOKENS, TOKENS_MAP } from '../../../../../../constants';
 import { Checkbox, DateTimePicker, Loading, TokenIcon } from '../../../../../../components';
@@ -219,6 +219,14 @@ export const NFTMakeAnOfferPopup = ({ nft, order, isOpen, onClose, }: INFTMakeAn
     setState(MakeAnOfferState.FORM);
   }, [isOpen]);
 
+  const handlePriceChange = (event: React.FormEvent<HTMLInputElement>) => {
+    const value = event.currentTarget.value;
+    const validPrice = Number(value) > -1 && value.length < 21;
+    if(validPrice) {
+      formik.handleChange(event);
+    }
+  }
+
   return (
     <Modal isCentered isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
@@ -260,11 +268,11 @@ export const NFTMakeAnOfferPopup = ({ nft, order, isOpen, onClose, }: INFTMakeAn
                     name={'amount'}
                     value={formik.values.amount}
                     pl={`${(tokensBtnRef.current?.clientWidth ?? 0) + (2 * 8)}px`}
-                    onChange={formik.handleChange}
+                    onChange={(event) => handlePriceChange(event)}
                     onBlur={formik.handleBlur}
                   />
                   <InputRightAddon>
-                    $ {!formik.values.amount ? '0.00' : (+formik.values.amount * tokenPrice).toFixed(2)}
+                    $ {!formik.values.amount ? '0.00' : (new BigNumber(+formik.values.amount * tokenPrice).toFixed(2))}
                   </InputRightAddon>
                 </InputGroup>
                 <FormErrorMessage>{formik.errors.amount}</FormErrorMessage>
