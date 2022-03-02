@@ -122,10 +122,8 @@ export const NFTMakeAnOfferPopup = ({ nft, order, isOpen, onClose, }: INFTMakeAn
         const salt = (await getSaltMutation.mutateAsync(address)).data.salt;
   
         const paymentToken = TOKENS_MAP[value.token as TokenTicker];
-        const paymentAmount = utils.parseUnits(
-          `${value.amount}`,
-          `${paymentToken.decimals}`
-        );
+        const paymentAmount = utils.parseUnits(value.amount, paymentToken.decimals);
+
         const contract = new Contract(contractsData[paymentToken.contractName].address, contractsData[paymentToken.contractName].abi, signer);
         const balance = await contract.balanceOf(address);
 
@@ -257,7 +255,7 @@ export const NFTMakeAnOfferPopup = ({ nft, order, isOpen, onClose, }: INFTMakeAn
                     </Menu>
                   </InputLeftElement>
                   <Input
-                    type={'number'}
+                    type={'text'}
                     placeholder={'Amount'}
                     name={'amount'}
                     value={formik.values.amount}

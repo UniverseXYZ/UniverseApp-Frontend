@@ -2,7 +2,7 @@ import { Box, Flex, Text, Link, Image, Tooltip } from '@chakra-ui/react';
 import { useState } from 'react';
 import { default as dayjs } from 'dayjs';
 import { utils } from 'ethers';
-import { TOKENS_MAP } from '../../../../../../../../constants/tokens';
+import { getTokenByAddress, TOKENS_MAP } from '../../../../../../../../constants/tokens';
 
 import { NFTTabItemWrapper } from '..';
 import { actionIcon, nameLabels } from './constants';
@@ -15,59 +15,79 @@ import EtherScanIcon from './../../../../../../../../../assets/images/etherscan.
 import { TokenTicker } from '../../../../../../../../enums';
 import { useAuthContext } from '../../../../../../../../../contexts/AuthContext';
 import { shortenEthereumAddress } from '../../../../../../../../../utils/helpers/format';
-import { IOrder } from '../../../../../../types';
+import { IERC721AssetType, IOrder } from '../../../../../../types';
+import { INFTHistory, INFTTransfer } from '../../../../../../api';
+import { getEtherscanTxUrl } from '../../../../../../../../../utils/helpers';
+import { IToken } from '../../../../../../../../types';
 
 interface ITabHistoryProps {
-  historyData?: IOrder[];
+  historyData?: INFTHistory;
 }
 
-export const TabHistory = ({ historyData = [] }: ITabHistoryProps) => {
+export const TabHistory = ({ historyData = {orderHistory: [], mintEvent: null as any} }: ITabHistoryProps) => {
   const { ethPrice } = useAuthContext() as any;
+
+  const events = [...historyData?.orderHistory, historyData?.mintEvent];
 
   return (
     <Box>
-      {historyData.map((transfer: IOrder, i: number) => {
+      {events.map((event: IOrder | any, i: number) => {
+        if (!event) {
+          return null;
+        }
+
         let type: HistoryType = HistoryType.MINTED;
-        let price: number = -1;
-
-        if (transfer.from !== ZERO_ADDRESS) {
-          const side = transfer.side;
-          const status = transfer.status;
+        let price = "";
+        let token: IToken = null as any;
+        
+        if (event.from !== ZERO_ADDRESS) {
+          const side = event.side;
+          const status = event.status;
           type = (side === 1 && status === 2) ? HistoryType.BOUGHT : (side === 1 && status === 0) ? HistoryType.LISTED : HistoryType.OFFER;
-
+          
           if (side === 0) {
-            price = +utils.formatUnits(transfer.make.value, `${TOKENS_MAP[transfer.make.assetType.assetClass as any as TokenTicker] ? TOKENS_MAP[transfer.make.assetType.assetClass as any as TokenTicker]?.decimals : 18}`);
+            token = getTokenByAddress((event.make.assetType as IERC721AssetType).contract);
+            const tokenDecimals = TOKENS_MAP[token.ticker]?.decimals ?? 18;
+            
+            price = utils.formatUnits(event.make.value, tokenDecimals);
           } else {
-            price = +utils.formatUnits(transfer.take.value, `${TOKENS_MAP[transfer.take.assetType.assetClass as TokenTicker] ? TOKENS_MAP[transfer.take.assetType.assetClass as TokenTicker]?.decimals : 18}`);
+            token = getTokenByAddress((event.take.assetType as IERC721AssetType).contract);
+            const tokenDecimals = TOKENS_MAP[token.ticker]?.decimals ?? 18;
+            
+            price = utils.formatUnits(event.take.value, tokenDecimals);
           }
         }
 
-        const expired: boolean = type === HistoryType.OFFER ? dayjs().diff(new Date(transfer.end)) > 0 : false;
+        const usdPrice = (Number(price) * ethPrice?.market_data?.current_price?.usd).toFixed(2);
+        
+        const expired: boolean = type === HistoryType.OFFER ? dayjs().diff(new Date(event.end)) > 0 : false;
 
         return (
-          <NFTTabItemWrapper key={i}>
+          <NFTTabItemWrapper key={event._id}>
             <Flex>
               <Box {...styles.ActionIconStyle} bg={actionIcon[type]} />
               <Box>
                 <Text {...styles.NameStyle}>
-                  <Box {...styles.ActionLabelStyle}>{nameLabels[type]} </Box>{ transfer.makerData && (transfer.makerData.displayName ? transfer.makerData.displayName : shortenEthereumAddress(transfer.makerData.address)) }
+                  <Box {...styles.ActionLabelStyle}>{nameLabels[type]} </Box>{ event.makerData && (event.makerData.displayName ? event.makerData.displayName : shortenEthereumAddress(event.makerData.address)) }
                 </Text>
                 <Text {...styles.AddedLabelStyle}>
-                  {getAddedAtLabel(transfer.createdAt)}
+                  {getAddedAtLabel(event.createdAt)}
                   {expired && <Box as={'span'} {...styles.ExpiredStyle}> (expired)</Box>}
                 </Text>
               </Box>
             </Flex>
             <Flex alignItems={'center'}>
-              {price > -1 && <Box textAlign={'right'}>
-                <Text {...styles.PriceStyle}>{price} WETH</Text>
-                <Text {...styles.PriceUSDStyle}>${(price * ethPrice?.market_data?.current_price?.usd).toFixed(2)}</Text>
+              {!!price && <Box textAlign={'right'}>
+                <Text {...styles.PriceStyle}>{price} {token.ticker}</Text>
+                <Text {...styles.PriceUSDStyle}>${usdPrice}</Text>
               </Box>}
-              <Link href={getEtherScanTx(transfer.hash)} target={'_blank'} ml={'16px'}>
-                <Tooltip hasArrow variant={'black'} {...styles.EtherscanTooltipStyle}>
-                  <Image src={EtherScanIcon} {...styles.EtherscanIconStyle} />
-                </Tooltip>
-              </Link>
+              {(type === HistoryType.BOUGHT || type === HistoryType.MINTED) && event.matchedTxHash &&
+                <Link href={getEtherscanTxUrl(event.matchedTxHash)} target={'_blank'} ml={'16px'}>
+                  <Tooltip hasArrow variant={'black'} {...styles.EtherscanTooltipStyle}>
+                    <Image src={EtherScanIcon} {...styles.EtherscanIconStyle} />
+                  </Tooltip>
+                </Link>
+              }
             </Flex>
           </NFTTabItemWrapper>
         );
