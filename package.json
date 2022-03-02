@@ -23,6 +23,7 @@
     "babel-preset-es2015": "^6.24.1",
     "babel-preset-react": "^6.24.1",
     "babel-register": "^6.26.0",
+    "bignumber.js": "^9.0.2",
     "dayjs": "^1.10.7",
     "domino": "^2.1.6",
     "ethereum-address": "0.0.4",
