@@ -48,7 +48,7 @@ export const TokenIcon = (
 
     if (size) {
       switch (typeof size) {
-        case 'number': return `${size}px`;
+        case 'number': return `${size}px !important`;
         case 'string': return size;
         case 'object': return size[0];
       }

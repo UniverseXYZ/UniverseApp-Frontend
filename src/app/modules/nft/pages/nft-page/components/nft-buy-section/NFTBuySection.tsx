@@ -21,16 +21,19 @@ import { utils } from 'ethers';
 import { TOKENS_MAP } from '../../../../../../constants';
 import { TokenTicker } from '../../../../../../enums';
 import { getRoyaltiesFromRegistry } from '../../../../../../../utils/marketplace/utils';
+import { HighestOffer } from './components/highest-offer';
+import { isEmpty } from '../../../../../../../utils/helpers';
 
 interface INFTBuySectionProps {
   NFT?: INFT;
   owner?: IUser;
   NFTs?: INFT[];
   order?: IOrder;
+  highestOffer?: {offer: IOrder, creator: IUser};
   onMeasureChange?: (measure: UseMeasureRect) => void;
 }
 
-export const NFTBuySection = ({ NFT, owner, NFTs, order, onMeasureChange }: INFTBuySectionProps) => {
+export const NFTBuySection = ({ NFT, owner, NFTs, order, highestOffer, onMeasureChange }: INFTBuySectionProps) => {
   const [ref, measure] = useMeasure<HTMLDivElement>();
 
   const router = useHistory();
@@ -148,7 +151,9 @@ export const NFTBuySection = ({ NFT, owner, NFTs, order, onMeasureChange }: INFT
         )}
         {state === BuyNFTSectionState.BUYER_FIXED_LISTING_BUY_N_OFFER && (
           <>
-            {/* <HighestBid /> */}
+          {!isEmpty(highestOffer?.offer) && (
+            <HighestOffer offer={highestOffer?.offer} creator={highestOffer?.creator as IUser} />
+          )}
             <SimpleGrid columns={2} spacingX={'12px'}>
               {buyNowButton()}
               <Button variant={'outline'} onClick={() => setIsMakeAnOfferPopupOpened(true)}>Make offer</Button>
@@ -170,6 +175,9 @@ export const NFTBuySection = ({ NFT, owner, NFTs, order, onMeasureChange }: INFT
         )}
         {state === BuyNFTSectionState.BUYER_NO_LISTING_OFFER && (
           <>
+          {!isEmpty(highestOffer?.offer) && (
+            <HighestOffer offer={highestOffer?.offer} creator={highestOffer?.creator as IUser} />
+          )}
           <SimpleGrid columns={1} spacingX={'12px'}>
             <Button variant={'outline'} onClick={() => setIsMakeAnOfferPopupOpened(true)}>Make offer</Button>
           </SimpleGrid>
@@ -194,8 +202,9 @@ export const NFTBuySection = ({ NFT, owner, NFTs, order, onMeasureChange }: INFT
         )}
         {state === BuyNFTSectionState.OWNER_FIXED_LISTING_CHANGE_PRICE && (
           <>
-            {/*TODO: show if highest bid exist, if not show message (below) "This NFT is in your wallet" */}
-            {/*<HighestBid />*/}
+          {!isEmpty(highestOffer?.offer) && (
+            <HighestOffer offer={highestOffer?.offer} creator={highestOffer?.creator as IUser} />
+          )}
             <SimpleGrid columns={2} spacingX={'12px'}>
               <Button boxShadow={'lg'} onClick={() => setIsChangeListingPricePopupOpened(true)}>Change price</Button>
               <Button variant={'outline'} onClick={() => setIsCancelListingPopupOpened(true)}>Cancel listing</Button>

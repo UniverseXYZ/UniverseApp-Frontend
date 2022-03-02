@@ -11,7 +11,7 @@ import {
   Tabs,
   Text,
 } from '@chakra-ui/react';
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import ReadMoreAndLess from 'react-read-more-less';
 import { UseMeasureRect } from 'react-use/lib/useMeasure';
 import { useHistory } from 'react-router-dom';
@@ -34,20 +34,26 @@ import * as styles from '../../styles';
 import * as styles2 from './styles';
 import { NFTLike } from '../../../../components/nft-item/components';
 import { NFTTransferPopup } from '../nft-transfer-popup';
-import {utils} from "ethers"
+import {BigNumber, utils} from "ethers"
 import { sendRefreshMetadataRequest } from '../../../../../../../utils/api/marketplace';
 import BGImage from '../../../../../../../assets/images/v2/stone_bg.jpg';
 import BrokenNFT from '../../../../../../../components/marketplaceNFT/BrokenNFT';
 import { NFTAssetBroken } from '../nft-asset-broken';
+import { INFT, IOrder, IUser } from '../../../../types';
+import { GetOrdersApi, GetUserApi } from '../../../../api';
 
 // TODO: hide metadata tab for not Polymorph NFT type
 export const NFTInfo = () => {
   const router = useHistory();
 
-  const { NFT, isLoading, order, creator, owner, collection, collectionAddress, history } = useNFTPageData();
+  const { NFT, isLoading, order, creator, owner, collection, collectionAddress, history, offers } = useNFTPageData();
 
   const [buySectionMeasure, setBuySectionMeasure] = useState<UseMeasureRect>();
   const [isTransferOpened, setIsTransferOpened] = useState(false);
+
+  const [highestOffer, setHighestOffer] = useState<IOrder>();
+  const [highestOfferCreator, setHighestOfferCreator] = useState<IUser>();
+  const [offerUsersMap, setUsersMap] = useState<Record<string, IUser>>({});
 
   const handleClickViewCollection = useCallback(() => {
     if (NFT.moreFromCollection && NFT.moreFromCollection[0].collection) {
@@ -78,6 +84,49 @@ export const NFTInfo = () => {
       console.log(err)
     }
   }
+
+  const getOrderOffers = async () => {
+      try {
+        const orders = offers?.orders || [];
+
+        orders?.sort((a,b) => {
+          const difference = BigNumber.from(b.make.value).sub(a.make.value).toString();
+          if (difference === "0") {
+            return 0;
+          }
+          // '-' means the difference is negative
+          if (difference.includes('-')) {
+            return -1;
+          }
+          return 1;
+        })
+        
+        const userRequests: Array<any> = [];
+        for (const order of orders) {
+          userRequests.push(GetUserApi(order.maker))
+        }
+      
+        const usersMap = (await (Promise.allSettled(userRequests))).reduce<Record<string, IUser>>((acc, response) => {
+          if(response.status !== 'fulfilled') {
+            return acc;
+          }
+
+          const user: IUser = response.value;
+          acc[user.address] = user;
+          return acc;
+        }, {});
+
+        setUsersMap(usersMap)
+        setHighestOffer(orders[0]);
+        setHighestOfferCreator(usersMap[orders[0]?.maker]);
+      }catch(err) {
+        console.error(err);
+      }
+  }
+
+  useEffect(() => {
+    getOrderOffers();
+  }, [offers])
 
   return (
     <>
@@ -168,7 +217,7 @@ export const NFTInfo = () => {
                       {/* TODO: Add implementation after release */}
                       {/* <TabPanel><TabOwners /></TabPanel> */}
                       {/* <TabPanel><TabBids /></TabPanel> */}
-                      <TabPanel><TabOffers nft={NFT} order={order}/></TabPanel>
+                      <TabPanel><TabOffers nft={NFT} order={order} offers={offers?.orders} usersMap={offerUsersMap}/></TabPanel>
                       <TabPanel><TabHistory historyData={history}/></TabPanel>
                     </TabPanels>
                   </Tabs>
@@ -177,6 +226,7 @@ export const NFTInfo = () => {
                   NFT={NFT}
                   owner={owner}
                   order={order}
+                  highestOffer={{ offer: highestOffer || {} as IOrder, creator: highestOfferCreator || {} as IUser}}
                   onMeasureChange={(measure) => setBuySectionMeasure(measure)}
                 />
               </Box>
