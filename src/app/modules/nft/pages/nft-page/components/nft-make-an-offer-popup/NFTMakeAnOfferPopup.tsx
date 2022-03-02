@@ -255,7 +255,7 @@ export const NFTMakeAnOfferPopup = ({ nft, order, isOpen, onClose, }: INFTMakeAn
                     </Menu>
                   </InputLeftElement>
                   <Input
-                    type={'string'}
+                    type={'text'}
                     placeholder={'Amount'}
                     name={'amount'}
                     value={formik.values.amount}
