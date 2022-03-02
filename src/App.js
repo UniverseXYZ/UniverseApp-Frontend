@@ -60,7 +60,7 @@ import { LayoutProvider } from './app/providers';
 import { BundlePage, NFTPage } from './app/modules/nft';
 // When the Whole App becomes TypeScript compatible, move this Popup in more appropriate place.
 import { LoadingPopup } from './app/modules/marketplace/components/popups/loading-popup';
-import { MyNFTsPage } from './app/modules/account';
+import { MyNFTsPage, UserProfilePage } from './app/modules/account';
 
 class UniverseRoute {
   constructor(
@@ -118,7 +118,8 @@ const routes = {
   // '/finalize-auction': new UniverseRoute(FinalizeAuction, true),
   // '/customize-auction-landing-page': new UniverseRoute(CustomizeAuction, true),
   // '/auction-review': new UniverseRoute(AuctionReview, true),
-  '/:artistUsername': new UniverseRoute(Artist),
+  '/:artistUsername': new UniverseRoute(UserProfilePage, false, true),
+  '/v1/:artistUsername': new UniverseRoute(Artist),
   '/collection/:collectionAddress': new UniverseRoute(Collection),
   // '/:artist/:auction': new UniverseRoute(AuctionLandingPage),
   '*': new UniverseRoute(NotFound, false, false, { exact: false }),
