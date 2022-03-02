@@ -29,6 +29,7 @@ export type IGetBestAndLastOfferResponse = {
 
 export type IGetOrdersApiFn = (params: Partial<IGetOrdersApiParams>) => Promise<{ orders: IOrder[], total: number; }>;
 export type IGetBestAndLastApiFn = (collection:string, tokenId:string) => Promise<IGetBestAndLastOfferResponse>;
+export type IGetActiveListingFn = (collection:string, tokenId:string) => Promise<IOrder | null>;
 
 export const GetOrdersApi: IGetOrdersApiFn = async (params = {}) => {
   const url = `${process.env.REACT_APP_MARKETPLACE_BACKEND}/v1/orders`;
@@ -37,6 +38,15 @@ export const GetOrdersApi: IGetOrdersApiFn = async (params = {}) => {
 
   return { total, orders: orders.map((order) => mapBackendOrder(order)) };
 };
+
+export const GetActiveListingApi: IGetActiveListingFn = async (collection:string, tokenId:string) => {
+  const url = `${process.env.REACT_APP_MARKETPLACE_BACKEND}/v1/orders/listing/${collection}/${tokenId}`;
+
+  const {data: order} = await axios.get<IOrderBackend>(url);
+
+  return order ? mapBackendOrder(order) : null
+};
+
 
 export const GetActiveSellOrdersApi: IGetOrdersApiFn = async (params = {}) => {
   const url = `${process.env.REACT_APP_MARKETPLACE_BACKEND}/v1/orders/browse`;

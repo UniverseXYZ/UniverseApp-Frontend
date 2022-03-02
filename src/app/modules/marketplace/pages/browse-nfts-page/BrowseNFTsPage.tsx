@@ -508,6 +508,7 @@ export const BrowseNFTsPage = () => {
                       <NFTItemContentWithPrice
                       name={NFT.name}
                       collection={collection}
+                      tokenId={NFT.tokenId}
                       creator={creator || undefined}
                       owner={owner || undefined}
                       order={{

@@ -60,6 +60,7 @@ export const WalletTab = () => {
                 <NFTItemContentWithPrice
                   name={NFT.name}
                   collection={collection}
+                  tokenId={NFT.tokenId}
                   creator={creator || undefined}
                   owner={owner || undefined}
                   order={{
