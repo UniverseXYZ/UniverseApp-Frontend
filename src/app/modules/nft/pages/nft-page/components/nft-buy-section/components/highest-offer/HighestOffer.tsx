@@ -17,8 +17,6 @@ interface IHighestOfferProps {
 }
 
 export const HighestOffer = ({ offer, creator }: IHighestOfferProps) => {
-  console.log(offer);
-  console.log(creator);
   const { usdPrice } = useAuthContext();
   const formattedPrice = Number(ethers.utils.formatUnits(offer?.make?.value || 0, 18));
 
