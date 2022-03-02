@@ -8,7 +8,8 @@ import {
   NFTArtworkType,
   NFTStandard,
   ICollectionScrapper,
-  ISearchBarDropdownCollection
+  ISearchBarDropdownCollection,
+  ICollection
 } from '../types';
 import { mapBackendCollection, mapBackendNft, mapBackendUser, mapDropdownCollection } from '../helpers';
 import { ethers } from 'ethers';
@@ -59,45 +60,35 @@ export const GetNFT2Api = async (collectionAddress: string, tokenId: string | nu
   try {
     const url = `${process.env.REACT_APP_DATASCRAPER_BACKEND}/v1/tokens/${ethers.utils.getAddress(collectionAddress)}/${tokenId}`;
 
-    const { data } = await axios.get<IGetNFTResponse>(url);
-    const collectionData = await GetCollectionApi(data.contractAddress);
+    const [{ data }, collectionData] = await Promise.all([
+      axios.get<IGetNFTResponse>(url),
+      GetCollectionApi(collectionAddress)
+    ])
 
-    const NFT: INFT = {
-      name: data?.metadata?.name ?? '',
-      tokenId: data.tokenId,
-      standard: data.tokenType as NFTStandard,
-      collection: collectionData,
-      tokenIds: [data.tokenId],
-      url: data?.metadata?.external_url,
-      id: data._id.toString(),
-      createdAt: new Date(data.createdAt),
-      description: data?.metadata?.description,
-      updatedAt: new Date(data.updatedAt),
-      thumbnailUrl: data?.metadata?.image_thumbnail_url,
-      originalUrl: data?.metadata?.image_original_url,
-      optimizedUrl: data?.metadata?.image_preview_url,
-      artworkType: tryGetArtworkType(data),
-      amount: 0, // TODO
-      txHash: null,
-      collectionId: 0,
-      numberOfEditions: 1,
-      properties: [],
-      tokenUri: '',
-      royalties: [],
-      _ownerAddress: data?.owners?.length ? data.owners[data.owners.length - 1].address : undefined,
-      _creatorAddress: data.firstOwner,
-      _collectionAddress: data.contractAddress,
-      _properties: data?.metadata?.attributes?.length ? data.metadata.attributes.map((attribute) => ({
-        traitType: attribute.trait_type,
-        value: attribute.value,
-        displayType: attribute.display_type,
-      })) : undefined,
-    };
+    const NFT: INFT = mapNft(data, collectionData);
 
     return NFT;
   } catch (e) {
     console.log(e);
     return {} as INFT;
+  }
+};
+
+export const GetMoreFromCollectionApi = async (collectionAddress: string, tokenId: string) => {
+  try {
+    const url = `${process.env.REACT_APP_DATASCRAPER_BACKEND}/v1/collections/${collectionAddress}/more`;
+
+    const [{ data }, collectionData] = await Promise.all([
+      axios.get<IGetNFTResponse[]>(url, {params: { excludeTokenId: tokenId, maxCount: 4 }}),
+      GetCollectionApi(collectionAddress)
+    ])
+
+    const NFT = data.map((nft: IGetNFTResponse) => mapNft(nft, collectionData));
+
+    return NFT;
+  } catch (e) {
+    console.log(e);
+    return [{}] as INFT[];
   }
 };
 
@@ -170,3 +161,37 @@ export const GetCollectionsFromScraperApi = async (search: string) : Promise<ISe
     return [];
   }
 };
+function mapNft(data: IGetNFTResponse, collectionData: ICollection | undefined): INFT {
+  return {
+    name: data?.metadata?.name ?? '',
+    tokenId: data.tokenId,
+    standard: data.tokenType as NFTStandard,
+    collection: collectionData,
+    tokenIds: [data.tokenId],
+    url: data?.metadata?.external_url,
+    id: data._id.toString(),
+    createdAt: new Date(data.createdAt),
+    description: data?.metadata?.description,
+    updatedAt: new Date(data.updatedAt),
+    thumbnailUrl: data?.metadata?.image_thumbnail_url,
+    originalUrl: data?.metadata?.image_original_url,
+    optimizedUrl: data?.metadata?.image_preview_url,
+    artworkType: tryGetArtworkType(data),
+    amount: 0,
+    txHash: null,
+    collectionId: 0,
+    numberOfEditions: 1,
+    properties: [],
+    tokenUri: '',
+    royalties: [],
+    _ownerAddress: data?.owners?.length ? data.owners[data.owners.length - 1].address : undefined,
+    _creatorAddress: data.firstOwner,
+    _collectionAddress: data.contractAddress,
+    _properties: data?.metadata?.attributes?.length ? data.metadata.attributes.map((attribute) => ({
+      traitType: attribute.trait_type,
+      value: attribute.value,
+      displayType: attribute.display_type,
+    })) : undefined,
+  };
+}
+
