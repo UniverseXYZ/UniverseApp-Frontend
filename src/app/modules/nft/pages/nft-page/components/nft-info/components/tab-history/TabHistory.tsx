@@ -63,7 +63,7 @@ export const TabHistory = ({ historyData = {orderHistory: [], mintEvent: null as
         const expired: boolean = type === HistoryType.OFFER ? dayjs().diff(new Date(event.end)) > 0 : false;
 
         return (
-          <NFTTabItemWrapper key={i}>
+          <NFTTabItemWrapper key={event._id}>
             <Flex>
               <Box {...styles.ActionIconStyle} bg={actionIcon[type]} />
               <Box>
