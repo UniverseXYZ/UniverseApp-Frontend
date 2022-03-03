@@ -47,7 +47,7 @@ export const NFTItemFooter = (
         <>
           <Flex>
             <Box sx={{ '> div': { mr: '6px', _last: { mr: 0 } } }}>
-              {!isOwner && <Button onClick={(event) => handleCheckoutModal(event)} className='buy-now' display={'none'} lineHeight={'0.5'} size='sm'>Buy now</Button>}
+              {!isOwner && <Button onClick={(event) => handleCheckoutModal(event)} className='buy-now' display={'none'} lineHeight={'0.5'} size='sm' borderRadius={'6px'}>Buy now</Button>}
               {NFT && <NFTItemFooterStandardLabel isOwner={isOwner} NFT={NFT} />}
               {NFT?.standard === NFTStandard.ERC1155 && <NFTItemFooterEditionsLabel isOwner={isOwner} NFT={NFT} />}
               {/*TODO: composition*/}
