@@ -95,6 +95,9 @@ const Footer = () => {
                   <li aria-hidden="true" onClick={() => history.push('/minting')}>
                     Minting
                   </li>
+                  <li onClick={() => history.push('/marketplace/browse')} aria-hidden="true">
+                    NFT Marketplace
+                  </li>
                   <li
                     className="disable"
                     // onClick={() =>
@@ -104,9 +107,6 @@ const Footer = () => {
                   >
                     Auction house
                     <span className="tooltiptext">Coming soon</span>
-                  </li>
-                  <li onClick={() => history.push('/marketplace/browse')} aria-hidden="true">
-                    NFT Marketplace
                   </li>
                   <li className="disable">
                     Social Media
