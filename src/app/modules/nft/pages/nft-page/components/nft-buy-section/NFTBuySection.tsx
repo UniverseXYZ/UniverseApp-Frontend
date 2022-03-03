@@ -100,7 +100,7 @@ export const NFTBuySection = ({ NFT, owner, NFTs, order, highestOffer, onMeasure
   const [isChangeListingPricePopupOpened, setIsChangeListingPricePopupOpened] = useState(false);
   const [nftRoyalties, setNftRoyalties] = useState(0);
 
-  const utcTimestamp = new Date().getTime();
+  const utcTimestamp = Math.floor(new Date().getTime() / 1000);
 
   const canCheckoutOrder = 
     (!order?.start && !order?.end) || // Order doesn't have start and end

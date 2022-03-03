@@ -146,7 +146,7 @@ export const NFTMakeAnOfferPopup = ({ nft, order, isOpen, onClose, }: INFTMakeAn
           take: order?.make,
           salt: salt,
           start: 0,
-          end: (value.expireAt as Date).getTime(),
+          end: Math.floor((value.expireAt as Date).getTime() / 1000),
           data: order?.data,
         };
 

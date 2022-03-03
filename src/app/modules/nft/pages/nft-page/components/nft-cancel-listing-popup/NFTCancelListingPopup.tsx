@@ -86,7 +86,7 @@ export const NFTCancelListingPopup = ({ order, isOpen, onClose, handleCancel }: 
           <Heading {...styles.TitleStyle} mb={'24px'}>Are you sure you want to cancel your listing?</Heading>
 
           <Text color={'rgba(0, 0, 0, 0.6)'} textAlign={'center'}>
-            Canceling your listing will unpublish this sale from Universe and requires a transaction to make sure it will never be fulfilable.
+            Canceling your listing will unpublish this sale from Universe and requires a transaction to make sure it will never be fulfillable.
           </Text>
 
           <Box {...styles.ButtonsContainerStyle}>

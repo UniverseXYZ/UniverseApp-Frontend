@@ -15,7 +15,7 @@ interface ILoadingValue {
 
 const LoadingPopupContext = createContext({} as ILoadingValue);
 
-const DEFAULT_HEADING = 'Please wait for the transaction to compleete ...';
+const DEFAULT_HEADING = 'Please wait for the transaction to complete ...';
 const DEFAULT_BODY = '';
 
 interface ILoaderProviderProps {

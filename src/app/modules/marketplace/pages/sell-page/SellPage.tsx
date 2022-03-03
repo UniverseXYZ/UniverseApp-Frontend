@@ -134,8 +134,8 @@ export const SellPage = () => {
           ).toString(),
         },
         type: 'UNIVERSE_V1',
-        start: values.startDate ? values.startDate.getTime() : 0,
-        end: values.endDate ? values.endDate.getTime() : 0,
+        start: values.startDate ? Math.floor(values.startDate.getTime()/1000) : 0,
+        end: values.endDate ? Math.floor(values.endDate.getTime() / 1000) : 0,
         data: {
           dataType: 'ORDER_DATA',
           revenueSplits: nft?.royalties?.map((royalty: any) => ({

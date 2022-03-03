@@ -23,8 +23,8 @@ export const NFTItemAsset = ({ NFT, renderAssetLabel, orderEnd }: INFTItemAssetP
   const isVideo = isNFTAssetVideo(NFT.artworkType);
   const isAudio = isNFTAssetAudio(NFT.artworkType);
 
-  const [showCountdown, setShowCountdown] = useState(!!orderEnd &&  orderEnd > new Date().getTime())
-
+  const [showCountdown, setShowCountdown] = useState(!!orderEnd && orderEnd > Math.floor(new Date().getTime() / 1000))
+  
   return (
     <Box ref={ref} pos={'relative'}>
       {NFT.artworkType ? 
@@ -41,7 +41,7 @@ export const NFTItemAsset = ({ NFT, renderAssetLabel, orderEnd }: INFTItemAssetP
       {renderAssetLabel === null ? null :
         renderAssetLabel ? renderAssetLabel(NFT) : (<NFTItemAssetType NFT={NFT} />)
       }
-      {!!orderEnd && showCountdown && <NFTItemAuctionCountdown auctionExpireDate={new Date(orderEnd)} onAuctionTimeOut={() => setShowCountdown(false)} />}
+      {!!orderEnd && showCountdown && <NFTItemAuctionCountdown auctionExpireDate={new Date(orderEnd * 1000)} onAuctionTimeOut={() => setShowCountdown(false)} />}
     </Box>
   );
 };
