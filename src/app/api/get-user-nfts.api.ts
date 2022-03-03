@@ -15,7 +15,8 @@ export const getUserNFTsApi = async (address: string, page: string | number, siz
 
   return {
     data: data.map((nft) => {
-      const extParts = nft.metadata?.image_original_url.split('.');
+      const imgUrl = nft.metadata?.image_url|| nft.metadata?.image || nft.metadata?.image_original_url || "";
+      const extParts = imgUrl.split('.');
 
       return {
         name: nft.metadata?.name ?? '',
@@ -28,9 +29,9 @@ export const getUserNFTsApi = async (address: string, page: string | number, siz
         createdAt: new Date(nft.createdAt),
         description: nft.metadata?.description,
         updatedAt: new Date(nft.updatedAt),
-        thumbnailUrl: nft.metadata?.image_url, // TODO
-        originalUrl: nft.metadata?.image_url, // TODO
-        optimizedUrl: nft.metadata?.image_url, // TODO
+        thumbnailUrl: imgUrl, // TODO
+        originalUrl: imgUrl, // TODO
+        optimizedUrl: imgUrl, // TODO
         artworkType: extParts?.length ? extParts[extParts.length - 1] as NFTArtworkType : '',
         amount: 0, // TODO
         txHash: null,
