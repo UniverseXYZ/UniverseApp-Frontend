@@ -1,8 +1,8 @@
 name: Alpha Environment
 on:
   push:
-    branches:
-    - main
+    tags:
+      - alpha-marketplace*
 
 jobs:
   build:
