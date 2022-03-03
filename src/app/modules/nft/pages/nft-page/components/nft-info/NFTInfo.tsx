@@ -32,7 +32,7 @@ import { CollectionPageLoader } from '../../../../../../../containers/collection
 import NotFound from '../../../../../../../components/notFound/NotFound';
 import * as styles from '../../styles';
 import * as styles2 from './styles';
-import { NFTLike } from '../../../../components/nft-item/components';
+import { NFTItemContentWithPrice, NFTLike } from '../../../../components/nft-item/components';
 import { NFTTransferPopup } from '../nft-transfer-popup';
 import {BigNumber, utils} from "ethers"
 import { sendRefreshMetadataRequest } from '../../../../../../../utils/api/marketplace';
@@ -41,12 +41,13 @@ import BrokenNFT from '../../../../../../../components/marketplaceNFT/BrokenNFT'
 import { NFTAssetBroken } from '../nft-asset-broken';
 import { INFT, IOrder, IUser } from '../../../../types';
 import { GetOrdersApi, GetUserApi } from '../../../../api';
+import { OrderAssetClass } from '../../../../enums';
 
 // TODO: hide metadata tab for not Polymorph NFT type
 export const NFTInfo = () => {
   const router = useHistory();
 
-  const { NFT, isLoading, order, creator, owner, collection, collectionAddress, history, offers } = useNFTPageData();
+  const { NFT, isLoading, order, creator, owner, collection, collectionAddress, history, offers, moreFromCollection } = useNFTPageData();
 
   const [buySectionMeasure, setBuySectionMeasure] = useState<UseMeasureRect>();
   const [isTransferOpened, setIsTransferOpened] = useState(false);
@@ -231,22 +232,48 @@ export const NFTInfo = () => {
                 />
               </Box>
             </Box>
-            {NFT.moreFromCollection && (
+            {moreFromCollection && (
               <Box {...styles.MoreNFTsWrapperStyle}>
                 <Heading {...styles.MoreNFTsTitleStyle}>More from this collection</Heading>
                 <Container
                   {...styles.MoreNFTsContainerStyle}
-                  w={NFT.moreFromCollection.length < 4 ? `calc(1110px / 4 * ${NFT.moreFromCollection.length})` : '100%'}
+                  w={moreFromCollection.length < 4 ? `calc(1110px / 4 * ${moreFromCollection.length})` : '100%'}
                 >
                   <SimpleGrid
                     columns={{
                       base: 1,
                       md: 2,
-                      lg: NFT.moreFromCollection.length < 4 ? NFT.moreFromCollection.length : 4,
+                      lg: moreFromCollection.length < 4 ? moreFromCollection.length : 4,
                     }}
                     spacingX={'20px'}
                   >
-                    {NFT.moreFromCollection.map((NFT) => (<NftItem key={NFT.id} NFT={NFT} collection={`${NFT.collection?.address}`} />))}
+                    {moreFromCollection.map((NFT) => !!NFT.id && (
+                    <NftItem
+                      key={NFT.id}
+                      NFT={NFT}
+                      collection={`${NFT._collectionAddress}`}
+                      renderContent={({ NFT, collection, creator, owner, bestOfferPrice, bestOfferPriceToken, lastOfferPrice, lastOfferPriceToken }) => (
+                        <NFTItemContentWithPrice
+                          name={NFT.name}
+                          collection={collection}
+                          tokenId={NFT.tokenId}
+                          creator={creator || undefined}
+                          owner={owner || undefined}
+                          order={{
+                            assetClass: OrderAssetClass.ERC721,
+                            collectionAddress: `${NFT._collectionAddress}`,
+                            tokenId: `${NFT.tokenId}`,
+                          }}
+                          bestOfferPrice={bestOfferPrice || 0}
+                          bestOfferPriceToken={bestOfferPriceToken || undefined}
+                          lastOfferPrice={lastOfferPrice || 0}
+                          lastOfferPriceToken={lastOfferPriceToken || undefined}
+        
+                        />
+                      )}
+                    />
+                    
+                    ))}
                   </SimpleGrid>
                 </Container>
                 <Button {...styles.MoreNFTsButtonStyle} onClick={handleClickViewCollection}>View collection</Button>

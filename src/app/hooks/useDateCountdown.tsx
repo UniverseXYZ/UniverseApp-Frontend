@@ -16,12 +16,16 @@ export const useDateCountdown = (_initialDate: Date, onCountDownEnd?: () => void
       return;
     }
 
-    const days = targetDate.diff(now, 'd');
-    const hours = targetDate.diff(now, 'h') - days * 24;
-    const minutes = targetDate.diff(now, 'm') - targetDate.diff(now, 'h') * 60;
-    const seconds = targetDate.diff(now, 's') - targetDate.diff(now, 'm') * 60;
+    const daysDiff = targetDate.diff(now, 'd');
+    const hoursDiff = targetDate.diff(now, 'h');
+    const minutesDiff = targetDate.diff(now, 'm');
+    const secondsDiff = targetDate.diff(now, 's');
 
-    const daysString = days ? `${days}d` : '';
+    let hours = hoursDiff - daysDiff * 24;
+    const minutes = minutesDiff - hoursDiff * 60;
+    const seconds = secondsDiff - minutesDiff * 60;
+    
+    const daysString = daysDiff ? `${daysDiff}d` : '';
     const hoursString = hours || daysString ? `${hours.toString().padStart(2, '0')}h` : '';
     const minutesString = minutes || hoursString ? `${minutes.toString().padStart(2, '0')}m` : '';
     const secondsString = `${seconds.toString().padStart(2, '0')}s`;

@@ -8,7 +8,7 @@ import { TokenTicker } from '../../../../../../enums';
 import { TokenIcon } from '../../../../../../components';
 import { TOKENS_MAP } from '../../../../../../constants';
 import { useQuery } from 'react-query';
-import { GetNFT2Api, GetOrdersApi } from '../../../../api';
+import { GetActiveListingApi, GetNFT2Api, GetOrdersApi } from '../../../../api';
 import { utils } from 'ethers';
 
 type IOrderFetchPayload = {
@@ -29,6 +29,7 @@ export interface INFTItemContentWithPriceProps {
   bestOfferPriceToken?: TokenTicker;
   lastOfferPrice?: number | string;
   lastOfferPriceToken?: TokenTicker;
+  tokenId?: string;
 }
 
 export const NFTItemContentWithPrice = (
@@ -44,33 +45,15 @@ export const NFTItemContentWithPrice = (
     bestOfferPriceToken,
     lastOfferPrice,
     lastOfferPriceToken,
+    tokenId
   }: INFTItemContentWithPriceProps
 ) => {
   const { data: order, isLoading: isLoadingOrder } = useQuery(
-    (_order as IOrder).id
-      ? ['order', (_order as IOrder).id]
-      : ['NFT', (_order as IOrderFetchPayload).collectionAddress, (_order as IOrderFetchPayload).tokenId, 'order'],
-    async () => {
-      const collectionAddress = (_order as IOrderFetchPayload).collectionAddress.toLowerCase();
-
-      const { orders } = await GetOrdersApi({
-        assetClass: (_order as IOrderFetchPayload).assetClass,
-        collection: collectionAddress,
-        // tokenId,
-        side: 1,
-      });
-
-      return orders.find((order) => {
-        const assetType = order.make.assetType as IERC721AssetType;
-        return assetType.contract === collectionAddress
-          && +assetType.tokenId === +(_order as IOrderFetchPayload).tokenId
-          && !order.cancelledTxHash;
-      });
-    },
+      ['listing', collection?.address, tokenId],
+      () => GetActiveListingApi(collection?.address ?? "", tokenId ?? ""),
     {
       retry: false,
-      staleTime: !(_order as IOrder).id ? 0 : Infinity,
-      initialData: !(_order as IOrder).id ? undefined : (_order as IOrder),
+      enabled: !!collection?.address && !!tokenId
     },
   );
 

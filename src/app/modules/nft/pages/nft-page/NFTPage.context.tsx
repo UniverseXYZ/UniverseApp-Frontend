@@ -3,7 +3,7 @@ import { useQuery } from 'react-query';
 import { useParams } from 'react-router-dom';
 
 import { ICollection, IERC721AssetType, INFT, IOrder, IUser } from '../../types';
-import { GetCollectionApi, GetNFT2Api, GetHistoryApi, GetOrdersApi, GetUserApi, INFTHistory } from '../../api';
+import { GetCollectionApi, GetNFT2Api, GetHistoryApi, GetOrdersApi, GetUserApi, INFTHistory, GetMoreFromCollectionApi } from '../../api';
 import { OrderAssetClass } from '../../enums';
 
 export interface INFTPageContext {
@@ -19,6 +19,7 @@ export interface INFTPageContext {
   setRefetchOffers: React.Dispatch<React.SetStateAction<boolean>>;
   history: INFTHistory | undefined;
   offers: { orders: IOrder[]; total: number; } | undefined;
+  moreFromCollection: INFT[] | undefined;
 }
 
 export const NFTPageContext = createContext<INFTPageContext>({} as INFTPageContext);
@@ -34,7 +35,20 @@ const NFTPageProvider: FC = ({ children }) => {
   const { data: NFT, isLoading: isLoadingNFT } = useQuery(
     ['NFT', collectionAddress, tokenId],
     () => GetNFT2Api(collectionAddress, tokenId),
-    { onSuccess: (NFT) => console.log('NFT', NFT) },
+    {
+      enabled: !!collectionAddress && !!tokenId,
+      onSuccess: (NFT) => console.log('NFT', NFT) 
+    },
+  );
+
+  const { data: moreFromCollection, isLoading: isMoreFromCollectionLoading } = useQuery(
+    ['moreFromCollection', collectionAddress, tokenId],
+    () => GetMoreFromCollectionApi(collectionAddress, tokenId),
+    {
+      enabled: !!collectionAddress && !!tokenId,
+      staleTime: Infinity,
+      onSuccess: (NFTs) => console.log('NFTs', NFTs) 
+    },
   );
 
   const { data: history, refetch: refetchHistory } = useQuery(
@@ -108,7 +122,8 @@ const NFTPageProvider: FC = ({ children }) => {
     refetchOffers,
     setRefetchOffers,
     history,
-    offers
+    offers,
+    moreFromCollection
   };
 
   return (
