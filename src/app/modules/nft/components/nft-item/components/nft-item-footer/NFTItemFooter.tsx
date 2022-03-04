@@ -31,7 +31,7 @@ export const NFTItemFooter = (
   }: INFTItemFooterProps
 ) => {
   const showLikes = false;
-   const { address } = useAuthContext() as any;
+   const { address, isAuthenticated } = useAuthContext() as any;
 
     const handleCheckoutModal = (event: React.MouseEvent<Element, MouseEvent>) => {
       event.preventDefault();
@@ -45,13 +45,15 @@ export const NFTItemFooter = (
     <Flex {...styles.WrapperStyle} {...rest}>
       {children ? children : (
         <>
-          <Flex>
+          <Flex w={'100%'} justifyContent={'space-between'}>
             <Box sx={{ '> div': { mr: '6px', _last: { mr: 0 } } }}>
-              {!isOwner && <Button onClick={(event) => handleCheckoutModal(event)} className='buy-now' display={'none'} lineHeight={'0.5'} size='sm' borderRadius={'6px'}>Buy now</Button>}
               {NFT && <NFTItemFooterStandardLabel isOwner={isOwner} NFT={NFT} />}
               {NFT?.standard === NFTStandard.ERC1155 && <NFTItemFooterEditionsLabel isOwner={isOwner} NFT={NFT} />}
               {/*TODO: composition*/}
               {/*{NFT.assets?.length && (<NFTItemFooterCompositionLabel count={NFT.assets.length ?? 0} mr={'6px'} />)}*/}
+            </Box>
+            <Box className='buy-now-box'>
+            {!isOwner && isAuthenticated && <Button onClick={(event) => handleCheckoutModal(event)} className='buy-now' display={'none'} lineHeight={'0.5'} size='sm' borderRadius={'6px'}>Buy now</Button>}
             </Box>
           </Flex>
 
