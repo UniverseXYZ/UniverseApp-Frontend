@@ -93,7 +93,7 @@ export const GetMoreFromCollectionApi = async (collectionAddress: string, tokenI
   }
 };
 
-const tryGetArtworkType = (data: IGetNFTResponse) => {
+export const tryGetArtworkType = (data: IGetNFTResponse) => {
   if (data.alternativeMediaFiles && data.alternativeMediaFiles.length && data.alternativeMediaFiles[0].type) {
     return data.alternativeMediaFiles[0].type as NFTArtworkType;
   }
