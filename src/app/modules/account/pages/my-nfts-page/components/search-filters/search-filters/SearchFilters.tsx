@@ -1,15 +1,5 @@
-import { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Popup from 'reactjs-popup';
-
-// Components & Interfaces
-import {
-  SearchNFTsField,
-  SortingDropdowns,
-  ApiSortingFilters,
-  SelectedFilters,
-  BrowseFilterPopup,
-  ISearchBarValue
-  } from '../index';
 
 // Styles
 import './SearchFilters.scss';
@@ -17,12 +7,25 @@ import './SearchFilters.scss';
 // Icons
 import filtersIcon from '../../../../../../../../assets/images/marketplace/filters.svg';
 
+// Components & Interfaces
+import {
+  SearchNFTsField,
+  SortingDropdowns,
+  ApiCollectionFilters,
+  SelectedFilters,
+  BrowseFilterPopup,
+  ISearchBarValue,
+  ICollectionFilterValue
+  } from '../index';
+
+import { ISearchBarDropdownCollection } from '../../../../../../nft/types';
 interface IPropsSearchFilter {
   searchText: ISearchBarValue;
   onChange: (values: ISearchBarValue) => void;
   selectedCollections: [];
   setSelectedCollections: (values: any) => void;
-  allCollections: [];
+  setSearchCollectionAddress: (value: ICollectionFilterValue) => void;
+  allCollections: ISearchBarDropdownCollection[];
 }
 
 type SaleButton = {
@@ -37,10 +40,9 @@ export const SearchFilters = (props: IPropsSearchFilter) => {
   const [sliderValue, setSliderValue] = useState({ min: 0.01, max: 100 });
   const [selectedTokenIndex, setSelectedTokenIndex] = useState(0);
   const [savedCollections, setSavedCollections] = useState([]);
-  // const [selectedCollections, setSelectedCollections] = useState([]);
+  const [selectedCollections, setSelectedCollections] = useState<ISearchBarDropdownCollection[]>([]);
   const [savedCreators, setSavedCreators] = useState([]);
   const [selectedCreators, setSelectedCreators] = useState([]);
-
   const [saleTypeButtons, setSaleTypeButtons] = useState<SaleButton[]>([
     {
       text: 'Buy now',
@@ -64,21 +66,26 @@ export const SearchFilters = (props: IPropsSearchFilter) => {
     },
   ]);
 
-  // useEffect(() => {
-  //   const onScroll = (e) => {
-  //     const element = document.querySelector('.search--sort--filters--section');
-  //     if (element) {
-  //       if (window.scrollY >= element.offsetTop) {
-  //         document.querySelector('header').style.position = 'absolute';
-  //       } else {
-  //         document.querySelector('header').style.position = 'fixed';
-  //       }
-  //     }
-  //   };
-  //   window.addEventListener('scroll', onScroll);
+  useEffect(() => {
+    const onScroll = () => {
+      const element = document.querySelector('.search--sort--filters--section') as HTMLElement;
 
-  //   return () => window.removeEventListener('scroll', onScroll);
-  // }, []);
+      if (element) {
+        const header = document.querySelector('header');
+        if (!header) return;
+
+        if (window.scrollY >= element.offsetTop) {
+          header.style.position = 'absolute';
+        } else {
+          header.style.position = 'fixed';
+        }
+      }
+    };
+
+    window.addEventListener('scroll', onScroll);
+
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
 
   return (
     <div className="search--sort--filters--section">
@@ -94,15 +101,9 @@ export const SearchFilters = (props: IPropsSearchFilter) => {
           onClick={() => setShowFilters(!showFilters)}
           aria-hidden="true"
         >
-          {saleTypeButtons.filter((item) => item.selected === true).length > 0 ||
-          selectedPrice ||
-          savedCollections.length > 0 ||
-          savedCreators.length > 0 ? (
+          {selectedCollections.length ? (
             <div className="tablet--selected--filters">
-              {saleTypeButtons.filter((item) => item.selected === true).length +
-                (selectedPrice && +1) +
-                savedCollections.length +
-                savedCreators.length}
+              {selectedCollections.length}
             </div>
           ) : (
             <img src={filtersIcon} alt="Filter" />
@@ -110,25 +111,14 @@ export const SearchFilters = (props: IPropsSearchFilter) => {
           Filters
         </div>
         {showFilters && (
-          <ApiSortingFilters
-            saleTypeButtons={saleTypeButtons}
-            setSaleTypeButtons={setSaleTypeButtons}
-            selectedPrice={selectedPrice}
-            setSelectedPrice={setSelectedPrice}
-            sliderValue={sliderValue}
-            setSliderValue={setSliderValue}
-            selectedTokenIndex={selectedTokenIndex}
-            setSelectedTokenIndex={setSelectedTokenIndex}
-            savedCollections={savedCollections}
-            setSavedCollections={setSavedCollections}
-            selectedCreators={selectedCreators}
-            setSelectedCreators={setSelectedCreators}
-            savedCreators={savedCreators}
-            setSavedCreators={setSavedCreators}
+        <div className="sorting--filters--list">
+          <ApiCollectionFilters
             allCollections={props.allCollections}
-            selectedCollections={props.selectedCollections}
-            setSelectedCollections={props.setSelectedCollections}
+            handleCollectionSearch={props.setSearchCollectionAddress}
+            selectedCollections={selectedCollections}
+            setSelectedCollections={setSelectedCollections}
           />
+        </div>
         )}
         {saleTypeButtons.filter((item) => item.selected === true).length > 0 ||
         selectedPrice ||

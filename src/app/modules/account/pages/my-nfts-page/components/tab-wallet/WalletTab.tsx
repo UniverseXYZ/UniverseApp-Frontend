@@ -1,6 +1,6 @@
 import { Button, SimpleGrid, Box } from '@chakra-ui/react';
 import { utils } from 'ethers';
-import { useInfiniteQuery } from 'react-query';
+import { useInfiniteQuery, useQuery } from 'react-query';
 import { useFormik } from 'formik';
 
 // Contexts
@@ -10,17 +10,19 @@ import { useErrorContext } from '../../../../../../../contexts/ErrorContext';
 // Components
 import NftCardSkeleton from '../../../../../../../components/skeletons/nftCardSkeleton/NftCardSkeleton';
 import NoNftsFound from '../../../../../../../components/myNFTs/NoNftsFound';
-import { ORDERS_PER_PAGE } from '../../../../../marketplace/pages/browse-nfts-page/constants';
 import { NftItem, NFTItemContentWithPrice } from '../../../../../nft/components';
-import { SearchFilters, ISearchBarValue } from '../search-filters';
+import { SearchFilters, ISearchBarValue, ICollectionFilterValue } from '../search-filters';
 
 // Helpers
 import { OrderAssetClass } from '../../../../../nft/enums';
 
 // API Calls & Interfaces
 import { getUserNFTsApi, IGetUserNFTsProps } from '../../../../../../api';
+import { GetCollectionApi, GetUserCollectionsFromScraperApi } from '../../../../../nft/api';
+import { IUserOwnedCollection, ISearchBarDropdownCollection } from '../../../../../nft/types';
 
 // Constants
+import { ORDERS_PER_PAGE } from '../../../../../marketplace/pages/browse-nfts-page/constants';
 const PER_PAGE = 12;
 
 export const WalletTab = () => {
@@ -34,17 +36,31 @@ export const WalletTab = () => {
     onSubmit: () => {},
   });
 
+  const collectionFilterForm = useFormik<ICollectionFilterValue>({
+    initialValues: {
+      contractAddress: '',
+    },
+    onSubmit: () => {},
+  });
+
+  /**
+   * Query for fetching user NFTs
+   * - supports search by name
+   * - supports search by collection address
+   */
   const { data: NFTsPages, fetchNextPage, hasNextPage, isFetching, isLoading, isIdle } = useInfiniteQuery([
     'user',
     address,
     searchBarForm.values,
+    collectionFilterForm.values,
     'NFTs'
   ], async ({ pageParam = 1 }) => {
       const query: IGetUserNFTsProps = {
         address: utils.getAddress(address),
         page: pageParam,
         size: PER_PAGE,
-        search: searchBarForm.values.searchValue
+        search: searchBarForm.values.searchValue,
+        tokenAddress: collectionFilterForm.values.contractAddress,
       };
 
       const NFTs = await getUserNFTsApi(query);
@@ -64,15 +80,61 @@ export const WalletTab = () => {
     },
   );
 
+  /**
+   * Query for fetching user Collections
+   * This query should only be executed once
+   */
+  const { data: UserCollections } = useQuery([
+    'user-collections',
+    address,
+    'Collections'
+  ], async () => {
+      const userCollections = await GetUserCollectionsFromScraperApi(address);
+
+      // The scraper doesn't return off chain info like (images, etc.) so we need to call the Universe Backend App for more info.
+
+      // Fetch collection (off chain) data from the Universe API
+      const getOffChainCollectionDataPromises = userCollections.map(async (c: IUserOwnedCollection) => {
+        const result = {
+          address: c.contractAddress,
+          name: c.name,
+          id: '',
+          image: undefined,
+        } as ISearchBarDropdownCollection;
+
+        const { id, coverUrl } = await GetCollectionApi(c.contractAddress);
+        result.id = id;
+        result.image = coverUrl;
+
+        return result;
+      })
+
+      const fullCollectionData = await Promise.all(getOffChainCollectionDataPromises);
+
+      return { result: fullCollectionData };
+    },
+    {
+      enabled: !!address,
+      keepPreviousData: true,
+      retry: false,
+      onError: ({ error, message }) => {
+        setErrorTitle(error);
+        setErrorBody(message);
+        setShowError(true);
+      },
+    },
+  );
+
   return (
     <>
       <Box>
         <SearchFilters
           onChange={(value) => searchBarForm.setValues(value)}
           searchText={searchBarForm.values}
+          setSearchCollectionAddress={(value) => collectionFilterForm.setValues(value)}
           setSelectedCollections={() => {}}
           selectedCollections={[]}
-          allCollections={[]}
+          allCollections={UserCollections?.result || []}
         />
       </Box>
 

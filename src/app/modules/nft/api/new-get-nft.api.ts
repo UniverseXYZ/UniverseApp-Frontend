@@ -9,7 +9,8 @@ import {
   NFTStandard,
   ICollectionScrapper,
   ISearchBarDropdownCollection,
-  ICollection
+  IUserOwnedCollection,
+  ICollection,
 } from '../types';
 import { mapBackendCollection, mapBackendNft, mapBackendUser, mapDropdownCollection } from '../helpers';
 import { ethers } from 'ethers';
@@ -124,7 +125,7 @@ export const GetUserApi = async (address: string) => {
  * @param address :string
  * @returns ICollectionBackend
  */
-export const GetCollectionApi = async (address: string) => {
+export const GetCollectionApi = async (address: string) : Promise<ICollection>=> {
   const url = `${process.env.REACT_APP_API_BASE_URL}/api/pages/collection/${address.toLowerCase()}`;
 
   try {
@@ -134,10 +135,12 @@ export const GetCollectionApi = async (address: string) => {
       }
     });
 
-    return data ? mapBackendCollection(data.collection) : undefined;
+    const mappedData: ICollection = mapBackendCollection(data.collection);
+
+    return mappedData;
   } catch (e) {
     console.log(e);
-    return undefined;
+    return {} as ICollection;
   }
 };
 
@@ -161,6 +164,7 @@ export const GetCollectionsFromScraperApi = async (search: string) : Promise<ISe
     return [];
   }
 };
+
 function mapNft(data: IGetNFTResponse, collectionData: ICollection | undefined): INFT {
   return {
     name: data?.metadata?.name ?? '',
@@ -195,3 +199,22 @@ function mapNft(data: IGetNFTResponse, collectionData: ICollection | undefined):
   };
 }
 
+
+/**
+ * Fetches user owned collections info from the Datascraper API
+ * @param address user address
+ * @returns returns all the collections from which the user has NFTs
+ */
+export const GetUserCollectionsFromScraperApi = async (address: string) : Promise<IUserOwnedCollection[]> => {
+  try {
+    const checkedAddress = ethers.utils.getAddress(address)
+    const url = `${process.env.REACT_APP_DATASCRAPER_BACKEND}/v1/collections/user/${checkedAddress}`;
+
+    const { data } = await axios.get<IUserOwnedCollection[]>(url);
+
+    return data;
+  } catch (e) {
+    console.log(e);
+    return [];
+  }
+};

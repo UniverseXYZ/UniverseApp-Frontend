@@ -76,7 +76,12 @@ export interface ISearchBarDropdownCollection {
   id: string | number;
   address: string;
   name: string;
-  image: string | null;
+  image: string | undefined;
+}
+
+export interface IUserOwnedCollection {
+  name: string;
+  contractAddress: string;
 }
 
 export interface INFTProperty {
