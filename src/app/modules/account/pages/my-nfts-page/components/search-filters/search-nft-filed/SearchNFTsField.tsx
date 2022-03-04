@@ -1,31 +1,48 @@
 import React, { useState } from 'react';
-import PropTypes from 'prop-types';
+import { DebounceInput } from 'react-debounce-input';
+
+// Icons
 import searchIcon from '../../../../../../../../assets/images/search-gray.svg';
+
+// Styles
 import './SearchField.scss';
 
+// Interfaces
+import { ISearchBarValue } from '../index';
+
+// Constants
+const MAX_CHAR_LENGTH = 32;
 interface IPropsSearchNFTsField {
-  searchValue: string;
+  searchValue: ISearchBarValue;
   placeholder: string;
-  setSearchValue: (value: any) => void;
-  resetPagination: () => void;
+  onChange: (value: ISearchBarValue) => void;
 };
 
 export const SearchNFTsField = (props: IPropsSearchNFTsField) => {
   const [focusField, setFocusField] = useState<string>('');
+  const [_value, _setLocalValue] = useState<ISearchBarValue>({ searchValue: ''});
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const charsLength = e.target.value.length;
+    if (charsLength > MAX_CHAR_LENGTH) return;
+
+    const result = {
+      searchValue: e.target.value,
+    };
+
+    _setLocalValue(result);
+    props.onChange(result);
+  }
 
   return (
     <div className={`search--field--component ${focusField}`}>
       <img className="search" src={searchIcon} alt="Search" />
-      <input
+      <DebounceInput
+        debounceTimeout={300}
         type="text"
         className="inp"
-        onChange={(e) => {
-          if (e.target.value.length <= 32) {
-            props.setSearchValue(e.target.value);
-            props.resetPagination();
-          }
-        }}
-        value={props.searchValue}
+        onChange={handleChange}
+        value={_value.searchValue}
         onFocus={() => setFocusField('focus--field')}
         onBlur={() => setFocusField('')}
         placeholder={props.placeholder}
@@ -34,15 +51,3 @@ export const SearchNFTsField = (props: IPropsSearchNFTsField) => {
     </div>
   );
 };
-
-SearchNFTsField.propTypes = {
-  searchValue: PropTypes.string.isRequired,
-  setSearchValue: PropTypes.func.isRequired,
-  resetPagination: PropTypes.func,
-};
-
-SearchNFTsField.defaultProps = {
-  resetPagination: () => {},
-};
-
-export default SearchNFTsField;

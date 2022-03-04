@@ -1,28 +1,55 @@
-import { Button, SimpleGrid, Box, Text } from '@chakra-ui/react';
+import { Button, SimpleGrid, Box } from '@chakra-ui/react';
 import { utils } from 'ethers';
-import React from 'react';
 import { useInfiniteQuery } from 'react-query';
+import { useFormik } from 'formik';
 
+// Contexts
 import { useAuthContext } from '../../../../../../../contexts/AuthContext';
 import { useErrorContext } from '../../../../../../../contexts/ErrorContext';
+
+// Components
 import NftCardSkeleton from '../../../../../../../components/skeletons/nftCardSkeleton/NftCardSkeleton';
-import { CollectionPageLoader } from '../../../../../../../containers/collection/CollectionPageLoader';
 import NoNftsFound from '../../../../../../../components/myNFTs/NoNftsFound';
 import { ORDERS_PER_PAGE } from '../../../../../marketplace/pages/browse-nfts-page/constants';
 import { NftItem, NFTItemContentWithPrice } from '../../../../../nft/components';
-import { getUserNFTsApi } from '../../../../../../api';
-import { OrderAssetClass } from '../../../../../nft/enums';
-import { SearchFilters } from '../search-filters/SearchFilters';
+import { SearchFilters, ISearchBarValue } from '../search-filters';
 
+// Helpers
+import { OrderAssetClass } from '../../../../../nft/enums';
+
+// API Calls & Interfaces
+import { getUserNFTsApi, IGetUserNFTsProps } from '../../../../../../api';
+
+// Constants
 const PER_PAGE = 12;
 
 export const WalletTab = () => {
   const { address } = useAuthContext();
   const { setShowError, setErrorTitle, setErrorBody } = useErrorContext() as any;
 
-  const { data: NFTsPages, fetchNextPage, hasNextPage, isFetching, isLoading, isIdle } = useInfiniteQuery(
-    ['user', address, 'NFTs'],
-    ({ pageParam = 1 }) => getUserNFTsApi(utils.getAddress(address), pageParam, PER_PAGE),
+  const searchBarForm = useFormik<ISearchBarValue>({
+    initialValues: {
+      searchValue: '',
+    },
+    onSubmit: () => {},
+  });
+
+  const { data: NFTsPages, fetchNextPage, hasNextPage, isFetching, isLoading, isIdle } = useInfiniteQuery([
+    'user',
+    address,
+    searchBarForm.values,
+    'NFTs'
+  ], async ({ pageParam = 1 }) => {
+      const query: IGetUserNFTsProps = {
+        address: utils.getAddress(address),
+        page: pageParam,
+        size: PER_PAGE,
+        search: searchBarForm.values.searchValue
+      };
+
+      const NFTs = await getUserNFTsApi(query);
+      return { total: NFTs.total, result: NFTs };
+    },
     {
       enabled: !!address,
       retry: false,
@@ -37,35 +64,32 @@ export const WalletTab = () => {
     },
   );
 
-  if (isIdle || isLoading) {
-    return (
-      <SimpleGrid columns={4} spacing={'30px'}>
-        <NftCardSkeleton />
-        <NftCardSkeleton />
-        <NftCardSkeleton />
-        <NftCardSkeleton />
-      </SimpleGrid>
-    );
-  }
-
   return (
     <>
       <Box>
         <SearchFilters
-          search={() => {}}
-          searchText={'input text'}
+          onChange={(value) => searchBarForm.setValues(value)}
+          searchText={searchBarForm.values}
           setSelectedCollections={() => {}}
           selectedCollections={[]}
           allCollections={[]}
-          resetPagination={() => {}}
         />
       </Box>
 
-      {NFTsPages?.pages?.length && NFTsPages.pages[0].data?.length ? (
+      {(isIdle || isLoading || isFetching) && (
+        <SimpleGrid columns={4} spacing={'30px'}>
+          <NftCardSkeleton />
+          <NftCardSkeleton />
+          <NftCardSkeleton />
+          <NftCardSkeleton />
+        </SimpleGrid>
+      )}
+
+      {NFTsPages?.pages?.length && NFTsPages?.pages[0]?.result?.data.length ? (
         <>
           <SimpleGrid columns={4} spacing={'30px'}>
             {(NFTsPages?.pages ?? []).map((page) => {
-              return page.data.map((NFT) => (
+              return page.result.data.map((NFT) => (
                 <NftItem
                   key={NFT.id}
                   NFT={NFT}
@@ -93,13 +117,13 @@ export const WalletTab = () => {
             })}
           </SimpleGrid>
 
-          {isFetching && <CollectionPageLoader />}
-
           {!isFetching && hasNextPage && (
             <Button variant={'outline'} isFullWidth={true} mt={10} onClick={() => fetchNextPage()}>Load more</Button>
           )}
         </>
-      ) : !isIdle ? <NoNftsFound /> : null}
+      ) : (
+        <NoNftsFound />
+      )}
     </>
   );
 };

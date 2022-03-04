@@ -1,20 +1,25 @@
-import React, { useState, useEffect } from 'react';
+import { useState } from 'react';
 import Popup from 'reactjs-popup';
-import './SearchFilters.scss';
-import { SearchNFTsField } from './search-nft-filed';
-import { SortingDropdowns } from './sorting-dropdown';
-import { ApiSortingFilters } from './sorting-filters';
-import { SelectedFilters } from './selected-filters';
-import { BrowseFilterPopup } from './browse-filters-popup';
-// import CollectionSortingFilters from '../marketplace/browseNFT/selectedFiltersAndSorting/CollectionSortingFilters';
-// import filtersIcon from '../../assets/images/marketplace/filters.svg';
 
-import filtersIcon from '../../../../../../../assets/images/marketplace/filters.svg';
+// Components & Interfaces
+import {
+  SearchNFTsField,
+  SortingDropdowns,
+  ApiSortingFilters,
+  SelectedFilters,
+  BrowseFilterPopup,
+  ISearchBarValue
+  } from '../index';
+
+// Styles
+import './SearchFilters.scss';
+
+// Icons
+import filtersIcon from '../../../../../../../../assets/images/marketplace/filters.svg';
 
 interface IPropsSearchFilter {
-  searchText: string;
-  search: (value: any) => void;
-  resetPagination: () => void;
+  searchText: ISearchBarValue;
+  onChange: (values: ISearchBarValue) => void;
   selectedCollections: [];
   setSelectedCollections: (values: any) => void;
   allCollections: [];
@@ -25,7 +30,6 @@ type SaleButton = {
   description: string;
   selected: boolean;
 };
-
 
 export const SearchFilters = (props: IPropsSearchFilter) => {
   const [showFilters, setShowFilters] = useState(false);
@@ -81,9 +85,8 @@ export const SearchFilters = (props: IPropsSearchFilter) => {
       <div className="search--sort--filters">
         <SearchNFTsField
           searchValue={props.searchText}
-          setSearchValue={props.search}
-          resetPagination={props.resetPagination}
-          placeholder="Search items"
+          onChange={props.onChange}
+          placeholder="Search for a NFT"
         />
         <SortingDropdowns />
         <div
