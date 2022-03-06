@@ -44,6 +44,24 @@ import { useLayout } from '../providers';
 //   return scrollY > originalRefY;
 // };
 
+export const useStaticHeader = () => {
+  const { headerRef } = useLayout();
+
+  useEffect(() => {
+    if (!headerRef.current) {
+      return;
+    }
+
+    headerRef.current.style.position = 'static';
+    document.body.style.setProperty('padding-top', '0', 'important');
+
+    return () => {
+      (headerRef.current as HTMLElement).style.position = '';
+      document.body.style.setProperty('padding-top', '');
+    }
+  }, [headerRef.current]);
+}
+
 export const useStickyHeader2 = (ref: React.RefObject<HTMLElement>) => {
   const { y: scrollY } = useWindowScroll();
   const { headerRef } = useLayout();

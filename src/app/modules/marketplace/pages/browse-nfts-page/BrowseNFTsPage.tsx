@@ -37,7 +37,7 @@ import {
   BundleItem,
 } from '../../../nft/components';
 import { IERC721AssetType, IERC721BundleAssetType, INFT, IOrder } from '../../../nft/types';
-import { useStickyHeader2 } from '../../../../hooks';
+import { useStaticHeader } from '../../../../hooks';
 import { coins } from '../../../../mocks';
 import { ORDERS_PER_PAGE } from './constants';
 import {
@@ -53,6 +53,8 @@ import { useThemeContext } from '../../../../../contexts/ThemeContext';
 import { CollectionPageLoader } from '../../../../../containers/collection/CollectionPageLoader';
 import { OrderAssetClass } from '../../../nft/enums';
 import BrowseFilterPopup from '../../../../../components/popups/BrowseFiltersPopup';
+import * as styles from './styles';
+import { useIntersection } from 'react-use';
 
 export const BrowseNFTsPage = () => {
   const { setDarkMode } = useThemeContext() as any;
@@ -177,8 +179,7 @@ export const BrowseNFTsPage = () => {
     }
 
     if (saleTypeFilterForm.values.new) {
-      const utcDateTimestamp = Math.floor((new Date()).getTime() / 1000);
-      apiFilters['beforeTimestamp'] = utcDateTimestamp
+      apiFilters['beforeTimestamp'] = Math.floor((new Date()).getTime() / 1000)
     }
 
     // NFT Filters
@@ -315,7 +316,13 @@ export const BrowseNFTsPage = () => {
 
   const filtersRef = useRef(null);
 
-  const isStickiedFilters = useStickyHeader2(filtersRef);
+  const intersection = useIntersection(filtersRef, {
+    threshold: 1,
+    root: null,
+    rootMargin: '0px'
+  });
+
+  useStaticHeader();
 
   const handleClear = useCallback(() => {
     saleTypeFilterForm.resetForm();
@@ -328,39 +335,20 @@ export const BrowseNFTsPage = () => {
   useEffect(() => setDarkMode(false), []);
 
   return (
-    <Box sx={{
-      bg: `url(${BGImage}) center / cover`
-    }}>
-      <Flex
-        sx={{
-          alignItems: 'center',
-          bg: {
-            base: `url(${IntroMobileBGImage}) center / cover`,
-            md: `url(${IntroTabletBGImage}) center / cover`,
-            lg: `url(${IntroDesktopBGImage}) center / cover`
-          },
-          color: 'black',
-          justifyContent: 'center',
-          pt: '100px',
-          h: '250px',
-          minH: '250px',
-          textAlign: 'center',
-        }}
-      >
+    <Box bg={`url(${BGImage}) center / cover`}>
+      <Flex {...styles.IntroSectionStyle}>
         <Box>
           <Text fontSize={'12px'} fontWeight={500} textTransform={'uppercase'} mb={'23px'} letterSpacing={'5px'}>Welcome to the</Text>
           <Heading as={'h1'} fontSize={'36px'}>Marketplace</Heading>
         </Box>
       </Flex>
 
-      <Flex
-        sx={{
-          alignItems: 'center',
-          justifyContent: 'center',
-          textAlign: 'center',
-        }}
-      >
-        <Box mb={'60px'} w={{ sm: '100%', md: '600px' }} ml={{ sm: '20px', md: 'auto' }} mr={{ sm: '20px', md: 'auto' }}>
+      <Flex {...styles.SearchBarWrapperStyle}>
+        <Box mb={'60px'}
+             w={{ sm: '100%', md: '600px' }}
+             ml={{ sm: '20px', md: 'auto' }}
+             mr={{ sm: '20px', md: 'auto' }}
+        >
           <SearchBar
             collections={collectionsResult?.pages[0]?.data || []}
             isFetchingCollections={isFetchingCollections}
@@ -378,13 +366,15 @@ export const BrowseNFTsPage = () => {
       <Box
         ref={filtersRef}
         sx={{
-          bg: isStickiedFilters ? 'white' : 'transparent',
+          bg: intersection?.intersectionRect.top === 0 ? 'white' : 'transparent',
           display: {
             base: 'none',
             md: 'block',
           },
           my: '20px',
           p: '20px !important',
+          position: 'sticky',
+          top: '-1px',
           transition: '200ms',
           w: '100%',
           zIndex: 30,
