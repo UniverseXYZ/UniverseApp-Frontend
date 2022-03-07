@@ -10,7 +10,7 @@ import { useState, useRef } from 'react';
 import SocialLinks from '../../../../../../../../src/components/collection/SocialLinks';
 import { useCollectionPageData } from '../../CollectionPage.context';
 import {
-  NftItem,
+  NftItem, NFTItemContentWithPrice,
 } from '../../../../components';
 import { CollectionPageLoader } from '../../../../../../../containers/collection/CollectionPageLoader';
 import { useErrorContext } from '../../../../../../../contexts/ErrorContext';
@@ -25,6 +25,7 @@ import Tabs from '../../../../../../../components/tabs/Tabs';
 import Description from '../../../../../../../components/collection/Description.jsx';
 import EmptyData from '../../../../../../../components/collection/EmptyData.jsx';
 import NoNftsFound from '../../../../../../../components/myNFTs/NoNftsFound';
+import { OrderAssetClass } from '../../../../enums';
 
 const PER_PAGE = 8;
 
@@ -41,7 +42,7 @@ export const CollectionInfo = () => {
 
   const { data: NFTsPages, fetchNextPage, hasNextPage, isFetching, isLoading, isIdle } = useInfiniteQuery(
     ['user', collectionAddress, 'NFTs'],
-    ({ pageParam = 1 }) => GetCollectionNFTsApi(utils.getAddress(collectionAddress), pageParam, PER_PAGE),
+    ({ pageParam = 349 }) => GetCollectionNFTsApi(utils.getAddress(collectionAddress), pageParam, PER_PAGE),
     {
       enabled: !!collectionAddress,
       retry: false,
@@ -151,6 +152,24 @@ export const CollectionInfo = () => {
                                       NFT={NFT}
                                       showBuyNowButton={false}
                                       collection={`${NFT._collectionAddress}`}
+                                      renderContent={({ NFT, collection, creator, owner, bestOfferPrice, bestOfferPriceToken, lastOfferPrice, lastOfferPriceToken }) => (
+                                        <NFTItemContentWithPrice
+                                        name={NFT.name}
+                                        collection={collection}
+                                        tokenId={NFT.tokenId}
+                                        creator={creator || undefined}
+                                        owner={owner || undefined}
+                                        order={{
+                                          assetClass: OrderAssetClass.ERC721,
+                                          collectionAddress: `${NFT._collectionAddress}`,
+                                          tokenId: `${NFT.tokenId}`,
+                                        }}
+                                        bestOfferPrice={bestOfferPrice || 0}
+                                        bestOfferPriceToken={bestOfferPriceToken || undefined}
+                                        lastOfferPrice={lastOfferPrice || 0}
+                                        lastOfferPriceToken={lastOfferPriceToken || undefined}
+                                        />
+                                      )}
                                     />
                                   ))
                                 })}
