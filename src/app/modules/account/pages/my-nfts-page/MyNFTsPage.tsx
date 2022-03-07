@@ -90,9 +90,7 @@ export const MyNFTsPage = () => {
       const summaryCopy = { ...summary };
 
       // Update total NFTs with the new Scraper Data
-      if (totalNFTs) {
-        summaryCopy.nfts = totalNFTs;
-      }
+      summaryCopy.nfts = totalNFTs || 0;
 
       setNftSummary(summaryCopy);
     }

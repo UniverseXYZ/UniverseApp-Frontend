@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { INFT, NFTArtworkType, NFTStandard } from '../modules/nft/types';
-
+import { tryGetArtworkType } from '../modules/nft/api';
 interface IUserNFTsResponse {
   data: any[];
   page: number;
@@ -8,15 +8,35 @@ interface IUserNFTsResponse {
   total: number;
 }
 
-export const getUserNFTsApi = async (address: string, page: string | number, size: string | number) => {
-  const url = `${process.env.REACT_APP_DATASCRAPER_BACKEND}/v1/users/${address}/tokens?page=${page}&size=${size}`;
+export interface IGetUserNFTsProps {
+  address: string;
+  page: string | number;
+  size: string | number;
+  search?: string;
+  tokenType?: string;
+  tokenAddress?: string;
+}
+
+export const getUserNFTsApi = async (props: IGetUserNFTsProps) => {
+  let url = `${process.env.REACT_APP_DATASCRAPER_BACKEND}/v1/users/${props.address}/tokens?page=${props.page}&size=${props.size}`;
+
+  if (props.search) {
+    url = url.concat('&search=' + props.search);
+  }
+
+  if (props.tokenType) {
+    url = url.concat('&tokenType=' + props.tokenType);
+  }
+
+  if (props.tokenAddress) {
+    url = url.concat('&tokenAddress=' + props.tokenAddress);
+  }
 
   const { data: { data, ...responseData } } = await axios.get<IUserNFTsResponse>(url);
 
   return {
     data: data.map((nft) => {
-      const imgUrl = nft.metadata?.image_url|| nft.metadata?.image || nft.metadata?.image_original_url || "";
-      const extParts = imgUrl.split('.');
+      const imgUrl = nft?.metadata?.image_url|| nft?.metadata?.image || nft?.metadata?.image_original_url || "";
 
       return {
         name: nft.metadata?.name ?? '',
@@ -32,7 +52,7 @@ export const getUserNFTsApi = async (address: string, page: string | number, siz
         thumbnailUrl: imgUrl, // TODO
         originalUrl: imgUrl, // TODO
         optimizedUrl: imgUrl, // TODO
-        artworkType: extParts?.length ? extParts[extParts.length - 1] as NFTArtworkType : '',
+        artworkType: tryGetArtworkType(nft),
         amount: 0, // TODO
         txHash: null,
         collectionId: 0,

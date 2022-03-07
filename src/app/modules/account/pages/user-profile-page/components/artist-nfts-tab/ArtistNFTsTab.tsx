@@ -19,7 +19,11 @@ export const ArtistNFTsTab = ({ artistAddress, onTotalLoad }: IArtistNFTsTabProp
 
   const { data: NFTsPages, fetchNextPage, hasNextPage, isFetching, isLoading, isIdle } = useInfiniteQuery(
     ['user', artistAddress, 'NFTs'],
-    ({ pageParam = 1 }) => getUserNFTsApi(utils.getAddress(artistAddress), pageParam, PER_PAGE),
+    ({ pageParam = 1 }) => getUserNFTsApi({
+      address: utils.getAddress(artistAddress),
+      page: pageParam,
+      size: PER_PAGE,
+    }),
     {
       enabled: !!artistAddress,
       retry: false,

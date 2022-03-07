@@ -7,6 +7,6 @@ export function mapDropdownCollection(
     id: collection._id,
     address: collection.contractAddress,
     name: collection.name,
-    image: null,
+    image: undefined,
   };
 }
