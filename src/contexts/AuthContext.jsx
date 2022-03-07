@@ -4,12 +4,13 @@ import { Contract, providers, utils } from 'ethers';
 import uuid from 'react-uuid';
 import WalletConnectProvider from '@walletconnect/web3-provider';
 import { useHistory } from 'react-router-dom';
-import { getEthPriceCoingecko } from '../utils/api/etherscan';
+import { getERC20PriceCoingecko, getEthPriceCoingecko } from '../utils/api/etherscan';
 import Contracts from '../contracts/contracts.json';
 import { CONNECTORS_NAMES } from '../utils/dictionary';
 import { getProfileInfo, setChallenge, userAuthenticate } from '../utils/api/profile';
 import { mapUserData } from '../utils/helpers';
 import { useErrorContext } from './ErrorContext';
+import { TokenTicker } from '../app/enums/token-ticker';
 
 const AuthContext = createContext(null);
 
@@ -39,7 +40,6 @@ const AuthContextProvider = ({ children }) => {
   const [isWalletConnected, setIsWalletConnected] = useState(false);
   const [ethereumNetwork, setEthereumNetwork] = useState('');
   const [usdEthBalance, setUsdEthBalance] = useState(0);
-  const [ethPrice, setEthPrice] = useState({});
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [showWrongNetworkPopup, setShowWrongNetworkPopup] = useState(false);
   const [universeERC721CoreContract, setUniverseERC721CoreContract] = useState(null);
@@ -47,26 +47,62 @@ const AuthContextProvider = ({ children }) => {
   const [contracts, setContracts] = useState(false);
   const [deployedCollections, setDeployedCollections] = useState([]);
   const history = useHistory();
-  const [usdPrice, setUsdPrice] = useState(0);
+  const [ethUsdPrice, setEthUsdPrice] = useState(0);
+  const [daiUsdPrice, setDaiUsdPrice] = useState(0);
+  const [usdcUsdPrice, setUsdcUsdPrice] = useState(0);
+  const [xyzUsdPrice, setXyzUsdPrice] = useState(0);
+  const [wethUsdPrice, setWethUsdPrice] = useState(0);
   // Getters
-  const getEthPriceData = async (balance) => {
-    const ethUsdPice = await getEthPriceCoingecko();
-    setUsdEthBalance(ethUsdPice?.market_data?.current_price?.usd * balance);
-    setEthPrice(ethUsdPice);
-    setUsdPrice(ethUsdPice?.market_data?.current_price?.usd);
-  };
+  useEffect(() => {
+    (async () => {
+      const ethPrice = await getEthPriceCoingecko();
+      const daiInfo = await getERC20PriceCoingecko('dai');
+      const usdcInfo = await getERC20PriceCoingecko('usd-coin');
+      const xyzInfo = await getERC20PriceCoingecko('universe-xyz');
+      const wethInfo = await getERC20PriceCoingecko('weth');
+
+      console.log(`wethPrice: ${wethInfo?.market_data?.current_price?.usd}`);
+      console.log(`ethPrice: ${ethPrice?.market_data?.current_price?.usd}`);
+      console.log(`usdcPrice: ${usdcInfo?.market_data?.current_price?.usd}`);
+      console.log(`daiPrice: ${daiInfo?.market_data?.current_price?.usd}`);
+      console.log(`xyzPrice: ${xyzInfo?.market_data?.current_price?.usd}`);
+
+      setEthUsdPrice(ethPrice?.market_data?.current_price?.usd);
+      setDaiUsdPrice(daiInfo?.market_data?.current_price?.usd);
+      setUsdcUsdPrice(usdcInfo?.market_data?.current_price?.usd);
+      setXyzUsdPrice(xyzInfo?.market_data?.current_price?.usd);
+      setWethUsdPrice(wethInfo?.market_data?.current_price?.usd);
+    })();
+  }, []);
 
   useEffect(() => {
-    if (yourBalance) {
-      getEthPriceData(yourBalance);
+    if (yourBalance && usdcUsdPrice) {
+      setUsdEthBalance(ethUsdPrice * yourBalance);
     }
-  }, [yourBalance]);
+  }, [yourBalance, usdcUsdPrice]);
 
   // HELPERS
   const clearStorageAuthData = () => {
     localStorage.removeItem('xyz_access_token');
     localStorage.removeItem('user_address');
     localStorage.removeItem('providerName');
+  };
+
+  const getTokenPriceByTicker = (ticker) => {
+    switch (ticker) {
+      case TokenTicker.ETH:
+        return ethUsdPrice;
+      case TokenTicker.USDC:
+        return usdcUsdPrice;
+      case TokenTicker.DAI:
+        return daiUsdPrice;
+      case TokenTicker.WETH:
+        return wethUsdPrice;
+      case TokenTicker.XYZ:
+        return xyzUsdPrice;
+      default:
+        return ethUsdPrice;
+    }
   };
 
   // Authentication and Web3
@@ -353,8 +389,6 @@ const AuthContextProvider = ({ children }) => {
         setEthereumNetwork,
         usdEthBalance,
         setUsdEthBalance,
-        ethPrice,
-        setEthPrice,
         isAuthenticated,
         setIsAuthenticated,
         showWrongNetworkPopup,
@@ -371,7 +405,12 @@ const AuthContextProvider = ({ children }) => {
         connectWithMetaMask,
         connectWeb3,
         connectWithWalletConnect,
-        usdPrice,
+        ethUsdPrice,
+        daiUsdPrice,
+        usdcUsdPrice,
+        xyzUsdPrice,
+        wethUsdPrice,
+        getTokenPriceByTicker,
       }}
     >
       {children}

@@ -34,19 +34,22 @@ import * as styles from '../../styles';
 import * as styles2 from './styles';
 import { NFTItemContentWithPrice, NFTLike } from '../../../../components/nft-item/components';
 import { NFTTransferPopup } from '../nft-transfer-popup';
-import {BigNumber, utils} from "ethers"
+import {BigNumber as EthersBigNumber, utils} from "ethers"
+import BigNumber from 'bignumber.js';
 import { sendRefreshMetadataRequest } from '../../../../../../../utils/api/marketplace';
 import BGImage from '../../../../../../../assets/images/v2/stone_bg.jpg';
 import BrokenNFT from '../../../../../../../components/marketplaceNFT/BrokenNFT';
 import { NFTAssetBroken } from '../nft-asset-broken';
-import { INFT, IOrder, IUser } from '../../../../types';
+import { IERC721AssetType, INFT, IOrder, IUser } from '../../../../types';
 import { GetOrdersApi, GetUserApi } from '../../../../api';
 import { OrderAssetClass } from '../../../../enums';
+import { getTokenByAddress } from '../../../../../../constants';
+import { useAuthContext } from '../../../../../../../contexts/AuthContext';
 
 // TODO: hide metadata tab for not Polymorph NFT type
 export const NFTInfo = () => {
   const router = useHistory();
-
+  const { getTokenPriceByTicker, ethUsdPrice, daiUsdPrice, usdcUsdPrice, xyzUsdPrice, wethUsdPrice } = useAuthContext() as any
   const { NFT, isLoading, order, creator, owner, collection, collectionAddress, history, offers, moreFromCollection } = useNFTPageData();
 
   const [buySectionMeasure, setBuySectionMeasure] = useState<UseMeasureRect>();
@@ -57,10 +60,10 @@ export const NFTInfo = () => {
   const [offerUsersMap, setUsersMap] = useState<Record<string, IUser>>({});
 
   const handleClickViewCollection = useCallback(() => {
-    if (NFT.moreFromCollection && NFT.moreFromCollection[0].collection) {
-      router.push(`/collection/${NFT.moreFromCollection[0].collection.address}`);
+    if (collectionAddress) {
+      router.push(`/collection/${collectionAddress}`);
     }
-  }, [NFT?.moreFromCollection]);
+  }, [collectionAddress]);
 
   const editions = useMemo<string[]>(() => NFT?.tokenIds ?? [], [NFT]);
 
@@ -90,23 +93,47 @@ export const NFTInfo = () => {
       try {
         const orders = offers?.orders || [];
 
+        const userRequests: Array<any> = [];
+        const uniqueUsers = [...Array.from(new Set(orders.map(order => order.maker)))];
+        for (const user of uniqueUsers) {
+          userRequests.push(GetUserApi(user))
+        }
+
         orders?.sort((a,b) => {
-          const difference = BigNumber.from(b.make.value).sub(a.make.value).toString();
-          if (difference === "0") {
+          // Order by USD value of orders DESC
+          const tokenContractA = (a.make.assetType as IERC721AssetType).contract;
+          const tokenA = getTokenByAddress(tokenContractA)
+          const tokenPriceA = getTokenPriceByTicker(tokenA.ticker)
+          const orderPriceA = utils.formatUnits(a.make.value, tokenA.decimals ?? 18);
+          const orderUsdPriceA = new BigNumber(orderPriceA).multipliedBy(tokenPriceA);
+
+          let tokenB = null;
+          let tokenPriceB = null;
+
+          const tokenContractB = (b.make.assetType as IERC721AssetType).contract;
+          
+          if (tokenContractA.toLowerCase() === tokenContractB.toLowerCase()) {
+            tokenB = tokenA;
+            tokenPriceB = tokenPriceA;
+          } else {
+            tokenB = getTokenByAddress(tokenContractB);
+            tokenPriceB = getTokenPriceByTicker(tokenB.ticker)
+          }
+
+          const orderPriceB = utils.formatUnits(b.make.value, tokenB.decimals ?? 18);
+          const orderUsdPriceB = new BigNumber(orderPriceB).multipliedBy(tokenPriceB);
+          
+          if (orderUsdPriceB.eq(orderUsdPriceA)) {
             return 0;
           }
-          // '-' means the difference is negative
-          if (difference.includes('-')) {
+
+          if (orderUsdPriceB.lt(orderUsdPriceA)) {
             return -1;
           }
+
           return 1;
         })
         
-        const userRequests: Array<any> = [];
-        for (const order of orders) {
-          userRequests.push(GetUserApi(order.maker))
-        }
-      
         const usersMap = (await (Promise.allSettled(userRequests))).reduce<Record<string, IUser>>((acc, response) => {
           if(response.status !== 'fulfilled') {
             return acc;
@@ -126,8 +153,10 @@ export const NFTInfo = () => {
   }
 
   useEffect(() => {
-    getOrderOffers();
-  }, [offers])
+    if (ethUsdPrice && daiUsdPrice && usdcUsdPrice && xyzUsdPrice && wethUsdPrice) {
+      getOrderOffers();
+    }
+  }, [offers, ethUsdPrice, daiUsdPrice, usdcUsdPrice, xyzUsdPrice, wethUsdPrice])
 
   return (
     <>

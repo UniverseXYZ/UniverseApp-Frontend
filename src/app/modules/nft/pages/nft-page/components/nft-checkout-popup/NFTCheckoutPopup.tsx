@@ -22,10 +22,11 @@ import WarningSVGIcon from '../../../../../../../assets/images/yellowIcon.svg';
 import ArrowSVGIcon from '../../../../../../../assets/images/arrow.svg';
 import WalletImage from '../../../../../../../assets/images/v2/wallet.png';
 import AudioNFTPreviewImage from '../../../../../../../assets/images/v2/audio-nft-preview.png';
-
+import Contracts from '../../../../../../../contracts/contracts.json';
+import { Contract, constants } from "ethers";
 import { useAuthContext } from '../../../../../../../contexts/AuthContext';
 import { useErrorContext } from '../../../../../../../contexts/ErrorContext';
-import { Checkbox, InputShadow, TokenIcon } from '../../../../../../components';
+import { Checkbox, InputShadow, Loading, TokenIcon } from '../../../../../../components';
 import { NFTType } from './components';
 import { CheckoutState } from './enums';
 import * as styles from './styles';
@@ -36,6 +37,12 @@ import { TokenTicker } from '../../../../../../enums';
 import { useMutation } from 'react-query';
 import axios from 'axios';
 import { Web3Provider } from '@ethersproject/providers';
+import { NFTCustomError } from '../nft-custom-error/NFTCustomError';
+import { getEtherscanTxUrl } from '../../../../../../../utils/helpers';
+import { formatAddress } from '../../../../../../../utils/helpers/format';
+import { useTokenPrice } from '../../../../../../hooks';
+// @ts-ignore
+const { contracts: contractsData } = Contracts[process.env.REACT_APP_NETWORK_CHAIN_ID];
 
 interface INFTCheckoutPopupProps {
   NFT?: INFT;
@@ -48,12 +55,13 @@ interface INFTCheckoutPopupProps {
 export const NFTCheckoutPopup = ({ NFT, NFTs, order, isOpen, onClose }: INFTCheckoutPopupProps) => {
   const router = useHistory();
 
-  const { address, signer, web3Provider, usdPrice } = useAuthContext() as any;
+  const { address, signer, web3Provider } = useAuthContext() as any;
   const { setShowError } = useErrorContext() as any;
   const { onCopy } = useClipboard(address);
 
   const [state, setState] = useState<CheckoutState>(CheckoutState.CHECKOUT);
   const [isNFTAudio] = useState(false);
+  const [approveTx, setApproveTx] = useState<string>('')
 
   const prepareMutation = useMutation(({ hash, data }: { hash: string, data: any }) => {
     return axios.post(`${process.env.REACT_APP_MARKETPLACE_BACKEND}/v1/orders/${hash}/prepare`, data);
@@ -64,11 +72,43 @@ export const NFTCheckoutPopup = ({ NFT, NFTs, order, isOpen, onClose }: INFTChec
   const tokenDecimals = TOKENS_MAP[tokenTicker]?.decimals ?? 18
 
   const listingPrice = Number(utils.formatUnits(order?.take.value || 0, tokenDecimals))
+  
+  const usdPrice = useTokenPrice(tokenTicker);
 
   const usdListingPrice = Math.round(listingPrice * usdPrice)
 
   const handleCheckoutClick = useCallback(async () => {
     try {
+      setState(CheckoutState.PROCESSING);
+
+      const paymentToken = TOKENS_MAP[order.take.assetType.assetClass as TokenTicker];
+
+      if (paymentToken.ticker !== TokenTicker.ETH) {
+        const paymentAmount = utils.parseUnits(order.take.value, paymentToken.decimals);
+  
+        const contract = new Contract(contractsData[paymentToken.contractName].address, contractsData[paymentToken.contractName].abi, signer);
+        const balance = await contract.balanceOf(address);
+  
+        if (paymentAmount.gt(balance)) {
+          setState(CheckoutState.INSUFFICIENT_BALANCE);
+          return;
+        }
+  
+        const allowance = await contract.allowance(address, process.env.REACT_APP_MARKETPLACE_CONTRACT);
+  
+        if(paymentAmount.gt(allowance)) {
+          setState(CheckoutState.APPROVAL);
+  
+          const approveTx = await contract.approve(process.env.REACT_APP_MARKETPLACE_CONTRACT, constants.MaxUint256);
+          setApproveTx(approveTx?.hash);
+  
+          await approveTx.wait();
+  
+          setState(CheckoutState.PROCESSING);
+        }
+
+      }
+
       const response = await prepareMutation.mutateAsync({
         hash: order.hash,
         data: {
@@ -80,17 +120,18 @@ export const NFTCheckoutPopup = ({ NFT, NFTs, order, isOpen, onClose }: INFTChec
   
       const {data, from, to, value} = response.data;
   
-      await sendSellTransaction(data, from, to, BigNumber.from(value.hex)); // TODO Test after new version of contracts and backend redeployed
+      await sendSellTransaction(data, from, to, BigNumber.from(value.hex), signer); // TODO Test after new version of contracts and backend redeployed
       setState(CheckoutState.CONGRATULATIONS);
 
     } catch(err) {
       console.log(err)      
       setShowError(true)
+      setState(CheckoutState.CHECKOUT)
     }
     
   }, [order, address]);
 
-  const sendSellTransaction = async (data: string, from: string, to: string, value: BigNumber ) => {
+  const sendSellTransaction = async (data: string, from: string, to: string, value: BigNumber, signer: any ) => {
 
     const sellTx = await (signer as Signer).sendTransaction({
       data,
@@ -179,6 +220,48 @@ export const NFTCheckoutPopup = ({ NFT, NFTs, order, isOpen, onClose }: INFTChec
                 <Button variant={'outline'} onClick={handleAddFundsClick}>Add Funds</Button>
               </Box>
             </>
+          )}
+
+          {state === CheckoutState.INSUFFICIENT_BALANCE && (
+            <NFTCustomError
+              title={`Insufficient balance`}
+              message={`You do not have enough ${TOKENS_MAP[order.take.assetType.assetClass as TokenTicker].ticker} in your wallet!`}
+            ></NFTCustomError>
+          )}
+
+          {state === CheckoutState.PROCESSING && (
+            <Box>
+              <Heading {...styles.TitleStyle} mb={'20px'}>Purchasing the NFT...</Heading>
+
+              <Text fontSize={'14px'} mx={'auto'} maxW={'260px'} textAlign={'center'}>
+                Just accept the signature request and wait for us to process your offer
+              </Text>
+
+              <Loading my={'64px'} />
+            </Box>
+          )}
+
+          {state === CheckoutState.APPROVAL && (
+            <Box>
+              <Heading {...styles.TitleStyle} mb={'20px'}>Purchasing the NFT...</Heading>
+
+              <Text fontSize={'14px'} mx={'auto'} maxW={'260px'} textAlign={'center'}>
+                Please give an approval for the specified amount ..
+              </Text>
+
+              <Loading my={'64px'} />
+
+
+              {approveTx && (
+                <Text color={'rgba(0, 0, 0, 0.6)'} textAlign={'center'} key={approveTx}>
+                  Transaction hash #{1}:{' '}
+                  <a target="_blank" href={getEtherscanTxUrl(approveTx)} rel="noreferrer" style={{color: 'blue'}}>
+                    {formatAddress(approveTx)}
+                  </a>
+                </Text>
+              )}
+
+            </Box>
           )}
 
           {state === CheckoutState.CONGRATULATIONS && (
