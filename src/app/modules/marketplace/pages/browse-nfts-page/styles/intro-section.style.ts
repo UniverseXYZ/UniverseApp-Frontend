@@ -7,9 +7,9 @@ import IntroDesktopBGImage from '../../../../../../assets/images/v2/marketplace/
 export const IntroSectionStyle: BoxProps = {
   alignItems: 'center',
   bg: {
-    base: `url(${IntroMobileBGImage}) center / cover`,
-    md: `url(${IntroTabletBGImage}) center / cover`,
-    lg: `url(${IntroDesktopBGImage}) center / cover`
+    base: `url(${IntroMobileBGImage}) bottom / cover`,
+    md: `url(${IntroTabletBGImage}) bottom / cover`,
+    lg: `url(${IntroDesktopBGImage}) bottom / cover`
   },
   color: 'black',
   justifyContent: 'center',
