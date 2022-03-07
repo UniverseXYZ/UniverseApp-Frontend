@@ -16,7 +16,7 @@ import { CollectionPageLoader } from '../../../../../../../containers/collection
 import { useErrorContext } from '../../../../../../../contexts/ErrorContext';
 import { CollectionStatistics } from './components/index';
 import { useInfiniteQuery } from 'react-query';
-import { getCollectionNFTsApi } from '../../../../api/new-get-nft.api';
+import { GetCollectionNFTsApi } from '../../../../api/new-get-nft.api';
 import { utils } from "ethers"
 import NotFound from '../../../../../../../components/notFound/NotFound';
 import BGImage from '../../../../../../../assets/images/v2/stone_bg.jpg';
@@ -41,7 +41,7 @@ export const CollectionInfo = () => {
 
   const { data: NFTsPages, fetchNextPage, hasNextPage, isFetching, isLoading, isIdle } = useInfiniteQuery(
     ['user', collectionAddress, 'NFTs'],
-    ({ pageParam = 1 }) => getCollectionNFTsApi(utils.getAddress(collectionAddress), pageParam, PER_PAGE),
+    ({ pageParam = 1 }) => GetCollectionNFTsApi(utils.getAddress(collectionAddress), pageParam, PER_PAGE),
     {
       enabled: !!collectionAddress,
       retry: false,
