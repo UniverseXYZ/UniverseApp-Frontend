@@ -25,11 +25,11 @@ const Head = () => {
     <div className="edit--my--profile--header">
       <div className="my-account-title">
         <div>
-          <h1>Edit my profile</h1>
+          <h1>Edit My Profile</h1>
         </div>
         <div className="button-section">
           <Button className="light-border-button public-button" onClick={() => handlePublicPage()}>
-            See public view
+            See Public View
           </Button>
         </div>
         <p>

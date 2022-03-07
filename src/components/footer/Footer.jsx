@@ -71,7 +71,7 @@ const Footer = () => {
               </p>
             </div>
             <div className="subscribe">
-              <p>Stay up to date with our newsletter</p>
+              <p>Stay Up to Date With Our Newsletter</p>
               <div className="form">
                 <input
                   type="email"
@@ -105,7 +105,7 @@ const Footer = () => {
                     // }
                     aria-hidden="true"
                   >
-                    Auction house
+                    Auction House
                     <span className="tooltiptext">Coming soon</span>
                   </li>
                   <li className="disable">
@@ -128,14 +128,14 @@ const Footer = () => {
                     // onClick={() => history.push('/core-drops')}
                     aria-hidden="true"
                   >
-                    OG planet drop
+                    OG Planet Drop
                     <span className="tooltiptext">Coming soon</span>
                   </li>
                 </ul>
               </div>
               <div>
                 <ul>
-                  <li>Rarity charts</li>
+                  <li>Rarity Charts</li>
                   <li onClick={() => history.push('/polymorph-rarity')} aria-hidden="true">
                     Polymorphs
                   </li>
@@ -188,7 +188,7 @@ const Footer = () => {
                     aria-hidden="true"
                     onClick={() => window.open('https://dao.universe.xyz/yield-farming')}
                   >
-                    Yield farming
+                    Yield Farming
                   </li>
                   <li aria-hidden="true" onClick={() => window.open('https://forum.universe.xyz/')}>
                     Forum
@@ -219,7 +219,7 @@ const Footer = () => {
                 )
               }
             >
-              Add liquidity to SushiSwap USDC/XYZ pool
+              Add Liquidity to SushiSwap USDC/XYZ Pool
             </span>
             <span
               aria-hidden="true"
@@ -229,7 +229,7 @@ const Footer = () => {
                 )
               }
             >
-              SushiSwap USDC/XYZ market
+              SushiSwap USDC/XYZ Market
             </span>
           </div>
           <div className="join__community">

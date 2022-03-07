@@ -6,7 +6,7 @@ const Donate = () => (
   <div className="donate--general--section">
     <div className="donate--general--section--container">
       <div className="left--block">
-        <h1>100% of the money will be donated</h1>
+        <h1>100% of the Money Will Be Donated</h1>
         <p>
           Lobby Lobsters goal is to raise money to donate to efforts that sanction decentralization.
           A Lobby Lobster is a badge for collectors which proves they helped make a difference.

@@ -17,7 +17,7 @@ const Welcome = () => {
       <div className="welcome__section__container">
         <div className="left">
           <AnimatedOnScroll animationIn="fadeIn" animationInDelay={200}>
-            <h1 className="title">Welcome to a Universe made for Artists by Artists</h1>
+            <h1 className="title">Welcome to a Universe Made for Artists by Artists</h1>
           </AnimatedOnScroll>
           <AnimatedOnScroll animationIn="fadeIn" animationInDelay={400}>
             <p className="desc">

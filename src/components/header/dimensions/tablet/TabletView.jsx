@@ -450,7 +450,7 @@ const TabletView = (props) => {
                     }}
                   >
                     <img src={myProfileIcon} alt="My Profile" />
-                    Edit my profile
+                    Edit My Profile
                   </button>
                   <button
                     type="button"
@@ -526,7 +526,7 @@ const TabletView = (props) => {
                     >
                       <img src={marketplaceIcon} alt="NFT Marketplace" />
                       <span>
-                        NFT marketplace
+                        NFT Marketplace
                         <Badge text="new" />
                       </span>
                       {/* <span className="tooltiptext">Coming soon</span> */}
@@ -542,14 +542,14 @@ const TabletView = (props) => {
                       }}
                     >
                       <img src={auctionHouseIcon} alt="Auction House" />
-                      <span>Auction house</span>
+                      <span>Auction House</span>
                       <span className="tooltiptext">Coming soon</span>
                     </button>
                   </div>
                   <div>
                     <button type="button" className="disable">
                       <img src={socialMediaIcon} alt="Social Media" />
-                      <span>Social media</span>
+                      <span>Social Media</span>
                       <span className="tooltiptext">Coming soon</span>
                     </button>
                   </div>
@@ -588,13 +588,13 @@ const TabletView = (props) => {
                       className="disable"
                     >
                       <img src={coreDropsIcon} alt="Core drops" />
-                      <span>OG planet drops</span>
+                      <span>OG Planet Drops</span>
                       <span className="tooltiptext">Coming soon</span>
                     </button>
                   </div>
                 </div>
                 <div>
-                  <p className="title">Rarity charts</p>
+                  <p className="title">Rarity Charts</p>
                   <div>
                     <button
                       type="button"
@@ -689,7 +689,7 @@ const TabletView = (props) => {
                       onClick={() => window.open('https://dao.universe.xyz/yield-farming')}
                     >
                       <img src={yieldFarmingIcon} alt="Yield Farming" />
-                      <span>Yield farming</span>
+                      <span>Yield Farming</span>
                     </button>
                   </div>
                   <div>

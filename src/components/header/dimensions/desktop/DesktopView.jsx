@@ -97,7 +97,7 @@ const DesktopView = ({
                 }}
               >
                 <img src={marketplaceIcon} alt="NFT Marketplace" />
-                <span>NFT marketplace</span>
+                <span>NFT Marketplace</span>
                 {/* <span className="tooltiptext">Coming soon</span> */}
               </button>
               <button
@@ -109,7 +109,7 @@ const DesktopView = ({
                 }}
               >
                 <img src={auctionHouseIcon} alt="Auction House" />
-                <span>Auction house</span>
+                <span>Auction House</span>
                 <span className="tooltiptext">Coming soon</span>
               </button>
               <button
@@ -120,7 +120,7 @@ const DesktopView = ({
                 }}
               >
                 <img src={socialMediaIcon} alt="Social Media" />
-                <span>Social media</span>
+                <span>Social Media</span>
                 <span className="tooltiptext">Coming soon</span>
               </button>
             </div>
@@ -132,7 +132,7 @@ const DesktopView = ({
             className="menu-li"
             onClick={() => setIsPolymorphsDropdownOpened(!isPolymorphsDropdownOpened)}
           >
-            <span className="nav__link__title">NFT drops</span>
+            <span className="nav__link__title">NFT Drops</span>
             <img className="arrow" src={arrowUP} alt="arrow" />
           </button>
           <div className="dropdown minting-drop">
@@ -163,7 +163,7 @@ const DesktopView = ({
                 // }}
               >
                 <img src={coreDropsIcon} alt="Core drops" />
-                <span>OG planet drops</span>
+                <span>OG Planet Drops</span>
                 <span className="tooltiptext">Coming soon</span>
               </button>
             </div>
@@ -175,7 +175,7 @@ const DesktopView = ({
             className="menu-li"
             onClick={() => setIsPolymorphsDropdownOpened(!isPolymorphsDropdownOpened)}
           >
-            <span className="nav__link__title">Rarity charts</span>
+            <span className="nav__link__title">Rarity Charts</span>
             <img className="arrow" src={arrowUP} alt="arrow" />
           </button>
           <div className="dropdown minting-drop">
@@ -293,7 +293,7 @@ const DesktopView = ({
                 }}
               >
                 <img src={yieldFarmingIcon} alt="Yield Farming" />
-                <span>Yield farming</span>
+                <span>Yield Farming</span>
               </button>
               <button
                 type="button"
@@ -399,7 +399,7 @@ const DesktopView = ({
                   }}
                 >
                   <img src={myProfileIcon} alt="My Profile" />
-                  Edit my profile
+                  Edit My Profile
                 </button>
                 <button
                   type="button"
