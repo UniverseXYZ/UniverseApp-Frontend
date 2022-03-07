@@ -82,27 +82,31 @@ export const NFTCheckoutPopup = ({ NFT, NFTs, order, isOpen, onClose }: INFTChec
       setState(CheckoutState.PROCESSING);
 
       const paymentToken = TOKENS_MAP[order.take.assetType.assetClass as TokenTicker];
-      const paymentAmount = utils.parseUnits(order.take.value, paymentToken.decimals);
 
-      const contract = new Contract(contractsData[paymentToken.contractName].address, contractsData[paymentToken.contractName].abi, signer);
-      const balance = await contract.balanceOf(address);
+      if (paymentToken.ticker !== TokenTicker.ETH) {
+        const paymentAmount = utils.parseUnits(order.take.value, paymentToken.decimals);
+  
+        const contract = new Contract(contractsData[paymentToken.contractName].address, contractsData[paymentToken.contractName].abi, signer);
+        const balance = await contract.balanceOf(address);
+  
+        if (paymentAmount.gt(balance)) {
+          setState(CheckoutState.INSUFFICIENT_BALANCE);
+          return;
+        }
+  
+        const allowance = await contract.allowance(address, process.env.REACT_APP_MARKETPLACE_CONTRACT);
+  
+        if(paymentAmount.gt(allowance)) {
+          setState(CheckoutState.APPROVAL);
+  
+          const approveTx = await contract.approve(process.env.REACT_APP_MARKETPLACE_CONTRACT, constants.MaxUint256);
+          setApproveTx(approveTx?.hash);
+  
+          await approveTx.wait();
+  
+          setState(CheckoutState.PROCESSING);
+        }
 
-      if (paymentAmount.gt(balance)) {
-        setState(CheckoutState.INSUFFICIENT_BALANCE);
-        return;
-      }
-
-      const allowance = await contract.allowance(address, process.env.REACT_APP_MARKETPLACE_CONTRACT);
-
-      if(paymentAmount.gt(allowance)) {
-        setState(CheckoutState.APPROVAL);
-
-        const approveTx = await contract.approve(process.env.REACT_APP_MARKETPLACE_CONTRACT, constants.MaxUint256);
-        setApproveTx(approveTx?.hash);
-
-        await approveTx.wait();
-
-        setState(CheckoutState.PROCESSING);
       }
 
       const response = await prepareMutation.mutateAsync({
@@ -116,7 +120,7 @@ export const NFTCheckoutPopup = ({ NFT, NFTs, order, isOpen, onClose }: INFTChec
   
       const {data, from, to, value} = response.data;
   
-      await sendSellTransaction(data, from, to, BigNumber.from(value.hex)); // TODO Test after new version of contracts and backend redeployed
+      await sendSellTransaction(data, from, to, BigNumber.from(value.hex), signer); // TODO Test after new version of contracts and backend redeployed
       setState(CheckoutState.CONGRATULATIONS);
 
     } catch(err) {
@@ -127,7 +131,7 @@ export const NFTCheckoutPopup = ({ NFT, NFTs, order, isOpen, onClose }: INFTChec
     
   }, [order, address]);
 
-  const sendSellTransaction = async (data: string, from: string, to: string, value: BigNumber ) => {
+  const sendSellTransaction = async (data: string, from: string, to: string, value: BigNumber, signer: any ) => {
 
     const sellTx = await (signer as Signer).sendTransaction({
       data,
