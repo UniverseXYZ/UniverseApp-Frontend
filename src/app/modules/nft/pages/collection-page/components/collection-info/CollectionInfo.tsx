@@ -16,7 +16,7 @@ import { CollectionPageLoader } from '../../../../../../../containers/collection
 import { useErrorContext } from '../../../../../../../contexts/ErrorContext';
 import { CollectionStatistics } from './components/index';
 import { useInfiniteQuery } from 'react-query';
-import { getCollectionNFTsApi } from '../../../../api/get-collection-nfts-api';
+import { getCollectionNFTsApi } from '../../../../api/new-get-nft.api';
 import { utils } from "ethers"
 import NotFound from '../../../../../../../components/notFound/NotFound';
 import BGImage from '../../../../../../../assets/images/v2/stone_bg.jpg';

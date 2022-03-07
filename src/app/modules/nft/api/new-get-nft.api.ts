@@ -17,6 +17,54 @@ import { INFTBackendType } from '../../../types';
 import { getArtworkType } from '../../../helpers';
 import { ARTWORK_TYPES } from '../../../../utils/helpers/pureFunctions/nfts';
 
+interface ICollectionNFTsResponse {
+  data: any[];
+  page: number;
+  size: string;
+  total: number;
+}
+interface IGetNFTResponse {
+  _id: string;
+  contractAddress: string;
+  tokenId: string;
+  createdAt: string;
+  needToRefresh: boolean;
+  alternativeMediaFiles: Array<{
+    type: string; // image
+    url: string;
+  }>;
+  firstOwner: string;
+  owners: Array<{
+    address: string;
+    transactionHash: string;
+    value: number;
+  }>;
+  tokenType: string;
+  updatedAt: string;
+  sentAt: string;
+  externalDomainViewUrl: string;
+  metadata: {
+    description: string;
+    name: string;
+    image: string;
+    image_url: string;
+    image_preview_url: string;
+    image_thumbnail_url: string;
+    image_original_url: string;
+    external_url: string;
+    attributes: Array<{
+      trait_type: string;
+      value: string;
+      display_type?: string;
+    }>;
+    royalties?: Array<{
+      address: string;
+      amount: number;
+    }>;
+  };
+  sentForMediaAt: string;
+}
+
 export const GetNFT2Api = async (collectionAddress: string, tokenId: string | number) => {
   try {
     const url = `${process.env.REACT_APP_DATASCRAPER_BACKEND}/v1/tokens/${ethers.utils.getAddress(collectionAddress)}/${tokenId}`;
@@ -182,5 +230,50 @@ export const GetUserCollectionsFromScraperApi = async (address: string) : Promis
   } catch (e) {
     console.log(e);
     return [];
+  }
+};
+
+export const getCollectionNFTsApi = async (address: string, page: string | number, size: string | number) => {
+  const url = `${process.env.REACT_APP_DATASCRAPER_BACKEND}/v1/collections/${address}/tokens?page=${page}&size=${size}`;
+
+  const { data: { data, ...responseData } } = await axios.get<ICollectionNFTsResponse>(url);
+
+  return {
+    data: data.map((nft) => {
+      const extParts = nft.metadata?.image_original_url.split('.');
+
+      return {
+        name: nft.metadata?.name ?? '',
+        tokenId: nft.tokenId,
+        standard: nft.tokenType as NFTStandard,
+        collection: undefined,
+        tokenIds: [nft.tokenId], // TODO
+        url: nft.metadata?.external_url, // TODO
+        id: nft._id,
+        createdAt: new Date(nft.createdAt),
+        description: nft.metadata?.description,
+        updatedAt: new Date(nft.updatedAt),
+        thumbnailUrl: nft.metadata?.image_url, // TODO
+        originalUrl: nft.metadata?.image_url, // TODO
+        optimizedUrl: nft.metadata?.image_url, // TODO
+        artworkType: extParts?.length ? extParts[extParts.length - 1] as NFTArtworkType : '',
+        amount: 0, // TODO
+        txHash: null,
+        collectionId: 0,
+        numberOfEditions: 1,
+        properties: [],
+        tokenUri: '',
+        royalties: [],
+        _ownerAddress: nft.owners?.length ? nft.owners[nft.owners.length - 1].address : undefined,
+        _creatorAddress: nft.firstOwner,
+        _collectionAddress: nft.contractAddress,
+        _properties: nft?.metadata?.attributes?.length ? nft.metadata.attributes.map((attribute: any) => ({
+          traitType: attribute.trait_type,
+          value: attribute.value,
+          displayType: attribute.display_type,
+        })) : undefined,
+      }
+    }) as INFT[],
+    ...responseData,
   }
 };
