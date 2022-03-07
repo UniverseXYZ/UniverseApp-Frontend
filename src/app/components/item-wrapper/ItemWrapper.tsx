@@ -58,7 +58,7 @@ const useStyles: (isBundle: boolean) => Record<
         display: 'block'
       },
       '& .nft-label': {
-        display: 'none'
+        display: 'block'
       }
     },
   }), [isBundle]);
