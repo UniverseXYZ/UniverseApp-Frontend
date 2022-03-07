@@ -5,7 +5,7 @@ import { Checkbox, Dropdown, DropdownFilterContainer } from '../../../../../comp
 import { SaleTypeFilterOptions } from './constants';
 import { ISaleTypeFilterProps, ISaleTypeFilterValue } from './types';
 
-import saleTypeIcon from '../../../../../../assets/images/marketplace/sale-type.svg';
+import saleTypeIcon from '../../../../../../assets/images/v2/marketplace/filter-sale-type.svg';
 
 export const SaleTypeFilter = ({ value: _value, onChange, onClear }: ISaleTypeFilterProps) => {
   const [isOpened, setIsOpened] = useState(false);

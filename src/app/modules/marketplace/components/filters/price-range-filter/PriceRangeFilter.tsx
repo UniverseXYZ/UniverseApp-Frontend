@@ -15,7 +15,7 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Dropdown, DropdownFilterContainer, CurrencySelect } from '../../../../../components';
 import { IPriceRangeFilterProps, IPriceRangeFilterValue } from './types';
 
-import priceRangeIcon from '../../../../../../assets/images/marketplace/price-range.svg';
+import priceRangeIcon from '../../../../../../assets/images/v2/marketplace/filter-price-range.svg';
 
 export const PriceRangeFilter = ({ value: _value, isDirty, onChange, onClear }: IPriceRangeFilterProps) => {
   const [isOpened, setIsOpened] = useState(false);
