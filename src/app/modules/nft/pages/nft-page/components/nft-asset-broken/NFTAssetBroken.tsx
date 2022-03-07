@@ -1,4 +1,4 @@
-import { Image, ImageProps } from '@chakra-ui/react';
+import { Box, BoxProps, Image, ImageProps } from '@chakra-ui/react';
 import React, { useState } from 'react';
 import BrokenNFT from '../../../../../../../components/marketplaceNFT/BrokenNFT';
 import { NFTAssetFullscreen } from '../nft-asset-full-screen';
@@ -13,28 +13,24 @@ const ImageStyle: ImageProps = {
   w: 'calc(100vh - 84px - 120px)',
 }
 
-export const NFTAssetBroken = () => {
+export const NFTAssetBroken = (props: BoxProps) => {
   return (
-    <>
-      <div className="wrap">
-        <div id="broken-nft-container">
-          <div>
-            <Image
-              src={cogWheel}
-              {...ImageStyle}
-              cursor={"default"}
-            />
-          </div>
-          <div className="error-text">
-            <span>This NFT can&apos;t load yet</span>
-          </div>
-          <div className="error-text">
-            <span style={{ fontWeight: 400, fontSize: 12 }}>We&apos;re working on it</span>
-          </div>
+    <Box className="wrap" {...props}>
+      <div id="broken-nft-container">
+        <div>
+          <Image
+            src={cogWheel}
+            {...ImageStyle}
+            cursor={"default"}
+          />
+        </div>
+        <div className="error-text">
+          <span>This NFT can&apos;t load yet</span>
+        </div>
+        <div className="error-text">
+          <span style={{ fontWeight: 400, fontSize: 12 }}>We&apos;re working on it</span>
         </div>
       </div>
-
-  </>
-
+    </Box>
   )
 }

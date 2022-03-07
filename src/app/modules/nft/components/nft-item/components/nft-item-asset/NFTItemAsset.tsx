@@ -34,7 +34,7 @@ export const NFTItemAsset = ({ NFT, renderAssetLabel, orderEnd }: INFTItemAssetP
           {isAudio && (<Image src={AudioNFTPreviewImage} alt={NFT.name} />)}
         </Box> : 
         <Box {...styles.BrokenAssetStyle(width)}>
-          <NFTAssetBroken />
+          <NFTAssetBroken _before={{ borderRadius: '6px 6px 0 0' }} />
         </Box>
       }
 

@@ -5,6 +5,7 @@ import { useInfiniteQuery } from 'react-query';
 import { useHistory } from 'react-router-dom';
 import { utils } from 'ethers';
 import Popup from 'reactjs-popup';
+import { useIntersection } from 'react-use';
 
 import NoiseTextureImage from './../../../../../assets/images/v2/marketplace/noise_texture.png';
 import IntroDesktopBGImage from './../../../../../assets/images/v2/marketplace/img_hero_desktop.png';
@@ -12,7 +13,6 @@ import IntroTabletBGImage from './../../../../../assets/images/v2/marketplace/im
 import IntroMobileBGImage from './../../../../../assets/images/v2/marketplace/img_hero_mobile.png';
 import BGImage from './../../../../../assets/images/v2/stone_bg.jpg';
 import filterIcon from './../../../../../assets/images/marketplace/filters.svg';
-import { ICollectionBackend, ISearchBarDropdownCollection } from '../../../nft/types';
 
 import {
   ArtistsFilter,
@@ -32,29 +32,23 @@ import { BackToTopButton, Select } from '../../../../components';
 import {
   NftItem,
   NFTItemContentWithPrice,
-  NFTItemAsset,
-  NFTItemAuctionCountdown,
   BundleItem,
 } from '../../../nft/components';
-import { IERC721AssetType, IERC721BundleAssetType, INFT, IOrder } from '../../../nft/types';
+import { IERC721AssetType, IERC721BundleAssetType, INFT, IOrder, ICollectionBackend, ISearchBarDropdownCollection } from '../../../nft/types';
 import { useStaticHeader } from '../../../../hooks';
 import { coins } from '../../../../mocks';
 import { ORDERS_PER_PAGE } from './constants';
 import {
   GetNFT2Api,
-  GetNFTApi,
   GetActiveSellOrdersApi,
   GetCollectionsFromScraperApi,
   GetCollectionApi
 } from '../../../nft/api';
-import { TokenTicker } from '../../../../enums';
-import { TOKENS_MAP } from '../../../../constants';
 import { useThemeContext } from '../../../../../contexts/ThemeContext';
 import { CollectionPageLoader } from '../../../../../containers/collection/CollectionPageLoader';
 import { OrderAssetClass } from '../../../nft/enums';
 import BrowseFilterPopup from '../../../../../components/popups/BrowseFiltersPopup';
 import * as styles from './styles';
-import { useIntersection } from 'react-use';
 
 export const BrowseNFTsPage = () => {
   const { setDarkMode } = useThemeContext() as any;

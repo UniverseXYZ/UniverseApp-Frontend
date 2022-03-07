@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { INFT, NFTArtworkType, NFTStandard } from '../modules/nft/types';
-import { tryGetArtworkType } from '../modules/nft/api';
+import { getArtworkType } from '../helpers';
 interface IUserNFTsResponse {
   data: any[];
   page: number;
@@ -52,7 +52,7 @@ export const getUserNFTsApi = async (props: IGetUserNFTsProps) => {
         thumbnailUrl: imgUrl, // TODO
         originalUrl: imgUrl, // TODO
         optimizedUrl: imgUrl, // TODO
-        artworkType: tryGetArtworkType(nft),
+        artworkType: getArtworkType(nft),
         amount: 0, // TODO
         txHash: null,
         collectionId: 0,

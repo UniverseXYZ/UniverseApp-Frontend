@@ -97,7 +97,7 @@ export interface INFT {
   _properties?: INFTProperty[];
   id: string;
   amount: number;
-  artworkType: NFTArtworkType;
+  artworkType: NFTArtworkType | null;
   collectionId: number;
   collection?: ICollection;
   createdAt: Date;

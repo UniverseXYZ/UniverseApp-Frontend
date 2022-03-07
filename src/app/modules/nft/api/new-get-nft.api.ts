@@ -1,9 +1,9 @@
 import axios from 'axios';
+import { ethers } from 'ethers';
 
 import {
   ICollectionBackend,
   INFT,
-  INFTBackend,
   IUserBackend,
   NFTArtworkType,
   NFTStandard,
@@ -13,56 +13,15 @@ import {
   ICollection,
 } from '../types';
 import { mapBackendCollection, mapBackendNft, mapBackendUser, mapDropdownCollection } from '../helpers';
-import { ethers } from 'ethers';
-
-interface IGetNFTResponse {
-  _id: string;
-  contractAddress: string;
-  tokenId: string;
-  createdAt: string;
-  needToRefresh: boolean;
-  alternativeMediaFiles: Array<{
-    type: string; // image
-    url: string;
-  }>;
-  firstOwner: string;
-  owners: Array<{
-    address: string;
-    transactionHash: string;
-    value: number;
-  }>;
-  tokenType: string;
-  updatedAt: string;
-  sentAt: string;
-  externalDomainViewUrl: string;
-  metadata: {
-    description: string;
-    name: string;
-    image: string;
-    image_url: string;
-    image_preview_url: string;
-    image_thumbnail_url: string;
-    image_original_url: string;
-    external_url: string;
-    attributes: Array<{
-      trait_type: string;
-      value: string;
-      display_type?: string;
-    }>;
-    royalties?: Array<{
-      address: string;
-      amount: number;
-    }>;
-  };
-  sentForMediaAt: string;
-}
+import { INFTBackendType } from '../../../types';
+import { getArtworkType } from '../../../helpers';
 
 export const GetNFT2Api = async (collectionAddress: string, tokenId: string | number) => {
   try {
     const url = `${process.env.REACT_APP_DATASCRAPER_BACKEND}/v1/tokens/${ethers.utils.getAddress(collectionAddress)}/${tokenId}`;
 
     const [{ data }, collectionData] = await Promise.all([
-      axios.get<IGetNFTResponse>(url),
+      axios.get<INFTBackendType>(url),
       GetCollectionApi(collectionAddress)
     ])
 
@@ -80,11 +39,11 @@ export const GetMoreFromCollectionApi = async (collectionAddress: string, tokenI
     const url = `${process.env.REACT_APP_DATASCRAPER_BACKEND}/v1/collections/${collectionAddress}/more`;
 
     const [{ data }, collectionData] = await Promise.all([
-      axios.get<IGetNFTResponse[]>(url, {params: { excludeTokenId: tokenId, maxCount: 4 }}),
+      axios.get<INFTBackendType[]>(url, {params: { excludeTokenId: tokenId, maxCount: 4 }}),
       GetCollectionApi(collectionAddress)
     ])
 
-    const NFT = data.map((nft: IGetNFTResponse) => mapNft(nft, collectionData));
+    const NFT = data.map((nft: INFTBackendType) => mapNft(nft, collectionData));
 
     return NFT;
   } catch (e) {
@@ -92,21 +51,6 @@ export const GetMoreFromCollectionApi = async (collectionAddress: string, tokenI
     return [{}] as INFT[];
   }
 };
-
-export const tryGetArtworkType = (data: IGetNFTResponse) => {
-  if (data.alternativeMediaFiles && data.alternativeMediaFiles.length && data.alternativeMediaFiles[0].type) {
-    return data.alternativeMediaFiles[0].type as NFTArtworkType;
-  }
-
-  const url = data?.metadata?.image_preview_url || data?.metadata?.image_thumbnail_url || data?.metadata?.image_thumbnail_url;
-  if (url) {
-    const urlComponents = url.split(/[.]+/);
-    const extension =  urlComponents[urlComponents.length - 1];
-    return extension as NFTArtworkType;
-  }
-
-  return "" as NFTArtworkType;
-}
 
 export const GetUserApi = async (address: string) => {
   const url = `${process.env.REACT_APP_API_BASE_URL}/api/user/get-profile-info/${address.toLowerCase()}`;
@@ -165,7 +109,7 @@ export const GetCollectionsFromScraperApi = async (search: string) : Promise<ISe
   }
 };
 
-function mapNft(data: IGetNFTResponse, collectionData: ICollection | undefined): INFT {
+function mapNft(data: INFTBackendType, collectionData: ICollection | undefined): INFT {
   return {
     name: data?.metadata?.name ?? '',
     tokenId: data.tokenId,
@@ -180,7 +124,7 @@ function mapNft(data: IGetNFTResponse, collectionData: ICollection | undefined):
     thumbnailUrl: data?.metadata?.image_thumbnail_url,
     originalUrl: data?.metadata?.image_original_url,
     optimizedUrl: data?.metadata?.image_preview_url,
-    artworkType: tryGetArtworkType(data),
+    artworkType: getArtworkType(data),
     amount: 0,
     txHash: null,
     collectionId: 0,
@@ -191,7 +135,7 @@ function mapNft(data: IGetNFTResponse, collectionData: ICollection | undefined):
     _ownerAddress: data?.owners?.length ? data.owners[data.owners.length - 1].address : undefined,
     _creatorAddress: data.firstOwner,
     _collectionAddress: data.contractAddress,
-    _properties: data?.metadata?.attributes?.length ? data.metadata.attributes.map((attribute) => ({
+    _properties: data?.metadata?.attributes?.length ? data.metadata?.attributes.map((attribute) => ({
       traitType: attribute.trait_type,
       value: attribute.value,
       displayType: attribute.display_type,

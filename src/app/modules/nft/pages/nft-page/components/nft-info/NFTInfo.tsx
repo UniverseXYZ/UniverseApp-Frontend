@@ -1,5 +1,5 @@
 import {
-  Box,
+  Box, BoxProps,
   Button,
   Container,
   Flex,
@@ -172,7 +172,7 @@ export const NFTInfo = () => {
               bg: `url(${BGImage}) center / cover`
             }}>
               <Box {...styles.NFTAssetContainerStyle}>
-                {!NFT.artworkType && <NFTAssetBroken/>}
+                {!NFT.artworkType && <NFTAssetBroken {...styles2.BrokenAssetStyle} />}
                 {isNFTAssetImage(NFT.artworkType) &&
                   <NFTAssetImage image={NFT.optimizedUrl || NFT.originalUrl} />
                 }

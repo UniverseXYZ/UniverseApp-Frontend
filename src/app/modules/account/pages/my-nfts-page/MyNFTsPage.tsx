@@ -65,7 +65,7 @@ export const MyNFTsPage = () => {
 
   const [triggerRefetch, setTriggerRefetch] = useStateIfMounted(false);
 
-  useTitle('Universe Minting - My NFTs');
+  useTitle('Universe Minting - My NFTs', { restoreOnUnmount: true });
 
   useClickAway(createButtonRef, () => {
     setIsDropdownOpened(false);
