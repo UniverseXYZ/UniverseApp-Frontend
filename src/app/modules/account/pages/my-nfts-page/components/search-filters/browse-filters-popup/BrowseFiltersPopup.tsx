@@ -1,124 +1,85 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 
-// import SaleType from '../marketplace/browseNFT/sidebarFiltration/SaleType';
-// import Price from '../marketplace/browseNFT/sidebarFiltration/Price';
-// import Creators from '../marketplace/browseNFT/sidebarFiltration/Creators';
-// import VerifiedOnly from '../marketplace/browseNFT/sidebarFiltration/VerifiedOnly';
-import { Collections } from './Collections';
+// Components
+import { ApiCollectionsFiltersMobile } from './ApiCollectionsFiltersMobile';
 
-import salesIcon from '../../../../../../../../assets/images/marketplace/sale-type.svg';
-import priceIcon from '../../../../../../../../assets/images/marketplace/price-range.svg';
-import collectionIcon from '../../../../../../../../assets/images/marketplace/collections.svg';
-import artistIcon from '../../../../../../../../assets/images/marketplace/artist.svg';
+// Icons
 import closeIcon from '../../../../../../../../assets/images/close-menu.svg';
 
-
+// Interfaces & Types
+import { ISearchBarDropdownCollection } from '../../../../../../nft/types';
+import { ICollectionFilterValue } from '../index';
 interface IPropsBrowseFiltersPopup {
   onClose: () => void,
-  saleTypeButtons: any[],
-  setSaleTypeButtons: (values: any[]) => void,
-  setSelectedPrice: (value: number) => void,
-  selectedTokenIndex: number,
-  setSelectedTokenIndex: (value: number) => void,
-  selectedCollections: any[],
-  setSelectedCollections: (value: any) => void,
-  savedCollections: any[],
-  setSavedCollections: (value: any) => void,
-  selectedCreators: any[],
-  setSelectedCreators: (value: any) => void,
-  savedCreators: any[],
-  setSavedCreators: (value: any) => void,
+  handleCollectionSearch: (value: ICollectionFilterValue) => void,
+  allCollections: ISearchBarDropdownCollection[],
+  selectedCollections: ISearchBarDropdownCollection[],
+  setSelectedCollections: (c: ISearchBarDropdownCollection[]) => void,
 };
 
-export const BrowseFilterPopup = (props: IPropsBrowseFiltersPopup) => {
-  const [filter, setFilter] = useState('');
-  const [singleItems, setSingleItems] = useState(true);
+export const BrowseFiltersPopup = (props: IPropsBrowseFiltersPopup) => {
+  const [collectionName, setCollectionName] = useState<string>('');
 
-  const handleClick = (idx: any) => {
-    const newSaleTypeButtons = [...props.saleTypeButtons];
-    newSaleTypeButtons[idx].selected = !newSaleTypeButtons[idx].selected;
-    props.setSaleTypeButtons(newSaleTypeButtons);
-  };
-
-  const handleClearAll = () => {
-    const newSaleTypeButtons = [...props.saleTypeButtons];
-
-    newSaleTypeButtons.forEach((item) => {
-      item.selected = false;
-    });
-
-    props.setSaleTypeButtons(newSaleTypeButtons);
-    props.setSelectedPrice(0);
+  const handleClearCollections = () => {
     props.setSelectedCollections([]);
-    props.setSavedCollections([]);
-    props.setSelectedCreators([]);
-    props.setSavedCreators([]);
-    // onClose();
+    setCollectionName('');
+
+    const r: ICollectionFilterValue = {
+      contractAddress: ''
+    };
+
+    props.handleCollectionSearch(r);
+    props.onClose();
   };
+
+  const handleSave = () => {
+    const c: ISearchBarDropdownCollection = props.selectedCollections[0];
+
+    const r: ICollectionFilterValue = {
+      contractAddress: c.address
+    };
+
+    props.handleCollectionSearch(r);
+    props.onClose();
+  }
+
+  const handleClose = () => {
+    // This handles the case in which, the user has deselected a collection and just press the X button
+    // In this case we wan't to clear all the filters of the user
+    if (!props.selectedCollections.length) {
+      handleClearCollections();
+      return;
+    }
+
+    props.onClose();
+  }
 
   return (
     <div className="browse__nft__filter__popup">
       <div className="browse__nft__filter__header">
-        <img className="close" src={closeIcon} alt="Close" onClick={props.onClose} aria-hidden="true" />
+        <img className="close" src={closeIcon} alt="Close" onClick={handleClose} aria-hidden="true" />
         <h3>Filters</h3>
-        <button type="button" className="clear__all" onClick={() => handleClearAll()}>
+        <button type="button" className="clear__all" onClick={handleClearCollections}>
           Clear all
         </button>
       </div>
       <div className="browse__nft__filter__body">
-        {/* <h3>
-          <img src={salesIcon} alt="Sale" /> Sale types
-        </h3>
-        <div className="sale--dropdown--body">
-          <div className="sale--dropdown--header">
-            <div
-              className={singleItems ? 'active' : ''}
-              onClick={() => setSingleItems(true)}
-              aria-hidden="true"
-            >
-              Single items
-            </div>
-            <div
-              className={singleItems ? '' : 'active'}
-              onClick={() => setSingleItems(false)}
-              aria-hidden="true"
-            >
-              Bundles
-            </div>
-          </div>
-          <div className="sale--types">
-            {saleTypeButtons.map((item, index) => (
-              <div className="sale--type--div">
-                <input
-                  type="checkbox"
-                  className="sale--type--checkboxes"
-                  onChange={() => handleClick(index)}
-                  checked={item.selected}
-                />
-                <div className="sale--type--name">
-                  <h4>{item.text}</h4>
-                  <p>{item.description}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div> */}
-        {/* <Price
-          setSelectedPrice={setSelectedPrice}
-          selectedTokenIndex={selectedTokenIndex}
-          setSelectedTokenIndex={setSelectedTokenIndex}
-        /> */}
-        <Collections
-          savedCollections={props.savedCollections}
-          setSavedCollections={props.setSavedCollections}
+        <ApiCollectionsFiltersMobile
+          collectionName={collectionName}
+          setCollectionName={setCollectionName}
+          allCollections={props.allCollections}
+          handleCollectionSearch={props.handleCollectionSearch}
           selectedCollections={props.selectedCollections}
           setSelectedCollections={props.setSelectedCollections}
         />
-        {/* <Creators savedCreators={savedCreators} setSavedCreators={setSavedCreators} /> */}
       </div>
       <div className="show--results">
-        <button type="button" className="light-button" onClick={props.onClose}>
-          Show results
+        <button
+          type="button"
+          className="light-button"
+          disabled={!props.selectedCollections.length}
+          onClick={handleSave}>
+            Show results
         </button>
       </div>
     </div>

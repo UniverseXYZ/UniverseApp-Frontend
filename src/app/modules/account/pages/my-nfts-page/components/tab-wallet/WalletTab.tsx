@@ -132,8 +132,6 @@ export const WalletTab = () => {
           onChange={(value) => searchBarForm.setValues(value)}
           searchText={searchBarForm.values}
           setSearchCollectionAddress={(value) => collectionFilterForm.setValues(value)}
-          setSelectedCollections={() => {}}
-          selectedCollections={[]}
           allCollections={UserCollections?.result || []}
         />
       </Box>

@@ -12,8 +12,7 @@ import {
   SearchNFTsField,
   SortingDropdowns,
   ApiCollectionFilters,
-  SelectedFilters,
-  BrowseFilterPopup,
+  BrowseFiltersPopup,
   ISearchBarValue,
   ICollectionFilterValue
   } from '../index';
@@ -22,49 +21,13 @@ import { ISearchBarDropdownCollection } from '../../../../../../nft/types';
 interface IPropsSearchFilter {
   searchText: ISearchBarValue;
   onChange: (values: ISearchBarValue) => void;
-  selectedCollections: [];
-  setSelectedCollections: (values: any) => void;
   setSearchCollectionAddress: (value: ICollectionFilterValue) => void;
   allCollections: ISearchBarDropdownCollection[];
 }
 
-type SaleButton = {
-  text: string;
-  description: string;
-  selected: boolean;
-};
-
 export const SearchFilters = (props: IPropsSearchFilter) => {
   const [showFilters, setShowFilters] = useState(false);
-  const [selectedPrice, setSelectedPrice] = useState<number>(0);
-  const [sliderValue, setSliderValue] = useState({ min: 0.01, max: 100 });
-  const [selectedTokenIndex, setSelectedTokenIndex] = useState(0);
-  const [savedCollections, setSavedCollections] = useState([]);
   const [selectedCollections, setSelectedCollections] = useState<ISearchBarDropdownCollection[]>([]);
-  const [savedCreators, setSavedCreators] = useState([]);
-  const [selectedCreators, setSelectedCreators] = useState([]);
-  const [saleTypeButtons, setSaleTypeButtons] = useState<SaleButton[]>([
-    {
-      text: 'Buy now',
-      description: 'Fixed price sale',
-      selected: false,
-    },
-    {
-      text: 'On auction',
-      description: 'You can place bids',
-      selected: false,
-    },
-    {
-      text: 'New',
-      description: 'Recently added',
-      selected: false,
-    },
-    {
-      text: 'Has offers',
-      description: 'High in demand',
-      selected: false,
-    },
-  ]);
 
   useEffect(() => {
     const onScroll = () => {
@@ -120,30 +83,6 @@ export const SearchFilters = (props: IPropsSearchFilter) => {
           />
         </div>
         )}
-        {saleTypeButtons.filter((item) => item.selected === true).length > 0 ||
-        selectedPrice ||
-        savedCollections.length > 0 ||
-        savedCreators.length > 0 ? (
-          <SelectedFilters
-            saleTypeButtons={saleTypeButtons}
-            setSaleTypeButtons={setSaleTypeButtons}
-            selectedPrice={selectedPrice}
-            setSelectedPrice={setSelectedPrice}
-            setSliderValue={setSliderValue}
-            selectedTokenIndex={selectedTokenIndex}
-            setSelectedTokenIndex={setSelectedTokenIndex}
-            savedCollections={savedCollections}
-            setSavedCollections={setSavedCollections}
-            selectedCreators={selectedCreators}
-            setSelectedCreators={setSelectedCreators}
-            savedCreators={savedCreators}
-            setSavedCreators={setSavedCreators}
-            selectedCollections={props.selectedCollections}
-            setSelectedCollections={props.setSelectedCollections}
-          />
-        ) : (
-          <></>
-        )}
       </div>
       <div className="mobile--filters">
         <Popup
@@ -154,33 +93,18 @@ export const SearchFilters = (props: IPropsSearchFilter) => {
           }
         >
           {(close: any) => (
-            <BrowseFilterPopup
+            <BrowseFiltersPopup
               onClose={close}
-              saleTypeButtons={saleTypeButtons}
-              setSaleTypeButtons={setSaleTypeButtons}
-              setSelectedPrice={setSelectedPrice}
-              selectedTokenIndex={selectedTokenIndex}
-              setSelectedTokenIndex={setSelectedTokenIndex}
-              selectedCollections={props.selectedCollections}
-              setSelectedCollections={props.setSelectedCollections}
-              savedCollections={savedCollections}
-              setSavedCollections={setSavedCollections}
-              selectedCreators={selectedCreators}
-              setSelectedCreators={setSelectedCreators}
-              savedCreators={savedCreators}
-              setSavedCreators={setSavedCreators}
+              allCollections={props.allCollections}
+              handleCollectionSearch={props.setSearchCollectionAddress}
+              selectedCollections={selectedCollections}
+              setSelectedCollections={setSelectedCollections}
             />
           )}
         </Popup>
-        {(saleTypeButtons.filter((item) => item.selected === true).length > 0 ||
-          selectedPrice ||
-          savedCollections.length > 0 ||
-          savedCreators.length > 0) && (
+        {selectedCollections.length && (
           <div className="selected--filters--numbers">
-            {saleTypeButtons.filter((item) => item.selected === true).length +
-              (selectedPrice && +1) +
-              savedCollections.length +
-              savedCreators.length}
+            {selectedCollections.length}
           </div>
         )}
       </div>
