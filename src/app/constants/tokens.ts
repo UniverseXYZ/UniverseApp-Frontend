@@ -8,6 +8,7 @@ import DAIIcon from './../../assets/images/v2/tokens/DAI.svg';
 import XYZIcon from './../../assets/images/v2/tokens/XYZ.svg';
 import WETHIcon from './../../assets/images/v2/tokens/WETH.svg';
 import Contracts from '../../contracts/contracts.json';
+import { useAuthContext } from '../../contexts/AuthContext';
 
 export const TOKENS_MAP: Record<TokenTicker, IToken> = {
   [TokenTicker.ETH]: {

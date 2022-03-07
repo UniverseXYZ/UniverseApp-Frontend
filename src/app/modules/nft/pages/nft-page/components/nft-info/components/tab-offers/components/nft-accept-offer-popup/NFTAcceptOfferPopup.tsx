@@ -13,7 +13,8 @@ import {
 } from '@chakra-ui/react';
 import axios from 'axios';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { BigNumber, ethers, Signer, utils } from 'ethers';
+import { BigNumber as EthersBigNumber, Signer, utils } from 'ethers';
+import BigNumber from 'bignumber.js';
 import { useMutation } from 'react-query';
 
 import AudioNFTPreviewImage from '../../../../../../../../../../../assets/images/v2/audio-nft-preview.png';
@@ -29,6 +30,7 @@ import { TOKENS_MAP, getTokenByAddress } from '../../../../../../../../../../con
 import { TokenTicker } from '../../../../../../../../../../enums';
 import { Fee } from '../../../../../../../../../marketplace/pages/sell-page/components/tab-summary/compoents';
 import { getRoyaltiesFromRegistry } from '../../../../../../../../../../../utils/marketplace/utils';
+import { useTokenPrice } from '../../../../../../../../../../hooks';
 
 interface INFTAcceptOfferPopupProps {
   NFT?: INFT;
@@ -40,7 +42,7 @@ interface INFTAcceptOfferPopupProps {
 const UNIVERSE_FEE = 2.5;
 
 export const NFTAcceptOfferPopup = ({ NFT, NFTs, order, isOpen, onClose }: INFTAcceptOfferPopupProps) => {
-  const { address, signer, usdPrice } = useAuthContext() as any;
+  const { address, signer } = useAuthContext() as any;
 
   const [state, setState] = useState<AcceptState>(AcceptState.CHECKOUT);
   const [nftRoyalties, setNftRoyalties] = useState(0);
@@ -58,12 +60,19 @@ export const NFTAcceptOfferPopup = ({ NFT, NFTs, order, isOpen, onClose }: INFTA
   }, [tokenTicker]);
 
   const listingPrice = useMemo(() => {
-    return Number(utils.formatUnits((order as any).make.value, tokenDecimals))
+    return utils.formatUnits((order as any).make.value, tokenDecimals)
   }, [tokenDecimals]);
 
   const prepareMutation = useMutation(({ hash, data }: { hash: string, data: any }) => {
     return axios.post(`${process.env.REACT_APP_MARKETPLACE_BACKEND}/v1/orders/${hash}/prepare`, data);
   });
+
+  const usdPrice = useTokenPrice(tokenTicker);
+
+   const usd = useMemo(() => {
+    return new BigNumber(usdPrice).multipliedBy(listingPrice).toFixed(2);
+   }, [usdPrice, listingPrice])
+
 
   const handleAcceptClick = useCallback(async () => {
     try {
@@ -80,7 +89,7 @@ export const NFTAcceptOfferPopup = ({ NFT, NFTs, order, isOpen, onClose }: INFTA
   
       const {data, from, to, value} = response.data;
   
-      await sendAcceptOfferTransaction(data, from, to, BigNumber.from(value.hex));
+      await sendAcceptOfferTransaction(data, from, to, EthersBigNumber.from(value.hex));
       setState(AcceptState.CONGRATULATIONS);
     } catch(err) {
       console.log(err);
@@ -88,7 +97,7 @@ export const NFTAcceptOfferPopup = ({ NFT, NFTs, order, isOpen, onClose }: INFTA
     }
   }, [order, address]);
 
-  const sendAcceptOfferTransaction = async (data: string, from: string, to: string, value: BigNumber ) => {
+  const sendAcceptOfferTransaction = async (data: string, from: string, to: string, value: EthersBigNumber ) => {
 
     const sellTx = await (signer as Signer).sendTransaction({
       data,
@@ -114,9 +123,10 @@ export const NFTAcceptOfferPopup = ({ NFT, NFTs, order, isOpen, onClose }: INFTA
   }
 
   const finalPrice = useMemo(() => {
-    const price = Number(utils.formatUnits((order as any).make.value, tokenDecimals));
-    return parseFloat((price - (price * totalRoyalties / 100)).toFixed(6));
-  }, [order, totalRoyalties]);
+    const royaltyCut = new BigNumber(listingPrice).multipliedBy(totalRoyalties).dividedBy(100)
+    const final = new BigNumber(listingPrice).minus(royaltyCut).toFixed(2);
+    return final;
+  }, [order, totalRoyalties, tokenDecimals, listingPrice]);
 
   useEffect(() => {
     fetchNftRoyalties()
@@ -170,7 +180,7 @@ export const NFTAcceptOfferPopup = ({ NFT, NFTs, order, isOpen, onClose }: INFTA
                     <TokenIcon ticker={tokenTicker} display={'inline'} size={20} mr={'6px'} mt={'-3px'} />
                     {listingPrice}
                   </Text>
-                  <Text {...styles.PriceUSDStyle}>${listingPrice * usdPrice}</Text>
+                  <Text {...styles.PriceUSDStyle}>${usd}</Text>
                 </Box>
               </Flex>
 
@@ -191,7 +201,7 @@ export const NFTAcceptOfferPopup = ({ NFT, NFTs, order, isOpen, onClose }: INFTA
                     <TokenIcon ticker={tokenTicker} display={'inline'} size={24} mr={'6px'} mt={'-3px'} />
                     {finalPrice}
                   </Text>
-                  <Text {...styles.PriceUSDStyle}>${Math.round(finalPrice * usdPrice)}</Text>
+                  <Text {...styles.PriceUSDStyle}>${usd}</Text>
                 </Box>
               </Flex>
 

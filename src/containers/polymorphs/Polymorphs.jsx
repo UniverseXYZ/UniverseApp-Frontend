@@ -41,7 +41,7 @@ const Polymorphs = () => {
   const [mobile, setMobile] = useState(false);
   const { data } = useGraphQueryHook(queryPolymorphsGraph(morphedPolymorphs));
   const { polymorphsFilter, navigateToMyUniverseNFTsTab } = useMyNftsContext();
-  const { ethPrice } = useAuthContext();
+  const { ethUsdPrice } = useAuthContext();
   useLayoutEffect(() => {
     function handleResize() {
       if (+window.innerWidth <= 575) setMobile(true);
@@ -82,7 +82,7 @@ const Polymorphs = () => {
       {/* <Characters /> */}
       <Section4 />
       <PolymorphsActivity
-        ethPrice={ethPrice?.market_data?.current_price?.usd.toString()}
+        ethPrice={ethUsdPrice.toString()}
         mobile={mobile}
         morphEntities={data?.tokenMorphedEntities}
       />

@@ -7,9 +7,10 @@ import { IERC721AssetType, INFT, IOrder, IUser } from '../../../../../../types';
 import Blockies from 'react-blockies';
 import { ethers } from 'ethers';
 import { getTokenByAddress } from '../../../../../../../../constants';
-import { useAuthContext } from '../../../../../../../../../contexts/AuthContext';
 import { TokenIcon } from '../../../../../../../../components';
 import { shortenEthereumAddress } from '../../../../../../../../../utils/helpers/format';
+import BigNumber from 'bignumber.js';
+import { useTokenPrice } from '../../../../../../../../hooks';
 
 interface IHighestOfferProps {
   offer?: IOrder;
@@ -17,9 +18,15 @@ interface IHighestOfferProps {
 }
 
 export const HighestOffer = ({ offer, creator }: IHighestOfferProps) => {
-  const { usdPrice } = useAuthContext();
-  const formattedPrice = Number(ethers.utils.formatUnits(offer?.make?.value || 0, 18));
 
+  const token = getTokenByAddress((offer?.make.assetType as IERC721AssetType).contract);
+  
+  const formattedPrice = ethers.utils.formatUnits(offer?.make?.value || 0, token.decimals ?? 18);
+  
+  const usdPrice = useTokenPrice(token.ticker);
+
+  const usd = new BigNumber(usdPrice).multipliedBy(formattedPrice).toFixed(2);
+  
   return (
     <Flex mb={'24px'}>
       {creator && creator.profileImageUrl ? (
@@ -40,14 +47,14 @@ export const HighestOffer = ({ offer, creator }: IHighestOfferProps) => {
           <Text {...styles.ContentPriceStyle}>
             <Tooltip label={'WETH'} {...styles.TooltipCurrencyStyle}>
               <TokenIcon
-                ticker={getTokenByAddress((offer?.make?.assetType as IERC721AssetType)?.contract)?.ticker}
+                ticker={token.ticker}
                 size={24}
               />
             </Tooltip>
             <strong>
-              {formattedPrice} {getTokenByAddress((offer?.make?.assetType as IERC721AssetType)?.contract)?.ticker}
+              {formattedPrice} {token.ticker}
             </strong>
-            ${(formattedPrice * usdPrice).toFixed(2)}
+           {usd}
           </Text>
         </Flex>
       </Box>
