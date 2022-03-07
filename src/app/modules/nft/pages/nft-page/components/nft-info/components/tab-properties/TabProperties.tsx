@@ -38,7 +38,7 @@ export const TabProperties = ({ properties = [] } : ITabPropertiesProps) => {
             ? !polymorphProperties.includes(property)
               ? <PolymorphPropertyTrait key={i} property={property} />
               : null
-            : <NFTProperty key={i} property={property} />
+            : property.traitType && property.value && <NFTProperty key={i} property={property} />
         ))}
       </SimpleGrid>
         {

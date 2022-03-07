@@ -12,6 +12,7 @@ interface IGetNFTResponse {
   tokenIds: string[];
 }
 
+// TODO: remove this function
 export const GetNFTApi = async (collectionAddress: string, tokenId: string | number) => {
   const url = `${process.env.REACT_APP_API_BASE_URL}/api/pages/nft/${collectionAddress}/${tokenId}`;
 

@@ -97,7 +97,7 @@ export interface INFT {
   _properties?: INFTProperty[];
   id: string;
   amount: number;
-  artworkType: NFTArtworkType;
+  artworkType: NFTArtworkType | null;
   collectionId: number;
   collection?: ICollection;
   createdAt: Date;
@@ -105,6 +105,7 @@ export interface INFT {
   description: string | null;
   name: string;
   numberOfEditions: number;
+  videoUrl: string;
   optimizedUrl: string;
   originalUrl: string;
   owner?: IUser;

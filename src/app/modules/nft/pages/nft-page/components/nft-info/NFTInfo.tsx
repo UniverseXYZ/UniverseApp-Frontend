@@ -1,5 +1,5 @@
 import {
-  Box,
+  Box, BoxProps,
   Button,
   Container,
   Flex,
@@ -172,12 +172,12 @@ export const NFTInfo = () => {
               bg: `url(${BGImage}) center / cover`
             }}>
               <Box {...styles.NFTAssetContainerStyle}>
-                {!NFT.artworkType && <NFTAssetBroken/>}
+                {!NFT.artworkType && <NFTAssetBroken {...styles2.BrokenAssetStyle} />}
                 {isNFTAssetImage(NFT.artworkType) &&
                   <NFTAssetImage image={NFT.optimizedUrl || NFT.originalUrl} />
                 }
                 {isNFTAssetVideo(NFT.artworkType) &&
-                  <NFTAssetVideo video={NFT.optimizedUrl || NFT.originalUrl} />
+                  <NFTAssetVideo video={NFT.videoUrl || NFT.optimizedUrl || NFT.originalUrl} />
                 }
                 {isNFTAssetAudio(NFT.artworkType) &&
                   <NFTAssetAudio audio={NFT.optimizedUrl || NFT.originalUrl} />

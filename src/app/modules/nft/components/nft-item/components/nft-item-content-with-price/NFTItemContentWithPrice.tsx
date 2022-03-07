@@ -8,7 +8,7 @@ import { TokenTicker } from '../../../../../../enums';
 import { TokenIcon } from '../../../../../../components';
 import { TOKENS_MAP } from '../../../../../../constants';
 import { useQuery } from 'react-query';
-import { GetActiveListingApi, GetNFT2Api, GetOrdersApi } from '../../../../api';
+import { GetActiveListingApi, GetOrdersApi } from '../../../../api';
 import { utils } from 'ethers';
 
 type IOrderFetchPayload = {

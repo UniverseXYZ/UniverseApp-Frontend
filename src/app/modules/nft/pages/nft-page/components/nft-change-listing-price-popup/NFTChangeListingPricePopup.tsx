@@ -3,13 +3,11 @@ import {
   Button,
   FormControl,
   FormErrorMessage,
-  FormLabel,
   Heading,
   Image,
   Input,
   InputGroup,
   InputLeftElement,
-  InputRightAddon,
   Menu,
   MenuButton,
   MenuItem,
@@ -21,25 +19,23 @@ import {
   ModalOverlay,
   Text,
 } from '@chakra-ui/react';
+import axios from 'axios';
+import { BigNumber, ethers } from 'ethers';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
+import { useMutation } from 'react-query';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import { useMutation, useQuery } from 'react-query';
-
-import * as styles from './styles';
-import { TOKENS, TOKENS_MAP, ZERO_ADDRESS } from '../../../../../../constants';
-import { Loading, TokenIcon } from '../../../../../../components';
-import { INFT, IOrder } from '../../../../types';
-import { TokenTicker } from '../../../../../../enums';
 
 import ArrowIcon from '../../../../../../../assets/images/arrow-down.svg';
 import SuccessIcon from '../../../../../../../assets/images/bid-submitted.png';
+
+import * as styles from './styles';
+import { TOKENS, TOKENS_MAP } from '../../../../../../constants';
+import { Loading, TokenIcon } from '../../../../../../components';
+import { INFT, IOrder } from '../../../../types';
+import { TokenTicker } from '../../../../../../enums';
 import { EncodeOrderApi, GetSaltApi, IEncodeOrderApiData } from '../../../../../../api';
 import { useAuthContext } from '../../../../../../../contexts/AuthContext';
-import axios from 'axios';
-import { GetNFT2Api } from '../../../../api';
-import { SellAmountType } from '../../../../../marketplace/pages/sell-page/enums';
-import { BigNumber, ethers } from 'ethers';
 import { sign } from '../../../../../../helpers';
 import { NFTCancelListingPopup } from '..';
 
