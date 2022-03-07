@@ -5,7 +5,7 @@ import { Checkbox, Dropdown, DropdownFilterContainer } from '../../../../../comp
 import { NftTypeFilterOptions } from './constants';
 import { INFTTypeFilterProps, INftTypeFilterValue } from './types';
 
-import nftTypeIcon from '../../../../../../assets/images/select-type-icon.svg';
+import nftTypeIcon from '../../../../../../assets/images/v2/marketplace/filter-nft-type.svg';
 
 export const NFTTypeFilter = ({ value: _value, onChange, onClear }: INFTTypeFilterProps) => {
   const [isOpened, setIsOpened] = useState(false);

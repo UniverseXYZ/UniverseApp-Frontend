@@ -5,7 +5,7 @@ import { Dropdown, DropdownFilterContainer, MultiSelect } from '../../../../../c
 import { ICollectionsFilterProps, ICollectionsFilterValue } from './types';
 import { FilterCollectionsItems } from '../../../mocks/filter-collections';
 
-import collectionsIcon from '../../../../../../assets/images/marketplace/collections.svg';
+import collectionsIcon from '../../../../../../assets/images/v2/marketplace/filter-collections.svg';
 import { SearchSelect } from '../../../../../components/search-select';
 
 export const CollectionsFilter = ({ value: _value, onChange, onClear }: ICollectionsFilterProps) => {
