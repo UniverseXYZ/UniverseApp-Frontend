@@ -354,7 +354,7 @@ const AuctionReview = () => {
         </Button>
         {isEditingAuction.length ? (
           <Button className="light-button" onClick={handleSetAuction}>
-            Save changes
+            Save Changes
           </Button>
         ) : (
           <Button className="light-button" onClick={handleSetAuction}>

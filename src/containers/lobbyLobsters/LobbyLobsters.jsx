@@ -19,7 +19,7 @@ const LobbyLobsters = () => {
       <HelpUsBeHeard />
       <Donate />
       <SliderSection />
-      <MintLobbyLobsterSection ref={myRef} />
+      {/* <MintLobbyLobsterSection ref={myRef} /> */}
     </div>
   );
 };

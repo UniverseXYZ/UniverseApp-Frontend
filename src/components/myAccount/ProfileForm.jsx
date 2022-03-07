@@ -132,7 +132,7 @@ const ProfileForm = ({
             <p>We recomend an image of at least 400x400.</p>
             {errors.previewImage && <p style={{ color: '#ff4949' }}>{errors.previewImage}</p>}
             <Button className="light-border-button" onClick={() => accountInput.current.click()}>
-              Choose file
+              Choose File
             </Button>
             <input
               type="file"
@@ -150,9 +150,9 @@ const ProfileForm = ({
               visible in other Universe products and sections, e.g. My Account
             </p>
           </div>
-          <h3 className="account-info">Account info</h3>
+          <h3 className="account-info">Account Info</h3>
           <h5>
-            <span>Display name</span>
+            <span>Display Name</span>
             <p className="input-max-chars">
               {accountName.length}/{MAX_FIELD_CHARS_LENGTH.name}
             </p>
@@ -171,12 +171,12 @@ const ProfileForm = ({
           />
 
           {!accountName && editProfileButtonClick && (
-            <p className="error__text">&quot;Display name&quot; is not allowed to be empty</p>
+            <p className="error__text">&quot;Display Name&quot; is not allowed to be empty</p>
           )}
           {accountNameExists && <p className="error__text">Sorry this user name is taken</p>}
           <h5>
             <span>
-              Universe page address
+              Universe Page Address
               <div className="universe__page__address">
                 <InfoIcon
                   onMouseEnter={() => setHideIcon(true)}
@@ -231,7 +231,7 @@ const ProfileForm = ({
               accountPageExists) &&
               editProfileButtonClick && (
                 <p className="error__text">
-                  &quot;Universe page address&quot; is not allowed to be empty
+                  &quot;Universe Page Address&quot; is not allowed to be empty
                 </p>
               )}
             {accountPageExists && <p className="error__text">Sorry, this page address is taken</p>}
@@ -243,7 +243,7 @@ const ProfileForm = ({
 
           <div className="account-grid-about-editing">
             <h5>
-              <span>Your bio</span>
+              <span>Your Bio</span>
               <p className="input-max-chars">
                 {about.length}/{MAX_FIELD_CHARS_LENGTH.bio}
               </p>
@@ -261,7 +261,7 @@ const ProfileForm = ({
               <div className="box--shadow--effect--block" />
             )}
             {!about && editProfileButtonClick && (
-              <p className="error__text">&quot;Your bio&quot; is not allowed to be empty</p>
+              <p className="error__text">&quot;Your Bio&quot; is not allowed to be empty</p>
             )}
           </div>
 
@@ -296,7 +296,7 @@ const ProfileForm = ({
             )}
           <div className="account-display-buttons">
             <Button className="light-button" disabled={disabled || hasError} onClick={saveChanges}>
-              Save changes
+              Save Changes
             </Button>
             <Button className="light-border-button" onClick={cancelChanges}>
               Cancel

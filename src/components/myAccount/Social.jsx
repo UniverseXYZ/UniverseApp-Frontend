@@ -22,11 +22,11 @@ const Social = ({
   <div className="account-grid-social">
     <div className="account-grid-social-editing">
       <h3>
-        Social media <span>(optional)</span>
+        Social Media <span>(Optional)</span>
       </h3>
       <div className="instagram">
         <h5>
-          <span>Instagram profile</span>
+          <span>Instagram Profile</span>
           <p className="input-max-chars">
             {instagramLink.length}/{MAX_FIELD_CHARS_LENGTH.instagram}
           </p>
@@ -45,7 +45,7 @@ const Social = ({
       </div>
       <div className="twitter">
         <h5>
-          <span>Twitter profile</span>
+          <span>Twitter Profile</span>
           <p className="input-max-chars">
             {twitterLink.length}/{MAX_FIELD_CHARS_LENGTH.twitter}
           </p>

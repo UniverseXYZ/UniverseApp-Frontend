@@ -65,7 +65,7 @@ const Polymorphs = () => {
     <div className="polymorphs">
       <WelcomeWrapper
         title="Polymorph Universe"
-        hintText="A universe of polymorphic creatures with the power to mutate on demand"
+        hintText="A universe of polymorphic creatures with the power to mutate on demand."
         popupBtnText="My Polymorphs"
         btnText="Mint a morph"
         btnOnClick={redirectToMyPolymorphs}

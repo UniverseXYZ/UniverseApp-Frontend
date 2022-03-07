@@ -500,7 +500,7 @@ const MobileView = (props) => {
                     }}
                   >
                     <img src={myProfileIcon} alt="My Profile" />
-                    Edit my profile
+                    Edit My Profile
                   </button>
                   <button
                     type="button"
@@ -586,7 +586,7 @@ const MobileView = (props) => {
                               }}
                             >
                               <img src={marketplaceIcon} alt="NFT Marketplace" />
-                              <span>NFT marketplace</span>
+                              <span>NFT Marketplace</span>
                               {/* <span className="tooltiptext">Coming soon</span> */}
                             </button>
                           </div>
@@ -600,14 +600,14 @@ const MobileView = (props) => {
                               }}
                             >
                               <img src={auctionHouseIcon} alt="Auction House" />
-                              <span>Auction house</span>
+                              <span>Auction House</span>
                               <span className="tooltiptext">Coming soon</span>
                             </button>
                           </div>
                           <div>
                             <button type="button" className="disable">
                               <img src={socialMediaIcon} alt="Social Media" />
-                              <span>Social media</span>
+                              <span>Social Media</span>
                               <span className="tooltiptext">Coming soon</span>
                             </button>
                           </div>
@@ -659,7 +659,7 @@ const MobileView = (props) => {
                               className="disable"
                             >
                               <img src={coreDropsIcon} alt="Core drops" />
-                              <span>OG planet drops</span>
+                              <span>OG Planet Drops</span>
                               <span className="tooltiptext">Coming soon</span>
                             </button>
                           </div>
@@ -674,7 +674,7 @@ const MobileView = (props) => {
                         aria-hidden="true"
                         onClick={() => setShowRarityCharts(!showRarityCharts)}
                       >
-                        <p className="title">Rarity charts</p>
+                        <p className="title">Rarity Charts</p>
                         <img
                           className={showRarityCharts ? 'rotate' : ''}
                           src={arrowDown}
@@ -803,7 +803,7 @@ const MobileView = (props) => {
                               onClick={() => window.open('https://dao.universe.xyz/yield-farming')}
                             >
                               <img src={yieldFarmingIcon} alt="Yield Farming" />
-                              <span>Yield farming</span>
+                              <span>Yield Farming</span>
                             </button>
                           </div>
                           <div>
