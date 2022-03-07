@@ -151,7 +151,6 @@ export const WalletTab = () => {
                 <NftItem
                   key={NFT.id}
                   NFT={NFT}
-                  showBuyNowButton={false}
                   collection={`${NFT._collectionAddress}`}
                   renderContent={({ NFT, collection, creator, owner, bestOfferPrice, bestOfferPriceToken, lastOfferPrice, lastOfferPriceToken }) => (
                     <NFTItemContentWithPrice

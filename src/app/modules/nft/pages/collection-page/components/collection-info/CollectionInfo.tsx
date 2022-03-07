@@ -10,7 +10,7 @@ import { useState, useRef } from 'react';
 import SocialLinks from '../../../../../../../../src/components/collection/SocialLinks';
 import { useCollectionPageData } from '../../CollectionPage.context';
 import {
-  NftItem, NFTItemContentWithPrice,
+  NftItem, NFTItemContentWithPrice, NoNFTsFound,
 } from '../../../../components';
 import { CollectionPageLoader } from '../../../../../../../containers/collection/CollectionPageLoader';
 import { useErrorContext } from '../../../../../../../contexts/ErrorContext';
@@ -24,7 +24,6 @@ import Cover from '../../../../../../../components/collection/Cover';
 import Tabs from '../../../../../../../components/tabs/Tabs';
 import Description from '../../../../../../../components/collection/Description.jsx';
 import EmptyData from '../../../../../../../components/collection/EmptyData.jsx';
-import NoNftsFound from '../../../../../../../components/myNFTs/NoNftsFound';
 import { OrderAssetClass } from '../../../../enums';
 
 const PER_PAGE = 8;
@@ -93,7 +92,7 @@ export const CollectionInfo = () => {
                                 objectFit={'cover'}
                                 src={collection.coverUrl}
                             />
-                            <Text 
+                            <Text
                                 fontFamily={'"Sharp Grotesk SemiBold",sans-serif'}
                                 fontSize={'20px'}
                                 lineHeight={'130%'}
@@ -127,7 +126,7 @@ export const CollectionInfo = () => {
                     maxWidth: '1110px',
                     margin: '0 auto',
                     flexDirection: 'column',
-                  }}>     
+                  }}>
                   <Box>
                     <Tabs
                       scrollContainer={scrollContainer}
@@ -150,7 +149,6 @@ export const CollectionInfo = () => {
                                     <NftItem
                                       key={NFT.id}
                                       NFT={NFT}
-                                      showBuyNowButton={false}
                                       collection={`${NFT._collectionAddress}`}
                                       renderContent={({ NFT, collection, creator, owner, bestOfferPrice, bestOfferPriceToken, lastOfferPrice, lastOfferPriceToken }) => (
                                         <NFTItemContentWithPrice
@@ -186,7 +184,7 @@ export const CollectionInfo = () => {
                             </div>
                           </div>
                         ) : (
-                          <NoNftsFound/>
+                          <NoNFTsFound />
                         )}
                       </>
                       ) : selectedTabIndex === 1 ? (
@@ -201,11 +199,10 @@ export const CollectionInfo = () => {
                       <></>
                     )}
                   </Box>
-                </Flex>        
+                </Flex>
             </Box>
           </Box>
         )}
     </>
   )
 };
-  

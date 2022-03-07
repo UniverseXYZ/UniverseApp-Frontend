@@ -37,7 +37,6 @@ export interface INftItemProps {
   order?: IOrder;
   isSelected?: boolean;
   selectedLabel?: string;
-  showBuyNowButton?: boolean;
   renderHeader?: IRenderFunc;
   renderAsset?: IRenderFunc;
   renderContent?: IRenderFunc;
@@ -53,7 +52,6 @@ export const NftItem = (
     order,
     isSelected,
     selectedLabel,
-    showBuyNowButton,
     renderHeader,
     renderAsset,
     renderContent,

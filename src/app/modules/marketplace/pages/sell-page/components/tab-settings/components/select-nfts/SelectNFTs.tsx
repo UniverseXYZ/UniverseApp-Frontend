@@ -322,7 +322,6 @@ export const SelectNFTs = ({}: ISelectNFTsProps) => {
                 key={nft.id}
                 NFT={nft}
                 collection={`${nft.collection?.address}`}
-                showBuyNowButton
                 isSelected={!!selectedEditions.length}
                 selectedLabel={isMultipleEditions ? `${selectedEditions.length} / ${tokensNumber}` : undefined}
                 renderFooter={() => (
