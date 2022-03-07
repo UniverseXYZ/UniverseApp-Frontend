@@ -2,6 +2,8 @@ import React, { useState, useEffect, useContext } from 'react';
 import PropTypes from 'prop-types';
 import uuid from 'react-uuid';
 
+// TODO:: This component is not used anywhere in the current implementation of the MY NFTs search bar, consider removing it on a later stage.
+
 import closeIcon from '../../../../../../../../assets/images/close-menu.svg';
 import priceIcon from '../../../../../../../../assets/images/marketplace/price.svg';
 import ethereumIcon from '../../../../../../../..//assets/images/eth-icon.svg';

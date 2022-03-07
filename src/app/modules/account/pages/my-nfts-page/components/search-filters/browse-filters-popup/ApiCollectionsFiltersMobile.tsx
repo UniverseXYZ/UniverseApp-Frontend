@@ -1,49 +1,47 @@
-import React, { useState } from 'react';
-import { Animated } from 'react-animated-css';
+import { useState } from 'react';
+
+// Icons
 import searchIcon from '../../../../../../../../assets/images/search-gray.svg';
 import collectionIcon from '../../../../../../../../assets/images/marketplace/collections.svg';
-import closeIcon from '../../../../../../../../assets/images/close-menu.svg';
 import checkIcon from '../../../../../../../../assets/images/check-vector.svg';
 import universeIcon from '../../../../../../../../assets/images/universe-img.svg';
 
-import { useAuthContext } from '../../../../../../../../contexts/AuthContext';
+// Helpers
 import { getCollectionBackgroundColor } from '../../../../../../../../utils/helpers';
 import { shortenEthereumAddress } from '../../../../../../../../utils/helpers/format';
 
-interface ICollectionsProps {
-  selectedCollections: any[],
-  setSelectedCollections: (value: any) => void,
-  savedCollections: any[],
-  setSavedCollections: (value: any) => void,
+// Interfaces
+import { ISearchBarDropdownCollection } from '../../../../../../nft/types';
+import { ICollectionFilterValue } from '../index';
+
+interface ICollectionsMobileProps {
+  collectionName: string,
+  setCollectionName: (value: string) => void,
+  handleCollectionSearch: (value: ICollectionFilterValue) => void,
+  allCollections: ISearchBarDropdownCollection[],
+  selectedCollections: ISearchBarDropdownCollection[],
+  setSelectedCollections: (c: ISearchBarDropdownCollection[]) => void,
 }
 
-export const Collections = (props: ICollectionsProps) => {
-  // const { deployedCollections } = useAuthContext();
-  const deployedCollections: any[] = [];
-  const [showFilters, setShowFilters] = useState(true);
-  const [collections, setCollections] = useState(deployedCollections);
-  const [searchByCollections, setSearchByCollections] = useState('');
+export const ApiCollectionsFiltersMobile = (props: ICollectionsMobileProps) => {
 
-  const handleSearch = (value: any) => {
-    setSearchByCollections(value);
-    const filtered = deployedCollections?.filter((col: any) =>
-      col.name.toLowerCase().includes(value.toLowerCase())
-    );
+  const handleSearchCollection = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const name = e.target.value;
 
-    setCollections(filtered);
+    props.setCollectionName(name);
   };
 
-  const handleSelect = (coll: any) => {
-    const newSelectedColl = [...props.selectedCollections];
-    const index = props.selectedCollections.map((col) => col.id).indexOf(coll.id);
+  const handleSelectCollection = (c: ISearchBarDropdownCollection) => {
+    const alreadySelected = props.selectedCollections.find((item: ISearchBarDropdownCollection) => item.id === c.id);
 
-    if (index >= 0) {
-      newSelectedColl.splice(index, 1);
-    } else {
-      newSelectedColl.push(coll);
-    }
-    props.setSavedCollections(newSelectedColl);
-    props.setSelectedCollections(newSelectedColl);
+    if (alreadySelected) {
+      // The user want's to de-select a collection from the list
+      props.setSelectedCollections([]);
+      return;
+    };
+
+    const newSelectedCollections = [c];
+    props.setSelectedCollections(newSelectedCollections);
   };
 
   return (
@@ -51,7 +49,6 @@ export const Collections = (props: ICollectionsProps) => {
       <div
         className="browse--nft--sidebar--filtration--item--header"
         aria-hidden="true"
-        onClick={() => setShowFilters(!showFilters)}
       >
         <h3>
           <img src={collectionIcon} alt="Collection" /> Collections
@@ -63,19 +60,18 @@ export const Collections = (props: ICollectionsProps) => {
             <input
               type="text"
               placeholder="Search collections"
-              onChange={(e) => handleSearch(e.target.value)}
-              value={searchByCollections}
+              onChange={handleSearchCollection}
+              value={props.collectionName}
             />
             <img src={searchIcon} alt="Search" />
           </div>
-          {collections
-            .filter((item: any) => item.name.toLowerCase().includes(searchByCollections.toLowerCase()))
-            .sort((a: any, b: any) => b.nftCount - a.nftCount)
-            .map((col: any) => (
+          {props.allCollections
+            .filter((item: ISearchBarDropdownCollection) => item.name.toLowerCase().includes(props.collectionName.toLowerCase()))
+            .map((col: ISearchBarDropdownCollection) => (
               <div
                 className="collections--list"
                 key={col.id}
-                onClick={() => handleSelect(col)}
+                onClick={() => handleSelectCollection(col)}
                 aria-hidden="true"
               >
                 {props.selectedCollections.map((coll) => coll.id).indexOf(col.id) >= 0 ? (
@@ -93,7 +89,7 @@ export const Collections = (props: ICollectionsProps) => {
                   </div>
                 ) : col.address === process?.env?.REACT_APP_UNIVERSE_ERC_721_ADDRESS?.toLowerCase() ? (
                   <img className="random--avatar--color" src={universeIcon} alt={col.name} />
-                ) : !col.coverUrl ? (
+                ) : !col.image ? (
                   <div
                     className="random--avatar--color"
                     style={{
@@ -103,10 +99,10 @@ export const Collections = (props: ICollectionsProps) => {
                     {col.name.charAt(0)}
                   </div>
                 ) : (
-                  <img className="sell__collection" src={col.coverUrl} alt={col.name} />
+                  <img className="sell__collection" src={col.image} alt={col.name} />
                 )}
                 <p>
-                  {col.name || shortenEthereumAddress(col.address)} ({col.nftCount})
+                  {col.name || shortenEthereumAddress(col.address)}
                 </p>
               </div>
             ))}
