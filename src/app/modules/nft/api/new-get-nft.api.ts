@@ -15,6 +15,7 @@ import {
 import { mapBackendCollection, mapBackendNft, mapBackendUser, mapDropdownCollection } from '../helpers';
 import { INFTBackendType } from '../../../types';
 import { getArtworkType } from '../../../helpers';
+import { ARTWORK_TYPES } from '../../../../utils/helpers/pureFunctions/nfts';
 
 export const GetNFT2Api = async (collectionAddress: string, tokenId: string | number) => {
   try {
@@ -110,8 +111,10 @@ export const GetCollectionsFromScraperApi = async (search: string) : Promise<ISe
 };
 
 function mapNft(data: INFTBackendType, collectionData: ICollection | undefined): INFT {
+  const alternativeImage = data.alternativeMediaFiles.find(file => file.type === ARTWORK_TYPES.image);
+
   return {
-    name: data?.metadata?.name ?? '',
+    name: data?.metadata?.name ?? `#${data.tokenId}`,
     tokenId: data.tokenId,
     standard: data.tokenType as NFTStandard,
     collection: collectionData,
@@ -121,9 +124,28 @@ function mapNft(data: INFTBackendType, collectionData: ICollection | undefined):
     createdAt: new Date(data.createdAt),
     description: data?.metadata?.description,
     updatedAt: new Date(data.updatedAt),
-    thumbnailUrl: data?.metadata?.image_thumbnail_url,
-    originalUrl: data?.metadata?.image_original_url,
-    optimizedUrl: data?.metadata?.image_preview_url,
+    videoUrl: data?.metadata?.animation_url,
+    thumbnailUrl: data?.metadata?.image_thumbnail_url 
+      ? data?.metadata?.image_thumbnail_url
+      : data?.metadata?.image_preview_url
+      ? data?.metadata?.image_preview_url
+      : data?.metadata?.image_original_url 
+      ? data?.metadata?.image_original_url
+      : data?.metadata?.image || alternativeImage?.url || data?.metadata?.image_url,
+    originalUrl: data?.metadata?.image_original_url 
+      ? data?.metadata?.image_original_url
+      : data?.metadata?.image_preview_url
+      ? data?.metadata?.image_preview_url
+      : data?.metadata?.image_thumbnail_url 
+      ? data?.metadata?.image_thumbnail_url
+      : data?.metadata?.image || alternativeImage?.url || data?.metadata?.image_url,
+    optimizedUrl: data?.metadata?.image_preview_url 
+    ? data?.metadata?.image_preview_url
+    : data?.metadata?.image_original_url
+    ? data?.metadata?.image_original_url
+    : data?.metadata?.image_thumbnail_url 
+    ? data?.metadata?.image_thumbnail_url
+    : data?.metadata?.image || alternativeImage?.url || data?.metadata?.image_url,
     artworkType: getArtworkType(data),
     amount: 0,
     txHash: null,
@@ -133,8 +155,8 @@ function mapNft(data: INFTBackendType, collectionData: ICollection | undefined):
     tokenUri: '',
     royalties: [],
     _ownerAddress: data?.owners?.length ? data.owners[data.owners.length - 1].address : undefined,
-    _creatorAddress: data.firstOwner,
-    _collectionAddress: data.contractAddress,
+    _creatorAddress: data?.firstOwner,
+    _collectionAddress: data?.contractAddress,
     _properties: data?.metadata?.attributes?.length ? data.metadata?.attributes.map((attribute) => ({
       traitType: attribute.trait_type,
       value: attribute.value,

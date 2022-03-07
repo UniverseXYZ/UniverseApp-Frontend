@@ -7,6 +7,8 @@ export const getArtworkType = (data: INFTBackendType) => {
     .map((key) => (NFTArtworkType as Record<string, NFTArtworkType>)[key]);
 
   const urls = [
+    data?.metadata?.animation_url,
+    data?.metadata?.image,
     data?.metadata?.image_url,
     data?.metadata?.image_original_url,
     data?.metadata?.image_preview_url,

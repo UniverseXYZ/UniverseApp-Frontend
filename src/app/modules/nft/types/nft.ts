@@ -105,6 +105,7 @@ export interface INFT {
   description: string | null;
   name: string;
   numberOfEditions: number;
+  videoUrl: string;
   optimizedUrl: string;
   originalUrl: string;
   owner?: IUser;

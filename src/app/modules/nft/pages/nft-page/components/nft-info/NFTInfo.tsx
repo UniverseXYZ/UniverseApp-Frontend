@@ -177,7 +177,7 @@ export const NFTInfo = () => {
                   <NFTAssetImage image={NFT.optimizedUrl || NFT.originalUrl} />
                 }
                 {isNFTAssetVideo(NFT.artworkType) &&
-                  <NFTAssetVideo video={NFT.optimizedUrl || NFT.originalUrl} />
+                  <NFTAssetVideo video={NFT.videoUrl || NFT.optimizedUrl || NFT.originalUrl} />
                 }
                 {isNFTAssetAudio(NFT.artworkType) &&
                   <NFTAssetAudio audio={NFT.optimizedUrl || NFT.originalUrl} />

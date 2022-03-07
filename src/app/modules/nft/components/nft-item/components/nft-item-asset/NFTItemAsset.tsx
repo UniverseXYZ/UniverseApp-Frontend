@@ -30,7 +30,7 @@ export const NFTItemAsset = ({ NFT, renderAssetLabel, orderEnd }: INFTItemAssetP
       {NFT.artworkType ? 
         <Box {...styles.AssetStyle(width)}>
           {isImage && (<Image src={NFT.thumbnailUrl} alt={NFT.name} />)}
-          {isVideo && (<video src={NFT.thumbnailUrl} />)}
+          {isVideo && (<video src={NFT.videoUrl || NFT.thumbnailUrl} />)}
           {isAudio && (<Image src={AudioNFTPreviewImage} alt={NFT.name} />)}
         </Box> : 
         <Box {...styles.BrokenAssetStyle(width)}>

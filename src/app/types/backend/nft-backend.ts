@@ -19,6 +19,7 @@ export interface INFTBackendType {
   sentAt: string;
   externalDomainViewUrl: string;
   metadata: {
+    animation_url: string;
     description: string;
     name: string;
     image: string;
