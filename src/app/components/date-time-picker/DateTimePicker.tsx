@@ -111,6 +111,12 @@ export const DateTimePicker = ({ value, onChange, onOpen, onClose, minDate, vali
 
   const sign = determineSign(offset);
 
+  const handleTime = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const value = event.currentTarget.value;
+    if(value.length > 2) return;
+    formik.handleChange(event)
+  }
+
   return (
     <>
       <Button
@@ -160,11 +166,11 @@ export const DateTimePicker = ({ value, onChange, onOpen, onClose, minDate, vali
               }
             >
               <NumberInput min={Number(formik.values.hours)} max={23} name="hours" value={formik.values.hours}>
-                <NumberInputField onChange={formik.handleChange} onBlur={formik.handleBlur} />
+                <NumberInputField onChange={(event) => handleTime(event)} onBlur={formik.handleBlur} />
               </NumberInput>
               <Text fontSize={'16px'} fontWeight={700}>:</Text>
               <NumberInput min={Number(formik.values.minutes)} max={59} name="minutes" value={formik.values.minutes}>
-                <NumberInputField onChange={formik.handleChange} onBlur={formik.handleBlur} />
+                <NumberInputField onChange={(event) => handleTime(event)} onBlur={formik.handleBlur} />
               </NumberInput>
             </Flex>
             {timeError && <Text fontSize={'12px'} align={'center'} color={'red'}>{timeError}</Text>}
