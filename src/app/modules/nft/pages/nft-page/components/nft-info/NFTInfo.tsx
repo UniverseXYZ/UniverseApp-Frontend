@@ -281,7 +281,6 @@ export const NFTInfo = () => {
                       key={NFT.id}
                       NFT={NFT}
                       collection={`${NFT._collectionAddress}`}
-                      showBuyNowButton
                       renderContent={({ NFT, collection, creator, owner, bestOfferPrice, bestOfferPriceToken, lastOfferPrice, lastOfferPriceToken }) => (
                         <NFTItemContentWithPrice
                           name={NFT.name}

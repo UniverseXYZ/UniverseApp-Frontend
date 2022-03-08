@@ -137,7 +137,6 @@ export const ArtistNFTsTab = ({ artistAddress, onTotalLoad }: IArtistNFTsTabProp
             <NftItem
               key={NFT.id}
               NFT={NFT}
-              showBuyNowButton={false}
               collection={`${NFT._collectionAddress}`}
               renderContent={({ NFT, collection, creator, owner, bestOfferPrice, bestOfferPriceToken, lastOfferPrice, lastOfferPriceToken }) => (
                 <NFTItemContentWithPrice

@@ -53,7 +53,7 @@ export const NftItem = (
     order,
     isSelected,
     selectedLabel,
-    showBuyNowButton,
+    showBuyNowButton = true,
     renderHeader,
     renderAsset,
     renderContent,

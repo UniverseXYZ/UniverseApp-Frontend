@@ -486,7 +486,6 @@ export const BrowseNFTsPage = () => {
                     order={order}
                     key={order.id}
                     NFT={NFTs[0]}
-                    showBuyNowButton
                     collection={`${NFTs[0].collection?.address}`}
                     orderEnd={order.end}
                     renderContent={({ NFT, collection, creator, owner, bestOfferPrice, bestOfferPriceToken, lastOfferPrice, lastOfferPriceToken }) => (
