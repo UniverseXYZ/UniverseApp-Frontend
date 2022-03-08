@@ -3,7 +3,7 @@ import React, { useMemo } from 'react';
 
 import { NFTItemRelation } from '../nft-item-relation';
 import { NFTRelationType, OrderAssetClass } from '../../../../enums';
-import { ICollection, IERC721AssetType, IOrder, IUser } from '../../../../types';
+import { ICollection, IERC20AssetType, IOrder, IUser } from '../../../../types';
 import { TokenTicker } from '../../../../../../enums';
 import { TokenIcon } from '../../../../../../components';
 import { getTokenByAddress, TOKENS_MAP } from '../../../../../../constants';
@@ -76,7 +76,7 @@ export const NFTItemContentWithPrice = (
       return TOKENS_MAP.ETH;
     }
 
-    return getTokenByAddress((order.take.assetType as IERC721AssetType).contract);
+    return getTokenByAddress((order.take.assetType as IERC20AssetType).contract);
   }, [order]);
 
   const price = useMemo(() => {

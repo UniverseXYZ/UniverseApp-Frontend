@@ -66,6 +66,5 @@ export const getTokenByAddress = (tokenAddress: string) => {
       token =  TOKENS_MAP[contractName as TokenTicker];
     }
   })
-
-  return token || TOKENS_MAP[TokenTicker.WETH];
+  return token || TOKENS_MAP[TokenTicker.ETH];
 }

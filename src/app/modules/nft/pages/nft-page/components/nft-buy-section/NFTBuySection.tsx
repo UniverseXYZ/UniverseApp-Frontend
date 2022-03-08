@@ -9,7 +9,7 @@ import ClockIcon from '../../../../../../../assets/images/clock.svg';
 import { useDateCountdown } from '../../../../../../hooks';
 import * as styles from './styles';
 import { HighestBid } from './components';
-import { INFT, IOrder, IUser } from '../../../../types';
+import { IERC20AssetType, INFT, IOrder, IUser } from '../../../../types';
 import { NFTCheckoutPopup } from '../nft-checkout-popup';
 import { NFTPlaceABidPopup } from '../nft-place-a-bid-popup';
 import { NFTMakeAnOfferPopup } from '../nft-make-an-offer-popup';
@@ -18,7 +18,7 @@ import { NFTChangeListingPricePopup } from '../nft-change-listing-price-popup';
 import { useAuthContext } from '../../../../../../../contexts/AuthContext';
 import { BuyNFTSectionState } from './enums';
 import { utils } from 'ethers';
-import { TOKENS_MAP } from '../../../../../../constants';
+import { getTokenByAddress, TOKENS_MAP } from '../../../../../../constants';
 import { TokenTicker } from '../../../../../../enums';
 import { getRoyaltiesFromRegistry } from '../../../../../../../utils/marketplace/utils';
 import { HighestOffer } from './components/highest-offer';
@@ -116,7 +116,7 @@ export const NFTBuySection = ({ NFT, owner, NFTs, order, highestOffer, onMeasure
   const buyNowButton = () => (
     <Tooltip label={"Can't buy this NFT. It's either not available yet or already expired."} isDisabled={!!canCheckoutOrder} hasArrow shouldWrapChildren placement='top'>
       <Button boxShadow={'lg'} onClick={() => setIsCheckoutPopupOpened(true)} disabled={!canCheckoutOrder} style={{"width": "100%"}}>
-        Buy for {listingPrice} {order?.take.assetType.assetClass}
+        Buy for {listingPrice} {getTokenByAddress((order?.take.assetType as IERC20AssetType).contract).ticker}
       </Button>
     </Tooltip>
   );
@@ -210,7 +210,7 @@ export const NFTBuySection = ({ NFT, owner, NFTs, order, highestOffer, onMeasure
               <Button variant={'outline'} onClick={() => setIsCancelListingPopupOpened(true)}>Cancel listing</Button>
             </SimpleGrid>
             <Text {...styles.ContentFeeLabelStyle} textAlign={'center'} mt={'12px'}>
-              This NFT is in your wallet and listed for <strong>{listingPrice} {order?.take.assetType.assetClass}</strong>
+              This NFT is in your wallet and listed for <strong>{listingPrice} {getTokenByAddress((order?.take.assetType as IERC20AssetType).contract).ticker}</strong>
             </Text>
           </>
         )}
