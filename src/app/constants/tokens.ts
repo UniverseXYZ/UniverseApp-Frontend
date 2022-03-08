@@ -63,7 +63,7 @@ export const getTokenByAddress = (tokenAddress: string) => {
     const contract = contractsData[contractName];
 
     if (tokenAddress && contract.address && contract.address.toLowerCase() === tokenAddress.toLowerCase()) {
-      token =  TOKENS_MAP[contractName as TokenTicker];
+      token = TOKENS.find(tkn => tkn.contractName === contractName as TokenTicker);
     }
   })
   return token || TOKENS_MAP[TokenTicker.ETH];
