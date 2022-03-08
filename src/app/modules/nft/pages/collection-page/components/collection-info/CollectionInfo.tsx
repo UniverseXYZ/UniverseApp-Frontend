@@ -42,7 +42,7 @@ export const CollectionInfo = () => {
 
   const { data: NFTsPages, fetchNextPage, hasNextPage, isFetching, isLoading, isIdle } = useInfiniteQuery(
     ['user', collectionAddress, 'NFTs'],
-    ({ pageParam = 349 }) => GetCollectionNFTsApi(utils.getAddress(collectionAddress), pageParam, PER_PAGE),
+    ({ pageParam = 1 }) => GetCollectionNFTsApi(utils.getAddress(collectionAddress), pageParam, PER_PAGE),
     {
       enabled: !!collectionAddress,
       retry: false,
