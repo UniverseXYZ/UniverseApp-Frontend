@@ -20,7 +20,7 @@ export const UserProfilePage = () => {
 
   const [totalNFTs, setTotalNFTs] = useState<number>();
 
-  const { isLoading, isError,  } = useQuery<any>(
+  const { isLoading, isError } = useQuery<any>(
     ['artist', artistUsername],
     () => getArtistApi(artistUsername),
     {
@@ -28,12 +28,19 @@ export const UserProfilePage = () => {
         setArtist(data.artist);
         setArtistAddress(data.address)
       },
-    }
+      refetchOnMount: 'always'
+    },
   );
 
   useTitle(`Universe Minting - Artist - ${artist?.name}`, { restoreOnUnmount: true });
 
-  return isLoading ? (
+  if(isError) {
+    return (
+      <NotFound />
+    )
+  }
+
+  let content = (
     <div className="artist__details__section">
       <div style={{ marginTop: 60, marginBottom: 60 }} className="artist__page">
         <div className="artist__details__section__container">
@@ -61,34 +68,39 @@ export const UserProfilePage = () => {
         </div>
       </div>
     </div>
-  ) : isError ? (
-    <NotFound />
-  ) : (
-    <div className="artist__page">
-      <Box sx={{ 'img': { display: 'inline' } }}>
-        <ArtistDetails artistAddress={artistUsername} onArtist={artist} loading={isLoading} />
-      </Box>
-      <Container maxW={'1110px'}>
-        <Tabs>
-          <TabList>
-            <Tab>NFTs <TabLabel>{totalNFTs}</TabLabel></Tab>
-            {/*<Tab>Active auctions</Tab>*/}
-            {/*<Tab>Future auctions</Tab>*/}
-            {/*<Tab>Past auctions</Tab>*/}
-          </TabList>
-
-          <TabPanels>
-            <TabPanel p={0} pt={'30px'}>
-              <ArtistNFTsTab artistAddress={artistAddress} onTotalLoad={(total) => setTotalNFTs(total)} />
-            </TabPanel>
-          </TabPanels>
-        </Tabs>
-      </Container>
-      {artist && artist.personalLogo && (
-        <div className="artist__personal__logo">
-          <img src={artist.personalLogo} alt="Artist personal logo" />
-        </div>
-      )}
-    </div>
   );
+
+    if(artist) {
+        content = (
+            <div className="artist__page">
+              <Box sx={{ 'img': { display: 'inline' } }}>
+                <ArtistDetails artistAddress={artistUsername} onArtist={artist} loading={isLoading} />
+              </Box>
+              <Container maxW={'1110px'}>
+                <Tabs>
+                  <TabList>
+                    <Tab>NFTs <TabLabel>{totalNFTs}</TabLabel></Tab>
+                    {/*<Tab>Active auctions</Tab>*/}
+                    {/*<Tab>Future auctions</Tab>*/}
+                    {/*<Tab>Past auctions</Tab>*/}
+                  </TabList>
+
+                  <TabPanels>
+                    <TabPanel p={0} pt={'30px'}>
+                      <ArtistNFTsTab artistAddress={artistAddress} onTotalLoad={(total) => setTotalNFTs(total)} />
+                    </TabPanel>
+                  </TabPanels>
+                </Tabs>
+              </Container>
+              {artist && artist.personalLogo && (
+                <div className="artist__personal__logo">
+                  <img src={artist.personalLogo} alt="Artist personal logo" />
+                </div>
+              )}
+            </div>
+        )
+  }
+
+  return content;
+
 };
