@@ -1,7 +1,6 @@
 import axios from 'axios';
-import { INFT, NFTArtworkType, NFTStandard } from '../modules/nft/types';
-import { getArtworkType } from '../helpers';
-import { mapBackendNft } from '../modules/nft';
+import { INFT } from '../modules/nft/types';
+import { mapNft } from '../modules/nft/api';
 interface IUserNFTsResponse {
   data: any[];
   page: number;
@@ -36,7 +35,7 @@ export const getUserNFTsApi = async (props: IGetUserNFTsProps) => {
   const { data: { data, ...responseData } } = await axios.get<IUserNFTsResponse>(url);
 
   return {
-    data: data.map((nft) => mapBackendNft(nft)) as INFT[],
+    data: data.map((nft) => mapNft(nft, undefined)) as INFT[],
     ...responseData,
   }
 };

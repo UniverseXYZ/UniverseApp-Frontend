@@ -72,6 +72,7 @@ export const NftItem = (
       retry: false,
       staleTime: typeof _collection === 'string' ? 0 : Infinity,
       initialData: typeof _collection === 'string' ? undefined : _collection,
+      enabled: !!_collection
     },
   );
 
@@ -79,7 +80,7 @@ export const NftItem = (
     ['NFT', collection?.address, typeof _tokenIdOrNFT === 'string' ? _tokenIdOrNFT : _tokenIdOrNFT.tokenId],
     () => GetNFT2Api(`${collection?.address}`, _tokenIdOrNFT as string),
     {
-      enabled: !!collection,
+      enabled: !!collection?.address,
       retry: false,
       staleTime: typeof _tokenIdOrNFT === 'string' ? 0 : Infinity,
       initialData: typeof _tokenIdOrNFT === 'string' ? undefined : _tokenIdOrNFT,

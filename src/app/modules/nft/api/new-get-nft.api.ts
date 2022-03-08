@@ -110,7 +110,7 @@ export const GetCollectionsFromScraperApi = async (search: string) : Promise<ISe
   }
 };
 
-function mapNft(data: INFTBackendType, collectionData: ICollection | undefined): INFT {
+export const mapNft = (data: INFTBackendType, collectionData: ICollection | undefined): INFT => {
   const alternativeImage = data.alternativeMediaFiles.find(file => file.type === ARTWORK_TYPES.image);
 
   return {
@@ -120,7 +120,7 @@ function mapNft(data: INFTBackendType, collectionData: ICollection | undefined):
     collection: collectionData,
     tokenIds: [data.tokenId],
     url: data?.metadata?.external_url,
-    id: data._id.toString(),
+    id: data._id,
     createdAt: new Date(data.createdAt),
     description: data?.metadata?.description,
     updatedAt: new Date(data.updatedAt),
