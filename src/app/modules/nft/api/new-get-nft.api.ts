@@ -17,6 +17,54 @@ import { INFTBackendType } from '../../../types';
 import { getArtworkType } from '../../../helpers';
 import { ARTWORK_TYPES } from '../../../../utils/helpers/pureFunctions/nfts';
 
+interface ICollectionNFTsResponse {
+  data: any[];
+  page: number;
+  size: string;
+  total: number;
+}
+interface IGetNFTResponse {
+  _id: string;
+  contractAddress: string;
+  tokenId: string;
+  createdAt: string;
+  needToRefresh: boolean;
+  alternativeMediaFiles: Array<{
+    type: string; // image
+    url: string;
+  }>;
+  firstOwner: string;
+  owners: Array<{
+    address: string;
+    transactionHash: string;
+    value: number;
+  }>;
+  tokenType: string;
+  updatedAt: string;
+  sentAt: string;
+  externalDomainViewUrl: string;
+  metadata: {
+    description: string;
+    name: string;
+    image: string;
+    image_url: string;
+    image_preview_url: string;
+    image_thumbnail_url: string;
+    image_original_url: string;
+    external_url: string;
+    attributes: Array<{
+      trait_type: string;
+      value: string;
+      display_type?: string;
+    }>;
+    royalties?: Array<{
+      address: string;
+      amount: number;
+    }>;
+  };
+  sentForMediaAt: string;
+}
+
 export const GetNFT2Api = async (collectionAddress: string, tokenId: string | number) => {
   try {
     const url = `${process.env.REACT_APP_DATASCRAPER_BACKEND}/v1/tokens/${ethers.utils.getAddress(collectionAddress)}/${tokenId}`;
@@ -182,5 +230,29 @@ export const GetUserCollectionsFromScraperApi = async (address: string) : Promis
   } catch (e) {
     console.log(e);
     return [];
+  }
+};
+
+
+/**
+ * Fetches collection nfts from Datascraper API
+ * @param address collection address
+ * @param page page
+ * @param size size
+ * @returns returns all the collection nfts
+ */
+export const GetCollectionNFTsApi = async (address: string, page: string | number, size: string | number) => {
+  try {
+    const url = `${process.env.REACT_APP_DATASCRAPER_BACKEND}/v1/collections/${address}/tokens?page=${page}&size=${size}`;
+  
+    const { data: { data, ...responseData } } = await axios.get<ICollectionNFTsResponse>(url);
+  
+    return {
+      data: data.map((nft: INFTBackendType) => mapNft(nft, undefined)),
+      ...responseData,
+    }
+  } catch (e) {
+    console.log(e);
+    return {} as ICollectionNFTsResponse;
   }
 };

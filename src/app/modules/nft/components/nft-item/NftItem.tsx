@@ -7,7 +7,7 @@ import { NFTItemAsset, NFTItemFooter, NFTItemRelation } from './components';
 import { ItemWrapper } from '../../../../components';
 import * as styles from './styles';
 import { NFTRelationType } from '../../enums';
-import { GetBestAndLastOffer, GetCollectionApi, GetNFT2Api, GetUserApi } from '../../api';
+import { GetActiveListingApi, GetBestAndLastOffer, GetCollectionApi, GetNFT2Api, GetUserApi } from '../../api';
 import { TokenTicker } from '../../../../enums';
 import { utils } from 'ethers';
 import { getTokenByAddress } from '../../../../constants';
@@ -37,7 +37,7 @@ export interface INftItemProps {
   order?: IOrder;
   isSelected?: boolean;
   selectedLabel?: string;
-
+  showBuyNowButton?: boolean;
   renderHeader?: IRenderFunc;
   renderAsset?: IRenderFunc;
   renderContent?: IRenderFunc;
@@ -53,7 +53,7 @@ export const NftItem = (
     order,
     isSelected,
     selectedLabel,
-
+    showBuyNowButton = true,
     renderHeader,
     renderAsset,
     renderContent,
@@ -63,7 +63,6 @@ export const NftItem = (
   }: INftItemProps
 ) => {
   const [isCheckoutPopupOpened, setIsCheckoutPopupOpened] = useState(false);
-
 
   const { data: collection, isLoading: isLoadingCollection } = useQuery(
     ['collection', typeof _collection === 'string' ? _collection : _collection.address],
@@ -111,6 +110,15 @@ export const NftItem = (
     {
       enabled: !!NFT?._collectionAddress && !!NFT?.tokenId,
       retry: false,
+    },
+  );
+
+  const { data: orderData, isLoading: isLoadingOrder } = useQuery(
+    ['listing', collection?.address, NFT?.tokenId],
+    () => GetActiveListingApi(collection?.address ?? "", NFT?.tokenId ?? ""),
+    {
+      retry: false,
+      enabled: !!collection?.address && !!NFT?.tokenId
     },
   );
 
@@ -222,7 +230,7 @@ export const NftItem = (
                 isLoadingCreator,
                 isLoadingOwner,
               }) : (
-                <NFTItemFooter isCheckoutPopupOpened={isCheckoutPopupOpened} setIsCheckoutPopupOpened={setIsCheckoutPopupOpened} NFT={NFT as INFT} />
+                <NFTItemFooter isCheckoutPopupOpened={isCheckoutPopupOpened} setIsCheckoutPopupOpened={setIsCheckoutPopupOpened} showBuyNowButton={showBuyNowButton && orderData && orderData.side === 1 && orderData.status === 0 ? true : false} NFT={NFT as INFT} />
               )
             }
           </Box>
@@ -232,7 +240,7 @@ export const NftItem = (
       {NFT?.id && (
         <NFTCheckoutPopup
           NFT={NFT}
-          order={order as IOrder}
+          order={order ? order as IOrder : orderData as IOrder}
           isOpen={isCheckoutPopupOpened}
           onClose={() => setIsCheckoutPopupOpened(false)}
         />

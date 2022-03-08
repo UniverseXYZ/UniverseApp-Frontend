@@ -57,7 +57,7 @@ import Minting from './components/products/minting/Minting';
 import { App as NewApp } from './app/App';
 import { SellPage, BrowseNFTsPage } from './app/modules/marketplace/pages';
 import { LayoutProvider } from './app/providers';
-import { BundlePage, NFTPage } from './app/modules/nft';
+import { BundlePage, NFTPage, CollectionPage } from './app/modules/nft';
 // When the Whole App becomes TypeScript compatible, move this Popup in more appropriate place.
 import { LoadingPopup } from './app/modules/marketplace/components/popups/loading-popup';
 import { MyNFTsPage, UserProfilePage } from './app/modules/account';
@@ -120,7 +120,7 @@ const routes = {
   // '/auction-review': new UniverseRoute(AuctionReview, true),
   '/:artistUsername': new UniverseRoute(UserProfilePage, false, true),
   '/v1/:artistUsername': new UniverseRoute(Artist),
-  '/collection/:collectionAddress': new UniverseRoute(Collection),
+  '/collection/:collectionAddress': new UniverseRoute(CollectionPage, false, true),
   // '/:artist/:auction': new UniverseRoute(AuctionLandingPage),
   '*': new UniverseRoute(NotFound, false, false, { exact: false }),
 };

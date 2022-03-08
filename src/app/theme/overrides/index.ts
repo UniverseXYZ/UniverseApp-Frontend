@@ -3,6 +3,7 @@ export * from './checkbox';
 export * from './container';
 export * from './heading';
 export * from './input';
+export * from './menu';
 export * from './modal';
 export * from './number-input';
 export * from './popover';
