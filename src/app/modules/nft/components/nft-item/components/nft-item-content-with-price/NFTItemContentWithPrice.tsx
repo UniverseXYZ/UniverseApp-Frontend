@@ -6,7 +6,7 @@ import { NFTRelationType, OrderAssetClass } from '../../../../enums';
 import { ICollection, IERC721AssetType, IOrder, IUser } from '../../../../types';
 import { TokenTicker } from '../../../../../../enums';
 import { TokenIcon } from '../../../../../../components';
-import { TOKENS_MAP } from '../../../../../../constants';
+import { getTokenByAddress, TOKENS_MAP } from '../../../../../../constants';
 import { useQuery } from 'react-query';
 import { GetActiveListingApi, GetOrdersApi } from '../../../../api';
 import { utils } from 'ethers';
@@ -71,17 +71,21 @@ export const NFTItemContentWithPrice = (
     return [null, null, defaultTicker];
   }, [bestOfferPrice, bestOfferPriceToken, lastOfferPrice, lastOfferPriceToken]);
 
+  const priceToken = useMemo(() => {
+    if (!order) {
+      return TOKENS_MAP.ETH;
+    }
+
+    return getTokenByAddress((order.take.assetType as IERC721AssetType).contract);
+  }, [order]);
+
   const price = useMemo(() => {
     if (!order) {
       return null;
     }
 
-    return utils.formatUnits(order.take.value, `${TOKENS_MAP[order.take.assetType.assetClass as TokenTicker].decimals}`);
-  }, [order]);
-
-  const priceToken = useMemo(() => {
-    return (order?.take.assetType.assetClass as TokenTicker) ?? null;
-  }, [order]);
+    return utils.formatUnits(order.take.value, `${priceToken.decimals}`);
+  }, [order, priceToken]);
 
   return (
     <>
@@ -92,7 +96,7 @@ export const NFTItemContentWithPrice = (
           {order && (
             <>
               <TokenIcon
-                ticker={priceToken}
+                ticker={priceToken.ticker}
                 display={'inline'}
                 mx={'4px'}
                 position={'relative'}
