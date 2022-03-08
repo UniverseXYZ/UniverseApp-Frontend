@@ -61,7 +61,7 @@ export const CurrencySelect = ({ value, onChange }: ICurrencySelectProps) => {
         width: '100%',
       }}
       containerProps={{
-        maxHeight: '230px',
+        maxHeight: '110px',
         overflowY: 'scroll',
         width: 'auto',
       }}

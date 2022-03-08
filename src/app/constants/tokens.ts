@@ -68,3 +68,12 @@ export const getTokenByAddress = (tokenAddress: string) => {
   })
   return token || TOKENS_MAP[TokenTicker.ETH];
 }
+
+export const getTokenAddressByTicker = (ticker: TokenTicker) => {
+  // @ts-ignore
+  const { contracts: contractsData } = Contracts[process.env.REACT_APP_NETWORK_CHAIN_ID];
+  const token = TOKENS_MAP[ticker as TokenTicker];
+  const tokenAddress = contractsData[token.contractName].address
+
+  return tokenAddress
+}

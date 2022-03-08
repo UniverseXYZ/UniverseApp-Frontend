@@ -49,6 +49,8 @@ import { CollectionPageLoader } from '../../../../../containers/collection/Colle
 import { OrderAssetClass } from '../../../nft/enums';
 import BrowseFilterPopup from '../../../../../components/popups/BrowseFiltersPopup';
 import * as styles from './styles';
+import { getTokenAddressByTicker } from '../../../../constants';
+import { TokenTicker } from '../../../../enums';
 
 export const BrowseNFTsPage = () => {
   const { setDarkMode } = useThemeContext() as any;
@@ -148,7 +150,6 @@ export const BrowseNFTsPage = () => {
     }
   });
 
-  // TODO
   const artistsFilterForm = useFormik<ICollectionsFilterValue>({
     initialValues: [],
     onSubmit: () => {},
@@ -187,7 +188,9 @@ export const BrowseNFTsPage = () => {
     
     // Price Filters
     if (priceRangeFilterForm.values.currency.token && priceRangeFilterForm.dirty) {
-      apiFilters['token'] = priceRangeFilterForm.values.currency.token;
+      const ticker = priceRangeFilterForm.values.currency.token as TokenTicker;
+      const tokenAddress = getTokenAddressByTicker(ticker)
+      apiFilters['token'] = tokenAddress;
     }
 
     const [minPrice, maxPrice] = priceRangeFilterForm.values.price;
