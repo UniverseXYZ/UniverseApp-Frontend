@@ -37,6 +37,7 @@ export interface INftItemProps {
   order?: IOrder;
   isSelected?: boolean;
   selectedLabel?: string;
+  showBuyNowButton?: boolean;
   renderHeader?: IRenderFunc;
   renderAsset?: IRenderFunc;
   renderContent?: IRenderFunc;
@@ -52,6 +53,7 @@ export const NftItem = (
     order,
     isSelected,
     selectedLabel,
+    showBuyNowButton,
     renderHeader,
     renderAsset,
     renderContent,
@@ -228,7 +230,7 @@ export const NftItem = (
                 isLoadingCreator,
                 isLoadingOwner,
               }) : (
-                <NFTItemFooter isCheckoutPopupOpened={isCheckoutPopupOpened} setIsCheckoutPopupOpened={setIsCheckoutPopupOpened} showBuyNowButton={orderData && orderData.side === 1 && orderData.status === 0 ? true : false} NFT={NFT as INFT} />
+                <NFTItemFooter isCheckoutPopupOpened={isCheckoutPopupOpened} setIsCheckoutPopupOpened={setIsCheckoutPopupOpened} showBuyNowButton={showBuyNowButton && orderData && orderData.side === 1 && orderData.status === 0 ? true : false} NFT={NFT as INFT} />
               )
             }
           </Box>

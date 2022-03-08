@@ -248,7 +248,7 @@ export const GetCollectionNFTsApi = async (address: string, page: string | numbe
     const { data: { data, ...responseData } } = await axios.get<ICollectionNFTsResponse>(url);
   
     return {
-      data: data.map((nft: IGetNFTResponse) => mapNft(nft, undefined)),
+      data: data.map((nft: INFTBackendType) => mapNft(nft, undefined)),
       ...responseData,
     }
   } catch (e) {

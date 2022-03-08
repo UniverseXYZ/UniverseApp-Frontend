@@ -25,6 +25,7 @@ import Tabs from '../../../../../../../components/tabs/Tabs';
 import Description from '../../../../../../../components/collection/Description.jsx';
 import EmptyData from '../../../../../../../components/collection/EmptyData.jsx';
 import { OrderAssetClass } from '../../../../enums';
+import { NoDescriptionFound } from '../../../../components/no-description-found';
 
 const PER_PAGE = 8;
 
@@ -149,6 +150,7 @@ export const CollectionInfo = () => {
                                     <NftItem
                                       key={NFT.id}
                                       NFT={NFT}
+                                      showBuyNowButton
                                       collection={`${NFT._collectionAddress}`}
                                       renderContent={({ NFT, collection, creator, owner, bestOfferPrice, bestOfferPriceToken, lastOfferPrice, lastOfferPriceToken }) => (
                                         <NFTItemContentWithPrice
@@ -192,7 +194,7 @@ export const CollectionInfo = () => {
                           {collection.description ? (
                             <Description selectedCollection={collection}/>
                           ) : (
-                            <EmptyData text="This collection doesn’t have a description yet" />
+                            <NoDescriptionFound />
                           )}
                         </>
                     ) : (
