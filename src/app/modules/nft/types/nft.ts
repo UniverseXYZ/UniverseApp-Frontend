@@ -45,6 +45,11 @@ export interface ICollection {
   name: string;
   owner: string;
   publicCollection: boolean;
+  instagramLink: string;
+  discordLink: string;
+  telegramLink: string;
+  siteLink: string;
+  mediumLink: string;
   shortUrl: string;
   source: string;
   symbol: string;
