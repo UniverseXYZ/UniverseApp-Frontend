@@ -30,9 +30,9 @@ import ArrowIcon from '../../../../../../../assets/images/arrow-down.svg';
 import SuccessIcon from '../../../../../../../assets/images/bid-submitted.png';
 
 import * as styles from './styles';
-import { TOKENS, TOKENS_MAP } from '../../../../../../constants';
+import { getTokenAddressByTicker, getTokenByAddress, TOKENS, TOKENS_MAP } from '../../../../../../constants';
 import { Loading, TokenIcon } from '../../../../../../components';
-import { INFT, IOrder } from '../../../../types';
+import { IERC721AssetType, INFT, IOrder } from '../../../../types';
 import { TokenTicker } from '../../../../../../enums';
 import { EncodeOrderApi, GetSaltApi, IEncodeOrderApiData } from '../../../../../../api';
 import { useAuthContext } from '../../../../../../../contexts/AuthContext';
@@ -79,7 +79,7 @@ export const NFTChangeListingPricePopup = ({ nft, order, isOpen, onClose, }: INF
   const formik = useFormik<{ amount: string; token: TokenTicker }>({
     initialValues: {
       amount: ethers.utils.formatEther(BigNumber.from(order?.take?.value || 0)),
-      token: TOKENS_MAP.ETH.ticker,
+      token: getTokenByAddress((order?.take?.assetType as IERC721AssetType)?.contract)?.ticker,
     },
     validationSchema: NFTChangeListingPriceValidationSchema,
     onSubmit: async (value) => {
@@ -127,10 +127,15 @@ export const NFTChangeListingPricePopup = ({ nft, order, isOpen, onClose, }: INF
       end: order.end,
       data: order.data,
     };
+    const newToken = TOKENS_MAP[value.token as TokenTicker];
+
     orderData.take.value = ethers.utils.parseUnits(
       `${value.amount}`,
-      `${TOKENS_MAP[value.token as TokenTicker].decimals}`
-    ).toString()
+      `${newToken.decimals}`
+    ).toString();
+    
+    const tokenAddress = getTokenAddressByTicker(newToken.ticker)
+    orderData.take.assetType.contract = tokenAddress;
 
     const { data: encodedOrder } = (await encodeOrderMutation.mutateAsync(orderData as IEncodeOrderApiData));
 
