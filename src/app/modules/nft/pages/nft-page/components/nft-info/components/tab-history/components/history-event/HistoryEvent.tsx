@@ -10,7 +10,7 @@ import { getTokenByAddress, TOKENS_MAP, ZERO_ADDRESS } from '../../../../../../.
 import { TokenTicker } from '../../../../../../../../../../enums';
 import { useTokenPrice } from '../../../../../../../../../../hooks';
 import { IToken } from '../../../../../../../../../../types';
-import { IERC721AssetType, IOrder } from '../../../../../../../../types';
+import { IERC20AssetType, IERC721AssetType, IOrder } from '../../../../../../../../types';
 import { HistoryType } from '../../../../../../enums';
 import { actionIcon, nameLabels } from '../../constants';
 import { getAddedAtLabel } from '../../helpers';
@@ -37,7 +37,7 @@ const HistoryEvent:React.FC<IHistoryEventProps> = ({event}) => {
       
       price = new BigNumber(utils.formatUnits(event.make.value, tokenDecimals)).toFixed(2);
     } else {
-      token = TOKENS_MAP[event.take.assetType.assetClass as TokenTicker]
+      token = getTokenByAddress((event.take.assetType as IERC20AssetType).contract);
       const tokenDecimals = token?.decimals ?? 18;
       
       price = new BigNumber(utils.formatUnits(event.take.value, tokenDecimals)).toFixed(2);

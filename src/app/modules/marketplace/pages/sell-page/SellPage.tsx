@@ -33,6 +33,7 @@ import { GetNFT2Api } from '../../../nft/api';
 import { INFT } from '../../../nft/types';
 import { EncodeOrderApi, GetSaltApi, IEncodeOrderApiData } from '../../../../api';
 import Contracts from '../../../../../contracts/contracts.json';
+import { OrderAssetClass } from '../../../nft/enums';
 
 // @ts-ignore
 const { contracts: contractsData } = Contracts[process.env.REACT_APP_NETWORK_CHAIN_ID];
@@ -126,7 +127,7 @@ export const SellPage = () => {
         taker: values.buyerAddress || ZERO_ADDRESS,
         take: {
           assetType: {
-            assetClass: values.priceCurrency,
+            assetClass: values.priceCurrency === OrderAssetClass.ETH ? OrderAssetClass.ETH : OrderAssetClass.ERC20,
           },
           value: utils.parseUnits(
             `${values.price}`,
@@ -144,6 +145,10 @@ export const SellPage = () => {
           })) || []
         },
       };
+
+      if (orderData.take.assetType.assetClass === OrderAssetClass.ERC20) {
+        orderData.take.assetType.contract = contractsData[values.priceCurrency]?.address;
+      }
 
       const { data: encodedOrder } = (await encodeOrderMutation.mutateAsync(orderData));
 

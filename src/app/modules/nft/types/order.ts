@@ -6,6 +6,10 @@ export interface IERC721AssetType {
   contract: string;
   tokenId: number;
 }
+export interface IERC20AssetType {
+  assetClass: OrderAssetClass.ERC20;
+  contract: string;
+}
 
 export interface IERC721BundleAssetType {
   assetClass: OrderAssetClass.ERC721_BUNDLE;
@@ -47,6 +51,7 @@ export interface IOrder {
   take: {
     assetType: {
       assetClass: string;
+      contract?: string;
     }
     value: string;
   };

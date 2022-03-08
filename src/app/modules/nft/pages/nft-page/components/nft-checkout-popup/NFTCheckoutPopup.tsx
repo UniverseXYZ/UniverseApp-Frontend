@@ -30,9 +30,9 @@ import { Checkbox, InputShadow, Loading, TokenIcon } from '../../../../../../com
 import { NFTType } from './components';
 import { CheckoutState } from './enums';
 import * as styles from './styles';
-import { INFT, IOrder } from '../../../../types';
+import { IERC20AssetType, IERC721AssetType, INFT, IOrder } from '../../../../types';
 import { isNFTAssetAudio, isNFTAssetImage, isNFTAssetVideo } from '../../../../helpers';
-import { TOKENS_MAP } from '../../../../../../constants';
+import { getTokenByAddress, TOKENS_MAP } from '../../../../../../constants';
 import { TokenTicker } from '../../../../../../enums';
 import { useMutation } from 'react-query';
 import axios from 'axios';
@@ -41,6 +41,7 @@ import { NFTCustomError } from '../nft-custom-error/NFTCustomError';
 import { getEtherscanTxUrl } from '../../../../../../../utils/helpers';
 import { formatAddress } from '../../../../../../../utils/helpers/format';
 import { useTokenPrice } from '../../../../../../hooks';
+import { IToken } from '../../../../../../types';
 // @ts-ignore
 const { contracts: contractsData } = Contracts[process.env.REACT_APP_NETWORK_CHAIN_ID];
 
@@ -67,25 +68,21 @@ export const NFTCheckoutPopup = ({ NFT, NFTs, order, isOpen, onClose }: INFTChec
     return axios.post(`${process.env.REACT_APP_MARKETPLACE_BACKEND}/v1/orders/${hash}/prepare`, data);
   });
 
-  const tokenTicker = order?.take.assetType.assetClass as TokenTicker
+  const tokenTicker =  getTokenByAddress((order?.take?.assetType as IERC20AssetType)?.contract);
 
-  const tokenDecimals = TOKENS_MAP[tokenTicker]?.decimals ?? 18
-
-  const listingPrice = Number(utils.formatUnits(order?.take.value || 0, tokenDecimals))
+  const listingPrice = Number(utils.formatUnits(order?.take.value || 0, tokenTicker.decimals));
   
-  const usdPrice = useTokenPrice(tokenTicker);
+  const usdPrice = useTokenPrice(tokenTicker.ticker);
 
   const usdListingPrice = Math.round(listingPrice * usdPrice)
 
   const handleCheckoutClick = useCallback(async () => {
     try {
       setState(CheckoutState.PROCESSING);
-
-      const paymentToken = TOKENS_MAP[order.take.assetType.assetClass as TokenTicker];
+      const paymentToken = getTokenByAddress((order?.take?.assetType as IERC20AssetType)?.contract);
 
       if (paymentToken.ticker !== TokenTicker.ETH) {
-        const paymentAmount = utils.parseUnits(order.take.value, paymentToken.decimals);
-  
+        const paymentAmount = BigNumber.from(order.take.value);
         const contract = new Contract(contractsData[paymentToken.contractName].address, contractsData[paymentToken.contractName].abi, signer);
         const balance = await contract.balanceOf(address);
   
@@ -197,7 +194,7 @@ export const NFTCheckoutPopup = ({ NFT, NFTs, order, isOpen, onClose }: INFTChec
                 </Box>
                 <Box {...styles.PriceContainerStyle}>
                   <Text fontSize={'14px'}>
-                    <TokenIcon ticker={tokenTicker} display={'inline'} size={20} mr={'6px'} mt={'-3px'} />
+                    <TokenIcon ticker={tokenTicker.ticker} display={'inline'} size={20} mr={'6px'} mt={'-3px'} />
                     {listingPrice}
                   </Text>
                   <Text {...styles.PriceUSDStyle}>${usdListingPrice}</Text>
@@ -208,7 +205,7 @@ export const NFTCheckoutPopup = ({ NFT, NFTs, order, isOpen, onClose }: INFTChec
                 <Text>Total</Text>
                 <Box {...styles.PriceContainerStyle}>
                   <Text fontSize={'18px'}>
-                    <TokenIcon ticker={tokenTicker} display={'inline'} size={24} mr={'6px'} mt={'-3px'} />
+                    <TokenIcon ticker={tokenTicker.ticker} display={'inline'} size={24} mr={'6px'} mt={'-3px'} />
                     {listingPrice}
                   </Text>
                   <Text {...styles.PriceUSDStyle}>${usdListingPrice}</Text>
@@ -225,7 +222,7 @@ export const NFTCheckoutPopup = ({ NFT, NFTs, order, isOpen, onClose }: INFTChec
           {state === CheckoutState.INSUFFICIENT_BALANCE && (
             <NFTCustomError
               title={`Insufficient balance`}
-              message={`You do not have enough ${TOKENS_MAP[order.take.assetType.assetClass as TokenTicker].ticker} in your wallet!`}
+              message={`You do not have enough ${getTokenByAddress(order?.take.assetType.contract as TokenTicker).ticker} in your wallet!`}
             ></NFTCustomError>
           )}
 
