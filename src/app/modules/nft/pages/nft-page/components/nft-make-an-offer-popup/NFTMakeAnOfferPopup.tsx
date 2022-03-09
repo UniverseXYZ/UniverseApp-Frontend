@@ -50,6 +50,7 @@ import { useNFTPageData } from '../../NFTPage.context';
 import { getEtherscanTxUrl} from '../../../../../../../utils/helpers';
 import { formatAddress } from '../../../../../../../utils/helpers/format';
 import { NFTCustomError } from '../nft-custom-error/NFTCustomError';
+import { useErrorContext } from '../../../../../../../contexts/ErrorContext';
 
 // @ts-ignore
 const { contracts: contractsData } = Contracts[process.env.REACT_APP_NETWORK_CHAIN_ID];
@@ -77,6 +78,8 @@ interface INFTMakeAnOfferPopupProps {
 
 export const NFTMakeAnOfferPopup = ({ nft, order, isOpen, onClose, }: INFTMakeAnOfferPopupProps) => {
   const tokensBtnRef = useRef<HTMLButtonElement>(null);
+  
+  const { setShowError, setErrorBody} = useErrorContext() as any;
 
   const { signer, web3Provider } = useAuthContext() as any;
   const { setRefetchOffers } = useNFTPageData();
@@ -197,9 +200,25 @@ export const NFTMakeAnOfferPopup = ({ nft, order, isOpen, onClose, }: INFTMakeAn
         setState(MakeAnOfferState.SUCCESS);
         setRefetchOffers(true);
         setApproveTx('');
-        } catch(err) {
+        } catch(err: any) {
+        console.log(err)   
         setState(MakeAnOfferState.FORM);
-        console.log(err)
+  
+        // Code 4001 is user rejected transaction
+        if (err?.code === 4001) {
+          return;
+        } 
+  
+        // Check if error comes from api request and if the api has returned a meaningful messages
+        if (getSaltMutation.isError && !!(getSaltMutation as any)?.error?.response?.data?.message) {
+          setErrorBody((getSaltMutation as any)?.error?.response?.data?.message)
+        } else if (encodeDataMutation.isError && !!(encodeDataMutation as any)?.error?.response?.data?.message) {
+          setErrorBody((encodeDataMutation as any)?.error?.response?.data?.message)
+        } else if (createOfferMutation.isError && !!(createOfferMutation as any)?.error?.response?.data?.message) {
+          setErrorBody((createOfferMutation as any)?.error?.response?.data?.message)
+        }
+
+        setShowError(true);
       }
     },
   });
