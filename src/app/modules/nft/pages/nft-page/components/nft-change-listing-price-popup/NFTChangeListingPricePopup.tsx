@@ -30,7 +30,7 @@ import ArrowIcon from '../../../../../../../assets/images/arrow-down.svg';
 import SuccessIcon from '../../../../../../../assets/images/bid-submitted.png';
 
 import * as styles from './styles';
-import { getTokenAddressByTicker, getTokenByAddress, TOKENS, TOKENS_MAP } from '../../../../../../constants';
+import { getTokenAddressByTicker, getTokenByAddress, TOKENS, TOKENS_MAP, ZERO_ADDRESS } from '../../../../../../constants';
 import { Loading, TokenIcon } from '../../../../../../components';
 import { IERC721AssetType, INFT, IOrder } from '../../../../types';
 import { TokenTicker } from '../../../../../../enums';
@@ -135,7 +135,9 @@ export const NFTChangeListingPricePopup = ({ nft, order, isOpen, onClose, }: INF
     ).toString();
     
     const tokenAddress = getTokenAddressByTicker(newToken.ticker)
-    orderData.take.assetType.contract = tokenAddress;
+    if (tokenAddress !== ZERO_ADDRESS) {
+      orderData.take.assetType.contract = tokenAddress;
+    }
 
     const { data: encodedOrder } = (await encodeOrderMutation.mutateAsync(orderData as IEncodeOrderApiData));
 

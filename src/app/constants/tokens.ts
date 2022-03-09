@@ -9,6 +9,7 @@ import XYZIcon from './../../assets/images/v2/tokens/XYZ.svg';
 import WETHIcon from './../../assets/images/v2/tokens/WETH.svg';
 import Contracts from '../../contracts/contracts.json';
 import { useAuthContext } from '../../contexts/AuthContext';
+import { ZERO_ADDRESS } from './zero-address';
 
 export const TOKENS_MAP: Record<TokenTicker, IToken> = {
   [TokenTicker.ETH]: {
@@ -70,6 +71,9 @@ export const getTokenByAddress = (tokenAddress: string) => {
 }
 
 export const getTokenAddressByTicker = (ticker: TokenTicker) => {
+  if (ticker === 'ETH') {
+    return ZERO_ADDRESS;
+  }
   // @ts-ignore
   const { contracts: contractsData } = Contracts[process.env.REACT_APP_NETWORK_CHAIN_ID];
   const token = TOKENS_MAP[ticker as TokenTicker];
