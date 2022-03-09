@@ -174,7 +174,7 @@ export const mapNft = (data: INFTBackendType, collectionData: ICollection | unde
     createdAt: new Date(data.createdAt),
     description: data.metadata?.description,
     updatedAt: new Date(data.updatedAt),
-    videoUrl: data.metadata.animation_url,
+    videoUrl: data.metadata?.animation_url,
     gifUrl: data.metadata?.gif,
     previewUrl: data.metadata?.image_preview_url,
     thumbnailUrl: data.metadata?.image_thumbnail_url
