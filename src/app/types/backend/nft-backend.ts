@@ -22,6 +22,7 @@ export interface INFTBackendType {
     animation_url: string;
     description: string;
     name: string;
+    gif?: string;
     image: string;
     image_url: string;
     image_preview_url: string;

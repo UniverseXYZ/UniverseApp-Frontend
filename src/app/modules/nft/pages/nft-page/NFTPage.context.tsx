@@ -1,4 +1,4 @@
-import { FC, createContext, useContext, useState, useEffect } from 'react';
+import { FC, createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { useQuery } from 'react-query';
 import { useParams } from 'react-router-dom';
 
@@ -15,8 +15,7 @@ export interface INFTPageContext {
   owner: IUser;
   collection: ICollection;
   collectionAddress: string;
-  refetchOffers: boolean;
-  setRefetchOffers: React.Dispatch<React.SetStateAction<boolean>>;
+  refetchOffers: () => void;
   history: INFTHistory | undefined;
   offers: { orders: IOrder[]; total: number; } | undefined;
   moreFromCollection: INFT[] | undefined;
@@ -29,7 +28,6 @@ export function useNFTPageData(): INFTPageContext {
 }
 
 const NFTPageProvider: FC = ({ children }) => {
-  const [refetchOffers, setRefetchOffers] = useState<boolean>(false);
   const { collectionAddress, tokenId } = useParams<{ collectionAddress: string; tokenId: string; }>();
 
   const { data: NFT, isLoading: isLoadingNFT } = useQuery(
@@ -100,15 +98,10 @@ const NFTPageProvider: FC = ({ children }) => {
     });
   }, { enabled: !!NFT?.id });
 
-  useEffect(() => {
-    if(refetchOffers) {
-      refetchHistory();
-      refetchNFTOffers();
-      setRefetchOffers(false);
-    }
-  
-  }, [refetchOffers])
-  
+  const refetchOffers = useCallback(() => {
+    refetchHistory();
+    refetchNFTOffers();
+  }, []);
 
   const value: INFTPageContext = {
     order,
@@ -120,7 +113,6 @@ const NFTPageProvider: FC = ({ children }) => {
     isLoading: isLoadingNFT || isLoadingOrder,
     isPolymorph: NFT?._collectionAddress?.toUpperCase() === process.env.REACT_APP_POLYMORPHS_CONTRACT_ADDRESS?.toUpperCase(),
     refetchOffers,
-    setRefetchOffers,
     history,
     offers,
     moreFromCollection

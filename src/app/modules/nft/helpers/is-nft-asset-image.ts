@@ -6,6 +6,7 @@ export const isNFTAssetImage = (type: NFTArtworkType | null) => {
     NFTArtworkType.JPEG,
     NFTArtworkType.PNG,
     NFTArtworkType.IMAGE,
-    NFTArtworkType.WEBP
+    NFTArtworkType.WEBP,
+    NFTArtworkType.GIF,
   ].includes(type);
 }
