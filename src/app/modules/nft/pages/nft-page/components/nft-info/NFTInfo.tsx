@@ -45,6 +45,9 @@ import { GetOrdersApi, GetUserApi } from '../../../../api';
 import { OrderAssetClass } from '../../../../enums';
 import { getTokenByAddress } from '../../../../../../constants';
 import { useAuthContext } from '../../../../../../../contexts/AuthContext';
+import { Status } from './components/tab-offers/components/refresh-metadata-popup/enums';
+import { RefreshMetadataPopup } from './components/tab-offers/components/refresh-metadata-popup';
+import { ReportStatusPopup } from './components/tab-offers/components/report-status-popup';
 
 // TODO: hide metadata tab for not Polymorph NFT type
 export const NFTInfo = () => {
@@ -58,6 +61,7 @@ export const NFTInfo = () => {
   const [highestOffer, setHighestOffer] = useState<IOrder>();
   const [highestOfferCreator, setHighestOfferCreator] = useState<IUser>();
   const [offerUsersMap, setUsersMap] = useState<Record<string, IUser>>({});
+  const [refreshMetadataStatus, setRefreshMetadataStatus] = useState(Status.HIDDEN);
 
   const handleClickViewCollection = useCallback(() => {
     if (collectionAddress) {
@@ -78,15 +82,17 @@ export const NFTInfo = () => {
   
   const handleRefresh = async () => {
     try {
+      setRefreshMetadataStatus(Status.PROCESSING);
       const request = await sendRefreshMetadataRequest(NFT?.collection?.address || "", NFT.tokenId);
       
       if (request.status === 204) {
-        console.log("Successfully sent refresh metadata request")
+        setRefreshMetadataStatus(Status.SUCCESS);
+        return;
       }
-
     } catch(err) {
       console.log(err)
     }
+    setRefreshMetadataStatus(Status.HIDDEN);
   }
 
   const getOrderOffers = async () => {
@@ -309,6 +315,7 @@ export const NFTInfo = () => {
               </Box>
             )}
             <NFTTransferPopup NFT={NFT} isOpen={isTransferOpened} onClose={() => setIsTransferOpened(false)} />
+            <RefreshMetadataPopup status={refreshMetadataStatus} onClose={() => setRefreshMetadataStatus(Status.HIDDEN)} />
           </>
         )
       : (<NotFound />)}
