@@ -136,14 +136,7 @@ export const WalletTab = () => {
         />
       </Box>
 
-      {(isIdle || isLoading || isFetching) ? (
-        <SimpleGrid columns={{ base: 1, md: 2, lg: 4 }} spacing={'30px'}>
-          <NftCardSkeleton />
-          <NftCardSkeleton />
-          <NftCardSkeleton />
-          <NftCardSkeleton />
-        </SimpleGrid>
-      ) : NFTsPages?.pages?.length && NFTsPages?.pages[0]?.result?.data.length ? (
+      {NFTsPages?.pages?.length && NFTsPages?.pages[0]?.result?.data.length ? (
         <>
           <SimpleGrid columns={{ base: 1, md: 2, lg: 4 }} spacing={'30px'}>
             {(NFTsPages?.pages ?? []).map((page) => {
@@ -181,7 +174,20 @@ export const WalletTab = () => {
           )}
         </>
       ) : (
-        <NoNftsFound />
+        <>
+          {!isIdle && !isLoading && !isFetching ?
+            <NoNftsFound /> : <></>
+          }
+        </>
+      )}
+
+      {(isIdle || isLoading || isFetching) && (
+        <SimpleGrid columns={{ base: 1, md: 2, lg: 4 }} spacing={'30px'} mt={10}>
+          <NftCardSkeleton />
+          <NftCardSkeleton />
+          <NftCardSkeleton />
+          <NftCardSkeleton />
+        </SimpleGrid>
       )}
     </>
   );
