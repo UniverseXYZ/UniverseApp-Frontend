@@ -37,6 +37,8 @@ import { OrderAssetClass } from '../../../nft/enums';
 
 // @ts-ignore
 const { contracts: contractsData } = Contracts[process.env.REACT_APP_NETWORK_CHAIN_ID];
+import { Status, Status as PostingPopupStatus } from './components/tab-summary/compoents/posting-popup/enums/index';
+import { useErrorContext } from '../../../../../contexts/ErrorContext';
 
 const getValidationSchema = (amountType?: SellAmountType, sellMethod?: SellMethod) => {
   switch (sellMethod) {
@@ -55,7 +57,9 @@ const getValidationSchema = (amountType?: SellAmountType, sellMethod?: SellMetho
 export const SellPage = () => {
   const params = useParams<{ collectionAddress: string; tokenId: string; }>();
 
-  const { signer, web3Provider } = useAuthContext() as any;
+  const { signer, web3Provider, address } = useAuthContext() as any;
+
+  const { setShowError, setErrorBody} = useErrorContext() as any;
 
   const encodeOrderMutation = useMutation(EncodeOrderApi);
 
@@ -75,94 +79,117 @@ export const SellPage = () => {
   const [amountType, setAmountType] = useState<SellAmountType>(SellAmountType.SINGLE); // TODO: add Bundle
   const [sellMethod, setSellMethod] = useState<SellMethod>();
   const [isPosted, setIsPosted] = useState<boolean>(false);
+  const [postingPopupStatus, setPostingPopupStatus] = useState<PostingPopupStatus>(PostingPopupStatus.HIDDEN);
 
   const form = useFormik<ISellForm>({
     initialValues: {} as ISellForm,
     validateOnMount: true,
     validationSchema: getValidationSchema(amountType, sellMethod),
     onSubmit: async (values: any) => {
-      const network = await web3Provider.getNetwork();
-      const address = await signer.getAddress();
-
-      const salt = (await getSaltMutation.mutateAsync(address)).data.salt;
-
-      const make: any = {
-        assetType: {
-          assetClass: nft?.standard,
-          contract: nft?.collection?.address,
-          tokenId: params.tokenId,
-        },
-        value: '1',
-      };
-
-      if (amountType === SellAmountType.BUNDLE) {
-        const [contracts, tokenIds] = (values.bundleSelectedNFTs as string[]).reduce<[string[], [string[]]]>((acc, key: string) => {
-          const [NFTId, NFTHash, NFTTokenId] = key.split(':');
-
-          let i = acc[0].indexOf(NFTHash);
-
-          if (i === -1) {
-            acc[0].push(NFTHash);
-            acc[1].push([]);
-            i = acc[0].length - 1;
-          }
-
-          acc[1][i].push(NFTTokenId);
-          return acc;
-        }, [[(nft?.collection?.address ?? '')], [[params.tokenId]]]);
-
-        make.assetType = {
-          assetClass: 'ERC721_BUNDLE',
-          contracts: contracts,
-          tokenIds: tokenIds,
-          bundleName: values.bundleName,
-          bundleDescription: values.bundleDescription,
-        };
-      }
-
-      const orderData: IEncodeOrderApiData = {
-        salt: salt,
-        maker: address,
-        make,
-        taker: values.buyerAddress || ZERO_ADDRESS,
-        take: {
+      try {
+        const network = await web3Provider.getNetwork();
+        const address = await signer.getAddress();
+  
+        const salt = (await getSaltMutation.mutateAsync(address)).data.salt;
+  
+        const make: any = {
           assetType: {
-            assetClass: values.priceCurrency === OrderAssetClass.ETH ? OrderAssetClass.ETH : OrderAssetClass.ERC20,
+            assetClass: nft?.standard,
+            contract: nft?.collection?.address,
+            tokenId: params.tokenId,
           },
-          value: utils.parseUnits(
-            `${values.price}`,
-            `${TOKENS_MAP[values.priceCurrency as TokenTicker].decimals}`
-          ).toString(),
-        },
-        type: 'UNIVERSE_V1',
-        start: values.startDate ? Math.floor(values.startDate.getTime()/1000) : 0,
-        end: values.endDate ? Math.floor(values.endDate.getTime() / 1000) : 0,
-        data: {
-          dataType: 'ORDER_DATA',
-          revenueSplits: nft?.royalties?.map((royalty: any) => ({
-            account: royalty.address as string,
-            value: royalty.amount * 100,
-          })) || []
-        },
-      };
-
-      if (orderData.take.assetType.assetClass === OrderAssetClass.ERC20) {
-        orderData.take.assetType.contract = contractsData[values.priceCurrency]?.address;
+          value: '1',
+        };
+  
+        if (amountType === SellAmountType.BUNDLE) {
+          const [contracts, tokenIds] = (values.bundleSelectedNFTs as string[]).reduce<[string[], [string[]]]>((acc, key: string) => {
+            const [NFTId, NFTHash, NFTTokenId] = key.split(':');
+  
+            let i = acc[0].indexOf(NFTHash);
+  
+            if (i === -1) {
+              acc[0].push(NFTHash);
+              acc[1].push([]);
+              i = acc[0].length - 1;
+            }
+  
+            acc[1][i].push(NFTTokenId);
+            return acc;
+          }, [[(nft?.collection?.address ?? '')], [[params.tokenId]]]);
+  
+          make.assetType = {
+            assetClass: 'ERC721_BUNDLE',
+            contracts: contracts,
+            tokenIds: tokenIds,
+            bundleName: values.bundleName,
+            bundleDescription: values.bundleDescription,
+          };
+        }
+  
+        const orderData: IEncodeOrderApiData = {
+          salt: salt,
+          maker: address,
+          make,
+          taker: values.buyerAddress || ZERO_ADDRESS,
+          take: {
+            assetType: {
+              assetClass: values.priceCurrency === OrderAssetClass.ETH ? OrderAssetClass.ETH : OrderAssetClass.ERC20,
+            },
+            value: utils.parseUnits(
+              `${values.price}`,
+              `${TOKENS_MAP[values.priceCurrency as TokenTicker].decimals}`
+            ).toString(),
+          },
+          type: 'UNIVERSE_V1',
+          start: values.startDate ? Math.floor(values.startDate.getTime()/1000) : 0,
+          end: values.endDate ? Math.floor(values.endDate.getTime() / 1000) : 0,
+          data: {
+            dataType: 'ORDER_DATA',
+            revenueSplits: nft?.royalties?.map((royalty: any) => ({
+              account: royalty.address as string,
+              value: royalty.amount * 100,
+            })) || []
+          },
+        };
+  
+        if (orderData.take.assetType.assetClass === OrderAssetClass.ERC20) {
+          orderData.take.assetType.contract = contractsData[values.priceCurrency]?.address;
+        }
+  
+        const { data: encodedOrder } = (await encodeOrderMutation.mutateAsync(orderData));
+  
+        const signature = await sign(
+          web3Provider.provider,
+          encodedOrder,
+          address,
+          `${network.chainId}`,
+          `${process.env.REACT_APP_MARKETPLACE_CONTRACT}`
+        );
+  
+        const createOrderResponse = (await createOrderMutation.mutateAsync({ ...orderData, signature })).data;
+  
+        setIsPosted(true);    
+      } catch(err: any) {
+        console.log(err)   
+        setPostingPopupStatus(PostingPopupStatus.HIDDEN);
+  
+        // Code 4001 is user rejected transaction
+        if (err?.code === 4001) {
+          return;
+        } 
+  
+        // Check if error comes from api request and if the api has returned a meaningful messages
+        if (getSaltMutation.isError && !!(getSaltMutation as any)?.error?.response?.data?.message) {
+          setErrorBody((getSaltMutation as any)?.error?.response?.data?.message)
+        } else if (encodeOrderMutation.isError && !!(encodeOrderMutation as any)?.error?.response?.data?.message) {
+          setErrorBody((encodeOrderMutation as any)?.error?.response?.data?.message)
+        } else if (createOrderMutation.isError && !!(createOrderMutation as any)?.error?.response?.data?.message) {
+          setErrorBody((createOrderMutation as any)?.error?.response?.data?.message)
+        }
+  
+        setShowError(true);
+  
       }
-
-      const { data: encodedOrder } = (await encodeOrderMutation.mutateAsync(orderData));
-
-      const signature = await sign(
-        web3Provider.provider,
-        encodedOrder,
-        address,
-        `${network.chainId}`,
-        `${process.env.REACT_APP_MARKETPLACE_CONTRACT}`
-      );
-
-      const createOrderResponse = (await createOrderMutation.mutateAsync({ ...orderData, signature })).data;
-
-      setIsPosted(true);
     },
   });
 
@@ -228,6 +255,8 @@ export const SellPage = () => {
     selectMethod: handleSelectSellMethod,
     goBack: handleGoBack,
     goContinue: handleContinue,
+    postingPopupStatus: postingPopupStatus,
+    setPostingPopupStatus: setPostingPopupStatus,
   };
 
   const settingsTabName = (amountType && sellMethod)

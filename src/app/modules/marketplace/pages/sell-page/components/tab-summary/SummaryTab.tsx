@@ -70,11 +70,9 @@ export const SummaryTab = () => {
   const [totalFees, setTotalFees] = useState(0);
   const [isApproving, setIsApproving] = useState(false);
 
-  const { nft, isPosted, form, sellMethod, amountType, goBack } = useMarketplaceSellData();
+  const { nft, isPosted, form, sellMethod, amountType, goBack, postingPopupStatus, setPostingPopupStatus } = useMarketplaceSellData();
 
   const update = useUpdate();
-
-  const [postingPopupStatus, setPostingPopupStatus] = useState<PostingPopupStatus>(PostingPopupStatus.HIDDEN);
 
   const handleSave = useCallback(() => {
     setPostingPopupStatus(PostingPopupStatus.PROCESSING)

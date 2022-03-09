@@ -35,7 +35,7 @@ import { isNFTAssetAudio, isNFTAssetImage, isNFTAssetVideo } from '../../../../h
 import { getTokenByAddress, TOKENS_MAP } from '../../../../../../constants';
 import { TokenTicker } from '../../../../../../enums';
 import { useMutation } from 'react-query';
-import axios from 'axios';
+import axios, { AxiosResponse } from 'axios';
 import { Web3Provider } from '@ethersproject/providers';
 import { NFTCustomError } from '../nft-custom-error/NFTCustomError';
 import { getEtherscanTxUrl } from '../../../../../../../utils/helpers';
@@ -57,7 +57,7 @@ export const NFTCheckoutPopup = ({ NFT, NFTs, order, isOpen, onClose }: INFTChec
   const router = useHistory();
 
   const { address, signer, web3Provider } = useAuthContext() as any;
-  const { setShowError } = useErrorContext() as any;
+  const { setShowError, setErrorBody} = useErrorContext() as any;
   const { onCopy } = useClipboard(address);
 
   const [state, setState] = useState<CheckoutState>(CheckoutState.CHECKOUT);
@@ -117,18 +117,29 @@ export const NFTCheckoutPopup = ({ NFT, NFTs, order, isOpen, onClose }: INFTChec
   
       const {data, from, to, value} = response.data;
   
-      await sendSellTransaction(data, from, to, BigNumber.from(value.hex), signer); // TODO Test after new version of contracts and backend redeployed
+      await sendSellTransaction(data, from, to, BigNumber.from(value.hex)); // TODO Test after new version of contracts and backend redeployed
       setState(CheckoutState.CONGRATULATIONS);
 
-    } catch(err) {
-      console.log(err)      
-      setShowError(true)
-      setState(CheckoutState.CHECKOUT)
+    } catch(err: any) {
+      console.log(err)   
+      setState(CheckoutState.CHECKOUT);
+
+      // Code 4001 is user rejected transaction
+      if (err?.code === 4001) {
+        return;
+      } 
+
+      // Check if error comes from api request and if the api has returned a meaningful messages
+      if (prepareMutation.isError && !!(prepareMutation as any)?.error?.response?.data?.message) {
+        setErrorBody((prepareMutation as any)?.error?.response?.data?.message)
+      }
+
+      setShowError(true);
     }
     
-  }, [order, address]);
+  }, [order, address, signer]);
 
-  const sendSellTransaction = async (data: string, from: string, to: string, value: BigNumber, signer: any ) => {
+  const sendSellTransaction = async (data: string, from: string, to: string, value: BigNumber) => {
 
     const sellTx = await (signer as Signer).sendTransaction({
       data,
@@ -138,7 +149,6 @@ export const NFTCheckoutPopup = ({ NFT, NFTs, order, isOpen, onClose }: INFTChec
     })
 
     return sellTx.wait();
-    
   }
 
   const handleMyNFTsClick = useCallback(() => {

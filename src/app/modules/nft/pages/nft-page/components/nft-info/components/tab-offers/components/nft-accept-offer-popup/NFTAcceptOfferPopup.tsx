@@ -31,6 +31,7 @@ import { TokenTicker } from '../../../../../../../../../../enums';
 import { Fee } from '../../../../../../../../../marketplace/pages/sell-page/components/tab-summary/compoents';
 import { getRoyaltiesFromRegistry } from '../../../../../../../../../../../utils/marketplace/utils';
 import { useTokenPrice } from '../../../../../../../../../../hooks';
+import { useErrorContext } from '../../../../../../../../../../../contexts/ErrorContext';
 
 interface INFTAcceptOfferPopupProps {
   NFT?: INFT;
@@ -43,6 +44,8 @@ const UNIVERSE_FEE = 2.5;
 
 export const NFTAcceptOfferPopup = ({ NFT, NFTs, order, isOpen, onClose }: INFTAcceptOfferPopupProps) => {
   const { address, signer } = useAuthContext() as any;
+
+  const { setShowError, setErrorBody} = useErrorContext() as any;
 
   const [state, setState] = useState<AcceptState>(AcceptState.CHECKOUT);
   const [nftRoyalties, setNftRoyalties] = useState(0);
@@ -91,11 +94,23 @@ export const NFTAcceptOfferPopup = ({ NFT, NFTs, order, isOpen, onClose }: INFTA
   
       await sendAcceptOfferTransaction(data, from, to, EthersBigNumber.from(value.hex));
       setState(AcceptState.CONGRATULATIONS);
-    } catch(err) {
-      console.log(err);
+    } catch(err: any) {
+      console.log(err)   
       setState(AcceptState.CHECKOUT);
+
+      // Code 4001 is user rejected transaction
+      if (err?.code === 4001) {
+        return;
+      } 
+
+      // Check if error comes from api request and if the api has returned a meaningful messages
+      if (prepareMutation.isError && !!(prepareMutation as any)?.error?.response?.data?.message) {
+        setErrorBody((prepareMutation as any)?.error?.response?.data?.message)
+      }
+
+      setShowError(true);
     }
-  }, [order, address]);
+  }, [order, address, signer]);
 
   const sendAcceptOfferTransaction = async (data: string, from: string, to: string, value: EthersBigNumber ) => {
 
