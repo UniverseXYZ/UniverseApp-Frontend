@@ -1,119 +1,9 @@
 import { Box, BoxProps, Image, Text } from '@chakra-ui/react';
-import React, { useMemo } from 'react';
+import React from 'react';
 
-import checkNftIcon from '../../../assets/images/check-nft.svg';
+import CheckNftIcon from '../../../assets/images/check-nft.svg';
 
-const useStyles: (isBundle: boolean) => Record<
-  'itemWrapperStyles' | 'subLayerStyles' | 'selectedLabel' | 'selectedBorder', BoxProps
-  > = (isBundle) => {
-  const itemWrapperStyles = useMemo<BoxProps>(() => ({
-    borderRadius: '12px',
-    cursor: 'pointer',
-    position: 'relative',
-
-    // shadow
-    _before: {
-      borderRadius: 'inherit',
-      content: '""',
-      h: '100%',
-      left: 0,
-      position: 'absolute',
-      top: 0,
-      w: '100%',
-      zIndex: 2,
-      transition: '100ms',
-    },
-
-    // border
-    _after: {
-      background: 'rgba(0, 0, 0, 0.1)',
-      backgroundOrigin: 'border-box',
-      border: '1px solid transparent',
-      borderRadius: 'inherit',
-      boxShadow: 'inset 2px 1000px 1px #fff',
-      content: '""',
-      h: '100%',
-      left: 0,
-      position: 'absolute',
-      top: 0,
-      w: '100%',
-      zIndex: 2,
-    },
-
-    _selected: {
-      _after: {
-        background: 'white !important',
-      },
-    },
-
-    _hover: {
-      '&:before, [data-layer]:before': {
-        boxShadow: `0px 0px 30px rgba(0, 0, 0, ${isBundle ? 0.1 : 0.2})`,
-      },
-      '&:after, [data-layer]:after': {
-        background: 'transparent',
-        border: 0,
-      },
-      '& .buy-now': {
-        display: 'block'
-      },
-      '& .nft-label': {
-        display: 'block'
-      }
-    },
-  }), [isBundle]);
-
-  const subLayerStyles = useMemo<BoxProps>(() => ({
-    background: 'white',
-    border: 'inherit',
-    borderRadius: 'inherit',
-    position: 'absolute',
-    height: '100%',
-    _before: itemWrapperStyles._before,
-    _after: itemWrapperStyles._after,
-    _selected: {
-      _after: {
-        background: 'white !important',
-        boxShadow: '0px 0px 0px 2px #00eaea',
-      }
-    },
-  }), [itemWrapperStyles]);
-
-  const selectedLabel = useMemo<BoxProps>(() => ({
-    alignItems: 'center',
-    background: 'linear-gradient(135deg, #BCEB00 15.57%, #00EAEA 84.88%)',
-    borderRadius: '10px',
-    display: 'flex',
-    fontSize: '10px',
-    fontWeight: 600,
-    height: '20px',
-    justifyContent: 'center',
-    minWidth: '20px',
-    p: '6px 5px',
-    position: 'absolute',
-    right: '-10px',
-    top: '-10px',
-    zIndex: 3,
-  }), []);
-
-  const selectedBorder = useMemo<BoxProps>(() => ({
-    bg: 'linear-gradient(170deg, #bceb00 15.57%, #00eaea 84.88%)',
-    borderRadius: '14px',
-    boxShadow: 'none !important',
-    display: 'none',
-    height: `calc(100% + 4px)`,
-    left: `-2px`,
-    position: 'absolute',
-    top: `-2px`,
-    width: `calc(100% + 4px)`,
-    zIndex: 2,
-    _selected: {
-      display: 'block',
-    }
-  }), []);
-
-  return { itemWrapperStyles, subLayerStyles, selectedLabel, selectedBorder };
-}
+import * as styles from './styles';
 
 interface IItemWrapperProps extends BoxProps {
   isBundle?: boolean;
@@ -121,36 +11,34 @@ interface IItemWrapperProps extends BoxProps {
   selectedLabel?: string;
 }
 
-export const ItemWrapper = (
-  {
+export const ItemWrapper = React.forwardRef<HTMLDivElement, IItemWrapperProps>((props, ref) => {
+  const {
     isBundle = false,
     isSelected = false,
     selectedLabel,
     children,
     ...rest
-  }: IItemWrapperProps
-) => {
-  const styles = useStyles(isBundle);
+  } = props;
 
   return (
-    <Box {...styles.itemWrapperStyles} {...rest} data-selected={isSelected || null}>
+    <Box ref={ref} {...styles.getItemWrapperStyle(isBundle)} {...rest} data-selected={isSelected || null}>
       {children}
-      <Box data-selected={isSelected || null} {...styles.selectedBorder} />
+      <Box data-selected={isSelected || null} {...styles.SelectedBorderStyle} />
       {isBundle && (
         <>
           {/*<Box data-layer data-selected={isSelected || null} {...styles.subLayerStyles} top={`5px`} left={`2%`} width={`96%`} zIndex={-2} />*/}
           {/*<Box data-layer data-selected={isSelected || null} {...styles.subLayerStyles} top={`10px`} left={`4%`} width={`92%`} zIndex={-3} />*/}
-          <Box data-layer data-selected={isSelected || null} {...styles.subLayerStyles} top={`5px`} left={`2%`} width={`96%`} zIndex={1} />
-          <Box data-layer data-selected={isSelected || null} {...styles.subLayerStyles} top={`10px`} left={`4%`} width={`92%`} zIndex={0} />
+          <Box data-layer data-selected={isSelected || null} {...styles.getSubLayerStyle(isBundle)} top={`5px`} left={`2%`} width={`96%`} zIndex={1} />
+          <Box data-layer data-selected={isSelected || null} {...styles.getSubLayerStyle(isBundle)} top={`10px`} left={`4%`} width={`92%`} zIndex={0} />
         </>
       )}
       {isSelected && (
-        <Box {...styles.selectedLabel}>
+        <Box {...styles.SelectedLabelStyle}>
           {selectedLabel && (<Text px={'3px'}>{selectedLabel}</Text>)}
-          <Image src={checkNftIcon} w={'10px'} h={'8px'} />
+          <Image src={CheckNftIcon} w={'10px'} h={'8px'} />
         </Box>
       )}
     </Box>
   )
-};
+});
 

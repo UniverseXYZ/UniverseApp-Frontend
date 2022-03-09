@@ -10,18 +10,28 @@ import * as styles from './styles';
 import { NFTItemAuctionCountdown } from '..';
 import { NFTItemAssetType } from './components';
 import { NFTAssetBroken } from '../../../../pages/nft-page/components/nft-asset-broken';
+import { getArtworkType, getArtworkTypeByUrl } from '../../../../../../helpers';
 
 interface INFTItemAssetProps {
   NFT: INFT;
   renderAssetLabel?: ((NFT: INFT) => React.ReactNode) | null;
   orderEnd?: number;
+  isHover?: boolean;
 }
-export const NFTItemAsset = ({ NFT, renderAssetLabel, orderEnd }: INFTItemAssetProps) => {
+export const NFTItemAsset = (props: INFTItemAssetProps) => {
+  const { NFT, renderAssetLabel, orderEnd, isHover } = props;
+
   const [ref, { width }] = useMeasure<HTMLDivElement>();
 
   const isImage = isNFTAssetImage(NFT.artworkType);
   const isVideo = isNFTAssetVideo(NFT.artworkType);
   const isAudio = isNFTAssetAudio(NFT.artworkType);
+
+  const previewUrl = NFT.previewUrl || NFT.thumbnailUrl || NFT.originalUrl;
+  const previewArtworkType = getArtworkTypeByUrl(previewUrl);
+  const isImagePreview = isNFTAssetImage(previewArtworkType);
+
+  const gifUrl = NFT.gifUrl;
 
   const [showCountdown, setShowCountdown] = useState(!!orderEnd && orderEnd > Math.floor(new Date().getTime() / 1000))
   
@@ -30,7 +40,13 @@ export const NFTItemAsset = ({ NFT, renderAssetLabel, orderEnd }: INFTItemAssetP
       {NFT.artworkType ? 
         <Box {...styles.AssetStyle(width)}>
           {isImage && (<Image src={NFT.thumbnailUrl} alt={NFT.name} />)}
-          {isVideo && (<video src={NFT.videoUrl || NFT.thumbnailUrl} />)}
+          {isVideo && (
+            <>
+              {isImagePreview
+                ? <Image src={isHover && gifUrl ? gifUrl : previewUrl} alt={NFT.name} />
+                : <video src={NFT.videoUrl || NFT.thumbnailUrl} />}
+            </>
+          )}
           {isAudio && (<Image src={AudioNFTPreviewImage} alt={NFT.name} />)}
         </Box> : 
         <Box {...styles.BrokenAssetStyle(width)}>

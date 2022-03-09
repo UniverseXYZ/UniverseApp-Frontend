@@ -1,5 +1,5 @@
 import { Box, LinkBox, LinkOverlay, Text } from '@chakra-ui/react';
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { useQuery } from 'react-query';
 
 import { ICollection, IERC721AssetType, INFT, IUser, IOrder } from '../../types';
@@ -12,6 +12,7 @@ import { TokenTicker } from '../../../../enums';
 import { utils } from 'ethers';
 import { getTokenByAddress } from '../../../../constants';
 import { NFTCheckoutPopup } from '../../../nft/pages/nft-page/components/nft-checkout-popup';
+import { useHoverDirty } from 'react-use';
 
 type IRenderFuncProps = {
   NFT: INFT;
@@ -128,9 +129,13 @@ export const NftItem = (
   const lastOfferPriceToken = !data?.lastOffer ? null : getTokenByAddress((data?.lastOffer.make.assetType as IERC721AssetType).contract)
   const lastOfferPrice = !lastOfferPriceToken ? null : utils.formatUnits(data?.lastOffer.make.value || 0, lastOfferPriceToken.decimals ?? 18)
 
+  const ref = useRef(null);
+
+  const isHover = useHoverDirty(ref);
+
   return (
-    <>
     <ItemWrapper
+      ref={ref}
       isBundle={NFT && NFT.numberOfEditions > 1}
       isSelected={isSelected}
       selectedLabel={selectedLabel}
@@ -169,7 +174,7 @@ export const NftItem = (
                 isLoadingCreator,
                 isLoadingOwner,
               }) : (
-                <NFTItemAsset NFT={NFT as INFT} orderEnd={orderEnd || 0} />
+                <NFTItemAsset NFT={NFT} orderEnd={orderEnd || 0} isHover={isHover} />
               )
             }
           </Box>
@@ -236,7 +241,6 @@ export const NftItem = (
           </Box>
         </LinkOverlay>
       </LinkBox>
-    </ItemWrapper>
       {NFT?.id && (
         <NFTCheckoutPopup
           NFT={NFT}
@@ -245,6 +249,6 @@ export const NftItem = (
           onClose={() => setIsCheckoutPopupOpened(false)}
         />
       )}
-    </>
+    </ItemWrapper>
   );
 };

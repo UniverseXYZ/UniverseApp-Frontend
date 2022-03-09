@@ -3,9 +3,10 @@ export enum NFTArtworkType {
   JPEG = 'jpeg',
   IMAGE = 'image',
   PNG = 'png',
+  GIF = 'gif',
   MP4 = 'mp4',
   MP3 = 'mp3',
-  WEBP = 'webp'
+  WEBP = 'webp',
 }
 
 export enum NFTStandard {
@@ -111,6 +112,7 @@ export interface INFT {
   name: string;
   numberOfEditions: number;
   videoUrl: string;
+  gifUrl?: string;
   optimizedUrl: string;
   originalUrl: string;
   owner?: IUser;
@@ -118,6 +120,7 @@ export interface INFT {
   royalties: Array<IRoyalty>;
   standard: NFTStandard;
   thumbnailUrl: string;
+  previewUrl?: string;
   tokenId: string;
   tokenIds: string[];
   tokenUri: string;

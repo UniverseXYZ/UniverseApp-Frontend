@@ -82,7 +82,7 @@ export const NFTMakeAnOfferPopup = ({ nft, order, isOpen, onClose, }: INFTMakeAn
   const { setShowError, setErrorBody} = useErrorContext() as any;
 
   const { signer, web3Provider } = useAuthContext() as any;
-  const { setRefetchOffers } = useNFTPageData();
+  const { refetchOffers } = useNFTPageData();
 
   const [state, setState] = useState<MakeAnOfferState>(MakeAnOfferState.FORM);
   const [tokenPrice, setTokenPrice] = useState(0);
@@ -198,7 +198,7 @@ export const NFTMakeAnOfferPopup = ({ nft, order, isOpen, onClose, }: INFTMakeAn
         const createOrderResponse = (await createOfferMutation.mutateAsync({ ...offerData, signature })).data;
   
         setState(MakeAnOfferState.SUCCESS);
-        setRefetchOffers(true);
+        refetchOffers();
         setApproveTx('');
         } catch(err: any) {
         console.log(err)   
