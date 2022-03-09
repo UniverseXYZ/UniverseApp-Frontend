@@ -148,3 +148,12 @@ export interface INFTBackend
   createdAt: string;
   updatedAt: string;
 }
+
+export interface ICollectionOwnersCountResponse {
+  owners: number;
+}
+
+export interface ICollectionAdditionalData {
+  floorPrice: string;
+  volumeTraded: string;
+}

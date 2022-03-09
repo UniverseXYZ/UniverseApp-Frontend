@@ -2,12 +2,14 @@ import { FC, createContext, useContext } from 'react';
 import { useQuery } from 'react-query';
 import { useParams } from 'react-router-dom';
 
-import { ICollection } from '../../types';
-import { GetCollectionApi } from '../../api';
+import { ICollection, ICollectionAdditionalData, ICollectionOwnersCountResponse } from '../../types';
+import { GetCollectionAdditionalData, GetCollectionApi, GetCollectionOwners } from '../../api';
 
 export interface ICollectionPageContext {
   collection: ICollection;
   collectionAddress: string;
+  owners: ICollectionOwnersCountResponse;
+  collectionAdditionalData: ICollectionAdditionalData;
 }
 
 export const CollectionPageContext = createContext<ICollectionPageContext>({} as ICollectionPageContext);
@@ -25,9 +27,23 @@ const CollectionPageProvider: FC = ({ children }) => {
     { onSuccess: (collection) => console.log('collection', collection) },
   );
 
+  const { data: owners } = useQuery(
+    ['owners', collectionAddress],
+    () => GetCollectionOwners(`${collectionAddress}`),
+    { onSuccess: (owners) => console.log('owners', owners) },
+  );
+
+  const { data: collectionAdditionalData } = useQuery(
+    ['collectionAdditionalData', collectionAddress],
+    () => GetCollectionAdditionalData(`${collectionAddress}`),
+    { onSuccess: (collectionAdditionalData) => console.log('collectionAdditionalData', collectionAdditionalData) },
+  );
+
   const value: ICollectionPageContext = {
     collection: collection as ICollection,
     collectionAddress,
+    owners: owners as ICollectionOwnersCountResponse,
+    collectionAdditionalData: collectionAdditionalData as ICollectionAdditionalData,
   };
 
   return (

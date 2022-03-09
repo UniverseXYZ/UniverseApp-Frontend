@@ -11,6 +11,8 @@ import {
   ISearchBarDropdownCollection,
   IUserOwnedCollection,
   ICollection,
+  ICollectionOwnersCountResponse,
+  ICollectionAdditionalData,
 } from '../types';
 import { mapBackendCollection, mapBackendNft, mapBackendUser, mapDropdownCollection } from '../helpers';
 import { INFTBackendType } from '../../../types';
@@ -254,5 +256,46 @@ export const GetCollectionNFTsApi = async (address: string, page: string | numbe
   } catch (e) {
     console.log(e);
     return {} as ICollectionNFTsResponse;
+  }
+};
+
+/**
+ * Fetches collection owners count
+ * @param address collection address
+ * @returns returns owners count
+ */
+export const GetCollectionOwners = async (address: string) : Promise<ICollectionOwnersCountResponse> => {
+  try {
+    const url = `${process.env.REACT_APP_DATASCRAPER_BACKEND}/v1/collections/${ethers.utils.getAddress(address)}`;
+  
+    const { data: { owners } } = await axios.get<ICollectionOwnersCountResponse>(url);
+  
+    return {
+      owners
+    };
+  } catch (e) {
+    console.log(e);
+    return {} as ICollectionOwnersCountResponse;
+  }
+};
+
+/**
+ * Fetches collection additional data
+ * @param address collection address
+ * @returns returns floor price and volume traded
+ */
+export const GetCollectionAdditionalData = async (address: string) : Promise<ICollectionAdditionalData> => {
+  try {
+    const url = `${process.env.REACT_APP_MARKETPLACE_BACKEND}/v1/orders/collection/${address}`;
+  
+    const { data: { floorPrice, volumeTraded } } = await axios.get<ICollectionAdditionalData>(url);
+  
+    return {
+      floorPrice,
+      volumeTraded
+    };
+  } catch (e) {
+    console.log(e);
+    return {} as ICollectionAdditionalData;
   }
 };
