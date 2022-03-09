@@ -33,11 +33,9 @@ export const CollectionInfo = () => {
   const tabs = ['Items', 'Description'];
   const [selectedTabIndex, setSelectedTabIndex] = useState(0);
 
-  const { collection, collectionAddress } = useCollectionPageData();
+  const { collection, collectionAddress, owners, collectionAdditionalData } = useCollectionPageData();
   const { setShowError, setErrorTitle, setErrorBody } = useErrorContext() as any;
 
-  // TODO
-  const [ownersCount, setOwnersCount] = useState(0);
   const scrollContainer = useRef(null);
 
   const { data: NFTsPages, fetchNextPage, hasNextPage, isFetching, isLoading, isIdle } = useInfiniteQuery(
@@ -119,7 +117,7 @@ export const CollectionInfo = () => {
                           boxSizing: 'border-box',
                           boxShadow: '0px 10px 30px rgba(0, 0, 0, 0.1)',
                         }}>
-                        <CollectionStatistics nftsCount={NFTsPages?.pages?.length && NFTsPages.pages[0].total} ownersCount={ownersCount} />
+                        <CollectionStatistics nftsCount={NFTsPages?.pages?.length && NFTsPages.pages[0].total} ownersCount={owners?.owners} floorPrice={collectionAdditionalData?.floorPrice} volumeTraded={collectionAdditionalData?.volumeTraded} />
                         </Box>
                     </Box>
                 </Flex>
