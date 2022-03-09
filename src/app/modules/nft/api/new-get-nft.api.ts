@@ -190,7 +190,7 @@ export const mapNft = (data: INFTBackendType, collectionData: ICollection | unde
       ? data?.metadata?.image_preview_url
       : data?.metadata?.image_thumbnail_url 
       ? data?.metadata?.image_thumbnail_url
-      : data?.metadata?.image || alternativeImage?.url || data?.metadata.image_url,
+      : data?.metadata?.image || alternativeImage?.url || data?.metadata?.image_url,
     optimizedUrl: data.metadata?.image_preview_url
     ? data.metadata?.image_preview_url
     : data.metadata?.image_original_url
