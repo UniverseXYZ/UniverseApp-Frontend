@@ -13,6 +13,7 @@ import { utils } from 'ethers';
 import { getTokenByAddress } from '../../../../constants';
 import { NFTCheckoutPopup } from '../../../nft/pages/nft-page/components/nft-checkout-popup';
 import { useHoverDirty } from 'react-use';
+import { shortenEthereumAddress } from '../../../../../utils/helpers/format';
 
 type IRenderFuncProps = {
   NFT: INFT;
@@ -215,7 +216,7 @@ export const NftItem = (
                       <NFTItemRelation
                         type={NFTRelationType.OWNER}
                         image={owner?.profileImageUrl ?? ''}
-                        value={owner?.displayName ?? ''}
+                        value={owner?.displayName || shortenEthereumAddress(owner?.address)}
                         linkParam={owner?.universePageUrl ?? ''}
                       />
                     </Box>
