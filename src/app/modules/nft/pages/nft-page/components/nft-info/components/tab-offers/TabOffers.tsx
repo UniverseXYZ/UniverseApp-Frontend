@@ -55,6 +55,7 @@ export const TabOffers:React.FC<ITabOffersProps> = ({nft, order, offers, usersMa
 
     } catch (error) {
       console.error(error);
+      setOfferCanceling(false);
     }
   }
 
