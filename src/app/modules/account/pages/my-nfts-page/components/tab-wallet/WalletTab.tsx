@@ -26,10 +26,12 @@ export const WalletTab = () => {
     isFetchingUserNFTs,
     hasMoreNFTs,
     fetchNextUserNFTs,
+    setShowCollectcionFilters,
   } = useFiltersContext();
 
   useEffect(() => {
     setUserAddress(address);
+    setShowCollectcionFilters(true);
   }, [address])
 
   return (

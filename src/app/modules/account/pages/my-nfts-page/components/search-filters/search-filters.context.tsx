@@ -43,7 +43,17 @@ export interface ISearchFiltersContext {
 	fetchNextUserNFTs: any;
 	isFetchingUserNFTs: boolean;
 	hasMoreNFTs: boolean | undefined;
-};
+	// --- FILTERS VISIBILITY ---
+	showSaleTypeFilters: boolean;
+	showNFTTypeFilters: boolean;
+	showPriceRangeFilters: boolean;
+	showCollectionFilters: boolean;
+	// --- FILTERS VISIBLITY SETTERS ---
+	setShowSaleTypeFilters: (v: boolean) => void;
+	setShowNFTTypeFilters: (v: boolean) => void;
+	setShowPriceRangeFilters: (v: boolean) => void;
+	setShowCollectcionFilters: (v: boolean) => void;
+	};
 
 export const SearchFiltersContext = createContext<ISearchFiltersContext>({} as ISearchFiltersContext);
 
@@ -58,6 +68,10 @@ interface IFiltersProviderProps {
 const FiltersContextProvider = (props: IFiltersProviderProps) => {
 	// --------- STATE ---------
 	const [userAddress, setUserAddress] = useState<string>('');
+	const [showSaleTypeFilters, setShowSaleTypeFilters]  = useState<boolean>(false);
+	const [showNFTTypeFilters, setShowNFTTypeFilters] = useState<boolean>(false);
+	const [showPriceRangeFilters, setShowPriceRangeFilters] = useState<boolean>(false);
+	const [showCollectionFilters, setShowCollectcionFilters] = useState<boolean>(false);
 
 	// --------- FORMIK ---------
 	const searchBarForm = useFormik<ISearchBarValue>({
@@ -212,6 +226,16 @@ const FiltersContextProvider = (props: IFiltersProviderProps) => {
 		saleTypeForm: saleTypeFilterForm,
 		nftTypeForm: nftTypeFilterForm,
 		priceRangeForm: priceRangeFilterForm,
+		// FILTERS VISIBLITY
+		showSaleTypeFilters: showSaleTypeFilters,
+		showNFTTypeFilters: showNFTTypeFilters,
+		showPriceRangeFilters: showPriceRangeFilters,
+		showCollectionFilters: showCollectionFilters,
+		// FILTERS VISIBLITY SETTERS
+		setShowSaleTypeFilters,
+		setShowNFTTypeFilters,
+		setShowPriceRangeFilters,
+		setShowCollectcionFilters,
 	};
 
   return (

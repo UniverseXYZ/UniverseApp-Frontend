@@ -34,6 +34,10 @@ export const SearchFilters = () => {
     saleTypeForm,
     nftTypeForm,
     priceRangeForm,
+    showSaleTypeFilters,
+    showNFTTypeFilters,
+    showPriceRangeFilters,
+    showCollectionFilters,
   } = useFiltersContext();
 
   useEffect(() => {
@@ -81,28 +85,41 @@ export const SearchFilters = () => {
         </div>
         {showFilters && (
         <div className="sorting--filters--list">
-          <SaleTypeFilter
-            value={saleTypeForm.values}
-            onChange={(values) => saleTypeForm.setValues(values)}
-            onClear={() => saleTypeForm.resetForm()}
-          />
-          <NFTTypeFilter
-            value={nftTypeForm.values}
-            onChange={(values) => nftTypeForm.setValues(values)}
-            onClear={() => nftTypeForm.resetForm()}
-          />
-          <PriceRangeFilter
-            value={priceRangeForm.values}
-            isDirty={priceRangeForm.dirty}
-            onChange={(values) => priceRangeForm.setValues(values)}
-            onClear={() => priceRangeForm.resetForm()}
-          />
-          <ApiCollectionFilters
-            allCollections={userCollections}
-            handleCollectionSearch={(value) => collectionFilterForm.setValues(value)}
-            selectedCollections={selectedCollections}
-            setSelectedCollections={setSelectedCollections}
-          />
+
+          {showSaleTypeFilters && (
+            <SaleTypeFilter
+              value={saleTypeForm.values}
+              onChange={(values) => saleTypeForm.setValues(values)}
+              onClear={() => saleTypeForm.resetForm()}
+            />
+          )}
+
+          {showNFTTypeFilters && (
+            <NFTTypeFilter
+              value={nftTypeForm.values}
+              onChange={(values) => nftTypeForm.setValues(values)}
+              onClear={() => nftTypeForm.resetForm()}
+            />
+          )}
+
+          {showPriceRangeFilters && (
+            <PriceRangeFilter
+              value={priceRangeForm.values}
+              isDirty={priceRangeForm.dirty}
+              onChange={(values) => priceRangeForm.setValues(values)}
+              onClear={() => priceRangeForm.resetForm()}
+           />
+          )}
+
+          {showCollectionFilters && (
+            <ApiCollectionFilters
+              allCollections={userCollections}
+              handleCollectionSearch={(value) => collectionFilterForm.setValues(value)}
+              selectedCollections={selectedCollections}
+              setSelectedCollections={setSelectedCollections}
+            />
+          )}
+
         </div>
         )}
       </div>
