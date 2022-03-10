@@ -10,6 +10,7 @@ import { getArtistApi } from '../../../../api';
 import { Box, Container, Tab, TabList, TabPanel, TabPanels, Tabs } from '@chakra-ui/react';
 import { ArtistNFTsTab } from './components';
 import { TabLabel } from '../../../../components';
+import FiltersContextProvider from '../../../account/pages/my-nfts-page/components/search-filters/search-filters.context';
 
 export const UserProfilePage = () => {
 
@@ -87,7 +88,9 @@ export const UserProfilePage = () => {
 
                   <TabPanels>
                     <TabPanel p={0} pt={'30px'}>
-                      <ArtistNFTsTab artistAddress={artistAddress} onTotalLoad={(total) => setTotalNFTs(total)} />
+                      <FiltersContextProvider>
+                        <ArtistNFTsTab artistAddress={artistAddress} onTotalLoad={(total) => setTotalNFTs(total)} />
+                      </FiltersContextProvider>
                     </TabPanel>
                   </TabPanels>
                 </Tabs>

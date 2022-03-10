@@ -53,10 +53,11 @@ export const CollectionInfo = () => {
   // TODO:: Handle Mobile Filters
   // TODO:: Handle Collection NFTs search by name --> We need BE Endpoint https://app.shortcut.com/universexyz/story/2153/endpoint-which-allows-the-fe-to-search-trough-specific-collection-nfts-by-name
   // TODO:: Think of handling Errors in the FiltersContext
-  // TODO:: Update the Artist page to use the new filters context & component
   // TODO:: Fix selected filters count
   // TODO:: Show the loaders in this page in appropriate manner
   // TODO:: Add JS Docs
+  // TODO:: Add clear all button on Arist page and My NFTs tab
+  // TODO:: Add ability to disable sort by filters
 
   useEffect(() => {
     setCollectionAddress(collectionAddress);
