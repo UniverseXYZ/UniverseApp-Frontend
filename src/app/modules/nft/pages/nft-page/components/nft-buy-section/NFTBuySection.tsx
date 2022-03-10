@@ -185,7 +185,7 @@ export const NFTBuySection = ({ NFT, owner, NFTs, order, highestOffer, onMeasure
         )}
         {state === BuyNFTSectionState.OWNER_PUT_ON_SALE && (
           <>
-            <Button boxShadow={'lg'} w={'100%'} onClick={() => router.push(`/nft/${NFT?.collection?.address}/${NFT?.tokenId}/sell`)}>Put on sale</Button>
+            <Button boxShadow={'lg'} w={'100%'} onClick={() => router.push(`/nft/${NFT?._collectionAddress}/${NFT?.tokenId}/sell`)}>Put on sale</Button>
             <Text {...styles.ContentFeeLabelStyle} textAlign={'center'} mt={'12px'} color={'rgba(0, 0, 0, 0.4)'}>
               This NFT is in your wallet
             </Text>
