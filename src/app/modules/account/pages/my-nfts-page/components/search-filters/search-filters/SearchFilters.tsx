@@ -7,27 +7,28 @@ import './SearchFilters.scss';
 // Icons
 import filtersIcon from '../../../../../../../../assets/images/marketplace/filters.svg';
 
+// Contexts
+import { useFiltersContext } from '../search-filters.context';
+
 // Components & Interfaces
 import {
   SearchNFTsField,
   SortingDropdowns,
   ApiCollectionFilters,
   BrowseFiltersPopup,
-  ISearchBarValue,
-  ICollectionFilterValue
   } from '../index';
 
 import { ISearchBarDropdownCollection } from '../../../../../../nft/types';
-interface IPropsSearchFilter {
-  searchText: ISearchBarValue;
-  onChange: (values: ISearchBarValue) => void;
-  setSearchCollectionAddress: (value: ICollectionFilterValue) => void;
-  allCollections: ISearchBarDropdownCollection[];
-}
 
-export const SearchFilters = (props: IPropsSearchFilter) => {
+export const SearchFilters = () => {
   const [showFilters, setShowFilters] = useState(false);
   const [selectedCollections, setSelectedCollections] = useState<ISearchBarDropdownCollection[]>([]);
+
+  const {
+    searchBarForm,
+    collectionFilterForm,
+    userCollections,
+  } = useFiltersContext();
 
   useEffect(() => {
     const onScroll = () => {
@@ -54,8 +55,7 @@ export const SearchFilters = (props: IPropsSearchFilter) => {
     <div className="search--sort--filters--section">
       <div className="search--sort--filters">
         <SearchNFTsField
-          searchValue={props.searchText}
-          onChange={props.onChange}
+          onChange={(value) => searchBarForm.setValues(value)}
           placeholder="Search for a NFT"
         />
         <SortingDropdowns />
@@ -76,8 +76,8 @@ export const SearchFilters = (props: IPropsSearchFilter) => {
         {showFilters && (
         <div className="sorting--filters--list">
           <ApiCollectionFilters
-            allCollections={props.allCollections}
-            handleCollectionSearch={props.setSearchCollectionAddress}
+            allCollections={userCollections}
+            handleCollectionSearch={(value) => collectionFilterForm.setValues(value)}
             selectedCollections={selectedCollections}
             setSelectedCollections={setSelectedCollections}
           />
@@ -95,8 +95,8 @@ export const SearchFilters = (props: IPropsSearchFilter) => {
           {(close: any) => (
             <BrowseFiltersPopup
               onClose={close}
-              allCollections={props.allCollections}
-              handleCollectionSearch={props.setSearchCollectionAddress}
+              allCollections={userCollections}
+              handleCollectionSearch={(value) => collectionFilterForm.setValues(value)}
               selectedCollections={selectedCollections}
               setSelectedCollections={setSelectedCollections}
             />

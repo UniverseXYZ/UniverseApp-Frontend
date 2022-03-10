@@ -13,7 +13,6 @@ import { ISearchBarValue } from '../index';
 // Constants
 const MAX_CHAR_LENGTH = 32;
 interface IPropsSearchNFTsField {
-  searchValue: ISearchBarValue;
   placeholder: string;
   onChange: (value: ISearchBarValue) => void;
 };

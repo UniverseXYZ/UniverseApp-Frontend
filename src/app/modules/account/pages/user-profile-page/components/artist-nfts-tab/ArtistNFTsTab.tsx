@@ -125,12 +125,12 @@ export const ArtistNFTsTab = ({ artistAddress, onTotalLoad }: IArtistNFTsTabProp
 
   return (
     <Box>
-      <SearchFilters
+      {/* <SearchFilters
         onChange={(value) => searchBarForm.setValues(value)}
         searchText={searchBarForm.values}
         setSearchCollectionAddress={(value) => collectionFilterForm.setValues(value)}
         allCollections={UserCollections?.result || []}
-      />
+      /> */}
       <SimpleGrid columns={4} spacing={'30px'}>
         {(NFTsPages?.pages ?? []).map((page) => {
           return page.result.data.map((NFT) => (
