@@ -15,7 +15,7 @@ import { useTokenPrice } from '../../../../../../../../../../hooks';
 interface INFTOfferProps {
   offer: IOrder;
   usersMap: Record<string, IUser>;
-  owner: string | undefined;
+  owner: string;
   setOfferForAccept: React.Dispatch<React.SetStateAction<IOrder | null>>;
   cancelOffer: (offer: IOrder) => void;
 }
@@ -27,8 +27,8 @@ export const  NFTOffer: React.FC<INFTOfferProps> = ({offer, usersMap, owner, set
   const expiredIn = neverExpired ? null : dayjs(offer.end * 1000).diff(new Date(), 'hours');
   const isExpired = expiredIn && !(expiredIn > 0);
   const offerUser = usersMap?.hasOwnProperty(offer.maker) ? usersMap[offer.maker] : {} as IUser;
-  const canAcceptsOffers = offer.maker !== address && owner?.toLowerCase() === address && !isExpired;
-  const canCancelOffers = offer && offer.maker === address && !isExpired;
+  const canAcceptsOffers = owner?.toLowerCase() === address && !isExpired;
+  const canCancelOffers = offer.maker === address && !isExpired;
 
   const token = getTokenByAddress((offer.make.assetType as IERC721AssetType).contract)
   const formattedPrice = new BigNumber(utils.formatUnits(offer.make.value, token.decimals ?? 18)).toFixed(2);

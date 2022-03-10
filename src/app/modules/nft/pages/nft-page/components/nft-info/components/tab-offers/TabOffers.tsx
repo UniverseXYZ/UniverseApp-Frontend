@@ -81,7 +81,7 @@ export const TabOffers:React.FC<ITabOffersProps> = ({nft, offers, usersMap}) => 
   return !offers?.length ? <OffersEmpty /> : (
     <Box>
       {offers?.map((offer) => (
-        offer && nft && usersMap && <NFTOffer
+        offer && nft && nft._ownerAddress && <NFTOffer
             key={offer.id} 
             offer={offer}
             owner={nft._ownerAddress}
