@@ -53,7 +53,7 @@ import { ReportStatusPopup } from './components/tab-offers/components/report-sta
 export const NFTInfo = () => {
   const router = useHistory();
   const { getTokenPriceByTicker, ethUsdPrice, daiUsdPrice, usdcUsdPrice, xyzUsdPrice, wethUsdPrice } = useAuthContext() as any
-  const { NFT, isLoading, order, creator, owner, collection, collectionAddress, history, offers, moreFromCollection } = useNFTPageData();
+  const { NFT, isLoading, buyOrder, sellOrder, creator, owner, collection, collectionAddress, history, offers, moreFromCollection } = useNFTPageData();
 
   const [buySectionMeasure, setBuySectionMeasure] = useState<UseMeasureRect>();
   const [isTransferOpened, setIsTransferOpened] = useState(false);
@@ -204,7 +204,7 @@ export const NFTInfo = () => {
                         NFT={NFT}
                         owner={owner}
                         collectionAddress={collectionAddress}
-                        showSell={!order}
+                        showSell={!sellOrder}
                         showBurn={false}
                         showRemove={false}
                         showHideUnhide={false}
@@ -253,7 +253,7 @@ export const NFTInfo = () => {
                       {/* TODO: Add implementation after release */}
                       {/* <TabPanel><TabOwners /></TabPanel> */}
                       {/* <TabPanel><TabBids /></TabPanel> */}
-                      <TabPanel><TabOffers nft={NFT} order={order} offers={offers?.orders} usersMap={offerUsersMap}/></TabPanel>
+                      <TabPanel><TabOffers nft={NFT} order={buyOrder} offers={offers?.orders} usersMap={offerUsersMap}/></TabPanel>
                       <TabPanel><TabHistory historyData={history}/></TabPanel>
                     </TabPanels>
                   </Tabs>
@@ -261,7 +261,7 @@ export const NFTInfo = () => {
                 <NFTBuySection
                   NFT={NFT}
                   owner={owner}
-                  order={order}
+                  order={sellOrder}
                   highestOffer={{ offer: highestOffer || {} as IOrder, creator: highestOfferCreator || {} as IUser}}
                   onMeasureChange={(measure) => setBuySectionMeasure(measure)}
                 />

@@ -85,6 +85,7 @@ export const TabOffers:React.FC<ITabOffersProps> = ({nft, order, offers, usersMa
             key={offer.id} 
             offer={offer}
             order={order}
+            owner={nft?._ownerAddress}
             usersMap={usersMap}
             setOfferForAccept={setOfferForAccept}
             cancelOffer={handleCancelOffer}
