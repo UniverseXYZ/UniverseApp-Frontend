@@ -58,8 +58,8 @@ export interface ISearchFiltersContext {
 	nftTypeForm: FormikProps<INftTypeFilterValue>;
 	priceRangeForm: FormikProps<IPriceRangeFilterValue>;
 	sortByForm: FormikProps<ISortByFilterValue>;
-	// --- FORMS END ---
-	// --- API RETURNED DATA END ---
+	clearAllForms: () => void;
+	// --- API RETURNED DATA ---
 	userCollections: ISearchBarDropdownCollection[];
 	userNFTs: InfiniteData<INFTsResult> | undefined;
 	fetchNextUserNFTs: any;
@@ -187,6 +187,16 @@ const FiltersContextProvider = (props: IFiltersProviderProps) => {
 		].some((v: boolean) => v);
 
 		return selected;
+	}
+
+	// --------- SETTERS ---------
+	const clearAllForms = () => {
+		saleTypeFilterForm.resetForm();
+    nftTypeFilterForm.resetForm();
+    priceRangeFilterForm.resetForm();
+    collectionFilterForm.resetForm();
+    sortByForm.resetForm();
+		searchBarForm.resetForm();
 	}
 
 	// --------- HELPERS ---------
@@ -499,6 +509,8 @@ const FiltersContextProvider = (props: IFiltersProviderProps) => {
 		hasSelectedSortByFilter,
 		hasSelectedNftTypeFilter,
 		hasSelectedOrderBookFilters,
+		// --- SETTERS ---
+		clearAllForms,
 		// --- FORMS ---
 		searchBarForm: searchBarForm,
 		collectionFilterForm: collectionFilterForm,

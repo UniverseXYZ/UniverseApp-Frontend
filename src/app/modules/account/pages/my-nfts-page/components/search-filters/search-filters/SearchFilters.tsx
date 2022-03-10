@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Popup from 'reactjs-popup';
+import { Link } from '@chakra-ui/react';
 
 // Styles
 import './SearchFilters.scss';
@@ -39,6 +40,8 @@ export const SearchFilters = () => {
     showNFTTypeFilters,
     showPriceRangeFilters,
     showCollectionFilters,
+    hasSelectedOrderBookFilters,
+    clearAllForms,
   } = useFiltersContext();
 
   useEffect(() => {
@@ -123,6 +126,22 @@ export const SearchFilters = () => {
               selectedCollections={selectedCollections}
               setSelectedCollections={setSelectedCollections}
             />
+          )}
+
+          {hasSelectedOrderBookFilters() && (
+              <Link
+                onClick={clearAllForms}
+                sx={{
+                  fontSize: '14px',
+                  fontWeight: 500,
+                  textDecoration: 'underline',
+                  _hover: {
+                    textDecoration: 'none',
+                  }
+                }
+              }>
+                Clear all
+              </Link>
           )}
 
         </div>
