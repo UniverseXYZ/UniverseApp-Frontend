@@ -6,6 +6,7 @@ interface ISortByProps {
   value: ISortByFilterValue;
   onSelect: (v: ISortByFilterValue) => void;
   onClear: () => void;
+  disabled?: boolean;
 }
 interface ISortItem {
   [key: string]: string;
@@ -63,6 +64,10 @@ export const SortingDropdowns = (props: ISortByProps) => {
             fontSize={'14px'}
             fontWeight={'500'}
             p={'15px'}
+            sx={{
+              opacity: props.disabled ? '0.3' : '',
+              pointerEvents: props.disabled ? 'none' : '',
+            }}
             _hover={{ bg: 'rgba(0, 0, 0, 0.05)' }}
             onClick={() => handleSelect(parseInt(key))}
           >

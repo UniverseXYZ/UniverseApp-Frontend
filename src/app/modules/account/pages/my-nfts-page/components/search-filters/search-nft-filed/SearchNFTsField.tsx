@@ -20,7 +20,6 @@ interface IPropsSearchNFTsField {
 
 export const SearchNFTsField = (props: IPropsSearchNFTsField) => {
   const [focusField, setFocusField] = useState<string>('');
-  // const [_value, _setLocalValue] = useState<ISearchBarValue>({ searchValue: ''});
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const charsLength = e.target.value.length;
@@ -30,7 +29,6 @@ export const SearchNFTsField = (props: IPropsSearchNFTsField) => {
       searchValue: e.target.value,
     };
 
-    // _setLocalValue(result);
     props.onChange(result);
   }
 

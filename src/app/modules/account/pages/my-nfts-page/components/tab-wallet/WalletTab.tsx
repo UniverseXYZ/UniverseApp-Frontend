@@ -27,11 +27,13 @@ export const WalletTab = () => {
     hasMoreUserNFTs,
     fetchNextUserNFTs,
     setShowCollectcionFilters,
+    setDisabledSortByFilters,
   } = useFiltersContext();
 
   useEffect(() => {
     setUserAddress(address);
     setShowCollectcionFilters(true);
+    setDisabledSortByFilters(true);
   }, [address])
 
   return (

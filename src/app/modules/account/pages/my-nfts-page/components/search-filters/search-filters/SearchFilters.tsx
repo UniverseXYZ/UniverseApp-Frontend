@@ -28,6 +28,7 @@ export const SearchFilters = () => {
   const {
     userCollections,
     selectedCollections,
+    disabledSortByFilters,
     setSelectedCollections,
     searchBarForm,
     collectionFilterForm,
@@ -80,6 +81,7 @@ export const SearchFilters = () => {
           value={sortByForm.values}
           onSelect={(values) => sortByForm.setValues(values)}
           onClear={() => sortByForm.resetForm()}
+          disabled={disabledSortByFilters}
         />
         <div
           className="filter--button"

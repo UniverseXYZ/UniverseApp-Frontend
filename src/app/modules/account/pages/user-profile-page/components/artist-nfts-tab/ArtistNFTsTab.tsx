@@ -20,11 +20,13 @@ export const ArtistNFTsTab = ({ artistAddress, onTotalLoad }: IArtistNFTsTabProp
     hasMoreUserNFTs,
     fetchNextUserNFTs,
     setShowCollectcionFilters,
+    setDisabledSortByFilters,
   } = useFiltersContext();
 
   useEffect(() => {
     setUserAddress(artistAddress);
     setShowCollectcionFilters(true);
+    setDisabledSortByFilters(true);
   }, [artistAddress]);
 
   return (

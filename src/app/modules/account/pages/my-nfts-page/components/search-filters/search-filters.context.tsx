@@ -52,6 +52,8 @@ export interface ISearchFiltersContext {
 	hasSelectedNftTypeFilter: () => boolean;
 	hasSelectedCollectionFilter: () => boolean;
 	hasSelectedOrderBookFilters: () => boolean;
+	disabledSortByFilters: boolean;
+	setDisabledSortByFilters: (v: boolean) => void;
 	selectedCollections: ISearchBarDropdownCollection[];
 	setSelectedCollections: (v: ISearchBarDropdownCollection[]) => void;
 	getSelectedFiltersCount: () => number;
@@ -108,7 +110,8 @@ const FiltersContextProvider = (props: IFiltersProviderProps) => {
 	const [showNFTTypeFilters, setShowNFTTypeFilters] = useState<boolean>(false);
 	const [showPriceRangeFilters, setShowPriceRangeFilters] = useState<boolean>(false);
 	const [showCollectionFilters, setShowCollectcionFilters] = useState<boolean>(false);
-  const [selectedCollections, setSelectedCollections] = useState<ISearchBarDropdownCollection[]>([]);
+  	const [selectedCollections, setSelectedCollections] = useState<ISearchBarDropdownCollection[]>([]);
+	const [disabledSortByFilters, setDisabledSortByFilters] = useState<boolean>(false);
 
 	// --------- FORMIK ---------
 	const searchBarForm = useFormik<ISearchBarValue>({
@@ -533,6 +536,7 @@ const FiltersContextProvider = (props: IFiltersProviderProps) => {
 		selectedCollections,
 		setUserAddress: setUserAddress,
 		setCollectionAddress: setCollectionAddress,
+		disabledSortByFilters,
 		// --- GETTERS ---
 		hasSelectedSaleTypeFilter,
 		hasSelectedPriceFilter,
@@ -544,6 +548,7 @@ const FiltersContextProvider = (props: IFiltersProviderProps) => {
 		// --- SETTERS ---
 		clearAllForms,
 		setSelectedCollections,
+		setDisabledSortByFilters,
 		// --- FORMS ---
 		searchBarForm: searchBarForm,
 		collectionFilterForm: collectionFilterForm,
