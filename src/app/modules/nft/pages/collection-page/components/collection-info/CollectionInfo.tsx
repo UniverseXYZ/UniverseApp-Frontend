@@ -57,6 +57,7 @@ export const CollectionInfo = () => {
   // TODO:: Update the Artist page to use the new filters context & component
   // TODO:: Fix selected filters count
   // TODO:: Show the loaders in this page in appropriate manner
+  // TODO:: Add JS Docs
 
   useEffect(() => {
     setCollectionAddress(collectionAddress);
