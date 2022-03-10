@@ -10,6 +10,7 @@ import { getTokenByAddress, TOKENS_MAP } from '../../../../../../constants';
 import { useQuery } from 'react-query';
 import { GetActiveListingApi, GetOrdersApi } from '../../../../api';
 import { utils } from 'ethers';
+import { shortenEthereumAddress } from '../../../../../../../utils/helpers/format'
 
 type IOrderFetchPayload = {
   assetClass: OrderAssetClass,
@@ -131,7 +132,7 @@ export const NFTItemContentWithPrice = (
             <NFTItemRelation
               type={NFTRelationType.OWNER}
               image={owner.profileImageUrl ?? ''}
-              value={owner.displayName ?? ''}
+              value={owner.displayName || shortenEthereumAddress(owner.address)}
               linkParam={owner.universePageUrl ?? ''}
             />
           )}
