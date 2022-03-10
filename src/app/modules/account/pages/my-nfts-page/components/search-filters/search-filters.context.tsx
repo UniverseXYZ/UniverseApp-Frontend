@@ -21,7 +21,9 @@ import {
 	INftTypeFilterValue,
 	IPriceRangeFilterValue,
 	ISearchBarValue,
-	ICollectionFilterValue
+	ICollectionFilterValue,
+	ISortByFilterValue,
+	SortOrderOptions,
 } from '../search-filters';
 
 interface INFTsResult {
@@ -46,12 +48,14 @@ export interface ISearchFiltersContext {
 	setCollectionAddress: (address: string) => void;
 	hasSelectedSaleTypeFilter: () => boolean;
 	hasSelectedPriceFilter: () => boolean;
+	hasSelectedSortByFilter: () => boolean;
 	// --- FORMS ---
 	searchBarForm: FormikProps<ISearchBarValue>;
 	collectionFilterForm: FormikProps<ICollectionFilterValue>;
 	saleTypeForm: FormikProps<ISaleTypeFilterValue>;
 	nftTypeForm: FormikProps<INftTypeFilterValue>;
 	priceRangeForm: FormikProps<IPriceRangeFilterValue>;
+	sortByForm: FormikProps<ISortByFilterValue>;
 	// --- FORMS END ---
 	// --- API RETURNED DATA END ---
 	userCollections: ISearchBarDropdownCollection[];
@@ -144,6 +148,13 @@ const FiltersContextProvider = (props: IFiltersProviderProps) => {
     },
     onSubmit: () => {},
   });
+
+	const sortByForm = useFormik<ISortByFilterValue>({
+    initialValues: {
+      sortingIndex: 0,
+    },
+    onSubmit: () => {},
+	});
 	// --------- END FORMIK ---------
 
 	// --------- GETTERS ---------
@@ -155,6 +166,10 @@ const FiltersContextProvider = (props: IFiltersProviderProps) => {
 		const [ min, max] = priceRangeFilterForm.values.price;
 
 		return min > 0 || max > 0;
+	}
+
+	const hasSelectedSortByFilter = () => {
+		return !!sortByForm.values.sortingIndex;
 	}
 	// --------- GETTERS END ---------
 
@@ -290,8 +305,7 @@ const FiltersContextProvider = (props: IFiltersProviderProps) => {
     'orders',
     saleTypeFilterForm.values,
     priceRangeFilterForm.values,
-		// TODO:: Implement sort by filters
-    // sortBy
+		sortByForm.values,
   ], async ({ pageParam = 1 }) => {
     const apiFilters: any = { page: pageParam, side: 1 };
 
@@ -326,26 +340,26 @@ const FiltersContextProvider = (props: IFiltersProviderProps) => {
     }
 
     // Sorting
-    // if (sortBy) {
-    //   let sortFilter = 0
-    //   switch (sortBy) {
-    //     case SortOrderOptionsEnum.EndingSoon:
-    //       sortFilter = 1
-    //       break;
-    //     case SortOrderOptionsEnum.HighestPrice:
-    //       sortFilter = 2
-    //       break;
-    //     case SortOrderOptionsEnum.LowestPrice:
-    //       sortFilter = 3
-    //       break;
-    //     case SortOrderOptionsEnum.RecentlyListed:
-    //       sortFilter = 4
-    //       break;
-    //     default:
-    //       break;
-    //   }
-    //   apiFilters['sortBy'] = sortFilter;
-    // }
+    if (sortByForm.values.sortingIndex) {
+      let sortFilter = 0
+      switch (sortByForm.values.sortingIndex) {
+        case SortOrderOptions.EndingSoon:
+          sortFilter = 1
+          break;
+        case SortOrderOptions.HighestPrice:
+          sortFilter = 2
+          break;
+        case SortOrderOptions.LowestPrice:
+          sortFilter = 3
+          break;
+        case SortOrderOptions.RecentlyListed:
+          sortFilter = 4
+          break;
+        default:
+          break;
+      }
+      apiFilters['sortBy'] = sortFilter;
+    }
 
     const { orders, total } = await GetActiveSellOrdersApi(apiFilters);
 
@@ -417,6 +431,7 @@ const FiltersContextProvider = (props: IFiltersProviderProps) => {
 		// --- GETTERS ---
 		hasSelectedSaleTypeFilter,
 		hasSelectedPriceFilter,
+		hasSelectedSortByFilter,
 		// --- GETTERS END ---
 		// --- FORMS ---
 		searchBarForm: searchBarForm,
@@ -424,6 +439,7 @@ const FiltersContextProvider = (props: IFiltersProviderProps) => {
 		nftTypeForm: nftTypeFilterForm,
 		saleTypeForm: saleTypeFilterForm,
 		priceRangeForm: priceRangeFilterForm,
+		sortByForm: sortByForm,
 		// --- FORMS END ---
 		// --- API returned Data ---
 		userCollections: UserCollections || [],

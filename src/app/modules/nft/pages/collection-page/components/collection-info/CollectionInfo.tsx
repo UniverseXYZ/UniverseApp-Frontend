@@ -26,8 +26,6 @@ import { NoDescriptionFound } from '../../../../components/no-description-found'
 import { useFiltersContext } from '../../../../../account/pages/my-nfts-page/components/search-filters/search-filters.context';
 import { SearchFilters } from '../../../../../account/pages/my-nfts-page/components/search-filters';
 
-const PER_PAGE = 8;
-
 export const CollectionInfo = () => {
   const tabs = ['Items', 'Description'];
   const [selectedTabIndex, setSelectedTabIndex] = useState(0);
@@ -48,18 +46,18 @@ export const CollectionInfo = () => {
     orders,
     hasSelectedSaleTypeFilter,
     hasSelectedPriceFilter,
+    hasSelectedSortByFilter,
     isLoadingCollectionNFTs,
     isIdleCollectionNFTs,
   } = useFiltersContext();
 
-  // TODO:: Connect the sale type filters to the Fetch orders Query
-  // TODO:: Connect the price range filters to the Fetch orders Query
-  // TODO:: Connect the sort by filters to the Fetch orders Query
   // TODO:: Handle the clear all button logic
   // TODO:: Handle Mobile Filters
   // TODO:: Think of handling Errors in the FiltersContext
   // TODO:: Update the Artist page to use the new filters context & component
   // TODO:: Fix selected filters count
+  // TODO:: Show the loaders in this page in appropriate manner
+  // TODO:: Handle Collection NFTs search by name --> We need BE Endpoint https://app.shortcut.com/universexyz/story/2153/endpoint-which-allows-the-fe-to-search-trough-specific-collection-nfts-by-name
 
   useEffect(() => {
     setCollectionAddress(collectionAddress);
@@ -69,7 +67,8 @@ export const CollectionInfo = () => {
 
   const hasSaleTypeFilters = hasSelectedSaleTypeFilter();
   const hasPriceFilters = hasSelectedPriceFilter();
-  const hasSelectedOrderBookFilters = hasSaleTypeFilters || hasPriceFilters;
+  const hasSortByFilters = hasSelectedSortByFilter();
+  const hasSelectedOrderBookFilters = hasSaleTypeFilters || hasPriceFilters || hasSortByFilters;
 
   return (
       <>

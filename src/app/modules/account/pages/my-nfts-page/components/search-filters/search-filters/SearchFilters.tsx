@@ -34,6 +34,7 @@ export const SearchFilters = () => {
     saleTypeForm,
     nftTypeForm,
     priceRangeForm,
+    sortByForm,
     showSaleTypeFilters,
     showNFTTypeFilters,
     showPriceRangeFilters,
@@ -68,7 +69,11 @@ export const SearchFilters = () => {
           onChange={(value) => searchBarForm.setValues(value)}
           placeholder="Search for a NFT"
         />
-        <SortingDropdowns />
+        <SortingDropdowns
+          value={sortByForm.values}
+          onSelect={(values) => sortByForm.setValues(values)}
+          onClear={() => sortByForm.resetForm()}
+        />
         <div
           className="filter--button"
           onClick={() => setShowFilters(!showFilters)}
