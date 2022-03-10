@@ -13,6 +13,8 @@ import IntroTabletBGImage from './../../../../../assets/images/v2/marketplace/im
 import IntroMobileBGImage from './../../../../../assets/images/v2/marketplace/img_hero_mobile.png';
 import BGImage from './../../../../../assets/images/v2/stone_bg.jpg';
 import filterIcon from './../../../../../assets/images/marketplace/filters.svg';
+import { useAuthContext } from '../../../../../contexts/AuthContext'
+import { SigninPopup } from './SignInPopup'
 
 import {
   ArtistsFilter,
@@ -54,10 +56,12 @@ import { TokenTicker } from '../../../../enums';
 
 export const BrowseNFTsPage = () => {
   const { setDarkMode } = useThemeContext() as any;
+  const { isWalletConnected } = useAuthContext();
 
   const router = useHistory();
 
   const [sortBy, setSortBy] = useState('');
+  const [isOpen, setIsOpen] = useState(false);
 
   const saleTypeFilterForm = useFormik<ISaleTypeFilterValue>({
     initialValues: {
@@ -331,6 +335,16 @@ export const BrowseNFTsPage = () => {
 
   useEffect(() => setDarkMode(false), []);
 
+  const onModalClose = () => setIsOpen(false);
+
+  const handleListNft = () => {
+    if(!isWalletConnected) {
+      setIsOpen(true);
+      return;
+    }
+    router.push('/my-nfts')
+  }
+
   return (
     <Box layerStyle={'StoneBG'}>
       <Flex {...styles.IntroSectionStyle}>
@@ -567,13 +581,14 @@ export const BrowseNFTsPage = () => {
                 <Heading fontSize={{ sm: '20px', md: '26px' }} mb={'10px'}>List your NFTs</Heading>
                 <Text fontSize={'14px'}>Choose the NFT you’d like to list from your wallet and put them on sale for FREE.</Text>
               </Box>
-              <Button sx={{ width: {sm: '100%', md: 'auto'}, marginTop: {sm: '20px', md: '0'} }} variant={'black'} onClick={() => router.push('/my-nfts')}>List an NFT</Button>
+              <Button sx={{ width: {sm: '100%', md: 'auto'}, marginTop: {sm: '20px', md: '0'} }} variant={'black'} onClick={handleListNft}>List an NFT</Button>
             </Flex>
           </Box>
 
           <BackToTopButton />
         </Container>
       </Box>
+      <SigninPopup isOpen={isOpen} onModalClose={onModalClose} />
     </Box>
   );
 };
