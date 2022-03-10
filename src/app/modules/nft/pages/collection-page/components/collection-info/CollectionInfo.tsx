@@ -52,9 +52,11 @@ export const CollectionInfo = () => {
     setShowNFTTypeFilters,
     collectionNFTs,
     fetchNextCollectionNFTs,
+    fetchNextOrders,
     hasMoreCollectionNFTs,
     orders,
     hasSelectedOrderBookFilters,
+    hasMoreOrders,
 		isFethingOrders,
 		isLoadingOrders,
 		isIdleOrders,
@@ -69,7 +71,6 @@ export const CollectionInfo = () => {
   // TODO:: Handle Collection NFTs search by name --> We need BE Endpoint https://app.shortcut.com/universexyz/story/2153/endpoint-which-allows-the-fe-to-search-trough-specific-collection-nfts-by-name
   // TODO:: Think of handling Errors in the FiltersContext
   // TODO:: Add JS Docs
-	// TODO:: Fix load more button states
 
   useEffect(() => {
     setCollectionAddress(collectionAddress);
@@ -214,8 +215,8 @@ export const CollectionInfo = () => {
                                   })}
                                 </SimpleGrid>
 
-                                {!isFetchingCollectionNFTs && hasMoreCollectionNFTs && (
-                                  <Button variant={'outline'} isFullWidth={true} mt={10} onClick={() => fetchNextCollectionNFTs()}>Load more</Button>
+                                {!waitingOrders && hasMoreOrders && (
+                                  <Button variant={'outline'} isFullWidth={true} mt={10} onClick={() => fetchNextOrders()}>Load more</Button>
                                 )}
 
                               </div>
@@ -259,7 +260,7 @@ export const CollectionInfo = () => {
 																	})}
 																</SimpleGrid>
 
-																{!isFetchingCollectionNFTs && hasMoreCollectionNFTs && (
+																{!waitingCollectionNFTs && hasMoreCollectionNFTs && (
 																	<Button variant={'outline'} isFullWidth={true} mt={10} onClick={() => fetchNextCollectionNFTs()}>Load more</Button>
 																)}
 

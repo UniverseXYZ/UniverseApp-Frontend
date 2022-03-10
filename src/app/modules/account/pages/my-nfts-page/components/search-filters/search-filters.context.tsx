@@ -73,10 +73,12 @@ export interface ISearchFiltersContext {
 	isFethingOrders: boolean;
 	isLoadingOrders: boolean;
 	isIdleOrders: boolean;
+	hasMoreOrders: boolean | undefined;
 	hasMoreUserNFTs: boolean | undefined;
 	collectionNFTs: InfiniteData<INFTsResult> | undefined;
 	// TODO:: UPDATE THE TYPE !
 	fetchNextCollectionNFTs: any;
+	fetchNextOrders: any;
 	hasMoreCollectionNFTs: boolean | undefined;
 	isFetchingCollectionNFTs: boolean;
 	isLoadingCollectionNFTs: boolean;
@@ -565,9 +567,11 @@ const FiltersContextProvider = (props: IFiltersProviderProps) => {
 		userCollections: UserCollections || [],
 		userNFTs: userNFTs,
 		orders: orders,
+		fetchNextOrders,
 		isFethingOrders,
 		isLoadingOrders,
 		isIdleOrders,
+		hasMoreOrders,
 		fetchNextUserNFTs: fetchNextUserNFTs,
 		isFetchingUserNFTs: isFetchingUserNFTs,
 		hasMoreUserNFTs: hasMoreUserNFTs,
