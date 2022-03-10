@@ -57,6 +57,7 @@ export const WalletTab = () => {
                       name={NFT.name}
                       collection={collection}
                       creator={creator || undefined}
+                      tokenId={NFT.tokenId}
                       owner={owner || undefined}
                       order={{
                         assetClass: OrderAssetClass.ERC721,
