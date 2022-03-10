@@ -160,21 +160,19 @@ const FiltersContextProvider = (props: IFiltersProviderProps) => {
 
 	// --------- GETTERS ---------
 	const hasSelectedSaleTypeFilter = () => {
-		return Object.values(saleTypeFilterForm.values).some((v: boolean) => v);
+		return saleTypeFilterForm.dirty;
 	}
 
 	const hasSelectedPriceFilter = () => {
-		const [ min, max] = priceRangeFilterForm.values.price;
-
-		return min > 0 || max > 0;
+		return priceRangeFilterForm.dirty;
 	}
 
 	const hasSelectedSortByFilter = () => {
-		return !!sortByForm.values.sortingIndex;
+		return sortByForm.dirty;
 	}
 
 	const hasSelectedNftTypeFilter = () => {
-		return Object.values(nftTypeFilterForm.values).some((v: boolean) => v);
+		return nftTypeFilterForm.dirty;
 	}
 
 	/**
