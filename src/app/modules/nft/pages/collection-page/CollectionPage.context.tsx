@@ -10,6 +10,9 @@ export interface ICollectionPageContext {
   collectionAddress: string;
   owners: ICollectionOwnersCountResponse;
   collectionAdditionalData: ICollectionAdditionalData;
+  isLoadingCollectionApi: boolean;
+  isFetchingCollectionApi: boolean;
+  isIdleCollectionApi: boolean;
 }
 
 export const CollectionPageContext = createContext<ICollectionPageContext>({} as ICollectionPageContext);
@@ -20,8 +23,13 @@ export function useCollectionPageData(): ICollectionPageContext {
 
 const CollectionPageProvider: FC = ({ children }) => {
   const { collectionAddress } = useParams<{ collectionAddress: string }>();
-  
-  const { data: collection } = useQuery(
+
+  const {
+    data: collection,
+    isLoading: isLoadingCollectionApi,
+    isFetching: isFetchingCollectionApi,
+    isIdle: isIdleCollectionApi,
+   } = useQuery(
     ['collection', collectionAddress],
     () => GetCollectionApi(`${collectionAddress}`),
     { onSuccess: (collection) => console.log('collection', collection) },
@@ -44,6 +52,9 @@ const CollectionPageProvider: FC = ({ children }) => {
     collectionAddress,
     owners: owners as ICollectionOwnersCountResponse,
     collectionAdditionalData: collectionAdditionalData as ICollectionAdditionalData,
+    isLoadingCollectionApi,
+    isFetchingCollectionApi,
+    isIdleCollectionApi,
   };
 
   return (

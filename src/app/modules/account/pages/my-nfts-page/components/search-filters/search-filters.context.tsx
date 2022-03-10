@@ -70,6 +70,9 @@ export interface ISearchFiltersContext {
 	userNFTs: InfiniteData<INFTsResult> | undefined;
 	fetchNextUserNFTs: any;
 	isFetchingUserNFTs: boolean;
+	isFethingOrders: boolean;
+	isLoadingOrders: boolean;
+	isIdleOrders: boolean;
 	hasMoreUserNFTs: boolean | undefined;
 	collectionNFTs: InfiniteData<INFTsResult> | undefined;
 	// TODO:: UPDATE THE TYPE !
@@ -110,7 +113,7 @@ const FiltersContextProvider = (props: IFiltersProviderProps) => {
 	const [showNFTTypeFilters, setShowNFTTypeFilters] = useState<boolean>(false);
 	const [showPriceRangeFilters, setShowPriceRangeFilters] = useState<boolean>(false);
 	const [showCollectionFilters, setShowCollectcionFilters] = useState<boolean>(false);
-  	const [selectedCollections, setSelectedCollections] = useState<ISearchBarDropdownCollection[]>([]);
+	const [selectedCollections, setSelectedCollections] = useState<ISearchBarDropdownCollection[]>([]);
 	const [disabledSortByFilters, setDisabledSortByFilters] = useState<boolean>(false);
 
 	// --------- FORMIK ---------
@@ -508,7 +511,9 @@ const FiltersContextProvider = (props: IFiltersProviderProps) => {
 		data: orders,
 		fetchNextPage: fetchNextOrders,
 		hasNextPage: hasMoreOrders,
-		isFetching: isFethingOrders
+		isFetching: isFethingOrders,
+		isLoading: isLoadingOrders,
+		isIdle: isIdleOrders,
 	} = useInfiniteQuery(
 		[
     	'orders',
@@ -560,6 +565,9 @@ const FiltersContextProvider = (props: IFiltersProviderProps) => {
 		userCollections: UserCollections || [],
 		userNFTs: userNFTs,
 		orders: orders,
+		isFethingOrders,
+		isLoadingOrders,
+		isIdleOrders,
 		fetchNextUserNFTs: fetchNextUserNFTs,
 		isFetchingUserNFTs: isFetchingUserNFTs,
 		hasMoreUserNFTs: hasMoreUserNFTs,

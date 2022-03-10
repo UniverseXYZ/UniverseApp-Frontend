@@ -25,12 +25,22 @@ import { OrderAssetClass } from '../../../../enums';
 import { NoDescriptionFound } from '../../../../components/no-description-found';
 import { useFiltersContext } from '../../../../../account/pages/my-nfts-page/components/search-filters/search-filters.context';
 import { SearchFilters } from '../../../../../account/pages/my-nfts-page/components/search-filters';
+import NftCardSkeleton from '../../../../../../../components/skeletons/nftCardSkeleton/NftCardSkeleton';
 
 export const CollectionInfo = () => {
   const tabs = ['Items', 'Description'];
   const [selectedTabIndex, setSelectedTabIndex] = useState(0);
 
-  const { collection, collectionAddress, owners, collectionAdditionalData } = useCollectionPageData();
+  const { 
+		collection,
+		isLoadingCollectionApi,
+		isFetchingCollectionApi,
+		isIdleCollectionApi,
+		collectionAddress,
+		owners,
+		collectionAdditionalData,
+	 } = useCollectionPageData();
+
   const { setShowError, setErrorTitle, setErrorBody } = useErrorContext() as any;
 
   const scrollContainer = useRef(null);
@@ -43,18 +53,23 @@ export const CollectionInfo = () => {
     collectionNFTs,
     fetchNextCollectionNFTs,
     hasMoreCollectionNFTs,
-    isFetchingCollectionNFTs,
     orders,
     hasSelectedOrderBookFilters,
+		isFethingOrders,
+		isLoadingOrders,
+		isIdleOrders,
+    isFetchingCollectionNFTs,
     isLoadingCollectionNFTs,
     isIdleCollectionNFTs,
   } = useFiltersContext();
 
+	console.log(isFethingOrders);
+
   // TODO:: Handle Mobile Filters
   // TODO:: Handle Collection NFTs search by name --> We need BE Endpoint https://app.shortcut.com/universexyz/story/2153/endpoint-which-allows-the-fe-to-search-trough-specific-collection-nfts-by-name
   // TODO:: Think of handling Errors in the FiltersContext
-  // TODO:: Show the loaders in this page in appropriate manner
   // TODO:: Add JS Docs
+	// TODO:: Fix load more button states
 
   useEffect(() => {
     setCollectionAddress(collectionAddress);
@@ -64,14 +79,19 @@ export const CollectionInfo = () => {
   }, [collectionAddress])
 
   const hasOrderBookFilters = hasSelectedOrderBookFilters();
+	const hasOrders = orders?.pages?.length && orders.pages[0].data?.length;
+	const hasCollectionNFTs = collectionNFTs?.pages?.length && collectionNFTs.pages[0].data?.length;
+	const waitingOrders = isFethingOrders || isLoadingOrders || isIdleOrders;
+	const waitingCollectionNFTs = isFetchingCollectionNFTs || isLoadingCollectionNFTs || isIdleCollectionNFTs;
+	const waitingCollectionApiInfo = isFetchingCollectionApi || isLoadingCollectionApi || isIdleCollectionApi;
 
   return (
       <>
-        {isFetchingCollectionNFTs && !collection ? (
+        {waitingCollectionApiInfo && !collection ? (
           <div className='loader-wrapper'>
             <CollectionPageLoader />
           </div>
-        ) : !isFetchingCollectionNFTs && !collection ? (
+        ) : !waitingCollectionApiInfo && !collection ? (
           <NotFound />
         ) : (
           <Box sx={{
@@ -153,9 +173,9 @@ export const CollectionInfo = () => {
                     {selectedTabIndex === 0 ? (
                       <>
                         {/* Orders NFTs based on search filters */}
-                        { hasOrderBookFilters ? (
+                        {hasOrderBookFilters ? (
 
-                          orders?.pages?.length && orders.pages[0].data?.length ? (
+													hasOrders ? (
                             <div className="mynfts__page">
                               <div className="container mynfts__page__body">
                                 <SimpleGrid columns={{ base: 1, md: 2, lg: 4 }} spacing={'30px'}>
@@ -193,70 +213,74 @@ export const CollectionInfo = () => {
                                     })
                                   })}
                                 </SimpleGrid>
-                                {isFetchingCollectionNFTs &&
-                                  <Box sx={{
-                                    mt: '50px'
-                                  }}>
-                                    <CollectionPageLoader />
-                                  </Box>}
-                                {!isFetchingCollectionNFTs && hasMoreCollectionNFTs && (
-                                  <Button variant={'outline'} isFullWidth={true} mt={10} onClick={() => fetchNextCollectionNFTs()}>Load more</Button>
-                                )}
-                              </div>
-                            </div>
-                          ) : (
-                            <NoNFTsFound />
-                          )
 
-                        ): (
-                          // Collection NFTs
-                          collectionNFTs?.pages?.length && collectionNFTs.pages[0].data?.length ? (
-                            <div className="mynfts__page">
-                              <div className="container mynfts__page__body">
-                                <SimpleGrid columns={{ base: 1, md: 2, lg: 4 }} spacing={'30px'}>
-                                  {(collectionNFTs?.pages ?? []).map((page) => {
-                                    return page.data.map((NFT) => (
-                                      <NftItem
-                                        key={NFT.id}
-                                        NFT={NFT}
-                                        collection={`${NFT._collectionAddress}`}
-                                        renderContent={({ NFT, collection, creator, owner, bestOfferPrice, bestOfferPriceToken, lastOfferPrice, lastOfferPriceToken }) => (
-                                          <NFTItemContentWithPrice
-                                          name={NFT.name}
-                                          collection={collection}
-                                          tokenId={NFT.tokenId}
-                                          creator={creator || undefined}
-                                          owner={owner || undefined}
-                                          order={{
-                                            assetClass: OrderAssetClass.ERC721,
-                                            collectionAddress: `${NFT._collectionAddress}`,
-                                            tokenId: `${NFT.tokenId}`,
-                                          }}
-                                          bestOfferPrice={bestOfferPrice || 0}
-                                          bestOfferPriceToken={bestOfferPriceToken || undefined}
-                                          lastOfferPrice={lastOfferPrice || 0}
-                                          lastOfferPriceToken={lastOfferPriceToken || undefined}
-                                          />
-                                        )}
-                                      />
-                                    ))
-                                  })}
-                                </SimpleGrid>
-                                {isFetchingCollectionNFTs &&
-                                  <Box sx={{
-                                    mt: '50px'
-                                  }}>
-                                    <CollectionPageLoader />
-                                  </Box>}
                                 {!isFetchingCollectionNFTs && hasMoreCollectionNFTs && (
                                   <Button variant={'outline'} isFullWidth={true} mt={10} onClick={() => fetchNextCollectionNFTs()}>Load more</Button>
                                 )}
+
                               </div>
                             </div>
-                          ) : (
-                            <NoNFTsFound />
-                          )
+													) : (
+														!waitingOrders && <NoNFTsFound />
+													)
+
+                        ) : (
+                          // Collection NFTs
+													hasCollectionNFTs ? (
+														<div className="mynfts__page">
+															<div className="container mynfts__page__body">
+																<SimpleGrid columns={{ base: 1, md: 2, lg: 4 }} spacing={'30px'}>
+																	{(collectionNFTs?.pages ?? []).map((page) => {
+																		return page.data.map((NFT) => (
+																			<NftItem
+																				key={NFT.id}
+																				NFT={NFT}
+																				collection={`${NFT._collectionAddress}`}
+																				renderContent={({ NFT, collection, creator, owner, bestOfferPrice, bestOfferPriceToken, lastOfferPrice, lastOfferPriceToken }) => (
+																					<NFTItemContentWithPrice
+																					name={NFT.name}
+																					collection={collection}
+																					tokenId={NFT.tokenId}
+																					creator={creator || undefined}
+																					owner={owner || undefined}
+																					order={{
+																						assetClass: OrderAssetClass.ERC721,
+																						collectionAddress: `${NFT._collectionAddress}`,
+																						tokenId: `${NFT.tokenId}`,
+																					}}
+																					bestOfferPrice={bestOfferPrice || 0}
+																					bestOfferPriceToken={bestOfferPriceToken || undefined}
+																					lastOfferPrice={lastOfferPrice || 0}
+																					lastOfferPriceToken={lastOfferPriceToken || undefined}
+																					/>
+																				)}
+																			/>
+																		))
+																	})}
+																</SimpleGrid>
+
+																{!isFetchingCollectionNFTs && hasMoreCollectionNFTs && (
+																	<Button variant={'outline'} isFullWidth={true} mt={10} onClick={() => fetchNextCollectionNFTs()}>Load more</Button>
+																)}
+
+															</div>
+													</div>
+													) : (
+                            !waitingCollectionNFTs && <NoNFTsFound />
+													)
+
                         )}
+
+												{
+													((hasOrderBookFilters && waitingOrders) || (!hasOrderBookFilters && waitingCollectionNFTs)) && (
+														<SimpleGrid columns={{ base: 1, md: 2, lg: 4 }} spacing={'30px'} mt={10}>
+															<NftCardSkeleton />
+															<NftCardSkeleton />
+															<NftCardSkeleton />
+															<NftCardSkeleton />
+															</SimpleGrid>
+													)
+												}
 
                       </>
                       ) : selectedTabIndex === 1 ? (
