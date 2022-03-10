@@ -70,6 +70,14 @@ export const TabOffers:React.FC<ITabOffersProps> = ({nft, order, offers, usersMa
     }
   }
 
+
+  const handleClose = () => {
+    setTimeout(() => {
+      setOfferForAccept(null);
+      location.reload();
+    }, 1000)
+  }
+  
   return !offers?.length ? <OffersEmpty /> : (
     <Box>
       {offers?.map((offer) => (
@@ -88,7 +96,7 @@ export const TabOffers:React.FC<ITabOffersProps> = ({nft, order, offers, usersMa
           NFT={nft as INFT}
           order={offerForAccept}
           isOpen={!!offerForAccept}
-          onClose={() => setOfferForAccept(null)}
+          onClose={() => handleClose()}
         />
       )}
       <LoadingPopup
