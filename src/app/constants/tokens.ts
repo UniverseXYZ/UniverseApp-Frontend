@@ -21,7 +21,8 @@ export const TOKENS_MAP: Record<TokenTicker, IToken> = {
   },
   [TokenTicker.USDC]: {
     ticker: TokenTicker.USDC,
-    decimals: 6,
+    // USDC Rinkeby Token has 18 decimals, mainnet has 6
+    decimals: process.env.REACT_APP_NETWORK_CHAIN_ID === "1" ? 6 : 18,
     name: 'USDC Coin',
     icons: [USDCIcon],
     contractName: 'USDC',
