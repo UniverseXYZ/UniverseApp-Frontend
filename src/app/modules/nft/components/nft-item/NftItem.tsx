@@ -1,6 +1,9 @@
 import { Box, LinkBox, LinkOverlay, Text } from '@chakra-ui/react';
 import React, { useRef, useState } from 'react';
 import { useQuery } from 'react-query';
+import { Link } from 'react-router-dom';
+import { useHoverDirty } from 'react-use';
+import { utils } from 'ethers';
 
 import { ICollection, IERC721AssetType, INFT, IUser, IOrder } from '../../types';
 import { NFTItemAsset, NFTItemFooter, NFTItemRelation } from './components';
@@ -9,10 +12,8 @@ import * as styles from './styles';
 import { NFTRelationType } from '../../enums';
 import { GetActiveListingApi, GetBestAndLastOffer, GetCollectionApi, GetNFT2Api, GetUserApi } from '../../api';
 import { TokenTicker } from '../../../../enums';
-import { utils } from 'ethers';
 import { getTokenByAddress } from '../../../../constants';
-import { NFTCheckoutPopup } from '../../../nft/pages/nft-page/components/nft-checkout-popup';
-import { useHoverDirty } from 'react-use';
+import { NFTCheckoutPopup } from '../../pages/nft-page/components';
 import { shortenEthereumAddress } from '../../../../../utils/helpers/format';
 
 type IRenderFuncProps = {
@@ -148,7 +149,8 @@ export const NftItem = (
     >
       <LinkBox>
         <LinkOverlay
-          href={!onClick ? `/nft/${collection?.address}/${NFT?.tokenId}`: 'javascript: void(0);'}
+          as={Link}
+          to={!onClick ? `/nft/${collection?.address}/${NFT?.tokenId}`: 'javascript: void(0);'}
           display={'contents'}
         >
           {!NFT || renderHeader === null ? null :

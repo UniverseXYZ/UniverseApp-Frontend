@@ -67,10 +67,9 @@ export const NFTTransferPopup = ({ NFT, isOpen, onClose, }: INFTTransferPopupPro
     initialValues: {
       receiverAddress: '',
       tokenId: NFT.tokenId,
-      amount: NFT.amount,
+      amount: NFT.amount || 1,
     },
     validationSchema: getTransferSchema(NFT),
-    validateOnMount: true,
     onSubmit: async (value) => {
       try {
         setState(INFTTransferState.PROCESSING);
