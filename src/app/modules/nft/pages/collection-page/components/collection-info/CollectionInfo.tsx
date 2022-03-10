@@ -39,36 +39,33 @@ export const CollectionInfo = () => {
     setCollectionAddress,
     setShowSaleTypeFilters,
     setShowPriceRangeFilters,
+    setShowNFTTypeFilters,
     collectionNFTs,
     fetchNextCollectionNFTs,
     hasMoreCollectionNFTs,
     isFetchingCollectionNFTs,
     orders,
-    hasSelectedSaleTypeFilter,
-    hasSelectedPriceFilter,
-    hasSelectedSortByFilter,
+    hasSelectedOrderBookFilters,
     isLoadingCollectionNFTs,
     isIdleCollectionNFTs,
   } = useFiltersContext();
 
   // TODO:: Handle the clear all button logic
   // TODO:: Handle Mobile Filters
+  // TODO:: Handle Collection NFTs search by name --> We need BE Endpoint https://app.shortcut.com/universexyz/story/2153/endpoint-which-allows-the-fe-to-search-trough-specific-collection-nfts-by-name
   // TODO:: Think of handling Errors in the FiltersContext
   // TODO:: Update the Artist page to use the new filters context & component
   // TODO:: Fix selected filters count
   // TODO:: Show the loaders in this page in appropriate manner
-  // TODO:: Handle Collection NFTs search by name --> We need BE Endpoint https://app.shortcut.com/universexyz/story/2153/endpoint-which-allows-the-fe-to-search-trough-specific-collection-nfts-by-name
 
   useEffect(() => {
     setCollectionAddress(collectionAddress);
     setShowSaleTypeFilters(true);
     setShowPriceRangeFilters(true);
+    setShowNFTTypeFilters(true);
   }, [collectionAddress])
 
-  const hasSaleTypeFilters = hasSelectedSaleTypeFilter();
-  const hasPriceFilters = hasSelectedPriceFilter();
-  const hasSortByFilters = hasSelectedSortByFilter();
-  const hasSelectedOrderBookFilters = hasSaleTypeFilters || hasPriceFilters || hasSortByFilters;
+  const hasOrderBookFilters = hasSelectedOrderBookFilters();
 
   return (
       <>
@@ -158,7 +155,7 @@ export const CollectionInfo = () => {
                     {selectedTabIndex === 0 ? (
                       <>
                         {/* Orders NFTs based on search filters */}
-                        { hasSelectedOrderBookFilters ? (
+                        { hasOrderBookFilters ? (
 
                           orders?.pages?.length && orders.pages[0].data?.length ? (
                             <div className="mynfts__page">

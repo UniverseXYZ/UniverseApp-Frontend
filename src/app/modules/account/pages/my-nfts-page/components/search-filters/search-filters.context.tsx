@@ -49,6 +49,8 @@ export interface ISearchFiltersContext {
 	hasSelectedSaleTypeFilter: () => boolean;
 	hasSelectedPriceFilter: () => boolean;
 	hasSelectedSortByFilter: () => boolean;
+	hasSelectedNftTypeFilter: () => boolean;
+	hasSelectedOrderBookFilters: () => boolean;
 	// --- FORMS ---
 	searchBarForm: FormikProps<ISearchBarValue>;
 	collectionFilterForm: FormikProps<ICollectionFilterValue>;
@@ -170,6 +172,24 @@ const FiltersContextProvider = (props: IFiltersProviderProps) => {
 
 	const hasSelectedSortByFilter = () => {
 		return !!sortByForm.values.sortingIndex;
+	}
+
+	const hasSelectedNftTypeFilter = () => {
+		return Object.values(nftTypeFilterForm.values).some((v: boolean) => v);
+	}
+
+	/**
+	 * @returns Boolean which indicates, if there are any OrderBook Filters selected
+	 */
+	const hasSelectedOrderBookFilters = () :boolean => {
+		const selected = [
+			hasSelectedSaleTypeFilter(),
+			hasSelectedPriceFilter(),
+			hasSelectedSortByFilter(),
+			hasSelectedNftTypeFilter(),
+		].some((v: boolean) => v);
+
+		return selected;
 	}
 	// --------- GETTERS END ---------
 
@@ -305,6 +325,7 @@ const FiltersContextProvider = (props: IFiltersProviderProps) => {
     'orders',
     saleTypeFilterForm.values,
     priceRangeFilterForm.values,
+		nftTypeFilterForm.values,
 		sortByForm.values,
   ], async ({ pageParam = 1 }) => {
     const apiFilters: any = { page: pageParam, side: 1 };
@@ -321,6 +342,15 @@ const FiltersContextProvider = (props: IFiltersProviderProps) => {
     if (saleTypeFilterForm.values.new) {
       apiFilters['beforeTimestamp'] = Math.floor((new Date()).getTime() / 1000);
     }
+
+		// NFT Filters
+		if (nftTypeFilterForm.values.singleItem) {
+			apiFilters['assetClass'] = "ERC721";
+		}
+
+		if (nftTypeFilterForm.values.bundle) {
+			apiFilters['assetClass'] = "ERC721_BUNDLE";
+		}
 
     // Price Filters
     if (priceRangeFilterForm.values.currency.token && priceRangeFilterForm.dirty) {
@@ -410,7 +440,7 @@ const FiltersContextProvider = (props: IFiltersProviderProps) => {
 
     return { total, data: result };
   }, {
-		enabled: !!collectionAddress,
+		enabled: hasSelectedOrderBookFilters(),
     retry: false,
     getNextPageParam: (lastPage, pages) => {
       return pages.length * PER_PAGE < lastPage.total ? pages.length + 1 : undefined;
@@ -432,6 +462,8 @@ const FiltersContextProvider = (props: IFiltersProviderProps) => {
 		hasSelectedSaleTypeFilter,
 		hasSelectedPriceFilter,
 		hasSelectedSortByFilter,
+		hasSelectedNftTypeFilter,
+		hasSelectedOrderBookFilters,
 		// --- GETTERS END ---
 		// --- FORMS ---
 		searchBarForm: searchBarForm,
