@@ -1,113 +1,81 @@
-import React, { useState, useRef, useEffect, MouseEvent } from 'react';
-import uuid from 'react-uuid';
-import arrowDown from '../../../../../../../../assets/images/browse-nft-arrow-down.svg';
+import { useEffect, useState } from 'react';
+import { Dropdown } from '../../../../../../../components/dropdown';
+import { Box } from '@chakra-ui/react';
+import { ISortByFilterValue } from './types';
+interface ISortByProps {
+  value: ISortByFilterValue;
+  onSelect: (v: ISortByFilterValue) => void;
+  onClear: () => void;
+  disabled?: boolean;
+}
+interface ISortItem {
+  [key: string]: string;
+};
 
-export const SortingDropdowns = () => {
-  const [showFirstDropdown, setShowFirstDropdown] = useState(false);
-  const [showSecondDropdown, setShowSecondDropdown] = useState(false);
-  const [selectedFirstDropdownIndex, setSelectedFirstDropdownIndex] = useState(0);
-  const [selectedSecondDropdownIndex, setSelectedSecondDropdownIndex] = useState(0);
+const SORT_ITEMS_MAP: ISortItem = {
+  1: 'Ending soon',
+  2: 'Lowest price first',
+  3: 'Highest price first',
+  4: 'Recently listed',
+};
+
+export const SortOrderOptions = {
+  EndingSoon: 1,
+  LowestPrice: 2,
+  HighestPrice: 3,
+  RecentlyListed: 4,
+};
+
+export const SortingDropdowns = (props: ISortByProps) => {
+  const [showDropdown, setShowDropdown] = useState(false);
   const [sortName, setSortName] = useState('Sort by');
-  const secondDropdownItems = [
-    'Sort by',
-    'Ending soon',
-    'Lowest price first',
-    'Highest price first',
-    'Recently listed',
-    'Recently created',
-    'Recently sold',
-    'Most liked',
-  ];
-  const ref = useRef<HTMLDivElement>(null);
-  const ref2 = useRef<HTMLDivElement>(null);
-
-  // TODO: Uncomment for marketplace
-  const handleClickOutside = (event: any) => {
-    if (ref.current && !ref.current.contains(event.target)) {
-      setShowFirstDropdown(false);
-    }
-    if (ref2.current && !ref2.current.contains(event.target)) {
-      setShowSecondDropdown(false);
-    }
-  };
+  const [_value, _setValue] = useState<string>('Sort By');
 
   useEffect(() => {
-    document.addEventListener('click', handleClickOutside, true);
-    return () => {
-      document.removeEventListener('click', handleClickOutside, true);
+    const v: string = SORT_ITEMS_MAP[props.value.sortingIndex];
+    _setValue(v);
+  }, [props.value]);
+
+  const handleSelect = (i: number) => {
+    const r: ISortByFilterValue = {
+      sortingIndex: i,
     };
-  });
+
+    props.onSelect(r);
+  }
 
   return (
-    <div className="nft--sorting">
-      {/* <div
-        className={`dropdown ${showFirstDropdown ? 'open' : ''}`}
-        aria-hidden="true"
-        onClick={() => setShowFirstDropdown(!showFirstDropdown)}
-        ref={ref}
+    <Dropdown
+      label={sortName}
+      value={_value}
+      isOpened={showDropdown}
+      onOpen={() => setShowDropdown(true)}
+      onClose={() => setShowDropdown(false)}
       >
-        <span>{firstDropdownItems[selectedFirstDropdownIndex]}</span>
-        <img src={arrowDown} alt="Arrow down" className={showFirstDropdown ? 'rotate' : ''} />
-        {showFirstDropdown ? (
-          <div className="dropdown--items">
-            {firstDropdownItems.map((item, index) => (
-              <div
-                className="dropdown--item"
-                key={uuid()}
-                aria-hidden="true"
-                onClick={() => setSelectedFirstDropdownIndex(index)}
-              >
-                {item}
-              </div>
-            ))}
-          </div>
-        ) : (
-          <></>
-        )}
-      </div> */}
-      <div
-        className={`dropdown ${showSecondDropdown ? 'open' : ''}`}
-        aria-hidden="true"
-        onClick={() => setShowSecondDropdown(!showSecondDropdown)}
-        ref={ref2}
-      >
-        <span>{sortName}</span>
-        <img src={arrowDown} alt="Arrow down" className={showSecondDropdown ? 'rotate' : ''} />
-        {showSecondDropdown ? (
-          <div className="dropdown--items">
-            {secondDropdownItems.map(
-              (item, index) =>
-                index !== selectedSecondDropdownIndex &&
-                index !== 0 && (
-                  // TODO: Uncomment for marketplace
-                  // <div
-                  //   className="dropdown--item"
-                  //   key={uuid()}
-                  //   aria-hidden="true"
-                  //   onClick={() => {
-                  //     setSelectedSecondDropdownIndex(index);
-                  //     setSortName(secondDropdownItems[index]);
-                  //   }}
-                  // >
-                  //   {item}
-                  // </div>
-
-                  <div
-                    style={{ opacity: 0.2, cursor: 'default' }}
-                    className="dropdown--item"
-                    key={uuid()}
-                    aria-hidden="true"
-                  >
-                    {item}
-                  </div>
-                )
-            )}
-          </div>
-        ) : (
-          <></>
-        )}
-      </div>
-      <div className="box--shadow--effect--block" />
-    </div>
+    <Box p={'8px'} w={'225px'} >
+      {Object.keys(SORT_ITEMS_MAP).map((key, i) => {
+        const item = SORT_ITEMS_MAP[key];
+        return (
+          <Box
+            key={key}
+            borderRadius={'6px'}
+            cursor={'pointer'}
+            fontFamily={'Space Grotesk'}
+            fontSize={'14px'}
+            fontWeight={'500'}
+            p={'15px'}
+            sx={{
+              opacity: props.disabled ? '0.3' : '',
+              pointerEvents: props.disabled ? 'none' : '',
+            }}
+            _hover={{ bg: 'rgba(0, 0, 0, 0.05)' }}
+            onClick={() => handleSelect(parseInt(key))}
+          >
+            {item}
+          </Box>
+        )
+      })}
+    </Box>
+    </Dropdown>
   );
 };

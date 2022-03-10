@@ -27,6 +27,7 @@ import NFTsActivity from '../../../../../components/myNFTs/NFTsActivity';
 import { useClickAway, useTitle } from 'react-use';
 import { WalletTab } from './components';
 import { getNftsPerAddress } from '../../../../../utils/api/marketplace';
+import FiltersContextProvider from '../../../account/pages/my-nfts-page/components/search-filters/search-filters.context';
 
 export const MyNFTsPage = () => {
   const tabs = ['Wallet', 'Collections', 'Saved NFTs', 'Universe NFTs'];
@@ -403,7 +404,11 @@ export const MyNFTsPage = () => {
       </div>
 
       <div className="container mynfts__page__body">
-        {myNFTsSelectedTabIndex === 0 && <WalletTab />}
+        {myNFTsSelectedTabIndex === 0 && (
+          <FiltersContextProvider>
+            <WalletTab />
+          </FiltersContextProvider>
+        )}
         {myNFTsSelectedTabIndex === 1 && <DeployedCollections scrollContainer={scrollContainer} />}
         {myNFTsSelectedTabIndex === 2 && (
           <SavedNFTs

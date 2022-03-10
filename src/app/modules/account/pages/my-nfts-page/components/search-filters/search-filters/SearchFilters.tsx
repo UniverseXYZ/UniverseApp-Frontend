@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import Popup from 'reactjs-popup';
+import { Link } from '@chakra-ui/react';
 
 // Styles
 import './SearchFilters.scss';
@@ -7,27 +8,45 @@ import './SearchFilters.scss';
 // Icons
 import filtersIcon from '../../../../../../../../assets/images/marketplace/filters.svg';
 
+// Contexts
+import { useFiltersContext } from '../search-filters.context';
+
 // Components & Interfaces
 import {
   SearchNFTsField,
   SortingDropdowns,
   ApiCollectionFilters,
   BrowseFiltersPopup,
-  ISearchBarValue,
-  ICollectionFilterValue
+  SaleTypeFilter,
+  NFTTypeFilter,
+  PriceRangeFilter,
   } from '../index';
 
-import { ISearchBarDropdownCollection } from '../../../../../../nft/types';
-interface IPropsSearchFilter {
-  searchText: ISearchBarValue;
-  onChange: (values: ISearchBarValue) => void;
-  setSearchCollectionAddress: (value: ICollectionFilterValue) => void;
-  allCollections: ISearchBarDropdownCollection[];
-}
-
-export const SearchFilters = (props: IPropsSearchFilter) => {
+export const SearchFilters = () => {
   const [showFilters, setShowFilters] = useState(false);
-  const [selectedCollections, setSelectedCollections] = useState<ISearchBarDropdownCollection[]>([]);
+
+  const {
+    userCollections,
+    selectedCollections,
+    disabledSortByFilters,
+    setSelectedCollections,
+    searchBarForm,
+    collectionFilterForm,
+    saleTypeForm,
+    nftTypeForm,
+    priceRangeForm,
+    sortByForm,
+    showSaleTypeFilters,
+    showNFTTypeFilters,
+    showPriceRangeFilters,
+    showCollectionFilters,
+    // OrderBook BE Filters
+    hasSelectedOrderBookFilters,
+    // Scraper BE Filters
+    hasSelectedCollectionFilter,
+    clearAllForms,
+    getSelectedFiltersCount,
+  } = useFiltersContext();
 
   useEffect(() => {
     const onScroll = () => {
@@ -54,19 +73,24 @@ export const SearchFilters = (props: IPropsSearchFilter) => {
     <div className="search--sort--filters--section">
       <div className="search--sort--filters">
         <SearchNFTsField
-          searchValue={props.searchText}
-          onChange={props.onChange}
+          value={searchBarForm.values}
+          onChange={(value) => searchBarForm.setValues(value)}
           placeholder="Search for a NFT"
         />
-        <SortingDropdowns />
+        <SortingDropdowns
+          value={sortByForm.values}
+          onSelect={(values) => sortByForm.setValues(values)}
+          onClear={() => sortByForm.resetForm()}
+          disabled={disabledSortByFilters}
+        />
         <div
           className="filter--button"
           onClick={() => setShowFilters(!showFilters)}
           aria-hidden="true"
         >
-          {selectedCollections.length ? (
+          {getSelectedFiltersCount() > 0 ? (
             <div className="tablet--selected--filters">
-              {selectedCollections.length}
+              {getSelectedFiltersCount()}
             </div>
           ) : (
             <img src={filtersIcon} alt="Filter" />
@@ -75,12 +99,57 @@ export const SearchFilters = (props: IPropsSearchFilter) => {
         </div>
         {showFilters && (
         <div className="sorting--filters--list">
-          <ApiCollectionFilters
-            allCollections={props.allCollections}
-            handleCollectionSearch={props.setSearchCollectionAddress}
-            selectedCollections={selectedCollections}
-            setSelectedCollections={setSelectedCollections}
-          />
+
+          {showSaleTypeFilters && (
+            <SaleTypeFilter
+              value={saleTypeForm.values}
+              onChange={(values) => saleTypeForm.setValues(values)}
+              onClear={() => saleTypeForm.resetForm()}
+            />
+          )}
+
+          {showNFTTypeFilters && (
+            <NFTTypeFilter
+              value={nftTypeForm.values}
+              onChange={(values) => nftTypeForm.setValues(values)}
+              onClear={() => nftTypeForm.resetForm()}
+            />
+          )}
+
+          {showPriceRangeFilters && (
+            <PriceRangeFilter
+              value={priceRangeForm.values}
+              isDirty={priceRangeForm.dirty}
+              onChange={(values) => priceRangeForm.setValues(values)}
+              onClear={() => priceRangeForm.resetForm()}
+           />
+          )}
+
+          {showCollectionFilters && (
+            <ApiCollectionFilters
+              allCollections={userCollections}
+              handleCollectionSearch={(value) => collectionFilterForm.setValues(value)}
+              selectedCollections={selectedCollections}
+              setSelectedCollections={setSelectedCollections}
+            />
+          )}
+
+          {(hasSelectedOrderBookFilters() || hasSelectedCollectionFilter()) && (
+              <Link
+                onClick={clearAllForms}
+                sx={{
+                  fontSize: '14px',
+                  fontWeight: 500,
+                  textDecoration: 'underline',
+                  _hover: {
+                    textDecoration: 'none',
+                  }
+                }
+              }>
+                Clear all
+              </Link>
+          )}
+
         </div>
         )}
       </div>
@@ -95,8 +164,8 @@ export const SearchFilters = (props: IPropsSearchFilter) => {
           {(close: any) => (
             <BrowseFiltersPopup
               onClose={close}
-              allCollections={props.allCollections}
-              handleCollectionSearch={props.setSearchCollectionAddress}
+              allCollections={userCollections}
+              handleCollectionSearch={(value) => collectionFilterForm.setValues(value)}
               selectedCollections={selectedCollections}
               setSelectedCollections={setSelectedCollections}
             />

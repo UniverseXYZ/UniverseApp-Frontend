@@ -13,14 +13,13 @@ import { ISearchBarValue } from '../index';
 // Constants
 const MAX_CHAR_LENGTH = 32;
 interface IPropsSearchNFTsField {
-  searchValue: ISearchBarValue;
+  value: ISearchBarValue;
   placeholder: string;
   onChange: (value: ISearchBarValue) => void;
 };
 
 export const SearchNFTsField = (props: IPropsSearchNFTsField) => {
   const [focusField, setFocusField] = useState<string>('');
-  const [_value, _setLocalValue] = useState<ISearchBarValue>({ searchValue: ''});
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const charsLength = e.target.value.length;
@@ -30,7 +29,6 @@ export const SearchNFTsField = (props: IPropsSearchNFTsField) => {
       searchValue: e.target.value,
     };
 
-    _setLocalValue(result);
     props.onChange(result);
   }
 
@@ -42,7 +40,7 @@ export const SearchNFTsField = (props: IPropsSearchNFTsField) => {
         type="text"
         className="inp"
         onChange={handleChange}
-        value={_value.searchValue}
+        value={props.value.searchValue}
         onFocus={() => setFocusField('focus--field')}
         onBlur={() => setFocusField('')}
         placeholder={props.placeholder}
