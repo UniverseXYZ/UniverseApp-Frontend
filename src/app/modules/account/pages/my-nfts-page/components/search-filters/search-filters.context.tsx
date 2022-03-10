@@ -50,7 +50,10 @@ export interface ISearchFiltersContext {
 	hasSelectedPriceFilter: () => boolean;
 	hasSelectedSortByFilter: () => boolean;
 	hasSelectedNftTypeFilter: () => boolean;
+	hasSelectedCollectionFilter: () => boolean;
 	hasSelectedOrderBookFilters: () => boolean;
+	selectedCollections: ISearchBarDropdownCollection[];
+	setSelectedCollections: (v: ISearchBarDropdownCollection[]) => void;
 	// --- FORMS ---
 	searchBarForm: FormikProps<ISearchBarValue>;
 	collectionFilterForm: FormikProps<ICollectionFilterValue>;
@@ -104,6 +107,7 @@ const FiltersContextProvider = (props: IFiltersProviderProps) => {
 	const [showNFTTypeFilters, setShowNFTTypeFilters] = useState<boolean>(false);
 	const [showPriceRangeFilters, setShowPriceRangeFilters] = useState<boolean>(false);
 	const [showCollectionFilters, setShowCollectcionFilters] = useState<boolean>(false);
+  const [selectedCollections, setSelectedCollections] = useState<ISearchBarDropdownCollection[]>([]);
 
 	// --------- FORMIK ---------
 	const searchBarForm = useFormik<ISearchBarValue>({
@@ -175,6 +179,10 @@ const FiltersContextProvider = (props: IFiltersProviderProps) => {
 		return nftTypeFilterForm.dirty;
 	}
 
+	const hasSelectedCollectionFilter = () => {
+		return collectionFilterForm.dirty;
+	}
+
 	/**
 	 * @returns Boolean which indicates, if there are any OrderBook Filters selected
 	 */
@@ -197,6 +205,7 @@ const FiltersContextProvider = (props: IFiltersProviderProps) => {
     collectionFilterForm.resetForm();
     sortByForm.resetForm();
 		searchBarForm.resetForm();
+		setSelectedCollections([]);
 	}
 
 	// --------- HELPERS ---------
@@ -501,6 +510,7 @@ const FiltersContextProvider = (props: IFiltersProviderProps) => {
   const value: ISearchFiltersContext = {
 		// --- STATE ---
 		userAddress: userAddress,
+		selectedCollections,
 		setUserAddress: setUserAddress,
 		setCollectionAddress: setCollectionAddress,
 		// --- GETTERS ---
@@ -508,9 +518,11 @@ const FiltersContextProvider = (props: IFiltersProviderProps) => {
 		hasSelectedPriceFilter,
 		hasSelectedSortByFilter,
 		hasSelectedNftTypeFilter,
+		hasSelectedCollectionFilter,
 		hasSelectedOrderBookFilters,
 		// --- SETTERS ---
 		clearAllForms,
+		setSelectedCollections,
 		// --- FORMS ---
 		searchBarForm: searchBarForm,
 		collectionFilterForm: collectionFilterForm,

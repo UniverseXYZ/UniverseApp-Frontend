@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import Popup from 'reactjs-popup';
 import { Link } from '@chakra-ui/react';
 
@@ -22,16 +22,15 @@ import {
   PriceRangeFilter,
   } from '../index';
 
-import { ISearchBarDropdownCollection } from '../../../../../../nft/types';
-
 export const SearchFilters = () => {
   const [showFilters, setShowFilters] = useState(false);
-  const [selectedCollections, setSelectedCollections] = useState<ISearchBarDropdownCollection[]>([]);
 
   const {
+    userCollections,
+    selectedCollections,
+    setSelectedCollections,
     searchBarForm,
     collectionFilterForm,
-    userCollections,
     saleTypeForm,
     nftTypeForm,
     priceRangeForm,
@@ -40,7 +39,10 @@ export const SearchFilters = () => {
     showNFTTypeFilters,
     showPriceRangeFilters,
     showCollectionFilters,
+    // OrderBook BE Filters
     hasSelectedOrderBookFilters,
+    // Scraper BE Filters
+    hasSelectedCollectionFilter,
     clearAllForms,
   } = useFiltersContext();
 
@@ -69,6 +71,7 @@ export const SearchFilters = () => {
     <div className="search--sort--filters--section">
       <div className="search--sort--filters">
         <SearchNFTsField
+          value={searchBarForm.values}
           onChange={(value) => searchBarForm.setValues(value)}
           placeholder="Search for a NFT"
         />
@@ -128,7 +131,7 @@ export const SearchFilters = () => {
             />
           )}
 
-          {hasSelectedOrderBookFilters() && (
+          {hasSelectedOrderBookFilters() || hasSelectedCollectionFilter() && (
               <Link
                 onClick={clearAllForms}
                 sx={{

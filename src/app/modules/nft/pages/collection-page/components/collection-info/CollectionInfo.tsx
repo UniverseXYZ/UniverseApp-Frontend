@@ -56,7 +56,6 @@ export const CollectionInfo = () => {
   // TODO:: Fix selected filters count
   // TODO:: Show the loaders in this page in appropriate manner
   // TODO:: Add JS Docs
-  // TODO:: Add clear all button on Arist page and My NFTs tab
   // TODO:: Add ability to disable sort by filters
 
   useEffect(() => {
