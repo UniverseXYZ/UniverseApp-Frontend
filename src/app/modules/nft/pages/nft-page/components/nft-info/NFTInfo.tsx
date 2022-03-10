@@ -253,7 +253,7 @@ export const NFTInfo = () => {
                       {/* TODO: Add implementation after release */}
                       {/* <TabPanel><TabOwners /></TabPanel> */}
                       {/* <TabPanel><TabBids /></TabPanel> */}
-                      <TabPanel><TabOffers nft={NFT} order={order} offers={offers?.orders} usersMap={offerUsersMap}/></TabPanel>
+                      <TabPanel><TabOffers nft={NFT} offers={offers?.orders} usersMap={offerUsersMap}/></TabPanel>
                       <TabPanel><TabHistory historyData={history}/></TabPanel>
                     </TabPanels>
                   </Tabs>

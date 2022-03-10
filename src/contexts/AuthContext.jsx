@@ -55,11 +55,13 @@ const AuthContextProvider = ({ children }) => {
   // Getters
   useEffect(() => {
     (async () => {
-      const ethPrice = await getEthPriceCoingecko();
-      const daiInfo = await getERC20PriceCoingecko('dai');
-      const usdcInfo = await getERC20PriceCoingecko('usd-coin');
-      const xyzInfo = await getERC20PriceCoingecko('universe-xyz');
-      const wethInfo = await getERC20PriceCoingecko('weth');
+      const [ethPrice, daiInfo, usdcInfo, xyzInfo, wethInfo] = await Promise.all([
+        getEthPriceCoingecko(),
+        getERC20PriceCoingecko('dai'),
+        getERC20PriceCoingecko('usd-coin'),
+        getERC20PriceCoingecko('universe-xyz'),
+        getERC20PriceCoingecko('weth'),
+      ]);
 
       console.log(`wethPrice: ${wethInfo?.market_data?.current_price?.usd}`);
       console.log(`ethPrice: ${ethPrice?.market_data?.current_price?.usd}`);

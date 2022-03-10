@@ -109,8 +109,8 @@ export const NFTBuySection = ({ NFT, owner, NFTs, order, highestOffer, onMeasure
     (!order.start && order.end && utcTimestamp < order.end ) // Order has only end 
   ;
 
-  const token = order?.take.assetType.assetClass as TokenTicker;
-  const tokenDecimals = TOKENS_MAP[token]?.decimals;
+  const token = getTokenByAddress(order?.take.assetType.contract || "");
+  const tokenDecimals = TOKENS_MAP[token.ticker]?.decimals;
   const listingPrice = utils.formatUnits(order?.take.value ?? 0, tokenDecimals);
   
   const buyNowButton = () => (

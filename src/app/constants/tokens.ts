@@ -21,7 +21,8 @@ export const TOKENS_MAP: Record<TokenTicker, IToken> = {
   },
   [TokenTicker.USDC]: {
     ticker: TokenTicker.USDC,
-    decimals: 6,
+    // USDC Rinkeby Token has 18 decimals, mainnet has 6
+    decimals: process.env.REACT_APP_NETWORK_CHAIN_ID === "1" ? 6 : 18,
     name: 'USDC Coin',
     icons: [USDCIcon],
     contractName: 'USDC',
@@ -55,7 +56,10 @@ export const TOKENS_MAP: Record<TokenTicker, IToken> = {
 
 export const TOKENS = Object.keys(TOKENS_MAP).map((ticker) => TOKENS_MAP[ticker as TokenTicker]);
 
-export const getTokenByAddress = (tokenAddress: string) => {
+export const getTokenByAddress = (tokenAddress: string | null | undefined) => {
+  if (!tokenAddress) {
+    return TOKENS_MAP[TokenTicker.ETH];
+  }
   // @ts-ignore
   const { contracts: contractsData } = Contracts[process.env.REACT_APP_NETWORK_CHAIN_ID];
   let token = undefined;
@@ -66,7 +70,8 @@ export const getTokenByAddress = (tokenAddress: string) => {
     if (tokenAddress && contract.address && contract.address.toLowerCase() === tokenAddress.toLowerCase()) {
       token = TOKENS.find(tkn => tkn.contractName === contractName as TokenTicker);
     }
-  })
+  });
+
   return token || TOKENS_MAP[TokenTicker.ETH];
 }
 
