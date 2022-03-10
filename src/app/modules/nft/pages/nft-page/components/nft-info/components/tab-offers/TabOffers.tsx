@@ -23,7 +23,7 @@ enum CancelingText {
   INDEXING = 'Indexing transaction...'
 }
 
-export const TabOffers:React.FC<ITabOffersProps> = ({nft, order, offers, usersMap}) => {
+export const TabOffers:React.FC<ITabOffersProps> = ({nft, offers, usersMap}) => {
   const { signer } = useAuthContext() as any;
   const [offerForAccept, setOfferForAccept] = useState<IOrder | null>(null);
   const [offerCanceling, setOfferCanceling] = useState(false);
@@ -81,12 +81,11 @@ export const TabOffers:React.FC<ITabOffersProps> = ({nft, order, offers, usersMa
   return !offers?.length ? <OffersEmpty /> : (
     <Box>
       {offers?.map((offer) => (
-        offer && order && usersMap && <NFTOffer
+        offer && nft && usersMap && <NFTOffer
             key={offer.id} 
             offer={offer}
-            order={order}
-            owner={nft?._ownerAddress}
-            usersMap={usersMap}
+            owner={nft._ownerAddress}
+            usersMap={usersMap || {}}
             setOfferForAccept={setOfferForAccept}
             cancelOffer={handleCancelOffer}
           />      

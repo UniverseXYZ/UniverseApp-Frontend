@@ -10,8 +10,7 @@ export interface INFTPageContext {
   NFT: INFT;
   isLoading: boolean;
   isPolymorph: boolean;
-  buyOrder?: IOrder;
-  sellOrder?: IOrder;
+  order?: IOrder;
   creator: IUser;
   owner: IUser;
   collection: ICollection;
@@ -84,29 +83,18 @@ const NFTPageProvider: FC = ({ children }) => {
     { enabled: !!NFT?.id, retry: false, onSuccess: (collection) => console.log('collection', collection) },
   );
 
-  const { data: buyOrder, isLoading: isLoadingBuyOrder } = useQuery<IOrder | undefined>(['NFT', collectionAddress, tokenId, 'buyOrder'], async () => {
+  const { data: order, isLoading: isLoadingOrder } = useQuery<IOrder | undefined>(['NFT', collectionAddress, tokenId, 'order'], async () => {
     const { orders } = await GetOrdersApi({
       assetClass: OrderAssetClass.ERC721,
       collection: collectionAddress,
-      tokenId: +tokenId,
-      side: 0,
-    });
-
-    return orders.find((order) => {
-      return !order.cancelledTxHash;
-    });
-  }, { enabled: !!NFT?.id });
-
-  const { data: sellOrder, isLoading: isLoadingSellOrder } = useQuery<IOrder | undefined>(['NFT', collectionAddress, tokenId, 'sellOrder'], async () => {
-    const { orders } = await GetOrdersApi({
-      assetClass: OrderAssetClass.ERC721,
-      collection: collectionAddress,
-      tokenId: +tokenId,
+      // tokenId,
       side: 1,
     });
 
+    // TODO: remove in favor to passing param tokenId to request
     return orders.find((order) => {
-      return !order.cancelledTxHash;
+      const assetType = order.make.assetType as IERC721AssetType;
+      return assetType.contract === collectionAddress && +assetType.tokenId === +tokenId && !order.cancelledTxHash;
     });
   }, { enabled: !!NFT?.id });
 
@@ -116,14 +104,13 @@ const NFTPageProvider: FC = ({ children }) => {
   }, []);
 
   const value: INFTPageContext = {
-    buyOrder,
-    sellOrder,
+    order,
     collectionAddress,
     creator: creator as IUser,
     owner: owner as IUser,
     collection: collection as ICollection,
     NFT: NFT as INFT,
-    isLoading: isLoadingNFT || isLoadingBuyOrder || isLoadingSellOrder,
+    isLoading: isLoadingNFT || isLoadingOrder,
     isPolymorph: NFT?._collectionAddress?.toUpperCase() === process.env.REACT_APP_POLYMORPHS_CONTRACT_ADDRESS?.toUpperCase(),
     refetchOffers,
     history,

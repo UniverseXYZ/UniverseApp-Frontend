@@ -15,26 +15,26 @@ import { useTokenPrice } from '../../../../../../../../../../hooks';
 interface INFTOfferProps {
   offer: IOrder;
   usersMap: Record<string, IUser>;
-  order: IOrder;
   owner: string | undefined;
   setOfferForAccept: React.Dispatch<React.SetStateAction<IOrder | null>>;
   cancelOffer: (offer: IOrder) => void;
 }
 
-export const  NFTOffer: React.FC<INFTOfferProps> = ({offer, usersMap, order, owner, setOfferForAccept, cancelOffer}) => {
+export const  NFTOffer: React.FC<INFTOfferProps> = ({offer, usersMap, owner, setOfferForAccept, cancelOffer}) => {
   const { address } = useAuthContext() as any;
   const neverExpired = !offer.start && !offer.end;
 
   const expiredIn = neverExpired ? null : dayjs(offer.end * 1000).diff(new Date(), 'hours');
   const isExpired = expiredIn && !(expiredIn > 0);
   const offerUser = usersMap?.hasOwnProperty(offer.maker) ? usersMap[offer.maker] : {} as IUser;
-  const canAcceptsOffers = order.maker !== address && owner?.toLowerCase() === address && !isExpired;
+  const canAcceptsOffers = offer.maker !== address && owner?.toLowerCase() === address && !isExpired;
   const canCancelOffers = offer && offer.maker === address && !isExpired;
 
   const token = getTokenByAddress((offer.make.assetType as IERC721AssetType).contract)
   const formattedPrice = new BigNumber(utils.formatUnits(offer.make.value, token.decimals ?? 18)).toFixed(2);
   const usdPrice = useTokenPrice(token.ticker);
-  const usd = new BigNumber(usdPrice).multipliedBy(formattedPrice).toFixed(2)
+  const usd = new BigNumber(usdPrice).multipliedBy(formattedPrice).toFixed(2);
+
   return (
     <NFTTabItemWrapper key={offer.id}>
       <Flex>
