@@ -25,7 +25,7 @@ export const SigninPopup = ({ isOpen, onModalClose }: ISigninPopup) => {
           pt: '40px !important',
           pb: '20px !important',
           textAlign: 'center',
-        }}>Signin</ModalHeader>
+        }}>Sign In</ModalHeader>
         <ModalCloseButton />
         <ModalBody pt={'0 !important'}>
           <Text sx={{
@@ -33,7 +33,7 @@ export const SigninPopup = ({ isOpen, onModalClose }: ISigninPopup) => {
             m: 'auto',
             mb: '30px',
             w: '300px',
-          }}>Please, signin before listing an item</Text>
+          }}>Please, sign in before listing an item</Text>
         </ModalBody>
       </ModalContent>
     </Modal>
