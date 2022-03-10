@@ -17,9 +17,10 @@ interface INFTOfferProps {
   usersMap: Record<string, IUser>;
   order: IOrder;
   setOfferForAccept: React.Dispatch<React.SetStateAction<IOrder | null>>;
+  cancelOffer: (offer: IOrder) => void;
 }
 
-export const  NFTOffer: React.FC<INFTOfferProps> = ({offer, usersMap, order, setOfferForAccept}) => {
+export const  NFTOffer: React.FC<INFTOfferProps> = ({offer, usersMap, order, setOfferForAccept, cancelOffer}) => {
   const { address } = useAuthContext() as any;
   const neverExpired = !offer.start && !offer.end;
 
@@ -27,6 +28,7 @@ export const  NFTOffer: React.FC<INFTOfferProps> = ({offer, usersMap, order, set
   const isExpired = expiredIn && !(expiredIn > 0);
   const offerUser = usersMap?.hasOwnProperty(offer.maker) ? usersMap[offer.maker] : {} as IUser;
   const canAcceptsOffers = order && order.maker === address && !isExpired;
+  const canCancelOffers = offer && offer.maker === address && !isExpired;
 
   const token = getTokenByAddress((offer.make.assetType as IERC721AssetType).contract)
   const formattedPrice = new BigNumber(utils.formatUnits(offer.make.value, token.decimals ?? 18)).toFixed(2);
@@ -69,6 +71,15 @@ export const  NFTOffer: React.FC<INFTOfferProps> = ({offer, usersMap, order, set
               setOfferForAccept(offer);
             }}
           >Accept</Button>
+        )}
+        { canCancelOffers && (
+          <Button
+            {...styles.AcceptButtonStyle}
+            onClick={() => {
+              console.log('offer', offer);
+              cancelOffer(offer);
+            }}
+          >Cancel</Button>
         )}
       </Flex>
     </NFTTabItemWrapper>

@@ -8,6 +8,7 @@ import { Contract } from 'ethers';
 import { useMutation } from 'react-query';
 import { useAuthContext } from '../../../../../../../../../contexts/AuthContext';
 import { EncodeOrderApi } from '../../../../../../../../api';
+import Contracts from '../../../../../../../../../contracts/contracts.json';
 
 
 interface ITabOffersProps {
@@ -16,30 +17,37 @@ interface ITabOffersProps {
   offers?: IOrder[];
   usersMap?: Record<string, IUser>;
 }
+
+enum CancelingText {
+  PROGRESS = 'The transaction is in progress...',
+  INDEXING = 'Indexing transaction...'
+}
+
 export const TabOffers:React.FC<ITabOffersProps> = ({nft, order, offers, usersMap}) => {
   const { signer } = useAuthContext() as any;
   const [offerForAccept, setOfferForAccept] = useState<IOrder | null>(null);
   const [offerCanceling, setOfferCanceling] = useState(false);
+  const [offerCancelingText, setOfferCancelingText] = useState(CancelingText.PROGRESS);
 
   // @ts-ignore
   const { contracts: contractsData } = Contracts[process.env.REACT_APP_NETWORK_CHAIN_ID];
 
   const encodeOrderMutation = useMutation(EncodeOrderApi);
 
-  const handleCancelOffer = async (order: IOrder) => {
+  const handleCancelOffer = async (offer: IOrder) => {
     setOfferCanceling(true);
     const contract = new Contract(`${process.env.REACT_APP_MARKETPLACE_CONTRACT}`, contractsData.Marketplace.abi, signer);
 
     const { data: encodedOrderData } = (await encodeOrderMutation.mutateAsync({
-        type: order.type,
-        data: order.data,
-        maker: order.maker,
-        make: order.make as any,
-        salt: order.salt,
-        start: order.start,
-        end: order.end,
-        take: order.take,
-        taker: order.taker,
+        type: offer.type,
+        data: offer.data,
+        maker: offer.maker,
+        make: offer.make as any,
+        salt: offer.salt,
+        start: offer.start,
+        end: offer.end,
+        take: offer.take,
+        taker: offer.taker,
     }));
 
     try {
@@ -50,8 +58,11 @@ export const TabOffers:React.FC<ITabOffersProps> = ({nft, order, offers, usersMa
         console.error('display error');
         return;
       }
-
-      setOfferCanceling(false);
+      //TODO: this is temporary solution
+      setOfferCancelingText(CancelingText.INDEXING)
+      setTimeout(() => {
+        location.reload();
+      }, 20000)
 
     } catch (error) {
       console.error(error);
@@ -68,6 +79,7 @@ export const TabOffers:React.FC<ITabOffersProps> = ({nft, order, offers, usersMa
             order={order}
             usersMap={usersMap}
             setOfferForAccept={setOfferForAccept}
+            cancelOffer={handleCancelOffer}
           />      
       ))}
       {/*TODO: add support of bundle*/}
@@ -81,7 +93,7 @@ export const TabOffers:React.FC<ITabOffersProps> = ({nft, order, offers, usersMa
       )}
       <LoadingPopup
           heading='Cancelling offer'
-          text="The transaction is in progress..."
+          text={offerCancelingText}
           isOpen={offerCanceling}
           onClose={() => setOfferCanceling(false)}
           transactions={[]}
