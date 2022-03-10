@@ -6,7 +6,7 @@ import {
     SimpleGrid,
     Text,
 } from '@chakra-ui/react';
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import SocialLinks from '../../../../../../../../src/components/collection/SocialLinks';
 import { useCollectionPageData } from '../../CollectionPage.context';
 import {
@@ -26,6 +26,8 @@ import Description from '../../../../../../../components/collection/Description.
 import EmptyData from '../../../../../../../components/collection/EmptyData.jsx';
 import { OrderAssetClass } from '../../../../enums';
 import { NoDescriptionFound } from '../../../../components/no-description-found';
+import { useFiltersContext } from '../../../../../account/pages/my-nfts-page/components/search-filters/search-filters.context';
+import { SearchFilters } from '../../../../../account/pages/my-nfts-page/components/search-filters';
 
 const PER_PAGE = 8;
 
@@ -37,6 +39,26 @@ export const CollectionInfo = () => {
   const { setShowError, setErrorTitle, setErrorBody } = useErrorContext() as any;
 
   const scrollContainer = useRef(null);
+
+  const {
+    setUserAddress,
+    userNFTs,
+    isFetchingUserNFTs,
+    hasMoreNFTs,
+    fetchNextUserNFTs,
+    setShowSaleTypeFilters,
+    setShowNFTTypeFilters,
+    setShowPriceRangeFilters,
+    setShowCollectcionFilters,
+  } = useFiltersContext();
+
+  useEffect(() => {
+    setShowSaleTypeFilters(true);
+    setShowNFTTypeFilters(true);
+    setShowPriceRangeFilters(true);
+    setShowCollectcionFilters(true);
+  }, [])
+
 
   const { data: NFTsPages, fetchNextPage, hasNextPage, isFetching, isLoading, isIdle } = useInfiniteQuery(
     ['user', collectionAddress, 'NFTs'],
@@ -135,6 +157,9 @@ export const CollectionInfo = () => {
                         handler: setSelectedTabIndex.bind(this, index),
                       }))}
                     />
+                  </Box>
+                  <Box>
+                    <SearchFilters />
                   </Box>
                   <Box>
                     {selectedTabIndex === 0 ? (
