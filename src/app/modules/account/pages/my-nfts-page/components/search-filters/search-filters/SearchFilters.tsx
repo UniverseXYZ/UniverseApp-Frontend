@@ -102,7 +102,7 @@ export const SearchFilters = (props: IPropsSearchFilter) => {
             />
           )}
         </Popup>
-        {selectedCollections.length && (
+        {selectedCollections.length > 0 && (
           <div className="selected--filters--numbers">
             {selectedCollections.length}
           </div>
