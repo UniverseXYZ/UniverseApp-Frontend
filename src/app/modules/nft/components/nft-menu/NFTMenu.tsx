@@ -152,7 +152,7 @@ export const NFTMenu = (
           {showShare && (<MenuItem name={'Share'} icon={ShareIcon} onClick={handleShare} />)}
           {showHideUnhide && isOwner && !NFT.hidden && (<MenuItem name={'Hide'} icon={HideIcon} onClick={handleHideUnhide} />)}
           {showHideUnhide && isOwner && !!NFT.hidden && (<MenuItem name={'Unhide'} icon={UnhideIcon} onClick={handleHideUnhide} />)}
-          {showRefresh && isOwner && (<MenuItem name={'Refresh'} icon={RefreshIcon} onClick={handleRefresh} />)}
+          {showRefresh && (<MenuItem name={'Refresh'} icon={RefreshIcon} onClick={handleRefresh} />)}
           {/*TODO: show edit*/}
           {/*{showEdit && isOwner && (<MenuItem name={'Edit'} icon={EditIcon} onClick={handleEdit} />)}*/}
           {showBurn && isOwner && (<MenuItem name={'Burn'} icon={BurnIcon} redColor={true} onClick={handleBurn} />)}
