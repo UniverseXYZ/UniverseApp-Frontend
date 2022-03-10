@@ -11,7 +11,7 @@ interface INFTItemFooterEditionsLabelProps extends BoxProps {
 export const NFTItemFooterEditionsLabel = ({ NFT, children, isOwner, ...rest }: INFTItemFooterEditionsLabelProps) => {
   const boxClassName = !isOwner ? 'nft-label' : '';
   return (
-    <Box className={boxClassName} layerStyle={'nft-card-footer-label'} {...rest}>
+    <Box className={boxClassName} layerStyle={'NFTCardFooterLabel'} {...rest}>
       <Text>{`x${NFT.tokenIds?.length ?? 1}`}</Text>
     </Box>
   );

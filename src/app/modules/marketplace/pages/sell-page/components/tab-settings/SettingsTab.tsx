@@ -21,7 +21,7 @@ export const SettingsTab = () => {
 
   return (
     <>
-      <Box layerStyle={'grey'} sx={styles.mainContainer}>
+      <Box layerStyle={'Grey'} sx={styles.mainContainer}>
         <SettingsTabFixedListing />
         <SettingsTabDutchAuction />
         <SettingsTabEnglishAuction />

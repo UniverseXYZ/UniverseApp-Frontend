@@ -336,7 +336,7 @@ export const SummaryTab = () => {
               Listing is free! At the time of the sale, the following fees will be deducted.
             </Text>
 
-            <Box layerStyle={'grey'} {...styles.FeesContainerStyle}>
+            <Box layerStyle={'Grey'} {...styles.FeesContainerStyle}>
               <Fee name={'To Universe'} amount={daoFee} />
               <Fee name={'To Collection'} amount={collectionRoyalties} />
               <Fee name={'To Creator'} amount={creatorRoyalties} />
