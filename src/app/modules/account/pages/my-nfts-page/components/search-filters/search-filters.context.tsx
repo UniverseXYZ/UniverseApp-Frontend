@@ -318,7 +318,12 @@ const FiltersContextProvider = (props: IFiltersProviderProps) => {
 		return r;
 	}
 
-	const _mapOrders = (orders: any[], nfts: any[]) => {
+	/**
+	 * @param orders IOrder[]
+	 * @param nfts INFT[]
+	 * @returns mapped data with Order and the information about the NFTs inside
+	 */
+	const _mapOrders = (orders: any[], nfts: any[]): OrdersData[] => {
 		const nftsMap = nfts.reduce<Record<string, INFT>>((acc, response) => {
       if (response.status !== 'fulfilled') {
         return acc;
@@ -357,7 +362,10 @@ const FiltersContextProvider = (props: IFiltersProviderProps) => {
 	}
 
 	// --------- QUERY HANDLERS ---------
-	const _handleGetUserCollections = async () => {
+	/**
+	 * Fetches all user collections in which the user has NFTs from the Scraper API
+	 */
+	const _handleGetUserCollections = async (): Promise<ISearchBarDropdownCollection[]> => {
 		const userCollections = await GetUserCollectionsFromScraperApi(userAddress);
 
 		// The scraper doesn't return off chain info like (images, etc.) so we need to call the Universe Backend App for more info.
@@ -383,6 +391,11 @@ const FiltersContextProvider = (props: IFiltersProviderProps) => {
 		return fullCollectionData;
 	};
 
+	/**
+	 * Fetches user NFTs based on applied query params
+	 * @param param number
+	 * @returns Object cointaining pagination info and INFT[];
+	 */
 	const _handleGetUserNFTs = async ({ pageParam = 1 }) => {
 		const query: IGetUserNFTsProps = {
 			address: utils.getAddress(userAddress),
@@ -396,6 +409,11 @@ const FiltersContextProvider = (props: IFiltersProviderProps) => {
 			return userNFTs;
 	};
 
+	/**
+	 * Gets the orders from the OrderBook API based on the applied filters
+	 * @param param number
+	 * @returns Object with OrdersData[] and total orders count
+	 */
 	const _handleGetOrders = async ({ pageParam = 1 }) => {
 		let apiFilters: any = { page: pageParam, side: 1 };
 
