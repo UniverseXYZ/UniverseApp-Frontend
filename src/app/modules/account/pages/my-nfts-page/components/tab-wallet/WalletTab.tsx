@@ -24,7 +24,7 @@ export const WalletTab = () => {
     setUserAddress,
     userNFTs,
     isFetchingUserNFTs,
-    hasMoreNFTs,
+    hasMoreUserNFTs,
     fetchNextUserNFTs,
     setShowCollectcionFilters,
   } = useFiltersContext();
@@ -73,7 +73,7 @@ export const WalletTab = () => {
             })}
           </SimpleGrid>
 
-          {!isFetchingUserNFTs && hasMoreNFTs && (
+          {!isFetchingUserNFTs && hasMoreUserNFTs && (
             <Button variant={'outline'} isFullWidth={true} mt={10} onClick={() => fetchNextUserNFTs()}>Load more</Button>
           )}
         </>

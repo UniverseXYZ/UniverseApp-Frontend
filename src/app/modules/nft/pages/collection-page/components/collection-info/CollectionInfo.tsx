@@ -15,9 +15,6 @@ import {
 import { CollectionPageLoader } from '../../../../../../../containers/collection/CollectionPageLoader';
 import { useErrorContext } from '../../../../../../../contexts/ErrorContext';
 import { CollectionStatistics } from './components/index';
-import { useInfiniteQuery } from 'react-query';
-import { GetCollectionNFTsApi } from '../../../../api/new-get-nft.api';
-import { utils } from "ethers"
 import NotFound from '../../../../../../../components/notFound/NotFound';
 import BGImage from '../../../../../../../assets/images/v2/stone_bg.jpg';
 import Cover from '../../../../../../../components/collection/Cover';
@@ -41,49 +38,30 @@ export const CollectionInfo = () => {
   const scrollContainer = useRef(null);
 
   const {
-    setUserAddress,
-    userNFTs,
-    isFetchingUserNFTs,
-    hasMoreNFTs,
-    fetchNextUserNFTs,
+    setCollectionAddress,
     setShowSaleTypeFilters,
-    setShowNFTTypeFilters,
     setShowPriceRangeFilters,
-    setShowCollectcionFilters,
+    collectionNFTs,
+    fetchNextCollectionNFTs,
+    hasMoreCollectionNFTs,
+    isFetchingCollectionNFTs,
+    isLoadingCollectionNFTs,
+    isIdleCollectionNFTs,
   } = useFiltersContext();
 
   useEffect(() => {
+    setCollectionAddress(collectionAddress);
     setShowSaleTypeFilters(true);
-    setShowNFTTypeFilters(true);
     setShowPriceRangeFilters(true);
-    setShowCollectcionFilters(true);
-  }, [])
-
-
-  const { data: NFTsPages, fetchNextPage, hasNextPage, isFetching, isLoading, isIdle } = useInfiniteQuery(
-    ['user', collectionAddress, 'NFTs'],
-    ({ pageParam = 1 }) => GetCollectionNFTsApi(utils.getAddress(collectionAddress), pageParam, PER_PAGE),
-    {
-      enabled: !!collectionAddress,
-      retry: false,
-      getNextPageParam: (lastPage, pages) => {
-        return pages.length * PER_PAGE < lastPage.total ? pages.length + 1 : undefined;
-      },
-      onError: ({ error, message }) => {
-        setErrorTitle(error);
-        setErrorBody(message);
-        setShowError(true);
-      },
-    },
-  );
+  }, [collectionAddress])
 
   return (
       <>
-        {isFetching && !collection ? (
+        {isFetchingCollectionNFTs && !collection ? (
           <div className='loader-wrapper'>
             <CollectionPageLoader />
           </div>
-        ) : !isFetching && !collection ? (
+        ) : !isFetchingCollectionNFTs && !collection ? (
           <NotFound />
         ) : (
           <Box sx={{
@@ -139,7 +117,7 @@ export const CollectionInfo = () => {
                           boxSizing: 'border-box',
                           boxShadow: '0px 10px 30px rgba(0, 0, 0, 0.1)',
                         }}>
-                        <CollectionStatistics nftsCount={NFTsPages?.pages?.length && NFTsPages.pages[0].total} ownersCount={owners?.owners} floorPrice={collectionAdditionalData?.floorPrice} volumeTraded={collectionAdditionalData?.volumeTraded} />
+                        <CollectionStatistics nftsCount={collectionNFTs?.pages?.length && collectionNFTs.pages[0].total} ownersCount={owners?.owners} floorPrice={collectionAdditionalData?.floorPrice} volumeTraded={collectionAdditionalData?.volumeTraded} />
                         </Box>
                     </Box>
                 </Flex>
@@ -164,11 +142,11 @@ export const CollectionInfo = () => {
                   <Box>
                     {selectedTabIndex === 0 ? (
                       <>
-                        {NFTsPages?.pages?.length && NFTsPages.pages[0].data?.length ? (
+                        {collectionNFTs?.pages?.length && collectionNFTs.pages[0].data?.length ? (
                           <div className="mynfts__page">
                             <div className="container mynfts__page__body">
                               <SimpleGrid columns={{ base: 1, md: 2, lg: 4 }} spacing={'30px'}>
-                                {(NFTsPages?.pages ?? []).map((page) => {
+                                {(collectionNFTs?.pages ?? []).map((page) => {
                                   return page.data.map((NFT) => (
                                     <NftItem
                                       key={NFT.id}
@@ -196,14 +174,14 @@ export const CollectionInfo = () => {
                                   ))
                                 })}
                               </SimpleGrid>
-                              {isFetching && 
+                              {isFetchingCollectionNFTs &&
                                 <Box sx={{
                                   mt: '50px'
                                 }}>
                                   <CollectionPageLoader />
                                 </Box>}
-                              {!isFetching && hasNextPage && (
-                                <Button variant={'outline'} isFullWidth={true} mt={10} onClick={() => fetchNextPage()}>Load more</Button>
+                              {!isFetchingCollectionNFTs && hasMoreCollectionNFTs && (
+                                <Button variant={'outline'} isFullWidth={true} mt={10} onClick={() => fetchNextCollectionNFTs()}>Load more</Button>
                               )}
                             </div>
                           </div>

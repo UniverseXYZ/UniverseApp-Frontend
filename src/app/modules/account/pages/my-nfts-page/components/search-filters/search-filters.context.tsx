@@ -7,6 +7,7 @@ import { utils } from 'ethers';
 import { getUserNFTsApi, IGetUserNFTsProps } from '../../../../../../api';
 import { GetCollectionApi, GetUserCollectionsFromScraperApi } from '../../../../../nft/api';
 import { IUserOwnedCollection, ISearchBarDropdownCollection, INFT } from '../../../../../nft/types';
+import { GetCollectionNFTsApi } from '../../../../../nft/api';
 
 // Constants
 const PER_PAGE = 12;
@@ -31,6 +32,7 @@ interface INFTsResult {
 export interface ISearchFiltersContext {
 	userAddress?: string;
 	setUserAddress: (address: string) => void;
+	setCollectionAddress: (address: string) => void;
 	// --- FORMS ---
 	searchBarForm: FormikProps<ISearchBarValue>;
 	collectionFilterForm: FormikProps<ICollectionFilterValue>;
@@ -38,11 +40,20 @@ export interface ISearchFiltersContext {
 	nftTypeForm: FormikProps<INftTypeFilterValue>;
 	priceRangeForm: FormikProps<IPriceRangeFilterValue>;
 	// --- FORMS END ---
+	// --- API RETURNED DATA END ---
 	userCollections: ISearchBarDropdownCollection[];
 	userNFTs: InfiniteData<INFTsResult> | undefined;
 	fetchNextUserNFTs: any;
 	isFetchingUserNFTs: boolean;
-	hasMoreNFTs: boolean | undefined;
+	hasMoreUserNFTs: boolean | undefined;
+	collectionNFTs: InfiniteData<INFTsResult> | undefined;
+	// TODO:: UPDATE THE TYPE !
+	fetchNextCollectionNFTs: any;
+	hasMoreCollectionNFTs: boolean | undefined;
+	isFetchingCollectionNFTs: boolean;
+	isLoadingCollectionNFTs: boolean;
+	isIdleCollectionNFTs: boolean;
+	// --- API RETURNED DATA END ---
 	// --- FILTERS VISIBILITY ---
 	showSaleTypeFilters: boolean;
 	showNFTTypeFilters: boolean;
@@ -68,6 +79,7 @@ interface IFiltersProviderProps {
 const FiltersContextProvider = (props: IFiltersProviderProps) => {
 	// --------- STATE ---------
 	const [userAddress, setUserAddress] = useState<string>('');
+	const [collectionAddress, setCollectionAddress] = useState<string>('');
 	const [showSaleTypeFilters, setShowSaleTypeFilters]  = useState<boolean>(false);
 	const [showNFTTypeFilters, setShowNFTTypeFilters] = useState<boolean>(false);
 	const [showPriceRangeFilters, setShowPriceRangeFilters] = useState<boolean>(false);
@@ -118,7 +130,6 @@ const FiltersContextProvider = (props: IFiltersProviderProps) => {
     },
     onSubmit: () => {},
   });
-
 	// --------- END FORMIK ---------
 
 	// --------- QUERY HANDLERS ---------
@@ -190,7 +201,7 @@ const FiltersContextProvider = (props: IFiltersProviderProps) => {
 	const {
 		data: userNFTs,
 		fetchNextPage: fetchNextUserNFTs,
-		hasNextPage: hasMoreNFTs,
+		hasNextPage: hasMoreUserNFTs,
 		isFetching: isFetchingUserNFTs
 	} = useInfiniteQuery([
 		'user',
@@ -209,33 +220,75 @@ const FiltersContextProvider = (props: IFiltersProviderProps) => {
 				// TODO:: think how to handle the errors
 			},
 		},
-		);
+	);
+
+
+	/**
+	 * Query for fetching Collection NFTs
+	 */
+	const {
+		data: collectionNFTs,
+		fetchNextPage: fetchNextCollectionNFTs,
+		hasNextPage: hasMoreCollectionNFTs,
+		isFetching: isFetchingCollectionNFTs,
+		isLoading: isLoadingCollectionNFTs,
+		isIdle: isIdleCollectionNFTs
+	 } = useInfiniteQuery(
+		[
+			'collection-nfts',
+			collectionAddress,
+		],
+		({ pageParam = 1 }) => GetCollectionNFTsApi(utils.getAddress(collectionAddress), pageParam, PER_PAGE),
+			{
+				enabled: !!collectionAddress,
+				retry: false,
+				getNextPageParam: (lastPage, pages) => {
+					return pages.length * PER_PAGE < lastPage.total ? pages.length + 1 : undefined;
+				},
+				onError: ({ error, message }) => {
+					// TODO:: Handle Errors ?
+				},
+			},
+  );
 	// --------- END QUERIES ---------
 
 	// --------- EXPORT VALUE ---------
   const value: ISearchFiltersContext = {
 		userAddress: userAddress,
 		setUserAddress: setUserAddress,
-		userCollections: UserCollections || [],
+		setCollectionAddress: setCollectionAddress,
+		// --- FORMS ---
 		searchBarForm: searchBarForm,
 		collectionFilterForm: collectionFilterForm,
+		nftTypeForm: nftTypeFilterForm,
+		saleTypeForm: saleTypeFilterForm,
+		priceRangeForm: priceRangeFilterForm,
+		// --- FORMS END ---
+		// --- API returned Data ---
+		userCollections: UserCollections || [],
 		userNFTs: userNFTs,
 		fetchNextUserNFTs: fetchNextUserNFTs,
 		isFetchingUserNFTs: isFetchingUserNFTs,
-		hasMoreNFTs: hasMoreNFTs,
-		saleTypeForm: saleTypeFilterForm,
-		nftTypeForm: nftTypeFilterForm,
-		priceRangeForm: priceRangeFilterForm,
-		// FILTERS VISIBLITY
+		hasMoreUserNFTs: hasMoreUserNFTs,
+		collectionNFTs: collectionNFTs,
+		fetchNextCollectionNFTs: fetchNextCollectionNFTs,
+		hasMoreCollectionNFTs: hasMoreCollectionNFTs,
+		isFetchingCollectionNFTs: isFetchingCollectionNFTs,
+		isLoadingCollectionNFTs: isLoadingCollectionNFTs,
+		isIdleCollectionNFTs: isIdleCollectionNFTs,
+		// --- API returned Data END ---
+		// --- FILTERS VISIBLITY ---
 		showSaleTypeFilters: showSaleTypeFilters,
 		showNFTTypeFilters: showNFTTypeFilters,
 		showPriceRangeFilters: showPriceRangeFilters,
 		showCollectionFilters: showCollectionFilters,
-		// FILTERS VISIBLITY SETTERS
+		// --- FILTERS VISIBLITY END ---
+		// --- FILTERS VISIBLITY SETTERS ---
 		setShowSaleTypeFilters,
 		setShowNFTTypeFilters,
 		setShowPriceRangeFilters,
 		setShowCollectcionFilters,
+		// --- FILTERS VISIBLITY SETTERS END---
 	};
 
   return (
