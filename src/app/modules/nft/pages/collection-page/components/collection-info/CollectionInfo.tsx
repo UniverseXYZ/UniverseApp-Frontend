@@ -45,6 +45,7 @@ export const CollectionInfo = () => {
     fetchNextCollectionNFTs,
     hasMoreCollectionNFTs,
     isFetchingCollectionNFTs,
+    orders,
     isLoadingCollectionNFTs,
     isIdleCollectionNFTs,
   } = useFiltersContext();

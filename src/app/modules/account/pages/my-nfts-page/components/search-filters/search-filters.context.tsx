@@ -5,13 +5,15 @@ import { utils } from 'ethers';
 
 // API Calls & Interfaces
 import { getUserNFTsApi, IGetUserNFTsProps } from '../../../../../../api';
-import { GetCollectionApi, GetUserCollectionsFromScraperApi } from '../../../../../nft/api';
-import { IUserOwnedCollection, ISearchBarDropdownCollection, INFT } from '../../../../../nft/types';
+import { GetCollectionApi, GetUserCollectionsFromScraperApi, GetActiveSellOrdersApi, GetNFT2Api } from '../../../../../nft/api';
+import { IUserOwnedCollection, ISearchBarDropdownCollection, INFT, IERC721AssetType, IERC721BundleAssetType, IOrder } from '../../../../../nft/types';
 import { GetCollectionNFTsApi } from '../../../../../nft/api';
+import { TokenTicker } from '../../../../../../enums';
 
 // Constants
 const PER_PAGE = 12;
 import { coins } from '../../../../../../mocks';
+import { getTokenAddressByTicker } from '../../../../../../constants';
 
 // Interfaces
 import {
@@ -29,6 +31,14 @@ interface INFTsResult {
 	data: any[],
 };
 
+type OrdersData = {
+	order: IOrder;
+	NFTs: INFT[];
+};
+interface IOrdersResult {
+	total: number;
+	data: OrdersData[];
+}
 export interface ISearchFiltersContext {
 	userAddress?: string;
 	setUserAddress: (address: string) => void;
@@ -53,6 +63,7 @@ export interface ISearchFiltersContext {
 	isFetchingCollectionNFTs: boolean;
 	isLoadingCollectionNFTs: boolean;
 	isIdleCollectionNFTs: boolean;
+	orders: InfiniteData<IOrdersResult> | undefined;
 	// --- API RETURNED DATA END ---
 	// --- FILTERS VISIBILITY ---
 	showSaleTypeFilters: boolean;
@@ -250,6 +261,135 @@ const FiltersContextProvider = (props: IFiltersProviderProps) => {
 				},
 			},
   );
+
+
+	/**
+	 * Query for fetching orders
+	 */
+	const {
+		data: orders,
+		fetchNextPage: fetchNextOrders,
+		hasNextPage: hasMoreOrders,
+		isFetching: isFethingOrders
+	} = useInfiniteQuery([
+    'orders',
+    saleTypeFilterForm.values,
+    priceRangeFilterForm.values,
+		// TODO:: Implement sort by filters
+    // sortBy
+  ], async ({ pageParam = 1 }) => {
+    const apiFilters: any = { page: pageParam, side: 1 };
+
+    // Sale Filters
+    if (saleTypeFilterForm.values.hasOffers) {
+      apiFilters['hasOffers'] = true;
+    }
+
+    if (saleTypeFilterForm.values.buyNow) {
+      apiFilters['side'] = 1;
+    }
+
+    if (saleTypeFilterForm.values.new) {
+      apiFilters['beforeTimestamp'] = Math.floor((new Date()).getTime() / 1000);
+    }
+
+    // Price Filters
+    if (priceRangeFilterForm.values.currency.token && priceRangeFilterForm.dirty) {
+      const ticker = priceRangeFilterForm.values.currency.token as TokenTicker;
+      const tokenAddress = getTokenAddressByTicker(ticker);
+      apiFilters['token'] = tokenAddress;
+    }
+
+    const [minPrice, maxPrice] = priceRangeFilterForm.values.price;
+
+    if (minPrice) {
+      apiFilters['minPrice'] = minPrice;
+    }
+
+    if (maxPrice && priceRangeFilterForm.dirty) {
+      apiFilters['maxPrice'] = maxPrice;
+    }
+
+    // Sorting
+    // if (sortBy) {
+    //   let sortFilter = 0
+    //   switch (sortBy) {
+    //     case SortOrderOptionsEnum.EndingSoon:
+    //       sortFilter = 1
+    //       break;
+    //     case SortOrderOptionsEnum.HighestPrice:
+    //       sortFilter = 2
+    //       break;
+    //     case SortOrderOptionsEnum.LowestPrice:
+    //       sortFilter = 3
+    //       break;
+    //     case SortOrderOptionsEnum.RecentlyListed:
+    //       sortFilter = 4
+    //       break;
+    //     default:
+    //       break;
+    //   }
+    //   apiFilters['sortBy'] = sortFilter;
+    // }
+
+    const { orders, total } = await GetActiveSellOrdersApi(apiFilters);
+
+    const NFTsRequests: Array<any> = [];
+
+    for (const order of orders) {
+      switch (order.make.assetType.assetClass) {
+        case 'ERC721':
+          const assetType = order.make.assetType as IERC721AssetType;
+          NFTsRequests.push(GetNFT2Api(assetType.contract, assetType.tokenId))
+          break;
+      }
+    }
+
+    const NFTsMap = (await (Promise.allSettled(NFTsRequests))).reduce<Record<string, INFT>>((acc, response) => {
+      if (response.status !== 'fulfilled') {
+        return acc;
+      }
+
+      const NFT: INFT = response.value;
+
+      const key = `${NFT.collection?.address}:${NFT.tokenId}`;
+
+      acc[key] = NFT;
+
+      return acc;
+    }, {});
+
+    const result = orders.reduce<OrdersData[]>((acc, order) => {
+      const NFTsMapKeys = Object.keys(NFTsMap);
+
+      switch (order.make.assetType.assetClass) {
+        case 'ERC721':
+          const assetType = order.make.assetType as IERC721AssetType;
+          if (NFTsMapKeys.includes(`${assetType.contract}:${assetType.tokenId}`)) {
+            acc.push({
+              order,
+              NFTs: NFTsMap[`${assetType.contract}:${assetType.tokenId}`]
+                ? [NFTsMap[`${assetType.contract}:${assetType.tokenId}`]]
+                : []
+            })
+          }
+          break;
+      }
+
+      return acc;
+    }, []);
+
+    return { total, data: result };
+  }, {
+		enabled: !!collectionAddress,
+    retry: false,
+    getNextPageParam: (lastPage, pages) => {
+      return pages.length * PER_PAGE < lastPage.total ? pages.length + 1 : undefined;
+    },
+    onSuccess: (result) => {
+      console.log('onSuccess 5:', result);
+    }
+  });
 	// --------- END QUERIES ---------
 
 	// --------- EXPORT VALUE ---------
@@ -267,6 +407,7 @@ const FiltersContextProvider = (props: IFiltersProviderProps) => {
 		// --- API returned Data ---
 		userCollections: UserCollections || [],
 		userNFTs: userNFTs,
+		orders: orders,
 		fetchNextUserNFTs: fetchNextUserNFTs,
 		isFetchingUserNFTs: isFetchingUserNFTs,
 		hasMoreUserNFTs: hasMoreUserNFTs,
