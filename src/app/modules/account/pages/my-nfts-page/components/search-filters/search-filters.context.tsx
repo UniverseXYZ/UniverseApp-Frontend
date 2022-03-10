@@ -54,6 +54,7 @@ export interface ISearchFiltersContext {
 	hasSelectedOrderBookFilters: () => boolean;
 	selectedCollections: ISearchBarDropdownCollection[];
 	setSelectedCollections: (v: ISearchBarDropdownCollection[]) => void;
+	getSelectedFiltersCount: () => number;
 	// --- FORMS ---
 	searchBarForm: FormikProps<ISearchBarValue>;
 	collectionFilterForm: FormikProps<ICollectionFilterValue>;
@@ -181,6 +182,25 @@ const FiltersContextProvider = (props: IFiltersProviderProps) => {
 
 	const hasSelectedCollectionFilter = () => {
 		return collectionFilterForm.dirty;
+	}
+
+	/**
+	 * Gets the selected filters type count
+	 * @returns number
+	 */
+	const getSelectedFiltersCount = () :number => {
+		let c = 0;
+		[
+			hasSelectedSaleTypeFilter(),
+			hasSelectedPriceFilter(),
+			hasSelectedSortByFilter(),
+			hasSelectedNftTypeFilter(),
+			hasSelectedCollectionFilter(),
+		].forEach((v: boolean) => {
+			if (v) c += 1;
+		});
+
+		return c;
 	}
 
 	/**
@@ -520,6 +540,7 @@ const FiltersContextProvider = (props: IFiltersProviderProps) => {
 		hasSelectedNftTypeFilter,
 		hasSelectedCollectionFilter,
 		hasSelectedOrderBookFilters,
+		getSelectedFiltersCount,
 		// --- SETTERS ---
 		clearAllForms,
 		setSelectedCollections,

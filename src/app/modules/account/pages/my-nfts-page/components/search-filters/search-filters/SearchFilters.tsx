@@ -44,6 +44,7 @@ export const SearchFilters = () => {
     // Scraper BE Filters
     hasSelectedCollectionFilter,
     clearAllForms,
+    getSelectedFiltersCount,
   } = useFiltersContext();
 
   useEffect(() => {
@@ -85,9 +86,9 @@ export const SearchFilters = () => {
           onClick={() => setShowFilters(!showFilters)}
           aria-hidden="true"
         >
-          {selectedCollections.length ? (
+          {getSelectedFiltersCount() > 0 ? (
             <div className="tablet--selected--filters">
-              {selectedCollections.length}
+              {getSelectedFiltersCount()}
             </div>
           ) : (
             <img src={filtersIcon} alt="Filter" />
@@ -131,7 +132,7 @@ export const SearchFilters = () => {
             />
           )}
 
-          {hasSelectedOrderBookFilters() || hasSelectedCollectionFilter() && (
+          {(hasSelectedOrderBookFilters() || hasSelectedCollectionFilter()) && (
               <Link
                 onClick={clearAllForms}
                 sx={{
