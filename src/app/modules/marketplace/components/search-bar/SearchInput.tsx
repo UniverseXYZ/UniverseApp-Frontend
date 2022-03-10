@@ -12,6 +12,7 @@ import { DebounceInput } from 'react-debounce-input';
 
 import searchIcon from '../../../../../assets/images/search-gray.svg';
 import closeIcon from '../../../../../assets/images/close-menu.svg';
+import { timeout } from '../../../../utils/debounceConfig';
 
 interface ISearchInputProps {
   inputGroupProps?: InputGroupProps;
@@ -31,7 +32,7 @@ export const SearchInput = (props: ISearchInputProps) => (
         <Image src={searchIcon} {...props.iconProps} />
       </InputLeftElement>
 `      <DebounceInput
-          debounceTimeout={300}
+          debounceTimeout={timeout}
           className="search-bar-input"
           style={{
             width: '90%',
