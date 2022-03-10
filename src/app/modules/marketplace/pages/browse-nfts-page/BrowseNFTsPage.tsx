@@ -332,7 +332,7 @@ export const BrowseNFTsPage = () => {
   useEffect(() => setDarkMode(false), []);
 
   return (
-    <Box bg={`url(${BGImage}) center / cover`}>
+    <Box layerStyle={'StoneBG'}>
       <Flex {...styles.IntroSectionStyle}>
         <Box>
           <Text fontSize={'12px'} fontWeight={500} textTransform={'uppercase'} mb={'23px'} letterSpacing={'5px'}>Welcome to the</Text>

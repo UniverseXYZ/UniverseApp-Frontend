@@ -17,7 +17,7 @@ interface INFTItemFooterStandardLabelProps extends BoxProps {
 export const NFTItemFooterStandardLabel = ({ NFT, children, isOwner, showBuyNowButton, ...rest }: INFTItemFooterStandardLabelProps) => {
   const boxClassName = !isOwner && showBuyNowButton ? 'nft-label' : '';
   return (
-    <Box className={boxClassName} layerStyle={'nft-card-footer-label'} {...rest}>
+    <Box className={boxClassName} layerStyle={'NFTCardFooterLabel'} {...rest}>
       <Text>{`${STANDARDS_LABELS[NFT.standard]}`}</Text>
     </Box>
   );

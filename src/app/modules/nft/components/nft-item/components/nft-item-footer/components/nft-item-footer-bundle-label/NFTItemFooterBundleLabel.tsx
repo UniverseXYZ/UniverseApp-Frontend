@@ -11,7 +11,7 @@ export const NFTItemFooterBundleLabel = ({ count, children, ...rest }: INFTItemF
   const label = `Bundle: ${count} NFTs`;
   return (
     <Tooltip hasArrow label={label} placement={'top'} variant={'black'} fontWeight={'700'}>
-      <Box layerStyle={'nft-card-footer-label'} p={'5px 6px'} {...rest}>
+      <Box layerStyle={'NFTCardFooterLabel'} p={'5px 6px'} {...rest}>
         <Image src={BundleIcon} alt={label} display={'inline'} />
       </Box>
     </Tooltip>

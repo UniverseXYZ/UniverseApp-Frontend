@@ -48,7 +48,7 @@ export const SettingsTabDutchAuction = () => {
         </Box>
         <Flex justifyContent={'flex-end'} />
         <Box pt={'20px'} w={'100%'}>
-          <Box layerStyle={'grey'} p={{ base: '20px', md: '30px' }}>
+          <Box layerStyle={'Grey'} p={{ base: '20px', md: '30px' }}>
             <Flex sx={styles.settingsItem}>
               <Box>
                 <Heading as={'h5'}>Ending price</Heading>
@@ -98,7 +98,7 @@ export const SettingsTabDutchAuction = () => {
         </Flex>
         {form.values.isScheduledForFutureTime && (
           <Box pt={'20px'} w={'100%'}>
-            <Box layerStyle={'grey'} p={'30px'}>
+            <Box layerStyle={'Grey'} p={'30px'}>
               <Flex sx={styles.settingsItem}>
                 <Box>
                   <Heading as={'h5'}>Future date</Heading>

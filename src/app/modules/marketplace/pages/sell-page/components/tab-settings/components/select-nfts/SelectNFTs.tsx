@@ -335,7 +335,7 @@ export const SelectNFTs = ({}: ISelectNFTsProps) => {
                         />
                       )
                       : (
-                        <Box layerStyle={'nft-card-footer-label'} mr={'6px'}>
+                        <Box layerStyle={'NFTCardFooterLabel'} mr={'6px'}>
                           {nft.tokenIds ? `#${nft.tokenIds[0]}` : ''}
                         </Box>
                       )}

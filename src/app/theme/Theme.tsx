@@ -3,6 +3,7 @@ import React from 'react';
 
 import { breakpoints, global } from './constants';
 import * as components from './overrides';
+import * as layerStyles from './layer-styles';
 
 const theme = extendTheme({
   breakpoints,
@@ -14,19 +15,7 @@ const theme = extendTheme({
     ...components,
   },
   layerStyles: {
-    grey: {
-      background: 'rgba(0, 0, 0, 0.02)',
-      border: '1px solid rgba(0, 0, 0, 0.1)',
-      borderRadius: '10px',
-    },
-    'nft-card-footer-label': {
-      bg: 'rgba(0, 0, 0, 0.05)',
-      borderRadius: '8px',
-      color: 'rgba(0, 0, 0, 0.4)',
-      display: 'inline-block',
-      padding: '10px',
-      lineHeight: '12px',
-    },
+    ...layerStyles,
   },
 });
 
