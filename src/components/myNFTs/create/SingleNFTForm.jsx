@@ -44,6 +44,7 @@ import { useAuthContext } from '../../../contexts/AuthContext';
 import { useErrorContext } from '../../../contexts/ErrorContext';
 import CollectionChoice from './CollectionChoice';
 import universeIcon from '../../../assets/images/universe-img.svg';
+import { timeout } from '../../../app/utils/debounceConfig';
 
 const MAX_FIELD_CHARS_LENGTH = {
   name: 32,
@@ -1192,7 +1193,7 @@ const SingleNFTForm = ({ scrollToTop }) => {
                       <div className="property-address">
                         <h5>Wallet address</h5>
                         <DebounceInput
-                          debounceTimeout={150}
+                          debounceTimeout={timeout}
                           className={`${error ? 'error-inp inp' : 'inp'}`}
                           placeholder="0x89205A3A3b2A69De6Dbf7f01ED13B2108B2c43e7"
                           value={elm.address}
@@ -1289,7 +1290,7 @@ const SingleNFTForm = ({ scrollToTop }) => {
                   <div className="property-address other-wallet">
                     <h5>Wallet address</h5>
                     <DebounceInput
-                      debounceTimeout={150}
+                      debounceTimeout={timeout}
                       className={`${otherWalletError ? 'error-inp inp' : 'inp'}`}
                       placeholder="0x89205A3A3b2A69De6Dbf7f01ED13B2108B2c43e7"
                       value={otherWalletValue}

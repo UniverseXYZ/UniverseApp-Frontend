@@ -10,6 +10,7 @@ import deleteIcon from '../../../assets/images/delred-icon.svg';
 import smallDeleteIcon from '../../../assets/images/del-icon.svg';
 import addIcon from '../../../assets/images/Add.svg';
 import { useAuthContext } from '../../../contexts/AuthContext.jsx';
+import { timeout } from '../../../app/utils/debounceConfig';
 
 const REVENUE_SPLITS_COUNT = 5;
 
@@ -189,7 +190,7 @@ const RevenueSplits = (props) => {
               <div className="revenue--split--wallet--address">
                 <h5>Wallet address</h5>
                 <DebounceInput
-                  debounceTimeout={150}
+                  debounceTimeout={timeout}
                   className={`${error ? 'error-inp inp' : 'inp'}`}
                   placeholder={ADDRESS_PLACEHOLDER}
                   value={elm.address}

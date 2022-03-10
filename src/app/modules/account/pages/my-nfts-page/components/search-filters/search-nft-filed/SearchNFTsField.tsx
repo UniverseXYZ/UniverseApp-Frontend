@@ -9,6 +9,7 @@ import './SearchField.scss';
 
 // Interfaces
 import { ISearchBarValue } from '../index';
+import { timeout } from '../../../../../../../utils/debounceConfig';
 
 // Constants
 const MAX_CHAR_LENGTH = 32;
@@ -36,7 +37,7 @@ export const SearchNFTsField = (props: IPropsSearchNFTsField) => {
     <div className={`search--field--component ${focusField}`}>
       <img className="search" src={searchIcon} alt="Search" />
       <DebounceInput
-        debounceTimeout={300}
+        debounceTimeout={timeout}
         type="text"
         className="inp"
         onChange={handleChange}
