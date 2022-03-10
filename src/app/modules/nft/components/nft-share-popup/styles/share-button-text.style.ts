@@ -5,4 +5,8 @@ export const ShareButtonTextStyle: TextProps = {
   fontSize: '14px',
   fontWeight: 400,
   textAlign: 'center',
+  display: {
+    sm: 'none',
+    md: 'block',
+  }
 }

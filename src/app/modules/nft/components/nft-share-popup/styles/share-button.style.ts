@@ -4,12 +4,18 @@ export const getShareButtonStyle: (icon: string) => BoxProps = (icon) => ({
   bg: 'rgba(0, 0, 0, 0.1)',
   borderRadius: '50%',
   cursor: 'pointer',
-  h: '62px',
+  w: {
+    sm: '50px',
+    md: '62px'
+  },
+  h: {
+    sm: '50px',
+    md: '62px'
+  },
   display: 'block',
   m: 'auto',
   mb: '16px',
   position: 'relative',
-  w: '62px',
 
   _after: {
     bg: `url(${icon}) center no-repeat, white`,

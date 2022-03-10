@@ -36,6 +36,7 @@ import { IERC721AssetType, INFT, IOrder } from '../../../../types';
 import { TokenTicker } from '../../../../../../enums';
 import { EncodeOrderApi, GetSaltApi, IEncodeOrderApiData } from '../../../../../../api';
 import { useAuthContext } from '../../../../../../../contexts/AuthContext';
+import { useErrorContext } from '../../../../../../../contexts/ErrorContext';
 import { sign } from '../../../../../../helpers';
 import { NFTCancelListingPopup } from '..';
 
@@ -68,6 +69,8 @@ export const NFTChangeListingPricePopup = ({ nft, order, isOpen, onClose, }: INF
 
   const { signer, web3Provider } = useAuthContext() as any;
 
+  const { setShowError } = useErrorContext() as any;
+
   const getSaltMutation = useMutation(GetSaltApi);
 
   const encodeOrderMutation = useMutation(EncodeOrderApi);
@@ -83,75 +86,81 @@ export const NFTChangeListingPricePopup = ({ nft, order, isOpen, onClose, }: INF
     },
     validationSchema: NFTChangeListingPriceValidationSchema,
     onSubmit: async (value) => {
-      if(nft == undefined || order == undefined) {
-        return;
-      }
-      if (BigNumber.from(ethers.utils.parseUnits(`${value.amount}`,`${TOKENS_MAP[value.token as TokenTicker].decimals}`)).gt(BigNumber.from(order.take.value)) && isMarkedForCancel) {
-        setIsCancelListingPopupOpened(true);
-      } else {
-        updateListing(value);
+      try {
+        if(nft == undefined || order == undefined) {
+          return;
+        }
+        if (BigNumber.from(ethers.utils.parseUnits(`${value.amount}`,`${TOKENS_MAP[value.token as TokenTicker].decimals}`)).gt(BigNumber.from(order.take.value)) && isMarkedForCancel) {
+          setIsCancelListingPopupOpened(true);
+        } else {
+          updateListing(value);
+        }
+      } catch (e) {
+        setShowError(true);        
       }
     },
   });
 
   const updateListing = async (value: any) => {
-    if(nft == undefined || order == undefined) {
-      return;
-    }
-
-    setState(ChangeListingPriceState.PROCESSING);
-    const network = await web3Provider.getNetwork();
-    const address = await signer.getAddress();
-
-    const salt = (await getSaltMutation.mutateAsync(address)).data.salt;
-
-    const make: any = {
-      assetType: {
-        assetClass: nft?.standard,
-        contract: nft?.collection?.address,
-        tokenId: nft.tokenId,
-      },
-      value: '1',
-    };
-
-    // TODO Refactor - add logic for bundles
-
-    const orderData: IEncodeOrderApiData = {
-      salt: salt,
-      maker: order.maker,
-      make: make,
-      taker: order.taker,
-      take: order.take,
-      type: order.type,
-      start: order.start,
-      end: order.end,
-      data: order.data,
-    };
-    const newToken = TOKENS_MAP[value.token as TokenTicker];
-
-    orderData.take.value = ethers.utils.parseUnits(
-      `${value.amount}`,
-      `${newToken.decimals}`
-    ).toString();
-    
-    const tokenAddress = getTokenAddressByTicker(newToken.ticker)
-    if (tokenAddress !== ZERO_ADDRESS) {
+    try {
+      if(nft == undefined || order == undefined) {
+        return;
+      }
+      setState(ChangeListingPriceState.PROCESSING);
+      const network = await web3Provider.getNetwork();
+      const address = await signer.getAddress();
+  
+      const salt = (await getSaltMutation.mutateAsync(address)).data.salt;
+  
+      const make: any = {
+        assetType: {
+          assetClass: nft?.standard,
+          contract: nft?.collection?.address,
+          tokenId: nft.tokenId,
+        },
+        value: '1',
+      };
+  
+      // TODO Refactor - add logic for bundles
+  
+      const orderData: IEncodeOrderApiData = {
+        salt: salt,
+        maker: order.maker,
+        make: make,
+        taker: order.taker,
+        take: order.take,
+        type: order.type,
+        start: order.start,
+        end: order.end,
+        data: order.data,
+      };
+      const newToken = TOKENS_MAP[value.token as TokenTicker];
+  
+      orderData.take.value = ethers.utils.parseUnits(
+        `${value.amount}`,
+        `${newToken.decimals}`
+      ).toString();
+      
+      const tokenAddress = getTokenAddressByTicker(newToken.ticker)
       orderData.take.assetType.contract = tokenAddress;
+  
+      const { data: encodedOrder } = (await encodeOrderMutation.mutateAsync(orderData as IEncodeOrderApiData));
+  
+      const signature = await sign(
+        web3Provider.provider,
+        encodedOrder,
+        address,
+        `${network.chainId}`,
+        `${process.env.REACT_APP_MARKETPLACE_CONTRACT}`
+      );
+  
+      const createOrderResponse = (await createOrderMutation.mutateAsync({ ...orderData, signature })).data;
+  
+      setState(ChangeListingPriceState.SUCCESS)
+    } catch(e) {
+      setShowError(true);        
+      setState(ChangeListingPriceState.FORM);
     }
-
-    const { data: encodedOrder } = (await encodeOrderMutation.mutateAsync(orderData as IEncodeOrderApiData));
-
-    const signature = await sign(
-      web3Provider.provider,
-      encodedOrder,
-      address,
-      `${network.chainId}`,
-      `${process.env.REACT_APP_MARKETPLACE_CONTRACT}`
-    );
-
-    const createOrderResponse = (await createOrderMutation.mutateAsync({ ...orderData, signature })).data;
-
-    setState(ChangeListingPriceState.SUCCESS)
   }
 
   useEffect(() => {
