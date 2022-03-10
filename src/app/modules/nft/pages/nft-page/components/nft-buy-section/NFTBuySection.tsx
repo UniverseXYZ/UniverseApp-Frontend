@@ -38,12 +38,12 @@ export const NFTBuySection = ({ NFT, owner, NFTs, order, highestOffer, onMeasure
 
   const router = useHistory();
 
-  const { signer, web3Provider } = useAuthContext() as any;
+  const { signer, isAuthenticated } = useAuthContext() as any;
 
   const [state, setState] = useState<BuyNFTSectionState>();
 
   const updateSectionState = useCallback(async () => {
-    if (!signer) {
+    if (!isAuthenticated) {
       return;
     }
 
@@ -70,7 +70,7 @@ export const NFTBuySection = ({ NFT, owner, NFTs, order, highestOffer, onMeasure
       }
     } catch (e) {
     }
-  }, [signer, NFT, order, owner]);
+  }, [isAuthenticated, signer, NFT, order, owner]);
 
   const fetchNftRoyalties = async () => {
     if (NFT?._collectionAddress && NFT.tokenId && signer) {
@@ -85,7 +85,7 @@ export const NFTBuySection = ({ NFT, owner, NFTs, order, highestOffer, onMeasure
 
   useEffect(() => {
     updateSectionState();
-  }, [signer, NFT, order, updateSectionState]);
+  }, [isAuthenticated, signer, NFT, order, updateSectionState]);
 
   useEffect(() => {
     fetchNftRoyalties();
