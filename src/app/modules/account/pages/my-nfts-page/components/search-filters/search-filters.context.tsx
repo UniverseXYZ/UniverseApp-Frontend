@@ -10,9 +10,16 @@ import { IUserOwnedCollection, ISearchBarDropdownCollection, INFT } from '../../
 
 // Constants
 const PER_PAGE = 12;
+import { coins } from '../../../../../../mocks';
 
 // Interfaces
-import { SearchFilters, ISearchBarValue, ICollectionFilterValue } from '../search-filters';
+import {
+	ISaleTypeFilterValue,
+	INftTypeFilterValue,
+	IPriceRangeFilterValue,
+	ISearchBarValue,
+	ICollectionFilterValue
+} from '../search-filters';
 
 interface INFTsResult {
   page: number,
@@ -24,9 +31,14 @@ interface INFTsResult {
 export interface ISearchFiltersContext {
 	userAddress?: string;
 	setUserAddress: (address: string) => void;
+	// --- FORMS ---
 	searchBarForm: FormikProps<ISearchBarValue>;
-	userCollections: ISearchBarDropdownCollection[];
 	collectionFilterForm: FormikProps<ICollectionFilterValue>;
+	saleTypeForm: FormikProps<ISaleTypeFilterValue>;
+	nftTypeForm: FormikProps<INftTypeFilterValue>;
+	priceRangeForm: FormikProps<IPriceRangeFilterValue>;
+	// --- FORMS END ---
+	userCollections: ISearchBarDropdownCollection[];
 	userNFTs: InfiniteData<INFTsResult> | undefined;
 	fetchNextUserNFTs: any;
 	isFetchingUserNFTs: boolean;
@@ -53,14 +65,46 @@ const FiltersContextProvider = (props: IFiltersProviderProps) => {
       searchValue: '',
     },
     onSubmit: () => {},
-  });
+	});
 
 	const collectionFilterForm = useFormik<ICollectionFilterValue>({
     initialValues: {
       contractAddress: '',
     },
     onSubmit: () => {},
+	});
+
+	const saleTypeFilterForm = useFormik<ISaleTypeFilterValue>({
+		initialValues: {
+			buyNow: false,
+			onAuction: false,
+			new: false,
+			hasOffers: false,
+		},
+		onSubmit: () => {},
+	});
+
+	const nftTypeFilterForm = useFormik<INftTypeFilterValue>({
+    initialValues: {
+      singleItem: false,
+      bundle: false,
+      composition: false,
+      stillImage: false,
+      gif: false,
+      audio: false,
+      video: false,
+    },
+    onSubmit: () => {},
   });
+
+	const priceRangeFilterForm = useFormik<IPriceRangeFilterValue>({
+    initialValues: {
+      currency: coins[0],
+      price: [0, 0],
+    },
+    onSubmit: () => {},
+  });
+
 	// --------- END FORMIK ---------
 
 	// --------- QUERY HANDLERS ---------
@@ -165,6 +209,9 @@ const FiltersContextProvider = (props: IFiltersProviderProps) => {
 		fetchNextUserNFTs: fetchNextUserNFTs,
 		isFetchingUserNFTs: isFetchingUserNFTs,
 		hasMoreNFTs: hasMoreNFTs,
+		saleTypeForm: saleTypeFilterForm,
+		nftTypeForm: nftTypeFilterForm,
+		priceRangeForm: priceRangeFilterForm,
 	};
 
   return (
