@@ -40,9 +40,12 @@ interface IOrdersResult {
 	data: OrdersData[];
 }
 export interface ISearchFiltersContext {
+	// --- STATE ---
 	userAddress?: string;
 	setUserAddress: (address: string) => void;
 	setCollectionAddress: (address: string) => void;
+	hasSelectedSaleTypeFilter: () => boolean;
+	hasSelectedPriceFilter: () => boolean;
 	// --- FORMS ---
 	searchBarForm: FormikProps<ISearchBarValue>;
 	collectionFilterForm: FormikProps<ICollectionFilterValue>;
@@ -142,6 +145,18 @@ const FiltersContextProvider = (props: IFiltersProviderProps) => {
     onSubmit: () => {},
   });
 	// --------- END FORMIK ---------
+
+	// --------- GETTERS ---------
+	const hasSelectedSaleTypeFilter = () => {
+		return Object.values(saleTypeFilterForm.values).some((v: boolean) => v);
+	}
+
+	const hasSelectedPriceFilter = () => {
+		const [ min, max] = priceRangeFilterForm.values.price;
+
+		return min > 0 || max > 0;
+	}
+	// --------- GETTERS END ---------
 
 	// --------- QUERY HANDLERS ---------
 	const handleGetUserCollections = async () => {
@@ -394,9 +409,15 @@ const FiltersContextProvider = (props: IFiltersProviderProps) => {
 
 	// --------- EXPORT VALUE ---------
   const value: ISearchFiltersContext = {
+		// --- STATE ---
 		userAddress: userAddress,
 		setUserAddress: setUserAddress,
 		setCollectionAddress: setCollectionAddress,
+		// --- STATE END ---
+		// --- GETTERS ---
+		hasSelectedSaleTypeFilter,
+		hasSelectedPriceFilter,
+		// --- GETTERS END ---
 		// --- FORMS ---
 		searchBarForm: searchBarForm,
 		collectionFilterForm: collectionFilterForm,
@@ -429,7 +450,7 @@ const FiltersContextProvider = (props: IFiltersProviderProps) => {
 		setShowNFTTypeFilters,
 		setShowPriceRangeFilters,
 		setShowCollectcionFilters,
-		// --- FILTERS VISIBLITY SETTERS END---
+		// --- FILTERS VISIBLITY SETTERS END ---
 	};
 
   return (

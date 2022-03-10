@@ -46,15 +46,30 @@ export const CollectionInfo = () => {
     hasMoreCollectionNFTs,
     isFetchingCollectionNFTs,
     orders,
+    hasSelectedSaleTypeFilter,
+    hasSelectedPriceFilter,
     isLoadingCollectionNFTs,
     isIdleCollectionNFTs,
   } = useFiltersContext();
+
+  // TODO:: Connect the sale type filters to the Fetch orders Query
+  // TODO:: Connect the price range filters to the Fetch orders Query
+  // TODO:: Connect the sort by filters to the Fetch orders Query
+  // TODO:: Handle the clear all button logic
+  // TODO:: Handle Mobile Filters
+  // TODO:: Think of handling Errors in the FiltersContext
+  // TODO:: Update the Artist page to use the new filters context & component
+  // TODO:: Fix selected filters count
 
   useEffect(() => {
     setCollectionAddress(collectionAddress);
     setShowSaleTypeFilters(true);
     setShowPriceRangeFilters(true);
   }, [collectionAddress])
+
+  const hasSaleTypeFilters = hasSelectedSaleTypeFilter();
+  const hasPriceFilters = hasSelectedPriceFilter();
+  const hasSelectedOrderBookFilters = hasSaleTypeFilters || hasPriceFilters;
 
   return (
       <>
@@ -143,52 +158,112 @@ export const CollectionInfo = () => {
                   <Box>
                     {selectedTabIndex === 0 ? (
                       <>
-                        {collectionNFTs?.pages?.length && collectionNFTs.pages[0].data?.length ? (
-                          <div className="mynfts__page">
-                            <div className="container mynfts__page__body">
-                              <SimpleGrid columns={{ base: 1, md: 2, lg: 4 }} spacing={'30px'}>
-                                {(collectionNFTs?.pages ?? []).map((page) => {
-                                  return page.data.map((NFT) => (
-                                    <NftItem
-                                      key={NFT.id}
-                                      NFT={NFT}
-                                      collection={`${NFT._collectionAddress}`}
-                                      renderContent={({ NFT, collection, creator, owner, bestOfferPrice, bestOfferPriceToken, lastOfferPrice, lastOfferPriceToken }) => (
-                                        <NFTItemContentWithPrice
-                                        name={NFT.name}
-                                        collection={collection}
-                                        tokenId={NFT.tokenId}
-                                        creator={creator || undefined}
-                                        owner={owner || undefined}
-                                        order={{
-                                          assetClass: OrderAssetClass.ERC721,
-                                          collectionAddress: `${NFT._collectionAddress}`,
-                                          tokenId: `${NFT.tokenId}`,
-                                        }}
-                                        bestOfferPrice={bestOfferPrice || 0}
-                                        bestOfferPriceToken={bestOfferPriceToken || undefined}
-                                        lastOfferPrice={lastOfferPrice || 0}
-                                        lastOfferPriceToken={lastOfferPriceToken || undefined}
+                        {/* Orders NFTs based on search filters */}
+                        { hasSelectedOrderBookFilters ? (
+
+                          orders?.pages?.length && orders.pages[0].data?.length ? (
+                            <div className="mynfts__page">
+                              <div className="container mynfts__page__body">
+                                <SimpleGrid columns={{ base: 1, md: 2, lg: 4 }} spacing={'30px'}>
+                                  {(orders?.pages ?? []).map((page) => {
+                                    return page.data.map(({ order, NFTs }) => {
+                                      if (!NFTs.length) {
+                                        return null;
+                                      }
+                                      return (
+                                        <NftItem
+                                          order={order}
+                                          key={order.id}
+                                          NFT={NFTs[0]}
+                                          collection={`${NFTs[0].collection?.address}`}
+                                          renderContent={({ NFT, collection, creator, owner, bestOfferPrice, bestOfferPriceToken, lastOfferPrice, lastOfferPriceToken }) => (
+                                            <NFTItemContentWithPrice
+                                            name={NFT.name}
+                                            collection={collection}
+                                            tokenId={NFT.tokenId}
+                                            creator={creator || undefined}
+                                            owner={owner || undefined}
+                                            order={{
+                                              assetClass: OrderAssetClass.ERC721,
+                                              collectionAddress: `${NFT._collectionAddress}`,
+                                              tokenId: `${NFT.tokenId}`,
+                                            }}
+                                            bestOfferPrice={bestOfferPrice || 0}
+                                            bestOfferPriceToken={bestOfferPriceToken || undefined}
+                                            lastOfferPrice={lastOfferPrice || 0}
+                                            lastOfferPriceToken={lastOfferPriceToken || undefined}
+                                            />
+                                          )}
                                         />
-                                      )}
-                                    />
-                                  ))
-                                })}
-                              </SimpleGrid>
-                              {isFetchingCollectionNFTs &&
-                                <Box sx={{
-                                  mt: '50px'
-                                }}>
-                                  <CollectionPageLoader />
-                                </Box>}
-                              {!isFetchingCollectionNFTs && hasMoreCollectionNFTs && (
-                                <Button variant={'outline'} isFullWidth={true} mt={10} onClick={() => fetchNextCollectionNFTs()}>Load more</Button>
-                              )}
+                                      )
+                                    })
+                                  })}
+                                </SimpleGrid>
+                                {isFetchingCollectionNFTs &&
+                                  <Box sx={{
+                                    mt: '50px'
+                                  }}>
+                                    <CollectionPageLoader />
+                                  </Box>}
+                                {!isFetchingCollectionNFTs && hasMoreCollectionNFTs && (
+                                  <Button variant={'outline'} isFullWidth={true} mt={10} onClick={() => fetchNextCollectionNFTs()}>Load more</Button>
+                                )}
+                              </div>
                             </div>
-                          </div>
-                        ) : (
-                          <NoNFTsFound />
+                          ) : (
+                            <NoNFTsFound />
+                          )
+
+                        ): (
+                          // Collection NFTs
+                          collectionNFTs?.pages?.length && collectionNFTs.pages[0].data?.length ? (
+                            <div className="mynfts__page">
+                              <div className="container mynfts__page__body">
+                                <SimpleGrid columns={{ base: 1, md: 2, lg: 4 }} spacing={'30px'}>
+                                  {(collectionNFTs?.pages ?? []).map((page) => {
+                                    return page.data.map((NFT) => (
+                                      <NftItem
+                                        key={NFT.id}
+                                        NFT={NFT}
+                                        collection={`${NFT._collectionAddress}`}
+                                        renderContent={({ NFT, collection, creator, owner, bestOfferPrice, bestOfferPriceToken, lastOfferPrice, lastOfferPriceToken }) => (
+                                          <NFTItemContentWithPrice
+                                          name={NFT.name}
+                                          collection={collection}
+                                          tokenId={NFT.tokenId}
+                                          creator={creator || undefined}
+                                          owner={owner || undefined}
+                                          order={{
+                                            assetClass: OrderAssetClass.ERC721,
+                                            collectionAddress: `${NFT._collectionAddress}`,
+                                            tokenId: `${NFT.tokenId}`,
+                                          }}
+                                          bestOfferPrice={bestOfferPrice || 0}
+                                          bestOfferPriceToken={bestOfferPriceToken || undefined}
+                                          lastOfferPrice={lastOfferPrice || 0}
+                                          lastOfferPriceToken={lastOfferPriceToken || undefined}
+                                          />
+                                        )}
+                                      />
+                                    ))
+                                  })}
+                                </SimpleGrid>
+                                {isFetchingCollectionNFTs &&
+                                  <Box sx={{
+                                    mt: '50px'
+                                  }}>
+                                    <CollectionPageLoader />
+                                  </Box>}
+                                {!isFetchingCollectionNFTs && hasMoreCollectionNFTs && (
+                                  <Button variant={'outline'} isFullWidth={true} mt={10} onClick={() => fetchNextCollectionNFTs()}>Load more</Button>
+                                )}
+                              </div>
+                            </div>
+                          ) : (
+                            <NoNFTsFound />
+                          )
                         )}
+
                       </>
                       ) : selectedTabIndex === 1 ? (
                         <>
