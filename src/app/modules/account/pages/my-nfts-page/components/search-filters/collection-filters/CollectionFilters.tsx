@@ -88,7 +88,7 @@ export const ApiCollectionFilters = (props : IPropsSortingFilters) => {
         onClick={() => setShowCollectionsDropdown(!showCollectionsDropdown)}
       >
         <p className="filter--name">
-          <img className="filter__icon" src={collectionIcon} alt="Collection" />
+          <img className="filter__icon" src={collectionIcon} alt="Collection" style={{ display: 'inline-block' }} />
           Collections {props.selectedCollections.length > 0 && `(${props.selectedCollections.length})`}
         </p>
         <img
