@@ -68,7 +68,7 @@ export const sendRefreshMetadataRequest = async (collectionAddress: string, toke
   const result = await fetch(`${process.env.REACT_APP_DATASCRAPER_BACKEND}/v1/tokens/refresh`, {
     method: 'PUT',
     body: JSON.stringify({
-      contractAddress: utils.getAddress(collectionAddress),
+      contract: utils.getAddress(collectionAddress),
       tokenId,
     }),
   });
