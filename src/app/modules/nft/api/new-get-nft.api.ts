@@ -177,27 +177,33 @@ export const mapNft = (data: INFTBackendType, collectionData: ICollection | unde
     videoUrl: data.metadata?.animation_url,
     gifUrl: data.metadata?.gif,
     previewUrl: data.metadata?.image_preview_url,
-    thumbnailUrl: data.metadata?.image_thumbnail_url
+    thumbnailUrl: alternativeImage?.url 
+      ? alternativeImage?.url || ''
+      : data.metadata?.image_thumbnail_url
       ? data.metadata?.image_thumbnail_url
       : data.metadata?.image_preview_url
       ? data.metadata?.image_preview_url
       : data.metadata?.image_original_url
       ? data.metadata?.image_original_url
       : data.metadata?.image || alternativeImage?.url || data.metadata?.image_url,
-    originalUrl: data.metadata?.image_original_url
+    originalUrl: alternativeImage?.url 
+      ? alternativeImage?.url || ''
+      : data.metadata?.image_original_url
       ? data?.metadata?.image_original_url
       : data?.metadata?.image_preview_url
       ? data?.metadata?.image_preview_url
       : data?.metadata?.image_thumbnail_url 
       ? data?.metadata?.image_thumbnail_url
-      : data?.metadata?.image || alternativeImage?.url || data?.metadata?.image_url,
-    optimizedUrl: data.metadata?.image_preview_url
+      : data?.metadata?.image || data?.metadata?.image_url,
+    optimizedUrl: alternativeImage?.url
+    ? alternativeImage?.url|| ''
+    : data.metadata?.image_preview_url
     ? data.metadata?.image_preview_url
     : data.metadata?.image_original_url
     ? data.metadata?.image_original_url
     : data.metadata?.image_thumbnail_url
     ? data.metadata?.image_thumbnail_url
-    : data.metadata?.image || alternativeImage?.url || data.metadata?.image_url,
+    : data.metadata?.image || data.metadata?.image_url,
     artworkType: getArtworkType(data),
     amount: 0,
     txHash: null,
