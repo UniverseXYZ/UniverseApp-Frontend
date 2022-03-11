@@ -67,6 +67,9 @@ export const sendReportRequest = async (values: any) => {
 export const sendRefreshMetadataRequest = async (collectionAddress: string, tokenId: string) => {
   const result = await fetch(`${process.env.REACT_APP_DATASCRAPER_BACKEND}/v1/tokens/refresh`, {
     method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+    },
     body: JSON.stringify({
       contract: utils.getAddress(collectionAddress),
       tokenId,
