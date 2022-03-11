@@ -62,6 +62,7 @@ const ActiveAuctionCard = ({ auction, removeAuction }) => {
 
   const { tokenSymbol } = auction;
   const tokenLogo = getBidTypeByName(tokenSymbol, options).img;
+  console.log('tokenLogo', tokenLogo);
   const promoImageProps = getPromoImageProps(auction.promoImageUrl, auction.user?.profileImageUrl);
 
   let auctionLink = '';
