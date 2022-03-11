@@ -8,7 +8,7 @@ import currencyIcon from '../../assets/images/eth-icon-new.svg';
 import calendarIcon from '../../assets/images/calendar-small.svg';
 import congratsIcon from '../../assets/images/bid-submitted.png';
 import SmallCalendar from '../calendar/SmallCalendar.jsx';
-import ethereumIcon from '../../assets/images/eth-icon.svg';
+import ethereumIcon from '../../assets/images/bid_icon.svg';
 import daiIcon from '../../assets/images/dai_icon.svg';
 import usdcIcon from '../../assets/images/usdc_icon.svg';
 import bondIcon from '../../assets/images/bond_icon.svg';
