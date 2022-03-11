@@ -162,6 +162,11 @@ export const GetCollectionsFromScraperApi = async (search: string) : Promise<ISe
 
 export const mapNft = (data: INFTBackendType, collectionData: ICollection | undefined): INFT => {
   const alternativeImage = data.alternativeMediaFiles.find(file => file.type === ARTWORK_TYPES.image);
+  const altImgComponents = alternativeImage?.url.split('.');
+  let isSvg: boolean = false;
+  if(altImgComponents && altImgComponents[altImgComponents.length-1] == 'svg'){
+      isSvg = true;
+  }
 
   return {
     name: data.metadata?.name ?? `#${data.tokenId}`,
@@ -177,7 +182,7 @@ export const mapNft = (data: INFTBackendType, collectionData: ICollection | unde
     videoUrl: data.metadata?.animation_url,
     gifUrl: data.metadata?.gif,
     previewUrl: data.metadata?.image_preview_url,
-    thumbnailUrl: alternativeImage?.url 
+    thumbnailUrl: !isSvg && alternativeImage
       ? alternativeImage?.url || ''
       : data.metadata?.image_thumbnail_url
       ? data.metadata?.image_thumbnail_url
@@ -186,7 +191,7 @@ export const mapNft = (data: INFTBackendType, collectionData: ICollection | unde
       : data.metadata?.image_original_url
       ? data.metadata?.image_original_url
       : data.metadata?.image || alternativeImage?.url || data.metadata?.image_url,
-    originalUrl: alternativeImage?.url 
+    originalUrl: !isSvg && alternativeImage
       ? alternativeImage?.url || ''
       : data.metadata?.image_original_url
       ? data?.metadata?.image_original_url
@@ -195,7 +200,7 @@ export const mapNft = (data: INFTBackendType, collectionData: ICollection | unde
       : data?.metadata?.image_thumbnail_url 
       ? data?.metadata?.image_thumbnail_url
       : data?.metadata?.image || data?.metadata?.image_url,
-    optimizedUrl: alternativeImage?.url
+    optimizedUrl: !isSvg && alternativeImage
     ? alternativeImage?.url|| ''
     : data.metadata?.image_preview_url
     ? data.metadata?.image_preview_url
