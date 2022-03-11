@@ -53,6 +53,7 @@ import BrowseFilterPopup from '../../../../../components/popups/BrowseFiltersPop
 import * as styles from './styles';
 import { getTokenAddressByTicker } from '../../../../constants';
 import { TokenTicker } from '../../../../enums';
+import { SaleTypeFilterDropdown } from '../../../account/pages/my-nfts-page/components/search-filters';
 
 export const BrowseNFTsPage = () => {
   const { setDarkMode } = useThemeContext() as any;
@@ -403,9 +404,9 @@ export const BrowseNFTsPage = () => {
                 mr: '14px'
               }
             }}>
-              <SaleTypeFilter
+              <SaleTypeFilterDropdown
                 value={saleTypeFilterForm.values}
-                onChange={(values) => saleTypeFilterForm.setValues(values)}
+                onSave={(value) => saleTypeFilterForm.setValues(value)}
                 onClear={() => saleTypeFilterForm.resetForm()}
               />
               <NFTTypeFilter
