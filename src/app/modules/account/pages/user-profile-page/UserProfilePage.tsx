@@ -77,7 +77,7 @@ export const UserProfilePage = () => {
               <Box sx={{ 'img': { display: 'inline' } }}>
                 <ArtistDetails artistAddress={artistUsername} onArtist={artist} loading={isLoading} />
               </Box>
-              <Container maxW={'1110px'}>
+              <Container maxW={'1110px'} sx={{ padding: { sm: '10px' }}}>
                 <Tabs>
                   <TabList>
                     <Tab>NFTs <TabLabel>{totalNFTs}</TabLabel></Tab>

@@ -32,7 +32,7 @@ export const ArtistNFTsTab = ({ artistAddress, onTotalLoad }: IArtistNFTsTabProp
   return (
     <Box>
       <SearchFilters />
-      <SimpleGrid columns={4} spacing={'30px'}>
+      <SimpleGrid columns={{ base: 1, md: 2, lg: 4 }} spacing={'30px'}>
         {(userNFTs?.pages ?? []).map((page) => {
           return page.data.map((NFT) => (
             <NftItem
