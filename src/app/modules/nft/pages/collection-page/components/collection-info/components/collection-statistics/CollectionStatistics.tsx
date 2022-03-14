@@ -9,6 +9,18 @@ import { utils } from 'ethers';
 import { TOKENS_MAP } from '../../../../../../../../constants';
 
 export const CollectionStatistics = ({ nftsCount, ownersCount, floorPrice, volumeTraded }: any) => {
+
+  let _floorPrice = '';
+
+  if (floorPrice) {
+   _floorPrice = utils.formatUnits(floorPrice, `${TOKENS_MAP.ETH.decimals}`)
+
+   if (_floorPrice?.length > 5 && _floorPrice.charAt(0) === '0') {
+      _floorPrice = '> 0.0001'
+    }
+  }
+
+
   return (
     <>
       <SimpleGrid columns={{ base: 1, md: 2, lg: 4 }} spacing={'1px'} borderRadius={"12px"}>
@@ -50,7 +62,7 @@ export const CollectionStatistics = ({ nftsCount, ownersCount, floorPrice, volum
             <Box {...styles.ValueStyle}>
                 {floorPrice ? (
                     <>
-                        <img src={currencyIcon} alt="Currency" /> {utils.formatUnits(floorPrice, `${TOKENS_MAP.ETH.decimals}`)}
+                        <img src={currencyIcon} alt="Currency" /> {_floorPrice}
                     </>
                 ) : (
                     '-'
