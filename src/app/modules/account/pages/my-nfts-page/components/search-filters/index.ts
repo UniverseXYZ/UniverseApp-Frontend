@@ -7,4 +7,4 @@ export * from './nft-type-filter';
 export * from './price-range-filter';
 export * from './collection-filters/ApiCollectionsFiltersMobile';
 // Main file is below
-export * from './search-filters';``
+export * from './search-filters';

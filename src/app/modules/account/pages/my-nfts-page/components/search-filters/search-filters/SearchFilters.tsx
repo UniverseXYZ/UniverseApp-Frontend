@@ -1,6 +1,15 @@
 import { useState, useEffect } from 'react';
 import Popup from 'reactjs-popup';
-import { Link } from '@chakra-ui/react';
+import {
+  Accordion,
+  AccordionButton,
+  AccordionIcon,
+  AccordionItem,
+  AccordionPanel,
+  Box,
+  Image,
+  Link,
+} from '@chakra-ui/react';
 
 // Styles
 import './SearchFilters.scss';
@@ -8,6 +17,8 @@ import './SearchFilters.scss';
 // Icons
 import filtersIcon from '../../../../../../../../assets/images/marketplace/filters.svg';
 import closeIcon from '../../../../../../../../assets/images/close-menu.svg';
+import SaleTypeIcon from '../../../../../../../../assets/images/v2/marketplace/filter-sale-type.svg';
+import CollectionsIcon from '../../../../../../../../assets/images/v2/marketplace/filter-collections.svg';
 
 
 // Contexts
@@ -22,6 +33,7 @@ import {
   NFTTypeFilter,
   PriceRangeFilter,
   ApiCollectionsFiltersMobile,
+  SaleTypeFilterDropdown,
   } from '../index';
 
 export const SearchFilters = () => {
@@ -105,9 +117,9 @@ export const SearchFilters = () => {
         <div className="sorting--filters--list">
 
           {showSaleTypeFilters && (
-            <SaleTypeFilter
+            <SaleTypeFilterDropdown
               value={saleTypeForm.values}
-              onChange={(values) => saleTypeForm.setValues(values)}
+              onSave={(values) => saleTypeForm.setValues(values)}
               onClear={() => saleTypeForm.resetForm()}
             />
           )}
@@ -175,12 +187,42 @@ export const SearchFilters = () => {
                  </button>
                </div>
                <div className="browse__nft__filter__body">
-                 <ApiCollectionsFiltersMobile
-                   allCollections={userCollections}
-                   handleCollectionSearch={(value) => collectionFilterForm.setValues(value)}
-                   selectedCollections={selectedCollections}
-                   setSelectedCollections={setSelectedCollections}
-                 />
+                 <Accordion allowMultiple>
+                   <AccordionItem>
+                     <h2>
+                       <AccordionButton fontWeight={'bold'}>
+                         <Box flex='1' textAlign='left'>
+                           <Image src={SaleTypeIcon} display={'inline-block'} pos={'relative'} top={'-1px'} mr={'8px'} />
+                           Sale type
+                         </Box>
+                         <AccordionIcon />
+                       </AccordionButton>
+                     </h2>
+                     <AccordionPanel pb={4}>
+                       <SaleTypeFilter value={saleTypeForm.values} onChange={(value) => saleTypeForm.setValues(value)} />
+                     </AccordionPanel>
+                   </AccordionItem>
+
+                   <AccordionItem>
+                     <h2>
+                       <AccordionButton fontWeight={'bold'}>
+                         <Box flex='1' textAlign='left'>
+                           <Image src={CollectionsIcon} display={'inline-block'} pos={'relative'} top={'-1px'} mr={'8px'} />
+                           Collections
+                         </Box>
+                         <AccordionIcon />
+                       </AccordionButton>
+                     </h2>
+                     <AccordionPanel pb={4}>
+                       <ApiCollectionsFiltersMobile
+                         allCollections={userCollections}
+                         handleCollectionSearch={(value) => collectionFilterForm.setValues(value)}
+                         selectedCollections={selectedCollections}
+                         setSelectedCollections={setSelectedCollections}
+                       />
+                     </AccordionPanel>
+                   </AccordionItem>
+                 </Accordion>
                </div>
                <div className="show--results">
                  <button
