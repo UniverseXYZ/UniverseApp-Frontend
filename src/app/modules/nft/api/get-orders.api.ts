@@ -31,6 +31,8 @@ export type IGetOrdersApiFn = (params: Partial<IGetOrdersApiParams>) => Promise<
 export type IGetBestAndLastApiFn = (collection:string, tokenId:string) => Promise<IGetBestAndLastOfferResponse>;
 export type IGetActiveListingFn = (collection:string, tokenId:string) => Promise<IOrder | null>;
 
+// TODO: Create a specific endpoint for fetching buy orders for a specific sell order.
+// This endpoint is very generic and is not optimized
 export const GetOrdersApi: IGetOrdersApiFn = async (params = {}) => {
   const url = `${process.env.REACT_APP_MARKETPLACE_BACKEND}/v1/orders`;
 

@@ -41,7 +41,7 @@ import BGImage from '../../../../../../../assets/images/v2/stone_bg.jpg';
 import BrokenNFT from '../../../../../../../components/marketplaceNFT/BrokenNFT';
 import { NFTAssetBroken } from '../nft-asset-broken';
 import { IERC721AssetType, INFT, IOrder, IUser } from '../../../../types';
-import { GetOrdersApi, GetUserApi } from '../../../../api';
+import { GetUserApi } from '../../../../api';
 import { OrderAssetClass } from '../../../../enums';
 import { getTokenByAddress } from '../../../../../../constants';
 import { useAuthContext } from '../../../../../../../contexts/AuthContext';

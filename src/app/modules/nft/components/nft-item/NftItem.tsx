@@ -15,6 +15,7 @@ import { TokenTicker } from '../../../../enums';
 import { getTokenByAddress } from '../../../../constants';
 import { NFTCheckoutPopup } from '../../pages/nft-page/components';
 import { shortenEthereumAddress } from '../../../../../utils/helpers/format';
+import { orderKeys } from '../../../../utils/query-keys';
 
 type IRenderFuncProps = {
   NFT: INFT;
@@ -118,7 +119,7 @@ export const NftItem = (
   );
 
   const { data: orderData, isLoading: isLoadingOrder } = useQuery(
-    ['listing', collection?.address, NFT?.tokenId],
+    orderKeys.listing({collectionAddress: collection?.address || '', tokenId: NFT?.tokenId || ""}),
     () => GetActiveListingApi(collection?.address ?? "", NFT?.tokenId ?? ""),
     {
       retry: false,

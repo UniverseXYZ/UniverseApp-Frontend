@@ -4,6 +4,7 @@ import { useParams } from 'react-router-dom';
 
 import { ICollection, IERC721AssetType, INFT, IOrder, IUser } from '../../types';
 import { GetCollectionApi, GetNFT2Api, GetHistoryApi, GetOrdersApi, GetUserApi, INFTHistory, GetMoreFromCollectionApi, GetActiveListingApi } from '../../api';
+import { orderKeys } from '../../../../utils/query-keys';
 
 export interface INFTPageContext {
   NFT: INFT;
@@ -41,7 +42,7 @@ const NFTPageProvider: FC = ({ children }) => {
 
   // NFT Order Listing 
   const { data: order, isLoading: isLoadingOrder } = useQuery(
-    ['NFT', collectionAddress, tokenId, 'order'], 
+    orderKeys.listing({collectionAddress, tokenId}),
     async () => {
       const order = await GetActiveListingApi(collectionAddress, tokenId);
       return order || undefined
@@ -50,7 +51,6 @@ const NFTPageProvider: FC = ({ children }) => {
       enabled: !!tokenId && !!collectionAddress,
       onSuccess: (order) => console.log('Order', order) 
     });
-  
 
   // More from collection NFTs query
   const { data: moreFromCollection, isLoading: isMoreFromCollectionLoading } = useQuery(
@@ -74,7 +74,7 @@ const NFTPageProvider: FC = ({ children }) => {
 
   // NFT Offers Query
   const { data: offers, refetch: refetchNFTOffers } = useQuery(
-    ['offers', collectionAddress, tokenId],
+    orderKeys.offers({tokenId, collectionAddress}),
     () => GetOrdersApi({
       side: 0, 
       tokenIds: tokenId, 
