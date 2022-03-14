@@ -160,6 +160,18 @@ export const GetCollectionsFromScraperApi = async (search: string) : Promise<ISe
   }
 };
 
+export const getURL = (url: string | null | undefined) => {
+  if (!url) {
+    return undefined;
+  }
+
+  if (url.startsWith('ipfs://')) {
+    return url.replace('ipfs://', 'https://ipfs.io/ipfs/');
+  }
+
+  return url;
+}
+
 export const mapNft = (data: INFTBackendType, collectionData: ICollection | undefined): INFT => {
   const alternativeImage = data.alternativeMediaFiles.find(file => file.type === ARTWORK_TYPES.image);
   const altImgComponents = alternativeImage?.url.split('.');
@@ -184,28 +196,28 @@ export const mapNft = (data: INFTBackendType, collectionData: ICollection | unde
     createdAt: new Date(data.createdAt),
     description: data.metadata?.description,
     updatedAt: new Date(data.updatedAt),
-    videoUrl: data.metadata?.animation_url,
-    gifUrl: data.metadata?.gif,
-    previewUrl: data.metadata?.image_preview_url,
-    thumbnailUrl: altImageUrl || 
+    videoUrl: getURL(data.metadata?.animation_url) || '',
+    gifUrl: getURL(data.metadata?.gif) || '',
+    previewUrl: getURL(data.metadata?.image_preview_url) || '',
+    thumbnailUrl: getURL(altImageUrl || 
       data.metadata?.image_thumbnail_url || 
       data.metadata?.image_preview_url || 
       data.metadata?.image_original_url || 
       data.metadata?.image ||
       alternativeImage?.url ||
-      data.metadata?.image_url,
-    originalUrl: altImageUrl ||
+      data.metadata?.image_url) || '',
+    originalUrl: getURL(altImageUrl ||
       data.metadata?.image_original_url ||
       data.metadata?.image_preview_url ||
       data.metadata?.image ||
       data.metadata?.image_url ||
-      data.metadata?.image_thumbnail_url,
-    optimizedUrl: altImageUrl ||
+      data.metadata?.image_thumbnail_url) || '',
+    optimizedUrl: getURL(altImageUrl ||
       data.metadata?.image_preview_url ||
       data.metadata?.image_original_url ||
       data.metadata?.image ||
       data.metadata?.image_url ||
-      data.metadata?.image_thumbnail_url,
+      data.metadata?.image_thumbnail_url) || '',
     artworkType: getArtworkType(data),
     amount: 0,
     txHash: null,
