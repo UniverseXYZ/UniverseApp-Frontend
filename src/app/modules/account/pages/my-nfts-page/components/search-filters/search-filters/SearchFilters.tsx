@@ -183,7 +183,10 @@ export const SearchFilters = () => {
                <div className="browse__nft__filter__header">
                  <img className="close" src={closeIcon} alt="Close" onClick={close} aria-hidden="true" />
                  <h3>Filters</h3>
-                 <button type="button" className="clear__all" onClick={clearAllForms}>
+                 <button type="button" className="clear__all" onClick={() => {
+                   clearAllForms();
+                   close();
+                 }}>
                    Clear all
                  </button>
                </div>
@@ -251,7 +254,10 @@ export const SearchFilters = () => {
                    type="button"
                    className="light-button"
                    disabled={false}
-                   onClick={() => setShowResultsMobile(true)}>
+                   onClick={() => {
+                     setShowResultsMobile(true);
+                     close();
+                   }}>
                      Show results
                  </button>
                </div>
