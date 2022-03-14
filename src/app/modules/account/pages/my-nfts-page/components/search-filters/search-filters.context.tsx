@@ -308,7 +308,7 @@ const FiltersContextProvider = (props: IFiltersProviderProps) => {
 		return r;
 	}
 
-	const _parseSortByForm  = (form: FormikProps<ISortByFilterValue>) => {
+	const _parseSortByForm = (form: FormikProps<ISortByFilterValue>) => {
 		const r: any = {};
 
     if (form.values.sortingIndex) {
@@ -331,6 +331,19 @@ const FiltersContextProvider = (props: IFiltersProviderProps) => {
       }
       r['sortBy'] = sortFilter;
     }
+
+		return r;
+	}
+
+	const _parseTokenIds = () => {
+		const r: any = {};
+
+		const hasCollectionNFTs = collectionNFTs?.pages.length && collectionNFTs?.pages[0]?.data.length;
+
+		if (hasSearchBarFilter() && hasCollectionNFTs) {
+			const nftIds = collectionNFTs?.pages[0].data.map((nft) => nft.tokenId).join(',');
+      r['tokenIds'] = nftIds;
+		}
 
 		return r;
 	}
@@ -390,8 +403,9 @@ const FiltersContextProvider = (props: IFiltersProviderProps) => {
 	const _getOrdersEnabled = () => {
 		const isMobileSearch = isMobile && showResultsMobile && hasSelectedOrderBookFilters();
 		const isDekstopSearch = !isMobile && hasSelectedOrderBookFilters();
+		const isSearchBarSearchInOrderBook = hasSearchBarFilter() && hasSelectedOrderBookFilters();
 
-		return isMobileSearch || isDekstopSearch;
+		return isMobileSearch || isDekstopSearch || isSearchBarSearchInOrderBook;
 	}
 
 
@@ -456,6 +470,7 @@ const FiltersContextProvider = (props: IFiltersProviderProps) => {
 		apiFilters = {...apiFilters, ..._parseNftTypeFilterForm(nftTypeFilterForm)};
 		apiFilters = {...apiFilters, ..._parsePriceRangeFilterForm(priceRangeFilterForm)};
 		apiFilters = {...apiFilters, ..._parseSortByForm(sortByForm)};
+		apiFilters = {...apiFilters, ..._parseTokenIds()};
 
 		// Get the orders
 		const { orders, total } = await GetActiveSellOrdersApi(apiFilters);
@@ -479,6 +494,11 @@ const FiltersContextProvider = (props: IFiltersProviderProps) => {
 		return { total, data: result };
 	}
 
+	/**
+	 * Gets the collection NFTs from the Scraper based on the applied Filters
+	 * @param param
+	 * @returns ICollectionNFTsResponse
+	 */
 	const _handleGetCollectionNFTs = async ({ pageParam = 1 }) => {
 		const searchQuery = searchBarForm.values.searchValue;
 
@@ -585,6 +605,10 @@ const FiltersContextProvider = (props: IFiltersProviderProps) => {
     	priceRangeFilterForm.values,
 			nftTypeFilterForm.values,
 			sortByForm.values,
+			{
+				searchValue: searchBarForm.values.searchValue,
+				collectionNFTs: collectionNFTs,
+			},
   	], _handleGetOrders,
 		{
 			enabled: _getOrdersEnabled(),
