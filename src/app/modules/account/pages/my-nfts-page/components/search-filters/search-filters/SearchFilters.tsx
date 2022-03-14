@@ -190,61 +190,68 @@ export const SearchFilters = () => {
                </div>
                <div className="browse__nft__filter__body">
                  <Accordion allowMultiple>
-                   <AccordionItem borderBottom={'1px solid rgba(0, 0, 0, 0.1)'}>
-                     <AccordionButton py={'30px'} fontWeight={'bold'}>
-                       <Box flex='1' textAlign='left'>
-                         <Image src={SaleTypeIcon} display={'inline-block'} pos={'relative'} top={'-1px'} mr={'8px'} />
-                         Sale type
-                       </Box>
-                       <AccordionIcon />
-                     </AccordionButton>
-                     <AccordionPanel pb={4}>
-                       <SaleTypeFilter value={saleTypeForm.values} onChange={(value) => saleTypeForm.setValues(value)} />
-                     </AccordionPanel>
-                   </AccordionItem>
+                   {showSaleTypeFilters && (
+                     <AccordionItem borderBottom={'1px solid rgba(0, 0, 0, 0.1)'}>
+                       <AccordionButton py={'30px'} fontWeight={'bold'}>
+                         <Box flex='1' textAlign='left'>
+                           <Image src={SaleTypeIcon} display={'inline-block'} pos={'relative'} top={'-1px'} mr={'8px'} />
+                           Sale type
+                         </Box>
+                         <AccordionIcon />
+                       </AccordionButton>
+                       <AccordionPanel pb={4}>
+                         <SaleTypeFilter value={saleTypeForm.values} onChange={(value) => saleTypeForm.setValues(value)} />
+                       </AccordionPanel>
+                     </AccordionItem>
+                   )}
 
-                   <AccordionItem borderBottom={'1px solid rgba(0, 0, 0, 0.1)'}>
-                     <AccordionButton py={'30px'} fontWeight={'bold'}>
-                       <Box flex='1' textAlign='left'>
-                         <Image src={NFTTypeIcon} display={'inline-block'} pos={'relative'} top={'-1px'} mr={'8px'} />
-                         NFT type
-                       </Box>
-                       <AccordionIcon />
-                     </AccordionButton>
-                     <AccordionPanel pb={4}>
-                       <NFTTypeFilter value={nftTypeForm.values} onChange={(value) => nftTypeForm.setValues(value)} />
-                     </AccordionPanel>
-                   </AccordionItem>
+                   {showNFTTypeFilters && (
+                     <AccordionItem borderBottom={'1px solid rgba(0, 0, 0, 0.1)'}>
+                       <AccordionButton py={'30px'} fontWeight={'bold'}>
+                         <Box flex='1' textAlign='left'>
+                           <Image src={NFTTypeIcon} display={'inline-block'} pos={'relative'} top={'-1px'} mr={'8px'} />
+                           NFT type
+                         </Box>
+                         <AccordionIcon />
+                       </AccordionButton>
+                       <AccordionPanel pb={4}>
+                         <NFTTypeFilter value={nftTypeForm.values} onChange={(value) => nftTypeForm.setValues(value)} />
+                       </AccordionPanel>
+                     </AccordionItem>
+                   )}
 
-                   <AccordionItem borderBottom={'1px solid rgba(0, 0, 0, 0.1)'}>
-                     <AccordionButton py={'30px'} fontWeight={'bold'}>
-                       <Box flex='1' textAlign='left'>
-                         <Image src={PriceRangeIcon} display={'inline-block'} pos={'relative'} top={'-1px'} mr={'8px'} />
-                         Price range
-                       </Box>
-                       <AccordionIcon />
-                     </AccordionButton>
-                     <AccordionPanel pb={4}>
-                       <PriceRangeFilter value={priceRangeForm.values} onChange={(value) => priceRangeForm.setValues(value)} />
-                     </AccordionPanel>
-                   </AccordionItem>
-
-                   <AccordionItem borderBottom={'1px solid rgba(0, 0, 0, 0.1)'}>
-                     <AccordionButton py={'30px'} fontWeight={'bold'}>
-                       <Box flex='1' textAlign='left'>
-                         <Image src={CollectionsIcon} display={'inline-block'} pos={'relative'} top={'-1px'} mr={'8px'} />
-                         Collections
-                       </Box>
-                       <AccordionIcon />
-                     </AccordionButton>
-                     <AccordionPanel pb={4}>
-                       <CollectionsFilter
-                         items={userCollections}
-                         value={collectionFilterForm.values.collections}
-                         onChange={(collections) => collectionFilterForm.setValues({ collections })}
-                       />
-                     </AccordionPanel>
-                   </AccordionItem>
+                   {showPriceRangeFilters && (
+                     <AccordionItem borderBottom={'1px solid rgba(0, 0, 0, 0.1)'}>
+                       <AccordionButton py={'30px'} fontWeight={'bold'}>
+                         <Box flex='1' textAlign='left'>
+                           <Image src={PriceRangeIcon} display={'inline-block'} pos={'relative'} top={'-1px'} mr={'8px'} />
+                           Price range
+                         </Box>
+                         <AccordionIcon />
+                       </AccordionButton>
+                       <AccordionPanel pb={4}>
+                         <PriceRangeFilter value={priceRangeForm.values} onChange={(value) => priceRangeForm.setValues(value)} />
+                       </AccordionPanel>
+                     </AccordionItem>
+                   )}
+                   {showCollectionFilters && (
+                     <AccordionItem borderBottom={'1px solid rgba(0, 0, 0, 0.1)'}>
+                       <AccordionButton py={'30px'} fontWeight={'bold'}>
+                         <Box flex='1' textAlign='left'>
+                           <Image src={CollectionsIcon} display={'inline-block'} pos={'relative'} top={'-1px'} mr={'8px'} />
+                           Collections
+                         </Box>
+                         <AccordionIcon />
+                       </AccordionButton>
+                       <AccordionPanel pb={4}>
+                         <CollectionsFilter
+                           items={userCollections}
+                           value={collectionFilterForm.values.collections}
+                           onChange={(collections) => collectionFilterForm.setValues({ collections })}
+                         />
+                       </AccordionPanel>
+                     </AccordionItem>
+                   )}
                  </Accordion>
                </div>
                <div className="show--results">
