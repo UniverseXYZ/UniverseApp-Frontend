@@ -29,11 +29,9 @@ import { useFiltersContext } from '../search-filters.context';
 import {
   SearchNFTsField,
   SortingDropdowns,
-  ApiCollectionFilters,
   SaleTypeFilter,
   NFTTypeFilter,
   PriceRangeFilter,
-  ApiCollectionsFiltersMobile,
   SaleTypeFilterDropdown,
   NFTTypeFilterDropdown,
   PriceRangeFilterDropdown,
