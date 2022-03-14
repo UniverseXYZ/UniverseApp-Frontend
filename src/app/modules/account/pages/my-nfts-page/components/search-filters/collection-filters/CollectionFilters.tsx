@@ -25,6 +25,11 @@ export interface ICollectionFilterValue {
   contractAddress: string;
 }
 
+/**
+ * TODO: remove if
+ * /src/app/modules/account/pages/my-nfts-page/components/search-filters/collections-filter/CollectionsFilter.tsx
+ * works fine
+ */
 export const ApiCollectionFilters = (props : IPropsSortingFilters) => {
   const [showCollectionsDropdown, setShowCollectionsDropdown] = useState<boolean>(false);
   const [collectionName, setCollectionName] = useState<string>('');
