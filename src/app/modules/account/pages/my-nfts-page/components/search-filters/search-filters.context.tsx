@@ -257,14 +257,19 @@ const FiltersContextProvider = (props: IFiltersProviderProps) => {
 
 	const _parseNftTypeFilterForm = (form: FormikProps<INftTypeFilterValue>) => {
 		const r: any = {};
+    
+    const assetClassFilters = []
+    if (form.values.singleItem) {
+      assetClassFilters.push("ERC721");
+    }
 
-		if (form.values.singleItem) {
-			r['assetClass'] = "ERC721";
-		}
+    if (form.values.bundle) {
+      assetClassFilters.push("ERC721_BUNDLE");
+    }
 
-		if (form.values.bundle) {
-			r['assetClass'] = "ERC721_BUNDLE";
-		}
+    if (assetClassFilters.length) {
+      r['assetClass'] = assetClassFilters.join(',');
+    }
 
 		return r;
 	}
