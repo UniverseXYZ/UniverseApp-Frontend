@@ -34,14 +34,18 @@ import { IERC20AssetType, IERC721AssetType, INFT, IOrder } from '../../../../typ
 import { isNFTAssetAudio, isNFTAssetImage, isNFTAssetVideo } from '../../../../helpers';
 import { getTokenByAddress, TOKENS_MAP } from '../../../../../../constants';
 import { TokenTicker } from '../../../../../../enums';
-import { useMutation } from 'react-query';
+import { useMutation, useQueryClient } from 'react-query';
 import axios, { AxiosResponse } from 'axios';
 import { Web3Provider } from '@ethersproject/providers';
 import { NFTCustomError } from '../nft-custom-error/NFTCustomError';
 import { getEtherscanTxUrl } from '../../../../../../../utils/helpers';
-import { formatAddress } from '../../../../../../../utils/helpers/format';
+import { formatAddress, shortenEthereumAddress } from '../../../../../../../utils/helpers/format';
 import { useTokenPrice } from '../../../../../../hooks';
 import { IToken } from '../../../../../../types';
+import { GetActiveListingApi, GetNFT2Api } from '../../../../api';
+import { nftKeys, orderKeys } from '../../../../../../utils/query-keys';
+import { ReactComponent as CheckIcon } from '../../../../../../../assets/images/check-vector.svg'; 
+import { useNftCheckoutPopupContext } from '../../../../../../providers/NFTCheckoutProvider';
 // @ts-ignore
 const { contracts: contractsData } = Contracts[process.env.REACT_APP_NETWORK_CHAIN_ID];
 
@@ -59,10 +63,17 @@ export const NFTCheckoutPopup = ({ NFT, NFTs, order, isOpen, onClose }: INFTChec
   const { address, signer, web3Provider } = useAuthContext() as any;
   const { setShowError, setErrorBody} = useErrorContext() as any;
   const { onCopy } = useClipboard(address);
+  const queryClient = useQueryClient();
+
+  const {setIsOpen} = useNftCheckoutPopupContext();
 
   const [state, setState] = useState<CheckoutState>(CheckoutState.CHECKOUT);
   const [isNFTAudio] = useState(false);
   const [approveTx, setApproveTx] = useState<string>('')
+  const [fetchOrderCount, setFetchOrderCount] = useState(0);
+  const [fetchNftCount, setFetchNftCount] = useState(0);
+  const [isOrderIndexed, setIsOrderIndexed] = useState(false);
+  const [isNftIndexed, setIsNftIndexed] = useState(false);
 
   const prepareMutation = useMutation(({ hash, data }: { hash: string, data: any }) => {
     return axios.post(`${process.env.REACT_APP_MARKETPLACE_BACKEND}/v1/orders/${hash}/prepare`, data);
@@ -78,6 +89,7 @@ export const NFTCheckoutPopup = ({ NFT, NFTs, order, isOpen, onClose }: INFTChec
 
   const handleCheckoutClick = useCallback(async () => {
     try {
+      setFetchOrderCount(0);
       setState(CheckoutState.PROCESSING);
       const paymentToken = getTokenByAddress((order?.take?.assetType as IERC20AssetType)?.contract);
 
@@ -118,7 +130,41 @@ export const NFTCheckoutPopup = ({ NFT, NFTs, order, isOpen, onClose }: INFTChec
       const {data, from, to, value} = response.data;
   
       await sendSellTransaction(data, from, to, BigNumber.from(value.hex)); // TODO Test after new version of contracts and backend redeployed
-      setState(CheckoutState.CONGRATULATIONS);
+
+      setState(CheckoutState.INDEXING);
+      // This polling mechanic is temporary until we have marketplace web sockets
+      const orderIndexing = setInterval(async () => {
+        setFetchOrderCount(count => count +=1);
+
+        const convertedOrder = order.make.assetType as IERC721AssetType;
+        const tokenId = convertedOrder.tokenId?.toString();
+        const collectionAddress = convertedOrder.contract;
+
+        // Fetch order api until a diffrent response is returned
+        const newOrder = await GetActiveListingApi(collectionAddress,tokenId);
+
+        // Change query information about order
+        if (!newOrder?.id || order.id !== newOrder.id) {
+          clearInterval(orderIndexing);
+          setIsOrderIndexed(true);
+        }
+      }, 4000);
+
+      const nftIndexing = setInterval(async () => {
+        setFetchNftCount(count => count +=1);
+
+        const tokenId = NFT?.tokenId || "";
+        const collectionAddress = NFT?._collectionAddress || "";
+
+        // Fetch order api until a diffrent response is returned
+        const newNft = await GetNFT2Api(collectionAddress, tokenId);
+
+        // Change query information about order
+        if (NFT?._ownerAddress?.toLowerCase() !== newNft._ownerAddress?.toLowerCase()) {
+          clearInterval(nftIndexing);
+          setIsNftIndexed(true);
+        }
+      }, 10000);
 
     } catch(err: any) {
       console.log(err)   
@@ -138,6 +184,29 @@ export const NFTCheckoutPopup = ({ NFT, NFTs, order, isOpen, onClose }: INFTChec
     }
     
   }, [order, address, signer]);
+
+  useEffect(() => {
+    if (isOrderIndexed && isNftIndexed) {
+      const tokenId = NFT?.tokenId || "";
+      const collectionAddress = NFT?._collectionAddress || "";
+
+      setState(CheckoutState.CONGRATULATIONS);
+
+      //TODO: Invalidate browse marketplace page if order has been loaded
+      queryClient.refetchQueries(orderKeys.browseAny)
+      
+      // Invalidate listing because it's not active anymore
+      queryClient.invalidateQueries(orderKeys.listing({tokenId, collectionAddress}));
+
+      // Invalidate nft info query in order to refetch new owner info
+      queryClient.invalidateQueries(nftKeys.nftInfo({tokenId, collectionAddress}));
+
+      // Invalidate my nfts query in order to see the new nft
+      queryClient.refetchQueries(nftKeys.userNfts(address));
+    }
+  
+  }, [isOrderIndexed, isNftIndexed])
+  
 
   const sendSellTransaction = async (data: string, from: string, to: string, value: BigNumber) => {
 
@@ -164,7 +233,13 @@ export const NFTCheckoutPopup = ({ NFT, NFTs, order, isOpen, onClose }: INFTChec
   }, []);
 
   const previewNFT = useMemo(() => {
-    return NFT || (NFTs as INFT[])[0];
+    if (NFT) {
+      return NFT;
+    }
+    if (NFTs && NFTs?.length) {
+      return NFTs[0];
+    } 
+    return null
   }, [NFT, NFTs]);
 
   useEffect(() => {
@@ -174,9 +249,12 @@ export const NFTCheckoutPopup = ({ NFT, NFTs, order, isOpen, onClose }: INFTChec
   if (!order) {
     return null;
   }
-
-  return (
-    <Modal isCentered isOpen={isOpen} onClose={onClose}>
+  console.log(NFTs?.length)
+  return !!previewNFT && (
+    <Modal isCentered isOpen={isOpen} onClose={() => {
+      onClose();
+      setIsOpen(false);
+    }} closeOnEsc={false} closeOnOverlayClick={false}>
       <ModalOverlay />
       <ModalContent maxW={'480px'}>
         <ModalCloseButton />
@@ -196,11 +274,11 @@ export const NFTCheckoutPopup = ({ NFT, NFTs, order, isOpen, onClose }: INFTChec
                     {isNFTAssetVideo(previewNFT.artworkType) && <video src={previewNFT.thumbnailUrl} />}
                     {isNFTAssetAudio(previewNFT.artworkType) && <Image src={AudioNFTPreviewImage} />}
                   </Box>
-                  {!!NFTs && (<NFTType type={'bundle'} count={NFTs.length} />)}
+                  {!!NFTs && !!NFTs.length && (<NFTType type={'bundle'} count={NFTs.length} />)}
                 </Box>
                 <Box flex={1} p={'20px'}>
-                  <Text>NFT name</Text>
-                  <Text {...styles.CollectionNameStyle}>Collection name</Text>
+                  <Text>{NFT?.name}</Text>
+                  <Text {...styles.CollectionNameStyle}>{NFT?.collection?.name || shortenEthereumAddress(NFT?._collectionAddress)}</Text>
                 </Box>
                 <Box {...styles.PriceContainerStyle}>
                   <Text fontSize={'14px'}>
@@ -248,6 +326,40 @@ export const NFTCheckoutPopup = ({ NFT, NFTs, order, isOpen, onClose }: INFTChec
             </Box>
           )}
 
+          {state === CheckoutState.INDEXING && (
+            <Box>
+              <Heading {...styles.TitleStyle} mb={'20px'}>Purchasing the NFT...</Heading>
+
+              <Text fontSize={'16px'} mx={'auto'} maxW={'260px'} textAlign={'center'}>
+                Indexing the order transaction
+                {
+                  !isOrderIndexed ? "..." :
+                  <Box display={'inline-block'} marginLeft={'5px'}>
+                    <CheckIcon/>
+                  </Box>
+                }
+              </Text>
+
+              <Text fontSize={'16px'} mx={'auto'} maxW={'260px'} textAlign={'center'}>
+                Indexing NFT changes 
+                {
+                  !isNftIndexed ? "..." :
+                  <Box display={'inline-block'} marginLeft={'5px'}>
+                    <CheckIcon/>
+                  </Box>
+                }
+              </Text>
+
+              {(fetchOrderCount >= 3 && !isOrderIndexed) || (fetchNftCount >= 5 && !isNftIndexed) &&
+                <Text marginTop={'20px'} fontSize={'14px'} mx={'auto'} maxW={'330px'} textAlign={'center'}>
+                  Receving the events from the blockchain is taking longer than expected. Please be patient.
+                </Text>
+              }
+
+              <Loading my={'64px'} />
+            </Box>
+          )}
+
           {state === CheckoutState.APPROVAL && (
             <Box>
               <Heading {...styles.TitleStyle} mb={'20px'}>Purchasing the NFT...</Heading>
@@ -280,7 +392,7 @@ export const NFTCheckoutPopup = ({ NFT, NFTs, order, isOpen, onClose }: INFTChec
                 {isNFTAssetImage(previewNFT.artworkType) && <Image src={previewNFT.thumbnailUrl} />}
                 {isNFTAssetVideo(previewNFT.artworkType) && <video src={previewNFT.thumbnailUrl} />}
                 {isNFTAssetAudio(previewNFT.artworkType) && <Image src={AudioNFTPreviewImage} />}
-                {!!NFTs && (<NFTType type={'bundle'} count={NFTs.length} />)}
+                {!!NFTs && !!NFTs?.length && <NFTType type={'bundle'} count={NFTs.length} />}
               </Box>
 
               <Box {...styles.ButtonsContainerStyle}>

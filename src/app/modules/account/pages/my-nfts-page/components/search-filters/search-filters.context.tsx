@@ -27,6 +27,7 @@ import {
 	SortOrderOptions,
 } from '../search-filters';
 import { ICollectionFilterValue } from './collections-filter/types';
+import { nftKeys } from '../../../../../../utils/query-keys';
 
 interface INFTsResult {
   page: number,
@@ -537,7 +538,7 @@ const FiltersContextProvider = (props: IFiltersProviderProps) => {
 		hasNextPage: hasMoreUserNFTs,
 		isFetching: isFetchingUserNFTs
 	} = useInfiniteQuery([
-		'user',
+		nftKeys.userNfts(userAddress),
 		userAddress,
 		searchBarForm.values,
 		collectionFilterForm.values,

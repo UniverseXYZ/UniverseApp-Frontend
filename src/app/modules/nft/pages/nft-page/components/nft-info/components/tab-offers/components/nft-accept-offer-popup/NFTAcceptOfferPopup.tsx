@@ -15,7 +15,7 @@ import axios from 'axios';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { BigNumber as EthersBigNumber, Signer, utils } from 'ethers';
 import BigNumber from 'bignumber.js';
-import { useMutation } from 'react-query';
+import { useMutation, useQueryClient } from 'react-query';
 
 import AudioNFTPreviewImage from '../../../../../../../../../../../assets/images/v2/audio-nft-preview.png';
 
@@ -24,7 +24,7 @@ import { Loading, TokenIcon } from '../../../../../../../../../../components';
 import { NFTType } from './components';
 import { AcceptState } from './enums';
 import * as styles from './styles';
-import { INFT, IOrder } from '../../../../../../../../types';
+import { IERC721AssetType, INFT, IOrder } from '../../../../../../../../types';
 import { isNFTAssetAudio, isNFTAssetImage, isNFTAssetVideo } from '../../../../../../../../helpers';
 import { TOKENS_MAP, getTokenByAddress } from '../../../../../../../../../../constants';
 import { TokenTicker } from '../../../../../../../../../../enums';
@@ -32,6 +32,9 @@ import { Fee } from '../../../../../../../../../marketplace/pages/sell-page/comp
 import { getRoyaltiesFromRegistry } from '../../../../../../../../../../../utils/marketplace/utils';
 import { useTokenPrice } from '../../../../../../../../../../hooks';
 import { useErrorContext } from '../../../../../../../../../../../contexts/ErrorContext';
+import { orderKeys } from '../../../../../../../../../../utils/query-keys';
+import { GetActiveListingApi, GetOrdersApi } from '../../../../../../../../api';
+import { useNFTPageData } from '../../../../../../NFTPage.context';
 
 interface INFTAcceptOfferPopupProps {
   NFT?: INFT;
@@ -47,12 +50,16 @@ export const NFTAcceptOfferPopup = ({ NFT, NFTs, order, isOpen, onClose }: INFTA
 
   const { setShowError, setErrorBody} = useErrorContext() as any;
 
+  const queryClient = useQueryClient();
+  const { offers } = useNFTPageData();
+
   const [state, setState] = useState<AcceptState>(AcceptState.CHECKOUT);
   const [nftRoyalties, setNftRoyalties] = useState(0);
   const [collectionRoyalties, setCollectionRoyalties] = useState(0);
   const [daoFee, setDaoFee] = useState(0);
   const [totalRoyalties, setTotalRoyalties] = useState(0);
   const [isNFTAudio] = useState(false);
+  const [fetchCount, setFetchCount] = useState(0);
   
   const tokenTicker = useMemo(() => {
     return getTokenByAddress((order as any).make.assetType.contract).ticker as TokenTicker
@@ -79,6 +86,7 @@ export const NFTAcceptOfferPopup = ({ NFT, NFTs, order, isOpen, onClose }: INFTA
 
   const handleAcceptClick = useCallback(async () => {
     try {
+      setFetchCount(0);
       setState(AcceptState.PROCESSING);
 
       const response = await prepareMutation.mutateAsync({
@@ -93,7 +101,37 @@ export const NFTAcceptOfferPopup = ({ NFT, NFTs, order, isOpen, onClose }: INFTA
       const {data, from, to, value} = response.data;
   
       await sendAcceptOfferTransaction(data, from, to, EthersBigNumber.from(value.hex));
-      setState(AcceptState.CONGRATULATIONS);
+      setState(AcceptState.INDEXING);
+      // This polling mechanic is temporary until we have marketplace web sockets
+      const indexInterval = setInterval(async () => {
+        const stringifiedOffers = offers?.orders?.map(offer => offer.id).join('');
+        setFetchCount(count => count +=1)
+
+        const convertedOrder = order.take.assetType as IERC721AssetType;
+        const tokenId = convertedOrder.tokenId?.toString();
+        const collectionAddress = convertedOrder.contract;
+
+
+        const newOffers = await GetOrdersApi({
+          side: 0, 
+          tokenIds: tokenId, 
+          collection: collectionAddress 
+        })
+  
+        // Change query information about order
+        const newStringifiedoffers = newOffers?.orders?.map(offer => offer.id).join('');
+        if (stringifiedOffers !== newStringifiedoffers) {
+          clearInterval(indexInterval);
+          // TODO: Invalidte NFT Owner Queries
+          // TODO: Invalidte MY NFTs Query
+          queryClient.setQueryData(orderKeys.offers({tokenId, collectionAddress}), null);
+          queryClient.invalidateQueries(orderKeys.all);
+          setState(AcceptState.CONGRATULATIONS);
+
+
+        }
+      }, 4000);
+
     } catch(err: any) {
       console.log(err)   
       setState(AcceptState.CHECKOUT);
@@ -234,6 +272,24 @@ export const NFTAcceptOfferPopup = ({ NFT, NFTs, order, isOpen, onClose }: INFTA
                 Just kidding you can do whatever you want.<br/>
                 This is Ethereum!
               </Text>
+            </Box>
+          )}
+
+          {state === AcceptState.INDEXING && (
+            <Box>
+              <Heading {...styles.TitleStyle} mb={'20px'}>Purchasing the NFT...</Heading>
+
+              <Text fontSize={'14px'} mx={'auto'} maxW={'260px'} textAlign={'center'}>
+                Indexing the transaction
+              </Text>
+
+              {fetchCount >= 3 &&
+                <Text fontSize={'14px'} mx={'auto'} maxW={'260px'} textAlign={'center'}>
+                  Receving the event from the blockchain is taking longer than expected. Please be patient.
+                </Text>
+              }
+
+              <Loading my={'64px'} />
             </Box>
           )}
 

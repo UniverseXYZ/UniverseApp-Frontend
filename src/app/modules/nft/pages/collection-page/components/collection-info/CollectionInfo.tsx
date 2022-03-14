@@ -203,18 +203,13 @@ export const CollectionInfo = () => {
                                           key={order.id}
                                           NFT={NFTs[0]}
                                           collection={`${NFTs[0].collection?.address}`}
-                                          renderContent={({ NFT, collection, creator, owner, bestOfferPrice, bestOfferPriceToken, lastOfferPrice, lastOfferPriceToken }) => (
+                                          renderContent={({ NFT, collection, creator, owner, bestOfferPrice, bestOfferPriceToken, lastOfferPrice, lastOfferPriceToken, order: orderData }) => (
                                             <NFTItemContentWithPrice
                                             name={NFT.name}
                                             collection={collection}
-                                            tokenId={NFT.tokenId}
                                             creator={creator || undefined}
                                             owner={owner || undefined}
-                                            order={{
-                                              assetClass: OrderAssetClass.ERC721,
-                                              collectionAddress: `${NFT._collectionAddress}`,
-                                              tokenId: `${NFT.tokenId}`,
-                                            }}
+                                            order={orderData || undefined}
                                             bestOfferPrice={bestOfferPrice || 0}
                                             bestOfferPriceToken={bestOfferPriceToken || undefined}
                                             lastOfferPrice={lastOfferPrice || 0}
@@ -249,18 +244,13 @@ export const CollectionInfo = () => {
 																				key={NFT.id}
 																				NFT={NFT}
 																				collection={`${NFT._collectionAddress}`}
-																				renderContent={({ NFT, collection, creator, owner, bestOfferPrice, bestOfferPriceToken, lastOfferPrice, lastOfferPriceToken }) => (
+																				renderContent={({ NFT, collection, creator, owner, bestOfferPrice, bestOfferPriceToken, lastOfferPrice, lastOfferPriceToken, order: orderData }) => (
 																					<NFTItemContentWithPrice
 																					name={NFT.name}
 																					collection={collection}
-																					tokenId={NFT.tokenId}
 																					creator={creator || undefined}
 																					owner={owner || undefined}
-																					order={{
-																						assetClass: OrderAssetClass.ERC721,
-																						collectionAddress: `${NFT._collectionAddress}`,
-																						tokenId: `${NFT.tokenId}`,
-																					}}
+																					order={orderData || undefined}
 																					bestOfferPrice={bestOfferPrice || 0}
 																					bestOfferPriceToken={bestOfferPriceToken || undefined}
 																					lastOfferPrice={lastOfferPrice || 0}

@@ -1,7 +1,7 @@
 import { Box, BoxProps, Flex } from '@chakra-ui/react';
 import React from 'react';
 
-import { INFT, NFTStandard } from '../../../../types';
+import { INFT, IOrder, NFTStandard } from '../../../../types';
 import { NFTLike } from '../nft-like';
 import * as styles from './styles';
 import {
@@ -12,11 +12,10 @@ import {
 } from './components';
 import { Button } from '@chakra-ui/react';
 import { useAuthContext } from '../../../../../../../contexts/AuthContext';
-
-
-
+import { useNftCheckoutPopupContext } from '../../../../../../providers/NFTCheckoutProvider';
 interface INFTItemFooterProps extends BoxProps {
   NFT?: INFT;
+  order?: any;
   isCheckoutPopupOpened?: boolean;
   showBuyNowButton?: boolean;
   setIsCheckoutPopupOpened?: (isCheckoutPopupOpened: boolean) => void;
@@ -25,6 +24,7 @@ interface INFTItemFooterProps extends BoxProps {
 export const NFTItemFooter = (
   {
     NFT,
+    order,
     children,
     isCheckoutPopupOpened,
     setIsCheckoutPopupOpened,
@@ -33,15 +33,25 @@ export const NFTItemFooter = (
   }: INFTItemFooterProps
 ) => {
   const showLikes = false;
-   const { address, isAuthenticated } = useAuthContext() as any;
+  const { address, isAuthenticated } = useAuthContext() as any;
+  const {setNFT, setIsOpen, setOrder, setOnClose} = useNftCheckoutPopupContext();
 
-    const handleCheckoutModal = (event: React.MouseEvent<Element, MouseEvent>) => {
-      event.preventDefault();
-      // @ts-ignore - TODO: this is temp
-      setIsCheckoutPopupOpened(!isCheckoutPopupOpened);
+
+  const handleCheckoutModal = (event: React.MouseEvent<Element, MouseEvent>) => {
+    event.preventDefault();
+    // @ts-ignore - TODO: this is temp
+    if(isCheckoutPopupOpened) {
+      setIsOpen(false);
+      setOrder({} as IOrder);
+      setNFT({} as INFT);
+    } else {
+      setIsOpen(true);
+      setOrder(order || {} as IOrder);
+      setNFT(NFT || {} as INFT)
+    }
   }
 
-   const isOwner = address?.toLowerCase() === NFT?._ownerAddress?.toLowerCase();
+  const isOwner = address?.toLowerCase() === NFT?._ownerAddress?.toLowerCase();
 
   return (
     <Flex {...styles.WrapperStyle} {...rest}>

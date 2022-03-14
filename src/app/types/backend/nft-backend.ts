@@ -10,7 +10,8 @@ export interface INFTBackendType {
   }>;
   firstOwner: string;
   owners: Array<{
-    address: string;
+    address?: string;
+    owner?: string;
     transactionHash: string;
     value: number;
   }>;

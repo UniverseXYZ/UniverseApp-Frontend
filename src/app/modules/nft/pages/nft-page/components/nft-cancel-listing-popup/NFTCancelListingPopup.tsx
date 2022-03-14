@@ -10,16 +10,18 @@ import {
   Text,
 } from '@chakra-ui/react';
 import React, { useCallback, useMemo } from 'react';
-import { useMutation } from 'react-query';
+import { useMutation, useQueryClient } from 'react-query';
 import { Contract } from 'ethers';
 
 import Contracts from '../../../../../../../contracts/contracts.json';
 
 import * as styles from './styles';
-import { IOrder } from '../../../../types';
+import { IERC721AssetType, IOrder } from '../../../../types';
 import { useAuthContext } from '../../../../../../../contexts/AuthContext';
 import { useLoadingPopupContext } from '../../../../../../providers/LoadingProvider';
 import { EncodeOrderApi } from '../../../../../../api';
+import { GetActiveListingApi } from '../../../../api';
+import { orderKeys } from '../../../../../../utils/query-keys';
 
 // @ts-ignore
 const { contracts: contractsData } = Contracts[process.env.REACT_APP_NETWORK_CHAIN_ID];
@@ -31,11 +33,13 @@ interface INFTCancelListingPopupProps {
   handleCancel: () => void;
 }
 
+const INDEXING_TAKING_TOO_LONG = "Receving the event from the blockchain is taking longer than expected. Please be patient.";
+
 export const NFTCancelListingPopup = ({ order, isOpen, onClose, handleCancel }: INFTCancelListingPopupProps) => {
 
   const { signer } = useAuthContext();
-  const { setShowLoading,  setLoadingTitle, closeLoading, setTransactions } = useLoadingPopupContext();
-
+  const { setShowLoading, setLoadingTitle, setLoadingBody, closeLoading, setTransactions } = useLoadingPopupContext();
+  const queryClient = useQueryClient();
   const contract = useMemo(
     () => new Contract(`${process.env.REACT_APP_MARKETPLACE_CONTRACT}`, contractsData.Marketplace.abi, signer),
     [order, signer]
@@ -73,8 +77,35 @@ export const NFTCancelListingPopup = ({ order, isOpen, onClose, handleCancel }: 
 
     await cancelResponse.wait();
     // Close loading modal
-    closeLoading();
-    handleCancel();
+    setLoadingTitle("Indexing transaction...");
+
+    // This polling mechanic is temporary until we have marketplace web sockets
+    let fetchCount = 0;
+    const indexInterval = setInterval(async () => {
+      fetchCount += 1;
+
+      const convertedOrder = order.make.assetType as IERC721AssetType;
+      const tokenId = convertedOrder.tokenId?.toString();
+      const collectionAddress = convertedOrder.contract;
+
+      // Fetch order api until a diffrent response is returned
+      const newOrder = await GetActiveListingApi(collectionAddress,tokenId);
+
+      // Change query information about order
+      if (!newOrder?.id || order.id !== newOrder.id) {
+        clearInterval(indexInterval);
+        queryClient.setQueryData(orderKeys.listing({tokenId, collectionAddress}), newOrder || undefined);
+        queryClient.refetchQueries(orderKeys.browseAny)
+        closeLoading();
+        handleCancel();
+      }
+
+      if (fetchCount === 3) {
+        setLoadingBody(INDEXING_TAKING_TOO_LONG);
+      }
+
+    }, 4000);
+
   }, [contract, order, onClose, handleCancel]);
 
   return (

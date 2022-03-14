@@ -1,14 +1,17 @@
 import { Box } from '@chakra-ui/react';
 import {  useState } from 'react';
 import { NFTAcceptOfferPopup, OffersEmpty } from './components';
-import { INFT, IOrder, IUser } from '../../../../../../types';
+import { IERC721AssetType, INFT, IOrder, IUser } from '../../../../../../types';
 import { NFTOffer } from './components/nft-offer/NFTOffer';
 import { LoadingPopup } from '../../../../../../../marketplace/components/popups/loading-popup';
 import { Contract } from 'ethers';
-import { useMutation } from 'react-query';
+import { useMutation, useQueryClient } from 'react-query';
 import { useAuthContext } from '../../../../../../../../../contexts/AuthContext';
 import { EncodeOrderApi } from '../../../../../../../../api';
 import Contracts from '../../../../../../../../../contracts/contracts.json';
+import { GetActiveListingApi, GetOrdersApi } from '../../../../../../api';
+import { orderKeys } from '../../../../../../../../utils/query-keys';
+import { useNFTPageData } from '../../../../NFTPage.context';
 
 
 interface ITabOffersProps {
@@ -20,7 +23,8 @@ interface ITabOffersProps {
 
 enum CancelingText {
   PROGRESS = 'The transaction is in progress...',
-  INDEXING = 'Indexing transaction...'
+  INDEXING = 'Indexing transaction...',
+  INDEXING_TAKING_TOO_LONG = "Receving the event from the blockchain is taking longer than expected. Please be patient."
 }
 
 export const TabOffers:React.FC<ITabOffersProps> = ({nft, offers, usersMap}) => {
@@ -28,6 +32,7 @@ export const TabOffers:React.FC<ITabOffersProps> = ({nft, offers, usersMap}) => 
   const [offerForAccept, setOfferForAccept] = useState<IOrder | null>(null);
   const [offerCanceling, setOfferCanceling] = useState(false);
   const [offerCancelingText, setOfferCancelingText] = useState(CancelingText.PROGRESS);
+  const queryClient = useQueryClient();
 
   // @ts-ignore
   const { contracts: contractsData } = Contracts[process.env.REACT_APP_NETWORK_CHAIN_ID];
@@ -36,6 +41,7 @@ export const TabOffers:React.FC<ITabOffersProps> = ({nft, offers, usersMap}) => 
 
   const handleCancelOffer = async (offer: IOrder) => {
     setOfferCanceling(true);
+    setOfferCancelingText(CancelingText.PROGRESS)
     const contract = new Contract(`${process.env.REACT_APP_MARKETPLACE_CONTRACT}`, contractsData.Marketplace.abi, signer);
 
     const { data: encodedOrderData } = (await encodeOrderMutation.mutateAsync({
@@ -58,11 +64,41 @@ export const TabOffers:React.FC<ITabOffersProps> = ({nft, offers, usersMap}) => 
         console.error('display error');
         return;
       }
-      //TODO: this is temporary solution
+
       setOfferCancelingText(CancelingText.INDEXING)
-      setTimeout(() => {
-        location.reload();
-      }, 20000)
+      
+      // This polling mechanic is temporary until we have marketplace web sockets
+      let fetchCount = 0;
+      const indexInterval = setInterval(async () => {
+        fetchCount += 1;
+        const stringifiedOffers = offers?.map(offer => offer.id).join('');
+
+        const convertedOrder = offer.take.assetType as IERC721AssetType;
+        const tokenId = convertedOrder.tokenId?.toString();
+        const collectionAddress = convertedOrder.contract;
+  
+        // Fetch order api until a diffrent response is returned
+        const newOffers = await GetOrdersApi({
+          side: 0, 
+          tokenIds: tokenId, 
+          collection: collectionAddress 
+        })
+  
+        // Change query information about order
+        const newStringifiedoffers = newOffers?.orders?.map(offer => offer.id).join('');
+        if (stringifiedOffers !== newStringifiedoffers) {
+          clearInterval(indexInterval);
+          queryClient.setQueryData(orderKeys.offers({tokenId, collectionAddress}), newOffers || undefined);
+          queryClient.invalidateQueries(orderKeys.listing({tokenId, collectionAddress}));
+          setOfferCanceling(false);
+
+        }
+  
+        if (fetchCount === 3) {
+          setOfferCancelingText(CancelingText.INDEXING_TAKING_TOO_LONG)
+        }
+  
+      }, 4000);  
 
     } catch (error) {
       console.error(error);

@@ -41,7 +41,7 @@ import BGImage from '../../../../../../../assets/images/v2/stone_bg.jpg';
 import BrokenNFT from '../../../../../../../components/marketplaceNFT/BrokenNFT';
 import { NFTAssetBroken } from '../nft-asset-broken';
 import { IERC721AssetType, INFT, IOrder, IUser } from '../../../../types';
-import { GetOrdersApi, GetUserApi } from '../../../../api';
+import { GetUserApi } from '../../../../api';
 import { OrderAssetClass } from '../../../../enums';
 import { getTokenByAddress } from '../../../../../../constants';
 import { useAuthContext } from '../../../../../../../contexts/AuthContext';
@@ -287,18 +287,13 @@ export const NFTInfo = () => {
                       key={NFT.id}
                       NFT={NFT}
                       collection={`${NFT._collectionAddress}`}
-                      renderContent={({ NFT, collection, creator, owner, bestOfferPrice, bestOfferPriceToken, lastOfferPrice, lastOfferPriceToken }) => (
+                      renderContent={({ NFT, collection, creator, owner, bestOfferPrice, bestOfferPriceToken, lastOfferPrice, lastOfferPriceToken, order: orderData }) => (
                         <NFTItemContentWithPrice
                           name={NFT.name}
                           collection={collection}
-                          tokenId={NFT.tokenId}
                           creator={creator || undefined}
                           owner={owner || undefined}
-                          order={{
-                            assetClass: OrderAssetClass.ERC721,
-                            collectionAddress: `${NFT._collectionAddress}`,
-                            tokenId: `${NFT.tokenId}`,
-                          }}
+                          order={orderData || undefined}
                           bestOfferPrice={bestOfferPrice || 0}
                           bestOfferPriceToken={bestOfferPriceToken || undefined}
                           lastOfferPrice={lastOfferPrice || 0}

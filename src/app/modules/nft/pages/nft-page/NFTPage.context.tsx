@@ -3,8 +3,8 @@ import { useQuery } from 'react-query';
 import { useParams } from 'react-router-dom';
 
 import { ICollection, IERC721AssetType, INFT, IOrder, IUser } from '../../types';
-import { GetCollectionApi, GetNFT2Api, GetHistoryApi, GetOrdersApi, GetUserApi, INFTHistory, GetMoreFromCollectionApi } from '../../api';
-import { OrderAssetClass } from '../../enums';
+import { GetCollectionApi, GetNFT2Api, GetHistoryApi, GetOrdersApi, GetUserApi, INFTHistory, GetMoreFromCollectionApi, GetActiveListingApi } from '../../api';
+import { nftKeys, orderKeys } from '../../../../utils/query-keys';
 
 export interface INFTPageContext {
   NFT: INFT;
@@ -30,8 +30,9 @@ export function useNFTPageData(): INFTPageContext {
 const NFTPageProvider: FC = ({ children }) => {
   const { collectionAddress, tokenId } = useParams<{ collectionAddress: string; tokenId: string; }>();
 
+  // NFT Data query
   const { data: NFT, isLoading: isLoadingNFT } = useQuery(
-    ['NFT', collectionAddress, tokenId],
+    nftKeys.nftInfo({collectionAddress, tokenId}),
     () => GetNFT2Api(collectionAddress, tokenId),
     {
       enabled: !!collectionAddress && !!tokenId,
@@ -39,6 +40,19 @@ const NFTPageProvider: FC = ({ children }) => {
     },
   );
 
+  // NFT Order Listing 
+  const { data: order, isLoading: isLoadingOrder } = useQuery(
+    orderKeys.listing({collectionAddress, tokenId}),
+    async () => {
+      const order = await GetActiveListingApi(collectionAddress, tokenId);
+      return order || undefined
+    },
+    {
+      enabled: !!tokenId && !!collectionAddress,
+      onSuccess: (order) => console.log('Order', order) 
+    });
+
+  // More from collection NFTs query
   const { data: moreFromCollection, isLoading: isMoreFromCollectionLoading } = useQuery(
     ['moreFromCollection', collectionAddress, tokenId],
     () => GetMoreFromCollectionApi(collectionAddress, tokenId),
@@ -49,55 +63,62 @@ const NFTPageProvider: FC = ({ children }) => {
     },
   );
 
+  // NFT Data History Query
   const { data: history, refetch: refetchHistory } = useQuery(
-    ['history', collectionAddress, tokenId],
+    orderKeys.history({collectionAddress, tokenId}),
     () => GetHistoryApi(collectionAddress, tokenId),
-    { onSuccess: (history) => console.log('history', history) },
+    {
+      onSuccess: (history) => console.log('history', history)
+    },
   );
 
+  // NFT Offers Query
   const { data: offers, refetch: refetchNFTOffers } = useQuery(
-    ['offers', collectionAddress, tokenId],
+    orderKeys.offers({tokenId, collectionAddress}),
     () => GetOrdersApi({
-      side: 0, 
-      tokenId: tokenId as unknown as number, 
-      collection: collectionAddress 
+      side: 0,
+      tokenIds: tokenId,
+      collection: collectionAddress
     }),
-    { onSuccess: (offers) => console.log('offers', offers) },
+    {
+      onSuccess: (offers) => console.log('offers', offers)
+    },
   );
-
+ 
+  // NFT Creator Data Query
   const { data: creator } = useQuery(
-    ['user', NFT?._creatorAddress],
+    nftKeys.nftCreator({tokenId, collectionAddress}, NFT?._creatorAddress || ""),
     () => GetUserApi(`${NFT?._creatorAddress}`),
-    { enabled: !!NFT?.id, retry: false, },
+    {
+      enabled: !!NFT?._creatorAddress,
+      retry: false,
+      onSuccess: (creator) => console.log('creator', creator)
+    },
   );
 
+  // NFT Owner Data Query
   const { data: owner } = useQuery(
-    ['user', NFT?._ownerAddress],
+    nftKeys.nftOwner({tokenId, collectionAddress}, NFT?._ownerAddress || ""),
     () => GetUserApi(`${NFT?._ownerAddress}`),
-    { enabled: !!NFT?.id, retry: false, },
+    {
+      enabled: !!NFT?._ownerAddress, 
+      retry: false,
+      onSuccess: (owner) => console.log('owner', owner)
+    },
   );
 
+  // NFT Collection Data Query
   const { data: collection } = useQuery(
     ['collection', NFT?._collectionAddress],
     () => GetCollectionApi(`${NFT?._collectionAddress}`),
-    { enabled: !!NFT?.id, retry: false, onSuccess: (collection) => console.log('collection', collection) },
+    { 
+      enabled: !!NFT?._collectionAddress,
+      retry: false,
+      onSuccess: (collection) => console.log('collection', collection) 
+    },
   );
 
-  const { data: order, isLoading: isLoadingOrder } = useQuery<IOrder | undefined>(['NFT', collectionAddress, tokenId, 'order'], async () => {
-    const { orders } = await GetOrdersApi({
-      assetClass: OrderAssetClass.ERC721,
-      collection: collectionAddress,
-      // tokenId,
-      side: 1,
-    });
-
-    // TODO: remove in favor to passing param tokenId to request
-    return orders.find((order) => {
-      const assetType = order.make.assetType as IERC721AssetType;
-      return assetType.contract === collectionAddress && +assetType.tokenId === +tokenId && !order.cancelledTxHash;
-    });
-  }, { enabled: !!NFT?.id });
-
+  //TODO: This can be reworked to invalidate the queries and they will be automatically refetched
   const refetchOffers = useCallback(() => {
     refetchHistory();
     refetchNFTOffers();

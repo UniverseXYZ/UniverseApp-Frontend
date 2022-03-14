@@ -29,16 +29,18 @@ import { sign } from '../../../../helpers';
 import { useAuthContext } from '../../../../../contexts/AuthContext';
 import { TOKENS_MAP, ZERO_ADDRESS } from '../../../../constants';
 import { TokenTicker } from '../../../../enums';
-import { GetNFT2Api } from '../../../nft/api';
+import { GetActiveListingApi, GetNFT2Api } from '../../../nft/api';
 import { INFT } from '../../../nft/types';
 import { EncodeOrderApi, GetSaltApi, IEncodeOrderApiData } from '../../../../api';
 import Contracts from '../../../../../contracts/contracts.json';
 import { OrderAssetClass } from '../../../nft/enums';
+import { useQueryClient } from 'react-query'
 
 // @ts-ignore
 const { contracts: contractsData } = Contracts[process.env.REACT_APP_NETWORK_CHAIN_ID];
 import { Status, Status as PostingPopupStatus } from './components/tab-summary/compoents/posting-popup/enums/index';
 import { useErrorContext } from '../../../../../contexts/ErrorContext';
+import { nftKeys, orderKeys } from '../../../../utils/query-keys';
 
 const getValidationSchema = (amountType?: SellAmountType, sellMethod?: SellMethod) => {
   switch (sellMethod) {
@@ -61,14 +63,27 @@ export const SellPage = () => {
 
   const { setShowError, setErrorBody} = useErrorContext() as any;
 
+  const queryClient = useQueryClient();
+
   const encodeOrderMutation = useMutation(EncodeOrderApi);
 
   const createOrderMutation = useMutation((data: any) => {
     return axios.post(`${process.env.REACT_APP_MARKETPLACE_BACKEND}/v1/orders/order`, data);
+  }, {
+    onSuccess: () => {
+      //TODO: Invalidate browse marketplace query key
+      queryClient.refetchQueries(orderKeys.browseAny)
+
+      queryClient.invalidateQueries(orderKeys.listing({ collectionAddress: params.collectionAddress.toLowerCase(), tokenId: params.tokenId }));
+      queryClient.prefetchQuery(orderKeys.listing({ collectionAddress: params.collectionAddress.toLowerCase(), tokenId: params.tokenId }), async () => {
+        const result = await GetActiveListingApi(params.collectionAddress.toLowerCase(), params.tokenId);
+        return result;
+      })
+    }
   });
 
   const { data: nft } = useQuery(
-    ['sell-nft', params.collectionAddress, params.tokenId],
+    nftKeys.nftInfo({collectionAddress: params.collectionAddress, tokenId: params.tokenId}),
     () => GetNFT2Api(params.collectionAddress, params.tokenId)
   );
 
@@ -168,7 +183,7 @@ export const SellPage = () => {
   
         const createOrderResponse = (await createOrderMutation.mutateAsync({ ...orderData, signature })).data;
   
-        setIsPosted(true);    
+        setIsPosted(true);
       } catch(err: any) {
         console.log(err)   
         setPostingPopupStatus(PostingPopupStatus.HIDDEN);
@@ -188,7 +203,6 @@ export const SellPage = () => {
         }
   
         setShowError(true);
-  
       }
     },
   });

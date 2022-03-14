@@ -226,7 +226,7 @@ export const mapNft = (data: INFTBackendType, collectionData: ICollection | unde
     properties: [],
     tokenUri: '',
     royalties: [],
-    _ownerAddress: data.owners?.length ? data.owners[data.owners.length - 1].address : undefined,
+    _ownerAddress: data.owners?.length ? data.owners[data.owners.length - 1].owner || data.owners[data.owners.length - 1].address : undefined,  
     _creatorAddress: data.firstOwner,
     _collectionAddress: data.contractAddress,
     _properties: data.metadata?.attributes?.length ? data.metadata?.attributes.map((attribute) => ({

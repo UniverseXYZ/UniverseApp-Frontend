@@ -54,6 +54,7 @@ import { TokenTicker } from '../../../../enums';
 import { SaleTypeFilterDropdown } from '../../../account/pages/my-nfts-page/components/search-filters';
 
 export type ICollectionsFilterValue = Array<any>;
+import { orderKeys } from '../../../../utils/query-keys';
 
 export const BrowseNFTsPage = () => {
   const { setDarkMode } = useThemeContext() as any;
@@ -159,14 +160,14 @@ export const BrowseNFTsPage = () => {
     initialValues: [],
     onSubmit: () => {},
   });
-  const { data: ordersResult, fetchNextPage, hasNextPage, isFetching } = useInfiniteQuery([
-    'orders',
-    saleTypeFilterForm.values,
-    nftTypeFilterForm.values,
-    priceRangeFilterForm.values,
-    collectionsFilterForm.values,
-    sortBy
-  ], async ({ pageParam = 1 }) => {
+  const { data: ordersResult, fetchNextPage, hasNextPage, isFetching } = useInfiniteQuery(orderKeys.browse(
+   {
+    saleFilters: saleTypeFilterForm.values,
+    nftTypefilters: nftTypeFilterForm.values,
+    priceRangeFilters: priceRangeFilterForm.values,
+    collectionsFilters: collectionsFilterForm.values,
+    sorting: sortBy
+   }), async ({ pageParam = 1 }) => {
     const apiFilters: any = { page: pageParam, side: 1 };
 
     // Sale Filters
@@ -267,7 +268,7 @@ export const BrowseNFTsPage = () => {
       }
 
       const NFT: INFT = response.value;
-
+      //TODO: set query cache to this specific nft(nftKeys.info)
       const key = `${NFT.collection?.address}:${NFT.tokenId}`;
 
       acc[key] = NFT;
@@ -511,18 +512,13 @@ export const BrowseNFTsPage = () => {
                     NFT={NFTs[0]}
                     collection={`${NFTs[0].collection?.address}`}
                     orderEnd={order.end}
-                    renderContent={({ NFT, collection, creator, owner, bestOfferPrice, bestOfferPriceToken, lastOfferPrice, lastOfferPriceToken }) => (
+                    renderContent={({ NFT, collection, creator, owner, bestOfferPrice, bestOfferPriceToken, lastOfferPrice, lastOfferPriceToken, order: orderData }) => (
                       <NFTItemContentWithPrice
                       name={NFT.name}
                       collection={collection}
-                      tokenId={NFT.tokenId}
                       creator={creator || undefined}
                       owner={owner || undefined}
-                      order={{
-                        assetClass: OrderAssetClass.ERC721,
-                        collectionAddress: `${NFT._collectionAddress}`,
-                        tokenId: `${NFT.tokenId}`,
-                      }}
+                      order={orderData || undefined}
                       bestOfferPrice={bestOfferPrice || 0}
                       bestOfferPriceToken={bestOfferPriceToken || undefined}
                       lastOfferPrice={lastOfferPrice || 0}
