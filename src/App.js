@@ -61,6 +61,8 @@ import { BundlePage, NFTPage, CollectionPage } from './app/modules/nft';
 // When the Whole App becomes TypeScript compatible, move this Popup in more appropriate place.
 import { LoadingPopup } from './app/modules/marketplace/components/popups/loading-popup';
 import { MyNFTsPage, UserProfilePage } from './app/modules/account';
+import { useNftCheckoutPopupContext } from './app/providers/NFTCheckoutProvider';
+import { NFTCheckoutPopup } from './app/modules/nft/pages/nft-page/components';
 
 class UniverseRoute {
   constructor(
@@ -142,6 +144,8 @@ const App = () => {
   const { showLoading, closeLoading, loadingTitle, loadingBody, transactions } =
     useLoadingPopupContext();
 
+  const { NFT, NFTs, order, isOpen, onClose, closeCheckout } = useNftCheckoutPopupContext();
+
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [location]);
@@ -176,6 +180,15 @@ const App = () => {
                                 text={loadingBody}
                                 transactions={transactions}
                               />
+                              {NFT?.tokenId && order?.id && (
+                                <NFTCheckoutPopup
+                                  NFT={NFT}
+                                  NFTs={NFTs}
+                                  order={order}
+                                  isOpen={isOpen}
+                                  onClose={closeCheckout}
+                                />
+                              )}
                             </NewApp>
                           )}
                         </RouteComponent>
@@ -196,6 +209,7 @@ const App = () => {
         </LobsterContextProvider>
       </PolymorphContextProvider>
       {/* <ReactQueryDevtools initialIsOpen={false} /> */}
+      <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>
   );
 };

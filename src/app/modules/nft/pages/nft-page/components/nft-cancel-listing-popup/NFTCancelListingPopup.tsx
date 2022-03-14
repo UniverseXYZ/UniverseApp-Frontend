@@ -86,7 +86,7 @@ export const NFTCancelListingPopup = ({ order, isOpen, onClose, handleCancel }: 
 
       const convertedOrder = order.make.assetType as IERC721AssetType;
       const tokenId = convertedOrder.tokenId?.toString();
-      const collectionAddress = convertedOrder.contract?.toLowerCase()
+      const collectionAddress = convertedOrder.contract;
 
       // Fetch order api until a diffrent response is returned
       const newOrder = await GetActiveListingApi(collectionAddress,tokenId);
@@ -95,6 +95,7 @@ export const NFTCancelListingPopup = ({ order, isOpen, onClose, handleCancel }: 
       if (!newOrder?.id || order.id !== newOrder.id) {
         clearInterval(indexInterval);
         queryClient.setQueryData(orderKeys.listing({tokenId, collectionAddress}), newOrder || undefined);
+        queryClient.refetchQueries(orderKeys.browseAny)
         closeLoading();
         handleCancel();
       }

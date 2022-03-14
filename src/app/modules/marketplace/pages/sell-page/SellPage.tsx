@@ -40,7 +40,7 @@ import { useQueryClient } from 'react-query'
 const { contracts: contractsData } = Contracts[process.env.REACT_APP_NETWORK_CHAIN_ID];
 import { Status, Status as PostingPopupStatus } from './components/tab-summary/compoents/posting-popup/enums/index';
 import { useErrorContext } from '../../../../../contexts/ErrorContext';
-import { orderKeys } from '../../../../utils/query-keys';
+import { nftKeys, orderKeys } from '../../../../utils/query-keys';
 
 const getValidationSchema = (amountType?: SellAmountType, sellMethod?: SellMethod) => {
   switch (sellMethod) {
@@ -71,6 +71,9 @@ export const SellPage = () => {
     return axios.post(`${process.env.REACT_APP_MARKETPLACE_BACKEND}/v1/orders/order`, data);
   }, {
     onSuccess: () => {
+      //TODO: Invalidate browse marketplace query key
+      queryClient.refetchQueries(orderKeys.browseAny)
+
       queryClient.invalidateQueries(orderKeys.listing({ collectionAddress: params.collectionAddress.toLowerCase(), tokenId: params.tokenId }));
       queryClient.prefetchQuery(orderKeys.listing({ collectionAddress: params.collectionAddress.toLowerCase(), tokenId: params.tokenId }), async () => {
         const result = await GetActiveListingApi(params.collectionAddress.toLowerCase(), params.tokenId);
@@ -80,7 +83,7 @@ export const SellPage = () => {
   });
 
   const { data: nft } = useQuery(
-    ['sell-nft', params.collectionAddress, params.tokenId],
+    nftKeys.nftInfo({collectionAddress: params.collectionAddress, tokenId: params.tokenId}),
     () => GetNFT2Api(params.collectionAddress, params.tokenId)
   );
 

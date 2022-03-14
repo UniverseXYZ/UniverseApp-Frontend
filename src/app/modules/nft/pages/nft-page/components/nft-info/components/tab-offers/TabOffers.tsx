@@ -75,7 +75,7 @@ export const TabOffers:React.FC<ITabOffersProps> = ({nft, offers, usersMap}) => 
 
         const convertedOrder = offer.take.assetType as IERC721AssetType;
         const tokenId = convertedOrder.tokenId?.toString();
-        const collectionAddress = convertedOrder.contract?.toLowerCase()
+        const collectionAddress = convertedOrder.contract;
   
         // Fetch order api until a diffrent response is returned
         const newOffers = await GetOrdersApi({

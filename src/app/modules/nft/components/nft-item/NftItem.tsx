@@ -15,7 +15,8 @@ import { TokenTicker } from '../../../../enums';
 import { getTokenByAddress } from '../../../../constants';
 import { NFTCheckoutPopup } from '../../pages/nft-page/components';
 import { shortenEthereumAddress } from '../../../../../utils/helpers/format';
-import { orderKeys } from '../../../../utils/query-keys';
+import { nftKeys, orderKeys } from '../../../../utils/query-keys';
+import { useNftCheckoutPopupContext } from '../../../../providers/NFTCheckoutProvider';
 
 type IRenderFuncProps = {
   NFT: INFT;
@@ -36,8 +37,8 @@ type IRenderFuncProps = {
 type IRenderFunc = ((props: IRenderFuncProps) => React.ReactNode) | null;
 
 export interface INftItemProps {
-  collection: ICollection | string;
-  NFT: INFT | string;
+  collection: string;
+  NFT: INFT;
   orderEnd?: number;
   order?: IOrder;
   isSelected?: boolean;
@@ -53,8 +54,8 @@ export interface INftItemProps {
 
 export const NftItem = (
   {
-    collection: _collection,
-    NFT: _tokenIdOrNFT,
+    collection: _collectionAddress,
+    NFT: _NFT,
     order,
     isSelected,
     selectedLabel,
@@ -69,30 +70,33 @@ export const NftItem = (
 ) => {
   const [isCheckoutPopupOpened, setIsCheckoutPopupOpened] = useState(false);
 
+
   const { data: collection, isLoading: isLoadingCollection } = useQuery(
-    ['collection', typeof _collection === 'string' ? _collection : _collection.address],
-    () => GetCollectionApi(_collection as string),
+    ['collection', _collectionAddress],
+    () => GetCollectionApi(_collectionAddress),
     {
       retry: false,
-      staleTime: typeof _collection === 'string' ? 0 : Infinity,
-      initialData: typeof _collection === 'string' ? undefined : _collection,
-      enabled: !!_collection
+      enabled: !!_collectionAddress
     },
   );
 
   const { data: NFT, isLoading: isLoadingNFT } = useQuery(
-    ['NFT', collection?.address, typeof _tokenIdOrNFT === 'string' ? _tokenIdOrNFT : _tokenIdOrNFT.tokenId],
-    () => GetNFT2Api(`${collection?.address}`, _tokenIdOrNFT as string),
+    nftKeys.nftInfo({collectionAddress: collection?.address || '', tokenId: _NFT.tokenId || ""}),
+    () => GetNFT2Api(`${collection?.address}`, _NFT.tokenId),
     {
-      enabled: !!collection?.address,
+      enabled: !!collection?.address && !!_NFT.tokenId,
       retry: false,
-      staleTime: typeof _tokenIdOrNFT === 'string' ? 0 : Infinity,
-      initialData: typeof _tokenIdOrNFT === 'string' ? undefined : _tokenIdOrNFT,
+      initialData: _NFT,
     },
   );
 
   const { data: creator, isLoading: isLoadingCreator } = useQuery(
-    ['user', `${NFT?._creatorAddress}`],
+    nftKeys.nftCreator(
+      {
+        collectionAddress: collection?.address || '',
+        tokenId: _NFT.tokenId || ""
+      },
+      NFT?._creatorAddress || ""),
     () => GetUserApi(NFT?._creatorAddress as string),
     {
       enabled: !!NFT?._creatorAddress,
@@ -101,7 +105,12 @@ export const NftItem = (
   );
 
   const { data: owner, isLoading: isLoadingOwner } = useQuery(
-    ['user', `${NFT?._ownerAddress}`],
+    nftKeys.nftOwner(
+      {
+        collectionAddress: collection?.address || '',
+        tokenId: _NFT.tokenId || ""
+      },
+      NFT?._ownerAddress || ""),
     () => GetUserApi(NFT?._ownerAddress as string),
     {
       enabled: !!NFT?._ownerAddress,
@@ -110,7 +119,7 @@ export const NftItem = (
   );
 
   const { data, isLoading: isLoadingOffers } = useQuery(
-    ['offer', NFT?._collectionAddress, NFT?.tokenId],
+    orderKeys.cardOffers({collectionAddress: NFT?._collectionAddress || "", tokenId: NFT?.tokenId || ""}),
     () => GetBestAndLastOffer(NFT?._collectionAddress || '', NFT?.tokenId || ''),
     {
       enabled: !!NFT?._collectionAddress && !!NFT?.tokenId,
@@ -240,18 +249,18 @@ export const NftItem = (
                 isLoadingCreator,
                 isLoadingOwner,
               }) : (
-                <NFTItemFooter isCheckoutPopupOpened={isCheckoutPopupOpened} setIsCheckoutPopupOpened={setIsCheckoutPopupOpened} showBuyNowButton={showBuyNowButton && orderData && orderData.side === 1 && orderData.status === 0 ? true : false} NFT={NFT as INFT} />
+                <NFTItemFooter
+                  isCheckoutPopupOpened={isCheckoutPopupOpened}
+                  setIsCheckoutPopupOpened={setIsCheckoutPopupOpened}
+                  showBuyNowButton={showBuyNowButton && (orderData || order) && (orderData || order)?.side === 1 && (orderData || order)?.status === 0 ? true : false}
+                  NFT={NFT as INFT}
+                  order={(order || orderData) as IOrder}
+                />
               )
             }
           </Box>
         </LinkOverlay>
       </LinkBox>
-      <NFTCheckoutPopup
-        NFT={NFT}
-        order={order ? order as IOrder : orderData as IOrder}
-        isOpen={isCheckoutPopupOpened}
-        onClose={() => setIsCheckoutPopupOpened(false)}
-      />
     </ItemWrapper>
   );
 };

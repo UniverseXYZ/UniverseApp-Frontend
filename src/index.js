@@ -6,6 +6,7 @@ import { AuthContextProvider } from './contexts/AuthContext';
 import { ThemeContextProvider } from './contexts/ThemeContext';
 import { ErrorContextProvider } from './contexts/ErrorContext';
 import { LoadingPopupContextProvider } from './app/providers/LoadingProvider';
+import { NFTCheckoutContextProvider } from './app/providers/NFTCheckoutProvider';
 
 ReactDOM.render(
   <BrowserRouter
@@ -14,13 +15,15 @@ ReactDOM.render(
     }}
   >
     <LoadingPopupContextProvider>
-      <ErrorContextProvider>
-        <AuthContextProvider>
-          <ThemeContextProvider>
-            <App />
-          </ThemeContextProvider>
-        </AuthContextProvider>
-      </ErrorContextProvider>
+      <NFTCheckoutContextProvider>
+        <ErrorContextProvider>
+          <AuthContextProvider>
+            <ThemeContextProvider>
+              <App />
+            </ThemeContextProvider>
+          </AuthContextProvider>
+        </ErrorContextProvider>
+      </NFTCheckoutContextProvider>
     </LoadingPopupContextProvider>
   </BrowserRouter>,
   document.getElementById('root')

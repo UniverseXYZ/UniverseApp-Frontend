@@ -23,6 +23,7 @@ import { TokenTicker } from '../../../../../../enums';
 import { getRoyaltiesFromRegistry } from '../../../../../../../utils/marketplace/utils';
 import { HighestOffer } from './components/highest-offer';
 import { isEmpty } from '../../../../../../../utils/helpers';
+import { useNftCheckoutPopupContext } from '../../../../../../providers/NFTCheckoutProvider';
 
 interface INFTBuySectionProps {
   NFT?: INFT;
@@ -41,6 +42,8 @@ export const NFTBuySection = ({ NFT, owner, NFTs, order, highestOffer, onMeasure
   const { signer, isAuthenticated } = useAuthContext() as any;
 
   const [state, setState] = useState<BuyNFTSectionState>();
+
+  const { setIsOpen, setNFT, setOrder } = useNftCheckoutPopupContext();
 
   const updateSectionState = useCallback(async () => {
     if (!isAuthenticated) {
@@ -113,7 +116,11 @@ export const NFTBuySection = ({ NFT, owner, NFTs, order, highestOffer, onMeasure
   const listingPrice = utils.formatUnits(order?.take?.value || 0, token.decimals ?? 18);
   const buyNowButton = () => (
     <Tooltip label={"Can't buy this NFT. It's either not available yet or already expired."} isDisabled={!!canCheckoutOrder} hasArrow shouldWrapChildren placement='top'>
-      <Button boxShadow={'lg'} onClick={() => setIsCheckoutPopupOpened(true)} disabled={!canCheckoutOrder} style={{"width": "100%"}}>
+      <Button boxShadow={'lg'} onClick={() => {
+        setIsOpen(true);
+        setOrder(order || {} as IOrder);
+        setNFT(NFT || {} as INFT);
+      }} disabled={!canCheckoutOrder} style={{"width": "100%"}}>
         Buy for {listingPrice} {getTokenByAddress((order?.take.assetType as IERC20AssetType).contract).ticker}
       </Button>
     </Tooltip>
@@ -213,13 +220,13 @@ export const NFTBuySection = ({ NFT, owner, NFTs, order, highestOffer, onMeasure
           </>
         )}
       </Box>
-      <NFTCheckoutPopup
+      {/* <NFTCheckoutPopup
         NFT={NFT}
         NFTs={NFTs}
         order={order as IOrder}
         isOpen={isCheckoutPopupOpened}
         onClose={() => setIsCheckoutPopupOpened(false)}
-      />
+      /> */}
       <NFTPlaceABidPopup
         order={order}
         isOpen={isPlaceABidPopupOpened}

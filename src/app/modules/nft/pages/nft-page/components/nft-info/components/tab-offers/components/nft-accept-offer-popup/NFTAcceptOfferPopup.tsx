@@ -109,7 +109,7 @@ export const NFTAcceptOfferPopup = ({ NFT, NFTs, order, isOpen, onClose }: INFTA
 
         const convertedOrder = order.take.assetType as IERC721AssetType;
         const tokenId = convertedOrder.tokenId?.toString();
-        const collectionAddress = convertedOrder.contract?.toLowerCase()
+        const collectionAddress = convertedOrder.contract;
 
 
         const newOffers = await GetOrdersApi({

@@ -4,7 +4,7 @@ import { useParams } from 'react-router-dom';
 
 import { ICollection, IERC721AssetType, INFT, IOrder, IUser } from '../../types';
 import { GetCollectionApi, GetNFT2Api, GetHistoryApi, GetOrdersApi, GetUserApi, INFTHistory, GetMoreFromCollectionApi, GetActiveListingApi } from '../../api';
-import { orderKeys } from '../../../../utils/query-keys';
+import { nftKeys, orderKeys } from '../../../../utils/query-keys';
 
 export interface INFTPageContext {
   NFT: INFT;
@@ -32,7 +32,7 @@ const NFTPageProvider: FC = ({ children }) => {
 
   // NFT Data query
   const { data: NFT, isLoading: isLoadingNFT } = useQuery(
-    ['NFT', collectionAddress, tokenId],
+    nftKeys.nftInfo({collectionAddress, tokenId}),
     () => GetNFT2Api(collectionAddress, tokenId),
     {
       enabled: !!collectionAddress && !!tokenId,
@@ -65,7 +65,7 @@ const NFTPageProvider: FC = ({ children }) => {
 
   // NFT Data History Query
   const { data: history, refetch: refetchHistory } = useQuery(
-    ['history', collectionAddress, tokenId],
+    orderKeys.history({collectionAddress, tokenId}),
     () => GetHistoryApi(collectionAddress, tokenId),
     {
       onSuccess: (history) => console.log('history', history)
@@ -76,9 +76,9 @@ const NFTPageProvider: FC = ({ children }) => {
   const { data: offers, refetch: refetchNFTOffers } = useQuery(
     orderKeys.offers({tokenId, collectionAddress}),
     () => GetOrdersApi({
-      side: 0, 
-      tokenIds: tokenId, 
-      collection: collectionAddress 
+      side: 0,
+      tokenIds: tokenId,
+      collection: collectionAddress
     }),
     {
       onSuccess: (offers) => console.log('offers', offers)
@@ -87,7 +87,7 @@ const NFTPageProvider: FC = ({ children }) => {
  
   // NFT Creator Data Query
   const { data: creator } = useQuery(
-    ['user', NFT?._creatorAddress],
+    nftKeys.nftCreator({tokenId, collectionAddress}, NFT?._creatorAddress || ""),
     () => GetUserApi(`${NFT?._creatorAddress}`),
     {
       enabled: !!NFT?._creatorAddress,
@@ -98,7 +98,7 @@ const NFTPageProvider: FC = ({ children }) => {
 
   // NFT Owner Data Query
   const { data: owner } = useQuery(
-    ['user', NFT?._ownerAddress],
+    nftKeys.nftOwner({tokenId, collectionAddress}, NFT?._ownerAddress || ""),
     () => GetUserApi(`${NFT?._ownerAddress}`),
     {
       enabled: !!NFT?._ownerAddress, 
