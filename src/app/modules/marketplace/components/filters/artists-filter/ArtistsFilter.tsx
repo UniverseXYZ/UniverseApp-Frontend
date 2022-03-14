@@ -1,12 +1,13 @@
+import { Image } from '@chakra-ui/react';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
-import { Dropdown, DropdownFilterContainer, MultiSelect } from '../../../../../components';
+import artistIcon from '../../../../../../assets/images/marketplace/artist.svg';
 
-import { ICollectionsFilterValue } from '../collections-filter';
-import { Image } from '@chakra-ui/react';
+import { Dropdown, DropdownFilterContainer, MultiSelect } from '../../../../../components';
 import { FilterArtistsItems } from '../../../mocks/filter-artists';
 
-import artistIcon from '../../../../../../assets/images/marketplace/artist.svg';
+
+export type IArtistsFilterValue = Array<any>;
 
 type IFormValues = any[];
 
@@ -18,7 +19,7 @@ interface IArtistsFilterProps {
 
 export const ArtistsFilter = ({ value: _value, onChange, onClear }: IArtistsFilterProps) => {
   const [isOpened, setIsOpened] = useState(false);
-  const [value, setValue] = useState<ICollectionsFilterValue>([]);
+  const [value, setValue] = useState<IArtistsFilterValue>([]);
 
   const handleChange = useCallback((value: any[]) => {
     // console.log('handleChange', value);

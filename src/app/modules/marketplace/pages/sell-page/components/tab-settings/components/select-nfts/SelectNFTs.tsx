@@ -37,7 +37,9 @@ import { useStickyFooter } from '../../../../../../../../hooks';
 import { UncheckBundleEditionsModal } from './components';
 import {
   ArtistsFilter,
-  CollectionsFilter, ICollectionsFilterValue, INftTypeFilterValue, IPriceRangeFilterValue, ISaleTypeFilterValue,
+  INftTypeFilterValue,
+  IPriceRangeFilterValue,
+  ISaleTypeFilterValue,
   NFTTypeFilter,
   PriceRangeFilter,
   SaleTypeFilter,
@@ -289,16 +291,16 @@ export const SelectNFTs = ({}: ISelectNFTsProps) => {
             onClear={() => true}
             isDirty={false}
           />
-          <CollectionsFilter
-            value={[] as ICollectionsFilterValue}
-            onChange={(values) => console.log('values', values)}
-            onClear={() => true}
-          />
-          <ArtistsFilter
-            value={[] as ICollectionsFilterValue}
-            onChange={(values) => console.log('values', values)}
-            onClear={() => true}
-          />
+          {/*<CollectionsFilter*/}
+          {/*  value={[] as ICollectionsFilterValue}*/}
+          {/*  onChange={(values) => console.log('values', values)}*/}
+          {/*  onClear={() => true}*/}
+          {/*/>*/}
+          {/*<ArtistsFilter*/}
+          {/*  value={[] as ICollectionsFilterValue}*/}
+          {/*  onChange={(values) => console.log('values', values)}*/}
+          {/*  onClear={() => true}*/}
+          {/*/>*/}
         </Flex>
       </Fade>
 
