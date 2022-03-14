@@ -19,6 +19,7 @@ import filtersIcon from '../../../../../../../../assets/images/marketplace/filte
 import closeIcon from '../../../../../../../../assets/images/close-menu.svg';
 import SaleTypeIcon from '../../../../../../../../assets/images/v2/marketplace/filter-sale-type.svg';
 import NFTTypeIcon from '../../../../../../../../assets/images/v2/marketplace/filter-nft-type.svg';
+import PriceRangeIcon from '../../../../../../../../assets/images/v2/marketplace/filter-price-range.svg';
 import CollectionsIcon from '../../../../../../../../assets/images/v2/marketplace/filter-collections.svg';
 
 // Contexts
@@ -33,7 +34,7 @@ import {
   NFTTypeFilter,
   PriceRangeFilter,
   ApiCollectionsFiltersMobile,
-  SaleTypeFilterDropdown, NFTTypeFilterDropdown,
+  SaleTypeFilterDropdown, NFTTypeFilterDropdown, PriceRangeFilterDropdown,
 } from '../index';
 
 export const SearchFilters = () => {
@@ -133,10 +134,10 @@ export const SearchFilters = () => {
           )}
 
           {showPriceRangeFilters && (
-            <PriceRangeFilter
+            <PriceRangeFilterDropdown
               value={priceRangeForm.values}
               isDirty={priceRangeForm.dirty}
-              onChange={(values) => priceRangeForm.setValues(values)}
+              onSave={(value) => priceRangeForm.setValues(value)}
               onClear={() => priceRangeForm.resetForm()}
            />
           )}
@@ -211,6 +212,19 @@ export const SearchFilters = () => {
                      </AccordionButton>
                      <AccordionPanel pb={4}>
                        <NFTTypeFilter value={nftTypeForm.values} onChange={(value) => nftTypeForm.setValues(value)} />
+                     </AccordionPanel>
+                   </AccordionItem>
+
+                   <AccordionItem borderBottom={'1px solid rgba(0, 0, 0, 0.1)'}>
+                     <AccordionButton py={'30px'} fontWeight={'bold'}>
+                       <Box flex='1' textAlign='left'>
+                         <Image src={PriceRangeIcon} display={'inline-block'} pos={'relative'} top={'-1px'} mr={'8px'} />
+                         Price range
+                       </Box>
+                       <AccordionIcon />
+                     </AccordionButton>
+                     <AccordionPanel pb={4}>
+                       <PriceRangeFilter value={priceRangeForm.values} onChange={(value) => priceRangeForm.setValues(value)} />
                      </AccordionPanel>
                    </AccordionItem>
 
