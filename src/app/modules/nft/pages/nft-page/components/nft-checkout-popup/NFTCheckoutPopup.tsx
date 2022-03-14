@@ -34,7 +34,7 @@ import { IERC20AssetType, IERC721AssetType, INFT, IOrder } from '../../../../typ
 import { isNFTAssetAudio, isNFTAssetImage, isNFTAssetVideo } from '../../../../helpers';
 import { getTokenByAddress, TOKENS_MAP } from '../../../../../../constants';
 import { TokenTicker } from '../../../../../../enums';
-import { useMutation } from 'react-query';
+import { useMutation, useQueryClient } from 'react-query';
 import axios, { AxiosResponse } from 'axios';
 import { Web3Provider } from '@ethersproject/providers';
 import { NFTCustomError } from '../nft-custom-error/NFTCustomError';
@@ -42,6 +42,8 @@ import { getEtherscanTxUrl } from '../../../../../../../utils/helpers';
 import { formatAddress } from '../../../../../../../utils/helpers/format';
 import { useTokenPrice } from '../../../../../../hooks';
 import { IToken } from '../../../../../../types';
+import { GetActiveListingApi } from '../../../../api';
+import { orderKeys } from '../../../../../../utils/query-keys';
 // @ts-ignore
 const { contracts: contractsData } = Contracts[process.env.REACT_APP_NETWORK_CHAIN_ID];
 
@@ -59,10 +61,12 @@ export const NFTCheckoutPopup = ({ NFT, NFTs, order, isOpen, onClose }: INFTChec
   const { address, signer, web3Provider } = useAuthContext() as any;
   const { setShowError, setErrorBody} = useErrorContext() as any;
   const { onCopy } = useClipboard(address);
+  const queryClient = useQueryClient();
 
   const [state, setState] = useState<CheckoutState>(CheckoutState.CHECKOUT);
   const [isNFTAudio] = useState(false);
   const [approveTx, setApproveTx] = useState<string>('')
+  const [fetchCount, setFetchCount] = useState(0);
 
   const prepareMutation = useMutation(({ hash, data }: { hash: string, data: any }) => {
     return axios.post(`${process.env.REACT_APP_MARKETPLACE_BACKEND}/v1/orders/${hash}/prepare`, data);
@@ -78,6 +82,7 @@ export const NFTCheckoutPopup = ({ NFT, NFTs, order, isOpen, onClose }: INFTChec
 
   const handleCheckoutClick = useCallback(async () => {
     try {
+      setFetchCount(0);
       setState(CheckoutState.PROCESSING);
       const paymentToken = getTokenByAddress((order?.take?.assetType as IERC20AssetType)?.contract);
 
@@ -118,7 +123,28 @@ export const NFTCheckoutPopup = ({ NFT, NFTs, order, isOpen, onClose }: INFTChec
       const {data, from, to, value} = response.data;
   
       await sendSellTransaction(data, from, to, BigNumber.from(value.hex)); // TODO Test after new version of contracts and backend redeployed
-      setState(CheckoutState.CONGRATULATIONS);
+
+      setState(CheckoutState.INDEXING);
+      // This polling mechanic is temporary until we have marketplace web sockets
+      const indexInterval = setInterval(async () => {
+        setFetchCount(count => count +=1)
+
+        const convertedOrder = order.make.assetType as IERC721AssetType;
+        const tokenId = convertedOrder.tokenId?.toString();
+        const collectionAddress = convertedOrder.contract?.toLowerCase()
+
+        // Fetch order api until a diffrent response is returned
+        const newOrder = await GetActiveListingApi(collectionAddress,tokenId);
+
+        // Change query information about order
+        if (!newOrder?.id || order.id !== newOrder.id) {
+          clearInterval(indexInterval);
+          queryClient.invalidateQueries(orderKeys.all);
+          // TODO: Invalidte NFT Owner Queries
+          // TODO: Invalidte MY NFTs Query
+          setState(CheckoutState.CONGRATULATIONS);
+        }
+      }, 4000);
 
     } catch(err: any) {
       console.log(err)   
@@ -243,6 +269,24 @@ export const NFTCheckoutPopup = ({ NFT, NFTs, order, isOpen, onClose }: INFTChec
               <Text fontSize={'14px'} mx={'auto'} maxW={'260px'} textAlign={'center'}>
                 Just accept the signature request and wait for us to process your offer
               </Text>
+
+              <Loading my={'64px'} />
+            </Box>
+          )}
+
+          {state === CheckoutState.INDEXING && (
+            <Box>
+              <Heading {...styles.TitleStyle} mb={'20px'}>Purchasing the NFT...</Heading>
+
+              <Text fontSize={'14px'} mx={'auto'} maxW={'260px'} textAlign={'center'}>
+                Indexing the transaction
+              </Text>
+
+              {fetchCount >= 3 &&
+                <Text fontSize={'14px'} mx={'auto'} maxW={'260px'} textAlign={'center'}>
+                  Receving the event from the blockchain is taking longer than expected. Please be patient.
+                </Text>
+              }
 
               <Loading my={'64px'} />
             </Box>

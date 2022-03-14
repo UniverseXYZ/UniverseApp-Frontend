@@ -118,7 +118,7 @@ const NFTPageProvider: FC = ({ children }) => {
     },
   );
 
-
+  //TODO: This can be reworked to invalidate the queries and they will be automatically refetched
   const refetchOffers = useCallback(() => {
     refetchHistory();
     refetchNFTOffers();

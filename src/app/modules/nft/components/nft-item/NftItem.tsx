@@ -246,14 +246,12 @@ export const NftItem = (
           </Box>
         </LinkOverlay>
       </LinkBox>
-      {NFT?.id && (
-        <NFTCheckoutPopup
-          NFT={NFT}
-          order={order ? order as IOrder : orderData as IOrder}
-          isOpen={isCheckoutPopupOpened}
-          onClose={() => setIsCheckoutPopupOpened(false)}
-        />
-      )}
+      <NFTCheckoutPopup
+        NFT={NFT}
+        order={order ? order as IOrder : orderData as IOrder}
+        isOpen={isCheckoutPopupOpened}
+        onClose={() => setIsCheckoutPopupOpened(false)}
+      />
     </ItemWrapper>
   );
 };

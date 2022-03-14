@@ -89,6 +89,7 @@ export const TabOffers:React.FC<ITabOffersProps> = ({nft, offers, usersMap}) => 
         if (stringifiedOffers !== newStringifiedoffers) {
           clearInterval(indexInterval);
           queryClient.setQueryData(orderKeys.offers({tokenId, collectionAddress}), newOffers || undefined);
+          queryClient.invalidateQueries(orderKeys.listing({tokenId, collectionAddress}));
           setOfferCanceling(false);
 
         }

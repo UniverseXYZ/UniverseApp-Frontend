@@ -4,5 +4,6 @@ export enum CheckoutState {
   ADD_FUNDS,
   INSUFFICIENT_BALANCE,
   APPROVAL,
-  PROCESSING
+  PROCESSING,
+  INDEXING
 }

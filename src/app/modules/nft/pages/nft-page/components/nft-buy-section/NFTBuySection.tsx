@@ -147,7 +147,7 @@ export const NFTBuySection = ({ NFT, owner, NFTs, order, highestOffer, onMeasure
             </SimpleGrid>
           </>
         )}
-        {state === BuyNFTSectionState.BUYER_FIXED_LISTING_BUY_N_OFFER && (
+        {order && state === BuyNFTSectionState.BUYER_FIXED_LISTING_BUY_N_OFFER && (
           <>
           {!isEmpty(highestOffer?.offer) && (
             <HighestOffer offer={highestOffer?.offer} creator={highestOffer?.creator as IUser} />
@@ -159,7 +159,7 @@ export const NFTBuySection = ({ NFT, owner, NFTs, order, highestOffer, onMeasure
             {!!nftRoyalties && royaltiesText()}
           </>
         )}
-        {state === BuyNFTSectionState.BUYER_FIXED_LISTING_BUY && (
+        {order && state === BuyNFTSectionState.BUYER_FIXED_LISTING_BUY && (
           <>
             {buyNowButton()}
             {!!nftRoyalties && royaltiesText()}
