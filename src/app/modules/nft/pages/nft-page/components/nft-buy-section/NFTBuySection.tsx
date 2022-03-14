@@ -9,7 +9,7 @@ import ClockIcon from '../../../../../../../assets/images/clock.svg';
 import { useDateCountdown } from '../../../../../../hooks';
 import * as styles from './styles';
 import { HighestBid } from './components';
-import { IERC20AssetType, INFT, IOrder, IUser } from '../../../../types';
+import { IERC20AssetType, IERC721AssetType, INFT, IOrder, IUser } from '../../../../types';
 import { NFTCheckoutPopup } from '../nft-checkout-popup';
 import { NFTPlaceABidPopup } from '../nft-place-a-bid-popup';
 import { NFTMakeAnOfferPopup } from '../nft-make-an-offer-popup';
@@ -109,10 +109,8 @@ export const NFTBuySection = ({ NFT, owner, NFTs, order, highestOffer, onMeasure
     (!order.start && order.end && utcTimestamp < order.end ) // Order has only end 
   ;
 
-  const token = getTokenByAddress(order?.take.assetType.contract || "");
-  const tokenDecimals = TOKENS_MAP[token.ticker]?.decimals;
-  const listingPrice = utils.formatUnits(order?.take.value ?? 0, tokenDecimals);
-  
+  const token = getTokenByAddress((order?.take.assetType as IERC721AssetType)?.contract);
+  const listingPrice = utils.formatUnits(order?.take?.value || 0, token.decimals ?? 18);
   const buyNowButton = () => (
     <Tooltip label={"Can't buy this NFT. It's either not available yet or already expired."} isDisabled={!!canCheckoutOrder} hasArrow shouldWrapChildren placement='top'>
       <Button boxShadow={'lg'} onClick={() => setIsCheckoutPopupOpened(true)} disabled={!canCheckoutOrder} style={{"width": "100%"}}>
