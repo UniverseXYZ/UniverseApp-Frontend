@@ -29,6 +29,13 @@ export const ArtistNFTsTab = ({ artistAddress, onTotalLoad }: IArtistNFTsTabProp
     setDisabledSortByFilters(true);
   }, [artistAddress]);
 
+  useEffect(() => {
+    const nftPages = userNFTs?.pages;
+    if(nftPages?.length) {
+      onTotalLoad(nftPages[0].total);
+    }
+  }, [userNFTs])
+
   return (
     <Box>
       <SearchFilters />
