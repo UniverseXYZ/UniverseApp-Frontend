@@ -37,7 +37,9 @@ import { useStickyFooter } from '../../../../../../../../hooks';
 import { UncheckBundleEditionsModal } from './components';
 import {
   ArtistsFilter,
-  CollectionsFilter, ICollectionsFilterValue, INftTypeFilterValue, IPriceRangeFilterValue, ISaleTypeFilterValue,
+  INftTypeFilterValue,
+  IPriceRangeFilterValue,
+  ISaleTypeFilterValue,
   NFTTypeFilter,
   PriceRangeFilter,
   SaleTypeFilter,
@@ -55,6 +57,7 @@ import {
   mapBackendUser,
 } from '../../../../../../../nft';
 import { NFTItemFooter, NFTItemFooterEditionsLabel } from '../../../../../../../nft/components/nft-item/components';
+import { SaleTypeFilterDropdown } from '../../../../../../../account/pages/my-nfts-page/components/search-filters';
 
 interface IActionBarNFTItemProps {
   nft: INFT;
@@ -272,9 +275,9 @@ export const SelectNFTs = ({}: ISelectNFTsProps) => {
             }
           }}
         >
-          <SaleTypeFilter
+          <SaleTypeFilterDropdown
             value={{} as ISaleTypeFilterValue}
-            onChange={(values) => console.log('values', values)}
+            onSave={(value) => console.log('value', value)}
             onClear={() => true}
           />
           <NFTTypeFilter
@@ -288,16 +291,16 @@ export const SelectNFTs = ({}: ISelectNFTsProps) => {
             onClear={() => true}
             isDirty={false}
           />
-          <CollectionsFilter
-            value={[] as ICollectionsFilterValue}
-            onChange={(values) => console.log('values', values)}
-            onClear={() => true}
-          />
-          <ArtistsFilter
-            value={[] as ICollectionsFilterValue}
-            onChange={(values) => console.log('values', values)}
-            onClear={() => true}
-          />
+          {/*<CollectionsFilter*/}
+          {/*  value={[] as ICollectionsFilterValue}*/}
+          {/*  onChange={(values) => console.log('values', values)}*/}
+          {/*  onClear={() => true}*/}
+          {/*/>*/}
+          {/*<ArtistsFilter*/}
+          {/*  value={[] as ICollectionsFilterValue}*/}
+          {/*  onChange={(values) => console.log('values', values)}*/}
+          {/*  onClear={() => true}*/}
+          {/*/>*/}
         </Flex>
       </Fade>
 

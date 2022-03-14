@@ -111,6 +111,7 @@ export const Dropdown = (
                   transform: value
                     ? `translate(${buttonProps?.leftIcon ? '-24px' : '0px'}, calc((var(--button-${buttonProps?.size || 'md'}-padding-y) + var(--padding) + (var(--opened-label-font-size) / 2)) * -1))`
                     : '',
+                  visibility: !!label ? 'visible' : 'hidden',
                   zIndex: 20,
                 }}
               >{label}</Box>
