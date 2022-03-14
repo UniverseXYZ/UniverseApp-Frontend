@@ -13,7 +13,7 @@ export interface IGetOrdersApiParams {
   side: 0 | 1;
   assetClass: OrderAssetClass;
   collection: string;
-  tokenId: number;
+  tokenIds: string;
 }
 
 export interface IGeBestAndLastApiParams {
