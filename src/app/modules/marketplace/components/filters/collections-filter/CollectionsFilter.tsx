@@ -8,6 +8,7 @@ import { FilterCollectionsItems } from '../../../mocks/filter-collections';
 import collectionsIcon from '../../../../../../assets/images/v2/marketplace/filter-collections.svg';
 import { SearchSelect } from '../../../../../components/search-select';
 
+// TODO: remove
 export const CollectionsFilter = ({ value: _value, onChange, onClear }: ICollectionsFilterProps) => {
   const [isOpened, setIsOpened] = useState(false);
   const [value, setValue] = useState<ICollectionsFilterValue>([]);

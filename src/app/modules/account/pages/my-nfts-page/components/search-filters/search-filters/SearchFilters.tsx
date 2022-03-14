@@ -6,9 +6,9 @@ import {
   AccordionIcon,
   AccordionItem,
   AccordionPanel,
-  Box,
+  Box, Flex,
   Image,
-  Link,
+  Link, LinkProps,
 } from '@chakra-ui/react';
 
 // Styles
@@ -34,17 +34,28 @@ import {
   NFTTypeFilter,
   PriceRangeFilter,
   ApiCollectionsFiltersMobile,
-  SaleTypeFilterDropdown, NFTTypeFilterDropdown, PriceRangeFilterDropdown,
+  SaleTypeFilterDropdown,
+  NFTTypeFilterDropdown,
+  PriceRangeFilterDropdown,
+  CollectionsFilterDropdown,
+  CollectionsFilter,
 } from '../index';
+
+const ClearAllStyle: LinkProps = {
+  fontSize: '14px',
+  fontWeight: 500,
+  textDecoration: 'underline',
+  _hover: {
+    textDecoration: 'none',
+  }
+};
 
 export const SearchFilters = () => {
   const [showFilters, setShowFilters] = useState(false);
 
   const {
     userCollections,
-    selectedCollections,
     disabledSortByFilters,
-    setSelectedCollections,
     searchBarForm,
     collectionFilterForm,
     saleTypeForm,
@@ -88,7 +99,8 @@ export const SearchFilters = () => {
 
   return (
     <div className="search--sort--filters--section">
-      <div className="search--sort--filters">
+      {/*TODO: remove this trick in future by adding button size prop to SortingDropdowns */}
+      <Box className="search--sort--filters" sx={{ '> button': { h: '50px' } }}>
         <SearchNFTsField
           value={searchBarForm.values}
           onChange={(value) => searchBarForm.setValues(value)}
@@ -115,61 +127,49 @@ export const SearchFilters = () => {
           Filters
         </div>
         {showFilters && (
-        <div className="sorting--filters--list">
+          <Flex className="sorting--filters--list" alignItems={'center'} sx={{ '> button': { mr: '10px' } }}>
 
-          {showSaleTypeFilters && (
-            <SaleTypeFilterDropdown
-              value={saleTypeForm.values}
-              onSave={(values) => saleTypeForm.setValues(values)}
-              onClear={() => saleTypeForm.resetForm()}
-            />
-          )}
+            {showSaleTypeFilters && (
+              <SaleTypeFilterDropdown
+                value={saleTypeForm.values}
+                onSave={(values) => saleTypeForm.setValues(values)}
+                onClear={() => saleTypeForm.resetForm()}
+              />
+            )}
 
-          {showNFTTypeFilters && (
-            <NFTTypeFilterDropdown
-              value={nftTypeForm.values}
-              onSave={(value) => nftTypeForm.setValues(value)}
-              onClear={() => nftTypeForm.resetForm()}
-            />
-          )}
+            {showNFTTypeFilters && (
+              <NFTTypeFilterDropdown
+                value={nftTypeForm.values}
+                onSave={(value) => nftTypeForm.setValues(value)}
+                onClear={() => nftTypeForm.resetForm()}
+              />
+            )}
 
-          {showPriceRangeFilters && (
-            <PriceRangeFilterDropdown
-              value={priceRangeForm.values}
-              isDirty={priceRangeForm.dirty}
-              onSave={(value) => priceRangeForm.setValues(value)}
-              onClear={() => priceRangeForm.resetForm()}
-           />
-          )}
+            {showPriceRangeFilters && (
+              <PriceRangeFilterDropdown
+                value={priceRangeForm.values}
+                isDirty={priceRangeForm.dirty}
+                onSave={(value) => priceRangeForm.setValues(value)}
+                onClear={() => priceRangeForm.resetForm()}
+             />
+            )}
 
-          {showCollectionFilters && (
-            <ApiCollectionFilters
-              allCollections={userCollections}
-              handleCollectionSearch={(value) => collectionFilterForm.setValues(value)}
-              selectedCollections={selectedCollections}
-              setSelectedCollections={setSelectedCollections}
-            />
-          )}
+            {showCollectionFilters && (
+              <CollectionsFilterDropdown
+                items={userCollections}
+                value={collectionFilterForm.values.collections}
+                onSave={(value) => collectionFilterForm.setValues({ collections: [...value] })}
+                onClear={() => collectionFilterForm.resetForm()}
+              />
+            )}
 
-          {(hasSelectedOrderBookFilters() || hasSelectedCollectionFilter()) && (
-              <Link
-                onClick={clearAllForms}
-                sx={{
-                  fontSize: '14px',
-                  fontWeight: 500,
-                  textDecoration: 'underline',
-                  _hover: {
-                    textDecoration: 'none',
-                  }
-                }
-              }>
-                Clear all
-              </Link>
-          )}
+            {(hasSelectedOrderBookFilters() || hasSelectedCollectionFilter()) && (
+              <Link {...ClearAllStyle} onClick={clearAllForms}>Clear all</Link>
+            )}
 
-        </div>
+          </Flex>
         )}
-      </div>
+      </Box>
       <div className="mobile--filters">
         <Popup
           trigger={
@@ -228,7 +228,7 @@ export const SearchFilters = () => {
                      </AccordionPanel>
                    </AccordionItem>
 
-                   <AccordionItem>
+                   <AccordionItem borderBottom={'1px solid rgba(0, 0, 0, 0.1)'}>
                      <AccordionButton py={'30px'} fontWeight={'bold'}>
                        <Box flex='1' textAlign='left'>
                          <Image src={CollectionsIcon} display={'inline-block'} pos={'relative'} top={'-1px'} mr={'8px'} />
@@ -237,11 +237,10 @@ export const SearchFilters = () => {
                        <AccordionIcon />
                      </AccordionButton>
                      <AccordionPanel pb={4}>
-                       <ApiCollectionsFiltersMobile
-                         allCollections={userCollections}
-                         handleCollectionSearch={(value) => collectionFilterForm.setValues(value)}
-                         selectedCollections={selectedCollections}
-                         setSelectedCollections={setSelectedCollections}
+                       <CollectionsFilter
+                         items={userCollections}
+                         value={collectionFilterForm.values.collections}
+                         onChange={(collections) => collectionFilterForm.setValues({ collections })}
                        />
                      </AccordionPanel>
                    </AccordionItem>
@@ -259,9 +258,9 @@ export const SearchFilters = () => {
              </div>
           )}
         </Popup>
-        {selectedCollections.length > 0 && (
+        {collectionFilterForm.values.collections.length > 0 && (
           <div className="selected--filters--numbers">
-            {selectedCollections.length}
+            {collectionFilterForm.values.collections.length}
           </div>
         )}
       </div>
