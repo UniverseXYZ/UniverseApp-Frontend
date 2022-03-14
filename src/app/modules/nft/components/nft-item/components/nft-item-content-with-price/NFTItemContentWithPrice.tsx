@@ -7,29 +7,19 @@ import { ICollection, IERC20AssetType, IOrder, IUser } from '../../../../types';
 import { TokenTicker } from '../../../../../../enums';
 import { TokenIcon } from '../../../../../../components';
 import { getTokenByAddress, TOKENS_MAP } from '../../../../../../constants';
-import { useQuery } from 'react-query';
-import { GetActiveListingApi, GetOrdersApi } from '../../../../api';
 import { utils } from 'ethers';
 
-type IOrderFetchPayload = {
-  assetClass: OrderAssetClass,
-  collectionAddress: string;
-  tokenId: string;
-}
 
 export interface INFTItemContentWithPriceProps {
   name: string;
   creator?: IUser;
   collection?: ICollection;
   owner?: IUser;
-  order: IOrder | IOrderFetchPayload;
-  // price: number;
-  // priceToken: TokenTicker;
+  order?: IOrder;
   bestOfferPrice?: number | string;
   bestOfferPriceToken?: TokenTicker;
   lastOfferPrice?: number | string;
   lastOfferPriceToken?: TokenTicker;
-  tokenId?: string;
 }
 
 export const NFTItemContentWithPrice = (
@@ -38,25 +28,13 @@ export const NFTItemContentWithPrice = (
     creator,
     collection,
     owner,
-    order: _order,
-    // price,
-    // priceToken,
+    order,
     bestOfferPrice,
     bestOfferPriceToken,
     lastOfferPrice,
     lastOfferPriceToken,
-    tokenId
   }: INFTItemContentWithPriceProps
 ) => {
-  const { data: order, isLoading: isLoadingOrder } = useQuery(
-      ['listing', collection?.address, tokenId],
-      () => GetActiveListingApi(collection?.address ?? "", tokenId ?? ""),
-    {
-      retry: false,
-      enabled: !!collection?.address && !!tokenId
-    },
-  );
-
   const [additionPriceLabel, additionPriceValue, additionPriceToken] = useMemo(() => {
     const defaultTicker = TOKENS_MAP.ETH.ticker;
 

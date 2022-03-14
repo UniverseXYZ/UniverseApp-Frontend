@@ -2,7 +2,6 @@ import { Button, SimpleGrid, Box } from '@chakra-ui/react';
 
 // Contexts
 import { useAuthContext } from '../../../../../../../contexts/AuthContext';
-import { useErrorContext } from '../../../../../../../contexts/ErrorContext';
 import { useFiltersContext } from '../search-filters/search-filters.context';
 
 // Components
@@ -11,15 +10,12 @@ import NoNftsFound from '../../../../../../../components/myNFTs/NoNftsFound';
 import { NftItem, NFTItemContentWithPrice } from '../../../../../nft/components';
 import { SearchFilters } from '../search-filters';
 
-// Helpers
-import { OrderAssetClass } from '../../../../../nft/enums';
-
 // Constants
 import { useEffect } from 'react';
 
 export const WalletTab = () => {
   const { address } = useAuthContext();
-  const { setShowError, setErrorTitle, setErrorBody } = useErrorContext() as any;
+
   const {
     setUserAddress,
     userNFTs,
@@ -52,18 +48,13 @@ export const WalletTab = () => {
                   NFT={NFT}
                   showBuyNowButton={false}
                   collection={`${NFT._collectionAddress}`}
-                  renderContent={({ NFT, collection, creator, owner, bestOfferPrice, bestOfferPriceToken, lastOfferPrice, lastOfferPriceToken }) => (
+                  renderContent={({ NFT, collection, creator, owner, bestOfferPrice, bestOfferPriceToken, lastOfferPrice, lastOfferPriceToken, order }) => (
                     <NFTItemContentWithPrice
                       name={NFT.name}
                       collection={collection}
                       creator={creator || undefined}
-                      tokenId={NFT.tokenId}
                       owner={owner || undefined}
-                      order={{
-                        assetClass: OrderAssetClass.ERC721,
-                        collectionAddress: `${NFT._collectionAddress}`,
-                        tokenId: `${NFT.tokenId}`,
-                      }}
+                      order={order || undefined}
                       bestOfferPrice={bestOfferPrice || 0}
                       bestOfferPriceToken={bestOfferPriceToken || undefined}
                       lastOfferPrice={lastOfferPrice || 0}

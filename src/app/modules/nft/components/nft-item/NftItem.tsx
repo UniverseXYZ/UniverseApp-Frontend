@@ -29,6 +29,7 @@ type IRenderFuncProps = {
   bestOfferPriceToken?: TokenTicker;
   lastOfferPrice?: number | string;
   lastOfferPriceToken?: TokenTicker;
+  order?: IOrder | null;
 };
 
 type IRenderFunc = ((props: IRenderFuncProps) => React.ReactNode) | null;
@@ -121,7 +122,7 @@ export const NftItem = (
     () => GetActiveListingApi(collection?.address ?? "", NFT?.tokenId ?? ""),
     {
       retry: false,
-      enabled: !!collection?.address && !!NFT?.tokenId
+      enabled: !order && !!collection?.address && !!NFT?.tokenId
     },
   );
 
@@ -195,8 +196,8 @@ export const NftItem = (
                 bestOfferPrice: bestOfferPrice || "0",
                 bestOfferPriceToken: bestOfferPriceToken?.ticker, 
                 lastOfferPrice: lastOfferPrice || "0",
-                lastOfferPriceToken: lastOfferPriceToken?.ticker,   
-                
+                lastOfferPriceToken: lastOfferPriceToken?.ticker,
+                order: order || orderData
               }) : (
                 <>
                   <Text fontSize={'14px'} fontWeight={700} mb={'12px'}>{NFT?.name}</Text>

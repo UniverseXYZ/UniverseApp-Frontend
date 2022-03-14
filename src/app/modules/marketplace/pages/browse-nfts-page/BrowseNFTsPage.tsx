@@ -511,18 +511,13 @@ export const BrowseNFTsPage = () => {
                     NFT={NFTs[0]}
                     collection={`${NFTs[0].collection?.address}`}
                     orderEnd={order.end}
-                    renderContent={({ NFT, collection, creator, owner, bestOfferPrice, bestOfferPriceToken, lastOfferPrice, lastOfferPriceToken }) => (
+                    renderContent={({ NFT, collection, creator, owner, bestOfferPrice, bestOfferPriceToken, lastOfferPrice, lastOfferPriceToken, order: orderData }) => (
                       <NFTItemContentWithPrice
                       name={NFT.name}
                       collection={collection}
-                      tokenId={NFT.tokenId}
                       creator={creator || undefined}
                       owner={owner || undefined}
-                      order={{
-                        assetClass: OrderAssetClass.ERC721,
-                        collectionAddress: `${NFT._collectionAddress}`,
-                        tokenId: `${NFT.tokenId}`,
-                      }}
+                      order={orderData || undefined}
                       bestOfferPrice={bestOfferPrice || 0}
                       bestOfferPriceToken={bestOfferPriceToken || undefined}
                       lastOfferPrice={lastOfferPrice || 0}
