@@ -182,14 +182,19 @@ export const BrowseNFTsPage = () => {
     }
 
     // NFT Filters
+    const assetClassFilters = []
     if (nftTypeFilterForm.values.singleItem) {
-      apiFilters['assetClass'] = "ERC721";
+      assetClassFilters.push("ERC721");
     }
 
     if (nftTypeFilterForm.values.bundle) {
-      apiFilters['assetClass'] = "ERC721_BUNDLE";
+      assetClassFilters.push("ERC721_BUNDLE");
     }
-    
+
+    if (assetClassFilters.length) {
+      apiFilters['assetClass'] = assetClassFilters.join(',');
+    }
+
     // Price Filters
     if (priceRangeFilterForm.values.currency.token && priceRangeFilterForm.dirty) {
       const ticker = priceRangeFilterForm.values.currency.token as TokenTicker;
