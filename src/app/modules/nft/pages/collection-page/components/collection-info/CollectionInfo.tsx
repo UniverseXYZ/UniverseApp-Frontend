@@ -5,6 +5,7 @@ import {
     Flex,
     SimpleGrid,
     Text,
+    Link
 } from '@chakra-ui/react';
 import { useState, useRef, useEffect } from 'react';
 import SocialLinks from '../../../../../../../../src/components/collection/SocialLinks';
@@ -26,6 +27,7 @@ import { NoDescriptionFound } from '../../../../components/no-description-found'
 import { useFiltersContext } from '../../../../../account/pages/my-nfts-page/components/search-filters/search-filters.context';
 import { SearchFilters } from '../../../../../account/pages/my-nfts-page/components/search-filters';
 import NftCardSkeleton from '../../../../../../../components/skeletons/nftCardSkeleton/NftCardSkeleton';
+import { shortenEthereumAddress } from '../../../../../../../utils/helpers/format';
 
 export const CollectionInfo = () => {
   const tabs = ['Items', 'Description'];
@@ -64,8 +66,6 @@ export const CollectionInfo = () => {
     isLoadingCollectionNFTs,
     isIdleCollectionNFTs,
   } = useFiltersContext();
-
-	console.log(isFethingOrders);
 
   // TODO:: Handle Mobile Filters
   // TODO:: Handle Collection NFTs search by name --> We need BE Endpoint https://app.shortcut.com/universexyz/story/2153/endpoint-which-allows-the-fe-to-search-trough-specific-collection-nfts-by-name
@@ -121,16 +121,29 @@ export const CollectionInfo = () => {
                                 objectFit={'cover'}
                                 src={collection.coverUrl}
                             />
-                            <Text
+                            <Flex direction={'column'} alignItems={'flex-start'}>
+                                <Text
                                 fontFamily={'"Sharp Grotesk SemiBold",sans-serif'}
                                 fontSize={'20px'}
                                 lineHeight={'130%'}
-                                textAlign={'center'}
                                 color={'#fff'}
                                 ml={'20px'}
                             >
                                 {collection.name}
                             </Text>
+                            <Link
+                              href={`${process.env.REACT_APP_ETHERSCAN_URL}/address/${collection.address}`}
+                              isExternal
+                              padding={'4px 10px'}
+                              ml={'18px'}
+                              mt={'10px'}
+                              borderRadius={'20px'}
+                              backgroundColor={'#000'}
+                              opacity={'0.6'}
+                              _hover={{ textDecoration: 'none' }}>
+                                <Text color={'#4D66EB'} fontSize={'12px'} fontWeight={600}>{shortenEthereumAddress(collection.address)}</Text>
+                            </Link>
+                            </Flex>
                             <SocialLinks
                                 instagramLink={collection?.instagramLink || ''}
                                 siteLink={collection?.siteLink || ''}
