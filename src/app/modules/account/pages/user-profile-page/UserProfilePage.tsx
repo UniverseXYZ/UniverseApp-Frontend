@@ -80,7 +80,7 @@ export const UserProfilePage = () => {
               <Container maxW={'1110px'} sx={{ padding: { sm: '10px' }}}>
                 <Tabs>
                   <TabList>
-                    <Tab>NFTs <TabLabel>{totalNFTs}</TabLabel></Tab>
+                    <Tab>NFTs {totalNFTs && (<TabLabel>{totalNFTs}</TabLabel>)}</Tab>
                     {/*<Tab>Active auctions</Tab>*/}
                     {/*<Tab>Future auctions</Tab>*/}
                     {/*<Tab>Past auctions</Tab>*/}
