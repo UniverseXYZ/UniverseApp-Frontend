@@ -18,8 +18,8 @@ import './SearchFilters.scss';
 import filtersIcon from '../../../../../../../../assets/images/marketplace/filters.svg';
 import closeIcon from '../../../../../../../../assets/images/close-menu.svg';
 import SaleTypeIcon from '../../../../../../../../assets/images/v2/marketplace/filter-sale-type.svg';
+import NFTTypeIcon from '../../../../../../../../assets/images/v2/marketplace/filter-nft-type.svg';
 import CollectionsIcon from '../../../../../../../../assets/images/v2/marketplace/filter-collections.svg';
-
 
 // Contexts
 import { useFiltersContext } from '../search-filters.context';
@@ -33,8 +33,8 @@ import {
   NFTTypeFilter,
   PriceRangeFilter,
   ApiCollectionsFiltersMobile,
-  SaleTypeFilterDropdown,
-  } from '../index';
+  SaleTypeFilterDropdown, NFTTypeFilterDropdown,
+} from '../index';
 
 export const SearchFilters = () => {
   const [showFilters, setShowFilters] = useState(false);
@@ -125,9 +125,9 @@ export const SearchFilters = () => {
           )}
 
           {showNFTTypeFilters && (
-            <NFTTypeFilter
+            <NFTTypeFilterDropdown
               value={nftTypeForm.values}
-              onChange={(values) => nftTypeForm.setValues(values)}
+              onSave={(value) => nftTypeForm.setValues(value)}
               onClear={() => nftTypeForm.resetForm()}
             />
           )}
@@ -188,31 +188,40 @@ export const SearchFilters = () => {
                </div>
                <div className="browse__nft__filter__body">
                  <Accordion allowMultiple>
-                   <AccordionItem>
-                     <h2>
-                       <AccordionButton fontWeight={'bold'}>
-                         <Box flex='1' textAlign='left'>
-                           <Image src={SaleTypeIcon} display={'inline-block'} pos={'relative'} top={'-1px'} mr={'8px'} />
-                           Sale type
-                         </Box>
-                         <AccordionIcon />
-                       </AccordionButton>
-                     </h2>
+                   <AccordionItem borderBottom={'1px solid rgba(0, 0, 0, 0.1)'}>
+                     <AccordionButton py={'30px'} fontWeight={'bold'}>
+                       <Box flex='1' textAlign='left'>
+                         <Image src={SaleTypeIcon} display={'inline-block'} pos={'relative'} top={'-1px'} mr={'8px'} />
+                         Sale type
+                       </Box>
+                       <AccordionIcon />
+                     </AccordionButton>
                      <AccordionPanel pb={4}>
                        <SaleTypeFilter value={saleTypeForm.values} onChange={(value) => saleTypeForm.setValues(value)} />
                      </AccordionPanel>
                    </AccordionItem>
 
+                   <AccordionItem borderBottom={'1px solid rgba(0, 0, 0, 0.1)'}>
+                     <AccordionButton py={'30px'} fontWeight={'bold'}>
+                       <Box flex='1' textAlign='left'>
+                         <Image src={NFTTypeIcon} display={'inline-block'} pos={'relative'} top={'-1px'} mr={'8px'} />
+                         NFT type
+                       </Box>
+                       <AccordionIcon />
+                     </AccordionButton>
+                     <AccordionPanel pb={4}>
+                       <NFTTypeFilter value={nftTypeForm.values} onChange={(value) => nftTypeForm.setValues(value)} />
+                     </AccordionPanel>
+                   </AccordionItem>
+
                    <AccordionItem>
-                     <h2>
-                       <AccordionButton fontWeight={'bold'}>
-                         <Box flex='1' textAlign='left'>
-                           <Image src={CollectionsIcon} display={'inline-block'} pos={'relative'} top={'-1px'} mr={'8px'} />
-                           Collections
-                         </Box>
-                         <AccordionIcon />
-                       </AccordionButton>
-                     </h2>
+                     <AccordionButton py={'30px'} fontWeight={'bold'}>
+                       <Box flex='1' textAlign='left'>
+                         <Image src={CollectionsIcon} display={'inline-block'} pos={'relative'} top={'-1px'} mr={'8px'} />
+                         Collections
+                       </Box>
+                       <AccordionIcon />
+                     </AccordionButton>
                      <AccordionPanel pb={4}>
                        <ApiCollectionsFiltersMobile
                          allCollections={userCollections}
