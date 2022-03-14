@@ -2,6 +2,7 @@ import { FC, createContext, useContext, useState, useEffect, ReactNode } from 'r
 import { useFormik, FormikProps} from 'formik';
 import { useInfiniteQuery, useQuery, InfiniteData } from 'react-query';
 import { utils } from 'ethers';
+import { useMedia } from 'react-use';
 
 // API Calls & Interfaces
 import { getUserNFTsApi, IGetUserNFTsProps } from '../../../../../../api';
@@ -14,6 +15,7 @@ import { TokenTicker } from '../../../../../../enums';
 const PER_PAGE = 12;
 import { coins } from '../../../../../../mocks';
 import { getTokenAddressByTicker } from '../../../../../../constants';
+import { breakpoints } from '../../../../../../theme/constants';
 
 // Interfaces
 import {
@@ -52,11 +54,14 @@ export interface ISearchFiltersContext {
 	hasSelectedNftTypeFilter: () => boolean;
 	hasSelectedCollectionFilter: () => boolean;
 	hasSelectedOrderBookFilters: () => boolean;
+	hasSearchBarFilter: () => boolean;
 	disabledSortByFilters: boolean;
 	setDisabledSortByFilters: (v: boolean) => void;
 	selectedCollections: ISearchBarDropdownCollection[];
 	setSelectedCollections: (v: ISearchBarDropdownCollection[]) => void;
 	getSelectedFiltersCount: () => number;
+	setShowResultsMobile: (v: boolean) => void;
+	showResultsMobile: boolean;
 	// --- FORMS ---
 	searchBarForm: FormikProps<ISearchBarValue>;
 	collectionFilterForm: FormikProps<ICollectionFilterValue>;
@@ -84,7 +89,6 @@ export interface ISearchFiltersContext {
 	isLoadingCollectionNFTs: boolean;
 	isIdleCollectionNFTs: boolean;
 	orders: InfiniteData<IOrdersResult> | undefined;
-	// --- API RETURNED DATA END ---
 	// --- FILTERS VISIBILITY ---
 	showSaleTypeFilters: boolean;
 	showNFTTypeFilters: boolean;
@@ -117,6 +121,8 @@ const FiltersContextProvider = (props: IFiltersProviderProps) => {
 	const [showCollectionFilters, setShowCollectcionFilters] = useState<boolean>(false);
 	const [selectedCollections, setSelectedCollections] = useState<ISearchBarDropdownCollection[]>([]);
 	const [disabledSortByFilters, setDisabledSortByFilters] = useState<boolean>(false);
+	const [showResultsMobile, setShowResultsMobile] = useState<boolean>(true); // In order for the get user NFTs querry to kick in Mobile on mount, on success set it to false
+	const isMobile = useMedia(`(max-width: ${breakpoints.md})`);
 
 	// --------- FORMIK ---------
 	const searchBarForm = useFormik<ISearchBarValue>({
@@ -192,6 +198,10 @@ const FiltersContextProvider = (props: IFiltersProviderProps) => {
 		return collectionFilterForm.dirty;
 	}
 
+	const hasSearchBarFilter = () => {
+		return searchBarForm.dirty;
+	}
+
 	/**
 	 * Gets the selected filters type count
 	 * @returns number
@@ -227,6 +237,7 @@ const FiltersContextProvider = (props: IFiltersProviderProps) => {
 
 	// --------- SETTERS ---------
 	const clearAllForms = () => {
+		isMobile && setShowResultsMobile(true);
 		saleTypeFilterForm.resetForm();
     nftTypeFilterForm.resetForm();
     priceRangeFilterForm.resetForm();
@@ -234,6 +245,7 @@ const FiltersContextProvider = (props: IFiltersProviderProps) => {
     sortByForm.resetForm();
 		searchBarForm.resetForm();
 		setSelectedCollections([]);
+		isMobile && setShowResultsMobile(false);
 	}
 
 	// --------- HELPERS ---------
@@ -366,6 +378,23 @@ const FiltersContextProvider = (props: IFiltersProviderProps) => {
 		return result;
 	}
 
+	// --------- FLAGS ---------
+	const _getUserNftsEnabled = () => {
+		const isMobilePopupSearch = (!!userAddress && isMobile && showResultsMobile);
+		const isMobileSearchBar = hasSearchBarFilter() && isMobile && !showResultsMobile;
+		const isDekstopSearch = !isMobile && !!userAddress;
+
+		return isMobilePopupSearch || isMobileSearchBar || isDekstopSearch;
+	}
+
+	const _getOrdersEnabled = () => {
+		const isMobileSearch = isMobile && showResultsMobile && hasSelectedOrderBookFilters();
+		const isDekstopSearch = !isMobile && hasSelectedOrderBookFilters();
+
+		return isMobileSearch || isDekstopSearch;
+	}
+
+
 	// --------- QUERY HANDLERS ---------
 	/**
 	 * Fetches all user collections in which the user has NFTs from the Scraper API
@@ -488,10 +517,13 @@ const FiltersContextProvider = (props: IFiltersProviderProps) => {
 		'NFTs'
 	], _handleGetUserNFTs,
 		{
-			enabled: !!userAddress,
+			enabled: _getUserNftsEnabled(),
 			retry: false,
 			getNextPageParam: (lastPage, pages) => {
 				return pages.length * PER_PAGE < lastPage.total ? pages.length + 1 : undefined;
+			},
+			onSuccess: () => {
+				isMobile && setShowResultsMobile(false);
 			},
 			onError: (error) => {
 				// TODO:: think how to handle the errors
@@ -548,13 +580,13 @@ const FiltersContextProvider = (props: IFiltersProviderProps) => {
 			sortByForm.values,
   	], _handleGetOrders,
 		{
-			enabled: hasSelectedOrderBookFilters(),
+			enabled: _getOrdersEnabled(),
 			retry: false,
 			getNextPageParam: (lastPage, pages) => {
 				return pages.length * PER_PAGE < lastPage.total ? pages.length + 1 : undefined;
 			},
 			onSuccess: (result) => {
-				console.log('onSuccess 5:', result);
+				isMobile && setShowResultsMobile(false);
 			}
   	}
 	);
@@ -567,6 +599,8 @@ const FiltersContextProvider = (props: IFiltersProviderProps) => {
 		setUserAddress: setUserAddress,
 		setCollectionAddress: setCollectionAddress,
 		disabledSortByFilters,
+		setShowResultsMobile,
+		showResultsMobile,
 		// --- GETTERS ---
 		hasSelectedSaleTypeFilter,
 		hasSelectedPriceFilter,
@@ -574,6 +608,7 @@ const FiltersContextProvider = (props: IFiltersProviderProps) => {
 		hasSelectedNftTypeFilter,
 		hasSelectedCollectionFilter,
 		hasSelectedOrderBookFilters,
+		hasSearchBarFilter,
 		getSelectedFiltersCount,
 		// --- SETTERS ---
 		clearAllForms,

@@ -7,6 +7,8 @@ import './SearchFilters.scss';
 
 // Icons
 import filtersIcon from '../../../../../../../../assets/images/marketplace/filters.svg';
+import closeIcon from '../../../../../../../../assets/images/close-menu.svg';
+
 
 // Contexts
 import { useFiltersContext } from '../search-filters.context';
@@ -16,10 +18,10 @@ import {
   SearchNFTsField,
   SortingDropdowns,
   ApiCollectionFilters,
-  BrowseFiltersPopup,
   SaleTypeFilter,
   NFTTypeFilter,
   PriceRangeFilter,
+  ApiCollectionsFiltersMobile,
   } from '../index';
 
 export const SearchFilters = () => {
@@ -46,6 +48,8 @@ export const SearchFilters = () => {
     hasSelectedCollectionFilter,
     clearAllForms,
     getSelectedFiltersCount,
+    setShowResultsMobile,
+    showResultsMobile,
   } = useFiltersContext();
 
   useEffect(() => {
@@ -162,13 +166,32 @@ export const SearchFilters = () => {
           }
         >
           {(close: any) => (
-            <BrowseFiltersPopup
-              onClose={close}
-              allCollections={userCollections}
-              handleCollectionSearch={(value) => collectionFilterForm.setValues(value)}
-              selectedCollections={selectedCollections}
-              setSelectedCollections={setSelectedCollections}
-            />
+            <div className="browse__nft__filter__popup">
+               <div className="browse__nft__filter__header">
+                 <img className="close" src={closeIcon} alt="Close" onClick={close} aria-hidden="true" />
+                 <h3>Filters</h3>
+                 <button type="button" className="clear__all" onClick={clearAllForms}>
+                   Clear all
+                 </button>
+               </div>
+               <div className="browse__nft__filter__body">
+                 <ApiCollectionsFiltersMobile
+                   allCollections={userCollections}
+                   handleCollectionSearch={(value) => collectionFilterForm.setValues(value)}
+                   selectedCollections={selectedCollections}
+                   setSelectedCollections={setSelectedCollections}
+                 />
+               </div>
+               <div className="show--results">
+                 <button
+                   type="button"
+                   className="light-button"
+                   disabled={false}
+                   onClick={() => setShowResultsMobile(true)}>
+                     Show results
+                 </button>
+               </div>
+             </div>
           )}
         </Popup>
         {selectedCollections.length > 0 && (

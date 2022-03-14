@@ -15,8 +15,6 @@ import { ISearchBarDropdownCollection } from '../../../../../../nft/types';
 import { ICollectionFilterValue } from '../index';
 
 interface ICollectionsMobileProps {
-  collectionName: string,
-  setCollectionName: (value: string) => void,
   handleCollectionSearch: (value: ICollectionFilterValue) => void,
   allCollections: ISearchBarDropdownCollection[],
   selectedCollections: ISearchBarDropdownCollection[],
@@ -24,24 +22,32 @@ interface ICollectionsMobileProps {
 }
 
 export const ApiCollectionsFiltersMobile = (props: ICollectionsMobileProps) => {
+  const [collectionName, setCollectionName] = useState<string>('');
 
   const handleSearchCollection = (e: React.ChangeEvent<HTMLInputElement>) => {
     const name = e.target.value;
 
-    props.setCollectionName(name);
+    setCollectionName(name);
   };
 
   const handleSelectCollection = (c: ISearchBarDropdownCollection) => {
     const alreadySelected = props.selectedCollections.find((item: ISearchBarDropdownCollection) => item.id === c.id);
 
+    const r: ICollectionFilterValue = {
+      contractAddress: c.address,
+    };
+
     if (alreadySelected) {
       // The user want's to de-select a collection from the list
       props.setSelectedCollections([]);
+      r.contractAddress = '';
+      props.handleCollectionSearch(r);
       return;
     };
 
     const newSelectedCollections = [c];
     props.setSelectedCollections(newSelectedCollections);
+    props.handleCollectionSearch(r);
   };
 
   return (
@@ -61,12 +67,12 @@ export const ApiCollectionsFiltersMobile = (props: ICollectionsMobileProps) => {
               type="text"
               placeholder="Search collections"
               onChange={handleSearchCollection}
-              value={props.collectionName}
+              value={collectionName}
             />
             <img src={searchIcon} alt="Search" />
           </div>
           {props.allCollections
-            .filter((item: ISearchBarDropdownCollection) => item.name.toLowerCase().includes(props.collectionName.toLowerCase()))
+            .filter((item: ISearchBarDropdownCollection) => item.name.toLowerCase().includes(collectionName.toLowerCase()))
             .map((col: ISearchBarDropdownCollection) => (
               <div
                 className="collections--list"
