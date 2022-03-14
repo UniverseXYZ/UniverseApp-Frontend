@@ -479,6 +479,13 @@ const FiltersContextProvider = (props: IFiltersProviderProps) => {
 		return { total, data: result };
 	}
 
+	const _handleGetCollectionNFTs = async ({ pageParam = 1 }) => {
+		const searchQuery = searchBarForm.values.searchValue;
+
+		const collectionNFTs = await GetCollectionNFTsApi(utils.getAddress(collectionAddress), pageParam, PER_PAGE, searchQuery);
+		return collectionNFTs;
+	};
+
 	// --------- QUERIES ---------
 	/**
    * Query for fetching user Collections
@@ -546,18 +553,18 @@ const FiltersContextProvider = (props: IFiltersProviderProps) => {
 		[
 			'collection-nfts',
 			collectionAddress,
-		],
-		({ pageParam = 1 }) => GetCollectionNFTsApi(utils.getAddress(collectionAddress), pageParam, PER_PAGE),
-			{
-				enabled: !!collectionAddress,
-				retry: false,
-				getNextPageParam: (lastPage, pages) => {
-					return pages.length * PER_PAGE < lastPage.total ? pages.length + 1 : undefined;
-				},
-				onError: ({ error, message }) => {
-					// TODO:: Handle Errors ?
-				},
+			searchBarForm.values,
+		], _handleGetCollectionNFTs,
+		{
+			enabled: !!collectionAddress,
+			retry: false,
+			getNextPageParam: (lastPage, pages) => {
+				return pages.length * PER_PAGE < lastPage.total ? pages.length + 1 : undefined;
 			},
+			onError: () => {
+				// TODO:: Handle Errors ?
+			},
+		},
   );
 
 
