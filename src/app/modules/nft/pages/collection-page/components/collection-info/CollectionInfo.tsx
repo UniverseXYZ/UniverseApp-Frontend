@@ -36,12 +36,15 @@ export const CollectionInfo = () => {
 
   const { 
 		collection,
-		isLoadingCollectionApi,
-		isFetchingCollectionApi,
-		isIdleCollectionApi,
+		// isLoadingCollectionApi,
+		// isFetchingCollectionApi,
+		// isIdleCollectionApi,
 		collectionAddress,
-		owners,
-		collectionAdditionalData,
+		collectionGeneralInfo,
+		collectionOrderBookData,
+    isLoadingCollectionGeneralInfo,
+    isFetchingCollectionGeneralInfo,
+    isIdleCollectionGeneralInfo,
 	 } = useCollectionPageData();
 
   const { setShowError, setErrorTitle, setErrorBody } = useErrorContext() as any;
@@ -86,21 +89,22 @@ export const CollectionInfo = () => {
 	const hasCollectionNFTs = collectionNFTs?.pages?.length && collectionNFTs.pages[0].data?.length;
 	const waitingOrders = isFethingOrders || isLoadingOrders || isIdleOrders;
 	const waitingCollectionNFTs = isFetchingCollectionNFTs || isLoadingCollectionNFTs || isIdleCollectionNFTs;
-	const waitingCollectionApiInfo = isFetchingCollectionApi || isLoadingCollectionApi || isIdleCollectionApi;
+	// const waitingCollectionOffChainInfo = isFetchingCollectionApi || isLoadingCollectionApi || isIdleCollectionApi;
+	const waitingCollectionGeneralInfo = isLoadingCollectionGeneralInfo || isFetchingCollectionGeneralInfo || isIdleCollectionGeneralInfo;
 
   return (
       <>
-        {waitingCollectionApiInfo && !collection ? (
+        {waitingCollectionGeneralInfo && !collectionGeneralInfo ? (
           <div className='loader-wrapper'>
             <CollectionPageLoader />
           </div>
-        ) : !waitingCollectionApiInfo && !collection ? (
+        ) : !waitingCollectionGeneralInfo && !collectionGeneralInfo ? (
           <NotFound />
         ) : (
           <Box sx={{
               bg: `url(${BGImage}) center / cover`
             }}>
-            <Cover selectedCollection={collection}/>
+            <Cover selectedCollection={collection} collectionGeneralInfo={collectionGeneralInfo}/>
             <Box sx={{
                 position: 'relative',
                 padding: '0 60px 80px',
@@ -122,7 +126,8 @@ export const CollectionInfo = () => {
                                 borderRadius={'50%'}
                                 pointerEvents={'none'}
                                 objectFit={'cover'}
-                                src={collection.coverUrl}
+                                name={collectionGeneralInfo?.name || collection?.name}
+                                src={collection?.coverUrl}
                             />
                             <Flex direction={'column'} alignItems={'flex-start'}>
                                 <Text
@@ -132,10 +137,10 @@ export const CollectionInfo = () => {
                                 color={'#fff'}
                                 ml={'20px'}
                             >
-                                {collection.name}
+                                {collectionGeneralInfo?.name || collection.name}
                             </Text>
                             <Link
-                              href={`${process.env.REACT_APP_ETHERSCAN_URL}/address/${collection.address}`}
+                              href={`${process.env.REACT_APP_ETHERSCAN_URL}/address/${collectionGeneralInfo?.contractAddress}`}
                               isExternal
                               padding={'4px 10px'}
                               ml={'18px'}
@@ -144,7 +149,7 @@ export const CollectionInfo = () => {
                               backgroundColor={'#000'}
                               opacity={'0.6'}
                               _hover={{ textDecoration: 'none' }}>
-                                <Text color={'#4D66EB'} fontSize={'12px'} fontWeight={600}>{shortenEthereumAddress(collection.address)}</Text>
+                                <Text color={'#4D66EB'} fontSize={'12px'} fontWeight={600}>{shortenEthereumAddress(collectionGeneralInfo?.contractAddress)}</Text>
                             </Link>
                             </Flex>
                             <SocialLinks
@@ -163,7 +168,7 @@ export const CollectionInfo = () => {
                           boxSizing: 'border-box',
                           boxShadow: '0px 10px 30px rgba(0, 0, 0, 0.1)',
                         }}>
-                        <CollectionStatistics nftsCount={totalNftsCount} ownersCount={owners?.owners} floorPrice={collectionAdditionalData?.floorPrice} volumeTraded={collectionAdditionalData?.volumeTraded} />
+                          <CollectionStatistics nftsCount={totalNftsCount} ownersCount={collectionGeneralInfo?.owners} floorPrice={collectionOrderBookData?.floorPrice} volumeTraded={collectionOrderBookData?.volumeTraded} />
                         </Box>
                     </Box>
                 </Flex>

@@ -6,11 +6,11 @@ import { useAuthContext } from '../../contexts/AuthContext';
 import { getCollectionBackgroundColor } from '../../utils/helpers';
 import { useMyNftsContext } from '../../contexts/MyNFTsContext';
 
-const Cover = ({ selectedCollection }) => {
+const Cover = ({ selectedCollection, collectionGeneralInfo }) => {
   const { deployedCollections, address } = useAuthContext();
   const { setMyMintableCollections, myMintableCollections } = useMyNftsContext();
   const ref = useRef(null);
-  const [bgImage, setBgImage] = useState(selectedCollection.bgImage);
+  const [bgImage, setBgImage] = useState(selectedCollection?.bgImage);
   const [imageUploadError, setError] = useState('');
 
   const onInputChange = async (e) => {
@@ -49,7 +49,7 @@ const Cover = ({ selectedCollection }) => {
       )}
       {bgImage ? (
         <img className="bg" src={URL.createObjectURL(bgImage)} alt={selectedCollection.name} />
-      ) : !selectedCollection.bannerUrl && selectedCollection.coverUrl ? (
+      ) : !selectedCollection?.bannerUrl && selectedCollection?.coverUrl ? (
         <>
           <img
             className="bg blur"
@@ -58,14 +58,16 @@ const Cover = ({ selectedCollection }) => {
           />
           <div className="blured" />
         </>
-      ) : selectedCollection.bannerUrl ? (
+      ) : selectedCollection?.bannerUrl ? (
         <img className="bg" src={selectedCollection.bannerUrl} alt={selectedCollection.name} />
       ) : (
         <div
           style={{
             width: '100%',
             height: '100%',
-            backgroundColor: getCollectionBackgroundColor(selectedCollection),
+            backgroundColor: getCollectionBackgroundColor(
+              selectedCollection || collectionGeneralInfo
+            ),
           }}
         />
       )}
@@ -75,7 +77,13 @@ const Cover = ({ selectedCollection }) => {
 };
 
 Cover.propTypes = {
-  selectedCollection: PropTypes.oneOfType([PropTypes.object]).isRequired,
+  selectedCollection: PropTypes.oneOfType([PropTypes.object]),
+  collectionGeneralInfo: PropTypes.oneOfType([PropTypes.object]),
+};
+
+Cover.defaultProps = {
+  selectedCollection: {},
+  collectionGeneralInfo: {},
 };
 
 export default Cover;

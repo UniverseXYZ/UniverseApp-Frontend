@@ -2,17 +2,20 @@ import { FC, createContext, useContext } from 'react';
 import { useQuery } from 'react-query';
 import { useParams } from 'react-router-dom';
 
-import { ICollection, ICollectionAdditionalData, ICollectionOwnersCountResponse } from '../../types';
-import { GetCollectionAdditionalData, GetCollectionApi, GetCollectionOwners } from '../../api';
+import { ICollection, ICollectionOrderBookData, ICollectionInfoResponse } from '../../types';
+import { GetCollectionOrderBookData, GetCollectionApi, GetCollectionGeneralInfo } from '../../api';
 
 export interface ICollectionPageContext {
   collection: ICollection;
   collectionAddress: string;
-  owners: ICollectionOwnersCountResponse;
-  collectionAdditionalData: ICollectionAdditionalData;
+  collectionGeneralInfo: ICollectionInfoResponse | undefined;
+  collectionOrderBookData: ICollectionOrderBookData | undefined;
   isLoadingCollectionApi: boolean;
   isFetchingCollectionApi: boolean;
   isIdleCollectionApi: boolean;
+  isLoadingCollectionGeneralInfo: boolean;
+  isFetchingCollectionGeneralInfo: boolean;
+  isIdleCollectionGeneralInfo: boolean;
 }
 
 export const CollectionPageContext = createContext<ICollectionPageContext>({} as ICollectionPageContext);
@@ -35,26 +38,34 @@ const CollectionPageProvider: FC = ({ children }) => {
     { onSuccess: (collection) => console.log('collection', collection) },
   );
 
-  const { data: owners } = useQuery(
+  const {
+    data: collectionGeneralInfo,
+    isLoading: isLoadingCollectionGeneralInfo,
+    isFetching: isFetchingCollectionGeneralInfo,
+    isIdle: isIdleCollectionGeneralInfo
+   } = useQuery(
     ['owners', collectionAddress],
-    () => GetCollectionOwners(`${collectionAddress}`),
-    { onSuccess: (owners) => console.log('owners', owners) },
+    () => GetCollectionGeneralInfo(`${collectionAddress}`),
+    { onSuccess: (owners) => console.log('collectionGeneralInfo', owners) },
   );
 
-  const { data: collectionAdditionalData } = useQuery(
+  const { data: collectionOrderBookData } = useQuery(
     ['collectionAdditionalData', collectionAddress],
-    () => GetCollectionAdditionalData(`${collectionAddress}`),
-    { onSuccess: (collectionAdditionalData) => console.log('collectionAdditionalData', collectionAdditionalData) },
+    () => GetCollectionOrderBookData(`${collectionAddress}`),
+    { onSuccess: (collectionAdditionalData) => console.log('collectionOrderBookData', collectionAdditionalData) },
   );
 
   const value: ICollectionPageContext = {
     collection: collection as ICollection,
     collectionAddress,
-    owners: owners as ICollectionOwnersCountResponse,
-    collectionAdditionalData: collectionAdditionalData as ICollectionAdditionalData,
+    collectionGeneralInfo: collectionGeneralInfo,
+    collectionOrderBookData: collectionOrderBookData,
     isLoadingCollectionApi,
     isFetchingCollectionApi,
     isIdleCollectionApi,
+    isLoadingCollectionGeneralInfo,
+    isFetchingCollectionGeneralInfo,
+    isIdleCollectionGeneralInfo,
   };
 
   return (

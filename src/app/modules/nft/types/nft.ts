@@ -152,11 +152,13 @@ export interface INFTBackend
   updatedAt: string;
 }
 
-export interface ICollectionOwnersCountResponse {
+export interface ICollectionInfoResponse {
   owners: number;
+  contractAddress: string;
+  name: string;
 }
 
-export interface ICollectionAdditionalData {
+export interface ICollectionOrderBookData {
   floorPrice: string;
   volumeTraded: string;
 }
