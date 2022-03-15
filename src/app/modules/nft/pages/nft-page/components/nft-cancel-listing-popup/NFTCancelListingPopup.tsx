@@ -9,7 +9,7 @@ import {
   ModalOverlay,
   Text,
 } from '@chakra-ui/react';
-import React, { useCallback, useMemo } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useMutation, useQueryClient } from 'react-query';
 import { Contract } from 'ethers';
 
@@ -40,12 +40,26 @@ export const NFTCancelListingPopup = ({ order, isOpen, onClose, handleCancel }: 
   const { signer } = useAuthContext();
   const { setShowLoading, setLoadingTitle, setLoadingBody, closeLoading, setTransactions } = useLoadingPopupContext();
   const queryClient = useQueryClient();
+
+  const [orderInterval, setOrderInterval] = useState<NodeJS.Timer>();
+  
   const contract = useMemo(
     () => new Contract(`${process.env.REACT_APP_MARKETPLACE_CONTRACT}`, contractsData.Marketplace.abi, signer),
     [order, signer]
   );
 
   const encodeOrderMutation = useMutation(EncodeOrderApi);
+
+
+  useEffect(() => {
+    return () => {
+      if (orderInterval) {
+        clearInterval(orderInterval);
+      }
+    }
+  }, [])
+  
+
 
   const handleCancelListing = useCallback(async () => {
     const orderData: any = { ...order };
@@ -106,6 +120,7 @@ export const NFTCancelListingPopup = ({ order, isOpen, onClose, handleCancel }: 
 
     }, 4000);
 
+    setOrderInterval(indexInterval);
   }, [contract, order, onClose, handleCancel]);
 
   return (

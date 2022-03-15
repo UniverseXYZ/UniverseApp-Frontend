@@ -15,7 +15,7 @@ import { TokenTicker } from '../../../../enums';
 import { getTokenByAddress } from '../../../../constants';
 import { NFTCheckoutPopup } from '../../pages/nft-page/components';
 import { shortenEthereumAddress } from '../../../../../utils/helpers/format';
-import { nftKeys, orderKeys } from '../../../../utils/query-keys';
+import { nftKeys, orderKeys, userKeys } from '../../../../utils/query-keys';
 import { useNftCheckoutPopupContext } from '../../../../providers/NFTCheckoutProvider';
 
 type IRenderFuncProps = {
@@ -91,12 +91,7 @@ export const NftItem = (
   );
 
   const { data: creator, isLoading: isLoadingCreator } = useQuery(
-    nftKeys.nftCreator(
-      {
-        collectionAddress: collection?.address || '',
-        tokenId: _NFT.tokenId || ""
-      },
-      NFT?._creatorAddress || ""),
+    userKeys.info(NFT?._creatorAddress || ""),
     () => GetUserApi(NFT?._creatorAddress as string),
     {
       enabled: !!NFT?._creatorAddress,
@@ -105,12 +100,7 @@ export const NftItem = (
   );
 
   const { data: owner, isLoading: isLoadingOwner } = useQuery(
-    nftKeys.nftOwner(
-      {
-        collectionAddress: collection?.address || '',
-        tokenId: _NFT.tokenId || ""
-      },
-      NFT?._ownerAddress || ""),
+    userKeys.info(NFT?._ownerAddress || ""),
     () => GetUserApi(NFT?._ownerAddress as string),
     {
       enabled: !!NFT?._ownerAddress,

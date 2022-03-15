@@ -1,6 +1,6 @@
 import { FC, createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { useFormik, FormikProps} from 'formik';
-import { useInfiniteQuery, useQuery, InfiniteData } from 'react-query';
+import { useInfiniteQuery, useQuery, InfiniteData, useQueryClient } from 'react-query';
 import { utils } from 'ethers';
 import { useMedia } from 'react-use';
 
@@ -27,7 +27,7 @@ import {
 	SortOrderOptions,
 } from '../search-filters';
 import { ICollectionFilterValue } from './collections-filter/types';
-import { nftKeys } from '../../../../../../utils/query-keys';
+import { nftKeys, orderKeys } from '../../../../../../utils/query-keys';
 
 interface INFTsResult {
   page: number,
@@ -126,6 +126,9 @@ const FiltersContextProvider = (props: IFiltersProviderProps) => {
 	const [disabledSortByFilters, setDisabledSortByFilters] = useState<boolean>(false);
 	const [showResultsMobile, setShowResultsMobile] = useState<boolean>(true); // In order for the get user NFTs querry to kick in Mobile on mount, on success set it to false
 	const isMobile = useMedia(`(max-width: ${breakpoints.md})`);
+
+  // --------- QUERY CLIENT ---------
+  const queryClient = useQueryClient();
 
 	// --------- FORMIK ---------
 	const searchBarForm = useFormik<ISearchBarValue>({
@@ -371,6 +374,8 @@ const FiltersContextProvider = (props: IFiltersProviderProps) => {
 
       const NFT: INFT = response.value;
 
+      queryClient.setQueryData(nftKeys.nftInfo({collectionAddress: NFT._collectionAddress || "", tokenId: NFT.tokenId}), NFT)
+
       const key = `${NFT.collection?.address}:${NFT.tokenId}`;
 
       acc[key] = NFT;
@@ -494,6 +499,7 @@ const FiltersContextProvider = (props: IFiltersProviderProps) => {
 			switch (order.make.assetType.assetClass) {
 				case 'ERC721':
 					const assetType = order.make.assetType as IERC721AssetType;
+          queryClient.setQueryData(orderKeys.listing({collectionAddress: assetType.contract, tokenId: assetType.tokenId.toString()}), order)
 					NFTsRequests.push(GetNFT2Api(assetType.contract, assetType.tokenId))
 					break;
 			}
@@ -503,6 +509,7 @@ const FiltersContextProvider = (props: IFiltersProviderProps) => {
 
 		// Map the results
 		const result = _mapOrders(orders, nfts);
+    
 		return { total, data: result };
 	}
 

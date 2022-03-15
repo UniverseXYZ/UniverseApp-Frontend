@@ -48,6 +48,9 @@ import { useAuthContext } from '../../../../../../../contexts/AuthContext';
 import { Status } from './components/tab-offers/components/refresh-metadata-popup/enums';
 import { RefreshMetadataPopup } from './components/tab-offers/components/refresh-metadata-popup';
 import { ReportStatusPopup } from './components/tab-offers/components/report-status-popup';
+import { NFTAcceptOfferPopup } from './components/tab-offers/components';
+import { useQueryClient } from 'react-query';
+import { userKeys } from '../../../../../../utils/query-keys';
 
 // TODO: hide metadata tab for not Polymorph NFT type
 export const NFTInfo = () => {
@@ -62,6 +65,10 @@ export const NFTInfo = () => {
   const [highestOfferCreator, setHighestOfferCreator] = useState<IUser>();
   const [offerUsersMap, setUsersMap] = useState<Record<string, IUser>>({});
   const [refreshMetadataStatus, setRefreshMetadataStatus] = useState(Status.HIDDEN);
+  const [showOfferPopup, setShowOfferPopup] = useState(false);
+  const [offerForAccept, setOfferForAccept] = useState<IOrder | null>(null);
+
+  const queryClient = useQueryClient();
 
   const handleClickViewCollection = useCallback(() => {
     if (collectionAddress) {
@@ -144,8 +151,10 @@ export const NFTInfo = () => {
           if(response.status !== 'fulfilled') {
             return acc;
           }
-
           const user: IUser = response.value;
+
+          queryClient.setQueryData(userKeys.info(user.address), user);
+
           acc[user.address] = user;
           return acc;
         }, {});
@@ -253,7 +262,7 @@ export const NFTInfo = () => {
                       {/* TODO: Add implementation after release */}
                       {/* <TabPanel><TabOwners /></TabPanel> */}
                       {/* <TabPanel><TabBids /></TabPanel> */}
-                      <TabPanel><TabOffers nft={NFT} offers={offers?.orders} usersMap={offerUsersMap}/></TabPanel>
+                      <TabPanel><TabOffers setOfferForAccept={setOfferForAccept} setShowOfferPopup={setShowOfferPopup} nft={NFT} offers={offers?.orders} usersMap={offerUsersMap}/></TabPanel>
                       <TabPanel><TabHistory historyData={history}/></TabPanel>
                     </TabPanels>
                   </Tabs>
@@ -267,6 +276,15 @@ export const NFTInfo = () => {
                 />
               </Box>
             </Box>
+            {showOfferPopup && (
+              <NFTAcceptOfferPopup
+                NFT={NFT}
+                order={offerForAccept || {} as IOrder}
+                isOpen={showOfferPopup}
+                onClose={() => setShowOfferPopup(false)}
+              />
+            )}
+
             {moreFromCollection && (
               <Box {...styles.MoreNFTsWrapperStyle}>
                 <Heading {...styles.MoreNFTsTitleStyle}>More from this collection</Heading>

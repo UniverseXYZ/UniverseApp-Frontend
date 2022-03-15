@@ -41,10 +41,11 @@ import { LineTabList } from '../../../../components';
 import { useThemeContext } from '../../../../../contexts/ThemeContext';
 import { BundlePageProvider, useBundlePage } from './BundlePage.provider';
 import { TabNFTs } from './components';
-import { IERC721BundleAssetType, INFT } from '../../types';
+import { IERC721BundleAssetType, INFT, IOrder } from '../../types';
 import { isNFTAssetAudio, isNFTAssetImage, isNFTAssetVideo } from '../../helpers';
 import { NFTRelationType } from '../../enums';
 import { SwiperArrowButton } from '../../../../components/swiper-arrow-button';
+import { NFTAcceptOfferPopup } from '../nft-page/components/nft-info/components/tab-offers/components';
 
 export const BundlePageContent = () => {
   const prevRef = useRef(null);
@@ -57,6 +58,8 @@ export const BundlePageContent = () => {
   const { creator, NFTs, isLoading, moreFromCollection, order } = useBundlePage();
 
   const [selectedNFTIdx, setSelectedNFTIdx] = useState(0);
+  const [showOfferPopup, setShowOfferPopup] = useState(false);
+  const [offerForAccept, setOfferForAccept] = useState<IOrder | null>(null);
 
   const handleClickViewCollection = useCallback(() => {
     if (moreFromCollection && moreFromCollection[0].collection) {
@@ -171,7 +174,7 @@ export const BundlePageContent = () => {
               <TabPanels sx={{ '> div' : { px: 0, pb: 0 }}}>
                 <TabPanel><TabNFTs NFTs={NFTs} /></TabPanel>
                 {/* <TabPanel><TabBids /></TabPanel> */}
-                <TabPanel><TabOffers /></TabPanel>
+                <TabPanel><TabOffers setOfferForAccept={setOfferForAccept} setShowOfferPopup={setShowOfferPopup} /></TabPanel>
                 <TabPanel><TabHistory /></TabPanel>
               </TabPanels>
             </Tabs>
@@ -179,6 +182,15 @@ export const BundlePageContent = () => {
           <NFTBuySection NFTs={NFTs} order={order} />
         </Box>
       </Box>
+      {showOfferPopup && (
+        <NFTAcceptOfferPopup
+          NFT={NFTs[0]}
+          order={offerForAccept || {} as IOrder}
+          isOpen={showOfferPopup}
+          onClose={() => setShowOfferPopup(false)}
+        />
+      )}
+
       {moreFromCollection && (
         <Box {...styles.MoreNFTsWrapperStyle}>
           <Heading {...styles.MoreNFTsTitleStyle}>More from this collection</Heading>

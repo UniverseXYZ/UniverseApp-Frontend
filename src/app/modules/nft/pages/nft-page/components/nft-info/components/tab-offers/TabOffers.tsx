@@ -1,5 +1,5 @@
 import { Box } from '@chakra-ui/react';
-import {  useState } from 'react';
+import {  useEffect, useState } from 'react';
 import { NFTAcceptOfferPopup, OffersEmpty } from './components';
 import { IERC721AssetType, INFT, IOrder, IUser } from '../../../../../../types';
 import { NFTOffer } from './components/nft-offer/NFTOffer';
@@ -19,6 +19,8 @@ interface ITabOffersProps {
   order?: IOrder;
   offers?: IOrder[];
   usersMap?: Record<string, IUser>;
+  setShowOfferPopup: React.Dispatch<React.SetStateAction<boolean>>
+  setOfferForAccept: React.Dispatch<React.SetStateAction<IOrder | null>>
 }
 
 enum CancelingText {
@@ -27,17 +29,26 @@ enum CancelingText {
   INDEXING_TAKING_TOO_LONG = "Receving the event from the blockchain is taking longer than expected. Please be patient."
 }
 
-export const TabOffers:React.FC<ITabOffersProps> = ({nft, offers, usersMap}) => {
+export const TabOffers:React.FC<ITabOffersProps> = ({nft, offers, usersMap, setShowOfferPopup, setOfferForAccept}) => {
   const { signer } = useAuthContext() as any;
-  const [offerForAccept, setOfferForAccept] = useState<IOrder | null>(null);
   const [offerCanceling, setOfferCanceling] = useState(false);
   const [offerCancelingText, setOfferCancelingText] = useState(CancelingText.PROGRESS);
+  const [orderInterval, setOrderInterval] = useState<NodeJS.Timer>();
   const queryClient = useQueryClient();
 
   // @ts-ignore
   const { contracts: contractsData } = Contracts[process.env.REACT_APP_NETWORK_CHAIN_ID];
 
   const encodeOrderMutation = useMutation(EncodeOrderApi);
+
+  useEffect(() => {
+    return () => {
+      if (orderInterval) {
+        clearInterval(orderInterval);
+      }
+    }
+  }, [])
+  
 
   const handleCancelOffer = async (offer: IOrder) => {
     setOfferCanceling(true);
@@ -69,7 +80,7 @@ export const TabOffers:React.FC<ITabOffersProps> = ({nft, offers, usersMap}) => 
       
       // This polling mechanic is temporary until we have marketplace web sockets
       let fetchCount = 0;
-      const indexInterval = setInterval(async () => {
+      const orderIndexing = setInterval(async () => {
         fetchCount += 1;
         const stringifiedOffers = offers?.map(offer => offer.id).join('');
 
@@ -87,7 +98,7 @@ export const TabOffers:React.FC<ITabOffersProps> = ({nft, offers, usersMap}) => 
         // Change query information about order
         const newStringifiedoffers = newOffers?.orders?.map(offer => offer.id).join('');
         if (stringifiedOffers !== newStringifiedoffers) {
-          clearInterval(indexInterval);
+          clearInterval(orderIndexing);
           queryClient.setQueryData(orderKeys.offers({tokenId, collectionAddress}), newOffers || undefined);
           queryClient.invalidateQueries(orderKeys.listing({tokenId, collectionAddress}));
           setOfferCanceling(false);
@@ -100,18 +111,12 @@ export const TabOffers:React.FC<ITabOffersProps> = ({nft, offers, usersMap}) => 
   
       }, 4000);  
 
+      setOrderInterval(orderIndexing);
+
     } catch (error) {
       console.error(error);
       setOfferCanceling(false);
     }
-  }
-
-
-  const handleClose = () => {
-    setTimeout(() => {
-      setOfferForAccept(null);
-      location.reload();
-    }, 1000)
   }
   
   return !offers?.length ? <OffersEmpty /> : (
@@ -123,18 +128,11 @@ export const TabOffers:React.FC<ITabOffersProps> = ({nft, offers, usersMap}) => 
             owner={nft._ownerAddress}
             usersMap={usersMap || {}}
             setOfferForAccept={setOfferForAccept}
+            setShowOfferPopup={setShowOfferPopup}
             cancelOffer={handleCancelOffer}
           />      
       ))}
       {/*TODO: add support of bundle*/}
-      {offerForAccept && (
-        <NFTAcceptOfferPopup
-          NFT={nft as INFT}
-          order={offerForAccept}
-          isOpen={!!offerForAccept}
-          onClose={() => handleClose()}
-        />
-      )}
       <LoadingPopup
           heading='Cancelling offer'
           text={offerCancelingText}
