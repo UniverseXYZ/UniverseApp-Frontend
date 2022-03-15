@@ -20,6 +20,7 @@ export interface IERC721BundleAssetType {
 }
 
 export interface IOrder {
+  blockNum?: number;
   cancelledTxHash: null | string;
   createdAt: Date;
   data: {

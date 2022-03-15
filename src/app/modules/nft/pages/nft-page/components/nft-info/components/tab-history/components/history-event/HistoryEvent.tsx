@@ -2,8 +2,9 @@ import { Box, Flex, Text, Link, Image, Tooltip } from '@chakra-ui/react';
 import BigNumber from 'bignumber.js';
 import dayjs from 'dayjs';
 import { utils } from 'ethers';
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { NFTTabItemWrapper } from '../../..';
+import { useAuthContext } from '../../../../../../../../../../../contexts/AuthContext';
 import { getEtherscanTxUrl } from '../../../../../../../../../../../utils/helpers';
 import { shortenEthereumAddress } from '../../../../../../../../../../../utils/helpers/format';
 import { getTokenByAddress, TOKENS_MAP, ZERO_ADDRESS } from '../../../../../../../../../../constants';
@@ -22,6 +23,9 @@ interface IHistoryEventProps {
 }
 
 const HistoryEvent:React.FC<IHistoryEventProps> = ({event}) => {
+  const { web3Provider } = useAuthContext() as any;
+  const [blockDate, setBlockDate] = useState(new Date());
+
   let type: HistoryType = HistoryType.MINTED;
   let price = "";
   let token: IToken = null as any;
@@ -51,6 +55,15 @@ const HistoryEvent:React.FC<IHistoryEventProps> = ({event}) => {
   const endDate = new Date(event.end * 1000);
   const expired = type === HistoryType.OFFER ? dayjs().diff(endDate) > 0 : false;
 
+  const getBlockTimestamp = async () => {
+    const blockTimestamp = await web3Provider?.getBlock(event?.blockNum);
+    setBlockDate(new Date(blockTimestamp?.timestamp * 1000));
+  }
+  
+  useEffect(() => {
+    getBlockTimestamp();
+  }, [web3Provider, event])
+
   return (
     <NFTTabItemWrapper>
       <Flex>
@@ -60,7 +73,7 @@ const HistoryEvent:React.FC<IHistoryEventProps> = ({event}) => {
             <Box {...styles.ActionLabelStyle}>{nameLabels[type]} </Box>{ event.makerData && (event.makerData.displayName ? event.makerData.displayName : shortenEthereumAddress(event.makerData.address)) }
           </Text>
           <Text {...styles.AddedLabelStyle}>
-            {getAddedAtLabel(event.createdAt)}
+            {getAddedAtLabel(type === HistoryType.MINTED ? blockDate : event.createdAt)}
             {expired && <Box as={'span'} {...styles.ExpiredStyle}> (expired)</Box>}
           </Text>
         </Box>
