@@ -7,77 +7,84 @@ import currencyIcon from '../../../../../../../../../assets/images/eth-icon-new.
 import * as styles from './styles';
 import { utils } from 'ethers';
 import { TOKENS_MAP } from '../../../../../../../../constants';
+import { formatPrice } from '../../../../../../../../utils/formatPrice';
 
 export const CollectionStatistics = ({ nftsCount, ownersCount, floorPrice, volumeTraded }: any) => {
+  let _floorPrice = formatPrice(floorPrice);
+
   return (
     <>
-      <SimpleGrid columns={{ base: 1, md: 2, lg: 4 }} spacing={'1px'} borderRadius={"12px"}>
+      <SimpleGrid columns={{ base: 1, md: 2, lg: 4 }} spacing={'1px'} borderRadius={'12px'}>
         <Flex {...styles.StatisticsContainerStyle}>
-            <Box {...styles.LabelStyle}>
-                <Box sx={{
-                    mr: '6px'
-                }}>
-                    <FolderIcon />
-                </Box>
-                Items
+          <Box {...styles.LabelStyle}>
+            <Box
+              sx={{
+                mr: '6px',
+              }}
+            >
+              <FolderIcon />
             </Box>
-            <Box {...styles.ValueStyle}>
-                {nftsCount}
-            </Box>
+            Items
+          </Box>
+          <Box {...styles.ValueStyle}>{nftsCount}</Box>
         </Flex>
         <Flex {...styles.StatisticsContainerStyle}>
-            <Box {...styles.LabelStyle}>
-                <Box sx={{
-                        mr: '6px'
-                    }}>
-                    <UserIcon />
-                </Box>
-                Owners
-            </Box> 
-            <Box {...styles.ValueStyle}>
-                {ownersCount}
+          <Box {...styles.LabelStyle}>
+            <Box
+              sx={{
+                mr: '6px',
+              }}
+            >
+              <UserIcon />
             </Box>
+            Owners
+          </Box>
+          <Box {...styles.ValueStyle}>{ownersCount}</Box>
         </Flex>
         <Flex {...styles.StatisticsContainerStyle}>
-            <Box {...styles.LabelStyle}>
-                <Box sx={{
-                    mr: '6px'
-                }}>
-                    <FloorPriceIcon />
-                </Box>
-                Floor price
+          <Box {...styles.LabelStyle}>
+            <Box
+              sx={{
+                mr: '6px',
+              }}
+            >
+              <FloorPriceIcon />
             </Box>
-            <Box {...styles.ValueStyle}>
-                {floorPrice ? (
-                    <>
-                        <img src={currencyIcon} alt="Currency" /> {utils.formatUnits(floorPrice, `${TOKENS_MAP.ETH.decimals}`)}
-                    </>
-                ) : (
-                    '-'
-                )}
-            </Box>
+            Floor price
+          </Box>
+          <Box {...styles.ValueStyle}>
+            {floorPrice ? (
+              <>
+                <img src={currencyIcon} alt="Currency" /> {_floorPrice}
+              </>
+            ) : (
+              '-'
+            )}
+          </Box>
         </Flex>
         <Flex {...styles.StatisticsContainerStyle}>
-            <Box {...styles.LabelStyle}>
-                <Box sx={{
-                        mr: '6px'
-                }}>
-                    <VolumeTraded />
-                </Box>
-                Volume traded
+          <Box {...styles.LabelStyle}>
+            <Box
+              sx={{
+                mr: '6px',
+              }}
+            >
+              <VolumeTraded />
             </Box>
-            <Box {...styles.ValueStyle}>
-                {Number(volumeTraded) > 0 ? (
-                    <>
-                        <img src={currencyIcon} alt="Currency" /> {Number(utils.formatUnits(volumeTraded, `${TOKENS_MAP.ETH.decimals}`)).toFixed(1)}
-                    </>
-                ) : (
-                    '-'
-                )}
-            </Box>
+            Volume traded
+          </Box>
+          <Box {...styles.ValueStyle}>
+            {Number(volumeTraded) > 0 ? (
+              <>
+                <img src={currencyIcon} alt="Currency" />{' '}
+                {Number(utils.formatUnits(volumeTraded, `${TOKENS_MAP.ETH.decimals}`)).toFixed(1)}
+              </>
+            ) : (
+              '-'
+            )}
+          </Box>
         </Flex>
       </SimpleGrid>
-  </>
-
-  )
-}
+    </>
+  );
+};
