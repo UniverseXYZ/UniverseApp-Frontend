@@ -692,7 +692,7 @@ const SingleNFTForm = ({ scrollToTop }) => {
     if (typeof previewImage === 'string') {
       return previewImage;
     }
-    return URL.createObjectURL(previewImage);
+    return previewImage && URL.createObjectURL(previewImage);
   }, [previewImage]);
 
   const previewVideoSource = typeof previewImage === 'string' && previewImage.endsWith('.mp4');
@@ -994,7 +994,7 @@ const SingleNFTForm = ({ scrollToTop }) => {
                 if (e.target.value.length > MAX_FIELD_CHARS_LENGTH.description) return;
                 setDescription(e.target.value);
               }}
-              value={description}
+              value={description || ''}
             />
             <div className="box--shadow--effect--block" />
           </div>
@@ -1198,7 +1198,6 @@ const SingleNFTForm = ({ scrollToTop }) => {
                           placeholder="0x89205A3A3b2A69De6Dbf7f01ED13B2108B2c43e7"
                           value={elm.address}
                           onChange={(e) => propertyChangesAddress(i, e.target.value)}
-                          hoverBoxShadowGradient
                         />
                         {error && <p className="error-message">{error}</p>}
                       </div>
