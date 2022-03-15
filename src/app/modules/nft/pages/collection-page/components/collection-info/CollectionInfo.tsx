@@ -111,7 +111,7 @@ export const CollectionInfo = () => {
             }} >
                 <Flex sx={{
                     maxWidth: '1110px',
-                    margin: '-170px auto 0px'
+                    margin: '-208px auto 0px'
                 }}>
                     <Box sx={{
                       width: '100%',

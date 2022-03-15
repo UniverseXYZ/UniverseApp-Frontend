@@ -69,6 +69,7 @@ const Cover = ({ selectedCollection }) => {
           }}
         />
       )}
+      <div className="transparent-dark-background" />
     </div>
   );
 };
