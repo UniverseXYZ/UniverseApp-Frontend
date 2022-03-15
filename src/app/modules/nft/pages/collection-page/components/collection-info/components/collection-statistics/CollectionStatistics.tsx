@@ -13,10 +13,19 @@ export const CollectionStatistics = ({ nftsCount, ownersCount, floorPrice, volum
   let _floorPrice = '';
 
   if (floorPrice) {
-   _floorPrice = utils.formatUnits(floorPrice, `${TOKENS_MAP.ETH.decimals}`)
+    _floorPrice = utils.formatUnits(floorPrice, `${TOKENS_MAP.ETH.decimals}`)
 
-   if (_floorPrice?.length > 5 && _floorPrice.charAt(0) === '0') {
-      _floorPrice = '> 0.0001'
+   if (_floorPrice?.length > 5) {
+
+        if (_floorPrice.includes('.')) {
+            // parse to float first to assure that trailing zeros are not displayed to the user
+            _floorPrice = parseFloat(_floorPrice.substring(0, 5)).toString();
+        }
+
+        if (_floorPrice === '0') {
+            _floorPrice = '> 0.001';
+        }
+
     }
   }
 
