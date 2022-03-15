@@ -8,6 +8,7 @@ export interface INFTTransfer {
   contractAddress: string;
   blockNum: number;
   hash: string;
+  matchedTxHash: string;
   from: string;
   to: string;
   tokenId: string;
@@ -63,6 +64,7 @@ export const GetHistoryApi = async (collectionAddress: string, tokenId: string):
     
     if (mintEvent) {
       mintEvent.makerData = await GetUserApi(mintEvent.to);
+      mintEvent.matchedTxHash = mintEvent.hash;
     }
 
     return {
