@@ -269,7 +269,7 @@ const FiltersContextProvider = (props: IFiltersProviderProps) => {
 
 	const _parseNftTypeFilterForm = (form: FormikProps<INftTypeFilterValue>) => {
 		const r: any = {};
-    
+
     const assetClassFilters = []
     if (form.values.singleItem) {
       assetClassFilters.push("ERC721");
@@ -343,6 +343,16 @@ const FiltersContextProvider = (props: IFiltersProviderProps) => {
 		if (hasSearchBarFilter() && hasCollectionNFTs) {
 			const nftIds = collectionNFTs?.pages[0].data.map((nft) => nft.tokenId).join(',');
       r['tokenIds'] = nftIds;
+		}
+
+		return r;
+	}
+
+	const _parseSelectedCollection = () => {
+		const r: any = {};
+
+		if (collectionAddress) {
+			r['collection'] = collectionAddress;
 		}
 
 		return r;
@@ -472,6 +482,7 @@ const FiltersContextProvider = (props: IFiltersProviderProps) => {
 		apiFilters = {...apiFilters, ..._parsePriceRangeFilterForm(priceRangeFilterForm)};
 		apiFilters = {...apiFilters, ..._parseSortByForm(sortByForm)};
 		apiFilters = {...apiFilters, ..._parseTokenIds()};
+		apiFilters = {...apiFilters, ..._parseSelectedCollection()};
 
 		// Get the orders
 		const { orders, total } = await GetActiveSellOrdersApi(apiFilters);
