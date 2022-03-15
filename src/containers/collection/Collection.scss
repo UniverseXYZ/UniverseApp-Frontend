@@ -129,131 +129,6 @@
               }
             }
           }
-          .social--icons--wrapper {
-            .social--icons--grid {
-              display: grid;
-              grid-auto-flow: column;
-              grid-gap: 8px;
-              &--item {
-                position: relative;
-                box-sizing: border-box;
-                border-radius: 10px;
-                width: 30px;
-                height: 30px;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                cursor: pointer;
-                .tooltiptext {
-                  visibility: hidden;
-                  font-family: $spaceGroteskFont;
-                  font-style: normal;
-                  font-weight: normal;
-                  font-size: 14px;
-                  color: $black;
-                  width: 100px;
-                  background-color: $white;
-                  text-align: center;
-                  border-radius: 8px;
-                  border: 1px solid #ececec;
-                  box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.1);
-                  padding: 12px 16px;
-                  position: absolute;
-                  z-index: 1;
-                  top: -50px;
-                  left: 50%;
-                  transform: translateX(-50%);
-                  &::after {
-                    content: "";
-                    position: absolute;
-                    top: 100%;
-                    left: 50%;
-                    margin-left: -5px;
-                    border-width: 5px;
-                    border-style: solid;
-                    border-color: $white transparent transparent transparent;
-                  }
-                }
-                &:hover {
-                  .tooltiptext {
-                    visibility: visible;
-                  }
-                  svg {
-                    path {
-                      fill: $white;
-                    }
-                  }
-                }
-              }
-              @include lg {
-                display: none;
-              }
-            }
-            .social--icons--dropdown--wrapper {
-              position: relative;
-              display: none;
-              .three--dots {
-                position: relative;
-                border: 1px solid rgba(255, 255, 255, 0.1);
-                box-sizing: border-box;
-                border-radius: 10px;
-                width: 42px;
-                height: 42px;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                cursor: pointer;
-                .dots--grid {
-                  display: grid;
-                  grid-template-columns: repeat(3, 1fr);
-                  grid-gap: 3px;
-                  span {
-                    background: $white;
-                    width: 3px;
-                    height: 3px;
-                  }
-                }
-              }
-              .social--icons--dropdown {
-                position: absolute;
-                top: 46px;
-                right: 0px;
-                z-index: 999;
-                background: $white;
-                border: 0.5px solid rgba(0, 0, 0, 0.05);
-                box-sizing: border-box;
-                box-shadow: 0px 10px 36px rgba(136, 120, 172, 0.14);
-                border-radius: 12px;
-                padding: 8px;
-                width: 164px;
-                button {
-                  display: flex;
-                  align-items: center;
-                  width: 100%;
-                  padding: 15px;
-                  border-radius: 6px;
-                  background: none;
-                  span {
-                    font-family: $spaceGroteskFont;
-                    font-style: normal;
-                    font-weight: 500;
-                    font-size: 14px;
-                    line-height: 140%;
-                    color: $black;
-                  }
-                  svg {
-                    margin-right: 7px;
-                  }
-                  &:hover {
-                    background: rgba(0, 0, 0, 0.05);
-                  }
-                }
-              }
-              @include lg {
-                display: block;
-              }
-            }
-          }
         }
         &__right {
           .collection__vote__edit {
@@ -745,5 +620,132 @@
     background: #00eaea;
     top: 56px;
     left: 12px;
+  }
+}
+
+.social--icons--wrapper {
+  margin-left: auto;
+  .social--icons--grid {
+    display: grid;
+    grid-auto-flow: column;
+    grid-gap: 8px;
+    &--item {
+      position: relative;
+      box-sizing: border-box;
+      border-radius: 10px;
+      width: 30px;
+      height: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      .tooltiptext {
+        visibility: hidden;
+        font-family: $spaceGroteskFont;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 14px;
+        color: $black;
+        width: 100px;
+        background-color: $white;
+        text-align: center;
+        border-radius: 8px;
+        border: 1px solid #ececec;
+        box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.1);
+        padding: 12px 14px;
+        position: absolute;
+        z-index: 1;
+        top: -50px;
+        left: 50%;
+        transform: translateX(-50%);
+        &::after {
+          content: "";
+          position: absolute;
+          top: 100%;
+          left: 50%;
+          margin-left: -5px;
+          border-width: 5px;
+          border-style: solid;
+          border-color: $white transparent transparent transparent;
+        }
+      }
+      &:hover {
+        .tooltiptext {
+          visibility: visible;
+        }
+        svg {
+          path {
+            fill: $white;
+          }
+        }
+      }
+    }
+    @include lg {
+      display: none;
+    }
+  }
+  .social--icons--dropdown--wrapper {
+    position: relative;
+    display: none;
+    .three--dots {
+      position: relative;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      box-sizing: border-box;
+      border-radius: 10px;
+      width: 42px;
+      height: 42px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      .dots--grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        grid-gap: 3px;
+        span {
+          background: $white;
+          width: 3px;
+          height: 3px;
+        }
+      }
+    }
+    .social--icons--dropdown {
+      position: absolute;
+      top: 46px;
+      right: 0px;
+      z-index: 999;
+      background: $white;
+      border: 0.5px solid rgba(0, 0, 0, 0.05);
+      box-sizing: border-box;
+      box-shadow: 0px 10px 36px rgba(136, 120, 172, 0.14);
+      border-radius: 12px;
+      padding: 8px;
+      width: 164px;
+      button {
+        display: flex;
+        align-items: center;
+        width: 100%;
+        padding: 15px;
+        border-radius: 6px;
+        background: none;
+        span {
+          font-family: $spaceGroteskFont;
+          font-style: normal;
+          font-weight: 500;
+          font-size: 14px;
+          line-height: 140%;
+          color: $black;
+        }
+        svg {
+          margin-right: 7px;
+        }
+        &:hover {
+          background: rgba(0, 0, 0, 0.05);
+        }
+      }
+    }
+    @include lg {
+      display: block;
+    }
   }
 }
