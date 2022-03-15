@@ -32,6 +32,7 @@ import { shortenEthereumAddress } from '../../../../../../../utils/helpers/forma
 export const CollectionInfo = () => {
   const tabs = ['Items', 'Description'];
   const [selectedTabIndex, setSelectedTabIndex] = useState(0);
+  const [totalNftsCount, setTotalNftsCount] = useState(0);
 
   const { 
 		collection,
@@ -77,6 +78,12 @@ export const CollectionInfo = () => {
     setShowPriceRangeFilters(true);
     setShowNFTTypeFilters(true);
   }, [collectionAddress])
+
+  useEffect(() => {
+    if (collectionNFTs && totalNftsCount === 0) {
+      setTotalNftsCount(collectionNFTs.pages[0].total);
+    }
+  }, [collectionNFTs])
 
   const hasOrderBookFilters = hasSelectedOrderBookFilters();
 	const hasOrders = orders?.pages?.length && orders.pages[0].data?.length;
@@ -160,7 +167,7 @@ export const CollectionInfo = () => {
                           boxSizing: 'border-box',
                           boxShadow: '0px 10px 30px rgba(0, 0, 0, 0.1)',
                         }}>
-                        <CollectionStatistics nftsCount={collectionNFTs?.pages?.length && collectionNFTs.pages[0].total} ownersCount={owners?.owners} floorPrice={collectionAdditionalData?.floorPrice} volumeTraded={collectionAdditionalData?.volumeTraded} />
+                        <CollectionStatistics nftsCount={totalNftsCount} ownersCount={owners?.owners} floorPrice={collectionAdditionalData?.floorPrice} volumeTraded={collectionAdditionalData?.volumeTraded} />
                         </Box>
                     </Box>
                 </Flex>

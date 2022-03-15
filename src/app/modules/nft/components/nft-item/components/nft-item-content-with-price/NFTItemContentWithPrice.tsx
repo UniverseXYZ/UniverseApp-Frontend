@@ -8,6 +8,7 @@ import { TokenTicker } from '../../../../../../enums';
 import { TokenIcon } from '../../../../../../components';
 import { getTokenByAddress, TOKENS_MAP } from '../../../../../../constants';
 import { utils } from 'ethers';
+import { shortenEthereumAddress } from '../../../../../../../utils/helpers/format';
 
 
 export interface INFTItemContentWithPriceProps {
@@ -39,11 +40,11 @@ export const NFTItemContentWithPrice = (
     const defaultTicker = TOKENS_MAP.ETH.ticker;
 
     if (Number(bestOfferPrice)) {
-      return ['Offer for', bestOfferPrice, bestOfferPriceToken ?? defaultTicker];
+      return ['Offer for', bestOfferPrice?.toString(), bestOfferPriceToken ?? defaultTicker];
     }
     
     if (Number(lastOfferPrice)) {
-      return ['Last', lastOfferPrice, lastOfferPriceToken ?? defaultTicker];
+      return ['Last', lastOfferPrice?.toString(), lastOfferPriceToken ?? defaultTicker];
     }
 
     return [null, null, defaultTicker];
@@ -81,7 +82,7 @@ export const NFTItemContentWithPrice = (
                 top={'-2px'}
                 width={'20px'}
               />
-              {price}
+              {Number(price) < 0.0001 ? '< 0.0001' : price && price.length > 7 ? Number(price).toFixed(2) : price}
             </>
           )}
         </Text>
@@ -109,9 +110,8 @@ export const NFTItemContentWithPrice = (
             <NFTItemRelation
               type={NFTRelationType.OWNER}
               image={owner.profileImageUrl ?? ''}
-              value={owner.displayName || owner.address}
+              value={owner.displayName || shortenEthereumAddress(owner.address)}
               linkParam={owner.universePageUrl ?? ''}
-              externalOwner={!owner.displayName}
             />
           )}
         </Box>
@@ -126,7 +126,13 @@ export const NFTItemContentWithPrice = (
               top={'-2px'}
               width={'20px'}
             />
-            <Box as={'span'} color={'black'}>{additionPriceValue}</Box>
+            <Box as={'span'} color={'black'}>
+              {Number(additionPriceValue) < 0.0001
+                ? '< 0.0001'
+                : additionPriceValue.length > 7
+                ? Number(additionPriceValue).toFixed(2)
+                : additionPriceValue}
+            </Box>
           </Text>
         )}
       </Flex>
