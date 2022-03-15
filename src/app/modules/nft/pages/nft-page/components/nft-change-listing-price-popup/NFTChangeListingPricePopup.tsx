@@ -141,9 +141,11 @@ export const NFTChangeListingPricePopup = ({ nft, order, isOpen, onClose, }: INF
         `${newToken.decimals}`
       ).toString();
       
-      const tokenAddress = getTokenAddressByTicker(newToken.ticker)
-      orderData.take.assetType.contract = tokenAddress;
-  
+      if (newToken.ticker !== TokenTicker.ETH) {
+        const tokenAddress = getTokenAddressByTicker(newToken.ticker)
+        orderData.take.assetType.contract = tokenAddress;
+      }
+      
       const { data: encodedOrder } = (await encodeOrderMutation.mutateAsync(orderData as IEncodeOrderApiData));
   
       const signature = await sign(

@@ -17,10 +17,11 @@ interface INFTOfferProps {
   usersMap: Record<string, IUser>;
   owner: string;
   setOfferForAccept: React.Dispatch<React.SetStateAction<IOrder | null>>;
+  setShowOfferPopup: React.Dispatch<React.SetStateAction<boolean>>;
   cancelOffer: (offer: IOrder) => void;
 }
 
-export const  NFTOffer: React.FC<INFTOfferProps> = ({offer, usersMap, owner, setOfferForAccept, cancelOffer}) => {
+export const  NFTOffer: React.FC<INFTOfferProps> = ({offer, usersMap, owner, setOfferForAccept, setShowOfferPopup, cancelOffer}) => {
   const { address } = useAuthContext() as any;
   const neverExpired = !offer.start && !offer.end;
 
@@ -70,6 +71,7 @@ export const  NFTOffer: React.FC<INFTOfferProps> = ({offer, usersMap, owner, set
             onClick={() => {
               console.log('offer', offer);
               setOfferForAccept(offer);
+              setShowOfferPopup(true);
             }}
           >Accept</Button>
         )}

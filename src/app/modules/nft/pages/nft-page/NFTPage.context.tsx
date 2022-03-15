@@ -1,10 +1,10 @@
 import { FC, createContext, useContext, useState, useEffect, useCallback } from 'react';
-import { useQuery } from 'react-query';
+import { useQuery, useQueryClient } from 'react-query';
 import { useParams } from 'react-router-dom';
 
 import { ICollection, IERC721AssetType, INFT, IOrder, IUser } from '../../types';
 import { GetCollectionApi, GetNFT2Api, GetHistoryApi, GetOrdersApi, GetUserApi, INFTHistory, GetMoreFromCollectionApi, GetActiveListingApi } from '../../api';
-import { nftKeys, orderKeys } from '../../../../utils/query-keys';
+import { nftKeys, orderKeys, userKeys } from '../../../../utils/query-keys';
 
 export interface INFTPageContext {
   NFT: INFT;
@@ -29,6 +29,8 @@ export function useNFTPageData(): INFTPageContext {
 
 const NFTPageProvider: FC = ({ children }) => {
   const { collectionAddress, tokenId } = useParams<{ collectionAddress: string; tokenId: string; }>();
+  const queryClient = useQueryClient();
+
 
   // NFT Data query
   const { data: NFT, isLoading: isLoadingNFT } = useQuery(
@@ -55,7 +57,16 @@ const NFTPageProvider: FC = ({ children }) => {
   // More from collection NFTs query
   const { data: moreFromCollection, isLoading: isMoreFromCollectionLoading } = useQuery(
     ['moreFromCollection', collectionAddress, tokenId],
-    () => GetMoreFromCollectionApi(collectionAddress, tokenId),
+    async () => {
+      const nfts = await GetMoreFromCollectionApi(collectionAddress, tokenId);
+
+      nfts.forEach(nft => {
+        // Set nft info in query cache in order to save requests
+        queryClient.setQueryData(nftKeys.nftInfo({tokenId: nft.tokenId, collectionAddress: nft._collectionAddress || ""}), nft);
+      });
+
+      return nfts;
+    },
     {
       enabled: !!collectionAddress && !!tokenId,
       staleTime: Infinity,
@@ -87,7 +98,7 @@ const NFTPageProvider: FC = ({ children }) => {
  
   // NFT Creator Data Query
   const { data: creator } = useQuery(
-    nftKeys.nftCreator({tokenId, collectionAddress}, NFT?._creatorAddress || ""),
+    userKeys.info(NFT?._creatorAddress || ""),
     () => GetUserApi(`${NFT?._creatorAddress}`),
     {
       enabled: !!NFT?._creatorAddress,
@@ -98,7 +109,7 @@ const NFTPageProvider: FC = ({ children }) => {
 
   // NFT Owner Data Query
   const { data: owner } = useQuery(
-    nftKeys.nftOwner({tokenId, collectionAddress}, NFT?._ownerAddress || ""),
+    userKeys.info(NFT?._ownerAddress || ""),
     () => GetUserApi(`${NFT?._ownerAddress}`),
     {
       enabled: !!NFT?._ownerAddress, 

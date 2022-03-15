@@ -70,10 +70,17 @@ export const NFTCheckoutPopup = ({ NFT, NFTs, order, isOpen, onClose }: INFTChec
   const [state, setState] = useState<CheckoutState>(CheckoutState.CHECKOUT);
   const [isNFTAudio] = useState(false);
   const [approveTx, setApproveTx] = useState<string>('')
+
+  // INDEXING
   const [fetchOrderCount, setFetchOrderCount] = useState(0);
   const [fetchNftCount, setFetchNftCount] = useState(0);
   const [isOrderIndexed, setIsOrderIndexed] = useState(false);
   const [isNftIndexed, setIsNftIndexed] = useState(false);
+  const [newOrderInfo, setNewOrderInfo] = useState<IOrder | null>(null);
+  const [newNftInfo, setNewNftInfo] = useState<INFT | null>(null);
+
+  const [nftInterval, setNftInterval] = useState<NodeJS.Timer>();
+  const [orderInterval, setOrderInterval] = useState<NodeJS.Timer>();
 
   const prepareMutation = useMutation(({ hash, data }: { hash: string, data: any }) => {
     return axios.post(`${process.env.REACT_APP_MARKETPLACE_BACKEND}/v1/orders/${hash}/prepare`, data);
@@ -85,8 +92,21 @@ export const NFTCheckoutPopup = ({ NFT, NFTs, order, isOpen, onClose }: INFTChec
   
   const usdPrice = useTokenPrice(tokenTicker.ticker);
 
-  const usdListingPrice = Math.round(listingPrice * usdPrice)
+  const usdListingPrice = Math.round(listingPrice * usdPrice);
 
+     // Clear intervals on unmount
+     useEffect(() => {
+      return () => {
+        if (nftInterval) {
+          clearInterval(nftInterval);
+        }
+ 
+        if (orderInterval) {
+          clearInterval(orderInterval)
+        }
+      }
+    }, [])
+ 
   const handleCheckoutClick = useCallback(async () => {
     try {
       setFetchOrderCount(0);
@@ -146,6 +166,7 @@ export const NFTCheckoutPopup = ({ NFT, NFTs, order, isOpen, onClose }: INFTChec
         // Change query information about order
         if (!newOrder?.id || order.id !== newOrder.id) {
           clearInterval(orderIndexing);
+          setNewOrderInfo(newOrder);
           setIsOrderIndexed(true);
         }
       }, 4000);
@@ -162,10 +183,13 @@ export const NFTCheckoutPopup = ({ NFT, NFTs, order, isOpen, onClose }: INFTChec
         // Change query information about order
         if (NFT?._ownerAddress?.toLowerCase() !== newNft._ownerAddress?.toLowerCase()) {
           clearInterval(nftIndexing);
+          setNewNftInfo(newNft || null);
           setIsNftIndexed(true);
         }
       }, 10000);
 
+      setNftInterval(nftIndexing);
+      setOrderInterval(orderIndexing);
     } catch(err: any) {
       console.log(err)   
       setState(CheckoutState.CHECKOUT);
@@ -197,12 +221,21 @@ export const NFTCheckoutPopup = ({ NFT, NFTs, order, isOpen, onClose }: INFTChec
       
       // Invalidate listing because it's not active anymore
       queryClient.invalidateQueries(orderKeys.listing({tokenId, collectionAddress}));
+      queryClient.setQueriesData(orderKeys.listing({tokenId, collectionAddress}), newOrderInfo);
 
       // Invalidate nft info query in order to refetch new owner info
-      queryClient.invalidateQueries(nftKeys.nftInfo({tokenId, collectionAddress}));
+      if (newNftInfo) {
+        queryClient.setQueryData(nftKeys.nftInfo({tokenId, collectionAddress}), newNftInfo);
+      } else {
+        // queryClient.invalidateQueries(nftKeys.nftInfo({tokenId, collectionAddress}));
+        queryClient.setQueryData(nftKeys.nftInfo({tokenId, collectionAddress}), null);
+      }
 
       // Invalidate my nfts query in order to see the new nft
       queryClient.refetchQueries(nftKeys.userNfts(address));
+
+      setNewNftInfo(null);
+      setNewOrderInfo(null);
     }
   
   }, [isOrderIndexed, isNftIndexed])
@@ -221,6 +254,7 @@ export const NFTCheckoutPopup = ({ NFT, NFTs, order, isOpen, onClose }: INFTChec
   }
 
   const handleMyNFTsClick = useCallback(() => {
+    onClose();
     router.push('/my-nfts');
   }, []);
 
@@ -249,7 +283,7 @@ export const NFTCheckoutPopup = ({ NFT, NFTs, order, isOpen, onClose }: INFTChec
   if (!order) {
     return null;
   }
-  console.log(NFTs?.length)
+  
   return !!previewNFT && (
     <Modal isCentered isOpen={isOpen} onClose={() => {
       onClose();
@@ -331,7 +365,7 @@ export const NFTCheckoutPopup = ({ NFT, NFTs, order, isOpen, onClose }: INFTChec
               <Heading {...styles.TitleStyle} mb={'20px'}>Purchasing the NFT...</Heading>
 
               <Text fontSize={'16px'} mx={'auto'} maxW={'260px'} textAlign={'center'}>
-                Indexing the order transaction
+                Indexing order transaction
                 {
                   !isOrderIndexed ? "..." :
                   <Box display={'inline-block'} marginLeft={'5px'}>

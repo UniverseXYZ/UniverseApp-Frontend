@@ -1,7 +1,7 @@
 import { Box, Button, Container, Flex, Heading, Link, SimpleGrid, Text } from '@chakra-ui/react';
 import { useFormik } from 'formik';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { useInfiniteQuery } from 'react-query';
+import { useInfiniteQuery, useQueryClient } from 'react-query';
 import { useHistory } from 'react-router-dom';
 import { utils } from 'ethers';
 import Popup from 'reactjs-popup';
@@ -54,11 +54,12 @@ import { TokenTicker } from '../../../../enums';
 import { SaleTypeFilterDropdown } from '../../../account/pages/my-nfts-page/components/search-filters';
 
 export type ICollectionsFilterValue = Array<any>;
-import { orderKeys } from '../../../../utils/query-keys';
+import { nftKeys, orderKeys } from '../../../../utils/query-keys';
 
 export const BrowseNFTsPage = () => {
   const { setDarkMode } = useThemeContext() as any;
   const { isWalletConnected } = useAuthContext();
+  const queryClient = useQueryClient();
 
   const router = useHistory();
 
@@ -249,12 +250,14 @@ export const BrowseNFTsPage = () => {
       switch (order.make.assetType.assetClass) {
         case 'ERC721':
           const assetType = order.make.assetType as IERC721AssetType;
+          queryClient.setQueryData(orderKeys.listing({collectionAddress: assetType.contract, tokenId: assetType.tokenId.toString()}), order);
           NFTsRequests.push(GetNFT2Api(assetType.contract, assetType.tokenId))
           break;
         case 'ERC721_BUNDLE':
           const assetTypeBundle = order.make.assetType as IERC721BundleAssetType;
           for (let i = 0; i < assetTypeBundle.contracts.length; i++) {
             for (const tokenId of assetTypeBundle.tokenIds[i]) {
+              queryClient.setQueryData(orderKeys.listing({collectionAddress: assetTypeBundle.contracts[i], tokenId: tokenId.toString()}), order);
               NFTsRequests.push(GetNFT2Api(assetTypeBundle.contracts[i], tokenId))
             }
           }
@@ -270,6 +273,8 @@ export const BrowseNFTsPage = () => {
       const NFT: INFT = response.value;
       //TODO: set query cache to this specific nft(nftKeys.info)
       const key = `${NFT.collection?.address}:${NFT.tokenId}`;
+
+      queryClient.setQueryData(nftKeys.nftInfo({collectionAddress: NFT._collectionAddress || "", tokenId: NFT.tokenId}), NFT)
 
       acc[key] = NFT;
 

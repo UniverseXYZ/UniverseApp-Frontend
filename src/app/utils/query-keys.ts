@@ -20,3 +20,8 @@ export const nftKeys = {
   nftCreator: (nftInfo: KVP, userAddress: string) => ['nfts', 'info', 'creator', { nftInfo: {tokenId: nftInfo.tokenId, collectionAddress: nftInfo.collectionAddress.toLowerCase()}, userAddress: userAddress.toLowerCase() }] as const,
   userNfts: (userAddress: string) => ['nfts', { userAddress: userAddress.toLowerCase() }]
 }
+
+export const userKeys = {
+  all: ['users'] as const,
+  info: (userAddress: string) => ['users', 'info', {userAddress: userAddress.toLowerCase()}]
+}

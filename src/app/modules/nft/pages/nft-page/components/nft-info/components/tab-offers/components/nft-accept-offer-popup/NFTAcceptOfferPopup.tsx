@@ -32,9 +32,11 @@ import { Fee } from '../../../../../../../../../marketplace/pages/sell-page/comp
 import { getRoyaltiesFromRegistry } from '../../../../../../../../../../../utils/marketplace/utils';
 import { useTokenPrice } from '../../../../../../../../../../hooks';
 import { useErrorContext } from '../../../../../../../../../../../contexts/ErrorContext';
-import { orderKeys } from '../../../../../../../../../../utils/query-keys';
-import { GetActiveListingApi, GetOrdersApi } from '../../../../../../../../api';
+import { nftKeys, orderKeys } from '../../../../../../../../../../utils/query-keys';
+import { GetActiveListingApi, GetNFT2Api, GetOrdersApi } from '../../../../../../../../api';
 import { useNFTPageData } from '../../../../../../NFTPage.context';
+import { ReactComponent as CheckIcon } from '../../../../../../../../../../../assets/images/check-vector.svg'; 
+import { clearInterval } from 'timers';
 
 interface INFTAcceptOfferPopupProps {
   NFT?: INFT;
@@ -60,6 +62,16 @@ export const NFTAcceptOfferPopup = ({ NFT, NFTs, order, isOpen, onClose }: INFTA
   const [totalRoyalties, setTotalRoyalties] = useState(0);
   const [isNFTAudio] = useState(false);
   const [fetchCount, setFetchCount] = useState(0);
+
+  // INDEXING
+  const [fetchOrderCount, setFetchOrderCount] = useState(0);
+  const [fetchNftCount, setFetchNftCount] = useState(0);
+  const [isOrderIndexed, setIsOrderIndexed] = useState(false);
+  const [isNftIndexed, setIsNftIndexed] = useState(false);
+  const [newOffersInfo, setNewOffersInfo] = useState<IOrder[]>([]);
+  const [newNftInfo, setNewNftInfo] = useState<INFT | null>(null);
+  const [nftInterval, setNftInterval] = useState<NodeJS.Timer>();
+  const [orderInterval, setOrderInterval] = useState<NodeJS.Timer>();
   
   const tokenTicker = useMemo(() => {
     return getTokenByAddress((order as any).make.assetType.contract).ticker as TokenTicker
@@ -83,6 +95,18 @@ export const NFTAcceptOfferPopup = ({ NFT, NFTs, order, isOpen, onClose }: INFTA
     return new BigNumber(usdPrice).multipliedBy(listingPrice).toFixed(2);
    }, [usdPrice, listingPrice])
 
+   // Clear intervals on unmount
+   useEffect(() => {
+     return () => {
+       if (nftInterval) {
+         clearInterval(nftInterval);
+       }
+
+       if (orderInterval) {
+         clearInterval(orderInterval)
+       }
+     }
+   }, [])
 
   const handleAcceptClick = useCallback(async () => {
     try {
@@ -103,7 +127,7 @@ export const NFTAcceptOfferPopup = ({ NFT, NFTs, order, isOpen, onClose }: INFTA
       await sendAcceptOfferTransaction(data, from, to, EthersBigNumber.from(value.hex));
       setState(AcceptState.INDEXING);
       // This polling mechanic is temporary until we have marketplace web sockets
-      const indexInterval = setInterval(async () => {
+      const orderIndexing = setInterval(async () => {
         const stringifiedOffers = offers?.orders?.map(offer => offer.id).join('');
         setFetchCount(count => count +=1)
 
@@ -121,17 +145,32 @@ export const NFTAcceptOfferPopup = ({ NFT, NFTs, order, isOpen, onClose }: INFTA
         // Change query information about order
         const newStringifiedoffers = newOffers?.orders?.map(offer => offer.id).join('');
         if (stringifiedOffers !== newStringifiedoffers) {
-          clearInterval(indexInterval);
-          // TODO: Invalidte NFT Owner Queries
-          // TODO: Invalidte MY NFTs Query
-          queryClient.setQueryData(orderKeys.offers({tokenId, collectionAddress}), null);
-          queryClient.invalidateQueries(orderKeys.all);
-          setState(AcceptState.CONGRATULATIONS);
-
+          clearInterval(orderIndexing);
+          setNewOffersInfo(newOffers.orders);
+          setIsOrderIndexed(true);
 
         }
       }, 4000);
 
+      const nftIndexing = setInterval(async () => {
+        setFetchNftCount(count => count +=1);
+
+        const tokenId = NFT?.tokenId || "";
+        const collectionAddress = NFT?._collectionAddress || "";
+
+        // Fetch order api until a diffrent response is returned
+        const newNft = await GetNFT2Api(collectionAddress, tokenId);
+
+        // Change query information about order
+        if (NFT?._ownerAddress?.toLowerCase() !== newNft._ownerAddress?.toLowerCase()) {
+          clearInterval(nftIndexing);
+          setNewNftInfo(newNft || null);
+          setIsNftIndexed(true);
+        }
+      }, 10000);
+
+      setOrderInterval(orderIndexing);
+      setNftInterval(nftIndexing);
     } catch(err: any) {
       console.log(err)   
       setState(AcceptState.CHECKOUT);
@@ -149,6 +188,37 @@ export const NFTAcceptOfferPopup = ({ NFT, NFTs, order, isOpen, onClose }: INFTA
       setShowError(true);
     }
   }, [order, address, signer]);
+
+  useEffect(() => {
+    if (isOrderIndexed && isNftIndexed) {
+      const tokenId = NFT?.tokenId || "";
+      const collectionAddress = NFT?._collectionAddress || "";
+
+      setState(AcceptState.CONGRATULATIONS);
+
+      //TODO: Invalidate browse marketplace page if order has been loaded
+      queryClient.refetchQueries(orderKeys.browseAny);
+      
+      // Invalidate listing because it's not active anymore
+      queryClient.invalidateQueries(orderKeys.listing({tokenId, collectionAddress}));
+      queryClient.setQueriesData(orderKeys.offers({tokenId, collectionAddress}), newOffersInfo);
+
+      // Set fetched nft info or invalidate query
+      if (newNftInfo) {
+        queryClient.setQueryData(nftKeys.nftInfo({tokenId, collectionAddress}), newNftInfo);
+      } else {
+        queryClient.invalidateQueries(nftKeys.nftInfo({tokenId, collectionAddress}));
+      }
+
+      // Invalidate my nfts query in order to see the new nft
+      queryClient.refetchQueries(nftKeys.userNfts(address));
+
+      setNewNftInfo(null);
+      setNewOffersInfo([]);
+    }
+  
+  }, [isOrderIndexed, isNftIndexed])
+
 
   const sendAcceptOfferTransaction = async (data: string, from: string, to: string, value: EthersBigNumber ) => {
 
@@ -266,6 +336,8 @@ export const NFTAcceptOfferPopup = ({ NFT, NFTs, order, isOpen, onClose }: INFTA
 
           {state === AcceptState.PROCESSING && (
             <Box>
+              <Heading {...styles.TitleStyle} mb={'20px'}>Accepting offer...</Heading>
+
               <Loading my={'64px'} />
               <Text textAlign={'center'} color={'rgba(0, 0, 0, 0.6)'}>
                 Loading.... do not click refresh or leave this page.<br/>
@@ -277,15 +349,31 @@ export const NFTAcceptOfferPopup = ({ NFT, NFTs, order, isOpen, onClose }: INFTA
 
           {state === AcceptState.INDEXING && (
             <Box>
-              <Heading {...styles.TitleStyle} mb={'20px'}>Purchasing the NFT...</Heading>
+              <Heading {...styles.TitleStyle} mb={'20px'}>Accepting offer...</Heading>
 
-              <Text fontSize={'14px'} mx={'auto'} maxW={'260px'} textAlign={'center'}>
-                Indexing the transaction
+              <Text fontSize={'16px'} mx={'auto'} maxW={'260px'} textAlign={'center'}>
+                Indexing order transaction
+                {
+                  !isOrderIndexed ? "..." :
+                  <Box display={'inline-block'} marginLeft={'5px'}>
+                    <CheckIcon/>
+                  </Box>
+                }
               </Text>
 
-              {fetchCount >= 3 &&
-                <Text fontSize={'14px'} mx={'auto'} maxW={'260px'} textAlign={'center'}>
-                  Receving the event from the blockchain is taking longer than expected. Please be patient.
+              <Text fontSize={'16px'} mx={'auto'} maxW={'260px'} textAlign={'center'}>
+                Indexing NFT changes 
+                {
+                  !isNftIndexed ? "..." :
+                  <Box display={'inline-block'} marginLeft={'5px'}>
+                    <CheckIcon/>
+                  </Box>
+                }
+              </Text>
+
+              {(fetchOrderCount >= 3 && !isOrderIndexed) || (fetchNftCount >= 5 && !isNftIndexed) &&
+                <Text marginTop={'20px'} fontSize={'14px'} mx={'auto'} maxW={'330px'} textAlign={'center'}>
+                  Receving the events from the blockchain is taking longer than expected. Please be patient.
                 </Text>
               }
 
