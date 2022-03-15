@@ -1,14 +1,17 @@
 import { useState } from 'react';
 import { useInterval } from 'react-use';
 import { default as dayjs } from 'dayjs';
+import utc from 'dayjs/plugin/utc'
+
+dayjs.extend(utc)
 
 export const useDateCountdown = (_initialDate: Date, onCountDownEnd?: () => void) => {
-  const [targetDate] = useState(dayjs(_initialDate));
+  const [targetDate] = useState(dayjs(_initialDate).utc(true));
   const [isRunning, setIsRunning] = useState(!!_initialDate);
   const [formattedString, setFormattedString] = useState<string>();
 
   useInterval(() => {
-    const now = new Date();
+    const now = dayjs(new Date()).utc(true);
 
     if (targetDate.diff(now) < 0) {
       setIsRunning(false);
