@@ -68,10 +68,6 @@ export const CollectionInfo = () => {
     isIdleCollectionNFTs,
   } = useFiltersContext();
 
-  // TODO:: Handle Mobile Filters
-  // TODO:: Handle Collection NFTs search by name --> We need BE Endpoint https://app.shortcut.com/universexyz/story/2153/endpoint-which-allows-the-fe-to-search-trough-specific-collection-nfts-by-name
-  // TODO:: fix css..
-
   useEffect(() => {
     setCollectionAddress(collectionAddress);
     setShowSaleTypeFilters(true);
