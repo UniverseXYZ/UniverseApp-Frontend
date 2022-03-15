@@ -8,6 +8,10 @@ import {
     Link
 } from '@chakra-ui/react';
 import { useState, useRef, useEffect } from 'react';
+import { Contract } from 'ethers';
+import { useHistory } from 'react-router-dom';
+
+import Contracts from '../../../../../../../contracts/contracts.json';
 import SocialLinks from '../../../../../../../../src/components/collection/SocialLinks';
 import { useCollectionPageData } from '../../CollectionPage.context';
 import {
@@ -28,17 +32,23 @@ import { useFiltersContext } from '../../../../../account/pages/my-nfts-page/com
 import { SearchFilters } from '../../../../../account/pages/my-nfts-page/components/search-filters';
 import NftCardSkeleton from '../../../../../../../components/skeletons/nftCardSkeleton/NftCardSkeleton';
 import { shortenEthereumAddress } from '../../../../../../../utils/helpers/format';
+import { useAuthContext } from '../../../../../../../contexts/AuthContext.jsx';
+import EditIcon from '../../../../../../../components/svgs/EditIcon';
 
 export const CollectionInfo = () => {
   const tabs = ['Items', 'Description'];
   const [selectedTabIndex, setSelectedTabIndex] = useState(0);
   const [totalNftsCount, setTotalNftsCount] = useState(0);
+  const { address, signer } = useAuthContext() as any;
+  const history = useHistory();
+  const [collectionOwner, setCollectionOwner] = useState<string>('');
 
-  const { 
+
+  const {
 		collection,
-		// isLoadingCollectionApi,
-		// isFetchingCollectionApi,
-		// isIdleCollectionApi,
+		isLoadingCollectionApi,
+		isFetchingCollectionApi,
+		isIdleCollectionApi,
 		collectionAddress,
 		collectionGeneralInfo,
 		collectionOrderBookData,
@@ -84,21 +94,53 @@ export const CollectionInfo = () => {
     }
   }, [collectionNFTs])
 
+  const fetchCollectionOwner = async () => {
+    try {
+      // @ts-ignore
+      const { contracts } = Contracts[process.env.REACT_APP_NETWORK_CHAIN_ID];
+      // We use the UniserveERC721Core ABI because it implements the Ownable interface
+      const collectionContract = new Contract(
+        collectionGeneralInfo?.contractAddress || collection?.address || '',
+        contracts.UniverseERC721Core.abi,
+        signer
+      );
+
+      const owner = await collectionContract.owner();
+      setCollectionOwner(owner.toLowerCase());
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  useEffect(() => {
+    if ((collectionGeneralInfo?.contractAddress || collection?.address) && signer) {
+      fetchCollectionOwner();
+    }
+  }, [collectionGeneralInfo?.contractAddress , collection?.address, signer]);
+
+  const handleEdit = (id: number | string) => {
+    history.push('/my-nfts/create', {
+      tabIndex: 1,
+      nftType: 'collection',
+      collection: collection
+    });
+  };
+
   const hasOrderBookFilters = hasSelectedOrderBookFilters();
 	const hasOrders = orders?.pages?.length && orders.pages[0].data?.length;
 	const hasCollectionNFTs = collectionNFTs?.pages?.length && collectionNFTs.pages[0].data?.length;
 	const waitingOrders = isFethingOrders || isLoadingOrders || isIdleOrders;
 	const waitingCollectionNFTs = isFetchingCollectionNFTs || isLoadingCollectionNFTs || isIdleCollectionNFTs;
-	// const waitingCollectionOffChainInfo = isFetchingCollectionApi || isLoadingCollectionApi || isIdleCollectionApi;
+	const waitingCollectionOffChainInfo = isFetchingCollectionApi || isLoadingCollectionApi || isIdleCollectionApi;
 	const waitingCollectionGeneralInfo = isLoadingCollectionGeneralInfo || isFetchingCollectionGeneralInfo || isIdleCollectionGeneralInfo;
 
   return (
       <>
-        {waitingCollectionGeneralInfo && !collectionGeneralInfo ? (
+        {(waitingCollectionGeneralInfo && !collectionGeneralInfo) || (waitingCollectionOffChainInfo && !collection) ? (
           <div className='loader-wrapper'>
             <CollectionPageLoader />
           </div>
-        ) : !waitingCollectionGeneralInfo && !collectionGeneralInfo ? (
+        ) : (!waitingCollectionGeneralInfo && !collectionGeneralInfo?.contractAddress) && (!waitingCollectionOffChainInfo && !collection?.address) ? (
           <NotFound />
         ) : (
           <Box sx={{
@@ -140,7 +182,7 @@ export const CollectionInfo = () => {
                                 {collectionGeneralInfo?.name || collection.name}
                             </Text>
                             <Link
-                              href={`${process.env.REACT_APP_ETHERSCAN_URL}/address/${collectionGeneralInfo?.contractAddress}`}
+                              href={`${process.env.REACT_APP_ETHERSCAN_URL}/address/${collectionGeneralInfo?.contractAddress || collection?.address}`}
                               isExternal
                               padding={'4px 10px'}
                               ml={'18px'}
@@ -149,7 +191,7 @@ export const CollectionInfo = () => {
                               backgroundColor={'#000'}
                               opacity={'0.6'}
                               _hover={{ textDecoration: 'none' }}>
-                                <Text color={'#4D66EB'} fontSize={'12px'} fontWeight={600}>{shortenEthereumAddress(collectionGeneralInfo?.contractAddress)}</Text>
+                                <Text color={'#4D66EB'} fontSize={'12px'} fontWeight={600}>{shortenEthereumAddress(collectionGeneralInfo?.contractAddress || collection?.address)}</Text>
                             </Link>
                             </Flex>
                             <SocialLinks
@@ -160,6 +202,17 @@ export const CollectionInfo = () => {
                                 telegramLink={collection?.telegramLink || ''}
                                 twitterLink=""
                             />
+                            <Box>
+                              {address?.toLowerCase() === collectionOwner && ( //
+                                <Button
+                                  className="light-button"
+                                  onClick={() => handleEdit(collection.id)}
+                                >
+                                  <span>Edit</span>
+                                  <EditIcon />
+                                </Button>
+                              )}
+                            </Box>
                         </Flex>
                         <Box sx={{
                           bgColor: '#e5e5e5',
@@ -188,11 +241,11 @@ export const CollectionInfo = () => {
                     />
                   </Box>
                   <Box>
-                    <SearchFilters />
-                  </Box>
-                  <Box>
                     {selectedTabIndex === 0 ? (
                       <>
+                        <Box>
+                          <SearchFilters />
+                        </Box>
                         {/* Orders NFTs based on search filters */}
                         {hasOrderBookFilters ? (
 
