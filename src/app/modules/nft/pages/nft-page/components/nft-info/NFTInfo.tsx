@@ -172,7 +172,7 @@ export const NFTInfo = () => {
             <CollectionPageLoader />
           </div>
         )
-      : NFT && NFT.id ? (
+      : NFT ? (
           <>
             <Box sx={{
               bg: `url(${BGImage}) center / cover`

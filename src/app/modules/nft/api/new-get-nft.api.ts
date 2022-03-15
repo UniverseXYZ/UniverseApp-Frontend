@@ -68,21 +68,14 @@ interface IGetNFTResponse {
 }
 
 export const GetNFT2Api = async (collectionAddress: string, tokenId: string | number) => {
-  try {
-    const url = `${process.env.REACT_APP_DATASCRAPER_BACKEND}/v1/tokens/${ethers.utils.getAddress(collectionAddress)}/${tokenId}`;
+  const url = `${process.env.REACT_APP_DATASCRAPER_BACKEND}/v1/tokens/${ethers.utils.getAddress(collectionAddress)}/${tokenId}`;
 
-    const [{ data }, collectionData] = await Promise.all([
-      axios.get<INFTBackendType>(url),
-      GetCollectionApi(collectionAddress)
-    ])
+  const [{ data }, collectionData] = await Promise.all([
+    axios.get<INFTBackendType>(url),
+    GetCollectionApi(collectionAddress)
+  ])
 
-    const NFT: INFT = mapNft(data, collectionData);
-
-    return NFT;
-  } catch (e) {
-    console.log(e);
-    return {} as INFT;
-  }
+  return mapNft(data, collectionData);
 };
 
 export const GetMoreFromCollectionApi = async (collectionAddress: string, tokenId: string) => {
