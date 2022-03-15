@@ -326,7 +326,7 @@ export const SummaryTab = () => {
           <Center flexDir={'column'} alignItems={'flex-start'} w={'100%'}>
             <Heading as={'h4'}>Listing</Heading>
             <Text mb={'30px'} color={'#00000066'}>
-              Your bundle will be listed for
+              Your NFT will be listed for
               <TokenIcon ticker={ticker} size={20} />
               <Box as={'strong'} color={'black'}>{price}</Box>
             </Text>
