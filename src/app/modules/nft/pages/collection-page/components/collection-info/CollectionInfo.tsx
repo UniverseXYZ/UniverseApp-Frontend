@@ -36,12 +36,15 @@ export const CollectionInfo = () => {
 
   const { 
 		collection,
-		isLoadingCollectionApi,
-		isFetchingCollectionApi,
-		isIdleCollectionApi,
+		// isLoadingCollectionApi,
+		// isFetchingCollectionApi,
+		// isIdleCollectionApi,
 		collectionAddress,
-		owners,
-		collectionAdditionalData,
+		collectionGeneralInfo,
+		collectionOrderBookData,
+    isLoadingCollectionGeneralInfo,
+    isFetchingCollectionGeneralInfo,
+    isIdleCollectionGeneralInfo,
 	 } = useCollectionPageData();
 
   const { setShowError, setErrorTitle, setErrorBody } = useErrorContext() as any;
@@ -86,21 +89,22 @@ export const CollectionInfo = () => {
 	const hasCollectionNFTs = collectionNFTs?.pages?.length && collectionNFTs.pages[0].data?.length;
 	const waitingOrders = isFethingOrders || isLoadingOrders || isIdleOrders;
 	const waitingCollectionNFTs = isFetchingCollectionNFTs || isLoadingCollectionNFTs || isIdleCollectionNFTs;
-	const waitingCollectionApiInfo = isFetchingCollectionApi || isLoadingCollectionApi || isIdleCollectionApi;
+	// const waitingCollectionOffChainInfo = isFetchingCollectionApi || isLoadingCollectionApi || isIdleCollectionApi;
+	const waitingCollectionGeneralInfo = isLoadingCollectionGeneralInfo || isFetchingCollectionGeneralInfo || isIdleCollectionGeneralInfo;
 
   return (
       <>
-        {waitingCollectionApiInfo && !collection ? (
+        {waitingCollectionGeneralInfo && !collectionGeneralInfo ? (
           <div className='loader-wrapper'>
             <CollectionPageLoader />
           </div>
-        ) : !waitingCollectionApiInfo && !collection ? (
-          <NotFound />
+        ) : !waitingCollectionGeneralInfo && !collectionGeneralInfo ? (
+          <NotFound /> 
         ) : (
           <Box sx={{
               bg: `url(${BGImage}) center / cover`
             }}>
-            <Cover selectedCollection={collection}/>
+            <Cover selectedCollection={collection} collectionGeneralInfo={collectionGeneralInfo}/>
             <Box sx={{
                 position: 'relative',
                 padding: '0 60px 80px',
@@ -163,7 +167,7 @@ export const CollectionInfo = () => {
                           boxSizing: 'border-box',
                           boxShadow: '0px 10px 30px rgba(0, 0, 0, 0.1)',
                         }}>
-                        <CollectionStatistics nftsCount={totalNftsCount} ownersCount={owners?.owners} floorPrice={collectionAdditionalData?.floorPrice} volumeTraded={collectionAdditionalData?.volumeTraded} />
+                          <CollectionStatistics nftsCount={totalNftsCount} ownersCount={collectionGeneralInfo?.owners} floorPrice={collectionOrderBookData?.floorPrice} volumeTraded={collectionOrderBookData?.volumeTraded} />
                         </Box>
                     </Box>
                 </Flex>

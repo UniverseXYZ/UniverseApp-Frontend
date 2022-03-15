@@ -11,8 +11,8 @@ import {
   ISearchBarDropdownCollection,
   IUserOwnedCollection,
   ICollection,
-  ICollectionOwnersCountResponse,
-  ICollectionAdditionalData,
+  ICollectionInfoResponse,
+  ICollectionOrderBookData,
 } from '../types';
 import { mapBackendCollection, mapBackendNft, mapBackendUser, mapDropdownCollection } from '../helpers';
 import { INFTBackendType } from '../../../types';
@@ -279,18 +279,16 @@ export const GetCollectionNFTsApi = async (address: string, page: string | numbe
  * @param address collection address
  * @returns returns owners count
  */
-export const GetCollectionOwners = async (address: string) : Promise<ICollectionOwnersCountResponse> => {
+export const GetCollectionGeneralInfo = async (address: string) : Promise<ICollectionInfoResponse> => {
   try {
     const url = `${process.env.REACT_APP_DATASCRAPER_BACKEND}/v1/collections/${ethers.utils.getAddress(address)}`;
-  
-    const { data: { owners } } = await axios.get<ICollectionOwnersCountResponse>(url);
-  
-    return {
-      owners
-    };
+
+    const { data } = await axios.get<ICollectionInfoResponse>(url);
+
+    return data;
   } catch (e) {
     console.log(e);
-    return {} as ICollectionOwnersCountResponse;
+    return {} as ICollectionInfoResponse;
   }
 };
 
@@ -299,18 +297,18 @@ export const GetCollectionOwners = async (address: string) : Promise<ICollection
  * @param address collection address
  * @returns returns floor price and volume traded
  */
-export const GetCollectionAdditionalData = async (address: string) : Promise<ICollectionAdditionalData> => {
+export const GetCollectionOrderBookData = async (address: string) : Promise<ICollectionOrderBookData> => {
   try {
     const url = `${process.env.REACT_APP_MARKETPLACE_BACKEND}/v1/orders/collection/${address}`;
-  
-    const { data: { floorPrice, volumeTraded } } = await axios.get<ICollectionAdditionalData>(url);
-  
+
+    const { data: { floorPrice, volumeTraded } } = await axios.get<ICollectionOrderBookData>(url);
+
     return {
       floorPrice,
       volumeTraded
     };
   } catch (e) {
     console.log(e);
-    return {} as ICollectionAdditionalData;
+    return {} as ICollectionOrderBookData;
   }
 };
