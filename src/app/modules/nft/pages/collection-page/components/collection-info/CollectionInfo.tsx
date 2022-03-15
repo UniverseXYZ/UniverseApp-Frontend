@@ -99,7 +99,7 @@ export const CollectionInfo = () => {
             <CollectionPageLoader />
           </div>
         ) : !waitingCollectionGeneralInfo && !collectionGeneralInfo ? (
-          <NotFound /> 
+          <NotFound />
         ) : (
           <Box sx={{
               bg: `url(${BGImage}) center / cover`
@@ -126,7 +126,8 @@ export const CollectionInfo = () => {
                                 borderRadius={'50%'}
                                 pointerEvents={'none'}
                                 objectFit={'cover'}
-                                src={collection.coverUrl}
+                                name={collectionGeneralInfo?.name || collection?.name}
+                                src={collection?.coverUrl}
                             />
                             <Flex direction={'column'} alignItems={'flex-start'}>
                                 <Text
@@ -136,10 +137,10 @@ export const CollectionInfo = () => {
                                 color={'#fff'}
                                 ml={'20px'}
                             >
-                                {collection.name}
+                                {collectionGeneralInfo?.name || collection.name}
                             </Text>
                             <Link
-                              href={`${process.env.REACT_APP_ETHERSCAN_URL}/address/${collection.address}`}
+                              href={`${process.env.REACT_APP_ETHERSCAN_URL}/address/${collectionGeneralInfo?.contractAddress}`}
                               isExternal
                               padding={'4px 10px'}
                               ml={'18px'}
@@ -148,7 +149,7 @@ export const CollectionInfo = () => {
                               backgroundColor={'#000'}
                               opacity={'0.6'}
                               _hover={{ textDecoration: 'none' }}>
-                                <Text color={'#4D66EB'} fontSize={'12px'} fontWeight={600}>{shortenEthereumAddress(collection.address)}</Text>
+                                <Text color={'#4D66EB'} fontSize={'12px'} fontWeight={600}>{shortenEthereumAddress(collectionGeneralInfo?.contractAddress)}</Text>
                             </Link>
                             </Flex>
                             <SocialLinks

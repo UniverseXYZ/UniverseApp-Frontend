@@ -338,7 +338,7 @@ const FiltersContextProvider = (props: IFiltersProviderProps) => {
 	const _parseTokenIds = () => {
 		const r: any = {};
 
-		const hasCollectionNFTs = collectionNFTs?.pages.length && collectionNFTs?.pages[0]?.data.length;
+		const hasCollectionNFTs = collectionNFTs?.pages?.length && collectionNFTs?.pages[0]?.data?.length;
 
 		if (hasSearchBarFilter() && hasCollectionNFTs) {
 			const nftIds = collectionNFTs?.pages[0].data.map((nft) => nft.tokenId).join(',');
