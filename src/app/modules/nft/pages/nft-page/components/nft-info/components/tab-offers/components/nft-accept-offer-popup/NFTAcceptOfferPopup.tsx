@@ -36,7 +36,6 @@ import { nftKeys, orderKeys } from '../../../../../../../../../../utils/query-ke
 import { GetActiveListingApi, GetNFT2Api, GetOrdersApi } from '../../../../../../../../api';
 import { useNFTPageData } from '../../../../../../NFTPage.context';
 import { ReactComponent as CheckIcon } from '../../../../../../../../../../../assets/images/check-vector.svg'; 
-import { clearInterval } from 'timers';
 
 interface INFTAcceptOfferPopupProps {
   NFT?: INFT;
