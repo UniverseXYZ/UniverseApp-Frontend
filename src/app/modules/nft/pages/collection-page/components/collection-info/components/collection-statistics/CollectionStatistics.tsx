@@ -50,7 +50,7 @@ export const CollectionStatistics = ({ nftsCount, ownersCount, floorPrice, volum
             <Box {...styles.ValueStyle}>
                 {floorPrice ? (
                     <>
-                        <img src={currencyIcon} alt="Currency" /> {utils.formatUnits(floorPrice, `${TOKENS_MAP.ETH.decimals}`)}
+                        <img src={currencyIcon} alt="Currency" /> {Number(utils.formatUnits(floorPrice, `${TOKENS_MAP.ETH.decimals}`)).toFixed(3)}
                     </>
                 ) : (
                     '-'
