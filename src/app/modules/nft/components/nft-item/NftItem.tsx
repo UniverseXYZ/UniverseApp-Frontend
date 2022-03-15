@@ -1,5 +1,5 @@
 import { Box, LinkBox, LinkOverlay, Text } from '@chakra-ui/react';
-import React, { useRef, useState } from 'react';
+import React, { useMemo, useRef, useState } from 'react';
 import { useQuery } from 'react-query';
 import { Link } from 'react-router-dom';
 import { useHoverDirty } from 'react-use';
@@ -12,7 +12,7 @@ import * as styles from './styles';
 import { NFTRelationType } from '../../enums';
 import { GetActiveListingApi, GetBestAndLastOffer, GetCollectionApi, GetNFT2Api, GetUserApi } from '../../api';
 import { TokenTicker } from '../../../../enums';
-import { getTokenByAddress } from '../../../../constants';
+import { getTokenByAddress, TOKENS_MAP } from '../../../../constants';
 import { NFTCheckoutPopup } from '../../pages/nft-page/components';
 import { shortenEthereumAddress } from '../../../../../utils/helpers/format';
 import { nftKeys, orderKeys, userKeys } from '../../../../utils/query-keys';
@@ -70,7 +70,7 @@ export const NftItem = (
 ) => {
   const [isCheckoutPopupOpened, setIsCheckoutPopupOpened] = useState(false);
 
-
+  // Get Collection Info Query
   const { data: collection, isLoading: isLoadingCollection } = useQuery(
     ['collection', _collectionAddress],
     () => GetCollectionApi(_collectionAddress),
@@ -80,6 +80,7 @@ export const NftItem = (
     },
   );
 
+  // Get NFT Info Query
   const { data: NFT, isLoading: isLoadingNFT } = useQuery(
     nftKeys.nftInfo({collectionAddress: collection?.address || '', tokenId: _NFT.tokenId || ""}),
     () => GetNFT2Api(`${collection?.address}`, _NFT.tokenId),
@@ -90,6 +91,7 @@ export const NftItem = (
     },
   );
 
+  // Get Creataor Query
   const { data: creator, isLoading: isLoadingCreator } = useQuery(
     userKeys.info(NFT?._creatorAddress || ""),
     () => GetUserApi(NFT?._creatorAddress as string),
@@ -99,6 +101,7 @@ export const NftItem = (
     },
   );
 
+  // Get Owner Query
   const { data: owner, isLoading: isLoadingOwner } = useQuery(
     userKeys.info(NFT?._ownerAddress || ""),
     () => GetUserApi(NFT?._ownerAddress as string),
@@ -108,6 +111,7 @@ export const NftItem = (
     },
   );
 
+  // Get Last And Best Offer Query
   const { data, isLoading: isLoadingOffers } = useQuery(
     orderKeys.cardOffers({collectionAddress: NFT?._collectionAddress || "", tokenId: NFT?.tokenId || ""}),
     () => GetBestAndLastOffer(NFT?._collectionAddress || '', NFT?.tokenId || ''),
@@ -117,6 +121,7 @@ export const NftItem = (
     },
   );
 
+  // Get Active Listing Query
   const { data: orderData, isLoading: isLoadingOrder } = useQuery(
     orderKeys.listing({collectionAddress: collection?.address || '', tokenId: NFT?.tokenId || ""}),
     () => GetActiveListingApi(collection?.address ?? "", NFT?.tokenId ?? ""),
@@ -126,11 +131,30 @@ export const NftItem = (
     },
   );
 
-  const bestOfferPriceToken = !data?.bestOffer ? null : getTokenByAddress((data?.bestOffer.make.assetType as IERC721AssetType).contract)
-  const bestOfferPrice = !bestOfferPriceToken ? null : utils.formatUnits(data?.bestOffer.make.value || 0, bestOfferPriceToken.decimals ?? 18)
+  const [bestOfferPriceToken, bestOfferPrice, lastOfferPriceToken, lastOfferPrice] = useMemo(() => {
+    const bestOfferPriceT = !data?.bestOffer ? null : getTokenByAddress((data?.bestOffer.make.assetType as IERC721AssetType).contract);
+    const bestOfferP = !bestOfferPriceT ? null : utils.formatUnits(data?.bestOffer.make.value || 0, bestOfferPriceT.decimals ?? 18);
 
-  const lastOfferPriceToken = !data?.lastOffer ? null : getTokenByAddress((data?.lastOffer.make.assetType as IERC721AssetType).contract)
-  const lastOfferPrice = !lastOfferPriceToken ? null : utils.formatUnits(data?.lastOffer.make.value || 0, lastOfferPriceToken.decimals ?? 18)
+    let lastOfferPriceT = undefined;
+    let lastOfferP = undefined;
+
+    if (data && data.lastOffer && data?.lastOffer.side) {
+      switch (data?.lastOffer.side) {
+        // Sell order
+        case 0:
+          lastOfferPriceT = !data?.lastOffer ? null : getTokenByAddress((data?.lastOffer.make.assetType as IERC721AssetType).contract);
+          lastOfferP = !lastOfferPriceT ? null : utils.formatUnits(data?.lastOffer.make.value || 0, lastOfferPriceT.decimals ?? 18);      
+          break;
+        // Buy order
+        case 1:
+          lastOfferPriceT = !data?.lastOffer ? null : getTokenByAddress((data?.lastOffer.take.assetType as IERC721AssetType).contract);
+          lastOfferP = !lastOfferPriceT ? null : utils.formatUnits(data?.lastOffer.take.value || 0, lastOfferPriceT.decimals ?? 18);      
+          break;
+      }
+    }
+  
+    return [bestOfferPriceT, bestOfferP, lastOfferPriceT, lastOfferP]
+  }, [orderData]);
 
   const ref = useRef(null);
 
