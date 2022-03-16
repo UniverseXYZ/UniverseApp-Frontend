@@ -92,6 +92,8 @@ export interface ISearchFiltersContext {
 	isFetchingCollectionNFTs: boolean;
 	isLoadingCollectionNFTs: boolean;
 	isIdleCollectionNFTs: boolean;
+	isLoadingUserNFTs: boolean;
+	isIdleUserNFTs: boolean;
 	orders: InfiniteData<IOrdersResult> | undefined;
 	// --- FILTERS VISIBILITY ---
 	showSaleTypeFilters: boolean;
@@ -342,9 +344,15 @@ const FiltersContextProvider = (props: IFiltersProviderProps) => {
 		const r: any = {};
 
 		const hasCollectionNFTs = collectionNFTs?.pages?.length && collectionNFTs?.pages[0]?.data?.length;
+		const hasUserNFTs = userNFTs?.pages?.length && userNFTs?.pages[0]?.data?.length;
 
 		if (hasSearchBarFilter() && hasCollectionNFTs) {
 			const nftIds = collectionNFTs?.pages[0].data.map((nft) => nft.tokenId).join(',');
+      r['tokenIds'] = nftIds;
+		}
+
+		if (!!hasUserNFTs) {
+			const nftIds = userNFTs?.pages[0].data.map((nft) => nft.tokenId).join(',');
       r['tokenIds'] = nftIds;
 		}
 
@@ -358,7 +366,22 @@ const FiltersContextProvider = (props: IFiltersProviderProps) => {
 			r['collection'] = collectionAddress;
 		}
 
+		if (hasSelectedCollectionFilter()) {
+			r['collection'] = collectionFilterForm.values.collections[0].address;
+		}
+
 		return r;
+	}
+
+	const _parseMaker = () => {
+		const r: any = {};
+
+		if (userAddress) {
+			r['maker'] = userAddress;
+		}
+
+		return r;
+
 	}
 
 	/**
@@ -488,6 +511,7 @@ const FiltersContextProvider = (props: IFiltersProviderProps) => {
 		apiFilters = {...apiFilters, ..._parseSortByForm(sortByForm)};
 		apiFilters = {...apiFilters, ..._parseTokenIds()};
 		apiFilters = {...apiFilters, ..._parseSelectedCollection()};
+		apiFilters = {...apiFilters, ..._parseMaker()};
 
 		// Get the orders
 		const { orders, total } = await GetActiveSellOrdersApi(apiFilters);
@@ -509,7 +533,7 @@ const FiltersContextProvider = (props: IFiltersProviderProps) => {
 
 		// Map the results
 		const result = _mapOrders(orders, nfts);
-    
+
 		return { total, data: result };
 	}
 
@@ -554,7 +578,9 @@ const FiltersContextProvider = (props: IFiltersProviderProps) => {
 		data: userNFTs,
 		fetchNextPage: fetchNextUserNFTs,
 		hasNextPage: hasMoreUserNFTs,
-		isFetching: isFetchingUserNFTs
+		isFetching: isFetchingUserNFTs,
+		isLoading: isLoadingUserNFTs,
+		isIdle: isIdleUserNFTs
 	} = useInfiniteQuery([
 		nftKeys.userNfts(userAddress),
 		userAddress,
@@ -606,6 +632,18 @@ const FiltersContextProvider = (props: IFiltersProviderProps) => {
 		},
   );
 
+		const waitForUserNFTs = () => {
+			if (!userAddress) return false;
+
+			// if there is user address we should check if we are fetching user nfts
+			if (isFetchingUserNFTs) return true;
+
+			const hasUserNFTs = userNFTs?.pages?.length && userNFTs?.pages[0]?.data?.length;
+
+			// if there is an user address and we are not fetching user nfts we should check the userNFTs length, if we don't have user nfts we should disable the order book query, else kick the query with the user nfts data
+			if (!!hasUserNFTs) return false;
+			else return true;
+		}
 
 	/**
 	 * Query for fetching orders
@@ -624,13 +662,14 @@ const FiltersContextProvider = (props: IFiltersProviderProps) => {
     	priceRangeFilterForm.values,
 			nftTypeFilterForm.values,
 			sortByForm.values,
+			userNFTs,
 			{
 				searchValue: searchBarForm.values.searchValue,
 				collectionNFTs: collectionNFTs,
 			},
   	], _handleGetOrders,
 		{
-			enabled: _getOrdersEnabled(),
+			enabled: _getOrdersEnabled() && !waitForUserNFTs(),
 			retry: false,
 			getNextPageParam: (lastPage, pages) => {
 				return pages.length * PER_PAGE < lastPage.total ? pages.length + 1 : undefined;
@@ -680,6 +719,8 @@ const FiltersContextProvider = (props: IFiltersProviderProps) => {
 		hasMoreOrders,
 		fetchNextUserNFTs: fetchNextUserNFTs,
 		isFetchingUserNFTs: isFetchingUserNFTs,
+		isLoadingUserNFTs,
+		isIdleUserNFTs,
 		hasMoreUserNFTs: hasMoreUserNFTs,
 		collectionNFTs: collectionNFTs,
 		fetchNextCollectionNFTs: fetchNextCollectionNFTs,
