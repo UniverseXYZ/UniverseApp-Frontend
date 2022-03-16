@@ -22,7 +22,7 @@ import {
 import axios from 'axios';
 import { BigNumber, ethers } from 'ethers';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-import { useMutation } from 'react-query';
+import { useMutation, useQueryClient } from 'react-query';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 
@@ -39,6 +39,7 @@ import { useAuthContext } from '../../../../../../../contexts/AuthContext';
 import { useErrorContext } from '../../../../../../../contexts/ErrorContext';
 import { sign } from '../../../../../../helpers';
 import { NFTCancelListingPopup } from '..';
+import { nftKeys, orderKeys } from '../../../../../../utils/query-keys';
 
 export enum ChangeListingPriceState {
   FORM,
@@ -62,8 +63,9 @@ export const NFTChangeListingPricePopup = ({ nft, order, isOpen, onClose, }: INF
   const tokensBtnRef = useRef<HTMLButtonElement>(null);
 
   const [state, setState] = useState<ChangeListingPriceState>(ChangeListingPriceState.FORM);
+  const queryClient = useQueryClient();
   const [isCancelListingPopupOpened, setIsCancelListingPopupOpened] = useState(false);
-  const [isMarkedForCancel, setIsMarkedForCancel] = useState(true);
+  const [oldOrder, setOldOrder] = useState<IOrder>();
 
   const tokens = useMemo(() => TOKENS, []);
 
@@ -87,14 +89,18 @@ export const NFTChangeListingPricePopup = ({ nft, order, isOpen, onClose, }: INF
     validationSchema: NFTChangeListingPriceValidationSchema,
     onSubmit: async (value) => {
       try {
-        if(nft == undefined || order == undefined) {
+
+        if(nft == undefined) {
           return;
         }
-        if (BigNumber.from(ethers.utils.parseUnits(`${value.amount}`,`${TOKENS_MAP[value.token as TokenTicker].decimals}`)).gt(BigNumber.from(order.take.value)) && isMarkedForCancel) {
-          setIsCancelListingPopupOpened(true);
-        } else {
+
+        if (!order) {
           updateListing(value);
+        } else {
+          setOldOrder(order);
+          setIsCancelListingPopupOpened(true);
         }
+
       } catch (e) {
         setShowError(true);        
       }
@@ -103,9 +109,11 @@ export const NFTChangeListingPricePopup = ({ nft, order, isOpen, onClose, }: INF
 
   const updateListing = async (value: any) => {
     try {
-      if(nft == undefined || order == undefined) {
+
+      if (nft == undefined || oldOrder == undefined) {
         return;
       }
+
       setState(ChangeListingPriceState.PROCESSING);
       const network = await web3Provider.getNetwork();
       const address = await signer.getAddress();
@@ -125,14 +133,14 @@ export const NFTChangeListingPricePopup = ({ nft, order, isOpen, onClose, }: INF
   
       const orderData: IEncodeOrderApiData = {
         salt: salt,
-        maker: order.maker,
+        maker: oldOrder.maker,
         make: make,
-        taker: order.taker,
-        take: order.take,
-        type: order.type,
-        start: order.start,
-        end: order.end,
-        data: order.data,
+        taker: oldOrder.taker,
+        take: oldOrder.take,
+        type: oldOrder.type,
+        start: oldOrder.start,
+        end: oldOrder.end,
+        data: oldOrder.data,
       };
       const newToken = TOKENS_MAP[value.token as TokenTicker];
   
@@ -144,6 +152,9 @@ export const NFTChangeListingPricePopup = ({ nft, order, isOpen, onClose, }: INF
       if (newToken.ticker !== TokenTicker.ETH) {
         const tokenAddress = getTokenAddressByTicker(newToken.ticker)
         orderData.take.assetType.contract = tokenAddress;
+      } else {
+        // ETH order must never have contract address
+        delete orderData.take.assetType.contract;
       }
       
       const { data: encodedOrder } = (await encodeOrderMutation.mutateAsync(orderData as IEncodeOrderApiData));
@@ -157,7 +168,21 @@ export const NFTChangeListingPricePopup = ({ nft, order, isOpen, onClose, }: INF
       );
   
       const createOrderResponse = (await createOrderMutation.mutateAsync({ ...orderData, signature })).data;
-  
+
+      const tokenIdCollectionPair = {
+        collectionAddress: orderData.make.assetType.contract || "",
+        tokenId: orderData.make.assetType.tokenId || ""
+      }
+
+      queryClient.setQueryData(orderKeys.listing(tokenIdCollectionPair), createOrderResponse)
+      queryClient.invalidateQueries(orderKeys.history(tokenIdCollectionPair));
+
+      //TODO: Invalidate browse marketplace page if order has been loaded
+      queryClient.refetchQueries(orderKeys.browseAny);
+
+      // Invalidate my nfts query in order to see the new nft
+      queryClient.refetchQueries(nftKeys.userNfts(address));
+
       setState(ChangeListingPriceState.SUCCESS)
     } catch(e) {
       setShowError(true);        
@@ -282,7 +307,7 @@ export const NFTChangeListingPricePopup = ({ nft, order, isOpen, onClose, }: INF
         order={order}
         isOpen={isCancelListingPopupOpened}
         onClose={() => setIsCancelListingPopupOpened(false)}
-        handleCancel={() => setIsMarkedForCancel(false)}
+        handleCancel={() => {}}
       />
     </Modal>
   );
