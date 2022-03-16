@@ -55,25 +55,30 @@ const AuthContextProvider = ({ children }) => {
   // Getters
   useEffect(() => {
     (async () => {
-      const [ethPrice, daiInfo, usdcInfo, xyzInfo, wethInfo] = await Promise.all([
-        getEthPriceCoingecko(),
-        getERC20PriceCoingecko('dai'),
-        getERC20PriceCoingecko('usd-coin'),
-        getERC20PriceCoingecko('universe-xyz'),
-        getERC20PriceCoingecko('weth'),
-      ]);
+      try {
+        const [ethPrice, daiInfo, usdcInfo, xyzInfo, wethInfo] = await Promise.all([
+          getEthPriceCoingecko(),
+          getERC20PriceCoingecko('dai'),
+          getERC20PriceCoingecko('usd-coin'),
+          getERC20PriceCoingecko('universe-xyz'),
+          getERC20PriceCoingecko('weth'),
+        ]);
 
-      console.log(`wethPrice: ${wethInfo?.market_data?.current_price?.usd}`);
-      console.log(`ethPrice: ${ethPrice?.market_data?.current_price?.usd}`);
-      console.log(`usdcPrice: ${usdcInfo?.market_data?.current_price?.usd}`);
-      console.log(`daiPrice: ${daiInfo?.market_data?.current_price?.usd}`);
-      console.log(`xyzPrice: ${xyzInfo?.market_data?.current_price?.usd}`);
+        console.log(`wethPrice: ${wethInfo?.market_data?.current_price?.usd}`);
+        console.log(`ethPrice: ${ethPrice?.market_data?.current_price?.usd}`);
+        console.log(`usdcPrice: ${usdcInfo?.market_data?.current_price?.usd}`);
+        console.log(`daiPrice: ${daiInfo?.market_data?.current_price?.usd}`);
+        console.log(`xyzPrice: ${xyzInfo?.market_data?.current_price?.usd}`);
 
-      setEthUsdPrice(ethPrice?.market_data?.current_price?.usd);
-      setDaiUsdPrice(daiInfo?.market_data?.current_price?.usd);
-      setUsdcUsdPrice(usdcInfo?.market_data?.current_price?.usd);
-      setXyzUsdPrice(xyzInfo?.market_data?.current_price?.usd);
-      setWethUsdPrice(wethInfo?.market_data?.current_price?.usd);
+        setEthUsdPrice(ethPrice?.market_data?.current_price?.usd);
+        setDaiUsdPrice(daiInfo?.market_data?.current_price?.usd);
+        setUsdcUsdPrice(usdcInfo?.market_data?.current_price?.usd);
+        setXyzUsdPrice(xyzInfo?.market_data?.current_price?.usd);
+        setWethUsdPrice(wethInfo?.market_data?.current_price?.usd);
+      } catch (err) {
+        console.log('coingecko price fetching failed');
+        console.log(err);
+      }
     })();
   }, []);
 
