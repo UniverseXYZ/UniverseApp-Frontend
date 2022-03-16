@@ -201,11 +201,10 @@ export const NFTInfo = () => {
               <Box {...styles.NFTDetailsContainerStyle}>
                 <Box sx={{ p: {sm: '40px 20px', md: '60px 40px'}, minH: `calc(100vh - 80px - ${buySectionMeasure?.height}px)`, }}>
                   <Flex sx={{
-                    alignItems: 'center',
                     mb: '12px',
                     justifyContent: 'space-between'
                   }}>
-                    <Heading as={'h2'} sx={{ fontSize: '26px', color: 'transparent', background: 'black', backgroundClip: 'text', textShadow: '2px 2px 5px rgba(255, 255, 255, 0.3)' }}>{NFT.name}</Heading>
+                    <Heading as={'h2'} sx={{ fontSize: '26px', color: 'transparent', background: 'black', backgroundClip: 'text', textShadow: '2px 2px 5px rgba(255, 255, 255, 0.3)', textOverflow: 'break-word', maxW: "90%"}}>{NFT.name}</Heading>
                     <Box>
                       {/*<NFTLike likes={[]} isLiked={true} {...styles.LikeButtonStyle} />*/}
 
