@@ -57,7 +57,13 @@ export const Tabs = {
           lg: '16px'
         },
         position: 'relative',
-        margin: '0 3px',
+        margin: '0 -3px',
+        clipPath: {
+          lg: 'polygon(97% 0, 100% 50%, 97% 100%, 0% 100%, 3% 50%, 0% 0%)',
+          md: 'polygon(95% 0, 100% 50%, 95% 100%, 0% 100%, 5% 50%, 0% 0%)',
+          sm: 'polygon(93% 0, 100% 50%, 93% 100%, 0% 100%, 7% 50%, 0% 0%)',
+        },
+        
         img: {
           h: '17px',
           m: {
@@ -91,33 +97,6 @@ export const Tabs = {
           _after: {
             borderLeft: '10px solid rgba(0, 0, 0, 0.03)',
           }
-        },
-        _before: {
-          borderBottom: 'calc(var(--tab-height) / 2) solid transparent',
-          borderLeft: '10px solid #fff',
-          borderTop: 'calc(var(--tab-height) / 2) solid transparent',
-          content: '" "',
-          height: 0,
-          left: 0,
-          position: 'absolute',
-          right: 'auto',
-          top: 0,
-          transition: 'border-color 0.2s ease',
-          width: 0,
-          zIndex: 0,
-        },
-        _after: {
-          borderBottom: 'calc(var(--tab-height) / 2) solid transparent',
-          borderLeft: '10px solid rgba(0, 0, 0, 0.03)',
-          borderTop: 'calc(var(--tab-height) / 2) solid transparent',
-          content: '" "',
-          height: 0,
-          position: 'absolute',
-          right: '-10px',
-          top: 0,
-          transition: 'border-color 0.2s ease',
-          width: 0,
-          zIndex: 2,
         },
       }
     }

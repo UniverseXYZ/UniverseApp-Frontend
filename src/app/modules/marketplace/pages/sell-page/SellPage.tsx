@@ -303,7 +303,7 @@ export const SellPage = () => {
               <Heading as="h1" mb={'50px'}>Sell NFT</Heading>
 
               <Tabs isFitted variant={'arrow'} index={activeTab} onChange={setActiveTab}>
-                <TabList overflowX={'scroll'}>
+                <TabList overflowX={'scroll'} padding={'0 5px'}>
                   {sellPageTabs.map((tab, i) => (
                     <Tab key={i} minW={'130px'} isDisabled={i > activeTab}>
                       <Image src={activeTab === i ? tab.iconActive : tab.icon} />
