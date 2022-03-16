@@ -78,7 +78,7 @@ export const NFTBuySection = ({ NFT, owner, NFTs, order, highestOffer, onMeasure
   const fetchNftRoyalties = async () => {
     if (NFT?._collectionAddress && NFT.tokenId && signer) {
       const { nftRoyaltiesPercent } = await getRoyaltiesFromRegistry(NFT._collectionAddress, NFT.tokenId, signer);
-      setNftRoyalties(nftRoyaltiesPercent.toNumber())
+      setNftRoyalties(+nftRoyaltiesPercent / 100)
     }
   };
 
@@ -190,6 +190,9 @@ export const NFTBuySection = ({ NFT, owner, NFTs, order, highestOffer, onMeasure
         )}
         {state === BuyNFTSectionState.OWNER_PUT_ON_SALE && (
           <>
+          {!isEmpty(highestOffer?.offer) && (
+            <HighestOffer offer={highestOffer?.offer} creator={highestOffer?.creator as IUser} />
+          )}
             <Button boxShadow={'lg'} w={'100%'} onClick={() => router.push(`/nft/${NFT?._collectionAddress}/${NFT?.tokenId}/sell`)}>Put on sale</Button>
             <Text {...styles.ContentFeeLabelStyle} textAlign={'center'} mt={'12px'} color={'rgba(0, 0, 0, 0.4)'}>
               This NFT is in your wallet
