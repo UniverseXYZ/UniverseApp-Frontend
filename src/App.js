@@ -97,7 +97,7 @@ const routes = {
   '/v1/nft/:collectionAddress/:tokenId': new UniverseRoute(MarketplaceNFT),
   // '/character-page': new UniverseRoute(CharacterPage),
   '/v1/marketplace': new UniverseRoute(BrowseNFT),
-  '/marketplace/browse': new UniverseRoute(BrowseNFTsPage, false, true),
+  '/marketplace': new UniverseRoute(BrowseNFTsPage, false, true),
   '/nft/:collectionAddress/:tokenId': new UniverseRoute(NFTPage, false, true),
   '/nft/:collectionAddress/:tokenId/sell': new UniverseRoute(SellPage, false, true),
   '/bundle/:hash': new UniverseRoute(BundlePage, false, true),
