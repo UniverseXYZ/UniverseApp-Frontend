@@ -21,9 +21,10 @@ interface IHistoryEventProps {
   event: IOrder;
   onlyListings?: boolean;
   cancelListing?: React.Dispatch<React.SetStateAction<boolean>>;
+  isOwner?: boolean;
 }
 
-const HistoryEvent: React.FC<IHistoryEventProps> = ({ event, onlyListings, cancelListing }) => {
+const HistoryEvent: React.FC<IHistoryEventProps> = ({ event, onlyListings, cancelListing, isOwner }) => {
   let type: HistoryType = HistoryType.MINTED;
   let price = '';
   let token: IToken = null as any;
@@ -94,7 +95,7 @@ const HistoryEvent: React.FC<IHistoryEventProps> = ({ event, onlyListings, cance
             <Text {...styles.PriceUSDStyle}>${usd}</Text>
           </Box>
         )}
-        {onlyListings && cancelListing && (
+        {isOwner && onlyListings && cancelListing && (
           <Button
             ml={'18px'}
             fontSize={'14px'}

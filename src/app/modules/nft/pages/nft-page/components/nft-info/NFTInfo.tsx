@@ -175,8 +175,6 @@ export const NFTInfo = () => {
     }
   }, [offers, ethUsdPrice, daiUsdPrice, usdcUsdPrice, xyzUsdPrice, wethUsdPrice]);
 
-  const isOwner = owner?.address === address;
-
   return (
     <>
       {isLoading ? (
