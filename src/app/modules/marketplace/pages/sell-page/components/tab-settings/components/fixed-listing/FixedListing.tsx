@@ -13,7 +13,7 @@ import {
 import { useState, useEffect } from 'react';
 import { FormikProps } from 'formik';
 import { default as dayjs } from 'dayjs';
-import { default as isSameOrAfter } from 'dayjs/plugin/isSameOrAfter'
+import { default as isSameOrAfter } from 'dayjs/plugin/isSameOrAfter';
 
 import { useMarketplaceSellData } from '../../../../hooks';
 import { SellAmountType, SellMethod } from '../../../../enums';
@@ -32,20 +32,24 @@ export const SettingsTabFixedListing = () => {
   const [minEndDate, setMinEndDate] = useState(dayjs().add(1, 'day').toDate());
   const { form, sellMethod, amountType } = useMarketplaceSellData() as IMarketplaceSellContextDataOverride;
 
-  const {values: { startDate, endDate }} = form;
+  const {
+    values: { startDate, endDate },
+  } = form;
 
   useEffect(() => {
     // set the end date + 1 day and set the minimum end date
-    const _endDate = dayjs(startDate || dayjs()).add(1, 'day').toDate();
+    const _endDate = dayjs(startDate || dayjs())
+      .add(1, 'day')
+      .toDate();
     setMinEndDate(_endDate);
 
     const isStartAfterEnd = dayjs(startDate).isSameOrAfter(dayjs(endDate));
 
-    if(isStartAfterEnd) {
+    if (isStartAfterEnd) {
       // if the user sets the start date to be after the end date - set the end date + 1 day
-      form.setFieldValue('endDate', _endDate)
+      form.setFieldValue('endDate', _endDate);
     }
-  }, [startDate, endDate])
+  }, [startDate, endDate]);
 
   if (sellMethod !== SellMethod.FIXED) {
     return null;
@@ -53,7 +57,7 @@ export const SettingsTabFixedListing = () => {
 
   return (
     <>
-      { amountType === SellAmountType.BUNDLE && (<BundleForm />) }
+      {amountType === SellAmountType.BUNDLE && <BundleForm />}
       <Flex sx={styles.settingsItem}>
         <Box>
           <Heading as={'h5'}>Price*</Heading>
@@ -84,7 +88,7 @@ export const SettingsTabFixedListing = () => {
           <Text>Your listing will be active during the time period you set.</Text>
         </Box>
         <Flex mt={'20px'} w={'100% !important'}>
-          <SimpleGrid columns={2} spacingX={'20px'}>
+          <SimpleGrid columns={{ sm: 1, md: 2 }} spacingX={'20px'}>
             <FormControl>
               <FormLabel>Start date</FormLabel>
               <DateTimePicker
