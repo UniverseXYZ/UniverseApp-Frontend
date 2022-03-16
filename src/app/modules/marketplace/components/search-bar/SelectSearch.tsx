@@ -1,4 +1,4 @@
-import { Box, BoxProps, CheckboxProps, Image, ImageProps, Text } from '@chakra-ui/react';
+import { Box, BoxProps, CheckboxProps, Image, ImageProps, Text, Flex } from '@chakra-ui/react';
 import React, { useCallback, useEffect, useState, useRef } from 'react';
 
 import { SearchInput } from './SearchInput';
@@ -6,6 +6,8 @@ import { ISearchBarValue } from './types';
 import { ISearchBarDropdownCollection } from '../../../nft/types';
 import { Loading } from '../../../../components';
 import { getCollectionBackgroundColor } from '../../../../../utils/helpers';
+import goToCollectionIcon from '../../../../../assets/images/eventTypeTransfer.svg';
+import { useHistory } from 'react-router-dom';
 
 const MIN_CHARS_LENGTH = 3;
 interface IStyles {
@@ -126,6 +128,7 @@ export const SearchSelect = (props: ISearchSelectProps) => {
   const [value, setValue] = useState<ISearchBarValue>({ searchValue: ''});
   const [filteredItems, setFilteredItems] = useState<ISearchBarDropdownCollection[]>(items);
   const ref = useRef<HTMLHeadingElement>(null);
+  const router = useHistory();
 
   const handleItemSelect = useCallback((item) => {
     const result: ISearchBarValue = {
@@ -161,6 +164,10 @@ export const SearchSelect = (props: ISearchSelectProps) => {
 
     setValue(result);
     onClear();
+  }
+
+  const handleGoToCollection = (address: string) => {
+    router.push(`/collection/${address}`);
   }
 
   useEffect(() => {
@@ -239,35 +246,51 @@ export const SearchSelect = (props: ISearchSelectProps) => {
           )}
 
           {!isFetchingCollections && filteredItems.map((item, i) => (
-            <Box key={item.address} {...styles.item} onClick={() => handleItemSelect(item)}>
+            <Box key={item.address} {...styles.item} >
 
-            {item?.image?.length && (
-              <Image
-                src={item.image || ''}
-                {...styles.itemImage(true)}
-                borderRadius={'50%'}
-              />
-            )}
+              <Flex w={'100%'}>
+                <Box flex='1' onClick={() => handleItemSelect(item)} textAlign={'initial'}>
+                  {item?.image?.length && (
+                    <Image
+                      src={item.image || ''}
+                      {...styles.itemImage(true)}
+                      borderRadius={'50%'}
+                    />
+                  )}
 
-            {!item.image && (
-              <Box
-                sx={{
-                  alignItems: 'center',
-                  bg: getCollectionBackgroundColor({
-                    id: getRandomInt(10000),
-                    address: item.address,
-                  }),
-                  borderRadius: '50%',
-                  display: 'flex',
-                  justifyContent: 'center',
-                  h: '30px',
-                  w: '30px',
-                  mr: '20px'
-                }}
-              >{item?.name.charAt(0)}</Box>
-            )}
+                  {!item.image && (
+                    <Box
+                      sx={{
+                        alignItems: 'center',
+                        bg: getCollectionBackgroundColor({
+                          id: getRandomInt(10000),
+                          address: item.address,
+                        }),
+                        borderRadius: '50%',
+                        display: 'flex',
+                        justifyContent: 'center',
+                        h: '30px',
+                        w: '30px',
+                        mr: '20px'
+                      }}
+                    >{item?.name.charAt(0)}</Box>
+                  )}
 
-              {item.name}
+                  {item.name}
+                </Box>
+
+                <Box>
+                  <Image
+                    _hover={{
+                      transform: 'scale(1.2)'
+                    }}
+                    src={goToCollectionIcon}
+                    {...styles.itemImage(true)}
+                    borderRadius={'50%'}
+                    onClick={() => handleGoToCollection(item.address)}
+                    />
+                </Box>
+              </Flex>
             </Box>
           ))}
         </Box>
@@ -275,3 +298,5 @@ export const SearchSelect = (props: ISearchSelectProps) => {
     </Box>
   );
 };
+
+
