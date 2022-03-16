@@ -1,5 +1,6 @@
 import {
-  Box, BoxProps,
+  Box,
+  BoxProps,
   Button,
   Container,
   Flex,
@@ -34,7 +35,7 @@ import * as styles from '../../styles';
 import * as styles2 from './styles';
 import { NFTItemContentWithPrice, NFTLike } from '../../../../components/nft-item/components';
 import { NFTTransferPopup } from '../nft-transfer-popup';
-import {BigNumber as EthersBigNumber, utils} from "ethers"
+import { BigNumber as EthersBigNumber, utils } from 'ethers';
 import BigNumber from 'bignumber.js';
 import { sendRefreshMetadataRequest } from '../../../../../../../utils/api/marketplace';
 import BGImage from '../../../../../../../assets/images/v2/stone_bg.jpg';
@@ -55,8 +56,10 @@ import { userKeys } from '../../../../../../utils/query-keys';
 // TODO: hide metadata tab for not Polymorph NFT type
 export const NFTInfo = () => {
   const router = useHistory();
-  const { getTokenPriceByTicker, ethUsdPrice, daiUsdPrice, usdcUsdPrice, xyzUsdPrice, wethUsdPrice } = useAuthContext() as any
-  const { NFT, isLoading, order, creator, owner, collection, collectionAddress, history, offers, moreFromCollection } = useNFTPageData();
+  const { getTokenPriceByTicker, ethUsdPrice, daiUsdPrice, usdcUsdPrice, xyzUsdPrice, wethUsdPrice } =
+    useAuthContext() as any;
+  const { NFT, isLoading, order, creator, owner, collection, collectionAddress, history, offers, moreFromCollection } =
+    useNFTPageData();
 
   const [buySectionMeasure, setBuySectionMeasure] = useState<UseMeasureRect>();
   const [isTransferOpened, setIsTransferOpened] = useState(false);
@@ -84,254 +87,300 @@ export const NFTInfo = () => {
 
   const showMetadata = [
     process.env.REACT_APP_POLYMORPHS_CONTRACT_ADDRESS,
-    process.env.REACT_APP_LOBSTERS_CONTRACT_ADDRESS
+    process.env.REACT_APP_LOBSTERS_CONTRACT_ADDRESS,
   ].includes(NFT?.collection?.address ?? '');
-  
+
   const handleRefresh = async () => {
     try {
       setRefreshMetadataStatus(Status.PROCESSING);
-      const request = await sendRefreshMetadataRequest(NFT?.collection?.address || "", NFT.tokenId);
-      
+      const request = await sendRefreshMetadataRequest(NFT?.collection?.address || '', NFT.tokenId);
+
       if (request.status === 204) {
         setRefreshMetadataStatus(Status.SUCCESS);
         return;
       }
-    } catch(err) {
-      console.log(err)
+    } catch (err) {
+      console.log(err);
     }
     setRefreshMetadataStatus(Status.HIDDEN);
-  }
+  };
 
   const getOrderOffers = async () => {
-      try {
-        const orders = offers?.orders || [];
+    try {
+      const orders = offers?.orders || [];
 
-        const userRequests: Array<any> = [];
-        const uniqueUsers = [...Array.from(new Set(orders.map(order => order.maker)))];
-        for (const user of uniqueUsers) {
-          userRequests.push(GetUserApi(user))
+      const userRequests: Array<any> = [];
+      const uniqueUsers = [...Array.from(new Set(orders.map((order) => order.maker)))];
+      for (const user of uniqueUsers) {
+        userRequests.push(GetUserApi(user));
+      }
+
+      orders?.sort((a, b) => {
+        // Order by USD value of orders DESC
+        const tokenContractA = (a.make.assetType as IERC721AssetType).contract;
+        const tokenA = getTokenByAddress(tokenContractA);
+        const tokenPriceA = getTokenPriceByTicker(tokenA.ticker);
+        const orderPriceA = utils.formatUnits(a.make.value, tokenA.decimals ?? 18);
+        const orderUsdPriceA = new BigNumber(orderPriceA).multipliedBy(tokenPriceA);
+
+        let tokenB = null;
+        let tokenPriceB = null;
+
+        const tokenContractB = (b.make.assetType as IERC721AssetType).contract;
+
+        if (tokenContractA.toLowerCase() === tokenContractB.toLowerCase()) {
+          tokenB = tokenA;
+          tokenPriceB = tokenPriceA;
+        } else {
+          tokenB = getTokenByAddress(tokenContractB);
+          tokenPriceB = getTokenPriceByTicker(tokenB.ticker);
         }
 
-        orders?.sort((a,b) => {
-          // Order by USD value of orders DESC
-          const tokenContractA = (a.make.assetType as IERC721AssetType).contract;
-          const tokenA = getTokenByAddress(tokenContractA)
-          const tokenPriceA = getTokenPriceByTicker(tokenA.ticker)
-          const orderPriceA = utils.formatUnits(a.make.value, tokenA.decimals ?? 18);
-          const orderUsdPriceA = new BigNumber(orderPriceA).multipliedBy(tokenPriceA);
+        const orderPriceB = utils.formatUnits(b.make.value, tokenB.decimals ?? 18);
+        const orderUsdPriceB = new BigNumber(orderPriceB).multipliedBy(tokenPriceB);
 
-          let tokenB = null;
-          let tokenPriceB = null;
+        if (orderUsdPriceB.eq(orderUsdPriceA)) {
+          return 0;
+        }
 
-          const tokenContractB = (b.make.assetType as IERC721AssetType).contract;
-          
-          if (tokenContractA.toLowerCase() === tokenContractB.toLowerCase()) {
-            tokenB = tokenA;
-            tokenPriceB = tokenPriceA;
-          } else {
-            tokenB = getTokenByAddress(tokenContractB);
-            tokenPriceB = getTokenPriceByTicker(tokenB.ticker)
-          }
+        if (orderUsdPriceB.lt(orderUsdPriceA)) {
+          return -1;
+        }
 
-          const orderPriceB = utils.formatUnits(b.make.value, tokenB.decimals ?? 18);
-          const orderUsdPriceB = new BigNumber(orderPriceB).multipliedBy(tokenPriceB);
-          
-          if (orderUsdPriceB.eq(orderUsdPriceA)) {
-            return 0;
-          }
+        return 1;
+      });
 
-          if (orderUsdPriceB.lt(orderUsdPriceA)) {
-            return -1;
-          }
-
-          return 1;
-        })
-        
-        const usersMap = (await (Promise.allSettled(userRequests))).reduce<Record<string, IUser>>((acc, response) => {
-          if(response.status !== 'fulfilled') {
-            return acc;
-          }
-          const user: IUser = response.value;
-
-          queryClient.setQueryData(userKeys.info(user.address), user);
-
-          acc[user.address] = user;
+      const usersMap = (await Promise.allSettled(userRequests)).reduce<Record<string, IUser>>((acc, response) => {
+        if (response.status !== 'fulfilled') {
           return acc;
-        }, {});
+        }
+        const user: IUser = response.value;
 
-        setUsersMap(usersMap)
-        setHighestOffer(orders[0]);
-        setHighestOfferCreator(usersMap[orders[0]?.maker]);
-      }catch(err) {
-        console.error(err);
-      }
-  }
+        queryClient.setQueryData(userKeys.info(user.address), user);
+
+        acc[user.address] = user;
+        return acc;
+      }, {});
+
+      setUsersMap(usersMap);
+      setHighestOffer(orders[0]);
+      setHighestOfferCreator(usersMap[orders[0]?.maker]);
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
   useEffect(() => {
     if (ethUsdPrice && daiUsdPrice && usdcUsdPrice && xyzUsdPrice && wethUsdPrice) {
       getOrderOffers();
     }
-  }, [offers, ethUsdPrice, daiUsdPrice, usdcUsdPrice, xyzUsdPrice, wethUsdPrice])
+  }, [offers, ethUsdPrice, daiUsdPrice, usdcUsdPrice, xyzUsdPrice, wethUsdPrice]);
 
   return (
     <>
-      {isLoading
-      ? (
-          <div className='loader-wrapper'>
-            <CollectionPageLoader />
-          </div>
-        )
-      : NFT ? (
-          <>
-            <Box sx={{
-              bg: `url(${BGImage}) center / cover`
-            }}>
-              <Box {...styles.NFTAssetContainerStyle}>
-                {!NFT.artworkType && <NFTAssetBroken {...styles2.BrokenAssetStyle} />}
-                {isNFTAssetImage(NFT.artworkType) &&
-                  <NFTAssetImage image={NFT.optimizedUrl || NFT.originalUrl} />
-                }
-                {isNFTAssetVideo(NFT.artworkType) &&
-                  <NFTAssetVideo video={NFT.videoUrl || NFT.optimizedUrl || NFT.originalUrl} />
-                }
-                {isNFTAssetAudio(NFT.artworkType) &&
-                  <NFTAssetAudio audio={NFT.optimizedUrl || NFT.originalUrl} />
-                }
-              </Box>
-              <Box {...styles.NFTDetailsContainerStyle}>
-                <Box sx={{ p: {sm: '40px 20px', md: '60px 40px'}, minH: `calc(100vh - 80px - ${buySectionMeasure?.height}px)`, }}>
-                  <Flex sx={{
+      {isLoading ? (
+        <div className="loader-wrapper">
+          <CollectionPageLoader />
+        </div>
+      ) : NFT ? (
+        <>
+          <Box
+            sx={{
+              bg: `url(${BGImage}) center / cover`,
+            }}
+          >
+            <Box {...styles.NFTAssetContainerStyle}>
+              {!NFT.artworkType && <NFTAssetBroken {...styles2.BrokenAssetStyle} />}
+              {isNFTAssetImage(NFT.artworkType) && <NFTAssetImage image={NFT.optimizedUrl || NFT.originalUrl} />}
+              {isNFTAssetVideo(NFT.artworkType) && (
+                <NFTAssetVideo video={NFT.videoUrl || NFT.optimizedUrl || NFT.originalUrl} />
+              )}
+              {isNFTAssetAudio(NFT.artworkType) && <NFTAssetAudio audio={NFT.optimizedUrl || NFT.originalUrl} />}
+            </Box>
+            <Box {...styles.NFTDetailsContainerStyle}>
+              <Box
+                sx={{
+                  p: { sm: '40px 20px', md: '60px 40px' },
+                  minH: `calc(100vh - 80px - ${buySectionMeasure?.height}px)`,
+                }}
+              >
+                <Flex
+                  sx={{
                     alignItems: 'center',
                     mb: '12px',
-                    justifyContent: 'space-between'
-                  }}>
-                    <Heading as={'h2'} sx={{ fontSize: '26px', color: 'transparent', background: 'black', backgroundClip: 'text', textShadow: '2px 2px 5px rgba(255, 255, 255, 0.3)' }}>{NFT.name}</Heading>
-                    <Box>
-                      {/*<NFTLike likes={[]} isLiked={true} {...styles.LikeButtonStyle} />*/}
-
-                      <NFTMenu
-                        NFT={NFT}
-                        owner={owner}
-                        collectionAddress={collectionAddress}
-                        showSell={!order}
-                        showBurn={false}
-                        showRemove={false}
-                        showHideUnhide={false}
-                        showTransfer={false}
-                        onTransfer={() => setIsTransferOpened(true)}
-                        onRefresh={handleRefresh}
-                      />
-                    </Box>
-                  </Flex>
-
-                  <Text {...styles2.EditionTextStyle}>
-                    Edition&nbsp;
-                    {`${editionNumber}/${NFT.numberOfEditions || editions.length}`}
-                  </Text>
-
-                  <Flex mb={'24px'} flexWrap={{ sm: 'wrap', md: 'nowrap' }}>
-                    {creator && <NFTPageCreatorRelation creator={creator} />}
-                    {collection && <NFTPageCollectionRelation collection={collection} />}
-                    {owner && <NFTPageOwnerRelation owner={owner} />}
-                  </Flex>
-
-                  <Box {...styles.DescriptionStyle}>
-                    <ReadMoreAndLess
-                      charLimit={150}
-                      readMoreText="Read more"
-                      readLessText="Read less"
-                    >
-                      {NFT.description || ''}
-                    </ReadMoreAndLess>
-                  </Box>
-
-                  <Tabs>
-                    <LineTabList>
-                      <Tab>Properties</Tab>
-                      {showMetadata && <Tab>Metadata</Tab>}
-                      {/* TODO: Add implementation after release */}
-                      {/* <Tab>Owners</Tab> */}
-                      {/* <Tab>Bids</Tab> */}
-                      <Tab>Offers</Tab>
-                      <Tab>History</Tab>
-                    </LineTabList>
-
-                    <TabPanels sx={{ '> div' : { px: 0, pb: 0, pt: '30px', }}}>
-                    <TabPanel><TabProperties properties={NFT?._properties ?? []} /></TabPanel>
-                      {showMetadata && <TabPanel><TabMetadata /></TabPanel>}
-                      {/* TODO: Add implementation after release */}
-                      {/* <TabPanel><TabOwners /></TabPanel> */}
-                      {/* <TabPanel><TabBids /></TabPanel> */}
-                      <TabPanel><TabOffers setOfferForAccept={setOfferForAccept} setShowOfferPopup={setShowOfferPopup} nft={NFT} offers={offers?.orders} usersMap={offerUsersMap}/></TabPanel>
-                      <TabPanel><TabHistory historyData={history}/></TabPanel>
-                    </TabPanels>
-                  </Tabs>
-                </Box>
-                <NFTBuySection
-                  NFT={NFT}
-                  owner={owner}
-                  order={order}
-                  highestOffer={{ offer: highestOffer || {} as IOrder, creator: highestOfferCreator || {} as IUser}}
-                  onMeasureChange={(measure) => setBuySectionMeasure(measure)}
-                />
-              </Box>
-            </Box>
-            {showOfferPopup && (
-              <NFTAcceptOfferPopup
-                NFT={NFT}
-                order={offerForAccept || {} as IOrder}
-                isOpen={showOfferPopup}
-                onClose={() => setShowOfferPopup(false)}
-              />
-            )}
-
-            {moreFromCollection && (
-              <Box {...styles.MoreNFTsWrapperStyle}>
-                <Heading {...styles.MoreNFTsTitleStyle}>More from this collection</Heading>
-                <Container
-                  {...styles.MoreNFTsContainerStyle}
-                  w={moreFromCollection.length < 4 ? `calc(1110px / 4 * ${moreFromCollection.length})` : '100%'}
+                    justifyContent: 'space-between',
+                  }}
                 >
-                  <SimpleGrid
-                    columns={{
-                      base: 1,
-                      md: 2,
-                      lg: moreFromCollection.length < 4 ? moreFromCollection.length : 4,
+                  <Heading
+                    as={'h2'}
+                    sx={{
+                      whiteSpace: 'nowrap',
+                      overflow: 'hidden',
+                      textOverflow: 'ellipsis',
+                      fontSize: '26px',
+                      color: 'transparent',
+                      background: 'black',
+                      backgroundClip: 'text',
+                      textShadow: '2px 2px 5px rgba(255, 255, 255, 0.3)',
                     }}
-                    spacingX={'20px'}
                   >
-                    {moreFromCollection.map((NFT) => !!NFT.id && (
-                    <NftItem
-                      key={NFT.id}
+                    {NFT.name}
+                  </Heading>
+                  <Box>
+                    {/*<NFTLike likes={[]} isLiked={true} {...styles.LikeButtonStyle} />*/}
+
+                    <NFTMenu
                       NFT={NFT}
-                      collection={`${NFT._collectionAddress}`}
-                      renderContent={({ NFT, collection, creator, owner, bestOfferPrice, bestOfferPriceToken, lastOfferPrice, lastOfferPriceToken, order: orderData }) => (
-                        <NFTItemContentWithPrice
-                          name={NFT.name}
-                          collection={collection}
-                          creator={creator || undefined}
-                          owner={owner || undefined}
-                          order={orderData || undefined}
-                          bestOfferPrice={bestOfferPrice || 0}
-                          bestOfferPriceToken={bestOfferPriceToken || undefined}
-                          lastOfferPrice={lastOfferPrice || 0}
-                          lastOfferPriceToken={lastOfferPriceToken || undefined}
-        
-                        />
-                      )}
+                      owner={owner}
+                      collectionAddress={collectionAddress}
+                      showSell={!order}
+                      showBurn={false}
+                      showRemove={false}
+                      showHideUnhide={false}
+                      showTransfer={false}
+                      onTransfer={() => setIsTransferOpened(true)}
+                      onRefresh={handleRefresh}
                     />
-                    
-                    ))}
-                  </SimpleGrid>
-                </Container>
-                <Button {...styles.MoreNFTsButtonStyle} onClick={handleClickViewCollection}>View collection</Button>
+                  </Box>
+                </Flex>
+
+                <Text {...styles2.EditionTextStyle}>
+                  Edition&nbsp;
+                  {`${editionNumber}/${NFT.numberOfEditions || editions.length}`}
+                </Text>
+
+                <Flex mb={'24px'} flexWrap={{ sm: 'wrap', md: 'nowrap' }}>
+                  {creator && <NFTPageCreatorRelation creator={creator} />}
+                  {collection && <NFTPageCollectionRelation collection={collection} />}
+                  {owner && <NFTPageOwnerRelation owner={owner} />}
+                </Flex>
+
+                <Box {...styles.DescriptionStyle}>
+                  <ReadMoreAndLess charLimit={150} readMoreText="Read more" readLessText="Read less">
+                    {NFT.description || ''}
+                  </ReadMoreAndLess>
+                </Box>
+
+                <Tabs>
+                  <LineTabList>
+                    <Tab>Properties</Tab>
+                    {showMetadata && <Tab>Metadata</Tab>}
+                    {/* TODO: Add implementation after release */}
+                    {/* <Tab>Owners</Tab> */}
+                    {/* <Tab>Bids</Tab> */}
+                    <Tab>Offers</Tab>
+                    <Tab>History</Tab>
+                  </LineTabList>
+
+                  <TabPanels sx={{ '> div': { px: 0, pb: 0, pt: '30px' } }}>
+                    <TabPanel>
+                      <TabProperties properties={NFT?._properties ?? []} />
+                    </TabPanel>
+                    {showMetadata && (
+                      <TabPanel>
+                        <TabMetadata />
+                      </TabPanel>
+                    )}
+                    {/* TODO: Add implementation after release */}
+                    {/* <TabPanel><TabOwners /></TabPanel> */}
+                    {/* <TabPanel><TabBids /></TabPanel> */}
+                    <TabPanel>
+                      <TabOffers
+                        setOfferForAccept={setOfferForAccept}
+                        setShowOfferPopup={setShowOfferPopup}
+                        nft={NFT}
+                        offers={offers?.orders}
+                        usersMap={offerUsersMap}
+                      />
+                    </TabPanel>
+                    <TabPanel>
+                      <TabHistory historyData={history} />
+                    </TabPanel>
+                  </TabPanels>
+                </Tabs>
               </Box>
-            )}
-            <NFTTransferPopup NFT={NFT} isOpen={isTransferOpened} onClose={() => setIsTransferOpened(false)} />
-            <RefreshMetadataPopup status={refreshMetadataStatus} onClose={() => setRefreshMetadataStatus(Status.HIDDEN)} />
-          </>
-        )
-      : (<NotFound />)}
+              <NFTBuySection
+                NFT={NFT}
+                owner={owner}
+                order={order}
+                highestOffer={{ offer: highestOffer || ({} as IOrder), creator: highestOfferCreator || ({} as IUser) }}
+                onMeasureChange={(measure) => setBuySectionMeasure(measure)}
+              />
+            </Box>
+          </Box>
+          {showOfferPopup && (
+            <NFTAcceptOfferPopup
+              NFT={NFT}
+              order={offerForAccept || ({} as IOrder)}
+              isOpen={showOfferPopup}
+              onClose={() => setShowOfferPopup(false)}
+            />
+          )}
+
+          {moreFromCollection && (
+            <Box {...styles.MoreNFTsWrapperStyle}>
+              <Heading {...styles.MoreNFTsTitleStyle}>More from this collection</Heading>
+              <Container
+                {...styles.MoreNFTsContainerStyle}
+                w={moreFromCollection.length < 4 ? `calc(1110px / 4 * ${moreFromCollection.length})` : '100%'}
+              >
+                <SimpleGrid
+                  columns={{
+                    base: 1,
+                    md: 2,
+                    lg: moreFromCollection.length < 4 ? moreFromCollection.length : 4,
+                  }}
+                  spacingX={'20px'}
+                >
+                  {moreFromCollection.map(
+                    (NFT) =>
+                      !!NFT.id && (
+                        <NftItem
+                          key={NFT.id}
+                          NFT={NFT}
+                          collection={`${NFT._collectionAddress}`}
+                          renderContent={({
+                            NFT,
+                            collection,
+                            creator,
+                            owner,
+                            bestOfferPrice,
+                            bestOfferPriceToken,
+                            lastOfferPrice,
+                            lastOfferPriceToken,
+                            order: orderData,
+                          }) => (
+                            <NFTItemContentWithPrice
+                              name={NFT.name}
+                              collection={collection}
+                              creator={creator || undefined}
+                              owner={owner || undefined}
+                              order={orderData || undefined}
+                              bestOfferPrice={bestOfferPrice || 0}
+                              bestOfferPriceToken={bestOfferPriceToken || undefined}
+                              lastOfferPrice={lastOfferPrice || 0}
+                              lastOfferPriceToken={lastOfferPriceToken || undefined}
+                            />
+                          )}
+                        />
+                      )
+                  )}
+                </SimpleGrid>
+              </Container>
+              <Button {...styles.MoreNFTsButtonStyle} onClick={handleClickViewCollection}>
+                View collection
+              </Button>
+            </Box>
+          )}
+          <NFTTransferPopup NFT={NFT} isOpen={isTransferOpened} onClose={() => setIsTransferOpened(false)} />
+          <RefreshMetadataPopup
+            status={refreshMetadataStatus}
+            onClose={() => setRefreshMetadataStatus(Status.HIDDEN)}
+          />
+        </>
+      ) : (
+        <NotFound />
+      )}
     </>
-  )
+  );
 };
