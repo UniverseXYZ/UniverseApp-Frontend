@@ -6,9 +6,6 @@ import { IOrder, IUser } from '../../../../../../types';
 import { EventsEmpty } from '../shared';
 import HistoryEvent from '../shared/history-listings-event/HistoryEvent';
 
-// TODO: refresh state after a listing is made
-// TODO: refresh state after a listing is canceled
-
 interface ITabListingsProps {
   orderHistory: IOrder[];
   owner: IUser;
