@@ -156,6 +156,12 @@
             color: rgba(255, 255, 255, 0.6);
             cursor: pointer;
             margin-bottom: 10px;
+
+            .badge {
+              top: 0;
+              margin-left: 8px;
+            }
+
             &:hover {
               color: $white;
             }

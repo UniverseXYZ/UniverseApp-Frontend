@@ -55,6 +55,7 @@ import { SaleTypeFilterDropdown } from '../../../account/pages/my-nfts-page/comp
 
 export type ICollectionsFilterValue = Array<any>;
 import { nftKeys, orderKeys } from '../../../../utils/query-keys';
+import Badge from '../../../../../components/badge/Badge';
 
 export const BrowseNFTsPage = () => {
   const { setDarkMode } = useThemeContext() as any;
@@ -362,15 +363,15 @@ export const BrowseNFTsPage = () => {
       <Flex {...styles.IntroSectionStyle}>
         <Box>
           <Text fontSize={'12px'} fontWeight={500} textTransform={'uppercase'} mb={'23px'} letterSpacing={'5px'}>Welcome to the</Text>
-          <Heading as={'h1'} fontSize={'36px'}>Marketplace</Heading>
+          <Heading as={'h1'} fontSize={'36px'}>Marketplace <Badge style={{ fontSize: '12px', padding: '4px 9px', top: '-20px', marginLeft: '-2px' }} text="beta" /></Heading>
         </Box>
       </Flex>
 
       <Flex {...styles.SearchBarWrapperStyle}>
         <Box mb={'60px'}
-             w={{ sm: '100%', md: '600px' }}
-             ml={{ sm: '20px', md: 'auto' }}
-             mr={{ sm: '20px', md: 'auto' }}
+          w={{ sm: '100%', md: '600px' }}
+          ml={{ sm: '20px', md: 'auto' }}
+          mr={{ sm: '20px', md: 'auto' }}
         >
           <SearchBar
             collections={collectionsResult?.pages[0]?.data || []}

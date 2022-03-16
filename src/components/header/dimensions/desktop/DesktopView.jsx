@@ -97,7 +97,9 @@ const DesktopView = ({
                 }}
               >
                 <img src={marketplaceIcon} alt="NFT Marketplace" />
-                <span>NFT Marketplace</span>
+                <span>
+                  NFT Marketplace <Badge text="beta" />
+                </span>
                 {/* <span className="tooltiptext">Coming soon</span> */}
               </button>
               <button

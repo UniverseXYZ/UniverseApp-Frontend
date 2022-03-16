@@ -526,8 +526,7 @@ const TabletView = (props) => {
                     >
                       <img src={marketplaceIcon} alt="NFT Marketplace" />
                       <span>
-                        NFT Marketplace
-                        <Badge text="new" />
+                        NFT Marketplace <Badge text="beta" />
                       </span>
                       {/* <span className="tooltiptext">Coming soon</span> */}
                     </button>

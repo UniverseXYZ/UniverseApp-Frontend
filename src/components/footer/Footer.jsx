@@ -11,6 +11,7 @@ import youtubeIcon from '../../assets/images/youtube.svg';
 import mediumIcon from '../../assets/images/medium.svg';
 import SubscribePopup from '../popups/SubscribePopup.jsx';
 import { useLayout } from '../../app/providers';
+import Badge from '../badge/Badge';
 
 const Footer = () => {
   const history = useHistory();
@@ -97,6 +98,7 @@ const Footer = () => {
                   </li>
                   <li onClick={() => history.push('/marketplace/browse')} aria-hidden="true">
                     NFT Marketplace
+                    <Badge text="beta" />
                   </li>
                   <li
                     className="disable"
