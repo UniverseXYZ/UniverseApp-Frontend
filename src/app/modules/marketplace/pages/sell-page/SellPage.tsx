@@ -75,6 +75,7 @@ export const SellPage = () => {
       queryClient.refetchQueries(orderKeys.browseAny)
 
       queryClient.invalidateQueries(orderKeys.listing({ collectionAddress: params.collectionAddress.toLowerCase(), tokenId: params.tokenId }));
+      queryClient.invalidateQueries(orderKeys.history({ collectionAddress: params.collectionAddress.toLowerCase(), tokenId: params.tokenId }));
       queryClient.prefetchQuery(orderKeys.listing({ collectionAddress: params.collectionAddress.toLowerCase(), tokenId: params.tokenId }), async () => {
         const result = await GetActiveListingApi(params.collectionAddress.toLowerCase(), params.tokenId);
         return result;

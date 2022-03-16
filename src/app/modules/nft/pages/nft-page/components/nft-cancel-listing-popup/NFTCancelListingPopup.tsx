@@ -108,6 +108,8 @@ export const NFTCancelListingPopup = ({ order, isOpen, onClose, handleCancel }: 
       // Change query information about order
       if (!newOrder?.id || order.id !== newOrder.id) {
         clearInterval(indexInterval);
+
+        queryClient.invalidateQueries(orderKeys.history({tokenId, collectionAddress}));
         queryClient.setQueryData(orderKeys.listing({tokenId, collectionAddress}), newOrder || undefined);
         queryClient.refetchQueries(orderKeys.browseAny)
         closeLoading();
