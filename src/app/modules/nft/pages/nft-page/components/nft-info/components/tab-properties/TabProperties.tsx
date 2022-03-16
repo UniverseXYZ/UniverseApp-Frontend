@@ -9,12 +9,13 @@ import { PolymorphPropertyTrait } from '..';
 import { PolymorphProperty } from '..';
 import { INFTProperty } from '../../../../../../types';
 import './TabProperties.scss';
+import { EventsEmpty } from '../shared';
 
 interface ITabPropertiesProps {
   properties: INFTProperty[];
 }
 
-export const TabProperties = ({ properties = [] } : ITabPropertiesProps) => {
+export const TabProperties = ({ properties = [] }: ITabPropertiesProps) => {
   const { isPolymorph } = useNFTPageData();
 
   const polymorphProperties = useMemo(() => {
@@ -22,34 +23,33 @@ export const TabProperties = ({ properties = [] } : ITabPropertiesProps) => {
       return [];
     }
 
-    return properties.filter((property) => ['Rank', 'Rarity score'].includes(property.traitType))
+    return properties.filter((property) => ['Rank', 'Rarity score'].includes(property.traitType));
   }, [isPolymorph, properties]);
+
+  if (!properties?.length) {
+    return <EventsEmpty title="This NFT doesn't have any properties." />;
+  }
 
   return (
     <Box>
       {isPolymorph && (
         <Flex mb={'18px'}>
-          {polymorphProperties.map((property, i: number) => <PolymorphProperty key={i} property={property} />)}
+          {polymorphProperties.map((property, i: number) => (
+            <PolymorphProperty key={i} property={property} />
+          ))}
         </Flex>
       )}
       <SimpleGrid columns={2} spacing={'20px'}>
-        {properties.map((property, i: number) => (
-          isPolymorph
-            ? !polymorphProperties.includes(property)
-              ? <PolymorphPropertyTrait key={i} property={property} />
-              : null
-            : property.traitType && property.value && <NFTProperty key={i} property={property} />
-        ))}
+        {properties.map((property, i: number) =>
+          isPolymorph ? (
+            !polymorphProperties.includes(property) ? (
+              <PolymorphPropertyTrait key={i} property={property} />
+            ) : null
+          ) : (
+            property.traitType && property.value && <NFTProperty key={i} property={property} />
+          )
+        )}
       </SimpleGrid>
-        {
-          properties.length == 0 ? 
-          <Flex align={'center'} color={'rgba(0, 0, 0, 0.4)'} flexDir={'column'}>
-            <Image src={TextBubbleImage} mt={'20px'} mb={'30px'} h={'70px'} w={'100px'} />
-            <Text fontSize={'18px'} fontWeight={500} mb={'6px'}>This NFT doesn&apos;t have any properties.</Text>
-          </Flex>
- 
-        : null
-        }
     </Box>
   );
 };

@@ -30,12 +30,11 @@ interface INFTCancelListingPopupProps {
   order?: IOrder;
   isOpen: boolean;
   onClose: () => void;
-  handleCancel: () => void;
 }
 
 const INDEXING_TAKING_TOO_LONG = "Receving the event from the blockchain is taking longer than expected. Please be patient.";
 
-export const NFTCancelListingPopup = ({ order, isOpen, onClose, handleCancel }: INFTCancelListingPopupProps) => {
+export const NFTCancelListingPopup = ({ order, isOpen, onClose }: INFTCancelListingPopupProps) => {
 
   const { signer } = useAuthContext();
   const { setShowLoading, setLoadingTitle, setLoadingBody, closeLoading, setTransactions } = useLoadingPopupContext();
@@ -108,10 +107,11 @@ export const NFTCancelListingPopup = ({ order, isOpen, onClose, handleCancel }: 
       // Change query information about order
       if (!newOrder?.id || order.id !== newOrder.id) {
         clearInterval(indexInterval);
+
+        queryClient.invalidateQueries(orderKeys.history({tokenId, collectionAddress}));
         queryClient.setQueryData(orderKeys.listing({tokenId, collectionAddress}), newOrder || undefined);
         queryClient.refetchQueries(orderKeys.browseAny)
         closeLoading();
-        handleCancel();
       }
 
       if (fetchCount === 3) {
@@ -121,7 +121,7 @@ export const NFTCancelListingPopup = ({ order, isOpen, onClose, handleCancel }: 
     }, 4000);
 
     setOrderInterval(indexInterval);
-  }, [contract, order, onClose, handleCancel]);
+  }, [contract, order, onClose]);
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} isCentered>

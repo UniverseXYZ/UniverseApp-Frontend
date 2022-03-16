@@ -17,6 +17,7 @@ import { NFTCheckoutPopup } from '../../pages/nft-page/components';
 import { shortenEthereumAddress } from '../../../../../utils/helpers/format';
 import { nftKeys, orderKeys, userKeys } from '../../../../utils/query-keys';
 import { useNftCheckoutPopupContext } from '../../../../providers/NFTCheckoutProvider';
+import { OrderSide, OrderStatus } from '../../../marketplace/enums';
 
 type IRenderFuncProps = {
   NFT: INFT;
@@ -266,7 +267,7 @@ export const NftItem = (
                 <NFTItemFooter
                   isCheckoutPopupOpened={isCheckoutPopupOpened}
                   setIsCheckoutPopupOpened={setIsCheckoutPopupOpened}
-                  showBuyNowButton={showBuyNowButton && (orderData || order) && (orderData || order)?.side === 1 && (orderData || order)?.status === 0 ? true : false}
+                  showBuyNowButton={showBuyNowButton && (orderData || order) && (orderData || order)?.side === OrderSide.SELL && (orderData || order)?.status === OrderStatus.CREATED ? true : false}
                   NFT={NFT as INFT}
                   order={(order || orderData) as IOrder}
                 />
