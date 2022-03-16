@@ -307,7 +307,6 @@ export const NFTChangeListingPricePopup = ({ nft, order, isOpen, onClose, }: INF
         order={order}
         isOpen={isCancelListingPopupOpened}
         onClose={() => setIsCancelListingPopupOpened(false)}
-        handleCancel={() => {}}
       />
     </Modal>
   );

@@ -57,7 +57,6 @@ export const TabListings = (props: ITabListingsProps) => {
               order={listing}
               isOpen={isCancelListingPopupOpened}
               onClose={() => setIsCancelListingPopupOpened(false)}
-              handleCancel={() => setIsCancelListingPopupOpened(false)}
             />
           </React.Fragment>
         );
