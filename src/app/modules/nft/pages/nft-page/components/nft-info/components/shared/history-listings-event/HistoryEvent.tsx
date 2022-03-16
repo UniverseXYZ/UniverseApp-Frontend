@@ -10,6 +10,7 @@ import { getTokenByAddress, TOKENS_MAP, ZERO_ADDRESS } from '../../../../../../.
 import { TokenTicker } from '../../../../../../../../../enums';
 import { useTokenPrice } from '../../../../../../../../../hooks';
 import { IToken } from '../../../../../../../../../types';
+import { OrderSide, OrderStatus } from '../../../../../../../../marketplace/enums';
 import { IERC20AssetType, IERC721AssetType, IOrder } from '../../../../../../../types';
 import { HistoryType } from '../../../../../enums';
 import { actionIcon, nameLabels } from '../../tab-history/constants';
@@ -33,9 +34,9 @@ const HistoryEvent: React.FC<IHistoryEventProps> = ({ event, onlyListings, cance
     const side = event.side;
     const status = event.status;
 
-    if (side === 1 && status === 2) {
+    if (side === OrderSide.SELL && status === OrderStatus.FILLED) {
       type = HistoryType.BOUGHT;
-    } else if (side === 1 && status === 0) {
+    } else if (side === OrderSide.SELL && status === OrderStatus.CREATED) {
       type = HistoryType.LISTED;
     } else if (onlyListings) {
       type = HistoryType.LISTED;
@@ -43,7 +44,7 @@ const HistoryEvent: React.FC<IHistoryEventProps> = ({ event, onlyListings, cance
       type = HistoryType.OFFER;
     }
 
-    if (side === 0) {
+    if (side === OrderSide.BUY) {
       token = getTokenByAddress((event.make.assetType as IERC721AssetType).contract);
       const tokenDecimals = TOKENS_MAP[token.ticker]?.decimals ?? 18;
 

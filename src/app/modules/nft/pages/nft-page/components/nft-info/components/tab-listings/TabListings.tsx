@@ -2,6 +2,7 @@ import { Box } from '@chakra-ui/react';
 import React, { useCallback, useMemo, useState } from 'react';
 import { NFTCancelListingPopup } from '../../..';
 import { useAuthContext } from '../../../../../../../../../contexts/AuthContext';
+import { OrderSide, OrderStatus } from '../../../../../../../marketplace/enums';
 import { IOrder, IUser } from '../../../../../../types';
 import { EventsEmpty } from '../shared';
 import HistoryEvent from '../shared/history-listings-event/HistoryEvent';
@@ -20,7 +21,7 @@ export const TabListings = (props: ITabListingsProps) => {
     ?.filter((order: IOrder) => {
       if (
         owner.address === order?.makerData?.address &&
-        order.side === 1 && order.status === 0
+        order.side === OrderSide.SELL && order.status === OrderStatus.CREATED
       ) {
         return order;
       }
