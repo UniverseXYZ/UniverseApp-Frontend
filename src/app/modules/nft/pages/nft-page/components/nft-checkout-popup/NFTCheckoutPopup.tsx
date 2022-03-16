@@ -136,6 +136,14 @@ export const NFTCheckoutPopup = ({ NFT, NFTs, order, isOpen, onClose }: INFTChec
           setState(CheckoutState.PROCESSING);
         }
 
+      } else {
+        const paymentAmount = BigNumber.from(order.take.value);
+        const balance = await web3Provider.getBalance(address);
+        
+        if (paymentAmount.gt(balance)) {
+          setState(CheckoutState.INSUFFICIENT_BALANCE);
+          return;
+        }
       }
 
       const response = await prepareMutation.mutateAsync({
@@ -207,7 +215,7 @@ export const NFTCheckoutPopup = ({ NFT, NFTs, order, isOpen, onClose }: INFTChec
       setShowError(true);
     }
     
-  }, [order, address, signer]);
+  }, [order, address, signer, web3Provider]);
 
   useEffect(() => {
     if (isOrderIndexed && isNftIndexed) {
