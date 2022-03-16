@@ -507,15 +507,6 @@ const TabletView = (props) => {
                 <div>
                   <p className="title">Products</p>
                   <div>
-                    <button type="button" onClick={() => history.push('/minting')}>
-                      <img src={mintingIcon} alt="Minting" />
-                      <span>
-                        Minting
-                        <Badge text="new" />
-                      </span>
-                    </button>
-                  </div>
-                  <div>
                     <button
                       type="button"
                       // className="disable"
@@ -529,6 +520,15 @@ const TabletView = (props) => {
                         NFT Marketplace <Badge text="beta" />
                       </span>
                       {/* <span className="tooltiptext">Coming soon</span> */}
+                    </button>
+                  </div>
+                  <div>
+                    <button type="button" onClick={() => history.push('/minting')}>
+                      <img src={mintingIcon} alt="Minting" />
+                      <span>
+                        Minting
+                        <Badge text="new" />
+                      </span>
                     </button>
                   </div>
                   <div>
