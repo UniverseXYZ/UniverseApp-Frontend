@@ -93,12 +93,12 @@ const Footer = () => {
               <div>
                 <ul>
                   <li>Products</li>
-                  <li aria-hidden="true" onClick={() => history.push('/minting')}>
-                    Minting
-                  </li>
                   <li onClick={() => history.push('/marketplace/browse')} aria-hidden="true">
                     NFT Marketplace
                     <Badge text="beta" />
+                  </li>
+                  <li aria-hidden="true" onClick={() => history.push('/minting')}>
+                    Minting
                   </li>
                   <li
                     className="disable"

@@ -571,12 +571,6 @@ const MobileView = (props) => {
                       {showProducts ? (
                         <>
                           <div>
-                            <button type="button" onClick={() => history.push('/minting')}>
-                              <img src={mintingIcon} alt="Minting" />
-                              <span>Minting</span>
-                            </button>
-                          </div>
-                          <div>
                             <button
                               type="button"
                               // className="disable"
@@ -590,6 +584,12 @@ const MobileView = (props) => {
                                 NFT Marketplace <Badge text="beta" />
                               </span>
                               {/* <span className="tooltiptext">Coming soon</span> */}
+                            </button>
+                          </div>
+                          <div>
+                            <button type="button" onClick={() => history.push('/minting')}>
+                              <img src={mintingIcon} alt="Minting" />
+                              <span>Minting</span>
                             </button>
                           </div>
                           <div>

@@ -82,10 +82,6 @@ const DesktopView = ({
           </button>
           <div className="dropdown minting-drop">
             <div className="dropdown__body">
-              <button type="button" onClick={() => history.push('/minting')}>
-                <img src={mintingIcon} alt="Minting" />
-                <span>Minting</span>
-              </button>
               <button
                 type="button"
                 // className="disable"
@@ -101,6 +97,10 @@ const DesktopView = ({
                   NFT Marketplace <Badge text="beta" />
                 </span>
                 {/* <span className="tooltiptext">Coming soon</span> */}
+              </button>
+              <button type="button" onClick={() => history.push('/minting')}>
+                <img src={mintingIcon} alt="Minting" />
+                <span>Minting</span>
               </button>
               <button
                 type="button"
