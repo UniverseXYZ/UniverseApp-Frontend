@@ -147,7 +147,7 @@ export const WalletTab = () => {
 
       )}
 
-      {isFetchingUserNFTs && (
+      {( waitingOrders || waitingUserNFTs ) && (
         <SimpleGrid columns={{ base: 1, md: 2, lg: 4 }} spacing={'30px'} mt={10}>
           <NftCardSkeleton />
           <NftCardSkeleton />
