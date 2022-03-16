@@ -45,7 +45,6 @@ interface INFTAcceptOfferPopupProps {
   isOpen: boolean;
   onClose: () => void;
 }
-const UNIVERSE_FEE = 2.5;
 
 // @ts-ignore
 const { contracts: contractsData } = Contracts[process.env.REACT_APP_NETWORK_CHAIN_ID];
@@ -258,7 +257,7 @@ export const NFTAcceptOfferPopup = ({ NFT, NFTs, order, isOpen, onClose }: INFTA
 
   const finalPrice = useMemo(() => {
     const royaltyCut = new BigNumber(listingPrice).multipliedBy(totalRoyalties).dividedBy(100)
-    const final = new BigNumber(listingPrice).minus(royaltyCut).toFixed(2);
+    const final = new BigNumber(listingPrice).minus(royaltyCut).toFixed(3);
     return final;
   }, [order, totalRoyalties, tokenDecimals, listingPrice]);
 
@@ -321,7 +320,7 @@ export const NFTAcceptOfferPopup = ({ NFT, NFTs, order, isOpen, onClose }: INFTA
               <Box>
                 <Text fontSize={'16px'} fontWeight={700}>Fees</Text>
                 <Box layerStyle={'Grey'} {...styles.FeesContainerStyle}>
-                  <Fee name={'To Universe'} amount={UNIVERSE_FEE} />
+                  <Fee name={'To Universe'} amount={daoFee} />
                   <Fee name={'To collection'} amount={collectionRoyalties} />
                   <Fee name={'To creator'} amount={nftRoyalties} />
                   <Fee name={'Total'} amount={totalRoyalties} />
