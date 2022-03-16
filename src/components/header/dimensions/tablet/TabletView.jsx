@@ -512,7 +512,7 @@ const TabletView = (props) => {
                       // className="disable"
                       onClick={() => {
                         setShowMenu(false);
-                        history.push('/marketplace/browse');
+                        history.push('/marketplace');
                       }}
                     >
                       <img src={marketplaceIcon} alt="NFT Marketplace" />

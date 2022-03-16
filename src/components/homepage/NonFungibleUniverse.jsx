@@ -46,7 +46,7 @@ const NonFungibleUniverse = () => {
         'An NFT marketplace that is completely decentralized and rigged with multiple open source tools and features.',
       loaded: false,
       action: 'Explore',
-      link: '/marketplace/browse',
+      link: '/marketplace',
       newTab: false,
     },
     {

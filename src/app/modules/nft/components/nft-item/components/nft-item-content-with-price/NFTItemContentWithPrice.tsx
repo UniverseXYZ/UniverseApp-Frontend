@@ -69,7 +69,7 @@ export const NFTItemContentWithPrice = (
   return (
     <>
       <Flex justifyContent={'space-between'} fontSize={'14px'} fontWeight={700} mb={'12px'}>
-        <Text>{name}</Text>
+        <Text sx={{whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", "maxW": "78%"}}>{name}</Text>
         <Text>
           {/*TODO: provide text "top bit" | "min bit" in case of auction*/}
           {order && (
