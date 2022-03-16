@@ -13,7 +13,7 @@ import {
 } from '@chakra-ui/react';
 import axios from 'axios';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { BigNumber as EthersBigNumber, Signer, utils } from 'ethers';
+import { BigNumber as EthersBigNumber, Contract, Signer, utils } from 'ethers';
 import BigNumber from 'bignumber.js';
 import { useMutation, useQueryClient } from 'react-query';
 
@@ -36,6 +36,7 @@ import { nftKeys, orderKeys } from '../../../../../../../../../../utils/query-ke
 import { GetActiveListingApi, GetNFT2Api, GetOrdersApi } from '../../../../../../../../api';
 import { useNFTPageData } from '../../../../../../NFTPage.context';
 import { ReactComponent as CheckIcon } from '../../../../../../../../../../../assets/images/check-vector.svg'; 
+import Contracts from '../../../../../../../../../../../contracts/contracts.json';
 
 interface INFTAcceptOfferPopupProps {
   NFT?: INFT;
@@ -44,12 +45,16 @@ interface INFTAcceptOfferPopupProps {
   isOpen: boolean;
   onClose: () => void;
 }
-const UNIVERSE_FEE = 2.5;
+
+// @ts-ignore
+const { contracts: contractsData } = Contracts[process.env.REACT_APP_NETWORK_CHAIN_ID];
 
 export const NFTAcceptOfferPopup = ({ NFT, NFTs, order, isOpen, onClose }: INFTAcceptOfferPopupProps) => {
   const { address, signer } = useAuthContext() as any;
 
   const { setShowError, setErrorBody} = useErrorContext() as any;
+
+  const contract = new Contract(`${NFT?.collection?.address}`, contractsData[NFT?.standard].abi, signer);
 
   const queryClient = useQueryClient();
   const { offers } = useNFTPageData();
@@ -109,6 +114,12 @@ export const NFTAcceptOfferPopup = ({ NFT, NFTs, order, isOpen, onClose }: INFTA
 
   const handleAcceptClick = useCallback(async () => {
     try {
+      const isApprovedForAll = await contract.isApprovedForAll(address, process.env.REACT_APP_MARKETPLACE_CONTRACT);
+      if (!isApprovedForAll) {
+        setState(AcceptState.APPROVAL);
+        const approveTx = await contract.setApprovalForAll(process.env.REACT_APP_MARKETPLACE_CONTRACT, true);
+        await approveTx.wait();
+      }
       setFetchCount(0);
       setState(AcceptState.PROCESSING);
 
@@ -246,7 +257,7 @@ export const NFTAcceptOfferPopup = ({ NFT, NFTs, order, isOpen, onClose }: INFTA
 
   const finalPrice = useMemo(() => {
     const royaltyCut = new BigNumber(listingPrice).multipliedBy(totalRoyalties).dividedBy(100)
-    const final = new BigNumber(listingPrice).minus(royaltyCut).toFixed(2);
+    const final = new BigNumber(listingPrice).minus(royaltyCut).toFixed(3);
     return final;
   }, [order, totalRoyalties, tokenDecimals, listingPrice]);
 
@@ -309,7 +320,7 @@ export const NFTAcceptOfferPopup = ({ NFT, NFTs, order, isOpen, onClose }: INFTA
               <Box>
                 <Text fontSize={'16px'} fontWeight={700}>Fees</Text>
                 <Box layerStyle={'Grey'} {...styles.FeesContainerStyle}>
-                  <Fee name={'To Universe'} amount={UNIVERSE_FEE} />
+                  <Fee name={'To Universe'} amount={daoFee} />
                   <Fee name={'To collection'} amount={collectionRoyalties} />
                   <Fee name={'To creator'} amount={nftRoyalties} />
                   <Fee name={'Total'} amount={totalRoyalties} />
@@ -331,6 +342,17 @@ export const NFTAcceptOfferPopup = ({ NFT, NFTs, order, isOpen, onClose }: INFTA
                 <Button boxShadow={'lg'} onClick={handleAcceptClick}>Accept</Button>
               </Box>
             </>
+          )}
+
+          {state === AcceptState.APPROVAL && (
+            <Box>
+              <Heading {...styles.TitleStyle} mb={'20px'}>Accepting offer...</Heading>
+
+              <Loading my={'64px'} />
+              <Text textAlign={'center'} color={'rgba(0, 0, 0, 0.6)'}>
+                 Please approve this collection before accepting the offer.
+              </Text>
+            </Box>
           )}
 
           {state === AcceptState.PROCESSING && (

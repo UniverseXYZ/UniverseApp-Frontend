@@ -1,6 +1,7 @@
 export enum AcceptState {
   CHECKOUT,
   PROCESSING,
+  APPROVAL,
   CONGRATULATIONS,
   INDEXING
 }

@@ -54,7 +54,7 @@ export const HighestOffer = ({ offer, creator }: IHighestOfferProps) => {
             <strong>
               {formattedPrice} {token.ticker}
             </strong>
-           {usd}
+           ${usd}
           </Text>
         </Flex>
       </Box>
