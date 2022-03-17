@@ -82,7 +82,7 @@ export const NFTItemContentWithPrice = (
                 top={'-2px'}
                 width={'20px'}
               />
-              {Number(price) < 0.0001 ? '< 0.0001' : price && price.length > 7 ? Number(price).toFixed(2) : price}
+              {Number(price) < 0.0001 ? '< 0.0001' : price && price.length > 7 ? price.substring(0, 5) : price}
             </>
           )}
         </Text>
