@@ -246,22 +246,23 @@ export const SummaryTab = () => {
         <Box {...styles.ImageContainerStyle}>
           {amountType === 'single' && (
             <>
-              {isNFTAssetImage(nft.artworkType) &&
+              {
+                isNFTAssetImage(nft.artworkTypes) &&
                 <NFTAssetImage
                   image={nft.originalUrl}
                   h={'var(--image-size)'}
                   w={'var(--image-size)'}
                   allowFullscreen={false}
                 />
-              }
-              {isNFTAssetVideo(nft.artworkType) &&
+              ||
+              isNFTAssetVideo(nft.artworkTypes) &&
                 <NFTAssetVideo
                   video={nft.originalUrl}
                   h={'var(--image-size)'}
                   w={'var(--image-size)'}
                 />
-              }
-              {isNFTAssetAudio(nft.artworkType) &&
+              ||
+              isNFTAssetAudio(nft.artworkTypes) &&
                 <NFTAssetAudio
                   audio={nft.originalUrl}
                   h={'var(--image-size)'}
@@ -292,7 +293,7 @@ export const SummaryTab = () => {
                 >
                   {NFTsForPreview.map((_NFT, i) => (
                     <SwiperSlide key={i}>
-                      {isNFTAssetImage(_NFT.artworkType) &&
+                      {isNFTAssetImage(_NFT.artworkTypes) &&
                         <NFTAssetImage
                           image={_NFT.originalUrl}
                           h={'var(--image-size)'}
@@ -300,14 +301,14 @@ export const SummaryTab = () => {
                           allowFullscreen={false}
                         />
                       }
-                      {isNFTAssetVideo(_NFT.artworkType) &&
+                      {isNFTAssetVideo(_NFT.artworkTypes) &&
                         <NFTAssetVideo
                           video={_NFT.originalUrl}
                           h={'var(--image-size)'}
                           w={'var(--image-size)'}
                         />
                       }
-                      {isNFTAssetAudio(_NFT.artworkType) &&
+                      {isNFTAssetAudio(_NFT.artworkTypes) &&
                         <NFTAssetAudio
                           audio={_NFT.originalUrl}
                           h={'var(--image-size)'}

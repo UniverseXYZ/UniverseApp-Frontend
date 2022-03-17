@@ -28,9 +28,9 @@ interface IPostingPopupProps {
 
 export const PostingPopup = ({ status, onClose }: IPostingPopupProps) => {
   const { nft } = useMarketplaceSellData();
-  const isImage = isNFTAssetImage(nft.artworkType);
-  const isVideo = isNFTAssetVideo(nft.artworkType);
-  const isAudio = isNFTAssetAudio(nft.artworkType);
+  const isImage = isNFTAssetImage(nft.artworkTypes);
+  const isVideo = isNFTAssetVideo(nft.artworkTypes);
+  const isAudio = isNFTAssetAudio(nft.artworkTypes);
   const router = useHistory();
 
   const handleClickViewListing = useCallback(() => {
@@ -59,9 +59,9 @@ export const PostingPopup = ({ status, onClose }: IPostingPopupProps) => {
               <Heading {...styles.TitleStyle} mb={'10px'}>Congratulations!</Heading>
               <Text color={'rgba(0, 0, 0, 0.6)'} textAlign={'center'}>You have successfully posted your listing</Text>
 
-              {isImage && (<Image src={nft.thumbnailUrl} {...styles.AssetCongratsStyle} alt={nft.name} />)}
-              {isVideo && (<NFTAssetVideo video={nft.thumbnailUrl} {...styles.AssetCongratsStyle}/>)}
-              {isAudio && (<Image src={AudioNFTPreviewImage} {...styles.AssetCongratsStyle} alt={nft.name} />)}
+              {isImage && (<Image src={nft.thumbnailUrl} {...styles.AssetCongratsStyle} alt={nft.name} />) ||
+               isVideo && (<NFTAssetVideo video={nft.thumbnailUrl} {...styles.AssetCongratsStyle}/>) ||
+               isAudio && (<Image src={AudioNFTPreviewImage} {...styles.AssetCongratsStyle} alt={nft.name} />)}
 
               <Box {...styles.ButtonsContainerStyle}>
                 <Button boxShadow={'lg'} onClick={handleClickViewListing}>View listing</Button>

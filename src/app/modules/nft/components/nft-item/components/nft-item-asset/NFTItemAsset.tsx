@@ -23,13 +23,13 @@ export const NFTItemAsset = (props: INFTItemAssetProps) => {
 
   const [ref, { width }] = useMeasure<HTMLDivElement>();
 
-  const isImage = isNFTAssetImage(NFT.artworkType);
-  const isVideo = isNFTAssetVideo(NFT.artworkType);
-  const isAudio = isNFTAssetAudio(NFT.artworkType);
+  const isImage = isNFTAssetImage(NFT.artworkTypes);
+  const isVideo = isNFTAssetVideo(NFT.artworkTypes);
+  const isAudio = isNFTAssetAudio(NFT.artworkTypes);
 
   const previewUrl = NFT.previewUrl || NFT.thumbnailUrl || NFT.originalUrl;
   const previewArtworkType = getArtworkTypeByUrl(previewUrl);
-  const isImagePreview = isNFTAssetImage(previewArtworkType);
+  const isImagePreview = !previewArtworkType || isNFTAssetImage([previewArtworkType]);
 
   const gifUrl = NFT.gifUrl;
 
@@ -37,17 +37,16 @@ export const NFTItemAsset = (props: INFTItemAssetProps) => {
   
   return (
     <Box ref={ref} pos={'relative'}>
-      {NFT.artworkType ? 
+      {NFT.artworkTypes && NFT.artworkTypes.length ? 
         <Box {...styles.AssetStyle(width)}>
-          {isImage && (<Image src={NFT.thumbnailUrl} alt={NFT.name} />)}
-          {isVideo && (
+          {isVideo &&
             <>
               {isImagePreview
                 ? <Image src={isHover && gifUrl ? gifUrl : previewUrl} alt={NFT.name} />
                 : <video src={NFT.videoUrl || NFT.thumbnailUrl} />}
             </>
-          )}
-          {isAudio && (<Image src={AudioNFTPreviewImage} alt={NFT.name} />)}
+           || isImage && (<Image src={NFT.thumbnailUrl} alt={NFT.name} />)
+           || isAudio && (<Image src={AudioNFTPreviewImage} alt={NFT.name} />)}
         </Box> : 
         <Box {...styles.BrokenAssetStyle(width)}>
           <NFTAssetBroken _before={{ borderRadius: '6px 6px 0 0' }} />

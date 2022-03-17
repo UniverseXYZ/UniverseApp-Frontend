@@ -211,7 +211,7 @@ export const mapNft = (data: INFTBackendType, collectionData: ICollection | unde
       data.metadata?.image ||
       data.metadata?.image_url ||
       data.metadata?.image_thumbnail_url) || '',
-    artworkType: getArtworkType(data),
+    artworkTypes: getArtworkType(data),
     amount: 0,
     txHash: null,
     collectionId: 0,

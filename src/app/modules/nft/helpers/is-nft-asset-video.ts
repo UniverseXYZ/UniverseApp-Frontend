@@ -1,5 +1,5 @@
 import { NFTArtworkType } from '../types';
 
-export const isNFTAssetVideo = (type: NFTArtworkType | null) => {
-  return type && [NFTArtworkType.MP4].includes(type);
+export const isNFTAssetVideo = (types: NFTArtworkType[]) => {
+  return types.some(type => [NFTArtworkType.MP4, NFTArtworkType.VIDEO].includes(type));
 }

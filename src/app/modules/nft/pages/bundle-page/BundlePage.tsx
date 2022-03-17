@@ -82,13 +82,14 @@ export const BundlePageContent = () => {
       <Box>
         <Box {...styles.NFTAssetContainerStyle} flexDir={'column'} alignItems={'center'}>
           <Box>
-            {isNFTAssetImage(uniqNFTs[selectedNFTIdx].artworkType) &&
-              <NFTAssetImage image={uniqNFTs[selectedNFTIdx].thumbnailUrl} maxH={'512px'} maxW={'512px'} />
-            }
-            {isNFTAssetVideo(uniqNFTs[selectedNFTIdx].artworkType) &&
+            {
+            isNFTAssetVideo(uniqNFTs[selectedNFTIdx].artworkTypes) &&
               <NFTAssetVideo video={uniqNFTs[selectedNFTIdx].thumbnailUrl} maxH={'512px'} maxW={'512px'} />
-            }
-            {isNFTAssetAudio(uniqNFTs[selectedNFTIdx].artworkType) &&
+            ||
+            isNFTAssetImage(uniqNFTs[selectedNFTIdx].artworkTypes) &&
+              <NFTAssetImage image={uniqNFTs[selectedNFTIdx].thumbnailUrl} maxH={'512px'} maxW={'512px'} />
+            ||
+            isNFTAssetAudio(uniqNFTs[selectedNFTIdx].artworkTypes) &&
               <NFTAssetAudio audio={uniqNFTs[selectedNFTIdx].thumbnailUrl} maxH={'512px'} maxW={'512px'} />
             }
           </Box>
@@ -126,9 +127,9 @@ export const BundlePageContent = () => {
                       w={'70px'}
                       onClick={() => setSelectedNFTIdx(i)}
                     >
-                      {isNFTAssetImage(NFT.artworkType) && <Image src={NFT.thumbnailUrl} />}
-                      {isNFTAssetVideo(NFT.artworkType) && <video src={NFT.thumbnailUrl} />}
-                      {isNFTAssetAudio(NFT.artworkType) && <Image src={AudioNFTPreviewImage} />}
+                      {isNFTAssetImage(NFT.artworkTypes) && <Image src={NFT.thumbnailUrl} />}
+                      {isNFTAssetVideo(NFT.artworkTypes) && <video src={NFT.thumbnailUrl} />}
+                      {isNFTAssetAudio(NFT.artworkTypes) && <Image src={AudioNFTPreviewImage} />}
                     </Box>
                   </SwiperSlide>
                 ))}

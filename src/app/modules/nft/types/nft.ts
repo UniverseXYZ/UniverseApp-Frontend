@@ -2,6 +2,7 @@ export enum NFTArtworkType {
   JPG = 'jpg',
   JPEG = 'jpeg',
   IMAGE = 'image',
+  VIDEO = 'video',
   PNG = 'png',
   GIF = 'gif',
   MP4 = 'mp4',
@@ -103,7 +104,7 @@ export interface INFT {
   _properties?: INFTProperty[];
   id: string;
   amount: number;
-  artworkType: NFTArtworkType | null;
+  artworkTypes: NFTArtworkType[];
   collectionId: number;
   collection?: ICollection;
   createdAt: Date;
