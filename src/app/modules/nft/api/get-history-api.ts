@@ -57,6 +57,26 @@ export const GetHistoryApi = async (collectionAddress: string, tokenId: string):
     // Api call to get the order creator or the minter data
     for (let i = 0; i < orderHistory.length; i++) {
       const order = orderHistory[i];
+      if (order.side === 0 && order.status === 2) {
+        const listingOrder = {
+          ...order,
+          createdAt: order.createdAt,
+          side: 0,
+          status: 0,
+        }
+        orderHistory.push(listingOrder);
+        order.createdAt = order.updatedAt;
+      } else if (order.side === 1 && order.status === 2) {
+        const listingOrder = {
+          ...order,
+          createdAt: order.createdAt,
+          side: 1,
+          status: 0,
+        }
+        orderHistory.push(listingOrder);
+        order.createdAt = order.updatedAt;
+        order.maker = order.taker;
+      }
       if (order.maker) {
         order.makerData = await GetUserApi(order.maker);
       }
@@ -68,7 +88,9 @@ export const GetHistoryApi = async (collectionAddress: string, tokenId: string):
     }
 
     return {
-      orderHistory: orderHistory,
+      orderHistory: orderHistory.sort((a, b) => {
+        return new Date(b.createdAt).valueOf() - new Date(a.createdAt).valueOf();
+      }),
       mintEvent: mintEvent
     }
 };
