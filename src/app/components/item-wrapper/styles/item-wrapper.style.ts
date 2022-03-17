@@ -52,7 +52,7 @@ export const getItemWrapperStyle: (isBundle: boolean) => BoxProps = (isBundle) =
       display: 'block'
     },
     '& .nft-label': {
-      display: 'block'
+      display: 'inline-block'
     }
   },
 });
