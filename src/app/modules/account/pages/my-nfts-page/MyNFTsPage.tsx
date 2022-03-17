@@ -28,9 +28,9 @@ import { useClickAway, useTitle } from 'react-use';
 import { WalletTab } from './components';
 import { getNftsPerAddress } from '../../../../../utils/api/marketplace';
 import FiltersContextProvider from '../../../account/pages/my-nfts-page/components/search-filters/search-filters.context';
+import { Box } from '@chakra-ui/react';
 
 export const MyNFTsPage = () => {
-  const tabs = ['Wallet', 'Collections', 'Saved NFTs', 'Universe NFTs'];
   const history = useHistory();
   const createButtonRef = useRef<HTMLButtonElement>(null);
 
@@ -57,9 +57,16 @@ export const MyNFTsPage = () => {
   const scrollContainer = useRef(null);
 
   // State hooks
-  const [showloading, setShowLoading] = useStateIfMounted(false);
+  const [showLoading, setShowLoading] = useStateIfMounted(false);
   const [showCongratsMintedSavedForLater, setShowCongratsMintedSavedForLater] = useStateIfMounted(false);
   const [isDropdownOpened, setIsDropdownOpened] = useStateIfMounted(false);
+
+  const tabs = [
+    { name: 'Wallet', amount: nftSummary?.nfts },
+    { name: 'Collections', amount: nftSummary?.collections },
+    { name: 'Saved NFTs', amount: nftSummary?.savedNfts },
+    { name: 'Universe NFTs', amount: (userLobsters.length || 0) + (userPolymorphs.length || 0) },
+  ];
 
   // NEW
   const [selectedSavedNfts, setSelectedSavedNfts] = useStateIfMounted([]);
@@ -73,10 +80,10 @@ export const MyNFTsPage = () => {
   });
 
   useEffect(() => {
-    if (!showloading) {
+    if (!showLoading) {
       setActiveTxHashes([]);
     }
-  }, [showloading]);
+  }, [showLoading]);
 
   useEffect(() => {
     setDarkMode(false);
@@ -257,27 +264,18 @@ export const MyNFTsPage = () => {
   const renderTabsWrapper = () => (
     <Tabs
       scrollContainer={scrollContainer}
-      items={tabs.map((tab, index) => ({
-        name: tab,
+      items={tabs.map(({ name, amount }, index) => ({
+        name,
         active: myNFTsSelectedTabIndex === index,
         handler: setMyNFTsSelectedTabIndex.bind(this, index),
-        length:
-          index === 0
-            ? nftSummary?.nfts || '0'
-            : index === 1
-              ? nftSummary?.collections || '0'
-              : index === 2
-                ? nftSummary?.savedNfts || '0'
-                : index === 3
-                  ? (userLobsters.length || 0) + (userPolymorphs.length || 0) || '0'
-                  : null,
+        length: amount
       }))}
     />
   );
 
   const renderPopups = () => (
     <>
-      <Popup closeOnDocumentClick={false} open={showloading}>
+      <Popup closeOnDocumentClick={false} open={showLoading}>
         <LoadingPopup
           text="The transaction is in progress. Keep this window opened. Navigating away from the page will reset the current progress."
           onClose={() => setShowLoading(false)}
@@ -403,12 +401,12 @@ export const MyNFTsPage = () => {
         {renderTabsWrapper()}
       </div>
 
+      {myNFTsSelectedTabIndex === 0 && (
+        <FiltersContextProvider>
+          <WalletTab />
+        </FiltersContextProvider>
+      )}
       <div className="container mynfts__page__body">
-        {myNFTsSelectedTabIndex === 0 && (
-          <FiltersContextProvider>
-            <WalletTab />
-          </FiltersContextProvider>
-        )}
         {myNFTsSelectedTabIndex === 1 && <DeployedCollections scrollContainer={scrollContainer} />}
         {myNFTsSelectedTabIndex === 2 && (
           <SavedNFTs

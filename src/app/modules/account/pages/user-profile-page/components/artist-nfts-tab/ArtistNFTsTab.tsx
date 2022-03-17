@@ -1,5 +1,5 @@
 import { Box, Button, SimpleGrid } from '@chakra-ui/react';
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 
 import { NftItem, NFTItemContentWithPrice } from '../../../../../nft/components';
 import { OrderAssetClass } from '../../../../../nft/enums';
@@ -7,6 +7,7 @@ import { Loading } from '../../../../../../components';
 import { SearchFilters } from '../../../my-nfts-page/components/search-filters';
 import { useFiltersContext } from '../../../../../account/pages/my-nfts-page/components/search-filters/search-filters.context';
 import NoNftsFound from '../../../../../../../components/myNFTs/NoNftsFound';
+import { useIntersection } from 'react-use';
 
 interface IArtistNFTsTabProps {
   artistAddress: string;
@@ -54,9 +55,31 @@ export const ArtistNFTsTab = ({ artistAddress, onTotalLoad }: IArtistNFTsTabProp
   const hasUserNFTs = userNFTs?.pages?.length && userNFTs?.pages[0]?.data?.length;
   const waitingUserNFTs = isFetchingUserNFTs || isLoadingUserNFTs;
 
+  const filtersRef = useRef(null);
+
+  const intersection = useIntersection(filtersRef, {
+    threshold: 1,
+    rootMargin: '0px',
+    root: null,
+  });
+
   return (
     <Box>
-      <SearchFilters />
+      <Box
+        ref={filtersRef}
+        sx={{
+          bg: (intersection?.intersectionRect.top ?? 1) === 0 ? 'white' : 'transparent',
+          pos: 'sticky',
+          top: '-1px',
+          mb: '40px',
+          zIndex: 20,
+          '.search--sort--filters--section': {
+            mb: 0,
+          },
+        }}
+      >
+        <SearchFilters />
+      </Box>
 
       {hasOrderBookFilters ? (
 

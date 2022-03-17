@@ -35,10 +35,8 @@ export const UserProfilePage = () => {
 
   useTitle(`Universe Minting - Artist - ${artist?.name}`, { restoreOnUnmount: true });
 
-  if(isError) {
-    return (
-      <NotFound />
-    )
+  if (isError) {
+    return (<NotFound />);
   }
 
   let content = (
@@ -71,39 +69,36 @@ export const UserProfilePage = () => {
     </div>
   );
 
-    if(artist) {
-        content = (
-            <div className="artist__page">
-              <Box sx={{ 'img': { display: 'inline' } }}>
-                <ArtistDetails artistAddress={artistUsername} onArtist={artist} loading={isLoading} />
-              </Box>
-              <Container maxW={'1110px'} sx={{ padding: { sm: '10px' }}}>
-                <Tabs>
-                  <TabList>
-                    <Tab>NFTs {totalNFTs && (<TabLabel>{totalNFTs}</TabLabel>)}</Tab>
-                    {/*<Tab>Active auctions</Tab>*/}
-                    {/*<Tab>Future auctions</Tab>*/}
-                    {/*<Tab>Past auctions</Tab>*/}
-                  </TabList>
+    if (artist) {
+      content = (
+        <div className="artist__page">
+          <Box sx={{ 'img': { display: 'inline' } }}>
+            <ArtistDetails artistAddress={artistUsername} onArtist={artist} loading={isLoading} />
+          </Box>
+          <Tabs padding={{ sm: '10px' }}>
+            <TabList maxW={'1110px'} m={'auto'}>
+              <Tab>NFTs {totalNFTs && (<TabLabel>{totalNFTs}</TabLabel>)}</Tab>
+              {/*<Tab>Active auctions</Tab>*/}
+              {/*<Tab>Future auctions</Tab>*/}
+              {/*<Tab>Past auctions</Tab>*/}
+            </TabList>
 
-                  <TabPanels>
-                    <TabPanel p={0} pt={'30px'}>
-                      <FiltersContextProvider>
-                        <ArtistNFTsTab artistAddress={artistAddress} onTotalLoad={(total) => setTotalNFTs(total)} />
-                      </FiltersContextProvider>
-                    </TabPanel>
-                  </TabPanels>
-                </Tabs>
-              </Container>
-              {artist && artist.personalLogo && (
-                <div className="artist__personal__logo">
-                  <img src={artist.personalLogo} alt="Artist personal logo" />
-                </div>
-              )}
+            <TabPanels>
+              <TabPanel p={0} pt={'30px'}>
+                <FiltersContextProvider>
+                  <ArtistNFTsTab artistAddress={artistAddress} onTotalLoad={(total) => setTotalNFTs(total)} />
+                </FiltersContextProvider>
+              </TabPanel>
+            </TabPanels>
+          </Tabs>
+          {artist && artist.personalLogo && (
+            <div className="artist__personal__logo">
+              <img src={artist.personalLogo} alt="Artist personal logo" />
             </div>
-        )
+          )}
+        </div>
+      )
   }
 
   return content;
-
 };
