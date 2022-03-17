@@ -189,12 +189,12 @@ export const NFTInfo = () => {
             }}
           >
             <Box {...styles.NFTAssetContainerStyle}>
-              {!NFT.artworkType && <NFTAssetBroken {...styles2.BrokenAssetStyle} />}
-              {isNFTAssetImage(NFT.artworkType) && <NFTAssetImage image={NFT.optimizedUrl || NFT.originalUrl} />}
-              {isNFTAssetVideo(NFT.artworkType) && (
+              {(!NFT.artworkTypes || !NFT.artworkTypes.length) && <NFTAssetBroken {...styles2.BrokenAssetStyle} /> ||
+              isNFTAssetVideo(NFT.artworkTypes) && (
                 <NFTAssetVideo video={NFT.videoUrl || NFT.optimizedUrl || NFT.originalUrl} />
-              )}
-              {isNFTAssetAudio(NFT.artworkType) && <NFTAssetAudio audio={NFT.optimizedUrl || NFT.originalUrl} />}
+              ) ||
+               isNFTAssetImage(NFT.artworkTypes) && <NFTAssetImage image={NFT.optimizedUrl || NFT.originalUrl} /> ||
+              isNFTAssetAudio(NFT.artworkTypes) && <NFTAssetAudio audio={NFT.optimizedUrl || NFT.originalUrl} />}
             </Box>
             <Box {...styles.NFTDetailsContainerStyle}>
               <Box

@@ -27,12 +27,13 @@ export const getArtworkType = (data: INFTBackendType) => {
     ...(data.alternativeMediaFiles ?? []).map((file) => file.type),
   ];
 
+  const artworkTypes = [];
   for (const url of urls) {
     const result = getArtworkTypeByUrl(url);
     if (result) {
-      return result;
+      artworkTypes.push(result);
     }
   }
 
-  return null;
+  return artworkTypes;
 }
