@@ -164,7 +164,8 @@ export const SummaryTab = () => {
               address: royalty[0],
               amount: BigNumber.from(royalty[1]),
             }));
-           setCreatorRoyalties(+nftRoyalties[0].amount / 100 || 0)
+           const total = nftRoyalties.reduce((total: number, obj: any) => +obj.amount + total, 0);
+           setCreatorRoyalties(total / 100 || 0);
           }
     
           // Index 1 is collection royalties
@@ -173,7 +174,8 @@ export const SummaryTab = () => {
               address: royalty[0],
               amount: BigNumber.from(royalty[1]),
             }));
-           setCollectionRoyalties(+collectionRoyalties[0].amount / 100 || 0)
+           const total = collectionRoyalties.reduce((total: number, obj: any) => +obj.amount + total, 0);
+           setCollectionRoyalties(total / 100 || 0);
           }
         } catch (err) {
           console.log(err);
