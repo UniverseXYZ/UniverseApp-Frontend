@@ -10,6 +10,7 @@ import {
   NumberInputField,
   NumberInputProps,
 } from '@chakra-ui/react';
+import { constants } from 'ethers';
 import React, { useCallback } from 'react';
 
 import ArrowIcon from '../../../assets/images/arrow-down.svg';
@@ -63,6 +64,7 @@ export const CurrencyInput = (
         value={value}
         {...props}
         onChange={handleChangeInput}
+        max={Number(constants.MaxInt256)}
       >
         <NumberInputField
           placeholder={placeholder}

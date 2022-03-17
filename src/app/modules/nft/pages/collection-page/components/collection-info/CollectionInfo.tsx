@@ -36,7 +36,7 @@ export const CollectionInfo = () => {
   const tabs = ['Items', 'Description'];
   const [selectedTabIndex, setSelectedTabIndex] = useState(0);
   const [totalNftsCount, setTotalNftsCount] = useState(0);
-  const { address, signer } = useAuthContext() as any;
+  const { address, signer, isAuthenticated } = useAuthContext() as any;
   const history = useHistory();
   const [collectionOwner, setCollectionOwner] = useState<string>('');
 
@@ -196,7 +196,7 @@ export const CollectionInfo = () => {
                       twitterLink=""
                     />
                     <Box>
-                      {address?.toLowerCase() === collectionOwner && ( //
+                      {isAuthenticated && address?.toLowerCase() === collectionOwner && ( //
                         <Button className="light-button" onClick={() => handleEdit(collection.id)}>
                           <span>Edit</span>
                           <EditIcon />
