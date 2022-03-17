@@ -172,6 +172,16 @@ export const NftItem = (
           onClick(e, NFT as INFT);
         }
       }}
+      sx={{ 
+        maxWidth: {
+          md: 'unset',
+          sm: '325px',
+        },
+        margin: {
+          md: 'unset',
+          sm: '0 auto',
+        },
+      }}
     >
       <LinkBox>
         <LinkOverlay
