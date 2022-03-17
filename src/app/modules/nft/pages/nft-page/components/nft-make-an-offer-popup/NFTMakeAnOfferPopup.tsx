@@ -138,7 +138,7 @@ export const NFTMakeAnOfferPopup = ({ nft, order, isOpen, onClose, }: INFTMakeAn
         let offerData = {
           type: 'UNIVERSE_V1',
           maker: address,
-          taker: order?.maker,
+          taker: ethers.constants.AddressZero,
           make: {
             assetType: {
               assetClass: OrderAssetClass.ERC20,
@@ -156,7 +156,7 @@ export const NFTMakeAnOfferPopup = ({ nft, order, isOpen, onClose, }: INFTMakeAn
         // Add taker info, in case the NFT is not listed
         if (!order) {
           offerData = {...offerData,
-            taker: nft?._ownerAddress,
+            taker: ethers.constants.AddressZero,
             take: {
               value: "1",
               assetType: {
