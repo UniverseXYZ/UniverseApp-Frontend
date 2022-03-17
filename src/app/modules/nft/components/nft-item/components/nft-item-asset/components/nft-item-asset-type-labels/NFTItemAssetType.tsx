@@ -12,8 +12,8 @@ interface INFTItemAssetTypeProps extends BoxProps {
 }
 
 export const NFTItemAssetType = ({ NFT, ...boxStyles }: INFTItemAssetTypeProps) => {
-  const isVideo = isNFTAssetVideo(NFT.artworkType);
-  const isAudio = isNFTAssetAudio(NFT.artworkType);
+  const isVideo = isNFTAssetVideo(NFT.artworkTypes);
+  const isAudio = isNFTAssetAudio(NFT.artworkTypes);
 
   return (
     <Box {...styles.AssetLabelContainerStyle} {...boxStyles}>

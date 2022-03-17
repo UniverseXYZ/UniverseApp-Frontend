@@ -298,9 +298,9 @@ export const NFTAcceptOfferPopup = ({ NFT, NFTs, order, isOpen, onClose }: INFTA
               <Flex {...styles.NFTContainerStyle}>
                 <Box pos={'relative'}>
                   <Box {...styles.AssetStyle}>
-                    {isNFTAssetImage(previewNFT.artworkType) && <Image src={previewNFT.thumbnailUrl} />}
-                    {isNFTAssetVideo(previewNFT.artworkType) && <video src={previewNFT.thumbnailUrl} />}
-                    {isNFTAssetAudio(previewNFT.artworkType) && <Image src={AudioNFTPreviewImage} />}
+                    {isNFTAssetImage(previewNFT.artworkTypes) && <Image src={previewNFT.thumbnailUrl} /> ||
+                    isNFTAssetVideo(previewNFT.artworkTypes) && <video src={previewNFT.thumbnailUrl} /> ||
+                    isNFTAssetAudio(previewNFT.artworkTypes) && <Image src={AudioNFTPreviewImage} />}
                   </Box>
                   {!!NFTs && (<NFTType type={'bundle'} count={NFTs.length} />)}
                 </Box>
@@ -410,9 +410,9 @@ export const NFTAcceptOfferPopup = ({ NFT, NFTs, order, isOpen, onClose }: INFTA
               </Text>
 
               <Box {...styles.AssetCongratsStyle}>
-                {isNFTAssetImage(previewNFT.artworkType) && <Image src={previewNFT.thumbnailUrl} />}
-                {isNFTAssetVideo(previewNFT.artworkType) && <video src={previewNFT.thumbnailUrl} />}
-                {isNFTAssetAudio(previewNFT.artworkType) && <Image src={AudioNFTPreviewImage} />}
+                {isNFTAssetImage(previewNFT.artworkTypes) && <Image src={previewNFT.thumbnailUrl} />}
+                {isNFTAssetVideo(previewNFT.artworkTypes) && <video src={previewNFT.thumbnailUrl} />}
+                {isNFTAssetAudio(previewNFT.artworkTypes) && <Image src={AudioNFTPreviewImage} />}
                 {!!NFTs && (<NFTType type={'bundle'} count={NFTs.length} />)}
               </Box>
 

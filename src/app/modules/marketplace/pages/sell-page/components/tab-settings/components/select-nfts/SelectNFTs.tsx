@@ -91,9 +91,9 @@ const ActionBarNFTItem = (
     }
   }, [onRemove]);
 
-  const isImage = isNFTAssetImage(nft.artworkType);
-  const isVideo = isNFTAssetVideo(nft.artworkType);
-  const isAudio = isNFTAssetAudio(nft.artworkType);
+  const isImage = isNFTAssetImage(nft.artworkTypes);
+  const isVideo = isNFTAssetVideo(nft.artworkTypes);
+  const isAudio = isNFTAssetAudio(nft.artworkTypes);
 
   return (
     <>
@@ -129,9 +129,9 @@ const ActionBarNFTItem = (
           }}
           onClick={handleRemove}
         >
-          {isImage && (<Image src={nft.thumbnailUrl} height={'54px'} width={'54px'} objectFit={'cover'} />)}
-          {isVideo && (<video src={nft.thumbnailUrl} style={{ objectFit: 'cover', height: '54px', width: '54px' }} />)}
-          {isNFTBundle && (
+          {isImage && (<Image src={nft.thumbnailUrl} height={'54px'} width={'54px'} objectFit={'cover'} />) ||
+           isVideo && (<video src={nft.thumbnailUrl} style={{ objectFit: 'cover', height: '54px', width: '54px' }} />) ||
+           isNFTBundle && (
             <Text
               sx={{
                 bg: 'rgba(0, 0, 0, 0.8)',

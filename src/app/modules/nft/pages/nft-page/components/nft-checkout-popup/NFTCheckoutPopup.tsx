@@ -312,9 +312,9 @@ export const NFTCheckoutPopup = ({ NFT, NFTs, order, isOpen, onClose }: INFTChec
               <Flex {...styles.NFTContainerStyle}>
                 <Box pos={'relative'}>
                   <Box {...styles.AssetStyle}>
-                    {isNFTAssetImage(previewNFT.artworkType) && <Image src={previewNFT.thumbnailUrl} />}
-                    {isNFTAssetVideo(previewNFT.artworkType) && <video src={previewNFT.thumbnailUrl} />}
-                    {isNFTAssetAudio(previewNFT.artworkType) && <Image src={AudioNFTPreviewImage} />}
+                    {isNFTAssetImage(previewNFT.artworkTypes) && <Image src={previewNFT.thumbnailUrl} /> ||
+                    isNFTAssetVideo(previewNFT.artworkTypes) && <video src={previewNFT.thumbnailUrl} /> ||
+                    isNFTAssetAudio(previewNFT.artworkTypes) && <Image src={AudioNFTPreviewImage} />}
                   </Box>
                   {!!NFTs && !!NFTs.length && (<NFTType type={'bundle'} count={NFTs.length} />)}
                 </Box>
@@ -431,9 +431,9 @@ export const NFTCheckoutPopup = ({ NFT, NFTs, order, isOpen, onClose }: INFTChec
               <Text color={'rgba(0, 0, 0, 0.6)'} textAlign={'center'}>You have successfully bought the NFT</Text>
 
               <Box {...styles.AssetCongratsStyle}>
-                {isNFTAssetImage(previewNFT.artworkType) && <Image src={previewNFT.thumbnailUrl} />}
-                {isNFTAssetVideo(previewNFT.artworkType) && <video src={previewNFT.thumbnailUrl} />}
-                {isNFTAssetAudio(previewNFT.artworkType) && <Image src={AudioNFTPreviewImage} />}
+                {isNFTAssetImage(previewNFT.artworkTypes) && <Image src={previewNFT.thumbnailUrl} />}
+                {isNFTAssetVideo(previewNFT.artworkTypes) && <video src={previewNFT.thumbnailUrl} />}
+                {isNFTAssetAudio(previewNFT.artworkTypes) && <Image src={AudioNFTPreviewImage} />}
                 {!!NFTs && !!NFTs?.length && <NFTType type={'bundle'} count={NFTs.length} />}
               </Box>
 
