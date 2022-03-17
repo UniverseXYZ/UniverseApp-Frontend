@@ -34,9 +34,9 @@ const HistoryEvent: React.FC<IHistoryEventProps> = ({ event, onlyListings, cance
     const side = event.side;
     const status = event.status;
 
-    if (side === OrderSide.SELL && status === OrderStatus.FILLED) {
+    if (status === OrderStatus.FILLED) {
       type = HistoryType.BOUGHT;
-    } else if (side === OrderSide.SELL && status === OrderStatus.CREATED) {
+    } else if (side === OrderSide.SELL && (status === OrderStatus.CREATED || OrderStatus.CANCELLED || OrderStatus.STALE)) {
       type = HistoryType.LISTED;
     } else if (onlyListings) {
       type = HistoryType.LISTED;
@@ -62,12 +62,13 @@ const HistoryEvent: React.FC<IHistoryEventProps> = ({ event, onlyListings, cance
   const usd = new BigNumber(price).multipliedBy(usdPrice).toFixed(2);
 
   const endDate = new Date(event.end * 1000);
-  const expired = type === HistoryType.OFFER ? dayjs().diff(endDate) > 0 : false;
+  const canceled = (type === HistoryType.OFFER || type === HistoryType.LISTED) && (event.status === OrderStatus.CANCELLED || event.status === OrderStatus.STALE);
+  const expired = !canceled && type === HistoryType.OFFER ? dayjs().diff(endDate) > 0 || event.status === OrderStatus.STALE : false;
 
   return (
     <NFTTabItemWrapper>
       <Flex>
-        {!onlyListings && <Box {...styles.ActionIconStyle} bg={actionIcon[type]} />}
+        <Box {...styles.ActionIconStyle} bg={actionIcon[type]} />
         <Box>
           <Text {...styles.NameStyle}>
             <Box {...styles.ActionLabelStyle}>{nameLabels[type]} </Box>
@@ -78,6 +79,12 @@ const HistoryEvent: React.FC<IHistoryEventProps> = ({ event, onlyListings, cance
           </Text>
           <Text {...styles.AddedLabelStyle}>
             {getAddedAtLabel(event.createdAt)}
+            {!onlyListings && canceled && (
+              <Box as={'span'} {...styles.ExpiredStyle}>
+                {' '}
+                (canceled)
+              </Box>
+            )}
             {!onlyListings && expired && (
               <Box as={'span'} {...styles.ExpiredStyle}>
                 {' '}

@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { utils } from 'ethers';
 import { ZERO_ADDRESS } from '../../../constants';
+import { OrderSide, OrderStatus } from '../../marketplace/enums';
 import { GetUserApi } from '../api';
 import { IOrder, IUser } from '../types';
 
@@ -57,6 +58,26 @@ export const GetHistoryApi = async (collectionAddress: string, tokenId: string):
     // Api call to get the order creator or the minter data
     for (let i = 0; i < orderHistory.length; i++) {
       const order = orderHistory[i];
+      if (order.side === OrderSide.BUY && order.status === OrderStatus.FILLED) {
+        const listingOrder = {
+          ...order,
+          createdAt: order.createdAt,
+          side: OrderSide.BUY,
+          status: OrderStatus.CREATED,
+        }
+        orderHistory.push(listingOrder);
+        order.createdAt = order.updatedAt;
+      } else if (order.side === OrderSide.SELL && order.status === OrderStatus.FILLED) {
+        const listingOrder = {
+          ...order,
+          createdAt: order.createdAt,
+          side: OrderSide.SELL,
+          status: OrderStatus.CREATED,
+        }
+        orderHistory.push(listingOrder);
+        order.createdAt = order.updatedAt;
+        order.maker = order.taker;
+      }
       if (order.maker) {
         order.makerData = await GetUserApi(order.maker);
       }
@@ -68,7 +89,9 @@ export const GetHistoryApi = async (collectionAddress: string, tokenId: string):
     }
 
     return {
-      orderHistory: orderHistory,
+      orderHistory: orderHistory.sort((a, b) => {
+        return new Date(b.createdAt).valueOf() - new Date(a.createdAt).valueOf();
+      }),
       mintEvent: mintEvent
     }
 };
