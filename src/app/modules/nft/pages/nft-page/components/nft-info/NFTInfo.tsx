@@ -108,7 +108,7 @@ export const NFTInfo = () => {
 
   const getOrderOffers = async () => {
     try {
-      const orders = offers?.orders || [];
+      const orders = offers?.orders?.filter(item => item?.maker?.toLowerCase() !== NFT?._ownerAddress?.toLowerCase()) || [];
 
       const userRequests: Array<any> = [];
       const uniqueUsers = [...Array.from(new Set(orders.map((order) => order.maker)))];
@@ -285,7 +285,7 @@ export const NFTInfo = () => {
                     <TabPanel>
                       <TabOffers
                         nft={NFT}
-                        offers={offers?.orders}
+                        offers={offers?.orders?.filter(item => item?.maker?.toLowerCase() !== NFT?._ownerAddress?.toLowerCase())}
                         usersMap={offerUsersMap}
                         setOfferForAccept={setOfferForAccept}
                         setShowOfferPopup={setShowOfferPopup}
