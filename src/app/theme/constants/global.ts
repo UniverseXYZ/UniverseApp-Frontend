@@ -15,6 +15,10 @@ export const global = {
   '.css-hdd9l7': {
     zIndex: '997 !important',
   },
+  '#popup-root': {
+    position: 'relative',
+    zIndex: 9999999,
+  },
   h1: {
     fontFamily: 'Sharp Grotesk SemiBold'
   },
