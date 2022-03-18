@@ -64,6 +64,7 @@ const DesktopView = ({
     resetConnectionState,
     loggedInArtist,
     signOut,
+    isAuthenticating,
   } = useAuthContext();
 
   return (
@@ -444,7 +445,7 @@ const DesktopView = ({
               closeOnDocumentClick={false}
               trigger={
                 <button type="button" className="sign__in">
-                  Sign In
+                  {isAuthenticating ? 'Signing in...' : 'Sign in'}
                 </button>
               }
             >

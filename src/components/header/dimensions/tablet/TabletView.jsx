@@ -77,6 +77,7 @@ const TabletView = (props) => {
     resetConnectionState,
     loggedInArtist,
     signOut,
+    isAuthenticating,
   } = useAuthContext();
 
   const { editProfileButtonClick } = useAuctionContext();
@@ -718,7 +719,11 @@ const TabletView = (props) => {
                 </Popup> */}
                 <Popup
                   closeOnDocumentClick={false}
-                  trigger={<button type="button">Sign in</button>}
+                  trigger={
+                    <button type="button" className="sign__in">
+                      {isAuthenticating ? 'Signing in...' : 'Sign in'}
+                    </button>
+                  }
                 >
                   {(close) => (
                     <SelectWalletPopup

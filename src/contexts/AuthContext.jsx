@@ -1,3 +1,4 @@
+/* eslint-disable no-use-before-define */
 import React, { createContext, useState, useEffect, useContext, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { Contract, providers, utils } from 'ethers';
@@ -52,9 +53,13 @@ const AuthContextProvider = ({ children }) => {
   const [usdcUsdPrice, setUsdcUsdPrice] = useState(0);
   const [xyzUsdPrice, setXyzUsdPrice] = useState(0);
   const [wethUsdPrice, setWethUsdPrice] = useState(0);
+  const [isAuthenticating, setIsAuthenticating] = useState(false);
+  const [isSigning, setIsSigning] = useState(false);
 
   const web3ProviderRef = useRef(web3Provider);
   const networkRef = useRef(ethereumNetwork);
+  const isAuthenticatingRef = useRef(isAuthenticating);
+  const isSigningRef = useRef(isSigning);
 
   useEffect(() => {
     web3ProviderRef.current = web3Provider;
@@ -63,6 +68,14 @@ const AuthContextProvider = ({ children }) => {
   useEffect(() => {
     networkRef.current = ethereumNetwork;
   }, [ethereumNetwork]);
+
+  useEffect(() => {
+    isAuthenticatingRef.current = isAuthenticating;
+  }, [web3Provider]);
+
+  useEffect(() => {
+    isSigningRef.current = isSigning;
+  }, [isSigning]);
 
   // Getters
   useEffect(() => {
@@ -198,7 +211,7 @@ const AuthContextProvider = ({ children }) => {
     // IF ACCOUNT CHANGES, CLEAR TOKEN AND ADDRESS FROM LOCAL STORAGE
     clearStorageAuthData();
     if (account) {
-      // await connectWithMetaMask();
+      connectWeb3();
       history.push('/');
       web3AuthenticationProccess(web3ProviderRef.current, networkRef.current, [account]);
     } else {
@@ -303,16 +316,22 @@ const AuthContextProvider = ({ children }) => {
   };
 
   const connectWeb3 = async () => {
-    if (providerName === CONNECTORS_NAMES.MetaMask) connectWithMetaMask();
-    if (providerName === CONNECTORS_NAMES.WalletConnect) connectWithWalletConnect();
+    if (isAuthenticatingRef.current) {
+      // Don't run authentication twice
+      return;
+    }
+    setIsAuthenticating(true);
+    if (providerName === CONNECTORS_NAMES.MetaMask) {
+      await connectWithMetaMask();
+    }
+
+    if (providerName === CONNECTORS_NAMES.WalletConnect) {
+      await connectWithWalletConnect();
+    }
   };
 
   useEffect(() => {
-    if (
-      !(providerName === CONNECTORS_NAMES.WalletConnect && !localStorage.getItem('walletconnect'))
-    ) {
-      connectWeb3();
-    }
+    connectWeb3();
   }, [providerName]);
 
   // Sign message for BE authentication
@@ -373,6 +392,7 @@ const AuthContextProvider = ({ children }) => {
             });
           }
         }
+        setIsAuthenticating(false);
         closeError();
       }
     } catch (err) {
@@ -386,11 +406,16 @@ const AuthContextProvider = ({ children }) => {
       setIsWalletConnected(false);
       setIsAuthenticated(false);
       console.error(err);
+      setIsAuthenticating(false);
     }
   };
 
   useEffect(async () => {
-    if (signer?.address !== address) signMessage();
+    if (!isSigningRef.current && signer?.address !== address) {
+      setIsSigning(true);
+      await signMessage();
+      setIsSigning(false);
+    }
   }, [signer]);
 
   return (
@@ -445,6 +470,7 @@ const AuthContextProvider = ({ children }) => {
         wethUsdPrice,
         getTokenPriceByTicker,
         signOut,
+        isAuthenticating,
       }}
     >
       {children}
