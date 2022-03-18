@@ -66,7 +66,7 @@ export const nftKeys = {
       },
     ] as const,
   userNfts: (userAddress: string) => ['nfts', { userAddress: userAddress.toLowerCase() }],
-  fetchNftSummary: (userAddress: string) => ['nftsSummary', { userAddress: userAddress.toLowerCase() }],
+  fetchNftSummary: (userAddress: string) => ['nfts', 'nftsSummary', { userAddress: userAddress.toLowerCase() }],
 };
 
 export const userKeys = {
