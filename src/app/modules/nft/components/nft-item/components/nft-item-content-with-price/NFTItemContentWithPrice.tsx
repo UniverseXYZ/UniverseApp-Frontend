@@ -112,6 +112,7 @@ export const NFTItemContentWithPrice = (
               image={owner.profileImageUrl ?? ''}
               value={owner.displayName || shortenEthereumAddress(owner.address)}
               linkParam={owner.universePageUrl ?? ''}
+              externalOwner={!owner.displayName}
             />
           )}
         </Box>

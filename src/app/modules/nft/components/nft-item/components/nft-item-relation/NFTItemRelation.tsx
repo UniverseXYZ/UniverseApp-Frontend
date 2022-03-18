@@ -27,8 +27,8 @@ export const NFTItemRelation = ({ type, image, value, linkParam, externalOwner }
        ownerName = shortenEthereumAddress(owner);
     }
     avatar = (
-          <Box style={{ borderRadius: '50%', overflow: 'hidden'}}>
-            <Blockies seed={owner} size={9} scale={4} />
+          <Box ml={'-7px'} display={'inline-block'} overflow={'hidden'} borderRadius={'50%'} border={'2px solid #fff'} height={'27px'} width={'27px'} position={'relative'}>
+            <Blockies seed={owner} size={9} scale={3} />
           </Box>
         )
   } else {
@@ -36,8 +36,8 @@ export const NFTItemRelation = ({ type, image, value, linkParam, externalOwner }
 
     avatar = (
         <Avatar
-            w={'26px'}
-            h={'26px'}
+            w={'27px'}
+            h={'27px'}
             src={image}
             name={ownerName}
             border={'2px solid white'}
