@@ -17,23 +17,24 @@ export const TabListings = (props: ITabListingsProps) => {
   const { orderHistory, owner } = props;
   const { address } = useAuthContext();
 
-  const listings = useMemo(() => orderHistory
-    ?.filter((order: IOrder) => {
-      if (
-        owner.address === order?.makerData?.address &&
-        order.side === OrderSide.SELL && order.status === OrderStatus.CREATED
-      ) {
-        return order;
-      }
-    })
-    .map((order) => {
-      return {
-        ...order,
-        start: Number(order.start),
-        end: Number(order.end),
-        salt: Number(order.salt),
-      };
-    }), [orderHistory]);
+  const listings = useMemo(() => !owner ? [] 
+    : orderHistory
+      ?.filter((order: IOrder) => {
+        if (
+          owner.address === order?.makerData?.address &&
+          order.side === OrderSide.SELL && order.status === OrderStatus.CREATED
+        ) {
+          return order;
+        }
+      })
+      .map((order) => {
+        return {
+          ...order,
+          start: Number(order.start),
+          end: Number(order.end),
+          salt: Number(order.salt),
+        };
+    }), [orderHistory, owner]);
 
   if (!listings?.length) {
     return <EventsEmpty title="No active listings yet." />;
