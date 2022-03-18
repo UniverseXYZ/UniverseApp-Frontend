@@ -9,7 +9,7 @@ import { useAuthContext } from './AuthContext';
 const MyNFTsContext = createContext(null);
 
 const MyNFTsContextProvider = ({ children }) => {
-  const { address } = useAuthContext();
+  const { address, isAuthenticated, isAuthenticating } = useAuthContext();
   const history = useHistory();
 
   const allCharactersFilter = 'All Characters';
@@ -38,7 +38,7 @@ const MyNFTsContextProvider = ({ children }) => {
   const [userPageNftsCount, setUserPageNftsCount] = useState(0);
 
   const { data: nftSummary } = useQuery(nftKeys.fetchNftSummary(address), getNftSummary, {
-    enabled: !!address,
+    enabled: !!address && isAuthenticated && !isAuthenticating,
   });
 
   const navigateToMyUniverseNFTsTab = (characterFilter) => {
