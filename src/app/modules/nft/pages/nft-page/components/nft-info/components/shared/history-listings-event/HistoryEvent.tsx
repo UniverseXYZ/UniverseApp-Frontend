@@ -2,7 +2,7 @@ import { Box, Flex, Text, Link, Image, Tooltip, Button } from '@chakra-ui/react'
 import BigNumber from 'bignumber.js';
 import dayjs from 'dayjs';
 import { utils } from 'ethers';
-import React from 'react';
+import React, { useEffect, useState } from 'react'
 import { NFTTabItemWrapper } from '../..';
 import { getEtherscanTxUrl } from '../../../../../../../../../../utils/helpers';
 import { shortenEthereumAddress } from '../../../../../../../../../../utils/helpers/format';
@@ -17,6 +17,7 @@ import { actionIcon, nameLabels } from '../../tab-history/constants';
 import { getAddedAtLabel } from '../../tab-history/helpers';
 import * as styles from '../../tab-history/styles';
 import EtherScanIcon from './../../../../../../../../../../assets/images/etherscan.svg';
+import { useAuthContext } from '../../../../../../../../../../contexts/AuthContext';
 
 interface IHistoryEventProps {
   event: IOrder;
@@ -26,6 +27,9 @@ interface IHistoryEventProps {
 }
 
 const HistoryEvent: React.FC<IHistoryEventProps> = ({ event, onlyListings, cancelListing, isOwner }) => {
+  const { web3Provider } = useAuthContext() as any;
+  const [blockDate, setBlockDate] = useState(new Date());
+
   let type: HistoryType = HistoryType.MINTED;
   let price = '';
   let token: IToken = null as any;
@@ -65,6 +69,15 @@ const HistoryEvent: React.FC<IHistoryEventProps> = ({ event, onlyListings, cance
   const canceled = (type === HistoryType.OFFER || type === HistoryType.LISTED) && (event.status === OrderStatus.CANCELLED || event.status === OrderStatus.STALE);
   const expired = !canceled && type === HistoryType.OFFER ? dayjs().diff(endDate) > 0 || event.status === OrderStatus.STALE : false;
 
+  const getBlockTimestamp = async () => {
+    const blockTimestamp = await web3Provider?.getBlock(event?.blockNum);
+    setBlockDate(new Date(blockTimestamp?.timestamp * 1000));
+  }
+
+  useEffect(() => {
+    getBlockTimestamp();
+  }, [web3Provider, event])
+
   return (
     <NFTTabItemWrapper>
       <Flex>
@@ -78,7 +91,7 @@ const HistoryEvent: React.FC<IHistoryEventProps> = ({ event, onlyListings, cance
                 : shortenEthereumAddress(event.makerData.address))}
           </Text>
           <Text {...styles.AddedLabelStyle}>
-            {getAddedAtLabel(event.createdAt)}
+            {getAddedAtLabel(type === HistoryType.MINTED ? blockDate : event.createdAt)}
             {!onlyListings && canceled && (
               <Box as={'span'} {...styles.ExpiredStyle}>
                 {' '}
