@@ -436,7 +436,7 @@ export const NFTAcceptOfferPopup = ({ NFT, NFTs, order, isOpen, onClose }: INFTA
           {state === AcceptState.INSUFFICIENT_BALANCE && (
             <NFTCustomError
               title={`Insufficient balance`}
-              message={`The creator of the offer does not have enough ${tokenTicker} in his wallet!`}
+              message={`The creator of the offer does not have enough ${tokenTicker} in the wallet!`}
             ></NFTCustomError>
           )}
         </ModalBody>
