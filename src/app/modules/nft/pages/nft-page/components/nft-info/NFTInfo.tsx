@@ -193,14 +193,13 @@ export const NFTInfo = () => {
               isNFTAssetVideo(NFT.artworkTypes) && (
                 <NFTAssetVideo video={NFT.videoUrl || NFT.optimizedUrl || NFT.originalUrl} />
               ) ||
-               isNFTAssetImage(NFT.artworkTypes) && <NFTAssetImage image={NFT.optimizedUrl || NFT.originalUrl} /> ||
+              isNFTAssetImage(NFT.artworkTypes) && <NFTAssetImage image={NFT.optimizedUrl || NFT.originalUrl} /> ||
               isNFTAssetAudio(NFT.artworkTypes) && <NFTAssetAudio audio={NFT.optimizedUrl || NFT.originalUrl} />}
             </Box>
             <Box {...styles.NFTDetailsContainerStyle}>
               <Box
                 sx={{
                   p: { sm: '40px 20px', md: '60px 40px' },
-                  minH: `calc(100vh - 80px - ${buySectionMeasure?.height}px)`,
                 }}
               >
                 <Flex
@@ -331,7 +330,7 @@ export const NFTInfo = () => {
                     md: 2,
                     lg: moreFromCollection.length < 4 ? moreFromCollection.length : 4,
                   }}
-                  spacingX={'20px'}
+                  spacing={'20px'}
                 >
                   {moreFromCollection.map(
                     (NFT) =>

@@ -9,7 +9,7 @@ export const NftMoreFromCollection = () => {
     <Box {...styles.MoreNFTsWrapperStyle}>
       <Heading {...styles.MoreNFTsTitleStyle}>More from this collection</Heading>
       <Container {...styles.MoreNFTsContainerStyle}>
-        <SimpleGrid columns={{ base: 1, md: 2, lg: 4 }} spacingX={'20px'}>
+        <SimpleGrid columns={{ base: 1, md: 2, lg: 4 }} spacing={'20px'}>
           more NFT
           {/*{NFT.moreFromCollection.map((NFT) => (<NftItem key={NFT.id} nft={NFT} />))}*/}
         </SimpleGrid>
