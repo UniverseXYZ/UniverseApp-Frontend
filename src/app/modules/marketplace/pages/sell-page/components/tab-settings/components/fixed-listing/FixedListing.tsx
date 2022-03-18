@@ -29,7 +29,7 @@ interface IMarketplaceSellContextDataOverride extends Omit<IMarketplaceSellConte
 }
 
 export const SettingsTabFixedListing = () => {
-  const [minEndDate, setMinEndDate] = useState(dayjs().add(1, 'day').toDate());
+  const [minEndDate, setMinEndDate] = useState(dayjs().add(1, 'hour').toDate());
   const { form, sellMethod, amountType } = useMarketplaceSellData() as IMarketplaceSellContextDataOverride;
 
   const {
@@ -39,7 +39,7 @@ export const SettingsTabFixedListing = () => {
   useEffect(() => {
     // set the end date + 1 day and set the minimum end date
     const _endDate = dayjs(startDate || dayjs())
-      .add(1, 'day')
+      .add(1, 'hour')
       .toDate();
     setMinEndDate(_endDate);
 
