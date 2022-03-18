@@ -206,7 +206,7 @@ export const BundlePageContent = () => {
                 md: 2,
                 lg: moreFromCollection.length < 4 ? moreFromCollection.length : 4,
               }}
-              spacingX={'20px'}
+              spacing={'20px'}
             >
               {moreFromCollection.map((NFT) => (<NftItem key={NFT.id} NFT={NFT} collection={`${NFT.collection?.address}`} />))}
             </SimpleGrid>

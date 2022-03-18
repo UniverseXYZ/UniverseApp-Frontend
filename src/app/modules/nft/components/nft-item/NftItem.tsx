@@ -181,6 +181,7 @@ export const NftItem = (
           md: 'unset',
           sm: '0 auto',
         },
+        width: '100%',
       }}
     >
       <LinkBox>
