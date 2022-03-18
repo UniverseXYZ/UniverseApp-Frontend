@@ -337,7 +337,11 @@ export const CollectionInfo = () => {
                   </TabPanel>
                   <TabPanel px={0}>
                     {collection.description
-                      ? (<Description selectedCollection={collection}/>)
+                      ? (
+                        <div className="container mynfts__page__body">
+                          <Description selectedCollection={collection}/>
+                        </div>
+                      )
                       : (<NoDescriptionFound />)
                     }
                   </TabPanel>
