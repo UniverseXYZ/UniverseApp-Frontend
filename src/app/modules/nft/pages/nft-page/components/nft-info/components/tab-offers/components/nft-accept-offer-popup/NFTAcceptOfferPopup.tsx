@@ -24,7 +24,7 @@ import { Loading, TokenIcon } from '../../../../../../../../../../components';
 import { NFTType } from './components';
 import { AcceptState } from './enums';
 import * as styles from './styles';
-import { IERC721AssetType, INFT, IOrder } from '../../../../../../../../types';
+import { IERC20AssetType, IERC721AssetType, INFT, IOrder } from '../../../../../../../../types';
 import { isNFTAssetAudio, isNFTAssetImage, isNFTAssetVideo } from '../../../../../../../../helpers';
 import { TOKENS_MAP, getTokenByAddress } from '../../../../../../../../../../constants';
 import { TokenTicker } from '../../../../../../../../../../enums';
@@ -37,6 +37,7 @@ import { GetActiveListingApi, GetNFT2Api, GetOrdersApi } from '../../../../../..
 import { useNFTPageData } from '../../../../../../NFTPage.context';
 import { ReactComponent as CheckIcon } from '../../../../../../../../../../../assets/images/check-vector.svg'; 
 import Contracts from '../../../../../../../../../../../contracts/contracts.json';
+import { NFTCustomError } from '../../../../../nft-custom-error/NFTCustomError';
 
 interface INFTAcceptOfferPopupProps {
   NFT?: INFT;
@@ -120,6 +121,16 @@ export const NFTAcceptOfferPopup = ({ NFT, NFTs, order, isOpen, onClose }: INFTA
         const approveTx = await contract.setApprovalForAll(process.env.REACT_APP_MARKETPLACE_CONTRACT, true);
         await approveTx.wait();
       }
+      const paymentToken = getTokenByAddress((order?.make?.assetType as IERC20AssetType)?.contract);
+      const paymentAmount = EthersBigNumber.from(order?.make?.value)
+      const tokenContract = new Contract(contractsData[paymentToken.contractName].address, contractsData[paymentToken.contractName].abi, signer);
+      const balance = await tokenContract.balanceOf(order.maker);
+
+      if (paymentAmount.gt(balance)) {
+        setState(AcceptState.INSUFFICIENT_BALANCE);
+        return;
+      }
+
       setFetchCount(0);
       setState(AcceptState.PROCESSING);
 
@@ -420,6 +431,13 @@ export const NFTAcceptOfferPopup = ({ NFT, NFTs, order, isOpen, onClose }: INFTA
                 <Button variant={'outline'} onClick={onClose}>Close</Button>
               </Box>
             </>
+          )}
+
+          {state === AcceptState.INSUFFICIENT_BALANCE && (
+            <NFTCustomError
+              title={`Insufficient balance`}
+              message={`The creator of the offer does not have enough ${tokenTicker} in his wallet!`}
+            ></NFTCustomError>
           )}
         </ModalBody>
       </ModalContent>
