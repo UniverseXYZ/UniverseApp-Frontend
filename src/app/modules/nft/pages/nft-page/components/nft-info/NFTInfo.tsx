@@ -322,7 +322,6 @@ export const NFTInfo = () => {
               <Heading {...styles.MoreNFTsTitleStyle}>More from this collection</Heading>
               <Container
                 {...styles.MoreNFTsContainerStyle}
-                w={moreFromCollection.length < 4 ? `calc(1110px / 4 * ${moreFromCollection.length})` : '100%'}
               >
                 <SimpleGrid
                   columns={{

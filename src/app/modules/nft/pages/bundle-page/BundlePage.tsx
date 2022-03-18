@@ -197,8 +197,6 @@ export const BundlePageContent = () => {
           <Heading {...styles.MoreNFTsTitleStyle}>More from this collection</Heading>
           <Container
             {...styles.MoreNFTsContainerStyle}
-            /*TODO: move 1110px to styles*/
-            w={moreFromCollection.length < 4 ? `calc(1110px / 4 * ${moreFromCollection.length})` : '100%'}
           >
             <SimpleGrid
               columns={{
