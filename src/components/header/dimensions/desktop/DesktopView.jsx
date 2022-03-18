@@ -63,6 +63,7 @@ const DesktopView = ({
     usdEthBalance,
     resetConnectionState,
     loggedInArtist,
+    signOut,
   } = useAuthContext();
 
   return (
@@ -427,10 +428,8 @@ const DesktopView = ({
                   type="button"
                   className="signOut"
                   onClick={() => {
-                    resetConnectionState();
+                    signOut();
                     setIsAccountDropdownOpened(false);
-                    setIsWalletConnected(!isWalletConnected);
-                    history.push('/');
                   }}
                 >
                   <img src={signOutIcon} alt="Sign out" />

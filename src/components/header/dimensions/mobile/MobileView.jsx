@@ -86,8 +86,7 @@ const MobileView = (props) => {
     showMobileSearch,
     setShowMobileSearch,
   } = props;
-  const { address, yourBalance, yourEnsDomain, usdEthBalance, resetConnectionState } =
-    useAuthContext();
+  const { address, yourBalance, yourEnsDomain, usdEthBalance, signOut } = useAuthContext();
   const [isAccountDropdownOpened, setIsAccountDropdownOpened] = useState(false);
   const [copied, setCopied] = useState(false);
   const ref = useRef(null);
@@ -526,10 +525,8 @@ const MobileView = (props) => {
                     type="button"
                     className="signOut"
                     onClick={() => {
-                      resetConnectionState();
-                      setIsAccountDropdownOpened(!isAccountDropdownOpened);
-                      setIsWalletConnected(!isWalletConnected);
-                      history.push('/');
+                      signOut();
+                      setIsAccountDropdownOpened(false);
                     }}
                   >
                     <img src={signOutIcon} alt="Sign out" />

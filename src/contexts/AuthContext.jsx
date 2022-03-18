@@ -1,4 +1,4 @@
-import React, { createContext, useState, useEffect, useContext } from 'react';
+import React, { createContext, useState, useEffect, useContext, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { Contract, providers, utils } from 'ethers';
 import uuid from 'react-uuid';
@@ -52,6 +52,18 @@ const AuthContextProvider = ({ children }) => {
   const [usdcUsdPrice, setUsdcUsdPrice] = useState(0);
   const [xyzUsdPrice, setXyzUsdPrice] = useState(0);
   const [wethUsdPrice, setWethUsdPrice] = useState(0);
+
+  const web3ProviderRef = useRef(web3Provider);
+  const networkRef = useRef(ethereumNetwork);
+
+  useEffect(() => {
+    web3ProviderRef.current = web3Provider;
+  }, [web3Provider]);
+
+  useEffect(() => {
+    networkRef.current = ethereumNetwork;
+  }, [ethereumNetwork]);
+
   // Getters
   useEffect(() => {
     (async () => {
@@ -182,6 +194,36 @@ const AuthContextProvider = ({ children }) => {
     setLobsterContract(null);
   };
 
+  const onAccountsChanged = async ([account]) => {
+    // IF ACCOUNT CHANGES, CLEAR TOKEN AND ADDRESS FROM LOCAL STORAGE
+    clearStorageAuthData();
+    if (account) {
+      // await connectWithMetaMask();
+      history.push('/');
+      web3AuthenticationProccess(web3ProviderRef.current, networkRef.current, [account]);
+    } else {
+      resetConnectionState();
+    }
+  };
+
+  const onChainChanged = async (networkId) => {
+    clearStorageAuthData();
+    window.location.reload();
+  };
+
+  const signOut = () => {
+    resetConnectionState();
+    // setIsAccountDropdownOpened(false);
+    setIsWalletConnected(!isWalletConnected);
+    history.push('/');
+
+    const { ethereum } = window;
+
+    ethereum.removeListener('accountsChanged', onAccountsChanged);
+    ethereum.removeListener('disconnect', resetConnectionState);
+    ethereum.removeListener('chainChanged', onChainChanged);
+  };
+
   const connectWithMetaMask = async () => {
     const { ethereum } = window;
 
@@ -201,27 +243,11 @@ const AuthContextProvider = ({ children }) => {
       localStorage.setItem('providerName', name);
       return name;
     });
+    ethereum.on('accountsChanged', onAccountsChanged);
 
-    ethereum.on('accountsChanged', async ([account]) => {
-      // IF ACCOUNT CHANGES, CLEAR TOKEN AND ADDRESS FROM LOCAL STORAGE
-      clearStorageAuthData();
-      if (account) {
-        // await connectWithMetaMask();
-        history.push('/');
-        web3AuthenticationProccess(provider, network, [account]);
-      } else {
-        resetConnectionState();
-      }
-    });
+    ethereum.on('chainChanged', onChainChanged);
 
-    ethereum.on('chainChanged', async (networkId) => {
-      clearStorageAuthData();
-      window.location.reload();
-    });
-
-    ethereum.on('disconnect', async (error) => {
-      resetConnectionState();
-    });
+    ethereum.on('disconnect', resetConnectionState);
   };
 
   const connectWithWalletConnect = async () => {
@@ -287,7 +313,7 @@ const AuthContextProvider = ({ children }) => {
     ) {
       connectWeb3();
     }
-  }, []);
+  }, [providerName]);
 
   // Sign message for BE authentication
   const signMessage = async () => {
@@ -418,6 +444,7 @@ const AuthContextProvider = ({ children }) => {
         xyzUsdPrice,
         wethUsdPrice,
         getTokenPriceByTicker,
+        signOut,
       }}
     >
       {children}
