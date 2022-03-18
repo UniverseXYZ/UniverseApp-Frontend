@@ -31,7 +31,7 @@ const SavedNFTs = ({
   setTriggerRefetch,
   scrollContainer,
 }) => {
-  const { setSavedNfts, fetchNftSummary } = useMyNftsContext();
+  const { setSavedNfts } = useMyNftsContext();
 
   const [selectAllIsChecked, setSelectAllIsChecked] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
@@ -184,7 +184,6 @@ const SavedNFTs = ({
       newSelected.splice(newSelected.map((nft) => nft.id).indexOf(newSavedNfts[nftIndex].id), 1);
       setSelectedSavedNfts(newSelected);
     }
-    fetchNftSummary();
     setTriggerRefetch(true);
   };
 

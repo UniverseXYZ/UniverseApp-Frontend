@@ -14,21 +14,8 @@ import { getNftsPerAddress } from '../../../utils/api/marketplace.ts';
 const Tabs = ({ username, artistAddress }) => {
   const [selectedTabIndex, setSelectedTabIndex] = useState(0);
 
-  const { fetchNftSummary, setNftSummary, nftSummary } = useMyNftsContext();
+  const { nftSummary } = useMyNftsContext();
   const { address } = useAuthContext();
-
-  useEffect(async () => {
-    if (address) {
-      const summary = await fetchNftSummary();
-      const { total: totalNFTs } = await getNftsPerAddress(utils.getAddress(address), 1, 1);
-      const summaryCopy = { ...summary };
-
-      // Update total NFTs with the new Scraper Data
-      summaryCopy.nfts = totalNFTs || 0;
-
-      setNftSummary(summaryCopy);
-    }
-  }, [address]);
 
   const scrollContainer = useRef();
   const scrollToTop = () => {

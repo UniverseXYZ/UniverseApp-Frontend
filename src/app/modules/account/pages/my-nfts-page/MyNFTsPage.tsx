@@ -1,6 +1,6 @@
 import { useHistory } from 'react-router-dom';
 import { Contract, utils } from 'ethers';
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Popup from 'reactjs-popup';
 
 import { useMyNftsContext } from '../../../../../contexts/MyNFTsContext';
@@ -26,24 +26,15 @@ import LikedNFTs from '../../../../../components/myNFTs/LikedNFTs';
 import NFTsActivity from '../../../../../components/myNFTs/NFTsActivity';
 import { useClickAway, useTitle } from 'react-use';
 import { WalletTab } from './components';
-import { getNftsPerAddress } from '../../../../../utils/api/marketplace';
 import FiltersContextProvider from '../../../account/pages/my-nfts-page/components/search-filters/search-filters.context';
-import { Box } from '@chakra-ui/react';
 
 export const MyNFTsPage = () => {
   const history = useHistory();
   const createButtonRef = useRef<HTMLButtonElement>(null);
 
   // Context hooks
-  const {
-    myNFTsSelectedTabIndex,
-    setMyNFTsSelectedTabIndex,
-    activeTxHashes,
-    setActiveTxHashes,
-    nftSummary,
-    fetchNftSummary,
-    setNftSummary,
-  } = useMyNftsContext() as any;
+  const { myNFTsSelectedTabIndex, setMyNFTsSelectedTabIndex, activeTxHashes, setActiveTxHashes, nftSummary } =
+    useMyNftsContext() as any;
 
   const { userLobsters } = useLobsterContext() as any;
   const { userPolymorphs } = usePolymorphContext() as any;
@@ -57,12 +48,13 @@ export const MyNFTsPage = () => {
   const scrollContainer = useRef(null);
 
   // State hooks
+  const [totalNfts, getTotalNfts] = useState<string | number>('-');
   const [showLoading, setShowLoading] = useStateIfMounted(false);
   const [showCongratsMintedSavedForLater, setShowCongratsMintedSavedForLater] = useStateIfMounted(false);
   const [isDropdownOpened, setIsDropdownOpened] = useStateIfMounted(false);
 
   const tabs = [
-    { name: 'Wallet', amount: nftSummary?.nfts },
+    { name: 'Wallet', amount: totalNfts },
     { name: 'Collections', amount: nftSummary?.collections },
     { name: 'Saved NFTs', amount: nftSummary?.savedNfts },
     { name: 'Universe NFTs', amount: (userLobsters.length || 0) + (userPolymorphs.length || 0) },
@@ -87,22 +79,7 @@ export const MyNFTsPage = () => {
 
   useEffect(() => {
     setDarkMode(false);
-    fetchNftSummary();
   }, []);
-
-  // @ts-ignore
-  useEffect(async () => {
-    if (address) {
-      const summary = await fetchNftSummary();
-      const { total: totalNFTs } = await getNftsPerAddress(utils.getAddress(address), 1, 1);
-      const summaryCopy = { ...summary };
-
-      // Update total NFTs with the new Scraper Data
-      summaryCopy.nfts = totalNFTs || 0;
-
-      setNftSummary(summaryCopy);
-    }
-  }, [address]);
 
   const handleMintSelected = async () => {
     setShowLoading(true);
@@ -175,8 +152,7 @@ export const MyNFTsPage = () => {
       const tokenURIsAndRoyaltiesObject: any = {};
 
       nftsAttachedTokenUri.forEach((nft: any) => {
-        if (!tokenURIsAndRoyaltiesObject[nft.collectionId])
-          tokenURIsAndRoyaltiesObject[nft.collectionId] = [];
+        if (!tokenURIsAndRoyaltiesObject[nft.collectionId]) tokenURIsAndRoyaltiesObject[nft.collectionId] = [];
 
         nft.tokenUri.forEach((token: any) => {
           tokenURIsAndRoyaltiesObject[nft.collectionId].push({
@@ -187,16 +163,11 @@ export const MyNFTsPage = () => {
         });
       });
 
-      const isSingle =
-        nftsAttachedTokenUri.length === 1 && nftsAttachedTokenUri[0].tokenUri.length === 1;
+      const isSingle = nftsAttachedTokenUri.length === 1 && nftsAttachedTokenUri[0].tokenUri.length === 1;
 
       const txDataArray: any = isSingle
         ? await sendMintRequest(requiredContracts, tokenURIsAndRoyaltiesObject, mintingFlowContext)
-        : await sendBatchMintRequest(
-          requiredContracts,
-          tokenURIsAndRoyaltiesObject,
-          mintingFlowContext
-        );
+        : await sendBatchMintRequest(requiredContracts, tokenURIsAndRoyaltiesObject, mintingFlowContext);
 
       const totalMintedMapping: any = {};
       const mintingNftsPromises = txDataArray.map(async (data: any, i: number) => {
@@ -217,9 +188,7 @@ export const MyNFTsPage = () => {
 
           const mints = uniqueMintingIds.map((id: any) => {
             // Check if the count of the id in the mapping will increase
-            const moreToGo = txDataArray
-              .slice(i + 1)
-              .some((tx: any) => tx.mintingIds && tx.mintingIds.includes(id));
+            const moreToGo = txDataArray.slice(i + 1).some((tx: any) => tx.mintingIds && tx.mintingIds.includes(id));
 
             // Do not update minted count in BE if there's more to go
             if (moreToGo) {
@@ -245,7 +214,6 @@ export const MyNFTsPage = () => {
         setShowLoading(false);
         setShowCongratsMintedSavedForLater(true);
         setTriggerRefetch(true);
-        fetchNftSummary();
       } else {
         setShowLoading(false);
         setShowError(true);
@@ -268,7 +236,7 @@ export const MyNFTsPage = () => {
         name,
         active: myNFTsSelectedTabIndex === index,
         handler: setMyNFTsSelectedTabIndex.bind(this, index),
-        length: amount
+        length: amount,
       }))}
     />
   );
@@ -314,9 +282,7 @@ export const MyNFTsPage = () => {
                 <button
                   type="button"
                   ref={createButtonRef}
-                  className={`create--nft--dropdown  ${
-                    isDropdownOpened ? 'opened' : ''
-                  } light-button`}
+                  className={`create--nft--dropdown  ${isDropdownOpened ? 'opened' : ''} light-button`}
                   onClick={() => setIsDropdownOpened(!isDropdownOpened)}
                   aria-hidden="true"
                 >
@@ -403,7 +369,7 @@ export const MyNFTsPage = () => {
 
       {myNFTsSelectedTabIndex === 0 && (
         <FiltersContextProvider>
-          <WalletTab />
+          <WalletTab getTotalNfts={getTotalNfts} />
         </FiltersContextProvider>
       )}
       <div className="container mynfts__page__body">

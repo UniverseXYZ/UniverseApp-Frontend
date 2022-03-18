@@ -40,8 +40,6 @@ const MyNFTs = () => {
     activeTxHashes,
     setActiveTxHashes,
     nftSummary,
-    fetchNftSummary,
-    setNftSummary,
   } = useMyNftsContext();
 
   const { userLobsters } = useLobsterContext();
@@ -90,21 +88,6 @@ const MyNFTs = () => {
       document.title = 'Universe Minting';
     };
   }, []);
-
-  useEffect(async () => {
-    if (address) {
-      const summary = await fetchNftSummary();
-      const { total: totalNFTs } = await getNftsPerAddress(utils.getAddress(address), 1, 1);
-      const summaryCopy = { ...summary };
-
-      // Update total NFTs with the new Scraper Data
-      if (totalNFTs) {
-        summaryCopy.nfts = totalNFTs;
-      }
-
-      setNftSummary(summaryCopy);
-    }
-  }, [address]);
 
   const handleMintSelected = async () => {
     setShowLoading(true);
@@ -247,7 +230,6 @@ const MyNFTs = () => {
         setShowLoading(false);
         setShowCongratsMintedSavedForLater(true);
         setTriggerRefetch(true);
-        fetchNftSummary();
       } else {
         setShowLoading(false);
         setShowError(true);
