@@ -36,7 +36,7 @@ export interface IOrder {
   hash: string;
   id: string;
   make: {
-    assetType: IERC721AssetType | IERC721BundleAssetType;
+    assetType: IERC721AssetType | IERC721BundleAssetType | IERC20AssetType;
     value: string;
   };
   makeBalance: string;
