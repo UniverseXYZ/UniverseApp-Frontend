@@ -331,7 +331,9 @@ const AuthContextProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    connectWeb3();
+    if (providerName) {
+      connectWeb3();
+    }
   }, [providerName]);
 
   // Sign message for BE authentication
