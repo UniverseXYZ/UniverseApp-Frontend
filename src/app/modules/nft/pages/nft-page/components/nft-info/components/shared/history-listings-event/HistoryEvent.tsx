@@ -2,7 +2,7 @@ import { Box, Flex, Text, Link, Image, Tooltip, Button } from '@chakra-ui/react'
 import BigNumber from 'bignumber.js';
 import dayjs from 'dayjs';
 import { utils } from 'ethers';
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { NFTTabItemWrapper } from '../..';
 import { getEtherscanTxUrl } from '../../../../../../../../../../utils/helpers';
 import { shortenEthereumAddress } from '../../../../../../../../../../utils/helpers/format';
@@ -75,8 +75,12 @@ const HistoryEvent: React.FC<IHistoryEventProps> = ({ event, onlyListings, cance
   }
 
   useEffect(() => {
-    getBlockTimestamp();
+    if (event.blockNum && web3Provider) {
+      getBlockTimestamp();
+    }
   }, [web3Provider, event])
+
+  const addedAtLabel = useMemo(() => getAddedAtLabel(type === HistoryType.MINTED ? blockDate : event.createdAt), [blockDate, event.createdAt, type])
 
   return (
     <NFTTabItemWrapper>
@@ -91,7 +95,7 @@ const HistoryEvent: React.FC<IHistoryEventProps> = ({ event, onlyListings, cance
                 : shortenEthereumAddress(event.makerData.address))}
           </Text>
           <Text {...styles.AddedLabelStyle}>
-            {getAddedAtLabel(type === HistoryType.MINTED ? blockDate : event.createdAt)}
+            {addedAtLabel}
             {!onlyListings && canceled && (
               <Box as={'span'} {...styles.ExpiredStyle}>
                 {' '}
