@@ -38,16 +38,16 @@ const RarityRankPopup = ({ onClose, item }) => {
                 target="_blank"
                 href={`https://${
                   parseInt(process.env.REACT_APP_NETWORK_CHAIN_ID, 10) === 1
-                    ? 'opensea.io'
-                    : 'testnets.opensea.io'
-                }/assets/${
+                    ? 'universe.xyz'
+                    : 'dev.universe.xyz'
+                }/nft/${
                   parseInt(process.env.REACT_APP_NETWORK_CHAIN_ID, 10) === 1
                     ? ''
                     : `${process.env.REACT_APP_NETWORK_NAME.toLowerCase()}/`
                 }${process.env.REACT_APP_POLYMORPHS_CONTRACT_ADDRESS}/${item.tokenid}`}
                 rel="noreferrer"
               >
-                View on Opensea <img src={linkIcon} alt="Link Icon" />
+                View on Universe <img src={linkIcon} alt="Link Icon" />
               </a>{' '}
             </div>
             <p className="number">{`#${item.tokenid}`}</p>
