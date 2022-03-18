@@ -7,6 +7,7 @@ import { Contract, utils } from 'ethers';
 import { DebounceInput } from 'react-debounce-input';
 import './CreateSingleNft.scss';
 import PropTypes from 'prop-types';
+import { useQueryClient } from 'react-query';
 import Button from '../../button/Button.jsx';
 import Input from '../../input/Input.jsx';
 import LoadingPopup from '../../popups/LoadingPopup.jsx';
@@ -45,6 +46,7 @@ import { useErrorContext } from '../../../contexts/ErrorContext';
 import CollectionChoice from './CollectionChoice';
 import universeIcon from '../../../assets/images/universe-img.svg';
 import { timeout } from '../../../app/utils/debounceConfig';
+import { nftKeys } from '../../../app/utils/query-keys';
 
 const MAX_FIELD_CHARS_LENGTH = {
   name: 32,
@@ -84,6 +86,8 @@ const SingleNFTForm = ({ scrollToTop }) => {
     signer,
     web3Provider,
   } = useAuthContext();
+
+  const queryClient = useQueryClient();
 
   const { setShowError, setErrorTitle, setErrorBody } = useErrorContext();
 
@@ -578,6 +582,7 @@ const SingleNFTForm = ({ scrollToTop }) => {
         setPreviewImage('');
         setProperties([{ name: '', value: '', errors: { name: '', value: '' } }]);
         setRoyaltyAddress([{ address, amount: '10' }]);
+        queryClient.invalidateQueries(nftKeys.fetchNftSummary(address));
       } else {
         setShowLoadingPopup(false);
         setShowError(true);
