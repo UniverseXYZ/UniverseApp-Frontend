@@ -63,6 +63,8 @@ const DesktopView = ({
     usdEthBalance,
     resetConnectionState,
     loggedInArtist,
+    signOut,
+    isAuthenticating,
   } = useAuthContext();
 
   return (
@@ -427,10 +429,8 @@ const DesktopView = ({
                   type="button"
                   className="signOut"
                   onClick={() => {
-                    resetConnectionState();
+                    signOut();
                     setIsAccountDropdownOpened(false);
-                    setIsWalletConnected(!isWalletConnected);
-                    history.push('/');
                   }}
                 >
                   <img src={signOutIcon} alt="Sign out" />
@@ -445,7 +445,7 @@ const DesktopView = ({
               closeOnDocumentClick={false}
               trigger={
                 <button type="button" className="sign__in">
-                  Sign In
+                  {isAuthenticating ? 'Signing in...' : 'Sign in'}
                 </button>
               }
             >

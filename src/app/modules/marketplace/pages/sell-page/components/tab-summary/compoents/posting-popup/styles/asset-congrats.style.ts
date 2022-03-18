@@ -6,4 +6,5 @@ export const AssetCongratsStyle: ImageProps = {
   my: '30px',
   mx: 'auto',
   w: '295px',
+  objectFit: "cover"
 };

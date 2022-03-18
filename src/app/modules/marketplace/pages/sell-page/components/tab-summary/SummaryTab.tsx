@@ -39,6 +39,8 @@ import { default as dayjs } from 'dayjs';
 import { default as UTC } from 'dayjs/plugin/utc';
 import { CollectionPageLoader } from '../../../../../../../containers/collection/CollectionPageLoader';
 import './SummaryTab.scss';
+import { getCollectionBackgroundColor } from '../../../../../../../utils/helpers';
+import { shortenEthereumAddress } from '../../../../../../../utils/helpers/format';
 
 dayjs.extend(UTC);
 
@@ -47,6 +49,7 @@ interface IApproveCollection {
   tokenIds: string[];
   standard: NFTStandard;
   collection: ICollection;
+  address: string;
 }
 
 // @ts-ignore
@@ -93,8 +96,8 @@ export const SummaryTab = () => {
     form.submitForm();
   }, [nft]);
 
-  const handleApproveCollection = useCallback(async ({ collection, standard, tokenIds }: IApproveCollection) => {
-    const contract = new Contract(`${collection.address}`, contractsData[standard].abi, signer);
+  const handleApproveCollection = useCallback(async ({ standard, address }: IApproveCollection) => {
+    const contract = new Contract(address, contractsData[standard].abi, signer);
 
     const approveTx = await contract.setApprovalForAll(process.env.REACT_APP_MARKETPLACE_CONTRACT, true)
     setIsApproving(true);
@@ -105,7 +108,7 @@ export const SummaryTab = () => {
     setIsApproving(false);
 
     setCollections(collections.map((collectionItem) => {
-      return collectionItem.collection.address !== collection.address
+      return collectionItem.address !== address
         ? collectionItem
         : { ...collectionItem, approved: true };
     }))
@@ -191,9 +194,11 @@ export const SummaryTab = () => {
   };
 
   const fetchIsApprovedForAll = async () => {
-      const contract = new Contract(`${nft.collection?.address}`, contractsData[nft.standard].abi, signer);
+    if (params.collectionAddress && params.tokenId && signer) {
+      const contract = new Contract(params.collectionAddress, contractsData[nft.standard].abi, signer);
       const isApprovedForAll = await contract.isApprovedForAll(address, process.env.REACT_APP_MARKETPLACE_CONTRACT);
       setCollectionIsApprovedForAll(isApprovedForAll);
+    }
   } 
 
   useEffect(() => {
@@ -206,7 +211,7 @@ export const SummaryTab = () => {
 
   useEffect(() => {
     fetchIsApprovedForAll();
-  }, [collectionIsAppovedForAll])
+  }, [params.collectionAddress, params.tokenId, signer])
 
   useEffect(() => {
     if (isPosted) {
@@ -217,17 +222,18 @@ export const SummaryTab = () => {
   useEffect(() => {
     const collections = Object.values(
       NFTsForPreview.reduce<Record<string, IApproveCollection>>((collectionsMap, NFT) => {
-        if (NFT.collection?.address) {
-          if (!collectionsMap.hasOwnProperty(NFT.collection.address)) {
-            collectionsMap[NFT.collection.address] = {
+        if (NFT._collectionAddress) {
+          if (!collectionsMap.hasOwnProperty(NFT._collectionAddress)) {
+            collectionsMap[NFT._collectionAddress] = {
               approved: collectionIsAppovedForAll,
               standard: NFT.standard,
               tokenIds: [],
-              collection: NFT.collection,
+              collection: NFT.collection || {} as ICollection,
+              address: NFT._collectionAddress
             };
           }
 
-          collectionsMap[NFT.collection.address].tokenIds.push(NFT.tokenId);
+          collectionsMap[NFT._collectionAddress].tokenIds.push(NFT.tokenId);
         }
         return collectionsMap;
       }, {})
@@ -368,9 +374,18 @@ export const SummaryTab = () => {
                 padding: '30px',
               }}
             >
-              <Image src={collectionItem.collection?.coverUrl} borderRadius={'50%'} objectFit={'cover'} h={'80px'} w={'80px'} />
+              {
+                collectionItem.collection?.coverUrl ? 
+                  <Image src={collectionItem.collection?.coverUrl} borderRadius={'50%'} objectFit={'cover'} h={'80px'} w={'80px'} />
+                :
+                <Box
+                  className="random--bg--color"
+                  borderRadius={'50%'} objectFit={'cover'} h={'80px'} w={'80px'}
+                  bg={getCollectionBackgroundColor()}
+                ></Box>
+              }
               <Box ml={'20px'} className="approve-section">
-                <Heading as={'h4'}>{collectionItem.collection?.name}</Heading>
+                <Heading as={'h4'}>{collectionItem.collection?.name || shortenEthereumAddress(nft._collectionAddress)}</Heading>
                 {isApproving && <CollectionPageLoader />}
                 
                 {!collectionItem.approved && !isApproving &&

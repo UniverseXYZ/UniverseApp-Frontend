@@ -76,6 +76,8 @@ const TabletView = (props) => {
     usdEthBalance,
     resetConnectionState,
     loggedInArtist,
+    signOut,
+    isAuthenticating,
   } = useAuthContext();
 
   const { editProfileButtonClick } = useAuctionContext();
@@ -476,10 +478,8 @@ const TabletView = (props) => {
                     type="button"
                     className="signOut"
                     onClick={() => {
-                      resetConnectionState();
-                      setIsAccountDropdownOpened(!isAccountDropdownOpened);
-                      setIsWalletConnected(!isWalletConnected);
-                      history.push('/');
+                      signOut();
+                      setIsAccountDropdownOpened(false);
                     }}
                   >
                     <img src={signOutIcon} alt="Sign out" />
@@ -719,7 +719,11 @@ const TabletView = (props) => {
                 </Popup> */}
                 <Popup
                   closeOnDocumentClick={false}
-                  trigger={<button type="button">Sign in</button>}
+                  trigger={
+                    <button type="button" className="sign__in">
+                      {isAuthenticating ? 'Signing in...' : 'Sign in'}
+                    </button>
+                  }
                 >
                   {(close) => (
                     <SelectWalletPopup
