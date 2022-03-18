@@ -21,8 +21,6 @@ import { CollectionPageLoader } from '../../../../../../../containers/collection
 import { CollectionStatistics } from './components/index';
 import NotFound from '../../../../../../../components/notFound/NotFound';
 import Cover from '../../../../../../../components/collection/Cover';
-// import Tabs from '../../../../../../../components/tabs/Tabs';
-import Description from '../../../../../../../components/collection/Description.jsx';
 import { NoDescriptionFound } from '../../../../components/no-description-found';
 import { useFiltersContext } from '../../../../../account/pages/my-nfts-page/components/search-filters/search-filters.context';
 import { SearchFilters } from '../../../../../account/pages/my-nfts-page/components/search-filters';
@@ -33,8 +31,6 @@ import EditIcon from '../../../../../../../components/svgs/EditIcon';
 import { useIntersection } from 'react-use';
 
 export const CollectionInfo = () => {
-  const tabs = ['Items', 'Description'];
-  const [selectedTabIndex, setSelectedTabIndex] = useState(0);
   const [totalNftsCount, setTotalNftsCount] = useState(0);
   const { address, signer, isAuthenticated } = useAuthContext() as any;
   const history = useHistory();
@@ -339,7 +335,11 @@ export const CollectionInfo = () => {
                     {collection.description
                       ? (
                         <div className="container mynfts__page__body">
-                          <Description selectedCollection={collection}/>
+                          <Box sx={{
+                            whiteSpace: 'break-spaces'
+                          }}>
+                            {collection.description}
+                          </Box>
                         </div>
                       )
                       : (<NoDescriptionFound />)
