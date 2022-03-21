@@ -87,7 +87,7 @@ export const NFTAcceptOfferPopup = ({ NFT, NFTs, order, isOpen, onClose }: INFTA
   }, [tokenTicker]);
 
   const listingPrice = useMemo(() => {
-    return utils.formatUnits((order as any).make.value, tokenDecimals);
+    return Number(utils.formatUnits((order as any).make.value, tokenDecimals));
   }, [tokenDecimals]);
 
   const prepareMutation = useMutation(({ hash, data }: { hash: string; data: any }) => {
@@ -269,10 +269,16 @@ export const NFTAcceptOfferPopup = ({ NFT, NFTs, order, isOpen, onClose }: INFTA
   };
 
   const finalPrice = useMemo(() => {
-    const royaltyCut = new BigNumber(listingPrice).multipliedBy(totalRoyalties).dividedBy(100);
-    const final = new BigNumber(listingPrice).minus(royaltyCut).toFixed(3);
-    return final;
+    const nftRoyaltiesAmount = listingPrice * nftRoyalties / 100;
+    const collectionRoyaltiesAmount = (listingPrice - nftRoyaltiesAmount) * collectionRoyalties / 100;
+    const daoFeeAmount =(listingPrice - nftRoyaltiesAmount - collectionRoyaltiesAmount) * daoFee / 100;
+
+    return parseFloat((listingPrice - (nftRoyaltiesAmount + collectionRoyaltiesAmount + daoFeeAmount)).toFixed(8));
   }, [order, totalRoyalties, tokenDecimals, listingPrice]);
+
+  const usdFinal = useMemo(() => {
+    return new BigNumber(usdPrice).multipliedBy(finalPrice).toFixed(2);
+  }, [usdPrice, finalPrice]);
 
   useEffect(() => {
     fetchNftRoyalties();
@@ -335,9 +341,9 @@ export const NFTAcceptOfferPopup = ({ NFT, NFTs, order, isOpen, onClose }: INFTA
                   Fees
                 </Text>
                 <Box layerStyle={'Grey'} {...styles.FeesContainerStyle}>
-                  <Fee name={'To Universe'} amount={daoFee} />
-                  <Fee name={'To collection'} amount={collectionRoyalties} />
-                  <Fee name={'To creator'} amount={nftRoyalties} />
+                  <Fee name={'Creator'} amount={nftRoyalties} />
+                  <Fee name={'Collection'} amount={collectionRoyalties} />
+                  <Fee name={'Universe'} amount={daoFee} />
                   <Fee name={'Total'} amount={totalRoyalties} />
                 </Box>
               </Box>
@@ -349,7 +355,7 @@ export const NFTAcceptOfferPopup = ({ NFT, NFTs, order, isOpen, onClose }: INFTA
                     <TokenIcon ticker={tokenTicker} display={'inline'} size={24} mr={'6px'} mt={'-3px'} />
                     {finalPrice}
                   </Text>
-                  <Text {...styles.PriceUSDStyle}>${usd}</Text>
+                  <Text {...styles.PriceUSDStyle}>${usdFinal}</Text>
                 </Box>
               </Flex>
 
