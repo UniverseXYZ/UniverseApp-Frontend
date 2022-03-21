@@ -448,33 +448,57 @@ export const NFTCheckoutPopup = ({ NFT, NFTs, order, isOpen, onClose }: INFTChec
               </Box>
             )}
 
-            {state === CheckoutState.CONGRATULATIONS && (
-              <>
-                <Heading {...styles.TitleStyle} mb={'10px'}>
-                  Congratulations!
-                </Heading>
-                <Text color={'rgba(0, 0, 0, 0.6)'} textAlign={'center'}>
-                  You have successfully bought the NFT
-                </Text>
+           {state === CheckoutState.CONGRATULATIONS && (
+            <>
+              <Heading {...styles.TitleStyle} mb={'10px'}>Congratulations!</Heading>
+              <Text color={'rgba(0, 0, 0, 0.6)'} textAlign={'center'}>You have successfully bought the NFT</Text>
 
-                <Box {...styles.AssetCongratsStyle}>
-                  {isNFTAssetImage(previewNFT.artworkTypes) && <Image src={previewNFT.thumbnailUrl} />}
-                  {isNFTAssetVideo(previewNFT.artworkTypes) && <video src={previewNFT.thumbnailUrl} />}
-                  {isNFTAssetAudio(previewNFT.artworkTypes) && <Image src={AudioNFTPreviewImage} />}
-                  {!!NFTs && !!NFTs?.length && <NFTType type={'bundle'} count={NFTs.length} />}
-                </Box>
+              <Box {...styles.AssetCongratsStyle}>
+                {isNFTAssetImage(previewNFT.artworkTypes) && <Image src={previewNFT.thumbnailUrl} />}
+                {isNFTAssetVideo(previewNFT.artworkTypes) && <video src={previewNFT.thumbnailUrl} />}
+                {isNFTAssetAudio(previewNFT.artworkTypes) && <Image src={AudioNFTPreviewImage} />}
+                {!!NFTs && !!NFTs?.length && <NFTType type={'bundle'} count={NFTs.length} />}
+              </Box>
 
-                <Flex position={'relative'} flexDir={{ base: 'column', md: 'row' }}>
-                  <InputShadow flex={1} mr={{ base: 0, md: '14px' }} mb={{ base: '14px', md: 0 }}>
-                    <Input defaultValue={address} />
-                  </InputShadow>
+              <Box {...styles.ButtonsContainerStyle}>
+                <Button boxShadow={'lg'} onClick={handleMyNFTsClick}>My NFTs</Button>
+                <Button variant={'outline'} onClick={onClose}>Close</Button>
+              </Box>
+            </>
+          )}
 
-                  <Button size={'lg'} boxShadow={'lg'} onClick={onCopy}>
-                    Copy
-                  </Button>
-                </Flex>
-              </>
-            )}
+          {state === CheckoutState.ADD_FUNDS && (
+            <>
+              <Heading {...styles.TitleStyle} mb={'40px'} position={'relative'}>
+                <Image src={ArrowSVGIcon}
+                       cursor={'pointer'}
+                       position={'absolute'}
+                       left={0}
+                       transform={'translateY(50%)'}
+                       onClick={handleBackClick}
+                />
+                Add funds
+              </Heading>
+
+              <Image src={WalletImage} {...styles.WalletStyle} />
+
+              <Text textAlign={'center'} px={'20px'} mb={'30px'}>
+                Transfer funds from an exchange or another wallet to your wallet address below:
+              </Text>
+
+              <Flex position={'relative'} flexDir={{ base: 'column', md: 'row' }}>
+                <InputShadow
+                  flex={1}
+                  mr={{ base: 0, md: '14px' }}
+                  mb={{ base: '14px', md: 0 }}
+                >
+                  <Input defaultValue={address} />
+                </InputShadow>
+
+                <Button size={'lg'} boxShadow={'lg'} onClick={onCopy}>Copy</Button>
+              </Flex>
+            </>
+          )}
           </ModalBody>
         </ModalContent>
       </Modal>
