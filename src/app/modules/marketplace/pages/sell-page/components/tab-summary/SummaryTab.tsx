@@ -413,10 +413,12 @@ export const SummaryTab = () => {
           ))}
         </SimpleGrid>
       </Box>
-      <Box textAlign={'right'} mb={'50px'}>
-        <Button mr={'10px'} variant={'outline'} onClick={goBack}>Back</Button>
-        <Button boxShadow={'xl'} disabled={!isAllCollectionApproved} onClick={handleSave}>Post your listing</Button>
-      </Box>
+      {!isPosted && (
+        <Box textAlign={'right'} mb={'50px'}>
+          <Button mr={'10px'} variant={'outline'} onClick={goBack}>Back</Button>
+          <Button boxShadow={'xl'} disabled={!isAllCollectionApproved} onClick={handleSave}>Post your listing</Button>
+        </Box>
+      )}
       <PostingPopup
         status={postingPopupStatus}
         onClose={() => setPostingPopupStatus(PostingPopupStatus.HIDDEN)}
