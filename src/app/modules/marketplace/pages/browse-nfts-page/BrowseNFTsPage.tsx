@@ -28,7 +28,7 @@ import {
   ISearchBarValue,
 } from '../../components';
 import { SortOrderOptions, SortOrderOptionsEnum } from '../../constants';
-import { BackToTopButton, Select } from '../../../../components';
+import { BackToTopButton, Loading, Select } from '../../../../components';
 import {
   NftItem,
   NFTItemContentWithPrice,
@@ -45,7 +45,6 @@ import {
   GetCollectionApi
 } from '../../../nft/api';
 import { useThemeContext } from '../../../../../contexts/ThemeContext';
-import { CollectionPageLoader } from '../../../../../containers/collection/CollectionPageLoader';
 import { OrderAssetClass } from '../../../nft/enums';
 import BrowseFilterPopup from '../../../../../components/popups/BrowseFiltersPopup';
 import * as styles from './styles';
@@ -552,11 +551,11 @@ export const BrowseNFTsPage = () => {
             })}
           </SimpleGrid>
           }
-          {isFetching &&
-           <Container centerContent>
-              <CollectionPageLoader/>
+          {isFetching && (
+            <Container centerContent py={'20px !important'}>
+              <Loading />
             </Container>
-          }
+          )}
           {hasNextPage && !isFetching && (
             <Button variant={'outline'} isFullWidth mb={'20px'} onClick={() => fetchNextPage()}>
               {isFetching ? 'Loading...' : 'Load More'}
