@@ -306,7 +306,7 @@ export const SellPage = () => {
               <Tabs isFitted variant={'arrow'} index={activeTab} onChange={setActiveTab}>
                 <TabList overflowX={'scroll'} padding={'0 5px'}>
                   {sellPageTabs.map((tab, i) => (
-                    <Tab key={i} minW={'130px'} isDisabled={i > activeTab}>
+                    <Tab key={i} minW={'130px'} isDisabled={i > activeTab || isPosted}>
                       <Image src={activeTab === i ? tab.iconActive : tab.icon} />
                       {tab.name}
                     </Tab>
