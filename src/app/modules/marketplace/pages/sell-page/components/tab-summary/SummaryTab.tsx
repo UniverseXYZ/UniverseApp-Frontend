@@ -4,6 +4,9 @@ import { Navigation } from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/react/swiper-react';
 import { useUpdate } from 'react-use';
 import { useParams } from 'react-router-dom';
+import { default as dayjs } from 'dayjs';
+import { default as UTC } from 'dayjs/plugin/utc';
+import { Contract, BigNumber } from 'ethers';
 
 import 'swiper/swiper-bundle.min.css';
 import 'swiper/swiper.min.css';
@@ -14,7 +17,6 @@ import CheckBlackIcon from '../../../../../../../assets/images/check-black.svg';
 import { Status, Status as PostingPopupStatus } from './compoents/posting-popup/enums';
 import { useMarketplaceSellData } from '../../hooks';
 import { Fee, PostingPopup } from './compoents';
-import { fees, totalFee } from './constants';
 import { SellAmountType, SellMethod } from '../../enums';
 import { IFixedListingForm } from '../../types';
 import { TokenTicker } from '../../../../../../enums';
@@ -33,14 +35,11 @@ import { useMyNftsContext } from '../../../../../../../contexts/MyNFTsContext';
 import { useAuthContext } from '../../../../../../../contexts/AuthContext';
 import { SwiperArrowButton } from '../../../../../../components/swiper-arrow-button';
 import Contracts from '../../../../../../../contracts/contracts.json';
-import { Contract, BigNumber } from 'ethers';
 import { fetchRoyalties, fetchDAOFee } from '../../../../../../../utils/api/royaltyRegistry';
-import { default as dayjs } from 'dayjs';
-import { default as UTC } from 'dayjs/plugin/utc';
 import { CollectionPageLoader } from '../../../../../../../containers/collection/CollectionPageLoader';
-import './SummaryTab.scss';
 import { getCollectionBackgroundColor } from '../../../../../../../utils/helpers';
 import { shortenEthereumAddress } from '../../../../../../../utils/helpers/format';
+import './SummaryTab.scss';
 
 dayjs.extend(UTC);
 
@@ -375,7 +374,7 @@ export const SummaryTab = () => {
         <Heading as={'h4'}>Approve collections for sale</Heading>
         <Text color={'#00000066'}>To get set up for listings for the first time, you must approve these collections for sale.</Text>
 
-        <SimpleGrid mt={'30px'} columns={3} spacing={'20px'}>
+        <SimpleGrid mt={'30px'} columns={{ base: 1, sm: 1, md: 2, lg: 3, xl: 3 }} spacing={'20px'}>
           {collections.map((collectionItem, i) => (
             <Flex
               key={i}
@@ -384,20 +383,30 @@ export const SummaryTab = () => {
                 bg: 'rgba(0, 0, 0, 0.02)',
                 border: '1px solid rgba(0, 0, 0, 0.1)',
                 borderRadius: '10px',
-                padding: '30px',
+                padding: {
+                  base: '10px',
+                  sm: '30px',
+                  md: '20px',
+                  lg: '20px',
+                  xl: '30px',
+                },
               }}
             >
-              {
-                collectionItem.collection?.coverUrl ? 
-                  <Image src={collectionItem.collection?.coverUrl} borderRadius={'50%'} objectFit={'cover'} h={'80px'} w={'80px'} />
-                :
-                <Box
-                  className="random--bg--color"
-                  borderRadius={'50%'} objectFit={'cover'} h={'80px'} w={'80px'}
-                  bg={getCollectionBackgroundColor()}
-                ></Box>
-              }
-              <Box ml={'20px'} className="approve-section">
+              <Box
+                bg={
+                  collectionItem.collection?.coverUrl
+                    ? `url(${collectionItem.collection?.coverUrl}) center / cover`
+                    : getCollectionBackgroundColor()
+                }
+                borderRadius={'50%'}
+                objectFit={'cover'}
+                h={{ base: '80px', md: '80px', lg: '60px', xl: '80px',  }}
+                w={{ base: '80px', md: '80px', lg: '60px', xl: '80px',  }}
+                maxW={{ base: '80px', md: '80px', lg: '60px', xl: '80px',  }}
+                minW={{ base: '80px', md: '80px', lg: '60px', xl: '80px',  }}
+                m={'auto'}
+              />
+              <Box className="approve-section" ml={'20px'} flex={1}>
                 <Heading as={'h4'}>{collectionItem.collection?.name || shortenEthereumAddress(nft._collectionAddress)}</Heading>
                 {isApproving && <CollectionPageLoader />}
                 
