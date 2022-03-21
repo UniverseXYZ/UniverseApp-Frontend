@@ -191,8 +191,16 @@ export const NFTChangeListingPricePopup = ({ nft, order, isOpen, onClose, }: INF
   }
 
   useEffect(() => {
-    formik.resetForm();
-    formik.validateForm();
+    if (isOpen) {
+      formik.setValues({
+        amount: ethers.utils.formatEther(BigNumber.from(order?.take?.value || 0)),
+        token: getTokenByAddress((order?.take?.assetType as IERC721AssetType)?.contract)?.ticker,
+      });
+    } else {
+      formik.resetForm();
+      formik.validateForm();
+    }
+
     setState(ChangeListingPriceState.FORM);
   }, [isOpen]);
 
