@@ -300,7 +300,7 @@ const NFTCollectionForm = ({ showCollectible, setShowCollectible, scrollToTop })
       if (royalties.length && royalties[1].length) {
         const collectionRoyalties = royalties[1].map((royalty) => ({
           address: royalty[0],
-          amount: BigNumber.from(royalty[1]).div(100).toString(),
+          amount: (BigNumber.from(royalty[1]).toNumber() / 100).toString(),
         }));
         setRevenueSplits(collectionRoyalties);
         setInitialsRevenueSplits(collectionRoyalties);
