@@ -273,7 +273,7 @@ export const SearchSelect = (props: ISearchSelectProps) => {
                         w: '30px',
                         mr: '20px'
                       }}
-                    >{item?.name.charAt(0)}</Box>
+                    >{item?.name?.charAt(0)}</Box>
                   )}
 
                   {item.name}
@@ -287,7 +287,7 @@ export const SearchSelect = (props: ISearchSelectProps) => {
                     src={goToCollectionIcon}
                     {...styles.itemImage(true)}
                     borderRadius={'50%'}
-                    onClick={() => handleGoToCollection(item.address)}
+                    onClick={() => handleGoToCollection(item?.address)}
                     />
                 </Box>
               </Flex>
