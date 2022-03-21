@@ -408,7 +408,13 @@ export const SummaryTab = () => {
               />
               <Box className="approve-section" ml={'20px'} flex={1}>
                 <Heading as={'h4'}>{collectionItem.collection?.name || shortenEthereumAddress(nft._collectionAddress)}</Heading>
-                {isApproving && <CollectionPageLoader />}
+                {isApproving && (
+                  <Box sx={{
+                    transform: 'scale(0.6)'
+                  }}>
+                    <CollectionPageLoader />
+                  </Box>
+                )}
                 
                 {!collectionItem.approved && !isApproving &&
                   <Button onClick={() => handleApproveCollection(collectionItem)}>Approve</Button>
