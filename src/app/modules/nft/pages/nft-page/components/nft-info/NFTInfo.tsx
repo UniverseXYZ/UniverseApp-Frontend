@@ -265,7 +265,7 @@ export const NFTInfo = () => {
                     {/* <Tab>Owners</Tab> */}
                     {/* <Tab>Bids</Tab> */}
                     <Tab>Offers</Tab>
-                    <Tab>History</Tab>
+                    <Tab>Universe History</Tab>
                     <Tab>Listings</Tab>
                   </LineTabList>
 
