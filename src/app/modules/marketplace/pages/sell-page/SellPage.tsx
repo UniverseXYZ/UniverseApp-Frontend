@@ -115,7 +115,7 @@ export const SellPage = () => {
         const make: any = {
           assetType: {
             assetClass: nft?.standard,
-            contract: nft?.collection?.address,
+            contract: params.collectionAddress.toLowerCase(),
             tokenId: params.tokenId,
           },
           value: '1',
@@ -135,7 +135,7 @@ export const SellPage = () => {
   
             acc[1][i].push(NFTTokenId);
             return acc;
-          }, [[(nft?.collection?.address ?? '')], [[params.tokenId]]]);
+          }, [[(params.collectionAddress.toLowerCase())], [[params.tokenId]]]);
   
           make.assetType = {
             assetClass: 'ERC721_BUNDLE',
