@@ -148,9 +148,7 @@ export const SearchSelect = (props: ISearchSelectProps) => {
     };
     setValue(result);
 
-    if (result.searchValue.length > MIN_CHARS_LENGTH) {
-      onChange(result);
-    }
+    onChange(result);
   };
 
   const getRandomInt = useCallback((max) => {
@@ -273,10 +271,10 @@ export const SearchSelect = (props: ISearchSelectProps) => {
                         w: '30px',
                         mr: '20px'
                       }}
-                    >{item?.name?.charAt(0)}</Box>
+                    >{(item.name || item.address)?.charAt(0)}</Box>
                   )}
 
-                  {item.name}
+                  {item.name || item.address}
                 </Box>
 
                 <Box>

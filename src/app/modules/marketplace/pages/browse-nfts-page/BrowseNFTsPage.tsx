@@ -141,6 +141,7 @@ export const BrowseNFTsPage = () => {
       // Mutate the copy
       if (offChainData) {
         copy.image = offChainData.coverUrl ?? null;
+        copy.name = copy.name || offChainData.name;
       }
 
       return copy;
