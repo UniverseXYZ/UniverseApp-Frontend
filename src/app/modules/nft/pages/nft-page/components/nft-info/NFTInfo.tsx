@@ -319,7 +319,9 @@ export const NFTInfo = () => {
           )}
           {moreFromCollection && (
             <Box {...styles.MoreNFTsWrapperStyle}>
-              <Heading {...styles.MoreNFTsTitleStyle}>More from this collection</Heading>
+              {moreFromCollection.length > 0 && (
+                <Heading {...styles.MoreNFTsTitleStyle}>More from this collection</Heading>
+              )}
               <Container
                 {...styles.MoreNFTsContainerStyle}
               >
@@ -327,7 +329,7 @@ export const NFTInfo = () => {
                   columns={{
                     base: 1,
                     md: 2,
-                    lg: moreFromCollection.length < 4 ? moreFromCollection.length : 4,
+                    lg: 4,
                   }}
                   spacing={'20px'}
                 >
