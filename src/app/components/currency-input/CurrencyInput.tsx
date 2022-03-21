@@ -49,7 +49,7 @@ export const CurrencyInput = (
   return (
     <Box position={'relative'}>
       <Menu>
-        <MenuButton ref={ref || undefined} as={Button} size={'sm'} {...styles.ButtonStyle}>
+        <MenuButton ref={ref} as={Button} size={'sm'} {...styles.ButtonStyle}>
           <Image src={TOKENS_MAP[currencyValue as TokenTicker].icons[0]} mr={'10px'} h={'20px'} w={'20px'} />
           {TOKENS_MAP[currencyValue as TokenTicker].ticker}
           <Image src={ArrowIcon} />
