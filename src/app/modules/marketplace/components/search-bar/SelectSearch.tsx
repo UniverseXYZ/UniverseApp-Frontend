@@ -4,9 +4,9 @@ import React, { useCallback, useEffect, useState, useRef } from 'react';
 import { SearchInput } from './SearchInput';
 import { ISearchBarValue } from './types';
 import { ISearchBarDropdownCollection } from '../../../nft/types';
-import { Loading } from '../../../../components';
+import { Loading, InfoTooltip } from '../../../../components';
 import { getCollectionBackgroundColor } from '../../../../../utils/helpers';
-import goToCollectionIcon from '../../../../../assets/images/eventTypeTransfer.svg';
+import goToCollectionIcon from '../../../../../assets/images/go-to-collection.svg';
 import { useHistory } from 'react-router-dom';
 
 const MIN_CHARS_LENGTH = 3;
@@ -280,15 +280,11 @@ export const SearchSelect = (props: ISearchSelectProps) => {
                 </Box>
 
                 <Box>
-                  <Image
-                    _hover={{
-                      transform: 'scale(1.2)'
-                    }}
-                    src={goToCollectionIcon}
-                    {...styles.itemImage(true)}
-                    borderRadius={'50%'}
+                  <InfoTooltip
+                    icon={goToCollectionIcon}
+                    label="Go to collection"
                     onClick={() => handleGoToCollection(item?.address)}
-                    />
+                  />
                 </Box>
               </Flex>
             </Box>
