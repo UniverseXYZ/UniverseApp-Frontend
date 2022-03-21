@@ -473,6 +473,39 @@ export const NFTCheckoutPopup = ({ NFT, NFTs, order, isOpen, onClose }: INFTChec
                 </Flex>
               </>
             )}
+
+            {state === CheckoutState.ADD_FUNDS && (
+              <>
+                <Heading {...styles.TitleStyle} mb={'40px'} position={'relative'}>
+                  <Image src={ArrowSVGIcon}
+                         cursor={'pointer'}
+                         position={'absolute'}
+                         left={0}
+                         transform={'translateY(50%)'}
+                         onClick={handleBackClick}
+                  />
+                  Add funds
+                </Heading>
+
+                <Image src={WalletImage} {...styles.WalletStyle} />
+
+                <Text textAlign={'center'} px={'20px'} mb={'30px'}>
+                  Transfer funds from an exchange or another wallet to your wallet address below:
+                </Text>
+
+                <Flex position={'relative'} flexDir={{ base: 'column', md: 'row' }}>
+                  <InputShadow
+                    flex={1}
+                    mr={{ base: 0, md: '14px' }}
+                    mb={{ base: '14px', md: 0 }}
+                  >
+                    <Input defaultValue={address} />
+                  </InputShadow>
+
+                  <Button size={'lg'} boxShadow={'lg'} onClick={onCopy}>Copy</Button>
+                </Flex>
+              </>
+            )}
           </ModalBody>
         </ModalContent>
       </Modal>
