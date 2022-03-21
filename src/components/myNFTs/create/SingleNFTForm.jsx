@@ -489,7 +489,7 @@ const SingleNFTForm = ({ scrollToTop }) => {
       // Get the contract instance to mint from
       const collectionContract =
         selectedCollection && selectedCollection.address !== universeCollection.address
-          ? new Contract(selectedCollection.address, contracts.UniverseERC721.abi, signer)
+          ? new Contract(selectedCollection.address, contracts.UniverseERC721Factory.abi, signer)
           : universeERC721CoreContract;
 
       // Update saved NFT data, before getting the TokenURI
