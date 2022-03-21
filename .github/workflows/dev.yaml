@@ -36,12 +36,12 @@ jobs:
         key: ${{ runner.os }}-${{ hashFiles('**/package-lock.json') }}
 
     - name: Install dependencies
-      run: yarn install
+      run: npm install
       env:
         CI: false
 
     - name: Build
-      run: yarn build
+      run: npm run build
       env:
         REACT_APP_API_BASE_URL: "https://dev.api.universe.xyz"
         REACT_APP_NETWORK_CHAIN_ID: 4
