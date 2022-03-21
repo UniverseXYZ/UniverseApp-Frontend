@@ -15,7 +15,8 @@ export const settingsItem = {
     },
     width: {
       base: '100%',
-      md: '70%'
+      md: '65%',
+      lg: '70%'
     },
   },
   '> div:nth-of-type(2)': {
@@ -23,7 +24,8 @@ export const settingsItem = {
     display: 'flex',
     width: {
       base: '100%',
-      md: '30%',
+      md: '35%',
+      lg: '30%'
     },
     '> div': {
       width: '100%'

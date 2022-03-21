@@ -121,7 +121,7 @@ export const NFTBuySection = ({ NFT, owner, NFTs, order, highestOffer, onMeasure
         setOrder(order || {} as IOrder);
         setNFT(NFT || {} as INFT);
       }} disabled={!canCheckoutOrder} style={{"width": "100%"}}>
-        Buy for {listingPrice} {getTokenByAddress((order?.take.assetType as IERC20AssetType).contract).ticker}
+        Buy for {listingPrice && listingPrice.length > 7 ? `${listingPrice.substring(0, 5)}...` : listingPrice} {getTokenByAddress((order?.take.assetType as IERC20AssetType).contract).ticker}
       </Button>
     </Tooltip>
   );
