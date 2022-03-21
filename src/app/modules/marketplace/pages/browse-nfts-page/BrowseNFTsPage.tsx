@@ -3,7 +3,7 @@ import { useFormik } from 'formik';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useInfiniteQuery, useQueryClient } from 'react-query';
 import { useHistory } from 'react-router-dom';
-import { utils } from 'ethers';
+import { utils, BigNumber } from 'ethers';
 import Popup from 'reactjs-popup';
 import { useIntersection } from 'react-use';
 
@@ -55,6 +55,7 @@ import { SaleTypeFilterDropdown } from '../../../account/pages/my-nfts-page/comp
 export type ICollectionsFilterValue = Array<any>;
 import { nftKeys, orderKeys } from '../../../../utils/query-keys';
 import Badge from '../../../../../components/badge/Badge';
+import { shallowEqual } from '../../../../helpers/'
 
 export const BrowseNFTsPage = () => {
   const { setDarkMode } = useThemeContext() as any;
@@ -243,8 +244,22 @@ export const BrowseNFTsPage = () => {
       apiFilters['sortBy'] = sortFilter;
     }
 
-    const { orders, total } = await GetActiveSellOrdersApi(apiFilters);
+    let { orders, total } = await GetActiveSellOrdersApi(apiFilters);
 
+    const ordersFiltered: IOrder[] = [];
+    orders.forEach(order => {
+        const ord = ordersFiltered.find(thisOrder => shallowEqual(thisOrder.make.assetType,order.make.assetType));
+        if (ord) {
+            if (BigNumber.from(ord.take.value).lt(order.take.value)) {
+              order = ord;
+            }
+            return;
+        }
+        ordersFiltered.push(order);
+    });
+    
+    orders = ordersFiltered;
+    
     const NFTsRequests: Array<any> = [];
 
     for (const order of orders) {
