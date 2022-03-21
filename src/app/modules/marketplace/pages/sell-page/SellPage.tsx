@@ -29,7 +29,7 @@ import { sign } from '../../../../helpers';
 import { useAuthContext } from '../../../../../contexts/AuthContext';
 import { TOKENS_MAP, ZERO_ADDRESS } from '../../../../constants';
 import { TokenTicker } from '../../../../enums';
-import { GetActiveListingApi, GetNFT2Api } from '../../../nft/api';
+import { GetActiveListingApi, GetHistoryApi, GetNFT2Api } from '../../../nft/api';
 import { INFT } from '../../../nft/types';
 import { EncodeOrderApi, GetSaltApi, IEncodeOrderApiData } from '../../../../api';
 import Contracts from '../../../../../contracts/contracts.json';
@@ -80,6 +80,10 @@ export const SellPage = () => {
         const result = await GetActiveListingApi(params.collectionAddress.toLowerCase(), params.tokenId);
         return result;
       })
+      queryClient.prefetchQuery(orderKeys.history({ collectionAddress: params.collectionAddress.toLowerCase(), tokenId: params.tokenId }), async () => {
+        const result = await GetHistoryApi(params.collectionAddress.toLowerCase(), params.tokenId);
+        return result;
+      });
     }
   });
 
