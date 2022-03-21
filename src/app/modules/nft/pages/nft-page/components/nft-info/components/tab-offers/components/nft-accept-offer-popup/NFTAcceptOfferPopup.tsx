@@ -77,6 +77,9 @@ export const NFTAcceptOfferPopup = ({ NFT, NFTs, order, isOpen, onClose }: INFTA
   const [newNftInfo, setNewNftInfo] = useState<INFT | null>(null);
   const [nftInterval, setNftInterval] = useState<NodeJS.Timer>();
   const [orderInterval, setOrderInterval] = useState<NodeJS.Timer>();
+  const [nftRoyaltiesValue, setNftRoyaltiesValue] = useState(0);
+  const [collectionRoyaltiesValue, setCollectionRoyaltiesValue] = useState(0);
+  const [daoFeeValue, setDaoFeeValue] = useState(0);
 
   const tokenTicker = useMemo(() => {
     return getTokenByAddress((order as any).make.assetType.contract).ticker as TokenTicker;
@@ -273,6 +276,10 @@ export const NFTAcceptOfferPopup = ({ NFT, NFTs, order, isOpen, onClose }: INFTA
     const collectionRoyaltiesAmount = (listingPrice - nftRoyaltiesAmount) * collectionRoyalties / 100;
     const daoFeeAmount =(listingPrice - nftRoyaltiesAmount - collectionRoyaltiesAmount) * daoFee / 100;
 
+    setNftRoyaltiesValue(nftRoyaltiesAmount);
+    setCollectionRoyaltiesValue(collectionRoyaltiesAmount);
+    setDaoFeeValue(daoFeeAmount);
+
     return parseFloat((listingPrice - (nftRoyaltiesAmount + collectionRoyaltiesAmount + daoFeeAmount)).toFixed(8));
   }, [order, totalRoyalties, tokenDecimals, listingPrice]);
 
@@ -341,10 +348,10 @@ export const NFTAcceptOfferPopup = ({ NFT, NFTs, order, isOpen, onClose }: INFTA
                   Fees
                 </Text>
                 <Box layerStyle={'Grey'} {...styles.FeesContainerStyle}>
-                  <Fee name={'Creator'} amount={nftRoyalties} />
-                  <Fee name={'Collection'} amount={collectionRoyalties} />
-                  <Fee name={'Universe'} amount={daoFee} />
-                  <Fee name={'Total'} amount={totalRoyalties} />
+                  <Fee name={'Creator'} amount={nftRoyalties} total={listingPrice} ticker={tokenTicker} />
+                  <Fee name={'Collection'} amount={collectionRoyalties} total={listingPrice - nftRoyaltiesValue} ticker={tokenTicker}  />
+                  <Fee name={'Universe'} amount={daoFee} total={listingPrice - nftRoyaltiesValue - collectionRoyaltiesValue} ticker={tokenTicker}  />
+                  <Fee name={'Total Fees'} total={nftRoyaltiesValue + collectionRoyaltiesValue + daoFeeValue} ticker={tokenTicker} />
                 </Box>
               </Box>
 
