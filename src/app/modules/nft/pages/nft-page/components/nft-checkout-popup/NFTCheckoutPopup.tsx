@@ -464,14 +464,12 @@ export const NFTCheckoutPopup = ({ NFT, NFTs, order, isOpen, onClose }: INFTChec
                   {!!NFTs && !!NFTs?.length && <NFTType type={'bundle'} count={NFTs.length} />}
                 </Box>
 
-                <Flex position={'relative'} flexDir={{ base: 'column', md: 'row' }}>
-                  <InputShadow flex={1} mr={{ base: 0, md: '14px' }} mb={{ base: '14px', md: 0 }}>
-                    <Input defaultValue={address} />
-                  </InputShadow>
-
-                  <Button size={'lg'} boxShadow={'lg'} onClick={onCopy}>
-                    Copy
-                  </Button>
+                <Flex justifyContent={'center'}>
+                  <Button size={'lg'} variant={'solid'} boxShadow={'lg'} mr={'12px'} onClick={() => {
+                    onClose();
+                    router.push('/my-nfts');
+                  }}>My NFTs</Button>
+                  <Button size={'lg'} variant={'outline'} onClick={onClose}>Close</Button>
                 </Flex>
               </>
             )}
