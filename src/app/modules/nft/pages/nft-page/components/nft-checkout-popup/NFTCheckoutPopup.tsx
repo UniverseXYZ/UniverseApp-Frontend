@@ -82,6 +82,8 @@ export const NFTCheckoutPopup = ({ NFT, NFTs, order, isOpen, onClose }: INFTChec
   const [nftInterval, setNftInterval] = useState<NodeJS.Timer>();
   const [orderInterval, setOrderInterval] = useState<NodeJS.Timer>();
 
+  const [verificationChecked, setSerificationChecked] = useState(false);
+
   const prepareMutation = useMutation(({ hash, data }: { hash: string; data: any }) => {
     return axios.post(`${process.env.REACT_APP_MARKETPLACE_BACKEND}/v1/orders/${hash}/prepare`, data);
   });
@@ -325,12 +327,12 @@ export const NFTCheckoutPopup = ({ NFT, NFTs, order, isOpen, onClose }: INFTChec
                         (isNFTAssetVideo(previewNFT.artworkTypes) && <video src={previewNFT.thumbnailUrl} />) ||
                         (isNFTAssetAudio(previewNFT.artworkTypes) && <Image src={AudioNFTPreviewImage} />)}
                     </Box>
+                  </Box>
                     <Box flex={1} p={'20px'}>
                       <Text>{NFT?.name}</Text>
                       <Text {...styles.CollectionNameStyle}>
                         {NFT?.collection?.name || shortenEthereumAddress(NFT?._collectionAddress)}
                       </Text>
-                    </Box>
                     <Box {...styles.PriceContainerStyle}>
                       <Text fontSize={'14px'}>
                         <TokenIcon ticker={tokenTicker.ticker} display={'inline'} size={20} mr={'6px'} mt={'-3px'} />
@@ -341,7 +343,7 @@ export const NFTCheckoutPopup = ({ NFT, NFTs, order, isOpen, onClose }: INFTChec
                   </Box>
                 </Flex>
 
-                <Flex {...styles.TotalContainerStyle}>
+                <Flex {...styles.TotalContainerStyle} pr={'20px'}>
                   <Text>Total</Text>
                   <Box {...styles.PriceContainerStyle}>
                     <Text fontSize={'18px'}>
@@ -352,8 +354,21 @@ export const NFTCheckoutPopup = ({ NFT, NFTs, order, isOpen, onClose }: INFTChec
                   </Box>
                 </Flex>
 
+                <Flex>
+                  <Checkbox isChecked={verificationChecked} onChange={() => setSerificationChecked(!verificationChecked)} mr={"15px"} alignSelf={'flex-start'} />
+                 <Box>
+                   <Text mb={'12px'} fontSize={'12px'}>
+                    Always verify on Etherscan to confirm that the contract address is the same address as the project you are trying to buy. Ethereum transactions are irreversible.
+                  </Text>
+                  <Text fontWeight={600} fontSize={'12px'} >
+                    By checking this box, I acknowledge this information.
+                  </Text>
+                 </Box>
+
+                </Flex>
+
                 <Box {...styles.ButtonsContainerStyle}>
-                  <Button boxShadow={'lg'} onClick={handleCheckoutClick}>
+                  <Button disabled={!verificationChecked} boxShadow={'lg'} onClick={handleCheckoutClick}>
                     Checkout
                   </Button>
                   <Button variant={'outline'} onClick={handleAddFundsClick}>
