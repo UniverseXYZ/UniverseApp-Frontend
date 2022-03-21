@@ -1,6 +1,4 @@
-import { Heading, TabPanel as ChakraTabPanel } from '@chakra-ui/react';
-import { TabPanelProps } from '@chakra-ui/tabs/dist/declarations/src/tabs';
-import React from 'react';
+import { Heading, TabPanel as ChakraTabPanel, TabPanelProps } from '@chakra-ui/react';
 
 interface ITabPanelProps extends TabPanelProps {
   name: string;
