@@ -5,13 +5,14 @@ import iIcon from './../../../assets/images/v2/marketplace/i.svg';
 
 interface IInfoTooltipProp extends ImageProps {
   label: string;
+  icon?: string;
 }
 
-export const InfoTooltip = ({ label, ...rest }: IInfoTooltipProp) => {
+export const InfoTooltip = ({ label, icon, ...rest }: IInfoTooltipProp) => {
   return (
     <Tooltip label={label}>
       <Image
-        src={iIcon}
+        src={icon || iIcon}
         alt={label}
         cursor={'pointer'}
         display={'inline'}

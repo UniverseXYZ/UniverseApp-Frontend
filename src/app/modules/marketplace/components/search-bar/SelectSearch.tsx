@@ -4,9 +4,9 @@ import React, { useCallback, useEffect, useState, useRef } from 'react';
 import { SearchInput } from './SearchInput';
 import { ISearchBarValue } from './types';
 import { ISearchBarDropdownCollection } from '../../../nft/types';
-import { Loading } from '../../../../components';
+import { Loading, InfoTooltip } from '../../../../components';
 import { getCollectionBackgroundColor } from '../../../../../utils/helpers';
-import goToCollectionIcon from '../../../../../assets/images/eventTypeTransfer.svg';
+import goToCollectionIcon from '../../../../../assets/images/go-to-collection.svg';
 import { useHistory } from 'react-router-dom';
 
 const MIN_CHARS_LENGTH = 3;
@@ -148,9 +148,7 @@ export const SearchSelect = (props: ISearchSelectProps) => {
     };
     setValue(result);
 
-    if (result.searchValue.length > MIN_CHARS_LENGTH) {
-      onChange(result);
-    }
+    onChange(result);
   };
 
   const getRandomInt = useCallback((max) => {
@@ -267,28 +265,24 @@ export const SearchSelect = (props: ISearchSelectProps) => {
                           address: item.address,
                         }),
                         borderRadius: '50%',
-                        display: 'flex',
+                        display: 'inline-flex',
                         justifyContent: 'center',
                         h: '30px',
                         w: '30px',
                         mr: '20px'
                       }}
-                    >{item?.name?.charAt(0)}</Box>
+                    >{(item.name || item.address)?.charAt(0)}</Box>
                   )}
 
-                  {item.name}
+                  {item.name || item.address}
                 </Box>
 
                 <Box>
-                  <Image
-                    _hover={{
-                      transform: 'scale(1.2)'
-                    }}
-                    src={goToCollectionIcon}
-                    {...styles.itemImage(true)}
-                    borderRadius={'50%'}
+                  <InfoTooltip
+                    icon={goToCollectionIcon}
+                    label="Go to collection"
                     onClick={() => handleGoToCollection(item?.address)}
-                    />
+                  />
                 </Box>
               </Flex>
             </Box>
