@@ -72,6 +72,9 @@ export const SummaryTab = () => {
   const [collectionIsAppovedForAll, setCollectionIsApprovedForAll] = useState(false);
   const [totalFees, setTotalFees] = useState(0);
   const [isApproving, setIsApproving] = useState(false);
+  const [nftRoyaltiesValue, setNftRoyaltiesValue] = useState(0);
+  const [collectionRoyaltiesValue, setCollectionRoyaltiesValue] = useState(0);
+  const [daoFeeValue, setDaoFeeValue] = useState(0);
 
   const { nft, isPosted, form, sellMethod, amountType, goBack, postingPopupStatus, setPostingPopupStatus } = useMarketplaceSellData();
 
@@ -125,7 +128,15 @@ export const SummaryTab = () => {
   }, [form.values]);
 
   const totalPrice = useMemo(() => {
-    return parseFloat((price - (price * totalFees / 100)).toFixed(6));
+    const nftRoyaltiesAmount = price * creatorRoyalties / 100;
+    const collectionRoyaltiesAmount = (price - nftRoyaltiesAmount) * collectionRoyalties / 100;
+    const daoFeeAmount =(price - nftRoyaltiesAmount - collectionRoyaltiesAmount) * daoFee / 100;
+
+    setNftRoyaltiesValue(nftRoyaltiesAmount);
+    setCollectionRoyaltiesValue(collectionRoyaltiesAmount);
+    setDaoFeeValue(daoFeeAmount);
+
+    return parseFloat((price - (nftRoyaltiesAmount + collectionRoyaltiesAmount + daoFeeAmount)).toFixed(8));
   }, [form.values, price, totalFees]);
 
   const NFTsForPreview = useMemo<INFT[]>(() => {
@@ -167,7 +178,8 @@ export const SummaryTab = () => {
               address: royalty[0],
               amount: BigNumber.from(royalty[1]),
             }));
-           setCreatorRoyalties(+nftRoyalties[0].amount / 100 || 0)
+            const total = nftRoyalties.reduce((total: number, obj: any) => +obj.amount + total, 0);
+            setCreatorRoyalties(total / 100 || 0);
           }
     
           // Index 1 is collection royalties
@@ -176,7 +188,8 @@ export const SummaryTab = () => {
               address: royalty[0],
               amount: BigNumber.from(royalty[1]),
             }));
-           setCollectionRoyalties(+collectionRoyalties[0].amount / 100 || 0)
+            const total = collectionRoyalties.reduce((total: number, obj: any) => +obj.amount + total, 0);
+            setCollectionRoyalties(total / 100 || 0);
           }
         } catch (err) {
           console.log(err);
@@ -344,10 +357,10 @@ export const SummaryTab = () => {
             </Text>
 
             <Box layerStyle={'Grey'} {...styles.FeesContainerStyle}>
-              <Fee name={'To Universe'} amount={daoFee} />
-              <Fee name={'To Collection'} amount={collectionRoyalties} />
-              <Fee name={'To Creator'} amount={creatorRoyalties} />
-              <Fee name={'Total'} amount={totalFees} />
+              <Fee name={'Creator'} amount={creatorRoyalties} total={price} ticker={ticker} />
+              <Fee name={'Collection'} amount={collectionRoyalties} total={price - nftRoyaltiesValue} ticker={ticker}  />
+              <Fee name={'Universe'} amount={daoFee} total={price - nftRoyaltiesValue - collectionRoyaltiesValue} ticker={ticker}  />
+              <Fee name={'Total Fees'} total={nftRoyaltiesValue + collectionRoyaltiesValue + daoFeeValue} ticker={ticker} />
             </Box>
 
             <Heading as={'h4'} mb={'0 !important'}>

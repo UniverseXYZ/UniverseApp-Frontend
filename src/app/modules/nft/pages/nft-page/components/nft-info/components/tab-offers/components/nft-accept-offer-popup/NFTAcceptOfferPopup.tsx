@@ -77,6 +77,9 @@ export const NFTAcceptOfferPopup = ({ NFT, NFTs, order, isOpen, onClose }: INFTA
   const [newNftInfo, setNewNftInfo] = useState<INFT | null>(null);
   const [nftInterval, setNftInterval] = useState<NodeJS.Timer>();
   const [orderInterval, setOrderInterval] = useState<NodeJS.Timer>();
+  const [nftRoyaltiesValue, setNftRoyaltiesValue] = useState(0);
+  const [collectionRoyaltiesValue, setCollectionRoyaltiesValue] = useState(0);
+  const [daoFeeValue, setDaoFeeValue] = useState(0);
 
   const tokenTicker = useMemo(() => {
     return getTokenByAddress((order as any).make.assetType.contract).ticker as TokenTicker;
@@ -87,7 +90,7 @@ export const NFTAcceptOfferPopup = ({ NFT, NFTs, order, isOpen, onClose }: INFTA
   }, [tokenTicker]);
 
   const listingPrice = useMemo(() => {
-    return utils.formatUnits((order as any).make.value, tokenDecimals);
+    return Number(utils.formatUnits((order as any).make.value, tokenDecimals));
   }, [tokenDecimals]);
 
   const prepareMutation = useMutation(({ hash, data }: { hash: string; data: any }) => {
@@ -269,10 +272,20 @@ export const NFTAcceptOfferPopup = ({ NFT, NFTs, order, isOpen, onClose }: INFTA
   };
 
   const finalPrice = useMemo(() => {
-    const royaltyCut = new BigNumber(listingPrice).multipliedBy(totalRoyalties).dividedBy(100);
-    const final = new BigNumber(listingPrice).minus(royaltyCut).toFixed(3);
-    return final;
+    const nftRoyaltiesAmount = listingPrice * nftRoyalties / 100;
+    const collectionRoyaltiesAmount = (listingPrice - nftRoyaltiesAmount) * collectionRoyalties / 100;
+    const daoFeeAmount =(listingPrice - nftRoyaltiesAmount - collectionRoyaltiesAmount) * daoFee / 100;
+
+    setNftRoyaltiesValue(nftRoyaltiesAmount);
+    setCollectionRoyaltiesValue(collectionRoyaltiesAmount);
+    setDaoFeeValue(daoFeeAmount);
+
+    return parseFloat((listingPrice - (nftRoyaltiesAmount + collectionRoyaltiesAmount + daoFeeAmount)).toFixed(8));
   }, [order, totalRoyalties, tokenDecimals, listingPrice]);
+
+  const usdFinal = useMemo(() => {
+    return new BigNumber(usdPrice).multipliedBy(finalPrice).toFixed(2);
+  }, [usdPrice, finalPrice]);
 
   useEffect(() => {
     fetchNftRoyalties();
@@ -335,10 +348,10 @@ export const NFTAcceptOfferPopup = ({ NFT, NFTs, order, isOpen, onClose }: INFTA
                   Fees
                 </Text>
                 <Box layerStyle={'Grey'} {...styles.FeesContainerStyle}>
-                  <Fee name={'To Universe'} amount={daoFee} />
-                  <Fee name={'To collection'} amount={collectionRoyalties} />
-                  <Fee name={'To creator'} amount={nftRoyalties} />
-                  <Fee name={'Total'} amount={totalRoyalties} />
+                  <Fee name={'Creator'} amount={nftRoyalties} total={listingPrice} ticker={tokenTicker} />
+                  <Fee name={'Collection'} amount={collectionRoyalties} total={listingPrice - nftRoyaltiesValue} ticker={tokenTicker}  />
+                  <Fee name={'Universe'} amount={daoFee} total={listingPrice - nftRoyaltiesValue - collectionRoyaltiesValue} ticker={tokenTicker}  />
+                  <Fee name={'Total Fees'} total={nftRoyaltiesValue + collectionRoyaltiesValue + daoFeeValue} ticker={tokenTicker} />
                 </Box>
               </Box>
 
@@ -349,7 +362,7 @@ export const NFTAcceptOfferPopup = ({ NFT, NFTs, order, isOpen, onClose }: INFTA
                     <TokenIcon ticker={tokenTicker} display={'inline'} size={24} mr={'6px'} mt={'-3px'} />
                     {finalPrice}
                   </Text>
-                  <Text {...styles.PriceUSDStyle}>${usd}</Text>
+                  <Text {...styles.PriceUSDStyle}>${usdFinal}</Text>
                 </Box>
               </Flex>
 
