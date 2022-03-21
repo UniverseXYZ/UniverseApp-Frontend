@@ -253,7 +253,7 @@ export const NFTInfo = () => {
 
                 <Box {...styles.DescriptionStyle}>
                   <ReadMoreAndLess charLimit={150} readMoreText="Read more" readLessText="Read less">
-                    {NFT.description || ''}
+                    {`${NFT.description} ` || ''}
                   </ReadMoreAndLess>
                 </Box>
 

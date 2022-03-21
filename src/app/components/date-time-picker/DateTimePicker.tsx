@@ -74,8 +74,8 @@ export const DateTimePicker = ({ value, onChange, onOpen, onClose, minDate, vali
   const handleOpen = useCallback(() => {
     formik.setValues({
       date: value,
-      hours: value ? value?.getHours().toString().padStart(2, '0') : undefined,
-      minutes: value ? value?.getMinutes().toString().padStart(2, '0') : undefined,
+      hours: value ? value?.getHours().toString().padStart(2, '0') : `0${new Date().getHours() + 1}`.slice(-2),
+      minutes: value ? value?.getMinutes().toString().padStart(2, '0') : `0${new Date().getMinutes() + 1}`.slice(-2),
     });
     openDisclosure();
     onOpen && onOpen();
@@ -134,7 +134,7 @@ export const DateTimePicker = ({ value, onChange, onOpen, onClose, minDate, vali
         </Box>
       </Button>
 
-      <Modal isOpen={isOpen} onClose={handleClose}>
+      <Modal isOpen={isOpen} onClose={handleClose} isCentered>
         <ModalOverlay />
         <ModalContent width={'auto'}>
           <ModalHeader p={'34px 30px 0 30px'}>
