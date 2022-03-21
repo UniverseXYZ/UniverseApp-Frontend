@@ -55,6 +55,7 @@ const AuthContextProvider = ({ children }) => {
   const [wethUsdPrice, setWethUsdPrice] = useState(0);
   const [isAuthenticating, setIsAuthenticating] = useState(false);
   const [isSigning, setIsSigning] = useState(false);
+  const [loginFn, setLoginFn] = useState();
 
   const web3ProviderRef = useRef(web3Provider);
   const networkRef = useRef(ethereumNetwork);
@@ -473,6 +474,8 @@ const AuthContextProvider = ({ children }) => {
         getTokenPriceByTicker,
         signOut,
         isAuthenticating,
+        loginFn,
+        setLoginFn,
       }}
     >
       {children}

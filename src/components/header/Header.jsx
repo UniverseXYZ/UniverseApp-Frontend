@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState, useRef } from 'react';
 import { Link, useHistory, withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
+import Popup from 'reactjs-popup';
 import {
   PLACEHOLDER_MARKETPLACE_AUCTIONS,
   PLACEHOLDER_MARKETPLACE_NFTS,
@@ -26,6 +27,7 @@ import { CONNECTORS_NAMES } from '../../utils/dictionary';
 import { useAuthContext } from '../../contexts/AuthContext';
 import { useThemeContext } from '../../contexts/ThemeContext';
 import { useLayout } from '../../app/providers';
+import SelectWalletPopup from '../popups/SelectWalletPopup';
 
 const Header = ({ location }) => {
   const {
@@ -34,6 +36,7 @@ const Header = ({ location }) => {
     connectWithWalletConnect,
     connectWithMetaMask,
     address,
+    setLoginFn,
   } = useAuthContext();
 
   const { darkMode } = useThemeContext();
@@ -49,6 +52,7 @@ const Header = ({ location }) => {
   const [showSearch, setShowSearch] = useState(false);
   const [showMobileSearch, setShowMobileSearch] = useState(false);
   const [searchFocus, setSearchFocus] = useState(false);
+  const [showLoginPopup, setShowLoginPopup] = useState(false);
   const searchRef = useRef();
   const ref = useRef();
 
@@ -129,6 +133,12 @@ const Header = ({ location }) => {
       document.querySelector('header').classList.add('dark');
     }
   }, [showMenu, darkMode]);
+
+  useEffect(() => {
+    setLoginFn(() => () => {
+      setShowLoginPopup(true);
+    });
+  }, [setLoginFn]);
 
   return (
     <header ref={headerRef}>
@@ -375,6 +385,28 @@ const Header = ({ location }) => {
         setShowMobileSearch={setShowMobileSearch}
         showMobileSearch={showMobileSearch}
       />
+
+      <Popup
+        closeOnDocumentClick={false}
+        trigger={<></>}
+        open={showLoginPopup}
+        onOpen={() => setShowLoginPopup(true)}
+        onClose={() => setShowLoginPopup(false)}
+      >
+        {(close) => (
+          <SelectWalletPopup
+            close={close}
+            showInstallWalletPopup={showInstallWalletPopup}
+            setShowInstallWalletPopup={setShowInstallWalletPopup}
+            selectedWallet={selectedWallet}
+            setSelectedWallet={setSelectedWallet}
+            handleConnectWallet={(wallet) => {
+              setShowLoginPopup(false);
+              handleConnectWallet(wallet);
+            }}
+          />
+        )}
+      </Popup>
     </header>
   );
 };
