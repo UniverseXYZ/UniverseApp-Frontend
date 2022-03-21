@@ -510,7 +510,7 @@ export const NFTCheckoutPopup = ({ NFT, NFTs, order, isOpen, onClose }: INFTChec
                   <Input defaultValue={address} />
                 </InputShadow>
 
-                <Button size={'lg'} boxShadow={'lg'} onClick={onCopy}>Copy</Button>
+                <Button size={'lg'} fontSize={'16px'} boxShadow={'lg'} onClick={onCopy}>Copy</Button>
               </Flex>
             </>
           )}
