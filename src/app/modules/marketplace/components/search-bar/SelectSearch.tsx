@@ -267,7 +267,7 @@ export const SearchSelect = (props: ISearchSelectProps) => {
                           address: item.address,
                         }),
                         borderRadius: '50%',
-                        display: 'flex',
+                        display: 'inline-flex',
                         justifyContent: 'center',
                         h: '30px',
                         w: '30px',
