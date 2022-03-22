@@ -74,7 +74,7 @@ export const DateTimePicker = ({ value, onChange, onOpen, onClose, minDate, vali
   const handleOpen = useCallback(() => {
     formik.setValues({
       date: value,
-      hours: value ? value?.getHours().toString().padStart(2, '0') : `0${new Date().getHours() + 1}`.slice(-2),
+      hours: value ? value?.getHours().toString().padStart(2, '0') : `0${new Date().getHours()}`.slice(-2),
       minutes: value ? value?.getMinutes().toString().padStart(2, '0') : `0${new Date().getMinutes() + 1}`.slice(-2),
     });
     openDisclosure();
