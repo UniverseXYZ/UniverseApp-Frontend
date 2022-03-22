@@ -53,7 +53,7 @@ import { TokenTicker } from '../../../../enums';
 import { SaleTypeFilterDropdown } from '../../../account/pages/my-nfts-page/components/search-filters';
 
 export type ICollectionsFilterValue = Array<any>;
-import { nftKeys, orderKeys } from '../../../../utils/query-keys';
+import { collectionKeys, nftKeys, orderKeys } from '../../../../utils/query-keys';
 import Badge from '../../../../../components/badge/Badge';
 
 export const BrowseNFTsPage = () => {
@@ -130,14 +130,13 @@ export const BrowseNFTsPage = () => {
 
     // Get the collections data
     const scraperData = await GetCollectionsFromScraperApi(searchQuery.searchValue);
-
     // The scraper doesn't return off chain info like (images, etc.) so we need to call the Universe Backend App for more info.
 
     // Fetch collection (off chain) data from the Universe API
     const getOffChainCollectionDataPromises = scraperData.map(async (c: ISearchBarDropdownCollection) => {
       const copy: ISearchBarDropdownCollection  = { ...c };
       const offChainData = await GetCollectionApi(copy.address);
-
+      queryClient.setQueryData(collectionKeys.centralizedInfo(copy.address), offChainData)
       // Mutate the copy
       if (offChainData) {
         copy.image = offChainData.coverUrl ?? null;

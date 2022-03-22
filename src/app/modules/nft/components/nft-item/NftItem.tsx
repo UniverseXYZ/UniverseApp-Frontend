@@ -15,7 +15,7 @@ import { TokenTicker } from '../../../../enums';
 import { getTokenByAddress, TOKENS_MAP } from '../../../../constants';
 import { NFTCheckoutPopup } from '../../pages/nft-page/components';
 import { shortenEthereumAddress } from '../../../../../utils/helpers/format';
-import { nftKeys, orderKeys, userKeys } from '../../../../utils/query-keys';
+import { collectionKeys, nftKeys, orderKeys, userKeys } from '../../../../utils/query-keys';
 import { useNftCheckoutPopupContext } from '../../../../providers/NFTCheckoutProvider';
 import { OrderSide, OrderStatus } from '../../../marketplace/enums';
 
@@ -73,7 +73,7 @@ export const NftItem = (
 
   // Get Collection Info Query
   const { data: collection, isLoading: isLoadingCollection } = useQuery(
-    ['collection', _collectionAddress],
+    collectionKeys.centralizedInfo(_collectionAddress),
     () => GetCollectionApi(_collectionAddress),
     {
       retry: false,
@@ -83,10 +83,10 @@ export const NftItem = (
 
   // Get NFT Info Query
   const { data: NFT, isLoading: isLoadingNFT } = useQuery(
-    nftKeys.nftInfo({collectionAddress: collection?.address || '', tokenId: _NFT.tokenId || ""}),
-    () => GetNFT2Api(`${collection?.address}`, _NFT.tokenId),
+    nftKeys.nftInfo({collectionAddress: _NFT._collectionAddress || '', tokenId: _NFT.tokenId || ""}),
+    () => GetNFT2Api(_NFT._collectionAddress || "", _NFT.tokenId),
     {
-      enabled: !!collection?.address && !!_NFT.tokenId,
+      enabled: !!_NFT._collectionAddress && !!_NFT.tokenId,
       retry: false,
       initialData: _NFT,
     },
@@ -124,11 +124,11 @@ export const NftItem = (
 
   // Get Active Listing Query
   const { data: orderData, isLoading: isLoadingOrder } = useQuery(
-    orderKeys.listing({collectionAddress: collection?.address || '', tokenId: NFT?.tokenId || ""}),
-    () => GetActiveListingApi(collection?.address ?? "", NFT?.tokenId ?? ""),
+    orderKeys.listing({collectionAddress: NFT?._collectionAddress || '', tokenId: NFT?.tokenId || ""}),
+    () => GetActiveListingApi(NFT?._collectionAddress ?? "", NFT?.tokenId ?? ""),
     {
       retry: false,
-      enabled: !order && !!collection?.address && !!NFT?.tokenId
+      enabled: !order && !!NFT?._collectionAddress && !!NFT?.tokenId
     },
   );
 
@@ -187,7 +187,7 @@ export const NftItem = (
       <LinkBox>
         <LinkOverlay
           as={Link}
-          to={!onClick ? `/nft/${collection?.address}/${NFT?.tokenId}`: 'javascript: void(0);'}
+          to={!onClick ? `/nft/${NFT?._collectionAddress}/${NFT?.tokenId}`: 'javascript: void(0);'}
           display={'contents'}
         >
           {!NFT || renderHeader === null ? null :
@@ -250,7 +250,7 @@ export const NftItem = (
                         type={NFTRelationType.COLLECTION}
                         image={collection?.coverUrl ?? ''}
                         value={collection?.name ?? ''}
-                        linkParam={collection?.address ?? ''}
+                        linkParam={NFT._collectionAddress ?? ''}
                       />
                       <NFTItemRelation
                         type={NFTRelationType.OWNER}

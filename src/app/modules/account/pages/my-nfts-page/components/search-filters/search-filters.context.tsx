@@ -27,7 +27,7 @@ import {
 	SortOrderOptions,
 } from '../search-filters';
 import { ICollectionFilterValue } from './collections-filter/types';
-import { nftKeys, orderKeys } from '../../../../../../utils/query-keys';
+import { collectionKeys, nftKeys, orderKeys } from '../../../../../../utils/query-keys';
 
 interface INFTsResult {
   page: number,
@@ -554,11 +554,9 @@ const FiltersContextProvider = (props: IFiltersProviderProps) => {
    * Query for fetching user Collections
    * This query should only be executed once
    */
-	const { data: UserCollections } = useQuery([
-		'user-collections',
-		userAddress,
-		'UserCollections'
-	], _handleGetUserCollections ,
+	const { data: UserCollections } = useQuery(
+    collectionKeys.userCollections(userAddress),
+    _handleGetUserCollections,
 		{
 			enabled: !!userAddress,
 			keepPreviousData: true,

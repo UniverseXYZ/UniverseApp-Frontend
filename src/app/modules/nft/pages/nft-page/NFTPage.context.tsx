@@ -4,7 +4,7 @@ import { useParams } from 'react-router-dom';
 
 import { ICollection, IERC721AssetType, INFT, IOrder, IUser } from '../../types';
 import { GetCollectionApi, GetNFT2Api, GetHistoryApi, GetOrdersApi, GetUserApi, INFTHistory, GetMoreFromCollectionApi, GetActiveListingApi } from '../../api';
-import { nftKeys, orderKeys, userKeys } from '../../../../utils/query-keys';
+import { collectionKeys, nftKeys, orderKeys, userKeys } from '../../../../utils/query-keys';
 
 export interface INFTPageContext {
   NFT: INFT;
@@ -120,7 +120,7 @@ const NFTPageProvider: FC = ({ children }) => {
 
   // NFT Collection Data Query
   const { data: collection } = useQuery(
-    ['collection', NFT?._collectionAddress],
+    collectionKeys.centralizedInfo(NFT?._collectionAddress || ""),
     () => GetCollectionApi(`${NFT?._collectionAddress}`),
     { 
       enabled: !!NFT?._collectionAddress,

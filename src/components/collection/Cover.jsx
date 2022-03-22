@@ -6,8 +6,8 @@ import { useAuthContext } from '../../contexts/AuthContext';
 import { getCollectionBackgroundColor } from '../../utils/helpers';
 import { useMyNftsContext } from '../../contexts/MyNFTsContext';
 
-const Cover = ({ selectedCollection, collectionGeneralInfo }) => {
-  const { deployedCollections, address } = useAuthContext();
+const Cover = ({ selectedCollection, collectionGeneralInfo, collectionOwner }) => {
+  const { isAuthenticated, address } = useAuthContext();
   const { setMyMintableCollections, myMintableCollections } = useMyNftsContext();
   const ref = useRef(null);
   const [bgImage, setBgImage] = useState(selectedCollection?.bgImage);
@@ -15,7 +15,7 @@ const Cover = ({ selectedCollection, collectionGeneralInfo }) => {
 
   const onInputChange = async (e) => {
     if (e.target.files[0]) {
-      const res = await editCollectionBanner(e.target.files[0], selectedCollection.id);
+      const res = await editCollectionBanner(e.target.files[0], selectedCollection.address);
 
       if (!res.message) {
         setError('');
@@ -38,15 +38,16 @@ const Cover = ({ selectedCollection, collectionGeneralInfo }) => {
 
   return (
     <div className="collection__page__cover">
-      {address === selectedCollection.owner && (
-        <>
-          <p className="image-upload-error">{imageUploadError}</p>
-          <div className="upload" onClick={() => ref.current.click()} aria-hidden="true">
-            <img src={uploadIcon} alt="Upload" />
-            <input type="file" className="inp-disable" ref={ref} onChange={onInputChange} />
-          </div>
-        </>
-      )}
+      {isAuthenticated &&
+        address?.toLowerCase() === collectionOwner && ( //
+          <>
+            <p className="image-upload-error">{imageUploadError}</p>
+            <div className="upload" onClick={() => ref.current.click()} aria-hidden="true">
+              <img src={uploadIcon} alt="Upload" />
+              <input type="file" className="inp-disable" ref={ref} onChange={onInputChange} />
+            </div>
+          </>
+        )}
       {bgImage ? (
         <img className="bg" src={URL.createObjectURL(bgImage)} alt={selectedCollection.name} />
       ) : !selectedCollection?.bannerUrl && selectedCollection?.coverUrl ? (
@@ -79,11 +80,13 @@ const Cover = ({ selectedCollection, collectionGeneralInfo }) => {
 Cover.propTypes = {
   selectedCollection: PropTypes.oneOfType([PropTypes.object]),
   collectionGeneralInfo: PropTypes.oneOfType([PropTypes.object]),
+  collectionOwner: PropTypes.string,
 };
 
 Cover.defaultProps = {
   selectedCollection: {},
   collectionGeneralInfo: {},
+  collectionOwner: '',
 };
 
 export default Cover;

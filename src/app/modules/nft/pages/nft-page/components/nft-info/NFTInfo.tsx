@@ -242,7 +242,7 @@ export const NFTInfo = () => {
 
                 <Flex mb={'24px'} flexWrap={{ sm: 'wrap', md: 'nowrap' }}>
                   {creator && <NFTPageCreatorRelation creator={creator} />}
-                  {collection && <NFTPageCollectionRelation collection={collection} />}
+                  {collection && collection.id && <NFTPageCollectionRelation collection={collection} />}
                   {owner && <NFTPageOwnerRelation owner={owner} />}
                 </Flex>
 

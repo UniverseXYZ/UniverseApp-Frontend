@@ -494,7 +494,7 @@ export const getCollectionData = async (address, offset, perPage) => {
 };
 
 export const editCollection = async (data) => {
-  const URL = `${EDIT_COLLECTION_URL}/${data.id}`;
+  const URL = `${EDIT_COLLECTION_URL}/${data.address}`;
 
   const requestOptions = {
     method: 'PATCH',
@@ -509,6 +509,7 @@ export const editCollection = async (data) => {
       instagramLink: data.instagramLink || '',
       mediumLink: data.mediumLink || '',
       telegramLink: data.telegramLink || '',
+      name: data.name || '',
     }),
   };
 
@@ -542,8 +543,8 @@ export const editCollectionImage = async (file, collectionId) => {
   return result;
 };
 
-export const editCollectionBanner = async (file, collectionId) => {
-  const URL = EDIT_COLLECTION_BANNER_URL(collectionId);
+export const editCollectionBanner = async (file, collectionAddress) => {
+  const URL = EDIT_COLLECTION_BANNER_URL(collectionAddress);
 
   const formData = new FormData();
   formData.append('banner', file);

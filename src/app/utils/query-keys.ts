@@ -73,3 +73,13 @@ export const userKeys = {
   all: ['users'] as const,
   info: (userAddress: string) => ['users', 'info', { userAddress: userAddress.toLowerCase() }],
 };
+
+export const collectionKeys = {
+  all: ['collections'] as const,
+  info: (collectionAddress: string) => ['collections', 'collection', {collectionAddress: collectionAddress.toLowerCase()}] as const,
+  centralizedInfo: (collectionAddress: string) => ['collections', 'collection', 'centralized', {collectionAddress: collectionAddress.toLowerCase()}] as const,
+  datacraperInfo: (collectionAddress: string) =>  ['collections', 'collection', 'datascraper', 'info', {collectionAddress: collectionAddress.toLowerCase()}] as const,
+  datascraperAdditionalInfo: (collectionAddress: string) =>  ['collections', 'collection', 'datascraper', 'additional', {collectionAddress: collectionAddress.toLowerCase()}] as const,
+  datascraperGeneralInfo: (collectionAddress: string) =>  ['collections', 'collection', 'datascraper', 'general', {collectionAddress: collectionAddress.toLowerCase()}] as const,
+  userCollections: (userAddress: string) =>  ['collections', 'user', {userAddress: userAddress.toLowerCase()}] as const,
+}

@@ -8,8 +8,12 @@ export const fetchRoyalties = async (collectionAddress, signer, tokenId = '0') =
     contracts.RoyaltyRegistry.abi,
     signer
   );
-
-  const royalties = await contract.callStatic.getRoyalties(collectionAddress, tokenId);
+  let royalties = [];
+  try {
+    royalties = await contract.callStatic.getRoyalties(collectionAddress, tokenId);
+  } catch (err) {
+    console.error(err);
+  }
 
   return [contract, royalties];
 };

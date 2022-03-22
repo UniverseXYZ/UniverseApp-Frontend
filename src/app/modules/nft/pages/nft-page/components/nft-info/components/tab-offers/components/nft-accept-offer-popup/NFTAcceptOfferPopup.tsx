@@ -223,6 +223,7 @@ export const NFTAcceptOfferPopup = ({ NFT, NFTs, order, isOpen, onClose }: INFTA
 
       // Invalidate listing because it's not active anymore
       queryClient.invalidateQueries(orderKeys.listing({ tokenId, collectionAddress }));
+      queryClient.invalidateQueries(orderKeys.history({ tokenId, collectionAddress }));
       queryClient.setQueriesData(orderKeys.offers({ tokenId, collectionAddress }), newOffersInfo);
 
       // Invalidate nfts counter
