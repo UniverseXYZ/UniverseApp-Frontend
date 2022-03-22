@@ -35,7 +35,7 @@ const getTransferData = async (collectionAddress: string, tokenId: string) => {
 }
 
 const getHistoryData = async (collectionAddress: string, tokenId: string): Promise<[IOrder[], number]> => {
-  const url = `${process.env.REACT_APP_MARKETPLACE_BACKEND}/v1/orders/listing/${collectionAddress}/${tokenId}/history`;
+  const url = `${process.env.REACT_APP_MARKETPLACE_BACKEND}/v1/orders/listing/${collectionAddress.toLowerCase()}/${tokenId}/history`;
 
   const { data } = await axios.get(url, {
     headers: {

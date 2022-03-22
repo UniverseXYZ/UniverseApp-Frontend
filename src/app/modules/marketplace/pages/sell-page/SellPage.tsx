@@ -1,4 +1,4 @@
-import { Box, Container, Heading, Image, Link, Tab, TabList, TabPanels, Tabs } from '@chakra-ui/react';
+import { Box, Container, Heading, Image, LinkBox, LinkOverlay, Tab, TabList, TabPanels, Tabs } from '@chakra-ui/react';
 import axios from 'axios';
 import { utils } from 'ethers';
 import { useFormik } from 'formik';
@@ -7,6 +7,7 @@ import { useParams } from 'react-router-dom';
 import { useMutation, useQuery } from 'react-query';
 import * as Yup from 'yup';
 import { Contract } from 'ethers';
+import { Link } from 'react-router-dom';
 
 import bg from '../../../../../assets/images/marketplace/v2/bg.png';
 import arrow from '../../../../../assets/images/arrow.svg';
@@ -294,16 +295,22 @@ export const SellPage = () => {
         >
           <Container maxW={'var(--container-max-width)'} pb={'0 !important'}>
             <Box px={{ base: '20px', md: '60px', xl: 0 }}>
-              <Link
-                href={`/nft/${params.collectionAddress}/${params.tokenId}`}
+              <LinkBox
                 mb={'20px'}
                 fontFamily={'Space Grotesk'}
                 fontWeight={500}
+                display={"inline-block"}
                 _hover={{ textDecoration: 'none' }}
               >
+                <LinkOverlay
+                  as={Link}
+                  display={'contents'}
+                  to={`/nft/${params.collectionAddress}/${params.tokenId}`}  
+                >
                 <Image src={arrow} display="inline" mr="10px" position="relative" top="-2px" />
-                {nft?.name ?? params.collectionAddress}
-              </Link>
+                {nft?.name ?? params.tokenId}
+              </LinkOverlay>
+              </LinkBox>
 
               <Heading as="h1" mb={'50px'}>Sell NFT</Heading>
 
