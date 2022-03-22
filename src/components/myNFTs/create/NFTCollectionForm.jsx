@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { BigNumber } from 'ethers';
 import Popup from 'reactjs-popup';
 import { useHistory, useLocation } from 'react-router-dom';
+import { useQueryClient } from 'react-query';
 import Input from '../../input/Input.jsx';
 import Button from '../../button/Button.jsx';
 import NFTCollectible from './NFTCollectible.jsx';
@@ -28,6 +29,7 @@ import RevenueSplits from '../revenueSplits/RevenueSplits.jsx';
 import SocialConnections from '../socialConnections/SocialConnections.jsx';
 import { formatRoyaltiesForMinting } from '../../../utils/helpers/contractInteraction.js';
 import { fetchRoyalties } from '../../../utils/api/royaltyRegistry';
+import { collectionKeys } from '../../../app/utils/query-keys.ts';
 
 const MAX_FIELD_CHARS_LENGTH = {
   name: 32,
@@ -35,7 +37,7 @@ const MAX_FIELD_CHARS_LENGTH = {
   token: 10,
 };
 
-const NFTCollectionForm = ({ showCollectible, setShowCollectible, scrollToTop }) => {
+const NFTCollectionForm = ({ scrollToTop }) => {
   const {
     myNFTs,
     activeTxHashes,
@@ -52,13 +54,9 @@ const NFTCollectionForm = ({ showCollectible, setShowCollectible, scrollToTop })
   const history = useHistory();
 
   const [coverImage, setCoverImage] = useState('');
-  const [bgImage, setBgImage] = useState(null);
   const [collectionName, setCollectionName] = useState('');
   const [tokenName, setTokenName] = useState('');
   const [description, setDescription] = useState('');
-  const [collectionNFTs, setCollectionNFTs] = useState([]);
-  const [collectionNFTsID, setCollectionNFTsID] = useState(null);
-  const [mintNowClick, setMintNowClick] = useState(false);
   const [border, setBorder] = useState(false);
   const [showLoading, setShowLoading] = useState(false);
   const [showCongrats, setShowCongrats] = useState(false);
@@ -79,9 +77,11 @@ const NFTCollectionForm = ({ showCollectible, setShowCollectible, scrollToTop })
   const [mediumLink, setMediumLink] = useState('');
   const [telegramLink, setTelegramLink] = useState('');
   const [registryContract, setRegistryContract] = useState(null);
+  const [isEditing, setIsEditing] = useState(false);
+
+  const queryClient = useQueryClient();
 
   const validateFile = (file) => {
-    setMintNowClick(false);
     if (!file) {
       setCoverImage('');
       setErrors({
@@ -104,7 +104,6 @@ const NFTCollectionForm = ({ showCollectible, setShowCollectible, scrollToTop })
   };
 
   const handleCollectionName = (value) => {
-    setMintNowClick(false);
     setCollectionName(value);
     setErrors({
       ...errors,
@@ -113,7 +112,6 @@ const NFTCollectionForm = ({ showCollectible, setShowCollectible, scrollToTop })
   };
 
   const handleTokenName = (value) => {
-    setMintNowClick(false);
     setTokenName(value);
     setErrors({
       ...errors,
@@ -122,8 +120,13 @@ const NFTCollectionForm = ({ showCollectible, setShowCollectible, scrollToTop })
   };
 
   const handleMinting = () => {
-    setMintNowClick(true);
-    if (!collectionName || !tokenName || !coverImage) {
+    // When editng just check for collection name
+    // We have the case where the collection is external and the datascraper hasn't picked up name, symbol, image
+    if (isEditing && !collectionName) {
+      setErrors({
+        coverImage: 'File format must be PNG, JPEG, GIF (Max Size: 1mb)',
+      });
+    } else if (!isEditing && (!collectionName || !tokenName || !coverImage)) {
       setErrors({
         collectionName: !collectionName ? '“Collection name” is not allowed to be empty' : '',
         tokenName: !tokenName ? '“Token name” is not allowed to be empty' : '',
@@ -141,7 +144,7 @@ const NFTCollectionForm = ({ showCollectible, setShowCollectible, scrollToTop })
         : [];
       if (
         (collectionNameExists.length || existsInMyNfts.length) &&
-        !location.state?.collection?.id
+        !location.state?.collectionAddress
       ) {
         setErrors({
           ...errors,
@@ -154,6 +157,9 @@ const NFTCollectionForm = ({ showCollectible, setShowCollectible, scrollToTop })
           collectible: '',
         });
       }
+
+      // eslint-disable-next-line no-use-before-define
+      onMintCollection();
     }
   };
 
@@ -176,15 +182,16 @@ const NFTCollectionForm = ({ showCollectible, setShowCollectible, scrollToTop })
 
       let res;
       // If is editing
-      if (location.state?.collection?.id) {
+      if (location.state?.collectionAddress) {
         res = await editCollection({
-          id: location.state?.collection?.id,
+          address: location.state?.collectionAddress.toLowerCase(),
           description,
           siteLink,
           discordLink,
           instagramLink,
           mediumLink,
           telegramLink,
+          name: collectionName,
         });
 
         if (res.message) {
@@ -192,7 +199,10 @@ const NFTCollectionForm = ({ showCollectible, setShowCollectible, scrollToTop })
         } else {
           const updateCoverImage = typeof coverImage === 'object';
           if (updateCoverImage) {
-            res = await editCollectionImage(coverImage, location.state?.collection?.id);
+            res = await editCollectionImage(
+              coverImage,
+              location.state?.collectionAddress.toLowerCase()
+            );
           }
         }
 
@@ -203,10 +213,11 @@ const NFTCollectionForm = ({ showCollectible, setShowCollectible, scrollToTop })
         if (areRevenueSplitsDifferent && registryContract) {
           const formattedRoyalties = formatRoyaltiesForMinting(revenueSplits);
           const royaltyTx = await registryContract.setRoyaltiesByToken(
-            location.state?.collection?.address,
+            location.state?.collectionAddress.toLowerCase(),
             formattedRoyalties
           );
           const txReceipt = await royaltyTx.wait();
+          queryClient.invalidateQueries(collectionKeys.info(location.state?.collectionAddress));
         }
       } else {
         // Create the collection
@@ -286,15 +297,9 @@ const NFTCollectionForm = ({ showCollectible, setShowCollectible, scrollToTop })
     }
   });
 
-  useEffect(() => {
-    if (mintNowClick && !errors.collectionName && !errors.tokenName && !errors.coverImage) {
-      onMintCollection();
-    }
-  }, [errors]);
-
   const fetchRoyaltyRegistry = async () => {
     try {
-      const [contract, royalties] = await fetchRoyalties(location.state.collection.address, signer);
+      const [contract, royalties] = await fetchRoyalties(location.state.collectionAddress, signer);
       setRegistryContract(contract);
       // Index 1 is collection royalties
       if (royalties.length && royalties[1].length) {
@@ -312,17 +317,18 @@ const NFTCollectionForm = ({ showCollectible, setShowCollectible, scrollToTop })
   };
 
   useEffect(() => {
-    if (signer && location.state.collection && location.state.collection.address) {
+    if (signer && location.state.collection && location.state.collectionAddress) {
       fetchRoyaltyRegistry();
     }
-  }, [signer, location.state?.collection?.address]);
+  }, [signer, location.state?.collectionAddress]);
 
   useEffect(() => {
     // It means we have opened a collection for EDIT
-    if (location.state?.collection?.id) {
-      if (location.state.collection.address) {
+    if (location.state?.collectionAddress) {
+      if (location.state.collectionAddress) {
         fetchRoyaltyRegistry();
       }
+      setIsEditing(true);
       const res = location.state?.collection;
       setCollectionName(res.name);
       // An already deployed collection should have a coverUrl
@@ -334,7 +340,6 @@ const NFTCollectionForm = ({ showCollectible, setShowCollectible, scrollToTop })
       setMediumLink(res.mediumLink);
       setInstagramLink(res.instagramLink);
       setTelegramLink(res.telegramLink);
-      setBgImage(res.bgImage || null);
     }
   }, [location.state?.collection]);
 
@@ -347,12 +352,12 @@ const NFTCollectionForm = ({ showCollectible, setShowCollectible, scrollToTop })
         : '',
     [coverImage]
   );
-  return !showCollectible ? (
+  return (
     <div className="nft--collection--settings--page">
       <RouterPrompt
-        when={!!showPrompt && !!location.state?.collection?.id}
+        when={!!showPrompt && !!location.state?.collectionAddress}
         onOK={() => true}
-        editing={!!location.state?.collection?.id}
+        editing={!!location.state?.collectionAddress}
       />
       <Popup closeOnDocumentClick={false} open={showLoading}>
         <LoadingPopup
@@ -376,7 +381,9 @@ const NFTCollectionForm = ({ showCollectible, setShowCollectible, scrollToTop })
           message="NFT collection was successfully created/updated and should be displayed in your wallet shortly"
         />
       </Popup>
-      <div className={`image--name--token${location.state?.collection?.id ? ' align-center' : ''}`}>
+      <div
+        className={`image--name--token${location.state?.collectionAddress ? ' align-center' : ''}`}
+      >
         <div className="collection--cover--image">
           <div
             className={`dropzone collection--cover--image--circle
@@ -443,12 +450,13 @@ const NFTCollectionForm = ({ showCollectible, setShowCollectible, scrollToTop })
               }}
               value={collectionName}
               hoverBoxShadowGradient
+              disabled={isEditing && collectionName}
             />
             <p className="input-max-chars">
               {collectionName?.length}/{MAX_FIELD_CHARS_LENGTH.name}
             </p>
           </div>
-          {!location.state?.collection?.id ? (
+          {!location.state?.collectionAddress ? (
             <div className="collection--token">
               <Input
                 label="Token name"
@@ -494,7 +502,7 @@ const NFTCollectionForm = ({ showCollectible, setShowCollectible, scrollToTop })
           {description ? description.length : 0}/{MAX_FIELD_CHARS_LENGTH.description}
         </p>
       </div>
-      {location.state.collection && location.state.collection.id && (
+      {location.state?.collectionAddress && (
         <RevenueSplits
           showRevenueSplits={showRevenueSplits}
           setShowRevenueSplits={setShowRevenueSplits}
@@ -529,7 +537,7 @@ const NFTCollectionForm = ({ showCollectible, setShowCollectible, scrollToTop })
         )}
       </div>
       <div className="create--collection--btn">
-        {!location.state?.collection?.id ? (
+        {!isEditing ? (
           <Button
             className="light-button"
             onClick={handleMinting}
@@ -542,33 +550,17 @@ const NFTCollectionForm = ({ showCollectible, setShowCollectible, scrollToTop })
             <Button className="light-border-button" onClick={() => history.push('/my-nfts')}>
               Cancel
             </Button>
-            <Button
-              className="light-button"
-              onClick={handleMinting}
-              disabled={!collectionName || !tokenName || !revenueSplitsValidAddress}
-            >
+            <Button className="light-button" onClick={handleMinting} disabled={!collectionName}>
               Submit changes
             </Button>
           </>
         )}
       </div>
     </div>
-  ) : (
-    <NFTCollectible
-      setShowCollectible={setShowCollectible}
-      collectionName={collectionName}
-      coverImage={coverImage}
-      collectionNFTs={collectionNFTs}
-      setCollectionNFTs={setCollectionNFTs}
-      collectionNFTsID={collectionNFTsID}
-      setCollectionNFTsID={setCollectionNFTsID}
-    />
   );
 };
 
 NFTCollectionForm.propTypes = {
-  showCollectible: PropTypes.bool.isRequired,
-  setShowCollectible: PropTypes.func.isRequired,
   scrollToTop: PropTypes.func.isRequired,
 };
 

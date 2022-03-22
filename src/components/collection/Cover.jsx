@@ -15,7 +15,7 @@ const Cover = ({ selectedCollection, collectionGeneralInfo }) => {
 
   const onInputChange = async (e) => {
     if (e.target.files[0]) {
-      const res = await editCollectionBanner(e.target.files[0], selectedCollection.id);
+      const res = await editCollectionBanner(e.target.files[0], selectedCollection.address);
 
       if (!res.message) {
         setError('');

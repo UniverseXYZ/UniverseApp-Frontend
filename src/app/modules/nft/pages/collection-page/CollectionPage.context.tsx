@@ -4,6 +4,7 @@ import { useParams } from 'react-router-dom';
 
 import { ICollection, ICollectionOrderBookData, ICollectionInfoResponse } from '../../types';
 import { GetCollectionOrderBookData, GetCollectionApi, GetCollectionGeneralInfo } from '../../api';
+import { collectionKeys } from '../../../../utils/query-keys';
 
 export interface ICollectionPageContext {
   collection: ICollection;
@@ -33,8 +34,8 @@ const CollectionPageProvider: FC = ({ children }) => {
     isFetching: isFetchingCollectionApi,
     isIdle: isIdleCollectionApi,
    } = useQuery(
-    ['collection', collectionAddress],
-    () => GetCollectionApi(`${collectionAddress}`),
+    collectionKeys.centralizedInfo(collectionAddress),
+    () => GetCollectionApi(collectionAddress),
     { onSuccess: (collection) => console.log('collection', collection) },
   );
 
@@ -44,13 +45,13 @@ const CollectionPageProvider: FC = ({ children }) => {
     isFetching: isFetchingCollectionGeneralInfo,
     isIdle: isIdleCollectionGeneralInfo
    } = useQuery(
-    ['owners', collectionAddress],
+    collectionKeys.datascraperGeneralInfo(collectionAddress),
     () => GetCollectionGeneralInfo(`${collectionAddress}`),
     { onSuccess: (owners) => console.log('collectionGeneralInfo', owners) },
   );
 
   const { data: collectionOrderBookData } = useQuery(
-    ['collectionAdditionalData', collectionAddress],
+    collectionKeys.datascraperAdditionalInfo(collectionAddress),
     () => GetCollectionOrderBookData(`${collectionAddress}`),
     { onSuccess: (collectionAdditionalData) => console.log('collectionOrderBookData', collectionAdditionalData) },
   );

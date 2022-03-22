@@ -108,11 +108,16 @@ export const CollectionInfo = () => {
     }
   }, [collectionGeneralInfo?.contractAddress , collection?.address, signer]);
 
-  const handleEdit = (id: number | string) => {
+  const handleEdit = () => {
     history.push('/my-nfts/create', {
       tabIndex: 1,
       nftType: 'collection',
-      collection: collection
+      collection: {
+        ...collection,
+        ...collectionGeneralInfo,
+        address: collection.address || collectionGeneralInfo?.contractAddress
+      },
+      collectionAddress
     });
   };
 
@@ -193,7 +198,7 @@ export const CollectionInfo = () => {
                     />
                     <Box>
                       {isAuthenticated && address?.toLowerCase() === collectionOwner && ( //
-                        <Button className="light-button" onClick={() => handleEdit(collection.id)}>
+                        <Button className="light-button" onClick={handleEdit}>
                           <span>Edit</span>
                           <EditIcon />
                         </Button>
