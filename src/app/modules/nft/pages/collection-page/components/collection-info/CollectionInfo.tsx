@@ -322,20 +322,36 @@ export const CollectionInfo = () => {
                               <Button variant={'outline'} isFullWidth={true} mt={10} onClick={() => fetchNextCollectionNFTs()}>Load more</Button>
                             )}
 
+                                {
+                                  ((hasOrderBookFilters && waitingOrders) || (!hasOrderBookFilters && waitingCollectionNFTs)) && (
+                                    <SimpleGrid columns={{ base: 1, md: 2, lg: 4 }} spacing={'30px'} mt={10}>
+                                      <NftCardSkeleton />
+                                      <NftCardSkeleton />
+                                      <NftCardSkeleton />
+                                      <NftCardSkeleton />
+                                    </SimpleGrid>
+                                  )
+                                }
                           </div>
                         </div>
                       ) : (!waitingCollectionNFTs && <NoNFTsFound />)
                     )}
-                    {
-                      ((hasOrderBookFilters && waitingOrders) || (!hasOrderBookFilters && waitingCollectionNFTs)) && (
-                        <SimpleGrid columns={{ base: 1, md: 2, lg: 4 }} spacing={'30px'} mt={10}>
-                          <NftCardSkeleton />
-                          <NftCardSkeleton />
-                          <NftCardSkeleton />
-                          <NftCardSkeleton />
-                        </SimpleGrid>
-                      )
-                    }
+
+                    <div className="mynfts__page">
+                      <div className="container mynfts__page__body">
+                        {
+                          ((hasOrderBookFilters && waitingOrders) || (!hasOrderBookFilters && waitingCollectionNFTs)) && (
+                            <SimpleGrid columns={{ base: 1, md: 2, lg: 4 }} spacing={'30px'} mt={10}>
+                              <NftCardSkeleton />
+                              <NftCardSkeleton />
+                              <NftCardSkeleton />
+                              <NftCardSkeleton />
+                            </SimpleGrid>
+                          )
+                        }
+                      </div>
+                    </div>
+
                   </TabPanel>
                   <TabPanel px={0}>
                     {collection.description

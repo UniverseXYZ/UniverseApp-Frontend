@@ -128,7 +128,10 @@ export const TabOffers: React.FC<ITabOffersProps> = ({
     <EventsEmpty title="No active offers yet." subtitle="Be the first to make an offer!" />
   ) : (
     <Box>
-      {offers?.map(
+      {offers
+        // Filter only active offers
+        .filter((offer: IOrder) => offer.end * 1000 > new Date().getTime())
+        .map(
         (offer) =>
           offer &&
           nft &&
