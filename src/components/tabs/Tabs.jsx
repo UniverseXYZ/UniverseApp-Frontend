@@ -39,7 +39,7 @@ const Tabs = ({ items, scrollContainer }) => (
                 </div>
               ) : (
                 <>
-                  {tab.name} {tab.length && <span>{tab.length}</span>}
+                  {tab.name} {tab.length ? <span>{tab.length}</span> : <span>-</span>}
                 </>
               )}
             </li>
