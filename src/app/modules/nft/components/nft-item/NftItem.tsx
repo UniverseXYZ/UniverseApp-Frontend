@@ -255,7 +255,7 @@ export const NftItem = (
                       <NFTItemRelation
                         type={NFTRelationType.OWNER}
                         image={owner?.profileImageUrl ?? ''}
-                        value={owner?.displayName || shortenEthereumAddress(owner?.address)}
+                        value={owner?.displayName || owner?.address || ''}
                         linkParam={owner?.universePageUrl ?? ''}
                       />
                     </Box>

@@ -18,19 +18,22 @@ export interface INFTItemRelationProps {
 export const NFTItemRelation = ({ type, image, value, linkParam, externalOwner }: INFTItemRelationProps) => {
   const router = useHistory();
 
-  let owner = value;
+  let owner = value; // * displayName or address
   let ownerName = '';
   let avatar = null;
 
+  // * If externalOwner prop is passed we set the owner address to be the owner display name and a blockie for his avatar (instead of profile image)
   if(externalOwner) {
     if(utils.isAddress(value)) {
        ownerName = shortenEthereumAddress(owner);
-    }
-    avatar = (
+
+        avatar = (
           <Box ml={'-7px'} display={'inline-block'} overflow={'hidden'} borderRadius={'50%'} border={'2px solid #fff'} height={'27px'} width={'27px'} position={'relative'}>
             <Blockies seed={owner} size={9} scale={3} />
           </Box>
         )
+    }
+
   } else {
     ownerName = `${owner.charAt(0)}`;
 
