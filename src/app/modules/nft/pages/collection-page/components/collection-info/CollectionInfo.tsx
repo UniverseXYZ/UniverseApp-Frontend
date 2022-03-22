@@ -148,7 +148,7 @@ export const CollectionInfo = () => {
         <NotFound />
       ) : (
         <Box layerStyle={'StoneBG'}>
-          <Cover selectedCollection={collection} collectionGeneralInfo={collectionGeneralInfo}/>
+          <Cover selectedCollection={collection} collectionGeneralInfo={collectionGeneralInfo} collectionOwner={collectionOwner} />
           <Box sx={{ position: 'relative', pb: '80px' }} >
             <Flex sx={{ maxWidth: '1110px', margin: '-208px auto 0px' }}>
               <Box w={'100%'}>
