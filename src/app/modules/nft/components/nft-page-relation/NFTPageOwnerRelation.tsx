@@ -16,7 +16,7 @@ export const NFTPageOwnerRelation = ({ owner, avatarStyle = {} } : INFTPageOwner
   return (
     <NFTPageRelation
       type={NFTRelationType.OWNER}
-      href={`/${owner?.universePageUrl}`}
+      href={`/${owner?.universePageUrl || owner?.address.toLowerCase()}`}
       value={`${owner?.displayName || owner?.address}`}
       renderAvatar={() => (owner?.profileImageUrl
           ? <RelationAvatar src={owner?.profileImageUrl} {...avatarStyle} />
