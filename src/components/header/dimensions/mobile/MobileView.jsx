@@ -833,7 +833,11 @@ const MobileView = (props) => {
                 </li>
                 {!isWalletConnected && (
                   <li className="sign__in">
-                    <button type="button" className="sign__in">
+                    <button
+                      type="button"
+                      className="sign__in"
+                      onClick={() => setShowSelectWallet(true)}
+                    >
                       {isAuthenticating ? 'Signing in...' : 'Sign in'}
                     </button>
                   </li>
@@ -857,20 +861,28 @@ const MobileView = (props) => {
                       <button type="button" onClick={() => handleConnectWallet('Metamask')}>
                         <img src={metamaskLogo} alt="Metamask" />
                       </button>
-                      <button type="button" onClick={() => handleConnectWallet('Ledger')}>
-                        <img src={ledgerLogo} alt="Ledger" />
-                      </button>
-                      <button type="button" onClick={() => handleConnectWallet('Keystore')}>
-                        <img src={keystoreLogo} alt="Keystore" />
-                      </button>
-                      <button type="button" onClick={() => handleConnectWallet('Trezor')}>
-                        <img src={trezorLogo} alt="Trezor" />
-                      </button>
-                      <button type="button" onClick={() => handleConnectWallet('Coinbase')}>
-                        <img src={coinbaseLogo} alt="Coinbase" />
-                      </button>
                       <button type="button" onClick={() => handleConnectWallet('WalletConnect')}>
                         <img src={walletConnectLogo} alt="WalletConnect" />
+                      </button>
+                      <button type="button" disabled onClick={() => handleConnectWallet('Ledger')}>
+                        <img src={ledgerLogo} alt="Ledger" />
+                      </button>
+                      <button
+                        type="button"
+                        disabled
+                        onClick={() => handleConnectWallet('Keystore')}
+                      >
+                        <img src={keystoreLogo} alt="Keystore" />
+                      </button>
+                      <button type="button" disabled onClick={() => handleConnectWallet('Trezor')}>
+                        <img src={trezorLogo} alt="Trezor" />
+                      </button>
+                      <button
+                        type="button"
+                        disabled
+                        onClick={() => handleConnectWallet('Coinbase')}
+                      >
+                        <img src={coinbaseLogo} alt="Coinbase" />
                       </button>
                     </div>
                     <p className="info">
