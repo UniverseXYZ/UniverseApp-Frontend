@@ -212,6 +212,7 @@
           line-height: 140%;
           color: transparent;
           background: $black;
+          word-break: break-all;
           -webkit-background-clip: text;
           text-shadow: 2px 2px 5px rgba(255, 255, 255, 0.3);
           @include lg {
@@ -276,6 +277,7 @@
           color: rgba(0, 0, 0, 0.6);
           margin: 10px 0 24px;
           white-space: pre-wrap;
+          word-break: break-all;
           @include lg {
             font-size: 14px;
           }
