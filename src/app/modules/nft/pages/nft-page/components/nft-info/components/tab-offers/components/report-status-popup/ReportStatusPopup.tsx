@@ -23,7 +23,7 @@ interface IReportStatusPopupProps {
 export const ReportStatusPopup = ({ status, onClose }: IReportStatusPopupProps) => {
 
   return (
-    <Modal isCentered isOpen={status !== Status.HIDDEN} onClose={onClose}>
+    <Modal isCentered isOpen={status !== Status.HIDDEN} onClose={onClose} closeOnEsc={false} closeOnOverlayClick={false}>
       <ModalOverlay />
       <ModalContent maxW={'480px'}>
         <ModalCloseButton />

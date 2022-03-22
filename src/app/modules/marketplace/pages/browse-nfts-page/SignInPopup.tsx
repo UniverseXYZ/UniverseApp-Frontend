@@ -18,7 +18,7 @@ interface ISigninPopup {
 export const SigninPopup = ({ isOpen, onModalClose }: ISigninPopup) => {
 
   return (
-    <Modal isOpen={isOpen} onClose={onModalClose}>
+    <Modal isOpen={isOpen} onClose={onModalClose} closeOnEsc={false} closeOnOverlayClick={false}>
       <ModalOverlay />
       <ModalContent maxW={'450px'} top={'5rem'}>
         <ModalHeader sx={{

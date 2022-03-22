@@ -106,7 +106,7 @@ export const NFTTransferPopup = ({ NFT, isOpen, onClose, }: INFTTransferPopupPro
   }, [isOpen]);
 
   return (
-    <Modal isCentered isOpen={isOpen} onClose={onClose}>
+    <Modal isCentered isOpen={isOpen} onClose={onClose} closeOnEsc={false} closeOnOverlayClick={false}>
       <ModalOverlay />
       <ModalContent maxW={'380px'}>
         <ModalCloseButton />
