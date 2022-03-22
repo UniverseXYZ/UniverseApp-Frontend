@@ -143,7 +143,7 @@ export const NFTPlaceABidPopup = ({ order, isOpen, onClose, }: INFTPlaceABidPopu
   }, [isOpen]);
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose}>
+    <Modal isOpen={isOpen} onClose={onClose} closeOnEsc={false} closeOnOverlayClick={false}>
       <ModalOverlay />
       <ModalContent maxW={'480px'}>
         <ModalCloseButton />

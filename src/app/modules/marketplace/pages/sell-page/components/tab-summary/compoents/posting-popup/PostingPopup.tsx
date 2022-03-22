@@ -34,7 +34,7 @@ export const PostingPopup = ({ status, onClose }: IPostingPopupProps) => {
   const router = useHistory();
 
   const handleClickViewListing = useCallback(() => {
-    router.push(`/nft/${nft.collection?.address}/${nft.tokenId}`);
+    router.push(`/nft/${nft._collectionAddress}/${nft.tokenId}`);
   }, [nft]);
 
   const handleClickMyNFTs = useCallback(() => {
@@ -42,7 +42,7 @@ export const PostingPopup = ({ status, onClose }: IPostingPopupProps) => {
   }, []);
 
   return (
-    <Modal isCentered isOpen={status !== Status.HIDDEN} onClose={onClose}>
+    <Modal isCentered isOpen={status !== Status.HIDDEN} onClose={onClose} closeOnEsc={false} closeOnOverlayClick={false}>
       <ModalOverlay />
       <ModalContent maxW={'480px'}>
         <ModalCloseButton />

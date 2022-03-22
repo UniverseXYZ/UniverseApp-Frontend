@@ -134,7 +134,7 @@ export const DateTimePicker = ({ value, onChange, onOpen, onClose, minDate, vali
         </Box>
       </Button>
 
-      <Modal isOpen={isOpen} onClose={handleClose} isCentered>
+      <Modal isOpen={isOpen} onClose={handleClose} isCentered closeOnEsc={false} closeOnOverlayClick={false}>
         <ModalOverlay />
         <ModalContent width={'auto'}>
           <ModalHeader p={'34px 30px 0 30px'}>

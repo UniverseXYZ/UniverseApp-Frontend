@@ -92,7 +92,7 @@ export const NFTReportPopup = ({ isOpen, onClose, collectionAddress, tokenId }: 
   return reportStatus !== ReportState.HIDDEN
     ? (<ReportStatusPopup status={reportStatus} onClose={() => setReportStatus(ReportState.HIDDEN)} />)
     : (
-      <Modal isOpen={isOpen} onClose={onModalClose}>
+      <Modal isOpen={isOpen} onClose={onModalClose} closeOnEsc={false} closeOnOverlayClick={false}>
         <ModalOverlay />
         <ModalContent maxW={'480px'}>
           <ModalHeader sx={{

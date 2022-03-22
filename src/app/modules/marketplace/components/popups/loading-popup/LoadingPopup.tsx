@@ -26,7 +26,7 @@ interface INFTCancelListingPopupProps {
 
 export const LoadingPopup = ({isOpen, onClose, heading, text, transactions }: INFTCancelListingPopupProps) => {
   return (
-      <Modal isOpen={isOpen} onClose={onClose} isCentered closeOnOverlayClick={false}>
+      <Modal isOpen={isOpen} onClose={onClose} isCentered closeOnEsc={false} closeOnOverlayClick={false}>
         <ModalOverlay />
         <ModalContent maxW={'480px'} maxH={'400px'}>
           <ModalCloseButton />
