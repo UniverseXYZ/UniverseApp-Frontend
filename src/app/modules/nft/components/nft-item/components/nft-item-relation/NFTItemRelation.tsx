@@ -18,19 +18,33 @@ export interface INFTItemRelationProps {
 export const NFTItemRelation = ({ type, image, value, linkParam, externalOwner }: INFTItemRelationProps) => {
   const router = useHistory();
 
-  let owner = value;
+  let owner = value; // * displayName or address
   let ownerName = '';
   let avatar = null;
 
+  const goToPage = (e: React.MouseEvent<HTMLElement>) => {
+    e.preventDefault();
+    switch (type) {
+      case NFTRelationType.CREATOR: return router.push(`/${linkParam}`);
+      case NFTRelationType.COLLECTION: return router.push(`/collection/${linkParam}`);
+      case NFTRelationType.OWNER: return router.push(`/${linkParam}`);
+    }
+}
+  // * If externalOwner prop is passed we set the owner address to be the owner display name and a blockie for his avatar (instead of profile image)
   if(externalOwner) {
     if(utils.isAddress(value)) {
        ownerName = shortenEthereumAddress(owner);
-    }
-    avatar = (
-          <Box ml={'-7px'} display={'inline-block'} overflow={'hidden'} borderRadius={'50%'} border={'2px solid #fff'} height={'27px'} width={'27px'} position={'relative'}>
+
+        avatar = (
+          <Box ml={'-7px'} display={'inline-block'} overflow={'hidden'} borderRadius={'50%'} border={'2px solid #fff'} height={'27px'} width={'27px'} position={'relative'} onClick={(e: any) => {
+            e.preventDefault();
+            router.push(`/${owner}`)
+          }}>
             <Blockies seed={owner} size={9} scale={3} />
           </Box>
         )
+    }
+
   } else {
     ownerName = `${owner.charAt(0)}`;
 
@@ -45,14 +59,7 @@ export const NFTItemRelation = ({ type, image, value, linkParam, externalOwner }
               marginLeft: '-7px',
               position: 'relative',
             }}
-            onClick={(e: React.MouseEvent<HTMLElement>) => {
-              e.preventDefault();
-              switch (type) {
-                case NFTRelationType.CREATOR: return router.push(`/${linkParam}`);
-                case NFTRelationType.COLLECTION: return router.push(`/collection/${linkParam}`);
-                case NFTRelationType.OWNER: return router.push(`/${linkParam}`);
-              }
-            }}
+            onClick={goToPage}
           />
       )
   }

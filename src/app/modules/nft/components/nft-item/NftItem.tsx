@@ -244,7 +244,7 @@ export const NftItem = (
                         type={NFTRelationType.CREATOR}
                         image={creator?.profileImageUrl ?? ''}
                         value={creator?.displayName ?? ''}
-                        linkParam={creator?.universePageUrl ?? ''}
+                        linkParam={creator?.universePageUrl || NFT._creatorAddress?.toLowerCase() || ""}
                       />
                       <NFTItemRelation
                         type={NFTRelationType.COLLECTION}
@@ -255,8 +255,8 @@ export const NftItem = (
                       <NFTItemRelation
                         type={NFTRelationType.OWNER}
                         image={owner?.profileImageUrl ?? ''}
-                        value={owner?.displayName || shortenEthereumAddress(owner?.address)}
-                        linkParam={owner?.universePageUrl ?? ''}
+                        value={owner?.displayName || NFT._ownerAddress || ''}
+                        linkParam={owner?.universePageUrl || owner?.address || NFT._ownerAddress?.toLowerCase() || ""}
                       />
                     </Box>
                   </Box>

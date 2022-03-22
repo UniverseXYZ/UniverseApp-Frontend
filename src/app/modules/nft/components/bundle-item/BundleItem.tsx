@@ -103,8 +103,9 @@ export const BundleItem = (
                       <NFTItemRelation
                         type={NFTRelationType.CREATOR}
                         image={NFTs[0].owner?.profileImageUrl ?? ''}
-                        value={NFTs[0].owner?.displayName ?? ''}
+                        value={NFTs[0].owner?.displayName || NFTs[0]._ownerAddress || ''}
                         linkParam={NFTs[0].owner?.universePageUrl ?? ''}
+                        externalOwner={!NFTs[0].owner?.displayName}
                       />
                     </Box>
                   </Box>
