@@ -305,7 +305,7 @@ export const NFTInfo = () => {
                       <TabHistory historyData={history} />
                     </TabPanel>
                     <TabPanel>
-                      <TabListings orderHistory={history?.orderHistory || []} owner={owner} />
+                      <TabListings owner={owner} />
                     </TabPanel>
                   </TabPanels>
                 </Tabs>
