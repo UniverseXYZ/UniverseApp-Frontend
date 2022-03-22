@@ -115,7 +115,8 @@ export const CollectionInfo = () => {
       collection: {
         ...collection,
         ...collectionGeneralInfo,
-        address: collection.address || collectionGeneralInfo?.contractAddress
+        address: collection.address || collectionGeneralInfo?.contractAddress,
+        name: collection.name || collectionGeneralInfo?.name,
       },
       collectionAddress
     });
