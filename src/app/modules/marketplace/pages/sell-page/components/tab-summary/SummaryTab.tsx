@@ -407,7 +407,7 @@ export const SummaryTab = () => {
                 m={'auto'}
               />
               <Box className="approve-section" ml={'20px'} flex={1}>
-                <Heading as={'h4'}>{collectionItem.collection?.name || shortenEthereumAddress(nft._collectionAddress)}</Heading>
+                <Heading as={'h4'} wordBreak='break-word' >{collectionItem.collection?.name || shortenEthereumAddress(nft._collectionAddress)}</Heading>
                 {isApproving && (
                   <Box sx={{
                     transform: 'scale(0.6)'

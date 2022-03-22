@@ -195,6 +195,14 @@ export const NFTInfo = () => {
               <Box
                 sx={{
                   p: { sm: '40px 20px', md: '60px 40px' },
+                  overflowY: { 
+                    xl: 'scroll'
+                  },
+                }}
+                css={{
+                  '&::-webkit-scrollbar': {
+                    display: 'none',
+                  }
                 }}
               >
                 <Flex
@@ -212,7 +220,7 @@ export const NFTInfo = () => {
                       backgroundClip: 'text',
                       textShadow: '2px 2px 5px rgba(255, 255, 255, 0.3)',
                       textOverflow: 'break-word',
-                      maxW: "90%"
+                      maxW: '90%',
                     }}
                   >
                     {NFT.name}
@@ -254,7 +262,11 @@ export const NFTInfo = () => {
                   </Box>
                 )}
 
-                <Tabs>
+                <Tabs sx={{
+                  h: {
+                    xl: 'calc(100vh - 466px)'
+                  }
+                }}>
                   <LineTabList>
                     <Tab>Properties</Tab>
                     {showMetadata && <Tab>Metadata</Tab>}
@@ -266,7 +278,9 @@ export const NFTInfo = () => {
                     <Tab>Listings</Tab>
                   </LineTabList>
 
-                  <TabPanels sx={{ '> div': { px: 0, pb: 0, pt: '30px' } }}>
+                  <TabPanels sx={{ '> div': { px: 0, pt: '30px', pb: {
+                    xl: '30px'
+                  }}}}>
                     <TabPanel>
                       <TabProperties properties={NFT?._properties ?? []} />
                     </TabPanel>
