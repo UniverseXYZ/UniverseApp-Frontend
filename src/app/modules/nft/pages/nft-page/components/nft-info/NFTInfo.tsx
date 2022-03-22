@@ -246,11 +246,13 @@ export const NFTInfo = () => {
                   {owner && <NFTPageOwnerRelation owner={owner} />}
                 </Flex>
 
-                <Box {...styles.DescriptionStyle}>
-                  <ReadMoreAndLess charLimit={150} readMoreText="Read more" readLessText="Read less">
-                    {`${NFT.description} ` || ''}
-                  </ReadMoreAndLess>
-                </Box>
+                {NFT.description && (
+                  <Box {...styles.DescriptionStyle}>
+                    <ReadMoreAndLess charLimit={150} readMoreText="Read more" readLessText="Read less">
+                      {`${NFT.description} `}
+                    </ReadMoreAndLess>
+                  </Box>
+                )}
 
                 <Tabs>
                   <LineTabList>
