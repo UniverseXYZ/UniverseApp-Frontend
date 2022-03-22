@@ -233,6 +233,7 @@ export const NFTCheckoutPopup = ({ NFT, NFTs, order, isOpen, onClose }: INFTChec
 
       // Invalidate listing because it's not active anymore
       queryClient.invalidateQueries(orderKeys.listing({ tokenId, collectionAddress }));
+      queryClient.invalidateQueries(orderKeys.history({ tokenId, collectionAddress }));
       queryClient.setQueriesData(orderKeys.listing({ tokenId, collectionAddress }), newOrderInfo);
 
       // Invalidate nfts counter
