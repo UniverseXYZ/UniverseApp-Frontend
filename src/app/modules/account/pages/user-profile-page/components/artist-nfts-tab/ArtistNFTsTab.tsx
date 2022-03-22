@@ -8,6 +8,7 @@ import { SearchFilters } from '../../../my-nfts-page/components/search-filters';
 import { useFiltersContext } from '../../../../../account/pages/my-nfts-page/components/search-filters/search-filters.context';
 import NoNftsFound from '../../../../../../../components/myNFTs/NoNftsFound';
 import { useIntersection } from 'react-use';
+import NftCardSkeleton from '../../../../../../../components/skeletons/nftCardSkeleton/NftCardSkeleton';
 
 interface IArtistNFTsTabProps {
   artistAddress: string;
@@ -163,6 +164,17 @@ export const ArtistNFTsTab = ({ artistAddress, onTotalLoad }: IArtistNFTsTabProp
                 <Button variant={'outline'} isFullWidth={true} mt={10} onClick={() => fetchNextUserNFTs()}>Load more</Button>
               )}
 
+              {
+                ((hasOrderBookFilters && waitingOrders) || (!hasOrderBookFilters && waitingUserNFTs)) && (
+                  <SimpleGrid columns={{ base: 1, md: 2, lg: 4 }} spacing={'30px'} mt={10}>
+                    <NftCardSkeleton />
+                    <NftCardSkeleton />
+                    <NftCardSkeleton />
+                    <NftCardSkeleton />
+                  </SimpleGrid>
+                )
+              }
+
             </div>
         </div>
         ) : (
@@ -171,7 +183,18 @@ export const ArtistNFTsTab = ({ artistAddress, onTotalLoad }: IArtistNFTsTabProp
 
       )}
 
-      {(waitingOrders || waitingUserNFTs) && <Loading mt={'10'} />}
+      {(waitingOrders || waitingUserNFTs) && 
+        <div className="mynfts__page">
+          <div className="container mynfts__page__body">
+            <SimpleGrid columns={{ base: 1, md: 2, lg: 4 }} spacing={'30px'} mt={10}>
+              <NftCardSkeleton />
+              <NftCardSkeleton />
+              <NftCardSkeleton />
+              <NftCardSkeleton />
+            </SimpleGrid>
+          </div>
+        </div>
+      }
     </Box>
   );
 };
