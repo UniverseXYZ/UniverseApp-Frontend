@@ -38,7 +38,6 @@ import { NFTTransferPopup } from '../nft-transfer-popup';
 import { BigNumber as EthersBigNumber, utils } from 'ethers';
 import BigNumber from 'bignumber.js';
 import { sendRefreshMetadataRequest } from '../../../../../../../utils/api/marketplace';
-import BGImage from '../../../../../../../assets/images/v2/stone_bg.jpg';
 import BrokenNFT from '../../../../../../../components/marketplaceNFT/BrokenNFT';
 import { NFTAssetBroken } from '../nft-asset-broken';
 import { IERC721AssetType, INFT, IOrder, IUser } from '../../../../types';
@@ -183,11 +182,7 @@ export const NFTInfo = () => {
         </div>
       ) : NFT ? (
         <>
-          <Box
-            sx={{
-              bg: `url(${BGImage}) center / cover`,
-            }}
-          >
+          <Box layerStyle={'StoneBG'}>
             <Box {...styles.NFTAssetContainerStyle}>
               {(!NFT.artworkTypes || !NFT.artworkTypes.length) && <NFTAssetBroken {...styles2.BrokenAssetStyle} /> ||
               isNFTAssetVideo(NFT.artworkTypes) && (
