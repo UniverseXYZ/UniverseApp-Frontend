@@ -152,9 +152,11 @@ export const NFTChangeListingPricePopup = ({ nft, order, isOpen, onClose, }: INF
       if (newToken.ticker !== TokenTicker.ETH) {
         const tokenAddress = getTokenAddressByTicker(newToken.ticker)
         orderData.take.assetType.contract = tokenAddress;
+        orderData.take.assetType.assetClass = "ERC20"
       } else {
         // ETH order must never have contract address
         delete orderData.take.assetType.contract;
+        orderData.take.assetType.assetClass = "ETH"
       }
       
       const { data: encodedOrder } = (await encodeOrderMutation.mutateAsync(orderData as IEncodeOrderApiData));
