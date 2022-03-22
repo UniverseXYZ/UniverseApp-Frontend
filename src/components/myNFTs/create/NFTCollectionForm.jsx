@@ -450,7 +450,7 @@ const NFTCollectionForm = ({ scrollToTop }) => {
               }}
               value={collectionName}
               hoverBoxShadowGradient
-              disabled={isEditing && collectionName}
+              disabled={isEditing && location.state?.collection?.name}
             />
             <p className="input-max-chars">
               {collectionName?.length}/{MAX_FIELD_CHARS_LENGTH.name}
