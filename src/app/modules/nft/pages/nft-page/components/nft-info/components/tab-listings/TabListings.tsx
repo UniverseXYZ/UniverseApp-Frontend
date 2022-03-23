@@ -29,7 +29,7 @@ export const TabListings = (props: ITabListingsProps) => {
           <React.Fragment key={listing.id}>
             <HistoryEvent
               key={listing.id ?? listing._id}
-              event={listing}
+              event={{ ...listing, makerData: owner } as IOrder}
               onlyListings
               cancelListing={setIsCancelListingPopupOpened}
               isOwner={owner?.address === address}
