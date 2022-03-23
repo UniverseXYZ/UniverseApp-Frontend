@@ -158,7 +158,10 @@ export const getURL = (url: string | null | undefined) => {
     return undefined;
   }
 
-  if (url.startsWith('ipfs://')) {
+  if (url.startsWith('ipfs://ipfs')) {
+    return url.replace('ipfs://', 'https://ipfs.io/');
+  }
+  else if (url.startsWith('ipfs://')) {
     return url.replace('ipfs://', 'https://ipfs.io/ipfs/');
   }
 
