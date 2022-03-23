@@ -586,7 +586,7 @@ export const BrowseNFTsPage = () => {
             <Flex alignItems={'center'} justifyContent={'space-between'} flexWrap={{ sm: 'wrap', md: 'nowrap' }}>
               <Box>
                 <Heading fontSize={{ sm: '20px', md: '26px' }} mb={'10px'}>List your NFTs</Heading>
-                <Text fontSize={'14px'}>Choose the NFT you’d like to list from your wallet and put them on sale for FREE.</Text>
+                <Text fontSize={'14px'}>Choose the NFT's you’d like to list from your wallet and put them on sale.</Text>
               </Box>
               <Button sx={{ width: {sm: '100%', md: 'auto'}, marginTop: {sm: '20px', md: '0'} }} variant={'black'} onClick={handleListNft}>List an NFT</Button>
             </Flex>
