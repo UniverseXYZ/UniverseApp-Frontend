@@ -46,7 +46,7 @@ export const NFTItemAsset = (props: INFTItemAssetProps) => {
                 ? <Image src={isHover && gifUrl ? gifUrl : previewUrl} onError={() => setShowError(true)} alt={NFT.name}  />
                 : <video src={NFT.videoUrl || NFT.thumbnailUrl} onError={() => setShowError(true)} />}
             </>
-           || isImage && (<Image src={NFT.thumbnailUrl} onError={() => {console.log("erroring"); setShowError(true);}} alt={NFT.name} />)
+           || isImage && (<Image src={NFT.thumbnailUrl} onError={() => {setShowError(true)}} alt={NFT.name} />)
            || isAudio && (<Image src={AudioNFTPreviewImage} onError={() => setShowError(true)} alt={NFT.name} />)}
         </Box> : 
         <Box {...styles.BrokenAssetStyle(width)}>
