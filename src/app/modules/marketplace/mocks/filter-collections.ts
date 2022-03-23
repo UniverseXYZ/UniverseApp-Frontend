@@ -1,5 +1,5 @@
 export const FilterCollectionsItems = [
-  {id: 35, address: "0x5a322b56ed080c559da183b69aa720d19690eaf2", name: "Universe Singularity", image:"https://universeapp-assets-dev.s3.amazonaws.com/1587a04f1c82f5740e53b679e8e15658f33fe5ea825f86ab.jpeg"},
+  {id: 34, address: "0x5a322b56ed080c559da183b69aa720d19690eaf2", name: "Universe Singularity", image:"https://universeapp-assets-dev.s3.amazonaws.com/1587a04f1c82f5740e53b679e8e15658f33fe5ea825f86ab.jpeg"},
   {id: 1,  address: "0xccc441ac31f02cd96c153db6fd5fe0a2f4e6a68d", name: "FLUF World", image:"https://lh3.googleusercontent.com/6A_zAw2qtq91-5x8yuJUwuV6ttgD2G__RWVApFWfUcH8Qb8oLhW3uP9MkonFAaHRnE4XodwYHCgESxQ3xdQlQrjTros61gPaG3qf2nQ=s0"},
   {id: 2,  address: "0x35471f47c3c0bc5fc75025b97a19ecdde00f78f8", name: "PartyBear", image:"https://lh3.googleusercontent.com/Pq4am5kMfPJxybtOv9OUcAIkYh6nn-A99Z_HcGnDk_G86qKm4P1yGTXEq2RBXsNirSXVJj0LxYIRKkx0wUNr_K8fPrEoRzc1M66lQQ=s0"},
   {id: 3,  address: "0x26437d312fb36bdd7ac9f322a6d4ccfe0c4fa313", name: "ASM AIFA Genesis", image:"https://lh3.googleusercontent.com/1zBGv7flcBW0Kh8lRdJlZxmiP6F7hPel2XHVFGJDytrz4IBveQPR7B6DSrGMSkxCw1LErUWYVAOPUIvgVDaUOzEcaoEpx9BOpOE98NE=s0"},
