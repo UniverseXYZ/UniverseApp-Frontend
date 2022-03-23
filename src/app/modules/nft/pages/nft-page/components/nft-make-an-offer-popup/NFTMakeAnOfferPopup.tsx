@@ -161,7 +161,7 @@ export const NFTMakeAnOfferPopup = ({ nft, order, isOpen, onClose, }: INFTMakeAn
               value: "1",
               assetType: {
                 tokenId: nft?.tokenId as unknown as number, 
-                contract: nft?.collection?.address as string, 
+                contract: nft?._collectionAddress?.toLowerCase() as string, 
                 assetClass: nft?.standard as unknown as OrderAssetClass.ERC721
               },
             },
