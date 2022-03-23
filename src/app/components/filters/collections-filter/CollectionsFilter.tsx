@@ -29,8 +29,8 @@ export const useCollectionsFilter = () => {
 interface ICollectionsFilterProps {
   items?: ICollectionsValue[];
   searchPlaceholder?: string;
-  value: ICollectionsValue[];
-  onChange: (value: ICollectionsValue[]) => void;
+  value: ICollectionFilterValue;
+  onChange: (value: ICollectionFilterValue) => void;
 }
 
 export const CollectionsFilter = (props: ICollectionsFilterProps) => {
@@ -48,7 +48,7 @@ export const CollectionsFilter = (props: ICollectionsFilterProps) => {
   }, []);
 
   const handleToggleItem = useCallback((item) => {
-    onChange([item]);
+    onChange({ collections: [item] });
   }, [value, onChange]);
 
   const filteredItems = useMemo(() => {
@@ -61,9 +61,9 @@ export const CollectionsFilter = (props: ICollectionsFilterProps) => {
 
   return (
     <>
-      <Box px={{ base: 0, md: '30px' }} pt={{ base: 0, md: '30px' }} pb={'18px'}>
+      <Box p={0} pb={'18px'}>
         <Flex flexWrap={'wrap'}>
-          {items.map((item, i) => !value.includes(item) ? null : (
+          {items.map((item, i) => !value.collections.includes(item) ? null : (
             <Box key={i} {...styles.SelectedItemStyle}>
               {item.image ? (
                 <Image
@@ -85,7 +85,7 @@ export const CollectionsFilter = (props: ICollectionsFilterProps) => {
               <Image
                 src={CloseIcon}
                 {...styles.SelectedItemRemoveStyle}
-                onClick={() => onChange([])}
+                onClick={() => onChange({ collections: [] })}
               />
             </Box>
           ))}
@@ -114,11 +114,11 @@ export const CollectionsFilter = (props: ICollectionsFilterProps) => {
       <Box sx={{
         maxH: { base: 'fit-content', md: '215px' },
         overflowY: 'scroll',
-        px: { base: 0, md: '30px' },
+        px: 0,
       }}>
         {filteredItems.map((item, i) => (
           <Box key={i} {...styles.ItemStyle} onClick={() => handleToggleItem(item)}>
-            {value.includes(item)
+            {value.collections.includes(item)
               ? (
                 <Checkbox
                   isChecked={true}
@@ -142,8 +142,8 @@ export const CollectionsFilter = (props: ICollectionsFilterProps) => {
 interface ICollectionsFilterDropdownProps {
   items?: ICollectionsValue[];
   searchPlaceholder?: string;
-  value: ICollectionsValue[];
-  onSave: (value: ICollectionsValue[]) => void;
+  value: ICollectionFilterValue;
+  onSave: (value: ICollectionFilterValue) => void;
   onClear: () => void;
 }
 
@@ -156,7 +156,7 @@ export const CollectionsFilterDropdown = (props: ICollectionsFilterDropdownProps
     onClear,
   } = props;
 
-  const [value, setValue] = useState<ICollectionsValue[]>([]);
+  const [value, setValue] = useState<ICollectionFilterValue>({ collections: [] });
   const [isOpened, setIsOpened] = useState(false);
 
   const handleSave = useCallback(() => {
@@ -170,11 +170,11 @@ export const CollectionsFilterDropdown = (props: ICollectionsFilterDropdownProps
   }, [initialValue, onClear]);
 
   const valueLabel = useMemo(() => {
-    if (!initialValue.length) {
+    if (!initialValue.collections.length) {
       return null;
     }
 
-    return `${initialValue[0].name}${initialValue.length > 1 ? `+${initialValue.length - 1}` : ''}`;
+    return `${initialValue.collections[0].name}${initialValue.collections.length > 1 ? `+${initialValue.collections.length - 1}` : ''}`;
   }, [initialValue]);
 
   useEffect(() => setValue(initialValue), [initialValue]);
@@ -192,7 +192,7 @@ export const CollectionsFilterDropdown = (props: ICollectionsFilterDropdownProps
       }}
     >
       <DropdownFilterContainer
-        padding={0}
+        padding={'30px 30px 0 30px'}
         onSave={handleSave}
         onClear={handleClear}
       >

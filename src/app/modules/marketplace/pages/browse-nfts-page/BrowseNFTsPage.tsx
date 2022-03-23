@@ -374,19 +374,19 @@ export const BrowseNFTsPage = () => {
                 name: 'Sale type',
                 form: saleTypeFilterForm,
                 icon: SaleTypeIcon,
-                mobileComponent: SaleTypeFilter,
+                renderFilter: (props) => <SaleTypeFilter {...props} />,
               },
               {
                 name: 'NFT Type',
                 form: nftTypeFilterForm,
                 icon: NFTTypeIcon,
-                mobileComponent: NFTTypeFilter,
+                renderFilter: (props) => <NFTTypeFilter {...props} />,
               },
               {
                 name: 'Price range',
                 form: priceRangeFilterForm,
                 icon: PriceRangeIcon,
-                mobileComponent: PriceRangeFilter,
+                renderFilter: (props) => <PriceRangeFilter {...props} />,
               },
             ]}
           >

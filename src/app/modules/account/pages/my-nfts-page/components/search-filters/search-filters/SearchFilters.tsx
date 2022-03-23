@@ -41,6 +41,7 @@ import {
   CollectionsFilter,
   ClearAllButton,
 } from '../../../../../../../components/filters';
+import { FiltersPopup } from '../../../../../../../components';
 
 export const SearchFilters = () => {
   const [showFilters, setShowFilters] = useState(false);
@@ -64,8 +65,6 @@ export const SearchFilters = () => {
     hasSelectedCollectionFilter,
     clearAllForms,
     getSelectedFiltersCount,
-    setShowResultsMobile,
-    showResultsMobile,
   } = useFiltersContext();
 
   useEffect(() => {
@@ -118,157 +117,83 @@ export const SearchFilters = () => {
           )}
           Filters
         </div>
-        {showFilters && (
-          <Flex className="sorting--filters--list" alignItems={'center'} sx={{ '> button': { mr: '10px' } }}>
-
-            {showSaleTypeFilters && (
-              <SaleTypeFilterDropdown
-                value={saleTypeForm.values}
-                onSave={(values) => saleTypeForm.setValues(values)}
-                onClear={() => saleTypeForm.resetForm()}
-              />
-            )}
-
-            {showNFTTypeFilters && (
-              <NFTTypeFilterDropdown
-                value={nftTypeForm.values}
-                onSave={(value) => nftTypeForm.setValues(value)}
-                onClear={() => nftTypeForm.resetForm()}
-              />
-            )}
-
-            {showPriceRangeFilters && (
-              <PriceRangeFilterDropdown
-                value={priceRangeForm.values}
-                isDirty={priceRangeForm.dirty}
-                onSave={(value) => priceRangeForm.setValues(value)}
-                onClear={() => priceRangeForm.resetForm()}
-             />
-            )}
-
-            {showCollectionFilters && (
-              <CollectionsFilterDropdown
-                items={userCollections}
-                value={collectionFilterForm.values.collections}
-                onSave={(value) => collectionFilterForm.setValues({ collections: [...value] })}
-                onClear={() => collectionFilterForm.resetForm()}
-              />
-            )}
-
-            {(hasSelectedOrderBookFilters() || hasSelectedCollectionFilter()) && (
-              <ClearAllButton onClick={clearAllForms} />
-            )}
-
-          </Flex>
-        )}
-      </Box>
-      <div className="mobile--filters">
-        <Popup
-          trigger={
-            <button type="button" className="light-button">
-              <img src={filtersIcon} alt="Filter" />
-            </button>
-          }
+        <FiltersPopup
+          mobileFilters={[
+            {
+              name: 'Sale type',
+              form: saleTypeForm,
+              visible: showSaleTypeFilters,
+              icon: SaleTypeIcon,
+              renderFilter: (props) => <SaleTypeFilter {...props} />
+            },
+            {
+              name: 'NFT type',
+              form: nftTypeForm,
+              visible: showNFTTypeFilters,
+              icon: NFTTypeIcon,
+              renderFilter: (props) => <NFTTypeFilter {...props} />
+            },
+            {
+              name: 'Price range',
+              form: priceRangeForm,
+              visible: showPriceRangeFilters,
+              icon: PriceRangeIcon,
+              renderFilter: (props) => <PriceRangeFilter {...props} />
+            },
+            {
+              name: 'Collections',
+              form: collectionFilterForm,
+              visible: showCollectionFilters,
+              icon: CollectionsIcon,
+              renderFilter: (props) => <CollectionsFilter {...props} items={userCollections} />
+            },
+          ]}
         >
-          {(close: any) => (
-            <div className="browse__nft__filter__popup">
-               <div className="browse__nft__filter__header">
-                 <img className="close" src={closeIcon} alt="Close" onClick={close} aria-hidden="true" />
-                 <h3>Filters</h3>
-                 <button type="button" className="clear__all" onClick={() => {
-                   clearAllForms();
-                   close();
-                 }}>
-                   Clear all
-                 </button>
-               </div>
-               <div className="browse__nft__filter__body">
-                 <Accordion allowMultiple>
-                   {showSaleTypeFilters && (
-                     <AccordionItem borderBottom={'1px solid rgba(0, 0, 0, 0.1)'}>
-                       <AccordionButton py={'30px'} fontWeight={'bold'}>
-                         <Box flex='1' textAlign='left'>
-                           <Image src={SaleTypeIcon} display={'inline-block'} pos={'relative'} top={'-1px'} mr={'8px'} />
-                           Sale type
-                         </Box>
-                         <AccordionIcon />
-                       </AccordionButton>
-                       <AccordionPanel pb={4}>
-                         <SaleTypeFilter value={saleTypeForm.values} onChange={(value) => saleTypeForm.setValues(value)} />
-                       </AccordionPanel>
-                     </AccordionItem>
-                   )}
+          {() => (
+            showFilters && (
+              <Flex className="sorting--filters--list" alignItems={'center'} sx={{ '> button': { mr: '10px' } }}>
+                {showSaleTypeFilters && (
+                  <SaleTypeFilterDropdown
+                    value={saleTypeForm.values}
+                    onSave={(values) => saleTypeForm.setValues(values)}
+                    onClear={() => saleTypeForm.resetForm()}
+                  />
+                )}
 
-                   {showNFTTypeFilters && (
-                     <AccordionItem borderBottom={'1px solid rgba(0, 0, 0, 0.1)'}>
-                       <AccordionButton py={'30px'} fontWeight={'bold'}>
-                         <Box flex='1' textAlign='left'>
-                           <Image src={NFTTypeIcon} display={'inline-block'} pos={'relative'} top={'-1px'} mr={'8px'} />
-                           NFT type
-                         </Box>
-                         <AccordionIcon />
-                       </AccordionButton>
-                       <AccordionPanel pb={4}>
-                         <NFTTypeFilter value={nftTypeForm.values} onChange={(value) => nftTypeForm.setValues(value)} />
-                       </AccordionPanel>
-                     </AccordionItem>
-                   )}
+                {showNFTTypeFilters && (
+                  <NFTTypeFilterDropdown
+                    value={nftTypeForm.values}
+                    onSave={(value) => nftTypeForm.setValues(value)}
+                    onClear={() => nftTypeForm.resetForm()}
+                  />
+                )}
 
-                   {showPriceRangeFilters && (
-                     <AccordionItem borderBottom={'1px solid rgba(0, 0, 0, 0.1)'}>
-                       <AccordionButton py={'30px'} fontWeight={'bold'}>
-                         <Box flex='1' textAlign='left'>
-                           <Image src={PriceRangeIcon} display={'inline-block'} pos={'relative'} top={'-1px'} mr={'8px'} />
-                           Price range
-                         </Box>
-                         <AccordionIcon />
-                       </AccordionButton>
-                       <AccordionPanel pb={4}>
-                         <PriceRangeFilter value={priceRangeForm.values} onChange={(value) => priceRangeForm.setValues(value)} />
-                       </AccordionPanel>
-                     </AccordionItem>
-                   )}
-                   {showCollectionFilters && (
-                     <AccordionItem borderBottom={'1px solid rgba(0, 0, 0, 0.1)'}>
-                       <AccordionButton py={'30px'} fontWeight={'bold'}>
-                         <Box flex='1' textAlign='left'>
-                           <Image src={CollectionsIcon} display={'inline-block'} pos={'relative'} top={'-1px'} mr={'8px'} />
-                           Collections
-                         </Box>
-                         <AccordionIcon />
-                       </AccordionButton>
-                       <AccordionPanel pb={4}>
-                         <CollectionsFilter
-                           items={userCollections}
-                           value={collectionFilterForm.values.collections}
-                           onChange={(collections) => collectionFilterForm.setValues({ collections })}
-                         />
-                       </AccordionPanel>
-                     </AccordionItem>
-                   )}
-                 </Accordion>
-               </div>
-               <div className="show--results">
-                 <button
-                   type="button"
-                   className="light-button"
-                   disabled={false}
-                   onClick={() => {
-                     setShowResultsMobile(true);
-                     close();
-                   }}>
-                     Show results
-                 </button>
-               </div>
-             </div>
+                {showPriceRangeFilters && (
+                  <PriceRangeFilterDropdown
+                    value={priceRangeForm.values}
+                    isDirty={priceRangeForm.dirty}
+                    onSave={(value) => priceRangeForm.setValues(value)}
+                    onClear={() => priceRangeForm.resetForm()}
+                  />
+                )}
+
+                {showCollectionFilters && (
+                  <CollectionsFilterDropdown
+                    items={userCollections}
+                    value={collectionFilterForm.values}
+                    onSave={(value) => collectionFilterForm.setValues(value)}
+                    onClear={() => collectionFilterForm.resetForm()}
+                  />
+                )}
+
+                {(hasSelectedOrderBookFilters() || hasSelectedCollectionFilter()) && (
+                  <ClearAllButton onClick={clearAllForms} />
+                )}
+              </Flex>
+            )
           )}
-        </Popup>
-        {collectionFilterForm.values.collections.length > 0 && (
-          <div className="selected--filters--numbers">
-            {collectionFilterForm.values.collections.length}
-          </div>
-        )}
-      </div>
+        </FiltersPopup>
+      </Box>
     </div>
   );
 };

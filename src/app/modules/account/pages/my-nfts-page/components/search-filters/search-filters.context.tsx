@@ -68,8 +68,6 @@ export interface ISearchFiltersContext {
 	disabledSortByFilters: boolean;
 	setDisabledSortByFilters: (v: boolean) => void;
 	getSelectedFiltersCount: () => number;
-	setShowResultsMobile: (v: boolean) => void;
-	showResultsMobile: boolean;
 	// --- FORMS ---
 	searchBarForm: FormikProps<ISearchBarValue>;
 	collectionFilterForm: FormikProps<ICollectionFilterFormValue>;
@@ -130,7 +128,6 @@ const FiltersContextProvider = (props: IFiltersProviderProps) => {
 	const [showPriceRangeFilters, setShowPriceRangeFilters] = useState<boolean>(false);
 	const [showCollectionFilters, setShowCollectcionFilters] = useState<boolean>(false);
 	const [disabledSortByFilters, setDisabledSortByFilters] = useState<boolean>(false);
-	const [showResultsMobile, setShowResultsMobile] = useState<boolean>(true); // In order for the get user NFTs querry to kick in Mobile on mount, on success set it to false
 	const isMobile = useMedia(`(max-width: ${breakpoints.md})`);
 
   // --------- QUERY CLIENT ---------
@@ -214,14 +211,12 @@ const FiltersContextProvider = (props: IFiltersProviderProps) => {
 
 	// --------- SETTERS ---------
 	const clearAllForms = () => {
-		isMobile && setShowResultsMobile(true);
 		saleTypeFilterForm.resetForm();
     nftTypeFilterForm.resetForm();
     priceRangeFilterForm.resetForm();
     collectionFilterForm.resetForm();
     sortByForm.resetForm();
 		searchBarForm.resetForm();
-		isMobile && setShowResultsMobile(false);
 	}
 
 	// --------- HELPERS ---------
@@ -400,24 +395,6 @@ const FiltersContextProvider = (props: IFiltersProviderProps) => {
 		return result;
 	}
 
-	// --------- FLAGS ---------
-	const _getUserNftsEnabled = () => {
-		const isMobilePopupSearch = (!!userAddress && isMobile && showResultsMobile);
-		const isMobileSearchBar = hasSearchBarFilter() && isMobile && !showResultsMobile;
-		const isDekstopSearch = !isMobile && !!userAddress;
-
-		return isMobilePopupSearch || isMobileSearchBar || isDekstopSearch;
-	}
-
-	const _getOrdersEnabled = () => {
-		const isMobileSearch = isMobile && showResultsMobile && hasSelectedOrderBookFilters();
-		const isDekstopSearch = !isMobile && hasSelectedOrderBookFilters();
-		const isSearchBarSearchInOrderBook = hasSearchBarFilter() && hasSelectedOrderBookFilters();
-
-		return isMobileSearch || isDekstopSearch || isSearchBarSearchInOrderBook;
-	}
-
-
 	// --------- QUERY HANDLERS ---------
 	/**
 	 * Fetches all user collections in which the user has NFTs from the Scraper API
@@ -558,13 +535,10 @@ const FiltersContextProvider = (props: IFiltersProviderProps) => {
 		'NFTs'
 	], _handleGetUserNFTs,
 		{
-			enabled: _getUserNftsEnabled(),
+			enabled: !!userAddress,
 			retry: false,
 			getNextPageParam: (lastPage, pages) => {
 				return pages.length * PER_PAGE < lastPage.total ? pages.length + 1 : undefined;
-			},
-			onSuccess: () => {
-				isMobile && setShowResultsMobile(false);
 			},
 			onError: (error) => {
 				// TODO:: think how to handle the errors
@@ -638,14 +612,11 @@ const FiltersContextProvider = (props: IFiltersProviderProps) => {
 			},
   	], _handleGetOrders,
 		{
-			enabled: _getOrdersEnabled() && !waitForUserNFTs(),
+			enabled: !waitForUserNFTs(),
 			retry: false,
 			getNextPageParam: (lastPage, pages) => {
 				return pages.length * PER_PAGE < lastPage.total ? pages.length + 1 : undefined;
 			},
-			onSuccess: (result) => {
-				isMobile && setShowResultsMobile(false);
-			}
   	}
 	);
 
@@ -656,8 +627,6 @@ const FiltersContextProvider = (props: IFiltersProviderProps) => {
 		setUserAddress: setUserAddress,
 		setCollectionAddress: setCollectionAddress,
 		disabledSortByFilters,
-		setShowResultsMobile,
-		showResultsMobile,
 		// --- GETTERS ---
 		hasSelectedSaleTypeFilter,
 		hasSelectedPriceFilter,

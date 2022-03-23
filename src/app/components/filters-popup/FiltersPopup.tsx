@@ -35,8 +35,9 @@ export interface IFiltersPopupProps {
   mobileFilters: Array<{
     name: string;
     form: FormikProps<any>;
-    icon: any;
-    mobileComponent: any;
+    icon: string;
+    visible?: boolean;
+    renderFilter: (props: { value: any, onChange: (value: any) => void }) => React.ReactNode;
   }>;
   children: (props: IChildrenFnProps) => React.ReactNode;
 }
@@ -124,7 +125,7 @@ export const FiltersPopup = (props: IFiltersPopupProps) => {
           <ModalBody {...styles.ModalBody}>
             {values && (
               <Accordion allowMultiple defaultIndex={openedTabs}>
-                {mobileFilters.map(({ mobileComponent: FilterComponent, ...filter }, i) => (
+                {mobileFilters.map(({ renderFilter, visible = true, ...filter }, i) => !visible ? null :(
                   <AccordionItem key={i} {...styles.AccordionItem}>
                     <AccordionButton {...styles.AccordionButton} onClick={handleToggleAccordionItem}>
                       <Box flex='1' textAlign='left'>
@@ -134,10 +135,10 @@ export const FiltersPopup = (props: IFiltersPopupProps) => {
                       <AccordionIcon display={{ base: 'inline-block', md: 'none' }} />
                     </AccordionButton>
                     <AccordionPanel p={'0 0 30px 0'}>
-                      <FilterComponent
-                        value={values[i]}
-                        onChange={(value: any) => handleSetValue(i, value)}
-                      />
+                      {renderFilter({
+                        value: values[i],
+                        onChange: (value: any) => handleSetValue(i, value)
+                      })}
                     </AccordionPanel>
                   </AccordionItem>
                 ))}
