@@ -35,15 +35,6 @@ import { SelectEditionsDropdown } from '../../../select-editions-dropdown';
 import { useMarketplaceSellData } from '../../../../hooks';
 import { useStickyFooter } from '../../../../../../../../hooks';
 import { UncheckBundleEditionsModal } from './components';
-import {
-  ArtistsFilter,
-  INftTypeFilterValue,
-  IPriceRangeFilterValue,
-  ISaleTypeFilterValue,
-  NFTTypeFilter,
-  PriceRangeFilter,
-  SaleTypeFilter,
-} from '../../../../../../components';
 import { FilterCollectionsItems } from '../../../../../../mocks/filter-collections';
 import { FilterArtistsItems } from '../../../../../../mocks/filter-artists';
 import { useMyNftsContext } from '../../../../../../../../../contexts/MyNFTsContext';
@@ -275,22 +266,22 @@ export const SelectNFTs = ({}: ISelectNFTsProps) => {
             }
           }}
         >
-          <SaleTypeFilterDropdown
-            value={{} as ISaleTypeFilterValue}
-            onSave={(value) => console.log('value', value)}
-            onClear={() => true}
-          />
-          <NFTTypeFilter
-            value={{} as INftTypeFilterValue}
-            onChange={(values) => console.log('values', values)}
-            onClear={() => true}
-          />
-          <PriceRangeFilter
-            value={{} as IPriceRangeFilterValue}
-            onChange={(values) => console.log('values', values)}
-            onClear={() => true}
-            isDirty={false}
-          />
+          {/*<SaleTypeFilterDropdown*/}
+          {/*  value={{} as ISaleTypeFilterValue}*/}
+          {/*  onSave={(value) => console.log('value', value)}*/}
+          {/*  onClear={() => true}*/}
+          {/*/>*/}
+          {/*<NFTTypeFilter*/}
+          {/*  value={{} as INftTypeFilterValue}*/}
+          {/*  onChange={(values) => console.log('values', values)}*/}
+          {/*  onClear={() => true}*/}
+          {/*/>*/}
+          {/*<PriceRangeFilter*/}
+          {/*  value={{} as IPriceRangeFilterValue}*/}
+          {/*  onChange={(values) => console.log('values', values)}*/}
+          {/*  onClear={() => true}*/}
+          {/*  isDirty={false}*/}
+          {/*/>*/}
           {/*<CollectionsFilter*/}
           {/*  value={[] as ICollectionsFilterValue}*/}
           {/*  onChange={(values) => console.log('values', values)}*/}
