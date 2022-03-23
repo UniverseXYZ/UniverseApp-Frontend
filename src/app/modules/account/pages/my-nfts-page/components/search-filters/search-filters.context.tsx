@@ -25,8 +25,8 @@ import {
 	ISearchBarValue,
 	ISortByFilterValue,
 	SortOrderOptions,
+	ICollectionsValue,
 } from '../search-filters';
-import { ICollectionFilterValue } from './collections-filter/types';
 import { collectionKeys, nftKeys, orderKeys } from '../../../../../../utils/query-keys';
 
 interface INFTsResult {
@@ -46,7 +46,7 @@ interface IOrdersResult {
 }
 
 interface ICollectionFilterFormValue {
-	collections: ICollectionFilterValue[];
+	collections: ICollectionsValue[];
 }
 
 export interface ISearchFiltersContext {

@@ -1,11 +1,26 @@
 import { Box, Image, SimpleGrid, Text } from '@chakra-ui/react';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { FormikProps, useFormik } from 'formik';
 
 import SaleTypeIcon from '../../../../../../../../assets/images/v2/marketplace/filter-sale-type.svg';
 
 import { Checkbox, Dropdown, DropdownFilterContainer } from '../../../../../../../components';
 import { SaleTypeFilterOptions } from './constants';
 import { ISaleTypeFilterProps, ISaleTypeFilterValue } from './types';
+
+export const useSaleTypeFilter = () => {
+  const form = useFormik<ISaleTypeFilterValue>({
+    initialValues: {
+      buyNow: false,
+      onAuction: false,
+      new: false,
+      hasOffers: false,
+    },
+    onSubmit: () => {},
+  }) as FormikProps<ISaleTypeFilterValue>;
+
+  return { form };
+};
 
 export const SaleTypeFilter = (props: ISaleTypeFilterProps) => {
   const { value, onChange } = props;

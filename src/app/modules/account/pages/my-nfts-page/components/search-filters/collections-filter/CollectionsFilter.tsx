@@ -1,20 +1,36 @@
 import { Box, Flex, Image } from '@chakra-ui/react';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { useFormik } from 'formik';
 
 import CollectionsIcon from '../../../../../../../../assets/images/v2/marketplace/filter-collections.svg';
 import CloseIcon from '../../../../../../../../assets/images/close-menu.svg';
 
 import { Checkbox, Dropdown, DropdownFilterContainer, SearchInput } from '../../../../../../../components';
 import * as styles from './styles';
-import { ICollectionFilterValue } from './types';
 import { CollectionImagePlaceholder } from './components';
 import { shortenEthereumAddress } from '../../../../../../../../utils/helpers/format';
+import { ICollectionsValue } from './types';
+
+interface ICollectionFilterValue {
+  collections: ICollectionsValue[];
+}
+
+export const useCollectionsFilter = () => {
+  const form = useFormik<ICollectionFilterValue>({
+    initialValues: {
+      collections: []
+    },
+    onSubmit: () => {},
+  });
+
+  return { form };
+};
 
 interface ICollectionsFilterProps {
-  items?: ICollectionFilterValue[];
+  items?: ICollectionsValue[];
   searchPlaceholder?: string;
-  value: ICollectionFilterValue[];
-  onChange: (value: ICollectionFilterValue[]) => void;
+  value: ICollectionsValue[];
+  onChange: (value: ICollectionsValue[]) => void;
 }
 
 export const CollectionsFilter = (props: ICollectionsFilterProps) => {
@@ -124,10 +140,10 @@ export const CollectionsFilter = (props: ICollectionsFilterProps) => {
 };
 
 interface ICollectionsFilterDropdownProps {
-  items?: ICollectionFilterValue[];
+  items?: ICollectionsValue[];
   searchPlaceholder?: string;
-  value: ICollectionFilterValue[];
-  onSave: (value: ICollectionFilterValue[]) => void;
+  value: ICollectionsValue[];
+  onSave: (value: ICollectionsValue[]) => void;
   onClear: () => void;
 }
 
@@ -140,7 +156,7 @@ export const CollectionsFilterDropdown = (props: ICollectionsFilterDropdownProps
     onClear,
   } = props;
 
-  const [value, setValue] = useState<ICollectionFilterValue[]>([]);
+  const [value, setValue] = useState<ICollectionsValue[]>([]);
   const [isOpened, setIsOpened] = useState(false);
 
   const handleSave = useCallback(() => {

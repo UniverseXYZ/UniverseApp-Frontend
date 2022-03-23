@@ -1,7 +1,7 @@
 import { BoxProps, Flex } from '@chakra-ui/react';
 import React from 'react';
 
-import { ICollectionFilterValue } from '../../types';
+import { ICollectionsValue } from '../../types';
 import { getCollectionBackgroundColor } from '../../../../../../../../../../utils/helpers';
 
 const PlaceholderStyle: BoxProps = {
@@ -16,7 +16,7 @@ const PlaceholderStyle: BoxProps = {
 };
 
 interface ICollectionImagePlaceholderProps extends BoxProps {
-  collection: ICollectionFilterValue;
+  collection: ICollectionsValue;
 }
 
 export const CollectionImagePlaceholder = (props: ICollectionImagePlaceholderProps) => {

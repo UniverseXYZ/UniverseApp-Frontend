@@ -1,1 +1,1 @@
-export * from './collection-filter-value';
+export * from './collections-value';
