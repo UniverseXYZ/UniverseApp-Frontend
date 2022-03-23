@@ -32,7 +32,7 @@ export const  NFTOffer: React.FC<INFTOfferProps> = ({offer, usersMap, owner, set
   const canCancelOffers = offer.maker === address && !isExpired;
 
   const token = getTokenByAddress((offer.make.assetType as IERC721AssetType).contract)
-  const formattedPrice = new BigNumber(utils.formatUnits(offer.make.value, token.decimals ?? 18)).toFixed(2);
+  const formattedPrice = parseFloat(new BigNumber(utils.formatUnits(offer.make.value, token.decimals ?? 18)).toFixed(4));
   const usdPrice = useTokenPrice(token.ticker);
   const usd = new BigNumber(usdPrice).multipliedBy(formattedPrice).toFixed(2);
 
