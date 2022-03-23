@@ -361,35 +361,36 @@ export const BrowseNFTsPage = () => {
         </Box>
       </Flex>
 
-      <FiltersPopup
-        mobileFilters={[
-          {
-            name: 'Sale type',
-            form: saleTypeFilterForm,
-            icon: SaleTypeIcon,
-            mobileComponent: SaleTypeFilter,
-          },
-          {
-            name: 'NFT Type',
-            form: nftTypeFilterForm,
-            icon: NFTTypeIcon,
-            mobileComponent: NFTTypeFilter,
-          },
-          {
-            name: 'Price range',
-            form: priceRangeFilterForm,
-            icon: PriceRangeIcon,
-            mobileComponent: PriceRangeFilter,
-          },
-        ]}
+
+      <Box
+        ref={filtersRef}
+        {...styles.FiltersStickyWrapper}
+        bg={intersection?.intersectionRect.top === 0 ? 'white' : 'transparent'}
       >
-        {({ openMobileFilters }) => (
-          <Box
-            ref={filtersRef}
-            {...styles.FiltersStickyWrapper}
-            bg={intersection?.intersectionRect.top === 0 ? 'white' : 'transparent'}
+        <Container {...styles.FiltersContainer}>
+          <FiltersPopup
+            mobileFilters={[
+              {
+                name: 'Sale type',
+                form: saleTypeFilterForm,
+                icon: SaleTypeIcon,
+                mobileComponent: SaleTypeFilter,
+              },
+              {
+                name: 'NFT Type',
+                form: nftTypeFilterForm,
+                icon: NFTTypeIcon,
+                mobileComponent: NFTTypeFilter,
+              },
+              {
+                name: 'Price range',
+                form: priceRangeFilterForm,
+                icon: PriceRangeIcon,
+                mobileComponent: PriceRangeFilter,
+              },
+            ]}
           >
-            <Container {...styles.FiltersContainer}>
+            {({ openMobileFilters }) => (
               <Box {...styles.FiltersWrapper}>
                 <SaleTypeFilterDropdown
                   value={saleTypeFilterForm.values}
@@ -421,17 +422,17 @@ export const BrowseNFTsPage = () => {
                 >More</Button>
                 {isFiltersDirty && (<ClearAll onClick={handleClear} />)}
               </Box>
-              <Select
-                label={'Sort by'}
-                items={SortOrderOptions}
-                value={sortBy}
-                buttonProps={{ justifyContent: 'space-between', }}
-                onSelect={(val) => setSortBy(val)}
-              />
-            </Container>
-          </Box>
-        )}
-      </FiltersPopup>
+            )}
+          </FiltersPopup>
+          <Select
+            label={'Sort by'}
+            items={SortOrderOptions}
+            value={sortBy}
+            buttonProps={{ justifyContent: 'space-between', w: { base: '100%', md: 'fit-content' } }}
+            onSelect={(val) => setSortBy(val)}
+          />
+        </Container>
+      </Box>
 
       <Box px={'20px'} pt={{ base: '20px', md: 0, }}>
         <Container maxW={'1360px'} pt={'0 !important'} position={'relative'}>
