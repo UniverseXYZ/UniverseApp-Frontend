@@ -39,16 +39,8 @@ import {
   PriceRangeFilterDropdown,
   CollectionsFilterDropdown,
   CollectionsFilter,
+  ClearAllButton,
 } from '../../../../../../../components/filters';
-
-const ClearAllStyle: LinkProps = {
-  fontSize: '14px',
-  fontWeight: 500,
-  textDecoration: 'underline',
-  _hover: {
-    textDecoration: 'none',
-  }
-};
 
 export const SearchFilters = () => {
   const [showFilters, setShowFilters] = useState(false);
@@ -164,7 +156,7 @@ export const SearchFilters = () => {
             )}
 
             {(hasSelectedOrderBookFilters() || hasSelectedCollectionFilter()) && (
-              <Link {...ClearAllStyle} onClick={clearAllForms}>Clear all</Link>
+              <ClearAllButton onClick={clearAllForms} />
             )}
 
           </Flex>

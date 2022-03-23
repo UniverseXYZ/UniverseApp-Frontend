@@ -23,7 +23,7 @@ import {
   ISearchBarValue,
 } from '../../components';
 import { SortOrderOptions, SortOrderOptionsEnum } from '../../constants';
-import { BackToTopButton, Loading, Select, FiltersPopup, ClearAll } from '../../../../components';
+import { BackToTopButton, Loading, Select, FiltersPopup } from '../../../../components';
 import {
   NftItem,
   NFTItemContentWithPrice,
@@ -46,6 +46,7 @@ import { TokenTicker } from '../../../../enums';
 import { collectionKeys, nftKeys, orderKeys } from '../../../../utils/query-keys';
 import Badge from '../../../../../components/badge/Badge';
 import {
+  ClearAllButton,
   SaleTypeFilter,
   SaleTypeFilterDropdown,
   NFTTypeFilter,
@@ -419,7 +420,7 @@ export const BrowseNFTsPage = () => {
                   {...styles.MoreFiltersButton}
                   onClick={openMobileFilters}
                 >More</Button>
-                {isFiltersDirty && (<ClearAll onClick={handleClear} />)}
+                {isFiltersDirty && (<ClearAllButton onClick={handleClear} />)}
               </Box>
             )}
           </FiltersPopup>

@@ -1,7 +1,7 @@
 import { Link, LinkProps } from '@chakra-ui/react';
 import React, { useCallback } from 'react';
 
-const ClearAllStyle: LinkProps = {
+const ClearAllButtonStyle: LinkProps = {
   fontFamily: 'Space Grotesk',
   fontSize: '14px',
   fontWeight: '500',
@@ -11,7 +11,7 @@ const ClearAllStyle: LinkProps = {
   },
 };
 
-export const ClearAll = ({ onClick, ...props }: LinkProps) => {
+export const ClearAllButton = ({ onClick, ...props }: LinkProps) => {
   const handleClick = useCallback((e) => {
     e.preventDefault();
     onClick && onClick(e);
@@ -20,7 +20,7 @@ export const ClearAll = ({ onClick, ...props }: LinkProps) => {
   return (
     <Link
       href={'#'}
-      {...ClearAllStyle}
+      {...ClearAllButtonStyle}
       {...props}
       onClick={handleClick}
     >Clear all</Link>

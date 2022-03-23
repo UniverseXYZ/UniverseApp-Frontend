@@ -24,7 +24,7 @@ import FilterIcon from '../../../assets/images/marketplace/filters2.svg';
 import CloseIcon from '../../../assets/images/close-menu.svg';
 
 import { breakpoints } from '../../theme/constants';
-import { ClearAll } from './components';
+import { ClearAllButton } from '../filters';
 import * as styles from './FiltersPopup.styles';
 
 export interface IChildrenFnProps {
@@ -115,7 +115,7 @@ export const FiltersPopup = (props: IFiltersPopupProps) => {
           <ModalHeader {...styles.ModalHeader}>
             Filters
             <Box {...styles.ModalHeaderMobileClose}>
-              <ClearAll onClick={() => handleClearAll()} />
+              <ClearAllButton onClick={() => handleClearAll()} />
               <Button variant={'simpleOutline'} borderColor={'transparent'} ml={'20px'} onClick={onClose}>
                 <Image src={CloseIcon} />
               </Button>
@@ -147,7 +147,7 @@ export const FiltersPopup = (props: IFiltersPopupProps) => {
 
           <ModalFooter {...styles.ModalFooter} borderBottomRadius={{ base: 0, md: 'md' }}>
             <Box display={{ base: 'none', md: 'flex' }} justifyContent={'space-between'} w={'100%'} alignItems={'center'}>
-              <ClearAll onClick={handleClearAll} />
+              <ClearAllButton onClick={handleClearAll} />
               <Button onClick={handleSave}>Save</Button>
             </Box>
             <Box display={{ base: 'block', md: 'none' }} w={'100%'}>
