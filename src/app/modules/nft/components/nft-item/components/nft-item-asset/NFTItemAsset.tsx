@@ -33,20 +33,21 @@ export const NFTItemAsset = (props: INFTItemAssetProps) => {
 
   const gifUrl = NFT.gifUrl;
 
-  const [showCountdown, setShowCountdown] = useState(!!orderEnd && orderEnd > Math.floor(new Date().getTime() / 1000))
-  
+  const [showCountdown, setShowCountdown] = useState(!!orderEnd && orderEnd > Math.floor(new Date().getTime() / 1000));
+  const [showError, setShowError] = useState(false);
+
   return (
     <Box ref={ref} pos={'relative'}>
-      {NFT.artworkTypes && NFT.artworkTypes.length ? 
+      {NFT.artworkTypes && NFT.artworkTypes.length && !showError ? 
         <Box {...styles.AssetStyle(width)}>
           {isVideo &&
             <>
               {isImagePreview
-                ? <Image src={isHover && gifUrl ? gifUrl : previewUrl} alt={NFT.name} />
-                : <video src={NFT.videoUrl || NFT.thumbnailUrl} />}
+                ? <Image src={isHover && gifUrl ? gifUrl : previewUrl} onError={() => setShowError(true)} alt={NFT.name}  />
+                : <video src={NFT.videoUrl || NFT.thumbnailUrl} onError={() => setShowError(true)} />}
             </>
-           || isImage && (<Image src={NFT.thumbnailUrl} alt={NFT.name} />)
-           || isAudio && (<Image src={AudioNFTPreviewImage} alt={NFT.name} />)}
+           || isImage && (<Image src={NFT.thumbnailUrl} onError={() => {console.log("erroring"); setShowError(true);}} alt={NFT.name} />)
+           || isAudio && (<Image src={AudioNFTPreviewImage} onError={() => setShowError(true)} alt={NFT.name} />)}
         </Box> : 
         <Box {...styles.BrokenAssetStyle(width)}>
           <NFTAssetBroken _before={{ borderRadius: '6px 6px 0 0' }} />
