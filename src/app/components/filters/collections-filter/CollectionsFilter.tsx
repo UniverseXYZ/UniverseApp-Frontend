@@ -8,7 +8,7 @@ import CloseIcon from '../../../../assets/images/close-menu.svg';
 import { Checkbox, Dropdown, DropdownFilterContainer, SearchInput } from '../../../components';
 import * as styles from './styles';
 import { CollectionImagePlaceholder } from './components';
-import { shortenEthereumAddress } from '../../../../../../../../utils/helpers/format';
+import { shortenEthereumAddress } from '../../../../utils/helpers/format';
 import { ICollectionsValue } from './types';
 
 interface ICollectionFilterValue {
