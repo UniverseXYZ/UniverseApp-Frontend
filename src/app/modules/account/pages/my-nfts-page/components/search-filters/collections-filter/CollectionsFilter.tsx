@@ -8,6 +8,7 @@ import { Checkbox, Dropdown, DropdownFilterContainer, SearchInput } from '../../
 import * as styles from './styles';
 import { ICollectionFilterValue } from './types';
 import { CollectionImagePlaceholder } from './components';
+import { shortenEthereumAddress } from '../../../../../../../../utils/helpers/format';
 
 interface ICollectionsFilterProps {
   items?: ICollectionFilterValue[];
@@ -64,7 +65,7 @@ export const CollectionsFilter = (props: ICollectionsFilterProps) => {
                   w={'20px'}
                 />
               )}
-              {item.name}
+              {item.name || shortenEthereumAddress(item.address || '')}
               <Image
                 src={CloseIcon}
                 {...styles.SelectedItemRemoveStyle}
@@ -114,7 +115,7 @@ export const CollectionsFilter = (props: ICollectionsFilterProps) => {
                 ? (<Image src={item.image} {...styles.ItemImageStyle} borderRadius={'5px'} />)
                 : (<CollectionImagePlaceholder collection={item} mr={'12px'} />)
             }
-            {item.name}
+            {item.name || shortenEthereumAddress(item.address || '')}
           </Box>
         ))}
       </Box>

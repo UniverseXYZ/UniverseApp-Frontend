@@ -28,7 +28,7 @@ export const CollectionImagePlaceholder = (props: ICollectionImagePlaceholderPro
       {...rest}
       bgColor={getCollectionBackgroundColor(collection)}
     >
-      {collection.name.charAt(0)}
+      {collection?.name?.charAt(0) || collection?.address?.charAt(collection?.address?.length - 1) || ''}
     </Flex>
   );
 }
