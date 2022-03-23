@@ -24,14 +24,14 @@ import FilterIcon from '../../../assets/images/marketplace/filters2.svg';
 import CloseIcon from '../../../assets/images/close-menu.svg';
 
 import { breakpoints } from '../../theme/constants';
-import { ClearAll } from './components'
-import * as styles from './styles';
+import { ClearAll } from './components';
+import * as styles from './FiltersPopup.styles';
 
 export interface IChildrenFnProps {
   openMobileFilters: () => void;
 }
 
-export interface IFiltersProps {
+export interface IFiltersPopupProps {
   mobileFilters: Array<{
     name: string;
     form: FormikProps<any>;
@@ -41,7 +41,7 @@ export interface IFiltersProps {
   children: (props: IChildrenFnProps) => React.ReactNode;
 }
 
-export const Filters = (props: IFiltersProps) => {
+export const FiltersPopup = (props: IFiltersPopupProps) => {
   const {
     mobileFilters,
     children,
@@ -97,58 +97,38 @@ export const Filters = (props: IFiltersProps) => {
         openMobileFilters: onOpen,
       }) : null}
 
-      <Button {...styles.ButtonStyle} onClick={onOpen}>
-        <Box display={!!countDirtyFilters ? 'flex' : 'none'} {...styles.ActiveFilterLabelStyle}>{countDirtyFilters}</Box>
+      <Button
+        {...styles.MobileFilterButton}
+        display={{ base: 'inline-flex', md: 'none' }}
+        onClick={onOpen}
+      >
+        <Box {...styles.ActiveFilterLabel} display={!!countDirtyFilters ? 'flex' : 'none'}>
+          {countDirtyFilters}
+        </Box>
         <img src={FilterIcon} alt="Filter" />
       </Button>
 
-      <Modal
-        isOpen={isOpen}
-        size={isMobile ? 'full' : 'md'}
-        onClose={onClose}
-      >
+      <Modal isOpen={isOpen} size={isMobile ? 'full' : 'md'} onClose={onClose}>
         <ModalOverlay />
         <ModalContent borderRadius={isMobile ? 0 : 'md'}>
           {!isMobile && (<ModalCloseButton />)}
-          <ModalHeader
-            sx={{
-              borderBottom: '1px solid rgba(0, 0, 0, 0.1)',
-              fontSize: '16px',
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              px: { base: '20px !important', md: '30px !important' },
-              py: '24px !important',
-            }}
-          >
+          <ModalHeader {...styles.ModalHeader}>
             Filters
-            <Box alignItems={'center'} display={{ base: 'flex', md: 'none' }}>
+            <Box {...styles.ModalHeaderMobileClose}>
               <ClearAll onClick={() => handleClearAll()} />
               <Button variant={'simpleOutline'} borderColor={'transparent'} ml={'20px'} onClick={onClose}>
                 <Image src={CloseIcon} />
               </Button>
             </Box>
           </ModalHeader>
-          <ModalBody pt={'10px !important'} pb={'0 !important'} px={{ base: '20px !important', md: '30px !important' }}>
+          <ModalBody {...styles.ModalBody}>
             {values && (
               <Accordion allowMultiple defaultIndex={openedTabs}>
                 {mobileFilters.map(({ mobileComponent: FilterComponent, ...filter }, i) => (
-                  <AccordionItem key={i} _notLast={{
-                    borderBottom: '1px solid rgba(0, 0, 0, 0.1)',
-                    mb: '10px'
-                  }}>
-                    <AccordionButton sx={{
-                      p: '20px 0',
-                      fontWeight: 'bold',
-                      _hover: {
-                        bg: 'transparent',
-                      },
-                      _focus: {
-                        boxShadow: 'none',
-                      },
-                    }} onClick={handleToggleAccordionItem}>
+                  <AccordionItem key={i} {...styles.AccordionItem}>
+                    <AccordionButton {...styles.AccordionButton} onClick={handleToggleAccordionItem}>
                       <Box flex='1' textAlign='left'>
-                        <Image src={filter.icon} display={'inline-block'} pos={'relative'} top={'-1px'} mr={'8px'} />
+                        <Image src={filter.icon} {...styles.AccordionButtonImage} />
                         {filter.name}
                       </Box>
                       <AccordionIcon display={{ base: 'inline-block', md: 'none' }} />
@@ -165,21 +145,7 @@ export const Filters = (props: IFiltersProps) => {
             )}
           </ModalBody>
 
-          <ModalFooter
-            sx={{
-              borderTop: '1px solid rgba(0, 0, 0, 0.1)',
-              borderBottomRadius: isMobile ? 0 : 'md',
-              background: 'white',
-              bottom: 0,
-              position: {
-                base: 'sticky',
-                md: 'static',
-              },
-              width: '100%',
-              zIndex: '200',
-              px: { base: '20px !important', md: '30px !important' }
-            }}
-          >
+          <ModalFooter {...styles.ModalFooter} borderBottomRadius={{ base: 0, md: 'md' }}>
             <Box display={{ base: 'none', md: 'flex' }} justifyContent={'space-between'} w={'100%'} alignItems={'center'}>
               <ClearAll onClick={() => handleClearAll()} />
               <Button onClick={handleSave}>Save</Button>

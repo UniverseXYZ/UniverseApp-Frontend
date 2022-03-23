@@ -4,7 +4,7 @@ export * from './currency-input';
 export * from './currency-select';
 export * from './date-time-picker';
 export * from './dropdown';
-export * from './filters';
+export * from './filters-popup';
 export * from './info-tooltip';
 export * from './input-shadow';
 export * from './item-wrapper';

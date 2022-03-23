@@ -10,14 +10,6 @@ import { GetCollectionApi, GetUserCollectionsFromScraperApi, GetActiveSellOrders
 import { IUserOwnedCollection, ISearchBarDropdownCollection, INFT, IERC721AssetType, IERC721BundleAssetType, IOrder } from '../../../../../nft/types';
 import { GetCollectionNFTsApi } from '../../../../../nft/api';
 import { TokenTicker } from '../../../../../../enums';
-
-// Constants
-const PER_PAGE = 12;
-import { coins } from '../../../../../../mocks';
-import { getTokenAddressByTicker } from '../../../../../../constants';
-import { breakpoints } from '../../../../../../theme/constants';
-
-// Interfaces
 import {
 	ISaleTypeFilterValue,
 	INftTypeFilterValue,
@@ -26,9 +18,19 @@ import {
 	ISortByFilterValue,
 	SortOrderOptions,
 	ICollectionsValue,
+	useCollectionsFilter,
+	useSaleTypeFilter,
+	useNFTTypeFilter,
+	usePriceRangeFilter,
 } from '../search-filters';
 import { collectionKeys, nftKeys, orderKeys } from '../../../../../../utils/query-keys';
 
+// Constants
+const PER_PAGE = 12;
+import { getTokenAddressByTicker } from '../../../../../../constants';
+import { breakpoints } from '../../../../../../theme/constants';
+
+// Interfaces
 interface INFTsResult {
   page: number,
   size: string,
@@ -140,50 +142,17 @@ const FiltersContextProvider = (props: IFiltersProviderProps) => {
     onSubmit: () => {},
 	});
 
-	const collectionFilterForm = useFormik<ICollectionFilterFormValue>({
-    initialValues: {
-			collections: [],
-    },
-    onSubmit: () => {},
-	});
-
-	const saleTypeFilterForm = useFormik<ISaleTypeFilterValue>({
+	const sortByForm = useFormik<ISortByFilterValue>({
 		initialValues: {
-			buyNow: false,
-			onAuction: false,
-			new: false,
-			hasOffers: false,
+			sortingIndex: 0,
 		},
 		onSubmit: () => {},
 	});
 
-	const nftTypeFilterForm = useFormik<INftTypeFilterValue>({
-    initialValues: {
-      singleItem: false,
-      bundle: false,
-      composition: false,
-      stillImage: false,
-      gif: false,
-      audio: false,
-      video: false,
-    },
-    onSubmit: () => {},
-  });
-
-	const priceRangeFilterForm = useFormik<IPriceRangeFilterValue>({
-    initialValues: {
-      currency: coins[0],
-      price: [0, 0],
-    },
-    onSubmit: () => {},
-  });
-
-	const sortByForm = useFormik<ISortByFilterValue>({
-    initialValues: {
-      sortingIndex: 0,
-    },
-    onSubmit: () => {},
-	});
+	const { form: saleTypeFilterForm } = useSaleTypeFilter();
+	const { form: nftTypeFilterForm } = useNFTTypeFilter();
+	const { form: priceRangeFilterForm } = usePriceRangeFilter();
+	const { form: collectionFilterForm } = useCollectionsFilter();
 
 	// --------- GETTERS ---------
 	const hasSelectedSaleTypeFilter = () => {

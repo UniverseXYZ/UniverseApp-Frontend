@@ -23,7 +23,7 @@ import {
   ISearchBarValue,
 } from '../../components';
 import { SortOrderOptions, SortOrderOptionsEnum } from '../../constants';
-import { BackToTopButton, Loading, Select, Filters, ClearAll } from '../../../../components';
+import { BackToTopButton, Loading, Select, FiltersPopup, ClearAll } from '../../../../components';
 import {
   NftItem,
   NFTItemContentWithPrice,
@@ -360,7 +360,7 @@ export const BrowseNFTsPage = () => {
         </Box>
       </Flex>
 
-      <Filters
+      <FiltersPopup
         mobileFilters={[
           {
             name: 'Sale type',
@@ -461,7 +461,7 @@ export const BrowseNFTsPage = () => {
             </Container>
           </Box>
         )}
-      </Filters>
+      </FiltersPopup>
 
       <Box px={'20px'} pt={{ base: '20px', md: 0, }}>
         <Container maxW={'1360px'} pt={'0 !important'} position={'relative'}>

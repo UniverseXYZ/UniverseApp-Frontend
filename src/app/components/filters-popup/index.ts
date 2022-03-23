@@ -1,3 +1,3 @@
 export * from './components/clear-all';
 
-export * from './Filters';
+export * from './FiltersPopup';
