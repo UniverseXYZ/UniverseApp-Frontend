@@ -10,25 +10,29 @@ import { GetCollectionApi, GetUserCollectionsFromScraperApi, GetActiveSellOrders
 import { IUserOwnedCollection, ISearchBarDropdownCollection, INFT, IERC721AssetType, IERC721BundleAssetType, IOrder } from '../../../../../nft/types';
 import { GetCollectionNFTsApi } from '../../../../../nft/api';
 import { TokenTicker } from '../../../../../../enums';
-
-// Constants
-const PER_PAGE = 12;
-import { coins } from '../../../../../../mocks';
-import { getTokenAddressByTicker } from '../../../../../../constants';
-import { breakpoints } from '../../../../../../theme/constants';
-
-// Interfaces
 import {
-	ISaleTypeFilterValue,
-	INftTypeFilterValue,
-	IPriceRangeFilterValue,
 	ISearchBarValue,
 	ISortByFilterValue,
 	SortOrderOptions,
 } from '../search-filters';
-import { ICollectionFilterValue } from './collections-filter/types';
 import { collectionKeys, nftKeys, orderKeys } from '../../../../../../utils/query-keys';
+import {
+	ISaleTypeFilterValue,
+	INftTypeFilterValue,
+	IPriceRangeFilterValue,
+	ICollectionsValue,
+	useCollectionsFilter,
+	useSaleTypeFilter,
+	useNFTTypeFilter,
+	usePriceRangeFilter,
+} from '../../../../../../components/filters';
 
+// Constants
+const PER_PAGE = 12;
+import { getTokenAddressByTicker } from '../../../../../../constants';
+import { breakpoints } from '../../../../../../theme/constants';
+
+// Interfaces
 interface INFTsResult {
   page: number,
   size: string,
@@ -46,7 +50,7 @@ interface IOrdersResult {
 }
 
 interface ICollectionFilterFormValue {
-	collections: ICollectionFilterValue[];
+	collections: ICollectionsValue[];
 }
 
 export interface ISearchFiltersContext {
@@ -64,8 +68,6 @@ export interface ISearchFiltersContext {
 	disabledSortByFilters: boolean;
 	setDisabledSortByFilters: (v: boolean) => void;
 	getSelectedFiltersCount: () => number;
-	setShowResultsMobile: (v: boolean) => void;
-	showResultsMobile: boolean;
 	// --- FORMS ---
 	searchBarForm: FormikProps<ISearchBarValue>;
 	collectionFilterForm: FormikProps<ICollectionFilterFormValue>;
@@ -126,7 +128,6 @@ const FiltersContextProvider = (props: IFiltersProviderProps) => {
 	const [showPriceRangeFilters, setShowPriceRangeFilters] = useState<boolean>(false);
 	const [showCollectionFilters, setShowCollectcionFilters] = useState<boolean>(false);
 	const [disabledSortByFilters, setDisabledSortByFilters] = useState<boolean>(false);
-	const [showResultsMobile, setShowResultsMobile] = useState<boolean>(true); // In order for the get user NFTs querry to kick in Mobile on mount, on success set it to false
 	const isMobile = useMedia(`(max-width: ${breakpoints.md})`);
 
   // --------- QUERY CLIENT ---------
@@ -140,50 +141,17 @@ const FiltersContextProvider = (props: IFiltersProviderProps) => {
     onSubmit: () => {},
 	});
 
-	const collectionFilterForm = useFormik<ICollectionFilterFormValue>({
-    initialValues: {
-			collections: [],
-    },
-    onSubmit: () => {},
-	});
-
-	const saleTypeFilterForm = useFormik<ISaleTypeFilterValue>({
+	const sortByForm = useFormik<ISortByFilterValue>({
 		initialValues: {
-			buyNow: false,
-			onAuction: false,
-			new: false,
-			hasOffers: false,
+			sortingIndex: 0,
 		},
 		onSubmit: () => {},
 	});
 
-	const nftTypeFilterForm = useFormik<INftTypeFilterValue>({
-    initialValues: {
-      singleItem: false,
-      bundle: false,
-      composition: false,
-      stillImage: false,
-      gif: false,
-      audio: false,
-      video: false,
-    },
-    onSubmit: () => {},
-  });
-
-	const priceRangeFilterForm = useFormik<IPriceRangeFilterValue>({
-    initialValues: {
-      currency: coins[0],
-      price: [0, 0],
-    },
-    onSubmit: () => {},
-  });
-
-	const sortByForm = useFormik<ISortByFilterValue>({
-    initialValues: {
-      sortingIndex: 0,
-    },
-    onSubmit: () => {},
-	});
+	const { form: saleTypeFilterForm } = useSaleTypeFilter();
+	const { form: nftTypeFilterForm } = useNFTTypeFilter();
+	const { form: priceRangeFilterForm } = usePriceRangeFilter();
+	const { form: collectionFilterForm } = useCollectionsFilter();
 
 	// --------- GETTERS ---------
 	const hasSelectedSaleTypeFilter = () => {
@@ -243,14 +211,12 @@ const FiltersContextProvider = (props: IFiltersProviderProps) => {
 
 	// --------- SETTERS ---------
 	const clearAllForms = () => {
-		isMobile && setShowResultsMobile(true);
 		saleTypeFilterForm.resetForm();
     nftTypeFilterForm.resetForm();
     priceRangeFilterForm.resetForm();
     collectionFilterForm.resetForm();
     sortByForm.resetForm();
 		searchBarForm.resetForm();
-		isMobile && setShowResultsMobile(false);
 	}
 
 	// --------- HELPERS ---------
@@ -429,24 +395,6 @@ const FiltersContextProvider = (props: IFiltersProviderProps) => {
 		return result;
 	}
 
-	// --------- FLAGS ---------
-	const _getUserNftsEnabled = () => {
-		const isMobilePopupSearch = (!!userAddress && isMobile && showResultsMobile);
-		const isMobileSearchBar = hasSearchBarFilter() && isMobile && !showResultsMobile;
-		const isDekstopSearch = !isMobile && !!userAddress;
-
-		return isMobilePopupSearch || isMobileSearchBar || isDekstopSearch;
-	}
-
-	const _getOrdersEnabled = () => {
-		const isMobileSearch = isMobile && showResultsMobile && hasSelectedOrderBookFilters();
-		const isDekstopSearch = !isMobile && hasSelectedOrderBookFilters();
-		const isSearchBarSearchInOrderBook = hasSearchBarFilter() && hasSelectedOrderBookFilters();
-
-		return isMobileSearch || isDekstopSearch || isSearchBarSearchInOrderBook;
-	}
-
-
 	// --------- QUERY HANDLERS ---------
 	/**
 	 * Fetches all user collections in which the user has NFTs from the Scraper API
@@ -587,13 +535,10 @@ const FiltersContextProvider = (props: IFiltersProviderProps) => {
 		'NFTs'
 	], _handleGetUserNFTs,
 		{
-			enabled: _getUserNftsEnabled(),
+			enabled: !!userAddress,
 			retry: false,
 			getNextPageParam: (lastPage, pages) => {
 				return pages.length * PER_PAGE < lastPage.total ? pages.length + 1 : undefined;
-			},
-			onSuccess: () => {
-				isMobile && setShowResultsMobile(false);
 			},
 			onError: (error) => {
 				// TODO:: think how to handle the errors
@@ -667,14 +612,11 @@ const FiltersContextProvider = (props: IFiltersProviderProps) => {
 			},
   	], _handleGetOrders,
 		{
-			enabled: _getOrdersEnabled() && !waitForUserNFTs(),
+			enabled: !waitForUserNFTs(),
 			retry: false,
 			getNextPageParam: (lastPage, pages) => {
 				return pages.length * PER_PAGE < lastPage.total ? pages.length + 1 : undefined;
 			},
-			onSuccess: (result) => {
-				isMobile && setShowResultsMobile(false);
-			}
   	}
 	);
 
@@ -685,8 +627,6 @@ const FiltersContextProvider = (props: IFiltersProviderProps) => {
 		setUserAddress: setUserAddress,
 		setCollectionAddress: setCollectionAddress,
 		disabledSortByFilters,
-		setShowResultsMobile,
-		showResultsMobile,
 		// --- GETTERS ---
 		hasSelectedSaleTypeFilter,
 		hasSelectedPriceFilter,

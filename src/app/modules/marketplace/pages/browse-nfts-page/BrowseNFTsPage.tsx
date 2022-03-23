@@ -1,10 +1,9 @@
-import { Box, Button, Container, Flex, Heading, Link, SimpleGrid, Text } from '@chakra-ui/react';
+import { Box, Button, Container, Flex, Heading, Image, Link, SimpleGrid, Text } from '@chakra-ui/react';
 import { useFormik } from 'formik';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useInfiniteQuery, useQueryClient } from 'react-query';
 import { useHistory } from 'react-router-dom';
 import { utils } from 'ethers';
-import Popup from 'reactjs-popup';
 import { useIntersection } from 'react-use';
 
 import NoiseTextureImage from './../../../../../assets/images/v2/marketplace/noise_texture.png';
@@ -12,23 +11,19 @@ import IntroDesktopBGImage from './../../../../../assets/images/v2/marketplace/i
 import IntroTabletBGImage from './../../../../../assets/images/v2/marketplace/img_hero_tablet.png';
 import IntroMobileBGImage from './../../../../../assets/images/v2/marketplace/img_hero_mobile.png';
 import BGImage from './../../../../../assets/images/v2/stone_bg.jpg';
-import filterIcon from './../../../../../assets/images/marketplace/filters.svg';
-import { useAuthContext } from '../../../../../contexts/AuthContext'
-import { SigninPopup } from './SignInPopup'
+import SaleTypeIcon from '../../../../../assets/images/v2/marketplace/filter-sale-type.svg';
+import NFTTypeIcon from '../../../../../assets/images/v2/marketplace/filter-nft-type.svg';
+import PriceRangeIcon from '../../../../../assets/images/v2/marketplace/filter-price-range.svg';
+import ArrowDownIcon from '../../../../../assets/images/arrow-down.svg';
 
+import { useAuthContext } from '../../../../../contexts/AuthContext'
+import { SigninPopup } from './components'
 import {
-  ArtistsFilter,
-  INftTypeFilterValue,
-  IPriceRangeFilterValue,
-  ISaleTypeFilterValue,
-  NFTTypeFilter,
-  PriceRangeFilter,
-  SaleTypeFilter,
   SearchBar,
   ISearchBarValue,
 } from '../../components';
 import { SortOrderOptions, SortOrderOptionsEnum } from '../../constants';
-import { BackToTopButton, Loading, Select } from '../../../../components';
+import { BackToTopButton, Loading, Select, FiltersPopup } from '../../../../components';
 import {
   NftItem,
   NFTItemContentWithPrice,
@@ -36,7 +31,6 @@ import {
 } from '../../../nft/components';
 import { IERC721AssetType, IERC721BundleAssetType, INFT, IOrder, ICollectionBackend, ISearchBarDropdownCollection } from '../../../nft/types';
 import { useStaticHeader } from '../../../../hooks';
-import { coins } from '../../../../mocks';
 import { ORDERS_PER_PAGE } from './constants';
 import {
   GetNFT2Api,
@@ -46,15 +40,25 @@ import {
 } from '../../../nft/api';
 import { useThemeContext } from '../../../../../contexts/ThemeContext';
 import { OrderAssetClass } from '../../../nft/enums';
-import BrowseFilterPopup from '../../../../../components/popups/BrowseFiltersPopup';
-import * as styles from './styles';
+import * as styles from './BrowseNFTsPage.styles';
 import { getTokenAddressByTicker } from '../../../../constants';
 import { TokenTicker } from '../../../../enums';
-import { SaleTypeFilterDropdown } from '../../../account/pages/my-nfts-page/components/search-filters';
-
-export type ICollectionsFilterValue = Array<any>;
 import { collectionKeys, nftKeys, orderKeys } from '../../../../utils/query-keys';
 import Badge from '../../../../../components/badge/Badge';
+import {
+  ClearAllButton,
+  SaleTypeFilter,
+  SaleTypeFilterDropdown,
+  NFTTypeFilter,
+  NFTTypeFilterDropdown,
+  PriceRangeFilter,
+  PriceRangeFilterDropdown,
+  useNFTTypeFilter,
+  usePriceRangeFilter,
+  useSaleTypeFilter,
+} from '../../../../components/filters';
+
+export type ICollectionsFilterValue = Array<any>;
 
 export const BrowseNFTsPage = () => {
   const { setDarkMode } = useThemeContext() as any;
@@ -66,41 +70,11 @@ export const BrowseNFTsPage = () => {
   const [sortBy, setSortBy] = useState('');
   const [isOpen, setIsOpen] = useState(false);
 
-  const saleTypeFilterForm = useFormik<ISaleTypeFilterValue>({
-    initialValues: {
-      buyNow: false,
-      onAuction: false,
-      new: false,
-      hasOffers: false,
-    },
-    onSubmit: () => {},
-  });
+  const [selectedAddress, setSelectedAddress] = useState<string>();
 
-  const nftTypeFilterForm = useFormik<INftTypeFilterValue>({
-    initialValues: {
-      singleItem: false,
-      bundle: false,
-      composition: false,
-      stillImage: false,
-      gif: false,
-      audio: false,
-      video: false,
-    },
-    onSubmit: () => {},
-  });
-
-  const priceRangeFilterForm = useFormik<IPriceRangeFilterValue>({
-    initialValues: {
-      currency: coins[0],
-      price: [0, 0],
-    },
-    onSubmit: () => {},
-  });
-
-  const collectionsFilterForm = useFormik<ICollectionsFilterValue>({
-    initialValues: [],
-    onSubmit: () => {},
-  });
+  const { form: saleTypeFilterForm } = useSaleTypeFilter();
+  const { form: nftTypeFilterForm } = useNFTTypeFilter();
+  const { form: priceRangeFilterForm } = usePriceRangeFilter();
 
   const searchBarForm = useFormik<ISearchBarValue>({
     initialValues: {
@@ -114,7 +88,7 @@ export const BrowseNFTsPage = () => {
     handleClear();
 
     // Refetch the orders based on the new address
-    collectionsFilterForm.setValues([{address: address}]);
+    setSelectedAddress(address);
   }
 
   const { data: collectionsResult, isFetching: isFetchingCollections } = useInfiniteQuery([
@@ -157,175 +131,173 @@ export const BrowseNFTsPage = () => {
     }
   });
 
-  const artistsFilterForm = useFormik<ICollectionsFilterValue>({
-    initialValues: [],
-    onSubmit: () => {},
-  });
-  const { data: ordersResult, fetchNextPage, hasNextPage, isFetching } = useInfiniteQuery(orderKeys.browse(
-   {
-    saleFilters: saleTypeFilterForm.values,
-    nftTypefilters: nftTypeFilterForm.values,
-    priceRangeFilters: priceRangeFilterForm.values,
-    collectionsFilters: collectionsFilterForm.values,
-    sorting: sortBy
-   }), async ({ pageParam = 1 }) => {
-    const apiFilters: any = { page: pageParam, side: 1 };
+  const { data: ordersResult, fetchNextPage, hasNextPage, isFetching } = useInfiniteQuery(
+    orderKeys.browse({
+      selectedAddress,
+      saleFilter: saleTypeFilterForm.values,
+      nftTypeFilter: nftTypeFilterForm.values,
+      priceRangeFilter: priceRangeFilterForm.values,
+      sorting: sortBy,
+    }),
+    async ({ pageParam = 1 }) => {
+      const apiFilters: any = { page: pageParam, side: 1 };
 
-    // Sale Filters
-    if (saleTypeFilterForm.values.hasOffers) {
-      apiFilters['hasOffers'] = true
-    }
-
-    if (saleTypeFilterForm.values.buyNow) {
-      apiFilters['side'] = 1
-    }
-
-    if (saleTypeFilterForm.values.new) {
-      apiFilters['beforeTimestamp'] = Math.floor((new Date()).getTime() / 1000)
-    }
-
-    // NFT Filters
-    const assetClassFilters = []
-    if (nftTypeFilterForm.values.singleItem) {
-      assetClassFilters.push("ERC721");
-    }
-
-    if (nftTypeFilterForm.values.bundle) {
-      assetClassFilters.push("ERC721_BUNDLE");
-    }
-
-    if (assetClassFilters.length) {
-      apiFilters['assetClass'] = assetClassFilters.join(',');
-    }
-
-    // Price Filters
-    if (priceRangeFilterForm.values.currency.token && priceRangeFilterForm.dirty) {
-      const ticker = priceRangeFilterForm.values.currency.token as TokenTicker;
-      const tokenAddress = getTokenAddressByTicker(ticker)
-      apiFilters['token'] = tokenAddress;
-    }
-
-    const [minPrice, maxPrice] = priceRangeFilterForm.values.price;
-
-    if (minPrice) {
-      apiFilters['minPrice'] = minPrice; 
-    }
-
-    if (maxPrice && priceRangeFilterForm.dirty) {
-      apiFilters['maxPrice'] = maxPrice;
-    }
-
-    // Collection Filters
-    if (collectionsFilterForm.values.length) {
-      apiFilters['collection'] = collectionsFilterForm.values[0].address
-    }
-
-    // Sorting
-    if (sortBy) {
-      let sortFilter = 0
-      switch (sortBy) {
-        case SortOrderOptionsEnum.EndingSoon:
-          sortFilter = 1
-          break;
-        case SortOrderOptionsEnum.HighestPrice:
-          sortFilter = 2
-          break;
-        case SortOrderOptionsEnum.LowestPrice:
-          sortFilter = 3
-          break;
-        case SortOrderOptionsEnum.RecentlyListed:
-          sortFilter = 4
-          break;
-        default:
-          break;
-      }
-      apiFilters['sortBy'] = sortFilter;
-    }
-
-    const { orders, total } = await GetActiveSellOrdersApi(apiFilters);
-
-    const NFTsRequests: Array<any> = [];
-
-    for (const order of orders) {
-      switch (order.make.assetType.assetClass) {
-        case 'ERC721':
-          const assetType = order.make.assetType as IERC721AssetType;
-          queryClient.setQueryData(orderKeys.listing({collectionAddress: assetType.contract, tokenId: assetType.tokenId.toString()}), order);
-          NFTsRequests.push(GetNFT2Api(assetType.contract, assetType.tokenId))
-          break;
-        case 'ERC721_BUNDLE':
-          const assetTypeBundle = order.make.assetType as IERC721BundleAssetType;
-          for (let i = 0; i < assetTypeBundle.contracts.length; i++) {
-            for (const tokenId of assetTypeBundle.tokenIds[i]) {
-              queryClient.setQueryData(orderKeys.listing({collectionAddress: assetTypeBundle.contracts[i], tokenId: tokenId.toString()}), order);
-              NFTsRequests.push(GetNFT2Api(assetTypeBundle.contracts[i], tokenId))
-            }
-          }
-          break;
-      }
-    }
-
-    const NFTsMap = (await (Promise.allSettled(NFTsRequests))).reduce<Record<string, INFT>>((acc, response) => {
-      if (response.status !== 'fulfilled') {
-        return acc;
+      // Sale Filters
+      if (saleTypeFilterForm.values.hasOffers) {
+        apiFilters['hasOffers'] = true
       }
 
-      const NFT: INFT = response.value;
-      //TODO: set query cache to this specific nft(nftKeys.info)
-      const key = `${NFT.collection?.address}:${NFT.tokenId}`;
+      if (saleTypeFilterForm.values.buyNow) {
+        apiFilters['side'] = 1
+      }
 
-      queryClient.setQueryData(nftKeys.nftInfo({collectionAddress: NFT._collectionAddress || "", tokenId: NFT.tokenId}), NFT)
+      if (saleTypeFilterForm.values.new) {
+        apiFilters['beforeTimestamp'] = Math.floor((new Date()).getTime() / 1000)
+      }
 
-      acc[key] = NFT;
+      // NFT Filters
+      const assetClassFilters = []
+      if (nftTypeFilterForm.values.singleItem) {
+        assetClassFilters.push("ERC721");
+      }
 
-      return acc;
-    }, {});
+      if (nftTypeFilterForm.values.bundle) {
+        assetClassFilters.push("ERC721_BUNDLE");
+      }
 
-    const result = orders.reduce<Array<{ order: IOrder; NFTs: INFT[]; }>>((acc, order) => {
-      const NFTsMapKeys = Object.keys(NFTsMap);
+      if (assetClassFilters.length) {
+        apiFilters['assetClass'] = assetClassFilters.join(',');
+      }
 
-      switch (order.make.assetType.assetClass) {
-        case 'ERC721':
-          const assetType = order.make.assetType as IERC721AssetType;
-          if (NFTsMapKeys.includes(`${assetType.contract}:${assetType.tokenId}`)) {
-            acc.push({
-              order,
-              NFTs: NFTsMap[`${assetType.contract}:${assetType.tokenId}`]
-                ? [NFTsMap[`${assetType.contract}:${assetType.tokenId}`]]
-                : []
-            })
-          }
-          break;
-        case 'ERC721_BUNDLE':
-          const assetTypeBundle = order.make.assetType as IERC721BundleAssetType;
-          const NFTs = [];
+      // Price Filters
+      if (priceRangeFilterForm.values.currency.token && priceRangeFilterForm.dirty) {
+        const ticker = priceRangeFilterForm.values.currency.token as TokenTicker;
+        apiFilters['token'] = getTokenAddressByTicker(ticker)
+      }
 
-          for (let i = 0; i < assetTypeBundle.contracts.length; i++) {
-            for (const tokenId of assetTypeBundle.tokenIds[i]) {
-              if (NFTsMap[`${assetTypeBundle.contracts[i]}:${tokenId}`]) {
-                NFTs.push(NFTsMap[`${assetTypeBundle.contracts[i]}:${tokenId}`]);
+      const [minPrice, maxPrice] = priceRangeFilterForm.values.price;
+
+      if (minPrice) {
+        apiFilters['minPrice'] = minPrice;
+      }
+
+      if (maxPrice && priceRangeFilterForm.dirty) {
+        apiFilters['maxPrice'] = maxPrice;
+      }
+
+      // Collection Filters
+      if (selectedAddress) {
+        apiFilters['collection'] = selectedAddress;
+      }
+
+      // Sorting
+      if (sortBy) {
+        let sortFilter = 0
+        switch (sortBy) {
+          case SortOrderOptionsEnum.EndingSoon:
+            sortFilter = 1
+            break;
+          case SortOrderOptionsEnum.HighestPrice:
+            sortFilter = 2
+            break;
+          case SortOrderOptionsEnum.LowestPrice:
+            sortFilter = 3
+            break;
+          case SortOrderOptionsEnum.RecentlyListed:
+            sortFilter = 4
+            break;
+          default:
+            break;
+        }
+        apiFilters['sortBy'] = sortFilter;
+      }
+
+      const { orders, total } = await GetActiveSellOrdersApi(apiFilters);
+
+      const NFTsRequests: Array<any> = [];
+
+      for (const order of orders) {
+        switch (order.make.assetType.assetClass) {
+          case 'ERC721':
+            const assetType = order.make.assetType as IERC721AssetType;
+            queryClient.setQueryData(orderKeys.listing({collectionAddress: assetType.contract, tokenId: assetType.tokenId.toString()}), order);
+            NFTsRequests.push(GetNFT2Api(assetType.contract, assetType.tokenId))
+            break;
+          case 'ERC721_BUNDLE':
+            const assetTypeBundle = order.make.assetType as IERC721BundleAssetType;
+            for (let i = 0; i < assetTypeBundle.contracts.length; i++) {
+              for (const tokenId of assetTypeBundle.tokenIds[i]) {
+                queryClient.setQueryData(orderKeys.listing({collectionAddress: assetTypeBundle.contracts[i], tokenId: tokenId.toString()}), order);
+                NFTsRequests.push(GetNFT2Api(assetTypeBundle.contracts[i], tokenId))
               }
             }
-          }
-
-          acc.push({ order, NFTs });
-
-          break;
+            break;
+        }
       }
 
-      return acc;
-    }, []);
+      const NFTsMap = (await (Promise.allSettled(NFTsRequests))).reduce<Record<string, INFT>>((acc, response) => {
+        if (response.status !== 'fulfilled') {
+          return acc;
+        }
 
-    return { total, data: result };
-  }, {
-    retry: false,
-    getNextPageParam: (lastPage, pages) => {
-      return pages.length * ORDERS_PER_PAGE < lastPage.total ? pages.length + 1 : undefined;
+        const NFT: INFT = response.value;
+        //TODO: set query cache to this specific nft(nftKeys.info)
+        const key = `${NFT.collection?.address}:${NFT.tokenId}`;
+
+        queryClient.setQueryData(nftKeys.nftInfo({collectionAddress: NFT._collectionAddress || "", tokenId: NFT.tokenId}), NFT)
+
+        acc[key] = NFT;
+
+        return acc;
+      }, {});
+
+      const result = orders.reduce<Array<{ order: IOrder; NFTs: INFT[]; }>>((acc, order) => {
+        const NFTsMapKeys = Object.keys(NFTsMap);
+
+        switch (order.make.assetType.assetClass) {
+          case 'ERC721':
+            const assetType = order.make.assetType as IERC721AssetType;
+            if (NFTsMapKeys.includes(`${assetType.contract}:${assetType.tokenId}`)) {
+              acc.push({
+                order,
+                NFTs: NFTsMap[`${assetType.contract}:${assetType.tokenId}`]
+                  ? [NFTsMap[`${assetType.contract}:${assetType.tokenId}`]]
+                  : []
+              })
+            }
+            break;
+          case 'ERC721_BUNDLE':
+            const assetTypeBundle = order.make.assetType as IERC721BundleAssetType;
+            const NFTs = [];
+
+            for (let i = 0; i < assetTypeBundle.contracts.length; i++) {
+              for (const tokenId of assetTypeBundle.tokenIds[i]) {
+                if (NFTsMap[`${assetTypeBundle.contracts[i]}:${tokenId}`]) {
+                  NFTs.push(NFTsMap[`${assetTypeBundle.contracts[i]}:${tokenId}`]);
+                }
+              }
+            }
+
+            acc.push({ order, NFTs });
+
+            break;
+        }
+
+        return acc;
+      }, []);
+
+      return { total, data: result };
     },
-    onSuccess: (result) => {
-      console.log('onSuccess 5:', result);
+    {
+      retry: false,
+      getNextPageParam: (lastPage, pages) => {
+        return pages.length * ORDERS_PER_PAGE < lastPage.total ? pages.length + 1 : undefined;
+      },
+      onSuccess: (result) => {
+        console.log('onSuccess 5:', result);
+      }
     }
-  });
+  );
 
   const filtersRef = useRef(null);
 
@@ -341,8 +313,7 @@ export const BrowseNFTsPage = () => {
     saleTypeFilterForm.resetForm();
     nftTypeFilterForm.resetForm();
     priceRangeFilterForm.resetForm();
-    collectionsFilterForm.resetForm();
-    artistsFilterForm.resetForm();
+    setSelectedAddress(undefined);
   }, []);
 
   useEffect(() => setDarkMode(false), []);
@@ -357,6 +328,10 @@ export const BrowseNFTsPage = () => {
     router.push('/my-nfts')
   }
 
+  const isFiltersDirty = saleTypeFilterForm.dirty
+    || nftTypeFilterForm.dirty
+    || priceRangeFilterForm.dirty;
+
   return (
     <Box layerStyle={'StoneBG'}>
       <Flex {...styles.IntroSectionStyle}>
@@ -367,10 +342,10 @@ export const BrowseNFTsPage = () => {
       </Flex>
 
       <Flex {...styles.SearchBarWrapperStyle}>
-        <Box mb={'60px'}
+        <Box
+          mb={'60px'}
           w={{ sm: '100%', md: '600px' }}
-          ml={{ sm: '20px', md: 'auto' }}
-          mr={{ sm: '20px', md: 'auto' }}
+          mx={{ sm: '20px', md: 'auto' }}
         >
           <SearchBar
             collections={collectionsResult?.pages[0]?.data || []}
@@ -386,117 +361,79 @@ export const BrowseNFTsPage = () => {
         </Box>
       </Flex>
 
+
       <Box
         ref={filtersRef}
-        sx={{
-          bg: intersection?.intersectionRect.top === 0 ? 'white' : 'transparent',
-          display: {
-            base: 'none',
-            md: 'block',
-          },
-          my: '20px',
-          p: '20px !important',
-          position: 'sticky',
-          top: '-1px',
-          transition: '200ms',
-          w: '100%',
-          zIndex: 30,
-        }}
+        {...styles.FiltersStickyWrapper}
+        bg={intersection?.intersectionRect.top === 0 ? 'white' : 'transparent'}
       >
-        <Container maxW={'1360px'} py={'0 !important'} position={'relative'}>
-          <Flex justifyContent={'space-between'}>
-            <Box sx={{
-              '> button, a': {
-                mr: '14px'
-              }
-            }}>
-              <SaleTypeFilterDropdown
-                value={saleTypeFilterForm.values}
-                onSave={(value) => saleTypeFilterForm.setValues(value)}
-                onClear={() => saleTypeFilterForm.resetForm()}
-              />
-              <NFTTypeFilter
-                value={nftTypeFilterForm.values}
-                onChange={(values) => nftTypeFilterForm.setValues(values)}
-                onClear={() => nftTypeFilterForm.resetForm()}
-              />
-              <PriceRangeFilter
-                value={priceRangeFilterForm.values}
-                isDirty={priceRangeFilterForm.dirty}
-                onChange={(values) => priceRangeFilterForm.setValues(values)}
-                onClear={() => priceRangeFilterForm.resetForm()}
-              />
-              {/* <CollectionsFilter
-                value={collectionsFilterForm.values}
-                onChange={(values) => collectionsFilterForm.setValues(values)}
-                onClear={() => collectionsFilterForm.resetForm()}
-              /> */}
-              {/* <ArtistsFilter
-                value={artistsFilterForm.values}
-                onChange={(values) => artistsFilterForm.setValues(values)}
-                onClear={() => artistsFilterForm.resetForm()}
-              /> */}
+        <Container {...styles.FiltersContainer}>
+          <FiltersPopup
+            mobileFilters={[
               {
-                (
-                  saleTypeFilterForm.dirty
-                  || nftTypeFilterForm.dirty
-                  || priceRangeFilterForm.dirty
-                  || collectionsFilterForm.dirty
-                  || artistsFilterForm.dirty
-                ) && (
-                  <Link onClick={handleClear} sx={{
-                    fontSize: '14px',
-                    fontWeight: 500,
-                    textDecoration: 'underline',
-                    _hover: {
-                      textDecoration: 'none',
-                    }
-                  }}>Clear all</Link>
-                )
-              }
-            </Box>
-            <Select
-              label={'Sort by'}
-              items={SortOrderOptions}
-              value={sortBy}
-              buttonProps={{
-                justifyContent: 'space-between',
-              }}
-              onSelect={(val) => setSortBy(val)}
-            />
-          </Flex>
+                name: 'Sale type',
+                form: saleTypeFilterForm,
+                icon: SaleTypeIcon,
+                renderFilter: (props) => <SaleTypeFilter {...props} />,
+              },
+              {
+                name: 'NFT Type',
+                form: nftTypeFilterForm,
+                icon: NFTTypeIcon,
+                renderFilter: (props) => <NFTTypeFilter {...props} />,
+              },
+              {
+                name: 'Price range',
+                form: priceRangeFilterForm,
+                icon: PriceRangeIcon,
+                renderFilter: (props) => <PriceRangeFilter {...props} />,
+              },
+            ]}
+          >
+            {({ openMobileFilters }) => (
+              <Box {...styles.FiltersWrapper}>
+                <SaleTypeFilterDropdown
+                  value={saleTypeFilterForm.values}
+                  onSave={(value) => saleTypeFilterForm.setValues(value)}
+                  onClear={() => saleTypeFilterForm.resetForm()}
+                />
+                <NFTTypeFilterDropdown
+                  value={nftTypeFilterForm.values}
+                  onSave={(value) => nftTypeFilterForm.setValues(value)}
+                  onClear={() => nftTypeFilterForm.resetForm()}
+                />
+                <PriceRangeFilterDropdown
+                  value={priceRangeFilterForm.values}
+                  isDirty={priceRangeFilterForm.dirty}
+                  onSave={(value) => priceRangeFilterForm.setValues(value)}
+                  onClear={() => priceRangeFilterForm.resetForm()}
+                />
+                <Button
+                  variant={'dropdown'}
+                  rightIcon={
+                    <Image src={ArrowDownIcon} sx={{
+                      width: '10px',
+                      transition: '200ms',
+                      transform: 'rotate(0deg)',
+                    }} />
+                  }
+                  {...styles.MoreFiltersButton}
+                  onClick={openMobileFilters}
+                >More</Button>
+                {isFiltersDirty && (<ClearAllButton onClick={handleClear} />)}
+              </Box>
+            )}
+          </FiltersPopup>
+          <Select
+            label={'Sort by'}
+            items={SortOrderOptions}
+            value={sortBy}
+            buttonProps={{ justifyContent: 'space-between', w: { base: '100%', md: 'fit-content' } }}
+            onSelect={(val) => setSortBy(val)}
+          />
         </Container>
       </Box>
-      <div className="mobile--filters">
-        <Popup
-          trigger={
-            <button type="button" className="light-button">
-              <img src={filterIcon} alt="Filter" />
-            </button>
-          }
-        >
-          {(close: any) => (
-            // TODO: need to convert this old functional with the new one -> useFormik
-            <BrowseFilterPopup
-              onClose={close}
-              // saleTypeButtons={saleTypeButtons}
-              // setSaleTypeButtons={setSaleTypeButtons}
-              // setSelectedPrice={setSelectedPrice}
-              // selectedTokenIndex={selectedTokenIndex}
-              // setSelectedTokenIndex={setSelectedTokenIndex}
-              // selectedCollections={selectedCollections}
-              // setSelectedCollections={setSelectedCollections}
-              // savedCollections={savedCollections}
-              // setSavedCollections={setSavedCollections}
-              // selectedCreators={selectedCreators}
-              // setSelectedCreators={setSelectedCreators}
-              // savedCreators={savedCreators}
-              // setSavedCreators={setSavedCreators}
-            />
-          )}
-        </Popup>
-        {/* {selectedFiltersLength !== 0 && <div className="count">{selectedFiltersLength}</div>} */}
-      </div>
+
       <Box px={'20px'} pt={{ base: '20px', md: 0, }}>
         <Container maxW={'1360px'} pt={'0 !important'} position={'relative'}>
           {!isFetching && !ordersResult?.pages[0].data.length ?
@@ -510,46 +447,48 @@ export const BrowseNFTsPage = () => {
                   if (!NFTs.length) {
                     return null;
                   }
-                return order.make.assetType.assetClass === 'ERC721' ? (
-                  <NftItem
-                    order={order}
-                    key={order.id}
-                    NFT={NFTs[0]}
-                    collection={`${NFTs[0].collection?.address}`}
-                    orderEnd={order.end}
-                    renderContent={({ NFT, collection, creator, owner, bestOfferPrice, bestOfferPriceToken, lastOfferPrice, lastOfferPriceToken, order: orderData }) => (
-                      <NFTItemContentWithPrice
-                      name={NFT.name}
-                      collection={collection}
-                      creator={creator || undefined}
-                      owner={owner || undefined}
-                      order={orderData || undefined}
-                      bestOfferPrice={bestOfferPrice || 0}
-                      bestOfferPriceToken={bestOfferPriceToken || undefined}
-                      lastOfferPrice={lastOfferPrice || 0}
-                      lastOfferPriceToken={lastOfferPriceToken || undefined}
-                      />
-                    )}
-                  />
-                ) : (
-                  <BundleItem
-                    key={order.id}
-                    NFTs={NFTs}
-                    order={order}
-                    renderContent={() => (
-                      <NFTItemContentWithPrice
-                        name={(order.make.assetType as IERC721BundleAssetType).bundleName}
-                        creator={NFTs[0].creator}
+                  return order.make.assetType.assetClass === 'ERC721'
+                    ? (
+                      <NftItem
                         order={order}
-                        // price={+utils.formatUnits(order.take.value, `${TOKENS_MAP[order.take.assetType.assetClass as TokenTicker].decimals}`)}
-                        // priceToken={order.take.assetType.assetClass as TokenTicker}
+                        key={order.id}
+                        NFT={NFTs[0]}
+                        collection={`${NFTs[0].collection?.address}`}
+                        orderEnd={order.end}
+                        renderContent={({ NFT, collection, creator, owner, bestOfferPrice, bestOfferPriceToken, lastOfferPrice, lastOfferPriceToken, order: orderData }) => (
+                          <NFTItemContentWithPrice
+                            name={NFT.name}
+                            collection={collection}
+                            creator={creator || undefined}
+                            owner={owner || undefined}
+                            order={orderData || undefined}
+                            bestOfferPrice={bestOfferPrice || 0}
+                            bestOfferPriceToken={bestOfferPriceToken || undefined}
+                            lastOfferPrice={lastOfferPrice || 0}
+                            lastOfferPriceToken={lastOfferPriceToken || undefined}
+                          />
+                        )}
                       />
-                    )}
-                  />
-                );
-              })
-            })}
-          </SimpleGrid>
+                    )
+                    : (
+                      <BundleItem
+                        key={order.id}
+                        NFTs={NFTs}
+                        order={order}
+                        renderContent={() => (
+                          <NFTItemContentWithPrice
+                            name={(order.make.assetType as IERC721BundleAssetType).bundleName}
+                            creator={NFTs[0].creator}
+                            order={order}
+                            // price={+utils.formatUnits(order.take.value, `${TOKENS_MAP[order.take.assetType.assetClass as TokenTicker].decimals}`)}
+                            // priceToken={order.take.assetType.assetClass as TokenTicker}
+                          />
+                        )}
+                      />
+                    );
+                })
+              })}
+            </SimpleGrid>
           }
           {isFetching && (
             <Container centerContent py={'20px !important'}>
