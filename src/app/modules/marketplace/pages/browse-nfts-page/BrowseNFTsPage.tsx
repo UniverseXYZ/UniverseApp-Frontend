@@ -17,7 +17,7 @@ import PriceRangeIcon from '../../../../../assets/images/v2/marketplace/filter-p
 import ArrowDownIcon from '../../../../../assets/images/arrow-down.svg';
 
 import { useAuthContext } from '../../../../../contexts/AuthContext'
-import { SigninPopup } from './SignInPopup'
+import { SigninPopup } from './components'
 import {
   SearchBar,
   ISearchBarValue,
@@ -40,7 +40,7 @@ import {
 } from '../../../nft/api';
 import { useThemeContext } from '../../../../../contexts/ThemeContext';
 import { OrderAssetClass } from '../../../nft/enums';
-import * as styles from './styles';
+import * as styles from './BrowseNFTsPage.styles';
 import { getTokenAddressByTicker } from '../../../../constants';
 import { TokenTicker } from '../../../../enums';
 import {
@@ -56,6 +56,7 @@ import {
 } from '../../../account/pages/my-nfts-page/components/search-filters';
 import { collectionKeys, nftKeys, orderKeys } from '../../../../utils/query-keys';
 import Badge from '../../../../../components/badge/Badge';
+import { FiltersContainer, FiltersStickyWrapper, FiltersWrapper, MoreFiltersButton } from './BrowseNFTsPage.styles';
 
 export type ICollectionsFilterValue = Array<any>;
 
@@ -385,79 +386,48 @@ export const BrowseNFTsPage = () => {
         {({ openMobileFilters }) => (
           <Box
             ref={filtersRef}
-            sx={{
-              bg: intersection?.intersectionRect.top === 0 ? 'white' : 'transparent',
-              my: '20px',
-              p: '20px !important',
-              position: 'sticky',
-              top: '-1px',
-              transition: '200ms',
-              w: '100%',
-              zIndex: 30,
-            }}
+            {...styles.FiltersStickyWrapper}
+            bg={intersection?.intersectionRect.top === 0 ? 'white' : 'transparent'}
           >
-            <Container maxW={'1360px'} py={'0 !important'} position={'relative'}>
-              <Flex justifyContent={'space-between'}>
-                <Box sx={{
-                  '> button, a': {
-                    mr: '14px',
-                  },
-                  '> button:nth-of-type(n+3):not(:nth-last-of-type(1))': {
-                    display: {
-                      base: 'none',
-                      lg: 'inline-flex',
-                    }
-                  }
-                }}>
-                  <SaleTypeFilterDropdown
-                    value={saleTypeFilterForm.values}
-                    onSave={(value) => saleTypeFilterForm.setValues(value)}
-                    onClear={() => saleTypeFilterForm.resetForm()}
-                  />
-                  <NFTTypeFilterDropdown
-                    value={nftTypeFilterForm.values}
-                    onSave={(value) => nftTypeFilterForm.setValues(value)}
-                    onClear={() => nftTypeFilterForm.resetForm()}
-                  />
-                  <PriceRangeFilterDropdown
-                    value={priceRangeFilterForm.values}
-                    isDirty={priceRangeFilterForm.dirty}
-                    onSave={(value) => priceRangeFilterForm.setValues(value)}
-                    onClear={() => priceRangeFilterForm.resetForm()}
-                  />
-                  <Button
-                    variant={'dropdown'}
-                    rightIcon={
-                      <Image src={ArrowDownIcon} sx={{
-                        width: '10px',
-                        transition: '200ms',
-                        transform: 'rotate(0deg)',
-                      }} />
-                    }
-                    sx={{
-                      fontSize: '14px',
-                      minWidth: 'fit-content',
-                      padding: '0 12px',
-                      position: 'relative',
-                      zIndex: 1,
-                      display: {
-                        base: 'none',
-                        md: 'inline-flex',
-                        lg: 'none',
-                      }
-                    }}
-                    onClick={openMobileFilters}
-                  >More</Button>
-                  {isFiltersDirty && (<ClearAll onClick={handleClear} />)}
-                </Box>
-                <Select
-                  label={'Sort by'}
-                  items={SortOrderOptions}
-                  value={sortBy}
-                  buttonProps={{ justifyContent: 'space-between', }}
-                  onSelect={(val) => setSortBy(val)}
+            <Container {...styles.FiltersContainer}>
+              <Box {...styles.FiltersWrapper}>
+                <SaleTypeFilterDropdown
+                  value={saleTypeFilterForm.values}
+                  onSave={(value) => saleTypeFilterForm.setValues(value)}
+                  onClear={() => saleTypeFilterForm.resetForm()}
                 />
-              </Flex>
+                <NFTTypeFilterDropdown
+                  value={nftTypeFilterForm.values}
+                  onSave={(value) => nftTypeFilterForm.setValues(value)}
+                  onClear={() => nftTypeFilterForm.resetForm()}
+                />
+                <PriceRangeFilterDropdown
+                  value={priceRangeFilterForm.values}
+                  isDirty={priceRangeFilterForm.dirty}
+                  onSave={(value) => priceRangeFilterForm.setValues(value)}
+                  onClear={() => priceRangeFilterForm.resetForm()}
+                />
+                <Button
+                  variant={'dropdown'}
+                  rightIcon={
+                    <Image src={ArrowDownIcon} sx={{
+                      width: '10px',
+                      transition: '200ms',
+                      transform: 'rotate(0deg)',
+                    }} />
+                  }
+                  {...styles.MoreFiltersButton}
+                  onClick={openMobileFilters}
+                >More</Button>
+                {isFiltersDirty && (<ClearAll onClick={handleClear} />)}
+              </Box>
+              <Select
+                label={'Sort by'}
+                items={SortOrderOptions}
+                value={sortBy}
+                buttonProps={{ justifyContent: 'space-between', }}
+                onSelect={(val) => setSortBy(val)}
+              />
             </Container>
           </Box>
         )}

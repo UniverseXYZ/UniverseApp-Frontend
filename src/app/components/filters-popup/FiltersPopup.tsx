@@ -147,7 +147,7 @@ export const FiltersPopup = (props: IFiltersPopupProps) => {
 
           <ModalFooter {...styles.ModalFooter} borderBottomRadius={{ base: 0, md: 'md' }}>
             <Box display={{ base: 'none', md: 'flex' }} justifyContent={'space-between'} w={'100%'} alignItems={'center'}>
-              <ClearAll onClick={() => handleClearAll()} />
+              <ClearAll onClick={handleClearAll} />
               <Button onClick={handleSave}>Save</Button>
             </Box>
             <Box display={{ base: 'block', md: 'none' }} w={'100%'}>
