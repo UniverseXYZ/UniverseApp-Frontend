@@ -188,7 +188,7 @@ export const mapNft = (data: INFTBackendType, collectionData: ICollection | unde
     collection: collectionData,
     tokenIds: [data.tokenId],
     url: data.metadata?.external_url,
-    id: data._id,
+    id: data._id || data.id || `${data.tokenId}-${data.contractAddress?.toLowerCase()}`,
     createdAt: new Date(data.createdAt),
     description: data.metadata?.description,
     updatedAt: new Date(data.updatedAt),
