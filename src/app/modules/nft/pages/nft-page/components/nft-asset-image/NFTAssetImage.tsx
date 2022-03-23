@@ -1,7 +1,13 @@
-import { Image, ImageProps } from '@chakra-ui/react';
+import { Box, Image, ImageProps } from '@chakra-ui/react';
 import React, { useState } from 'react';
 import BrokenNFT from '../../../../../../../components/marketplaceNFT/BrokenNFT';
 import { NFTAssetFullscreen } from '../nft-asset-full-screen';
+import * as styles from "../nft-info/styles/broken-asset.style";
+
+interface INFTAssetImageProps extends ImageProps {
+  image: string;
+  allowFullscreen?: boolean;
+}
 
 const ImageStyle: ImageProps = {
   borderRadius: '12px',
@@ -12,16 +18,15 @@ const ImageStyle: ImageProps = {
   w: 'calc(100vh - 84px - 120px)',
 }
 
-interface INFTAssetImageProps extends ImageProps {
-  image: string;
-  allowFullscreen?: boolean;
-}
 
 export const NFTAssetImage = ({ image, allowFullscreen = true, ...rest }: INFTAssetImageProps) => {
   const [fullscreen, setFullscreen] = useState(false);
   const [showError, setShowError] = useState(false);
 
-  return showError ? <BrokenNFT /> : (
+  return showError ? <Box {...styles.BrokenAssetStyle}>
+    <BrokenNFT />
+    </Box>
+   : (
     <>
       <Image
         src={image}
