@@ -67,7 +67,7 @@ export const BrowseNFTsPage = () => {
 
   const router = useHistory();
 
-  const [sortBy, setSortBy] = useState('');
+  const [sortBy, setSortBy] = useState(SortOrderOptionsEnum.RecentlyListed);
   const [isOpen, setIsOpen] = useState(false);
 
   const [selectedAddress, setSelectedAddress] = useState<string>();
