@@ -587,7 +587,7 @@ const TabletView = (props) => {
                       className="disable"
                     >
                       <img src={coreDropsIcon} alt="Core drops" />
-                      <span>OG Planet Drops</span>
+                      <span>OG Planet Drop</span>
                       <span className="tooltiptext">Coming soon</span>
                     </button>
                   </div>
