@@ -1,5 +1,6 @@
 export interface INFTBackendType {
   _id: string;
+  id: string;
   contractAddress: string;
   tokenId: string;
   createdAt: string;

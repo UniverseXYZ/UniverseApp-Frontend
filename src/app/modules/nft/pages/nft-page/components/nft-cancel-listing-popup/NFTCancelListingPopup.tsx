@@ -43,7 +43,7 @@ export const NFTCancelListingPopup = ({ order, isOpen, onClose }: INFTCancelList
   const [orderInterval, setOrderInterval] = useState<NodeJS.Timer>();
   
   const contract = useMemo(
-    () => new Contract(`${process.env.REACT_APP_MARKETPLACE_CONTRACT}`, contractsData.Marketplace.abi, signer),
+    () => signer ? new Contract(`${process.env.REACT_APP_MARKETPLACE_CONTRACT}`, contractsData.Marketplace.abi, signer) : null,
     [order, signer]
   );
 
@@ -64,7 +64,7 @@ export const NFTCancelListingPopup = ({ order, isOpen, onClose }: INFTCancelList
     const orderData: any = { ...order };
     orderData.make.assetType.tokenId = `${orderData.make.assetType.tokenId}`;
 
-    if (!order) {
+    if (!order || !contract) {
       return;
     }
 

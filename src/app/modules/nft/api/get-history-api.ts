@@ -61,6 +61,7 @@ export const GetHistoryApi = async (collectionAddress: string, tokenId: string):
       if (order.side === OrderSide.BUY && order.status === OrderStatus.FILLED) {
         const listingOrder = {
           ...order,
+          id: `${order.id}-listing`,
           createdAt: order.createdAt,
           side: OrderSide.BUY,
           status: OrderStatus.CREATED,

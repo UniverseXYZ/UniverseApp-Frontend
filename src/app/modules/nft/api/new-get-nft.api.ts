@@ -158,7 +158,10 @@ export const getURL = (url: string | null | undefined) => {
     return undefined;
   }
 
-  if (url.startsWith('ipfs://')) {
+  if (url.startsWith('ipfs://ipfs')) {
+    return url.replace('ipfs://', 'https://ipfs.io/');
+  }
+  else if (url.startsWith('ipfs://')) {
     return url.replace('ipfs://', 'https://ipfs.io/ipfs/');
   }
 
@@ -185,7 +188,7 @@ export const mapNft = (data: INFTBackendType, collectionData: ICollection | unde
     collection: collectionData,
     tokenIds: [data.tokenId],
     url: data.metadata?.external_url,
-    id: data._id,
+    id: data._id || data.id || `${data.tokenId}-${data.contractAddress?.toLowerCase()}`,
     createdAt: new Date(data.createdAt),
     description: data.metadata?.description,
     updatedAt: new Date(data.updatedAt),
