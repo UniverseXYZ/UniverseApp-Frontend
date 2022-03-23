@@ -200,7 +200,7 @@ export const CollectionInfo = () => {
                     <Box>
                       {isAuthenticated && address?.toLowerCase() === collectionOwner && ( //
                         <Button className="light-button" onClick={handleEdit}>
-                          <span>Edit</span>
+                          <span style={{ marginRight: '5px'}}>Edit</span>
                           <EditIcon />
                         </Button>
                       )}
