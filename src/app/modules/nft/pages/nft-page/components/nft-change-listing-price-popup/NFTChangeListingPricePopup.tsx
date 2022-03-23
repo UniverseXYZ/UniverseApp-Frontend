@@ -83,7 +83,7 @@ export const NFTChangeListingPricePopup = ({ nft, order, isOpen, onClose, }: INF
 
   const formik = useFormik<{ amount: string; token: TokenTicker }>({
     initialValues: {
-      amount: ethers.utils.formatEther(BigNumber.from(order?.take?.value || 0)),
+      amount: ethers.utils.formatUnits(BigNumber.from(order?.take?.value || 0),  getTokenByAddress((order?.take?.assetType as IERC721AssetType)?.contract)?.decimals),
       token: getTokenByAddress((order?.take?.assetType as IERC721AssetType)?.contract)?.ticker,
     },
     validationSchema: NFTChangeListingPriceValidationSchema,
@@ -195,7 +195,7 @@ export const NFTChangeListingPricePopup = ({ nft, order, isOpen, onClose, }: INF
   useEffect(() => {
     if (isOpen) {
       formik.setValues({
-        amount: ethers.utils.formatEther(BigNumber.from(order?.take?.value || 0)),
+        amount: ethers.utils.formatUnits(BigNumber.from(order?.take?.value || 0),  getTokenByAddress((order?.take?.assetType as IERC721AssetType)?.contract)?.decimals),
         token: getTokenByAddress((order?.take?.assetType as IERC721AssetType)?.contract)?.ticker,
       });
     } else {
