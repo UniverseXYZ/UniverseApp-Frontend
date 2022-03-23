@@ -8,6 +8,13 @@ import { ErrorContextProvider } from './contexts/ErrorContext';
 import { LoadingPopupContextProvider } from './app/providers/LoadingProvider';
 import { NFTCheckoutContextProvider } from './app/providers/NFTCheckoutProvider';
 
+// replace console.* for disable log on production
+if (process.env.NODE_ENV === 'production') {
+  console.log = () => {};
+  console.error = () => {};
+  console.debug = () => {};
+}
+
 ReactDOM.render(
   <BrowserRouter
     getUserConfirmation={() => {
