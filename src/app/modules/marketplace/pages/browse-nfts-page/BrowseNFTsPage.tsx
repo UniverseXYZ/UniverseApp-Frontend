@@ -43,6 +43,8 @@ import { OrderAssetClass } from '../../../nft/enums';
 import * as styles from './BrowseNFTsPage.styles';
 import { getTokenAddressByTicker } from '../../../../constants';
 import { TokenTicker } from '../../../../enums';
+import { collectionKeys, nftKeys, orderKeys } from '../../../../utils/query-keys';
+import Badge from '../../../../../components/badge/Badge';
 import {
   SaleTypeFilter,
   SaleTypeFilterDropdown,
@@ -53,10 +55,7 @@ import {
   useNFTTypeFilter,
   usePriceRangeFilter,
   useSaleTypeFilter,
-} from '../../../account/pages/my-nfts-page/components/search-filters';
-import { collectionKeys, nftKeys, orderKeys } from '../../../../utils/query-keys';
-import Badge from '../../../../../components/badge/Badge';
-import { FiltersContainer, FiltersStickyWrapper, FiltersWrapper, MoreFiltersButton } from './BrowseNFTsPage.styles';
+} from '../../../../components/filters';
 
 export type ICollectionsFilterValue = Array<any>;
 

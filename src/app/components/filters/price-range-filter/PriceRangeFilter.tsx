@@ -13,11 +13,11 @@ import {
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useFormik } from 'formik';
 
-import PriceRangeIcon from '../../../../../../../../assets/images/v2/marketplace/filter-price-range.svg';
+import PriceRangeIcon from '../../../../assets/images/v2/marketplace/filter-price-range.svg';
 
-import { CurrencySelect, Dropdown, DropdownFilterContainer } from '../../../../../../../components';
+import { CurrencySelect, Dropdown, DropdownFilterContainer } from '../../../components';
 import { IPriceRangeFilterProps, IPriceRangeFilterValue } from './types';
-import { coins } from '../../../../../../../mocks';
+import { coins } from '../../../mocks';
 
 export const usePriceRangeFilter = () => {
   const form = useFormik<IPriceRangeFilterValue>({

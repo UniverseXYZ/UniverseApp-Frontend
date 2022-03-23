@@ -29,6 +29,8 @@ import { useFiltersContext } from '../search-filters.context';
 import {
   SearchNFTsField,
   SortingDropdowns,
+} from '../index';
+import {
   SaleTypeFilter,
   NFTTypeFilter,
   PriceRangeFilter,
@@ -37,7 +39,7 @@ import {
   PriceRangeFilterDropdown,
   CollectionsFilterDropdown,
   CollectionsFilter,
-} from '../index';
+} from '../../../../../../../components/filters';
 
 const ClearAllStyle: LinkProps = {
   fontSize: '14px',

@@ -11,19 +11,21 @@ import { IUserOwnedCollection, ISearchBarDropdownCollection, INFT, IERC721AssetT
 import { GetCollectionNFTsApi } from '../../../../../nft/api';
 import { TokenTicker } from '../../../../../../enums';
 import {
-	ISaleTypeFilterValue,
-	INftTypeFilterValue,
-	IPriceRangeFilterValue,
 	ISearchBarValue,
 	ISortByFilterValue,
 	SortOrderOptions,
+} from '../search-filters';
+import { collectionKeys, nftKeys, orderKeys } from '../../../../../../utils/query-keys';
+import {
+	ISaleTypeFilterValue,
+	INftTypeFilterValue,
+	IPriceRangeFilterValue,
 	ICollectionsValue,
 	useCollectionsFilter,
 	useSaleTypeFilter,
 	useNFTTypeFilter,
 	usePriceRangeFilter,
-} from '../search-filters';
-import { collectionKeys, nftKeys, orderKeys } from '../../../../../../utils/query-keys';
+} from '../../../../../../components/filters';
 
 // Constants
 const PER_PAGE = 12;

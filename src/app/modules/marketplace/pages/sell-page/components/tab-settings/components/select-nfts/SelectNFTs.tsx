@@ -48,7 +48,6 @@ import {
   mapBackendUser,
 } from '../../../../../../../nft';
 import { NFTItemFooter, NFTItemFooterEditionsLabel } from '../../../../../../../nft/components/nft-item/components';
-import { SaleTypeFilterDropdown } from '../../../../../../../account/pages/my-nfts-page/components/search-filters';
 
 interface IActionBarNFTItemProps {
   nft: INFT;

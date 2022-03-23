@@ -2,7 +2,7 @@ import { BoxProps, Flex } from '@chakra-ui/react';
 import React from 'react';
 
 import { ICollectionsValue } from '../../types';
-import { getCollectionBackgroundColor } from '../../../../../../../../../../utils/helpers';
+import { getCollectionBackgroundColor } from '../../../../../../utils/helpers';
 
 const PlaceholderStyle: BoxProps = {
   alignItems: 'center',
