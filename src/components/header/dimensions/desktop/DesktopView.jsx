@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import Popup from 'reactjs-popup';
 import './DesktopView.scss';
@@ -54,6 +54,7 @@ const DesktopView = ({
   const [isDAODropdownOpened, setIsDAODropdownOpened] = useState(false);
   const [copied, setCopied] = useState(false);
   const history = useHistory();
+  const location = useLocation();
   const {
     address,
     isAuthenticated,
@@ -62,6 +63,8 @@ const DesktopView = ({
     usdEthBalance,
     resetConnectionState,
     loggedInArtist,
+    signOut,
+    isAuthenticating,
   } = useAuthContext();
 
   return (
@@ -81,6 +84,22 @@ const DesktopView = ({
           </button>
           <div className="dropdown minting-drop">
             <div className="dropdown__body">
+              <button
+                type="button"
+                // className="disable"
+                onClick={() => {
+                  setIsMintingDropdownOpened(false);
+                  if (location.pathname !== '/marketplace') {
+                    history.push('/marketplace');
+                  }
+                }}
+              >
+                <img src={marketplaceIcon} alt="NFT Marketplace" />
+                <span>
+                  NFT Marketplace <Badge text="beta" />
+                </span>
+                {/* <span className="tooltiptext">Coming soon</span> */}
+              </button>
               <button type="button" onClick={() => history.push('/minting')}>
                 <img src={mintingIcon} alt="Minting" />
                 <span>Minting</span>
@@ -94,19 +113,7 @@ const DesktopView = ({
                 }}
               >
                 <img src={auctionHouseIcon} alt="Auction House" />
-                <span>Auction house</span>
-                <span className="tooltiptext">Coming soon</span>
-              </button>
-              <button
-                type="button"
-                className="disable"
-                onClick={() => {
-                  // setIsMintingDropdownOpened(false);
-                  // history.push('/marketplace');
-                }}
-              >
-                <img src={marketplaceIcon} alt="NFT Marketplace" />
-                <span>NFT marketplace</span>
+                <span>Auction House</span>
                 <span className="tooltiptext">Coming soon</span>
               </button>
               <button
@@ -117,7 +124,7 @@ const DesktopView = ({
                 }}
               >
                 <img src={socialMediaIcon} alt="Social Media" />
-                <span>Social media</span>
+                <span>Social Media</span>
                 <span className="tooltiptext">Coming soon</span>
               </button>
             </div>
@@ -129,7 +136,7 @@ const DesktopView = ({
             className="menu-li"
             onClick={() => setIsPolymorphsDropdownOpened(!isPolymorphsDropdownOpened)}
           >
-            <span className="nav__link__title">NFT drops</span>
+            <span className="nav__link__title">NFT Drops</span>
             <img className="arrow" src={arrowUP} alt="arrow" />
           </button>
           <div className="dropdown minting-drop">
@@ -160,7 +167,7 @@ const DesktopView = ({
                 // }}
               >
                 <img src={coreDropsIcon} alt="Core drops" />
-                <span>OG planet drops</span>
+                <span>OG Planet Drop</span>
                 <span className="tooltiptext">Coming soon</span>
               </button>
             </div>
@@ -172,7 +179,7 @@ const DesktopView = ({
             className="menu-li"
             onClick={() => setIsPolymorphsDropdownOpened(!isPolymorphsDropdownOpened)}
           >
-            <span className="nav__link__title">Rarity charts</span>
+            <span className="nav__link__title">Rarity Charts</span>
             <img className="arrow" src={arrowUP} alt="arrow" />
           </button>
           <div className="dropdown minting-drop">
@@ -290,7 +297,7 @@ const DesktopView = ({
                 }}
               >
                 <img src={yieldFarmingIcon} alt="Yield Farming" />
-                <span>Yield farming</span>
+                <span>Yield Farming</span>
               </button>
               <button
                 type="button"
@@ -396,7 +403,7 @@ const DesktopView = ({
                   }}
                 >
                   <img src={myProfileIcon} alt="My Profile" />
-                  Edit my profile
+                  Edit My Profile
                 </button>
                 <button
                   type="button"
@@ -422,10 +429,8 @@ const DesktopView = ({
                   type="button"
                   className="signOut"
                   onClick={() => {
-                    resetConnectionState();
+                    signOut();
                     setIsAccountDropdownOpened(false);
-                    setIsWalletConnected(!isWalletConnected);
-                    history.push('/');
                   }}
                 >
                   <img src={signOutIcon} alt="Sign out" />
@@ -440,7 +445,7 @@ const DesktopView = ({
               closeOnDocumentClick={false}
               trigger={
                 <button type="button" className="sign__in">
-                  Sign In
+                  {isAuthenticating ? 'Signing in...' : 'Sign in'}
                 </button>
               }
             >

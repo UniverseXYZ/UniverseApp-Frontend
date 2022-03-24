@@ -49,7 +49,7 @@ const MintingPage = () => {
       <div className="select--title">
         <div className="container">
           <h1>Minting</h1>
-          <p>Mint NFTs or create a collection</p>
+          <p>Mint NFTs or Create a Collection</p>
         </div>
       </div>
       <div className="selecttype--section container">

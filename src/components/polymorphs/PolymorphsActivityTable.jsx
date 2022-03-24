@@ -8,8 +8,8 @@ const PolymorphsActivityTable = (props) => {
       {!!tableHead.length && (
         <thead>
           <tr>
-            {tableHead.map((elem, index) => (
-              <th className={elem.className} key={index.toString()}>
+            {tableHead.map((elem) => (
+              <th className={elem.className} key={elem}>
                 {elem.labelText}
               </th>
             ))}

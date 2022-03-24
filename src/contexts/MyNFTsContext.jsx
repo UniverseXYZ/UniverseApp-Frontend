@@ -1,11 +1,15 @@
-import React, { createContext, useState, useEffect, useContext } from 'react';
+import React, { createContext, useState, useContext } from 'react';
+import { useQuery } from 'react-query';
 import PropTypes from 'prop-types';
 import { useHistory } from 'react-router';
 import { getNftSummary } from '../utils/api/mintNFT';
+import { nftKeys } from '../app/utils/query-keys';
+import { useAuthContext } from './AuthContext';
 
 const MyNFTsContext = createContext(null);
 
 const MyNFTsContextProvider = ({ children }) => {
+  const { address, isAuthenticated, isAuthenticating } = useAuthContext();
   const history = useHistory();
 
   const allCharactersFilter = 'All Characters';
@@ -33,12 +37,9 @@ const MyNFTsContextProvider = ({ children }) => {
   const [myMintableCollections, setMyMintableCollections] = useState([]);
   const [userPageNftsCount, setUserPageNftsCount] = useState(0);
 
-  const [nftSummary, setNftSummary] = useState(null);
-
-  const fetchNftSummary = async () => {
-    const summary = await getNftSummary();
-    setNftSummary(summary);
-  };
+  const { data: nftSummary } = useQuery(nftKeys.fetchNftSummary(address), getNftSummary, {
+    enabled: !!address && isAuthenticated && !isAuthenticating,
+  });
 
   const navigateToMyUniverseNFTsTab = (characterFilter) => {
     setCollectionFilter(characterFilter);
@@ -93,7 +94,6 @@ const MyNFTsContextProvider = ({ children }) => {
         myNftsLoading,
         myMintableCollections,
         setMyMintableCollections,
-        fetchNftSummary,
         nftSummary,
         userPageNftsCount,
         setUserPageNftsCount,

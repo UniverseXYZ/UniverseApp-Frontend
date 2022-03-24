@@ -41,7 +41,7 @@ const SocialLinks = ({
         {!!twitterLink && (
           <div className="social--icons--grid--item">
             <span className="tooltiptext">Twitter</span>
-            <TwitterIcon width="18" height="14" fillColor="rgba(0, 0, 0, 0.4)" />
+            <TwitterIcon width="18" height="14" fillColor="rgba(255, 255, 255, 0.4)" />
           </div>
         )}
         {!!discordLink && (
@@ -51,7 +51,7 @@ const SocialLinks = ({
             aria-hidden
           >
             <span className="tooltiptext">Discord</span>
-            <DiscordIcon width="18" height="14" fillColor="rgba(0, 0, 0, 0.4)" />
+            <DiscordIcon width="18" height="14" fillColor="rgba(255, 255, 255, 0.4)" />
           </div>
         )}
         {!!siteLink && (
@@ -61,7 +61,7 @@ const SocialLinks = ({
             aria-hidden
           >
             <span className="tooltiptext">Website</span>
-            <WebsiteIcon width="16" height="16" fillColor="rgba(0, 0, 0, 0.4)" />
+            <WebsiteIcon width="16" height="16" fillColor="rgba(255, 255, 255, 0.4)" />
           </div>
         )}
         {!!instagramLink && (
@@ -71,7 +71,7 @@ const SocialLinks = ({
             aria-hidden
           >
             <span className="tooltiptext">Instagram</span>
-            <InstagramIcon width="16" height="16" fillColor="rgba(0, 0, 0, 0.4)" />
+            <InstagramIcon width="16" height="16" fillColor="rgba(255, 255, 255, 0.4)" />
           </div>
         )}
         {!!mediumLink && (
@@ -81,7 +81,7 @@ const SocialLinks = ({
             aria-hidden
           >
             <span className="tooltiptext">Medium</span>
-            <MediumIcon width="18" height="14" fillColor="rgba(0, 0, 0, 0.4)" />
+            <MediumIcon width="18" height="14" fillColor="rgba(255, 255, 255, 0.4)" />
           </div>
         )}
         {!!telegramLink && (
@@ -91,47 +91,64 @@ const SocialLinks = ({
             aria-hidden
           >
             <span className="tooltiptext">Telegram</span>
-            <TelegramIcon width="19" height="15" fillColor="rgba(0, 0, 0, 0.4)" />
+            <TelegramIcon width="19" height="15" fillColor="rgba(255, 255, 255, 0.4)" />
           </div>
         )}
       </div>
       <div className="social--icons--dropdown--wrapper">
-        <div className="three--dots" aria-hidden="true" onClick={handleClick}>
-          <div className="dots--grid">
-            <span />
-            <span />
-            <span />
+        {(twitterLink ||
+          discordLink ||
+          siteLink ||
+          instagramLink ||
+          mediumLink ||
+          telegramLink) && (
+          <div className="three--dots" aria-hidden="true" onClick={handleClick}>
+            <div className="dots--grid">
+              <span />
+              <span />
+              <span />
+            </div>
           </div>
-        </div>
-        {showDropdown ? (
+        )}
+        {showDropdown && (
           <div ref={ref} className="social--icons--dropdown">
-            <button type="button">
-              <TwitterIcon width="18" height="14" />
-              <span>Twitter</span>
-            </button>
-            <button type="button">
-              <DiscordIcon width="18" height="14" />
-              <span>Discord</span>
-            </button>
-            <button type="button">
-              <WebsiteIcon width="16" height="16" />
-              <span>Website</span>
-            </button>
-            <button type="button">
-              <InstagramIcon width="16" height="16" />
-              <span>Instagram</span>
-            </button>
-            <button type="button">
-              <MediumIcon width="18" height="14" />
-              <span>Medium</span>
-            </button>
-            <button type="button">
-              <TelegramIcon width="19" height="15" />
-              <span>Telegram</span>
-            </button>
+            {!!twitterLink && (
+              <button type="button">
+                <TwitterIcon width="18" height="14" />
+                <span>Twitter</span>
+              </button>
+            )}
+            {!!discordLink && (
+              <button type="button">
+                <DiscordIcon width="18" height="14" />
+                <span>Discord</span>
+              </button>
+            )}
+            {!!siteLink && (
+              <button type="button">
+                <WebsiteIcon width="16" height="16" />
+                <span>Website</span>
+              </button>
+            )}
+            {!!instagramLink && (
+              <button type="button">
+                <InstagramIcon width="16" height="16" />
+                <span>Instagram</span>
+              </button>
+            )}
+            {!!mediumLink && (
+              <button type="button">
+                <MediumIcon width="18" height="14" />
+                <span>Medium</span>
+              </button>
+            )}
+            {!!telegramLink && (
+              <button type="button">
+                <TelegramIcon width="19" height="15" />
+                <span>Telegram</span>
+              </button>
+            )}
           </div>
-        ) : (
-          <></>
         )}
       </div>
     </div>

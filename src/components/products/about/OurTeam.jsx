@@ -42,7 +42,7 @@ const OurTeam = () => {
             className="light-border-button"
             onClick={() => history.push('/team')}
           >
-            See the full team
+            See the Full Team
           </Button>
         </div>
       </div>

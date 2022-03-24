@@ -33,7 +33,7 @@ const ItemsPerPageDropdown = ({ perPage, setPerPage, itemsPerPage, offset, page,
 
   return (
     <div className="items__per__page">
-      <span>Items per page</span>
+      <span>Items Per Page</span>
       <button type="button" ref={ref} onClick={() => setShowDropdown(!showDropdown)}>
         <span>{perPage}</span>
         <img src={arrowDownIcon} alt="Chevron" className={showDropdown ? 'rotate' : ''} />

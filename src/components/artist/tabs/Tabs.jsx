@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
+import { utils } from 'ethers';
 import NFTsTab from './nfts/NFTsTab.jsx';
 import tabArrow from '../../../assets/images/tab-arrow.svg';
 import ActiveAuctionsTab from './activeAuctions/ActiveAuctionsTab.jsx';
@@ -7,12 +8,15 @@ import FutureAuctionsTab from './futureAuctions/FutureAuctionsTab.jsx';
 import PastAuctionsTab from './pastAuctions/PastAuctionsTab.jsx';
 import { handleTabLeftScrolling, handleTabRightScrolling } from '../../../utils/scrollingHandlers';
 import { useMyNftsContext } from '../../../contexts/MyNFTsContext.jsx';
+import { useAuthContext } from '../../../contexts/AuthContext';
+import { getNftsPerAddress } from '../../../utils/api/marketplace.ts';
 
 const Tabs = ({ username, artistAddress }) => {
   const [selectedTabIndex, setSelectedTabIndex] = useState(0);
-  const { userPageNftsCount, setUserPageNftsCount } = useMyNftsContext();
 
-  useEffect(() => setUserPageNftsCount(0), []);
+  const { nftSummary } = useMyNftsContext();
+  const { address } = useAuthContext();
+
   const scrollContainer = useRef();
   const scrollToTop = () => {
     if (scrollContainer && scrollContainer.current) {
@@ -39,7 +43,7 @@ const Tabs = ({ username, artistAddress }) => {
                 className={selectedTabIndex === 0 ? 'active' : ''}
               >
                 NFTs
-                <span>{userPageNftsCount}</span>
+                <span>{nftSummary?.nfts}</span>
               </button>
               {/* <button
                 type="button"

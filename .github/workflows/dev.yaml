@@ -2,7 +2,7 @@ name: Dev Environment
 on:
   push:
     branches:
-    - develop
+    - features/marketplace-v2
 
 jobs:
   build:
@@ -36,12 +36,12 @@ jobs:
         key: ${{ runner.os }}-${{ hashFiles('**/package-lock.json') }}
 
     - name: Install dependencies
-      run: yarn install
+      run: npm install
       env:
         CI: false
 
     - name: Build
-      run: yarn build
+      run: npm run build
       env:
         REACT_APP_API_BASE_URL: "https://dev.api.universe.xyz"
         REACT_APP_NETWORK_CHAIN_ID: 4
@@ -57,6 +57,13 @@ jobs:
         REACT_APP_ETHERSCAN_URL: "https://rinkeby.etherscan.io"
         REACT_APP_UNIVERSE_ERC_721_ADDRESS: "0x5a322b56ed080c559da183b69aa720d19690eaf2"
         REACT_APP_UNIVERSE_ERC_721_FACTORY_ADDRESS: "0xbdfff8b0306fd7af337c4842350625f50fd2be3a"
+        REACT_APP_DATASCRAPER_BACKEND: "https://dev.datascraper-api.universe.xyz"
+        REACT_APP_MARKETPLACE_BACKEND: "https://dev.marketplace-api.universe.xyz"
+        REACT_APP_MARKETPLACE_CONTRACT: "0xe441c394F917D5a90019C76897458257801ce132"
+        REACT_APP_ROYALTY_REGISTRY_CONTRACT: "0x58e1A04dC9d4655234f8eEc8071fC60093113648"
+        REACT_APP_FACEBOOK_APP_ID: "1384895125302127"
+        REACT_APP_CAPTCHA_ID: "6LcuWmseAAAAABfw8I5CXKUisFT3yT90uexc8Bc0"
+
         
     - name: Save artifacts
       uses: actions/upload-artifact@v2
@@ -114,14 +121,14 @@ jobs:
         aws-region: us-east-1
 
     - name: Deploy static site to S3
-      run: ls -l && aws s3 sync . s3://dev-devuniversexyz-origin --delete
+      run: ls -l && aws s3 sync . s3://marketplace-marketplacedevuniversexyz-origin --delete
 
     - name: Invalidate CloudFront cache
       run: |
         #!/usr/bin/env bash
         set -eou pipefail
 
-        CF_DIST_ID=$(aws cloudfront list-distributions --query "DistributionList.Items[?Aliases.Items!=null] | [?contains(Aliases.Items, 'dev.universe.xyz')].Id | [0]" | tr -d \")
+        CF_DIST_ID=$(aws cloudfront list-distributions --query "DistributionList.Items[?Aliases.Items!=null] | [?contains(Aliases.Items, 'marketplace.dev.universe.xyz')].Id | [0]" | tr -d \")
         echo "Clearing cache for ${CF_DIST_ID}..."
         CF_INVALIDATION_ID=$(aws cloudfront create-invalidation --distribution-id ${CF_DIST_ID} --paths "/*" | jq -r '.Invalidation.Id')
         while [ $(aws cloudfront get-invalidation --distribution-id ${CF_DIST_ID} --id ${CF_INVALIDATION_ID} | jq -r '.Invalidation.Status') != "Completed" ]; do

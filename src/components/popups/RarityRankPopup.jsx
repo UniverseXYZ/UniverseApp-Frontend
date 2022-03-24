@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 import closeIcon from '../../assets/images/close-menu.svg';
 import neverScrumbledIcon from '../../assets/images/never-scrambled-badge.svg';
 import scrumbledIcon from '../../assets/images/single-trait-scrambled-badge.svg';
@@ -34,21 +35,11 @@ const RarityRankPopup = ({ onClose, item }) => {
           <div className="rarity--rank--header">
             <div>
               <h1>{`Rarity Rank #${item.rank}`}</h1>
-              <a
-                target="_blank"
-                href={`https://${
-                  parseInt(process.env.REACT_APP_NETWORK_CHAIN_ID, 10) === 1
-                    ? 'opensea.io'
-                    : 'testnets.opensea.io'
-                }/assets/${
-                  parseInt(process.env.REACT_APP_NETWORK_CHAIN_ID, 10) === 1
-                    ? ''
-                    : `${process.env.REACT_APP_NETWORK_NAME.toLowerCase()}/`
-                }${process.env.REACT_APP_POLYMORPHS_CONTRACT_ADDRESS}/${item.tokenid}`}
-                rel="noreferrer"
+              <Link
+                to={`/nft/${process.env.REACT_APP_POLYMORPHS_CONTRACT_ADDRESS}/${item.tokenid}`}
               >
-                View on Opensea <img src={linkIcon} alt="Link Icon" />
-              </a>{' '}
+                View on Universe <img src={linkIcon} alt="Link Icon" />
+              </Link>{' '}
             </div>
             <p className="number">{`#${item.tokenid}`}</p>
           </div>

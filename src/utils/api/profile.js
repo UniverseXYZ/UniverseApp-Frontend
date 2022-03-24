@@ -104,7 +104,6 @@ export const getProfileInfo = async (address) => {
       Authorization: `Bearer ${localStorage.getItem('xyz_access_token')}`,
     },
   });
-
   if (!request.ok && request.status !== 201) {
     console.error(`Error while trying to GET profile info: ${request.statusText}`);
   }

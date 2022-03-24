@@ -7,6 +7,7 @@ import { Contract, utils } from 'ethers';
 import { DebounceInput } from 'react-debounce-input';
 import './CreateSingleNft.scss';
 import PropTypes from 'prop-types';
+import { useQueryClient } from 'react-query';
 import Button from '../../button/Button.jsx';
 import Input from '../../input/Input.jsx';
 import LoadingPopup from '../../popups/LoadingPopup.jsx';
@@ -44,6 +45,8 @@ import { useAuthContext } from '../../../contexts/AuthContext';
 import { useErrorContext } from '../../../contexts/ErrorContext';
 import CollectionChoice from './CollectionChoice';
 import universeIcon from '../../../assets/images/universe-img.svg';
+import { timeout } from '../../../app/utils/debounceConfig';
+import { nftKeys } from '../../../app/utils/query-keys';
 
 const MAX_FIELD_CHARS_LENGTH = {
   name: 32,
@@ -83,6 +86,8 @@ const SingleNFTForm = ({ scrollToTop }) => {
     signer,
     web3Provider,
   } = useAuthContext();
+
+  const queryClient = useQueryClient();
 
   const { setShowError, setErrorTitle, setErrorBody } = useErrorContext();
 
@@ -484,7 +489,7 @@ const SingleNFTForm = ({ scrollToTop }) => {
       // Get the contract instance to mint from
       const collectionContract =
         selectedCollection && selectedCollection.address !== universeCollection.address
-          ? new Contract(selectedCollection.address, contracts.UniverseERC721.abi, signer)
+          ? new Contract(selectedCollection.address, contracts.UniverseERC721Core.abi, signer)
           : universeERC721CoreContract;
 
       // Update saved NFT data, before getting the TokenURI
@@ -577,6 +582,7 @@ const SingleNFTForm = ({ scrollToTop }) => {
         setPreviewImage('');
         setProperties([{ name: '', value: '', errors: { name: '', value: '' } }]);
         setRoyaltyAddress([{ address, amount: '10' }]);
+        queryClient.invalidateQueries(nftKeys.fetchNftSummary(address));
       } else {
         setShowLoadingPopup(false);
         setShowError(true);
@@ -691,7 +697,7 @@ const SingleNFTForm = ({ scrollToTop }) => {
     if (typeof previewImage === 'string') {
       return previewImage;
     }
-    return URL.createObjectURL(previewImage);
+    return previewImage && URL.createObjectURL(previewImage);
   }, [previewImage]);
 
   const previewVideoSource = typeof previewImage === 'string' && previewImage.endsWith('.mp4');
@@ -993,7 +999,7 @@ const SingleNFTForm = ({ scrollToTop }) => {
                 if (e.target.value.length > MAX_FIELD_CHARS_LENGTH.description) return;
                 setDescription(e.target.value);
               }}
-              value={description}
+              value={description || ''}
             />
             <div className="box--shadow--effect--block" />
           </div>
@@ -1192,12 +1198,11 @@ const SingleNFTForm = ({ scrollToTop }) => {
                       <div className="property-address">
                         <h5>Wallet address</h5>
                         <DebounceInput
-                          debounceTimeout={150}
+                          debounceTimeout={timeout}
                           className={`${error ? 'error-inp inp' : 'inp'}`}
                           placeholder="0x89205A3A3b2A69De6Dbf7f01ED13B2108B2c43e7"
                           value={elm.address}
                           onChange={(e) => propertyChangesAddress(i, e.target.value)}
-                          hoverBoxShadowGradient
                         />
                         {error && <p className="error-message">{error}</p>}
                       </div>
@@ -1289,7 +1294,7 @@ const SingleNFTForm = ({ scrollToTop }) => {
                   <div className="property-address other-wallet">
                     <h5>Wallet address</h5>
                     <DebounceInput
-                      debounceTimeout={150}
+                      debounceTimeout={timeout}
                       className={`${otherWalletError ? 'error-inp inp' : 'inp'}`}
                       placeholder="0x89205A3A3b2A69De6Dbf7f01ED13B2108B2c43e7"
                       value={otherWalletValue}

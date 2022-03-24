@@ -1,8 +1,8 @@
 name: Alpha Environment
 on:
   push:
-    branches:
-    - main
+    tags:
+      - alpha-marketplace*
 
 jobs:
   build:
@@ -36,17 +36,17 @@ jobs:
         key: ${{ runner.os }}-${{ hashFiles('**/package-lock.json') }}
 
     - name: Install dependencies
-      run: yarn install
+      run: npm install
       env:
         CI: false
 
     - name: Build
-      run: yarn build
+      run: npm run build
       env:
-        REACT_APP_API_BASE_URL: "https://alpha.api.universe.xyz"
-        REACT_APP_NETWORK_CHAIN_ID: 1
+        REACT_APP_API_BASE_URL: "https://api.universe.xyz"
+        REACT_APP_NETWORK_CHAIN_ID: "1"
         REACT_APP_NETWORK_NAME: "Mainnet"
-        REACT_APP_BATCH_MINTING_CHUNK_SIZE: 40
+        REACT_APP_BATCH_MINTING_CHUNK_SIZE: "40"
         REACT_APP_POLYMORPHS_GRAPH_URL: "https://api.thegraph.com/subgraphs/name/strenev/polymorph"
         REACT_APP_LOBSTERS_GRAPH_URL: "https://api.thegraph.com/subgraphs/name/strenev/lobsters"
         REACT_APP_POLYMORPHS_CONTRACT_ADDRESS: "0x1cbb182322aee8ce9f4f1f98d7460173ee30af1f"
@@ -57,6 +57,12 @@ jobs:
         REACT_APP_ETHERSCAN_URL: "https://etherscan.io"
         REACT_APP_UNIVERSE_ERC_721_ADDRESS: "0xb67e6711c3bb2aa968be26703de20152d4948b38"
         REACT_APP_UNIVERSE_ERC_721_FACTORY_ADDRESS: "0x67aacc69f369846733e55a1f767e961743f58978"
+        REACT_APP_DATASCRAPER_BACKEND: "https://datascraper-api.universe.xyz"
+        REACT_APP_MARKETPLACE_BACKEND: "https://marketplace-api.universe.xyz"
+        REACT_APP_MARKETPLACE_CONTRACT: "0xB720279a6fc982721771427aA3B6B3a135f81dE3"
+        REACT_APP_ROYALTY_REGISTRY_CONTRACT: "0x2A9647901684caaeC6f026eEc0b1355195313cB5"
+        REACT_APP_FACEBOOK_APP_ID: "1384895125302127"
+        REACT_APP_CAPTCHA_ID: "6LcuWmseAAAAABfw8I5CXKUisFT3yT90uexc8Bc0"
 
     - name: Save artifacts
       uses: actions/upload-artifact@v2
@@ -114,14 +120,14 @@ jobs:
         aws-region: us-east-1
 
     - name: Deploy static site to S3
-      run: ls -l && aws s3 sync . s3://alpha-alphauniversexyz-origin --delete
+      run: ls -l && aws s3 sync . s3://marketplace-marketplacealphauniversexyz-origin --delete
 
     - name: Invalidate CloudFront cache
       run: |
         #!/usr/bin/env bash
         set -eou pipefail
 
-        CF_DIST_ID=$(aws cloudfront list-distributions --query "DistributionList.Items[?Aliases.Items!=null] | [?contains(Aliases.Items, 'alpha.universe.xyz')].Id | [0]" | tr -d \")
+        CF_DIST_ID=$(aws cloudfront list-distributions --query "DistributionList.Items[?Aliases.Items!=null] | [?contains(Aliases.Items, 'marketplace.alpha.universe.xyz')].Id | [0]" | tr -d \")
         echo "Clearing cache for ${CF_DIST_ID}..."
         CF_INVALIDATION_ID=$(aws cloudfront create-invalidation --distribution-id ${CF_DIST_ID} --paths "/*" | jq -r '.Invalidation.Id')
         while [ $(aws cloudfront get-invalidation --distribution-id ${CF_DIST_ID} --id ${CF_INVALIDATION_ID} | jq -r '.Invalidation.Status') != "Completed" ]; do

@@ -73,7 +73,7 @@ const SelectNfts = (props) => {
         <div className="select--nfts--footer--container">
           <div className="selected--nft--block">
             {selectedGalleryItem.map((elem, index) => (
-              <div className="selected--nft--item" key={index.toString()}>
+              <div className="selected--nft--item" key={elem}>
                 {elem.media.type === 'image/png' && (
                   <img src={URL.createObjectURL(elem.media)} alt="img" />
                 )}

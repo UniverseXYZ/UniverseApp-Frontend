@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { useHistory } from 'react-router-dom';
 import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
 import { AnimatedOnScroll } from 'react-animated-css-onscroll';
 import Popup from 'reactjs-popup';
@@ -10,6 +11,7 @@ import SubscribePopup from '../popups/SubscribePopup.jsx';
 const Welcome = () => {
   const [loaded, setLoaded] = useState(false);
   const ref = useRef();
+  const history = useHistory();
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -29,7 +31,7 @@ const Welcome = () => {
       <div className="welcome__section__container">
         <div className="left">
           <AnimatedOnScroll animationIn="fadeIn" animationInDelay={200}>
-            <h1 className="title">Welcome to the NFT Universe built on Ethereum</h1>
+            <h1 className="title">Welcome to the NFT Universe Built on Ethereum</h1>
           </AnimatedOnScroll>
           <AnimatedOnScroll animationIn="fadeIn" animationInDelay={400}>
             <p className="desc">
@@ -39,16 +41,13 @@ const Welcome = () => {
           </AnimatedOnScroll>
           <AnimatedOnScroll animationIn="fadeIn" animationInDelay={600}>
             <div className="links">
-              <Button
-                className="light-button"
-                onClick={() => window.open('https://github.com/UniverseXYZ/UniverseXYZ-Whitepaper')}
-              >
-                Whitepaper
+              <Button className="light-button" onClick={() => history.push('/marketplace')}>
+                Marketplace
               </Button>
               <Popup
                 trigger={
                   <button type="button" className="light-border-button">
-                    Join newsletter
+                    Join Newsletter
                   </button>
                 }
               >

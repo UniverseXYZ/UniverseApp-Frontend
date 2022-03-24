@@ -24,6 +24,9 @@ const Avatar = ({ selectedCollection }) => (
         alt={selectedCollection.name}
       />
     )}
+    <div className="collection__name">
+      <h1 title={selectedCollection.name}>{selectedCollection.name}</h1>
+    </div>
   </div>
 );
 

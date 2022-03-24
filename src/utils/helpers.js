@@ -57,13 +57,21 @@ export const defaultColors = [
   '#D7CCC8',
 ];
 
-export const getCollectionBackgroundColor = (collection) =>
-  defaultColors[
+const getRandomInt = (max) => Math.floor(Math.random() * max);
+
+export const getCollectionBackgroundColor = (collection) => {
+  if (!collection?.address) {
+    const r = getRandomInt(defaultColors.length);
+    return defaultColors[r];
+  }
+
+  return defaultColors[
     Math.floor(
       (collection?.id * collection?.address.charCodeAt(collection?.address.length - 1)) %
         defaultColors.length
     )
   ];
+};
 
 export const mapUserData = (userInfo) => {
   const map = {
