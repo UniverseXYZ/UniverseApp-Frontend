@@ -25,7 +25,8 @@ export const  NFTOffer: React.FC<INFTOfferProps> = ({offer, usersMap, owner, set
   const { address } = useAuthContext() as any;
   const neverExpired = !offer.start && !offer.end;
 
-  const expiredIn = neverExpired ? null : dayjs(offer.end * 1000).diff(new Date(), 'hours');
+  const expiredIn = neverExpired ? null : dayjs(offer.end * 1000).diff(new Date(), 'hours') > 0 ? dayjs(offer.end * 1000).diff(new Date(), 'hours') : dayjs(offer.end * 1000).diff(new Date(), 'minutes');
+  const timeLabel = neverExpired ? null : dayjs(offer.end * 1000).diff(new Date(), 'hours') > 0 ? 'hours' : 'minutes';
   const isExpired = expiredIn && !(expiredIn > 0);
   const offerUser = usersMap?.hasOwnProperty(offer.maker) ? usersMap[offer.maker] : {} as IUser;
   const canAcceptsOffers = owner?.toLowerCase() === address && !isExpired;
@@ -55,7 +56,7 @@ export const  NFTOffer: React.FC<INFTOfferProps> = ({offer, usersMap, owner, set
             : (
               isExpired
                 ? (<Text {...styles.ExpiredStyle} color={'#FF4949'}>Expired</Text>)
-                : (<Text {...styles.ExpiredStyle}>Expires in {expiredIn} hours</Text>)
+                : (<Text {...styles.ExpiredStyle}>Expires in {expiredIn} {timeLabel}</Text>)
             )
           }
         </Box>
