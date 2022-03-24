@@ -1,4 +1,4 @@
-import { Box, Image } from '@chakra-ui/react';
+import { Box, Center, Image, useImage } from '@chakra-ui/react';
 import React, { useState } from 'react';
 import { useMeasure } from 'react-use';
 
@@ -11,6 +11,7 @@ import { NFTItemAuctionCountdown } from '..';
 import { NFTItemAssetType } from './components';
 import { NFTAssetBroken } from '../../../../pages/nft-page/components/nft-asset-broken';
 import { getArtworkType, getArtworkTypeByUrl } from '../../../../../../helpers';
+import { Loading } from '../../../../../../components';
 
 interface INFTItemAssetProps {
   NFT: INFT;
@@ -36,6 +37,8 @@ export const NFTItemAsset = (props: INFTItemAssetProps) => {
   const [showCountdown, setShowCountdown] = useState(!!orderEnd && orderEnd > Math.floor(new Date().getTime() / 1000));
   const [showError, setShowError] = useState(false);
 
+  const imageState = useImage({ src: isImage ? NFT.thumbnailUrl : undefined });
+
   return (
     <Box ref={ref} pos={'relative'}>
       {NFT.artworkTypes && NFT.artworkTypes.length && !showError ? 
@@ -46,7 +49,12 @@ export const NFTItemAsset = (props: INFTItemAssetProps) => {
                 ? <Image src={isHover && gifUrl ? gifUrl : previewUrl} onError={() => setShowError(true)} alt={NFT.name}  />
                 : <video src={NFT.videoUrl || NFT.thumbnailUrl} onError={() => setShowError(true)} />}
             </>
-           || isImage && (<Image src={NFT.thumbnailUrl} onError={() => {setShowError(true)}} alt={NFT.name} />)
+           || isImage && (
+             <Image
+               src={NFT.thumbnailUrl}
+               fallback={<Center h={`${width}px`}><Loading /></Center>}
+               onError={() => {setShowError(true)}} alt={imageState}
+             />)
            || isAudio && (<Image src={AudioNFTPreviewImage} onError={() => setShowError(true)} alt={NFT.name} />)}
         </Box> : 
         <Box {...styles.BrokenAssetStyle(width)}>
