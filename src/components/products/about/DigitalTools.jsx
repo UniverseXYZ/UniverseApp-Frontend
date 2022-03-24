@@ -18,7 +18,7 @@ const DigitalTools = () => {
             <img src={blockOne} alt="Block" />
           </AnimatedOnScroll>
           <AnimatedOnScroll animationIn="fadeIn">
-            <h2 className="title">Efficient collection curating and launching</h2>
+            <h2 className="title">Efficient Collection Curating and Launching</h2>
             <p className="desc">
               Curate large collections of 100s or even 1000s of NFTs: Our tools allow you to easily
               customize and perfect your collection before you launch. Launching 100s of NFTs at a
@@ -31,13 +31,13 @@ const DigitalTools = () => {
                 history.push('/my-nfts/create', { tabIndex: 1, nftType: 'collection' })
               }
             >
-              Create NFT collection
+              Create NFT Collection
             </Button>
           </AnimatedOnScroll>
 
           {/* Block 2 */}
           <AnimatedOnScroll animationIn="fadeIn">
-            <h2 className="title">Easy to use UI for minting and selling NFTs</h2>
+            <h2 className="title">Easy to Use UI for Minting and Selling NFTs</h2>
             <p className="desc">
               We have combined UI and flows from industry leaders and tweaked it slightly to make an
               easy to use system for minting and selling NFTs. <br />
@@ -60,7 +60,7 @@ const DigitalTools = () => {
             <img src={blockThree} alt="Block" />
           </AnimatedOnScroll>
           <AnimatedOnScroll animationIn="fadeIn">
-            <h2 className="title">Powerful platform for auctioning NFTs</h2>
+            <h2 className="title">Powerful Platform for Auctioning NFTs</h2>
             <p className="desc">
               Sell any NFT in your collection whether you created it or bought it on the secondary
               market or another platform. You will be able to bundle an Euler beat with a Hashmask
@@ -72,7 +72,7 @@ const DigitalTools = () => {
               Set up auction
             </Button> */}
             <button type="button" className="light-border-button" disabled>
-              Coming soon
+              Coming Soon
             </button>
           </AnimatedOnScroll>
         </div>

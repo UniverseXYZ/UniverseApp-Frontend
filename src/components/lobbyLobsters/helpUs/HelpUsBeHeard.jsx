@@ -21,7 +21,7 @@ const HelpUsBeHeard = () => (
         />
       </div>
       <div className="right--block">
-        <h1>Help us be heard</h1>
+        <h1>Help Us Be Heard</h1>
         <p>
           Lobby Lobsters are shouting from underwater, but nobody hears them... &quot;WE WANT
           DECENTRALIZATION!&quot; Help the Lobby Lobsters get in front of Congress.

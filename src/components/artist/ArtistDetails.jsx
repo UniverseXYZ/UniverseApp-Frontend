@@ -53,7 +53,7 @@ const ArtistDetails = ({ artistAddress, onArtist, loading }) => {
   return (
     <div className="artist__details__section">
       <Animated animationIn="zoomIn">
-        {artistAddress && !onArtist ? (
+        {artistAddress && !onArtist.avatar ? (
           <div className="artist__details__section__container">
             <div className="avatar">
               <Blockies seed={artistAddress} size={9} scale={blockieScale} />

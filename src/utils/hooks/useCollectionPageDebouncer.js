@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import AwesomeDebouncePromise from 'awesome-debounce-promise';
 import useConstant from 'use-constant';
 import { useAsyncAbortable } from 'react-async-hook';
+import { utils } from 'ethers';
 import useStateIfMounted from './useStateIfMounted';
 
 const buildCollectionPageUrl = (address, offset, perPage, text) => {
@@ -9,6 +10,13 @@ const buildCollectionPageUrl = (address, offset, perPage, text) => {
   if (text) {
     endpoint = `${endpoint}&name=${text}`;
   }
+  return endpoint;
+};
+
+const buildCollectionPageNftsUrl = (address, page) => {
+  const endpoint = `${process.env.REACT_APP_DATA_SCRAPER}/v1/collections/${utils.getAddress(
+    address
+  )}/tokens?page=${page}&size=8`;
   return endpoint;
 };
 
@@ -23,21 +31,25 @@ export const useSearchCollection = (address) => {
   const [loadedPages, setLoadedPages] = useStateIfMounted([]);
   const [notFound, setNotFound] = useStateIfMounted(false);
 
-  const searchCollectionNfts = async (endpoint, abortSignal) => {
-    const result = await fetch(endpoint, {
+  const searchCollectionNfts = async (collectionEndpoint, nftsEndpoint, abortSignal) => {
+    const collectionData = await fetch(collectionEndpoint, {
       signal: abortSignal,
     });
-    if (result.status !== 200) {
+    const nftsData = await fetch(nftsEndpoint, {
+      signal: abortSignal,
+    });
+    if (collectionData.status !== 200) {
       setNotFound(true);
-      throw new Error(`bad status = ${result.status}`);
+      throw new Error(`bad status = ${collectionData.status}`);
     }
-    const json = await result.json();
+    const json = await collectionData.json();
+    json.nfts = await nftsData.json();
     setResults(json);
     return json;
   };
 
-  const loadMoreNfts = async (endpoint, abortSignal) => {
-    const result = await fetch(endpoint, {
+  const loadMoreNfts = async (nftsEndpoint, abortSignal) => {
+    const result = await fetch(nftsEndpoint, {
       signal: abortSignal,
     });
     if (result.status !== 200) {
@@ -45,9 +57,9 @@ export const useSearchCollection = (address) => {
     }
     const json = await result.json();
     setResults((old) => {
-      const concatedNfts = [...old.nfts, ...json.nfts];
-      json.nfts = concatedNfts;
-      return json;
+      const concatedNfts = [...old.nfts.data, ...json.data];
+      old.nfts.data = concatedNfts;
+      return old;
     });
     setIsLastPage(false);
     return json;
@@ -65,11 +77,17 @@ export const useSearchCollection = (address) => {
 
   const search = useAsyncAbortable(
     async (abortSignal, text) => {
-      const endpoint = buildCollectionPageUrl(address, perPage * apiPage, perPage, inputText);
+      const collectionEndpoint = buildCollectionPageUrl(
+        address,
+        perPage * apiPage,
+        perPage,
+        inputText
+      );
+      const nftsEndpoint = buildCollectionPageNftsUrl(address, apiPage + 1);
       if (apiPage === 0) {
-        return debouncedSearchCollectionNfts(endpoint, abortSignal);
+        return debouncedSearchCollectionNfts(collectionEndpoint, nftsEndpoint, abortSignal);
       }
-      return debouncedLoadMoreNfts(endpoint, abortSignal);
+      return debouncedLoadMoreNfts(nftsEndpoint, abortSignal);
     },
     // Ensure a new request is made everytime the text changes (even if it's debounced)
     [perPage, inputText, apiPage]

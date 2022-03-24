@@ -76,6 +76,8 @@ const TabletView = (props) => {
     usdEthBalance,
     resetConnectionState,
     loggedInArtist,
+    signOut,
+    isAuthenticating,
   } = useAuthContext();
 
   const { editProfileButtonClick } = useAuctionContext();
@@ -450,7 +452,7 @@ const TabletView = (props) => {
                     }}
                   >
                     <img src={myProfileIcon} alt="My Profile" />
-                    Edit my profile
+                    Edit My Profile
                   </button>
                   <button
                     type="button"
@@ -476,10 +478,8 @@ const TabletView = (props) => {
                     type="button"
                     className="signOut"
                     onClick={() => {
-                      resetConnectionState();
-                      setIsAccountDropdownOpened(!isAccountDropdownOpened);
-                      setIsWalletConnected(!isWalletConnected);
-                      history.push('/');
+                      signOut();
+                      setIsAccountDropdownOpened(false);
                     }}
                   >
                     <img src={signOutIcon} alt="Sign out" />
@@ -507,6 +507,22 @@ const TabletView = (props) => {
                 <div>
                   <p className="title">Products</p>
                   <div>
+                    <button
+                      type="button"
+                      // className="disable"
+                      onClick={() => {
+                        setShowMenu(false);
+                        history.push('/marketplace');
+                      }}
+                    >
+                      <img src={marketplaceIcon} alt="NFT Marketplace" />
+                      <span>
+                        NFT Marketplace <Badge text="beta" />
+                      </span>
+                      {/* <span className="tooltiptext">Coming soon</span> */}
+                    </button>
+                  </div>
+                  <div>
                     <button type="button" onClick={() => history.push('/minting')}>
                       <img src={mintingIcon} alt="Minting" />
                       <span>
@@ -525,28 +541,14 @@ const TabletView = (props) => {
                       }}
                     >
                       <img src={auctionHouseIcon} alt="Auction House" />
-                      <span>Auction house</span>
-                      <span className="tooltiptext">Coming soon</span>
-                    </button>
-                  </div>
-                  <div>
-                    <button
-                      type="button"
-                      className="disable"
-                      onClick={() => {
-                        // setShowMenu(false);
-                        // history.push('/marketplace');
-                      }}
-                    >
-                      <img src={marketplaceIcon} alt="NFT Marketplace" />
-                      <span>NFT marketplace</span>
+                      <span>Auction House</span>
                       <span className="tooltiptext">Coming soon</span>
                     </button>
                   </div>
                   <div>
                     <button type="button" className="disable">
                       <img src={socialMediaIcon} alt="Social Media" />
-                      <span>Social media</span>
+                      <span>Social Media</span>
                       <span className="tooltiptext">Coming soon</span>
                     </button>
                   </div>
@@ -585,13 +587,13 @@ const TabletView = (props) => {
                       className="disable"
                     >
                       <img src={coreDropsIcon} alt="Core drops" />
-                      <span>OG planet drops</span>
+                      <span>OG Planet Drop</span>
                       <span className="tooltiptext">Coming soon</span>
                     </button>
                   </div>
                 </div>
                 <div>
-                  <p className="title">Rarity charts</p>
+                  <p className="title">Rarity Charts</p>
                   <div>
                     <button
                       type="button"
@@ -686,7 +688,7 @@ const TabletView = (props) => {
                       onClick={() => window.open('https://dao.universe.xyz/yield-farming')}
                     >
                       <img src={yieldFarmingIcon} alt="Yield Farming" />
-                      <span>Yield farming</span>
+                      <span>Yield Farming</span>
                     </button>
                   </div>
                   <div>
@@ -717,7 +719,11 @@ const TabletView = (props) => {
                 </Popup> */}
                 <Popup
                   closeOnDocumentClick={false}
-                  trigger={<button type="button">Sign in</button>}
+                  trigger={
+                    <button type="button" className="sign__in">
+                      {isAuthenticating ? 'Signing in...' : 'Sign in'}
+                    </button>
+                  }
                 >
                   {(close) => (
                     <SelectWalletPopup

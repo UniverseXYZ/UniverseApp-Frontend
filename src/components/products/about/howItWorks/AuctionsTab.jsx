@@ -34,7 +34,7 @@ const AuctionsTab = () => {
             <span className="horizontal" />
             {!isFirstAccordionOpened && <span className="vertical" />}
           </div>
-          <h2 className="title">Set up reward tiers</h2>
+          <h2 className="title">Set Up Reward Tiers</h2>
         </div>
         <div className={`accordion__item__body ${isFirstAccordionOpened ? 'open' : ''}`}>
           <div className="auction-dropdown">
@@ -58,7 +58,7 @@ const AuctionsTab = () => {
             <span className="horizontal" />
             {!isSecondAccordionOpened && <span className="vertical" />}
           </div>
-          <h2 className="title">Set up Universe auction</h2>
+          <h2 className="title">Set Up Universe Auction</h2>
         </div>
         <div className={`accordion__item__body ${isSecondAccordionOpened ? 'open' : ''}`}>
           <div className="auction-dropdown">
@@ -99,7 +99,7 @@ const AuctionsTab = () => {
           Set up auction
         </Button> */}
         <button type="button" className="light-border-button" disabled>
-          Coming soon
+          Coming Soon
         </button>
       </div>
     </div>

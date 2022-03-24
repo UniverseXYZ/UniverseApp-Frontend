@@ -1,7 +1,7 @@
 @import "../../assets/scss/variables";
 @import "../../assets/scss/_mixins";
 
-footer {
+#root > footer {
   padding: 0;
   margin: 0;
   background: $black;
@@ -156,6 +156,12 @@ footer {
             color: rgba(255, 255, 255, 0.6);
             cursor: pointer;
             margin-bottom: 10px;
+
+            .badge {
+              top: 0;
+              margin-left: 8px;
+            }
+
             &:hover {
               color: $white;
             }

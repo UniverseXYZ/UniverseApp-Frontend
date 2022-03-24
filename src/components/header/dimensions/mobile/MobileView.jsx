@@ -86,7 +86,7 @@ const MobileView = (props) => {
     showMobileSearch,
     setShowMobileSearch,
   } = props;
-  const { address, yourBalance, yourEnsDomain, usdEthBalance, resetConnectionState } =
+  const { address, yourBalance, yourEnsDomain, usdEthBalance, signOut, isAuthenticating } =
     useAuthContext();
   const [isAccountDropdownOpened, setIsAccountDropdownOpened] = useState(false);
   const [copied, setCopied] = useState(false);
@@ -500,7 +500,7 @@ const MobileView = (props) => {
                     }}
                   >
                     <img src={myProfileIcon} alt="My Profile" />
-                    Edit my profile
+                    Edit My Profile
                   </button>
                   <button
                     type="button"
@@ -526,10 +526,8 @@ const MobileView = (props) => {
                     type="button"
                     className="signOut"
                     onClick={() => {
-                      resetConnectionState();
-                      setIsAccountDropdownOpened(!isAccountDropdownOpened);
-                      setIsWalletConnected(!isWalletConnected);
-                      history.push('/');
+                      signOut();
+                      setIsAccountDropdownOpened(false);
                     }}
                   >
                     <img src={signOutIcon} alt="Sign out" />
@@ -571,6 +569,22 @@ const MobileView = (props) => {
                       {showProducts ? (
                         <>
                           <div>
+                            <button
+                              type="button"
+                              // className="disable"
+                              onClick={() => {
+                                setShowMenu(false);
+                                history.push('/marketplace');
+                              }}
+                            >
+                              <img src={marketplaceIcon} alt="NFT Marketplace" />
+                              <span>
+                                NFT Marketplace <Badge text="beta" />
+                              </span>
+                              {/* <span className="tooltiptext">Coming soon</span> */}
+                            </button>
+                          </div>
+                          <div>
                             <button type="button" onClick={() => history.push('/minting')}>
                               <img src={mintingIcon} alt="Minting" />
                               <span>Minting</span>
@@ -586,28 +600,14 @@ const MobileView = (props) => {
                               }}
                             >
                               <img src={auctionHouseIcon} alt="Auction House" />
-                              <span>Auction house</span>
-                              <span className="tooltiptext">Coming soon</span>
-                            </button>
-                          </div>
-                          <div>
-                            <button
-                              type="button"
-                              className="disable"
-                              onClick={() => {
-                                // setShowMenu(false);
-                                // history.push('/marketplace');
-                              }}
-                            >
-                              <img src={marketplaceIcon} alt="NFT Marketplace" />
-                              <span>NFT marketplace</span>
+                              <span>Auction House</span>
                               <span className="tooltiptext">Coming soon</span>
                             </button>
                           </div>
                           <div>
                             <button type="button" className="disable">
                               <img src={socialMediaIcon} alt="Social Media" />
-                              <span>Social media</span>
+                              <span>Social Media</span>
                               <span className="tooltiptext">Coming soon</span>
                             </button>
                           </div>
@@ -659,7 +659,7 @@ const MobileView = (props) => {
                               className="disable"
                             >
                               <img src={coreDropsIcon} alt="Core drops" />
-                              <span>OG planet drops</span>
+                              <span>OG Planet Drop</span>
                               <span className="tooltiptext">Coming soon</span>
                             </button>
                           </div>
@@ -674,7 +674,7 @@ const MobileView = (props) => {
                         aria-hidden="true"
                         onClick={() => setShowRarityCharts(!showRarityCharts)}
                       >
-                        <p className="title">Rarity charts</p>
+                        <p className="title">Rarity Charts</p>
                         <img
                           className={showRarityCharts ? 'rotate' : ''}
                           src={arrowDown}
@@ -803,7 +803,7 @@ const MobileView = (props) => {
                               onClick={() => window.open('https://dao.universe.xyz/yield-farming')}
                             >
                               <img src={yieldFarmingIcon} alt="Yield Farming" />
-                              <span>Yield farming</span>
+                              <span>Yield Farming</span>
                             </button>
                           </div>
                           <div>
@@ -833,8 +833,12 @@ const MobileView = (props) => {
                 </li>
                 {!isWalletConnected && (
                   <li className="sign__in">
-                    <button type="button" onClick={() => setShowSelectWallet(true)}>
-                      Sign In
+                    <button
+                      type="button"
+                      className="sign__in"
+                      onClick={() => setShowSelectWallet(true)}
+                    >
+                      {isAuthenticating ? 'Signing in...' : 'Sign in'}
                     </button>
                   </li>
                 )}
@@ -857,20 +861,28 @@ const MobileView = (props) => {
                       <button type="button" onClick={() => handleConnectWallet('Metamask')}>
                         <img src={metamaskLogo} alt="Metamask" />
                       </button>
-                      <button type="button" onClick={() => handleConnectWallet('Ledger')}>
-                        <img src={ledgerLogo} alt="Ledger" />
-                      </button>
-                      <button type="button" onClick={() => handleConnectWallet('Keystore')}>
-                        <img src={keystoreLogo} alt="Keystore" />
-                      </button>
-                      <button type="button" onClick={() => handleConnectWallet('Trezor')}>
-                        <img src={trezorLogo} alt="Trezor" />
-                      </button>
-                      <button type="button" onClick={() => handleConnectWallet('Coinbase')}>
-                        <img src={coinbaseLogo} alt="Coinbase" />
-                      </button>
                       <button type="button" onClick={() => handleConnectWallet('WalletConnect')}>
                         <img src={walletConnectLogo} alt="WalletConnect" />
+                      </button>
+                      <button type="button" disabled onClick={() => handleConnectWallet('Ledger')}>
+                        <img src={ledgerLogo} alt="Ledger" />
+                      </button>
+                      <button
+                        type="button"
+                        disabled
+                        onClick={() => handleConnectWallet('Keystore')}
+                      >
+                        <img src={keystoreLogo} alt="Keystore" />
+                      </button>
+                      <button type="button" disabled onClick={() => handleConnectWallet('Trezor')}>
+                        <img src={trezorLogo} alt="Trezor" />
+                      </button>
+                      <button
+                        type="button"
+                        disabled
+                        onClick={() => handleConnectWallet('Coinbase')}
+                      >
+                        <img src={coinbaseLogo} alt="Coinbase" />
                       </button>
                     </div>
                     <p className="info">

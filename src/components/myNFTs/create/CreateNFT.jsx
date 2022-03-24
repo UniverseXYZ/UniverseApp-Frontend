@@ -12,7 +12,6 @@ const CreateNFT = () => {
   const [selectedTabIndex, setSelectedTabIndex] = useState(0);
   const [selectedNFTType, setSelectedNFTType] = useState('');
   const [backPath, setBackPath] = useState('');
-  const [showCollectible, setShowCollectible] = useState(false);
 
   const scrollContainer = useRef(null);
 
@@ -60,7 +59,7 @@ const CreateNFT = () => {
           <h1 className="page--title">
             {selectedTabIndex === 0 ||
             (selectedTabIndex === 1 && selectedNFTType === 'single') ||
-            (selectedTabIndex === 1 && selectedNFTType === 'collection' && showCollectible)
+            (selectedTabIndex === 1 && selectedNFTType === 'collection')
               ? 'Create NFT'
               : 'Create NFT collection'}
           </h1>
@@ -78,11 +77,7 @@ const CreateNFT = () => {
             <SingleNFTForm scrollToTop={scrollToTop} />
           )}
           {selectedTabIndex === 1 && selectedNFTType === 'collection' && (
-            <NFTCollectionForm
-              showCollectible={showCollectible}
-              setShowCollectible={setShowCollectible}
-              scrollToTop={scrollToTop}
-            />
+            <NFTCollectionForm scrollToTop={scrollToTop} />
           )}
         </div>
       </div>

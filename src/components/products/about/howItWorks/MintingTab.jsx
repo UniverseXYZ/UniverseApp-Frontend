@@ -65,7 +65,7 @@ const MintingTab = () => {
             <span className="horizontal" />
             {!isSecondAccordionOpened && <span className="vertical" />}
           </div>
-          <h2 className="title">Upload images, audio or video, and fill the meta data</h2>
+          <h2 className="title">Upload Images, Audio, or Video, and Fill the Metadata</h2>
         </div>
         <div className={`accordion__item__body ${isSecondAccordionOpened ? 'open' : ''}`}>
           <div className="dropdown-info-middle">
@@ -89,7 +89,7 @@ const MintingTab = () => {
             <span className="horizontal" />
             {!isThirdAccordionOpened && <span className="vertical" />}
           </div>
-          <h2 className="title">Mint NFTs or save for later</h2>
+          <h2 className="title">Mint NFTs or Save for Later</h2>
         </div>
         <div className={`accordion__item__body ${isThirdAccordionOpened ? 'open' : ''}`}>
           <div className="dropdown-info-last">

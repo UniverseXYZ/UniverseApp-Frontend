@@ -26,6 +26,7 @@ import { sendBatchMintRequest, sendMintRequest } from '../../userFlows/api/Contr
 import { createMintingNFT, getMetaForSavedNft } from '../../utils/api/mintNFT';
 import { formatRoyaltiesForMinting } from '../../utils/helpers/contractInteraction';
 import useStateIfMounted from '../../utils/hooks/useStateIfMounted';
+import { getNftsPerAddress } from '../../utils/api/marketplace.ts';
 
 const MyNFTs = () => {
   const tabs = ['Wallet', 'Collections', 'Saved NFTs', 'Universe NFTs'];
@@ -39,7 +40,6 @@ const MyNFTs = () => {
     activeTxHashes,
     setActiveTxHashes,
     nftSummary,
-    fetchNftSummary,
   } = useMyNftsContext();
 
   const { userLobsters } = useLobsterContext();
@@ -87,10 +87,6 @@ const MyNFTs = () => {
     return () => {
       document.title = 'Universe Minting';
     };
-  }, []);
-
-  useEffect(() => {
-    fetchNftSummary();
   }, []);
 
   const handleMintSelected = async () => {
@@ -234,7 +230,6 @@ const MyNFTs = () => {
         setShowLoading(false);
         setShowCongratsMintedSavedForLater(true);
         setTriggerRefetch(true);
-        fetchNftSummary();
       } else {
         setShowLoading(false);
         setShowError(true);

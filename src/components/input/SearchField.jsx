@@ -69,8 +69,7 @@ const SearchField = (props) => {
                   <p>No items found</p>
                 </div>
               )}
-              {!!findData.length &&
-                findData.map((elem, index) => <CardElement {...elem} key={index.toString()} />)}
+              {!!findData.length && findData.map((elem) => <CardElement {...elem} key={elem} />)}
             </div>
           )}
         </>

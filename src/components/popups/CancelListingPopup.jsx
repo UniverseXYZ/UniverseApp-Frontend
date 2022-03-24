@@ -9,7 +9,7 @@ const CancelListingPopup = ({ close }) => (
     <h1>Are you sure you want to cancel your listing?</h1>
     <p>
       Canceling your listing will unpublish this sale from Universe and requires a transaction to
-      make sure it will never be fulfilable.
+      make sure it will never be fulfillable.
     </p>
     <div className="button__div">
       <Button className="light-button">Cancel listing</Button>

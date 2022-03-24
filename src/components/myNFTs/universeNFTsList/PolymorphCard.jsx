@@ -24,7 +24,9 @@ const PolymorphCard = ({ item }) => {
           onClick={() => {
             setSelectedNftForScramble(item);
             history.push(
-              item.type === 'polymorph' ? `/polymorphs/${item.id}` : `/lobsters/${item.id}`
+              item.type === 'polymorph'
+                ? `/polymorphs/${item.id}`
+                : `/nft/${process.env.REACT_APP_LOBSTERS_CONTRACT_ADDRESS}/${item.id}`
             );
           }}
         />

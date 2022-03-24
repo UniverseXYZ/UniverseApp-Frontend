@@ -10,10 +10,13 @@ import coinGesco from '../../assets/images/coingecko-icon.svg';
 import youtubeIcon from '../../assets/images/youtube.svg';
 import mediumIcon from '../../assets/images/medium.svg';
 import SubscribePopup from '../popups/SubscribePopup.jsx';
+import { useLayout } from '../../app/providers';
+import Badge from '../badge/Badge';
 
 const Footer = () => {
   const history = useHistory();
   const [email, setEmail] = useState('');
+  const { footerRef } = useLayout();
 
   const handleSubscribe = () => {
     const re =
@@ -43,7 +46,7 @@ const Footer = () => {
     }
   };
   return (
-    <footer>
+    <footer ref={footerRef}>
       <Popup
         trigger={
           <button
@@ -69,7 +72,7 @@ const Footer = () => {
               </p>
             </div>
             <div className="subscribe">
-              <p>Stay up to date with our newsletter</p>
+              <p>Stay Up to Date With Our Newsletter</p>
               <div className="form">
                 <input
                   type="email"
@@ -90,6 +93,10 @@ const Footer = () => {
               <div>
                 <ul>
                   <li>Products</li>
+                  <li onClick={() => history.push('/marketplace')} aria-hidden="true">
+                    NFT Marketplace
+                    <Badge text="beta" />
+                  </li>
                   <li aria-hidden="true" onClick={() => history.push('/minting')}>
                     Minting
                   </li>
@@ -100,15 +107,7 @@ const Footer = () => {
                     // }
                     aria-hidden="true"
                   >
-                    Auction house
-                    <span className="tooltiptext">Coming soon</span>
-                  </li>
-                  <li
-                    className="disable"
-                    // onClick={() => history.push('/marketplace')}
-                    aria-hidden="true"
-                  >
-                    NFT Marketplace
+                    Auction House
                     <span className="tooltiptext">Coming soon</span>
                   </li>
                   <li className="disable">
@@ -131,14 +130,14 @@ const Footer = () => {
                     // onClick={() => history.push('/core-drops')}
                     aria-hidden="true"
                   >
-                    OG planet drop
+                    OG Planet Drop
                     <span className="tooltiptext">Coming soon</span>
                   </li>
                 </ul>
               </div>
               <div>
                 <ul>
-                  <li>Rarity charts</li>
+                  <li>Rarity Charts</li>
                   <li onClick={() => history.push('/polymorph-rarity')} aria-hidden="true">
                     Polymorphs
                   </li>
@@ -191,7 +190,7 @@ const Footer = () => {
                     aria-hidden="true"
                     onClick={() => window.open('https://dao.universe.xyz/yield-farming')}
                   >
-                    Yield farming
+                    Yield Farming
                   </li>
                   <li aria-hidden="true" onClick={() => window.open('https://forum.universe.xyz/')}>
                     Forum
@@ -222,7 +221,7 @@ const Footer = () => {
                 )
               }
             >
-              Add liquidity to SushiSwap USDC/XYZ pool
+              Add Liquidity to SushiSwap USDC/XYZ Pool
             </span>
             <span
               aria-hidden="true"
@@ -232,7 +231,7 @@ const Footer = () => {
                 )
               }
             >
-              SushiSwap USDC/XYZ market
+              SushiSwap USDC/XYZ Market
             </span>
           </div>
           <div className="join__community">

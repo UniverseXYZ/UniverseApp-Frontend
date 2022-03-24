@@ -41,7 +41,7 @@ const Polymorphs = () => {
   const [mobile, setMobile] = useState(false);
   const { data } = useGraphQueryHook(queryPolymorphsGraph(morphedPolymorphs));
   const { polymorphsFilter, navigateToMyUniverseNFTsTab } = useMyNftsContext();
-  const { ethPrice } = useAuthContext();
+  const { ethUsdPrice } = useAuthContext();
   useLayoutEffect(() => {
     function handleResize() {
       if (+window.innerWidth <= 575) setMobile(true);
@@ -65,7 +65,7 @@ const Polymorphs = () => {
     <div className="polymorphs">
       <WelcomeWrapper
         title="Polymorph Universe"
-        hintText="A universe of polymorphic creatures with the power to mutate on demand"
+        hintText="A universe of polymorphic creatures with the power to mutate on demand."
         popupBtnText="My Polymorphs"
         btnText="Mint a morph"
         btnOnClick={redirectToMyPolymorphs}
@@ -82,7 +82,7 @@ const Polymorphs = () => {
       {/* <Characters /> */}
       <Section4 />
       <PolymorphsActivity
-        ethPrice={ethPrice?.market_data?.current_price?.usd.toString()}
+        ethPrice={ethUsdPrice.toString()}
         mobile={mobile}
         morphEntities={data?.tokenMorphedEntities}
       />
