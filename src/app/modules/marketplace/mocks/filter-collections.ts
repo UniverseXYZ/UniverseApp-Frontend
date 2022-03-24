@@ -37,4 +37,7 @@ export const FilterCollectionsItems = [
   {id: 36, address: "0xD8ab2B8b8A6036DcB91D44cbDf6e9a42a199EBE2", name: "PixaWitches", image:"https://lh3.googleusercontent.com/2S4bUu0u2jkdfn7ATH7MnUxoXj8ikl1TIcvEWDbaL2MtfJwU3sikxqCEC6I9AQSXianiDExTBnphzUici2PV6xilFinFDKZreK09v_A=s130"},
   {id: 37, address: "0xc6b0B290176AaaB958441Dcb0c64ad057cBc39a0", name: "PixaWizards", image:"https://lh3.googleusercontent.com/nwvYgwZp-ln5cix5p4r7axRPxhhAsgQrrOcaf5vVsxNBecjzRhXyRDkgd5m0ZO3SB7zzfAZNGZkIOFiNg4GlNmBrn0TLpe1pTp_PTAw=s130"},
   {id: 38, address: "0xAFeF885027A59603dfF7837C280DaD772c476b82", name: "OMGKirby", image:"https://lh3.googleusercontent.com/hlenqhWgD9qAowKSlJZf1_n4BIFknUzpJYtTal8gyZ1hxYCce2wVrRZXISZusPn9DXKbtT7_gKja_Hd99RYeRXYeWzExsSS-aL-P6og=s130"},
+  {id: 39, address: "0x42069ABFE407C60cf4ae4112bEDEaD391dBa1cdB", name: "CryptoDickbutts", image:"https://lh3.googleusercontent.com/vw-gp8yUYkQsxQN5xbHrWEhY7rQWQZhIjgO2tvLxu46VY6iwulwWZt5VFS2Q9gy9qJaiJk8QspZs0qaM9z1ODeIyeUUseABOxdfVrC8=s130"},
+  {id: 40, address: "0x5Af0D9827E0c53E4799BB226655A1de152A425a5", name: "Wᴉlɐpʎ Wɐʞǝɹ", image:"https://lh3.googleusercontent.com/j8PFqoTtQQ1LkwnFhBRUwFvG2RVXrLpnmSZ6d5he2yxJnDvN3NcaWIaK9Vnmk5Ip2VhrSNVfQD10MyPyM8R1jjs8z1d6cPtjgcPWcA=s130"},
+  {id: 41, address: "0xCa7cA7BcC765F77339bE2d648BA53ce9c8a262bD", name: "Tubby Cats", image:"https://lh3.googleusercontent.com/XHZY9623keDQqFSDHKqOdcjD99Y7N82K1egYRM2Mm1Z-Jxn5myrkKiC5NBktWKStVtTzDzwELy9dNpzTWJTIkLsdMIxUHI86jduQ=s130"},
   ];
