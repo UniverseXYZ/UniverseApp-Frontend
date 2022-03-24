@@ -34,4 +34,7 @@ export const FilterCollectionsItems = [
   {id: 32, address: "0x67d9417c9c3c250f61a83c7e8658dac487b56b09", name: "PhantaBear", image:"https://lh3.googleusercontent.com/1wTnxFx6paNeV1lv_ht10OFpDucUhg-fL6IZbPrai3Jf_3pHS5dSazhpU_UBn2BVQBUEffYAeoo2iVbCu9LPeUDhmwZwt_7J4xpdrQ=s0"},
   {id: 33, address: "0x4b3406a41399c7fd2ba65cbc93697ad9e7ea61e5", name: "LOSTPOETS", image:"https://lh3.googleusercontent.com/cGKkMxKQ-7J0A4mZvcPqr2LKvGqIVsXjzGqpfxRNb4yVr-zTycPJ0kznkwKqDyUTg--A32oW8cI32BQBl6hrbM-frn1__o544ECpCg=s0"},
   {id: 35, address: "0x16de9D750F4AC24226154C40980Ef83d4D3fD4AD", name: "Ethlizards", image:"https://lh3.googleusercontent.com/xQtMH32KlwsBh0Ka2gwzHhy8Qu7-rbh15SQaPqz8xe7ZC1TH_MkSTgLAaNg4hPcsupacDqPVciBaXlqDNpZzDgGOfHHbXYaSxwGzUg=s130"},
+  {id: 36, address: "0xD8ab2B8b8A6036DcB91D44cbDf6e9a42a199EBE2", name: "PixaWitches", image:"https://lh3.googleusercontent.com/2S4bUu0u2jkdfn7ATH7MnUxoXj8ikl1TIcvEWDbaL2MtfJwU3sikxqCEC6I9AQSXianiDExTBnphzUici2PV6xilFinFDKZreK09v_A=s130"},
+  {id: 37, address: "0xc6b0B290176AaaB958441Dcb0c64ad057cBc39a0", name: "PixaWizards", image:"https://lh3.googleusercontent.com/nwvYgwZp-ln5cix5p4r7axRPxhhAsgQrrOcaf5vVsxNBecjzRhXyRDkgd5m0ZO3SB7zzfAZNGZkIOFiNg4GlNmBrn0TLpe1pTp_PTAw=s130"},
+  {id: 38, address: "0xAFeF885027A59603dfF7837C280DaD772c476b82", name: "OMGKirby", image:"https://lh3.googleusercontent.com/hlenqhWgD9qAowKSlJZf1_n4BIFknUzpJYtTal8gyZ1hxYCce2wVrRZXISZusPn9DXKbtT7_gKja_Hd99RYeRXYeWzExsSS-aL-P6og=s130"},
   ];
