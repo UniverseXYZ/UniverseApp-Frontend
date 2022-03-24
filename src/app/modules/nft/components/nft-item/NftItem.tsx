@@ -214,7 +214,7 @@ export const NftItem = (
                 isLoadingCreator,
                 isLoadingOwner,
               }) : (
-                <NFTItemAsset NFT={NFT} orderEnd={orderEnd || 0} isHover={isHover} />
+                <NFTItemAsset NFT={NFT} orderEnd={orderEnd || orderData?.end || 0} isHover={isHover} />
               )
             }
           </Box>

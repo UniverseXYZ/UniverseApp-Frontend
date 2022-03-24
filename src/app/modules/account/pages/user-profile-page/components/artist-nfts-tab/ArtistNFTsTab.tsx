@@ -100,6 +100,7 @@ export const ArtistNFTsTab = ({ artistAddress, onTotalLoad }: IArtistNFTsTabProp
                               key={order.id}
                               NFT={NFTs[0]}
                               collection={`${NFTs[0].collection?.address}`}
+                              orderEnd={order.end}
                               renderContent={({
                                 NFT,
                                 collection,
@@ -121,7 +122,7 @@ export const ArtistNFTsTab = ({ artistAddress, onTotalLoad }: IArtistNFTsTabProp
                                   bestOfferPriceToken={bestOfferPriceToken || undefined}
                                   lastOfferPrice={lastOfferPrice || 0}
                                   lastOfferPriceToken={lastOfferPriceToken || undefined}
-                                />
+                                /> 
                               )}
                             />
                           );
