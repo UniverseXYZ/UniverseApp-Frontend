@@ -123,7 +123,7 @@ export const NFTChangeListingPricePopup = ({ nft, order, isOpen, onClose, }: INF
       const make: any = {
         assetType: {
           assetClass: nft?.standard,
-          contract: nft?.collection?.address,
+          contract: nft?._collectionAddress?.toLowerCase(),
           tokenId: nft.tokenId,
         },
         value: '1',
