@@ -91,7 +91,7 @@ const HistoryEvent: React.FC<IHistoryEventProps> = ({ event, onlyListings, cance
             <Box {...styles.ActionLabelStyle}>{nameLabels[type]} </Box>
             {event.makerData &&
               (event.makerData.displayName
-                ? event.makerData.displayName
+                ? event.makerData.displayName.substring(0, 14)
                 : shortenEthereumAddress(event.makerData.address))}
           </Text>
           <Text {...styles.AddedLabelStyle}>
@@ -115,7 +115,7 @@ const HistoryEvent: React.FC<IHistoryEventProps> = ({ event, onlyListings, cance
         {!!price && (
           <Box textAlign={'right'}>
             <Text {...styles.PriceStyle}>
-              {price} {token?.ticker ?? ''}
+              {price.substring(0, 5)} {token?.ticker ?? ''}
             </Text>
             <Text {...styles.PriceUSDStyle}>${usd}</Text>
           </Box>
