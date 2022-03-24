@@ -85,7 +85,7 @@ export const UserProfilePage = () => {
 
             <TabPanels>
               <TabPanel p={0} pt={'30px'}>
-                <FiltersContextProvider>
+                <FiltersContextProvider defaultSorting={0}>
                   <ArtistNFTsTab artistAddress={artistAddress} onTotalLoad={(total) => setTotalNFTs(total)} />
                 </FiltersContextProvider>
               </TabPanel>

@@ -14,7 +14,7 @@ export const CollectionPage = () => {
 
   return (
     <CollectionPageProvider>
-      <FiltersContextProvider>
+      <FiltersContextProvider defaultSorting={0}>
         <CollectionInfo />
       </FiltersContextProvider>
     </CollectionPageProvider>
