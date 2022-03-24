@@ -44,8 +44,6 @@ import {
 import { FiltersPopup } from '../../../../../../../components';
 
 export const SearchFilters = () => {
-  const [showFilters, setShowFilters] = useState(false);
-
   const {
     userCollections,
     disabledSortByFilters,
@@ -65,6 +63,8 @@ export const SearchFilters = () => {
     hasSelectedCollectionFilter,
     clearAllForms,
     getSelectedFiltersCount,
+    showFiltersToggle,
+    setShowFiltersToggle,
   } = useFiltersContext();
 
   useEffect(() => {
@@ -105,7 +105,7 @@ export const SearchFilters = () => {
         />
         <div
           className="filter--button"
-          onClick={() => setShowFilters(!showFilters)}
+          onClick={() => setShowFiltersToggle(!showFiltersToggle)}
           aria-hidden="true"
         >
           {getSelectedFiltersCount() > 0 ? (
@@ -150,7 +150,7 @@ export const SearchFilters = () => {
           ]}
         >
           {() => (
-            showFilters && (
+            showFiltersToggle && (
               <Flex className="sorting--filters--list" alignItems={'center'} sx={{ '> button': { mr: '10px' } }}>
                 {showSaleTypeFilters && (
                   <SaleTypeFilterDropdown
