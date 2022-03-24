@@ -85,7 +85,6 @@ export const BrowseNFTsPage = () => {
 
   const handleSearchBarItemSelect = (address: string) => {
     // Clear all the current filters
-    handleClear();
 
     // Refetch the orders based on the new address
     setSelectedAddress(address);
