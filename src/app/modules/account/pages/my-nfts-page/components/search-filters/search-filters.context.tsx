@@ -31,6 +31,8 @@ import {
 const PER_PAGE = 12;
 import { getTokenAddressByTicker } from '../../../../../../constants';
 import { breakpoints } from '../../../../../../theme/constants';
+import { R } from '../../../../../nft/pages/nft-page/components/nft-asset-audio/hooks';
+import { RLP } from 'ethers/lib/utils';
 
 // Interfaces
 interface INFTsResult {
@@ -102,11 +104,13 @@ export interface ISearchFiltersContext {
 	showNFTTypeFilters: boolean;
 	showPriceRangeFilters: boolean;
 	showCollectionFilters: boolean;
+	showFiltersToggle: boolean;
 	// --- FILTERS VISIBLITY SETTERS ---
 	setShowSaleTypeFilters: (v: boolean) => void;
 	setShowNFTTypeFilters: (v: boolean) => void;
 	setShowPriceRangeFilters: (v: boolean) => void;
 	setShowCollectcionFilters: (v: boolean) => void;
+	setShowFiltersToggle: (v: boolean) => void;
 	};
 
 export const SearchFiltersContext = createContext<ISearchFiltersContext>({} as ISearchFiltersContext);
@@ -128,7 +132,7 @@ const FiltersContextProvider = (props: IFiltersProviderProps) => {
 	const [showPriceRangeFilters, setShowPriceRangeFilters] = useState<boolean>(false);
 	const [showCollectionFilters, setShowCollectcionFilters] = useState<boolean>(false);
 	const [disabledSortByFilters, setDisabledSortByFilters] = useState<boolean>(false);
-	const isMobile = useMedia(`(max-width: ${breakpoints.md})`);
+	const [showFiltersToggle, setShowFiltersToggle] = useState<boolean>(false);
 
   // --------- QUERY CLIENT ---------
   const queryClient = useQueryClient();
@@ -217,6 +221,10 @@ const FiltersContextProvider = (props: IFiltersProviderProps) => {
     collectionFilterForm.resetForm();
     sortByForm.resetForm();
 		searchBarForm.resetForm();
+	}
+
+	const clearForms = (forms: FormikProps<any>[]): void => {
+		forms.forEach((f) => f.resetForm());
 	}
 
 	// --------- HELPERS ---------
@@ -457,7 +465,7 @@ const FiltersContextProvider = (props: IFiltersProviderProps) => {
 		apiFilters = {...apiFilters, ..._parseNftTypeFilterForm(nftTypeFilterForm)};
 		apiFilters = {...apiFilters, ..._parsePriceRangeFilterForm(priceRangeFilterForm)};
 		apiFilters = {...apiFilters, ..._parseSortByForm(sortByForm)};
-		apiFilters = {...apiFilters, ..._parseTokenIds()};
+		// apiFilters = {...apiFilters, ..._parseTokenIds()};
 		apiFilters = {...apiFilters, ..._parseSelectedCollection()};
 		apiFilters = {...apiFilters, ..._parseMaker()};
 
@@ -535,10 +543,18 @@ const FiltersContextProvider = (props: IFiltersProviderProps) => {
 		'NFTs'
 	], _handleGetUserNFTs,
 		{
-			enabled: !!userAddress,
+			enabled: !!userAddress && (!hasSelectedOrderBookFilters() || (hasSelectedOrderBookFilters() && hasSearchBarFilter())),
 			retry: false,
 			getNextPageParam: (lastPage, pages) => {
 				return pages.length * PER_PAGE < lastPage.total ? pages.length + 1 : undefined;
+			},
+			onSuccess: () => {
+				// For Beta, we support either SearchBar search or OrderBook filters. So reset the OrderBookFilters here.
+				if (hasSelectedOrderBookFilters()) {
+					clearForms([ saleTypeFilterForm, nftTypeFilterForm, priceRangeFilterForm, sortByForm ]);
+					setShowFiltersToggle(false);
+				};
+
 			},
 			onError: (error) => {
 				// TODO:: think how to handle the errors
@@ -564,10 +580,17 @@ const FiltersContextProvider = (props: IFiltersProviderProps) => {
 			searchBarForm.values,
 		], _handleGetCollectionNFTs,
 		{
-			enabled: !!collectionAddress,
+			enabled: !!collectionAddress && (!hasSelectedOrderBookFilters() || (hasSelectedOrderBookFilters() && hasSearchBarFilter())),
 			retry: false,
 			getNextPageParam: (lastPage, pages) => {
 				return pages.length * PER_PAGE < lastPage.total ? pages.length + 1 : undefined;
+			},
+			onSuccess: () => {
+				// For Beta, we support either SearchBar search or OrderBook filters. So reset the OrderBookFilters here.
+				if (hasSelectedOrderBookFilters()) {
+					clearForms([ saleTypeFilterForm, nftTypeFilterForm, priceRangeFilterForm, sortByForm ]);
+					setShowFiltersToggle(false);
+				};
 			},
 			onError: () => {
 				// TODO:: Handle Errors ?
@@ -605,18 +628,25 @@ const FiltersContextProvider = (props: IFiltersProviderProps) => {
     	priceRangeFilterForm.values,
 			nftTypeFilterForm.values,
 			sortByForm.values,
-			userNFTs,
-			{
-				searchValue: searchBarForm.values.searchValue,
-				collectionNFTs: collectionNFTs,
-			},
+			collectionFilterForm.values,
+			// userNFTs,
+			// {
+			// 	searchValue: searchBarForm.values.searchValue,
+			// 	collectionNFTs: collectionNFTs,
+			// },
   	], _handleGetOrders,
 		{
-			enabled: !waitForUserNFTs(),
+			enabled: hasSelectedOrderBookFilters(),
 			retry: false,
 			getNextPageParam: (lastPage, pages) => {
 				return pages.length * PER_PAGE < lastPage.total ? pages.length + 1 : undefined;
 			},
+			onSuccess: () => {
+				// For Beta, we support either SearchBar search or OrderBook filters. So reset the search bar here.
+				if (hasSearchBarFilter()) {
+					searchBarForm.resetForm();
+				}
+			}
   	}
 	);
 
@@ -671,11 +701,13 @@ const FiltersContextProvider = (props: IFiltersProviderProps) => {
 		showNFTTypeFilters: showNFTTypeFilters,
 		showPriceRangeFilters: showPriceRangeFilters,
 		showCollectionFilters: showCollectionFilters,
+		showFiltersToggle,
 		// --- FILTERS VISIBLITY SETTERS ---
 		setShowSaleTypeFilters,
 		setShowNFTTypeFilters,
 		setShowPriceRangeFilters,
 		setShowCollectcionFilters,
+		setShowFiltersToggle,
 	};
 
   return (
