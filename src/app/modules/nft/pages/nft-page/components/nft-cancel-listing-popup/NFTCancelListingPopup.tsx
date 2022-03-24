@@ -128,10 +128,10 @@ export const NFTCancelListingPopup = ({ order, isOpen, onClose }: INFTCancelList
       <ModalOverlay />
       <ModalContent maxW={'480px'}>
         <ModalCloseButton />
-        <ModalBody pt={'40px !important'}>
-          <Heading {...styles.TitleStyle} mb={'24px'}>Are you sure you want to cancel your listing?</Heading>
+        <ModalBody pt={'45px !important'} pb={'45px !important'}>
+          <Heading {...styles.TitleStyle} mb={'33px'}>Are you sure you want to cancel your listing?</Heading>
 
-          <Text color={'rgba(0, 0, 0, 0.6)'} textAlign={'center'}>
+          <Text color={'rgba(0, 0, 0, 0.6)'} textAlign={'center'} lineHeight={'1.5'}>
             Canceling your listing will unpublish this sale from Universe and requires a transaction to make sure it will never be fulfillable.
           </Text>
 

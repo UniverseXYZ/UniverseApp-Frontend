@@ -214,7 +214,7 @@ export const NFTChangeListingPricePopup = ({ nft, order, isOpen, onClose, }: INF
         <ModalBody pt={'40px !important'}>
           {state === ChangeListingPriceState.FORM && (
             <Box>
-              <Heading {...styles.TitleStyle} mb={'40px'}>Change the listing price</Heading>
+              <Heading {...styles.TitleStyle} mb={'20px'}>Change the listing price</Heading>
               <Text color={'rgba(228, 182, 19, 1)'} textAlign={'center'}>
                 You may have other listings on the item with a lower or different price. Please check Listings tab to cancel a listing.
               </Text>
