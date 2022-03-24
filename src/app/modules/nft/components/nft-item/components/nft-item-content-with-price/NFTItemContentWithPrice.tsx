@@ -9,7 +9,7 @@ import { TokenIcon } from '../../../../../../components';
 import { getTokenByAddress, TOKENS_MAP } from '../../../../../../constants';
 import { utils } from 'ethers';
 import { shortenEthereumAddress } from '../../../../../../../utils/helpers/format';
-
+import * as style from './NFTItemContentWithPrice.styles';
 
 export interface INFTItemContentWithPriceProps {
   name: string;
@@ -69,7 +69,7 @@ export const NFTItemContentWithPrice = (
   return (
     <>
       <Flex justifyContent={'space-between'} fontSize={'14px'} fontWeight={700} mb={'12px'}>
-        <Text sx={{whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", "maxW": "78%"}}>{name}</Text>
+        <Text {...style.NFTName}>{name}</Text>
         <Text>
           {/*TODO: provide text "top bit" | "min bit" in case of auction*/}
           {order && (
