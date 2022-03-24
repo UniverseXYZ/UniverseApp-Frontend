@@ -580,7 +580,7 @@ const FiltersContextProvider = (props: IFiltersProviderProps) => {
 			searchBarForm.values,
 		], _handleGetCollectionNFTs,
 		{
-			enabled: !!collectionAddress,
+			enabled: !!collectionAddress && (!hasSelectedOrderBookFilters() || (hasSelectedOrderBookFilters() && hasSearchBarFilter())),
 			retry: false,
 			getNextPageParam: (lastPage, pages) => {
 				return pages.length * PER_PAGE < lastPage.total ? pages.length + 1 : undefined;
