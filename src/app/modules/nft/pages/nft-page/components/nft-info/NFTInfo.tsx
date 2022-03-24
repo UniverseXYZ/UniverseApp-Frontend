@@ -85,15 +85,15 @@ export const NFTInfo = () => {
     return editions.findIndex((edition) => edition === NFT.tokenId) + 1;
   }, [editions]);
 
-  const showMetadata = [
-    process.env.REACT_APP_POLYMORPHS_CONTRACT_ADDRESS,
-    process.env.REACT_APP_LOBSTERS_CONTRACT_ADDRESS,
-  ].includes(NFT?.collection?.address ?? '');
+  const showMetadata = process.env.REACT_APP_POLYMORPHS_CONTRACT_ADDRESS && process.env.REACT_APP_LOBSTERS_CONTRACT_ADDRESS && [
+    process.env.REACT_APP_POLYMORPHS_CONTRACT_ADDRESS.toLowerCase(),
+    process.env.REACT_APP_LOBSTERS_CONTRACT_ADDRESS.toLowerCase(),
+  ].includes((NFT?._collectionAddress || "").toLowerCase() ?? '');
 
   const handleRefresh = async () => {
     try {
       setRefreshMetadataStatus(Status.PROCESSING);
-      const request = await sendRefreshMetadataRequest(NFT?.collection?.address || '', NFT.tokenId);
+      const request = await sendRefreshMetadataRequest(NFT?._collectionAddress || '', NFT.tokenId);
 
       if (request.status === 204) {
         setRefreshMetadataStatus(Status.SUCCESS);
