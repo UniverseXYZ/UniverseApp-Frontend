@@ -24,9 +24,10 @@ interface INFTOfferProps {
 export const  NFTOffer: React.FC<INFTOfferProps> = ({offer, usersMap, owner, setOfferForAccept, setShowOfferPopup, cancelOffer}) => {
   const { address } = useAuthContext() as any;
   const neverExpired = !offer.start && !offer.end;
-
-  const expiredIn = neverExpired ? null : dayjs(offer.end * 1000).diff(new Date(), 'hours') > 0 ? dayjs(offer.end * 1000).diff(new Date(), 'hours') : dayjs(offer.end * 1000).diff(new Date(), 'minutes');
-  const timeLabel = neverExpired ? null : dayjs(offer.end * 1000).diff(new Date(), 'hours') > 0 ? 'hours' : 'minutes';
+  const remainingHours = dayjs(offer.end * 1000).diff(new Date(), 'hours');
+  const remainingMinutes = dayjs(offer.end * 1000).diff(new Date(), 'minutes');
+  const expiredIn = neverExpired ? null : remainingHours > 0 ? remainingHours : remainingMinutes;
+  const timeLabel = neverExpired ? null : remainingHours > 1 ? 'hours' : remainingHours === 1 ? 'hour' : remainingMinutes === 1 ? 'minute' : 'minutes';
   const isExpired = expiredIn && !(expiredIn > 0);
   const offerUser = usersMap?.hasOwnProperty(offer.maker) ? usersMap[offer.maker] : {} as IUser;
   const canAcceptsOffers = owner?.toLowerCase() === address && !isExpired;
