@@ -368,7 +368,7 @@ export const MyNFTsPage = () => {
       </div>
 
       {myNFTsSelectedTabIndex === 0 && (
-        <FiltersContextProvider>
+        <FiltersContextProvider defaultSorting={0} >
           <WalletTab getTotalNfts={getTotalNfts} />
         </FiltersContextProvider>
       )}

@@ -118,10 +118,22 @@ export const SearchFiltersContext = createContext<ISearchFiltersContext>({} as I
 export function useFiltersContext(): ISearchFiltersContext {
 	return useContext(SearchFiltersContext);
 }
-
-interface IFiltersProviderProps {
+interface IFiltersRequiredProviderProps {
 	children: ReactNode;
 }
+
+interface IFilterProviderOptionalProps {
+  defaultSorting: number;
+  clearSorting: number;
+}
+interface IFiltersProviderProps
+  extends IFiltersRequiredProviderProps,
+  IFilterProviderOptionalProps {}
+
+const filterDefaultProps: IFilterProviderOptionalProps = {
+  defaultSorting: SortOrderOptions.LowestPrice,
+  clearSorting: 0
+};
 
 const FiltersContextProvider = (props: IFiltersProviderProps) => {
 	// --------- STATE ---------
@@ -147,7 +159,7 @@ const FiltersContextProvider = (props: IFiltersProviderProps) => {
 
 	const sortByForm = useFormik<ISortByFilterValue>({
 		initialValues: {
-			sortingIndex: 0,
+			sortingIndex: props.defaultSorting,
 		},
 		onSubmit: () => {},
 	});
@@ -167,7 +179,7 @@ const FiltersContextProvider = (props: IFiltersProviderProps) => {
 	}
 
 	const hasSelectedSortByFilter = () => {
-		return sortByForm.dirty;
+		return !!sortByForm.values.sortingIndex;
 	}
 
 	const hasSelectedNftTypeFilter = () => {
@@ -191,7 +203,6 @@ const FiltersContextProvider = (props: IFiltersProviderProps) => {
 		[
 			hasSelectedSaleTypeFilter(),
 			hasSelectedPriceFilter(),
-			hasSelectedSortByFilter(),
 			hasSelectedNftTypeFilter(),
 			hasSelectedCollectionFilter(),
 		].forEach((v: boolean) => {
@@ -220,6 +231,7 @@ const FiltersContextProvider = (props: IFiltersProviderProps) => {
     priceRangeFilterForm.resetForm();
     collectionFilterForm.resetForm();
     sortByForm.resetForm();
+    sortByForm.setFieldValue("sortingIndex", props.clearSorting)
 		searchBarForm.resetForm();
 	}
 
@@ -717,5 +729,6 @@ const FiltersContextProvider = (props: IFiltersProviderProps) => {
   );
 };
 
+FiltersContextProvider.defaultProps = filterDefaultProps;
 
 export default FiltersContextProvider;

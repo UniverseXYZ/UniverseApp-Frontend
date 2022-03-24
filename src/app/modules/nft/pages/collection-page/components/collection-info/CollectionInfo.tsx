@@ -262,6 +262,7 @@ export const CollectionInfo = () => {
                                       key={order.id}
                                       NFT={NFTs[0]}
                                       collection={`${NFTs[0].collection?.address}`}
+                                      orderEnd={order.end}
                                       renderContent={({ NFT, collection, creator, owner, bestOfferPrice, bestOfferPriceToken, lastOfferPrice, lastOfferPriceToken, order: orderData }) => (
                                         <NFTItemContentWithPrice
                                           name={NFT.name}
