@@ -10,6 +10,10 @@ export const ContainerStyle: AspectRatioProps = {
   sx: {
     video: {
       borderRadius: '12px',
+
+      _fullScreen: {
+        objectFit: 'contain',
+      },
     }
   }
 }
