@@ -21,7 +21,7 @@ export const getUserNFTsApi = async (props: IGetUserNFTsProps) => {
   let url = `${process.env.REACT_APP_DATASCRAPER_BACKEND}/v1/users/${props.address}/tokens?page=${props.page}&size=${props.size}`;
 
   if (props.search) {
-    url = url.concat('&search=' + props.search);
+    url = url.concat('&search=' + encodeURIComponent(props.search));
   }
 
   if (props.tokenType) {
