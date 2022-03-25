@@ -90,7 +90,10 @@ export const SellPage = () => {
 
   const { data: nft } = useQuery(
     nftKeys.nftInfo({collectionAddress: params.collectionAddress, tokenId: params.tokenId}),
-    () => GetNFT2Api(params.collectionAddress, params.tokenId)
+    () => GetNFT2Api(params.collectionAddress, params.tokenId),
+    {
+      onSuccess: (data) => console.log(data)
+    }
   );
 
   const getSaltMutation = useMutation(GetSaltApi);

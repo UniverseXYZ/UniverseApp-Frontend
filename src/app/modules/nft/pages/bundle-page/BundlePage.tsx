@@ -62,8 +62,8 @@ export const BundlePageContent = () => {
   const [offerForAccept, setOfferForAccept] = useState<IOrder | null>(null);
 
   const handleClickViewCollection = useCallback(() => {
-    if (moreFromCollection && moreFromCollection[0].collection) {
-      router.push(`/collection/${moreFromCollection[0].collection.address}`);
+    if (moreFromCollection && moreFromCollection[0]._collectionAddress) {
+      router.push(`/collection/${moreFromCollection[0]._collectionAddress}`);
     }
   }, [moreFromCollection]);
 
@@ -146,7 +146,7 @@ export const BundlePageContent = () => {
             }}>
               <Heading {...styles2.NameStyle}>{(order.make.assetType as IERC721BundleAssetType).bundleName}</Heading>
               <Box>
-                <BundleMenu collectionAddress={uniqNFTs[selectedNFTIdx].collection?.address} tokenId={uniqNFTs[selectedNFTIdx].tokenId}/>
+                <BundleMenu collectionAddress={uniqNFTs[selectedNFTIdx]._collectionAddress} tokenId={uniqNFTs[selectedNFTIdx].tokenId}/>
               </Box>
             </Flex>
 
@@ -206,7 +206,7 @@ export const BundlePageContent = () => {
               }}
               spacing={'20px'}
             >
-              {moreFromCollection.map((NFT) => (<NftItem key={NFT.id} NFT={NFT} collection={`${NFT.collection?.address}`} />))}
+              {moreFromCollection.map((NFT) => (<NftItem key={NFT.id} NFT={NFT} collection={`${NFT._collectionAddress}`} />))}
             </SimpleGrid>
           </Container>
           <Button {...styles.MoreNFTsButtonStyle} onClick={handleClickViewCollection}>View collection</Button>

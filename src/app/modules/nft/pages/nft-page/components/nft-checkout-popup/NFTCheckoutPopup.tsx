@@ -30,7 +30,7 @@ import { Checkbox, InputShadow, Loading, TokenIcon } from '../../../../../../com
 import { NFTType } from './components';
 import { CheckoutState } from './enums';
 import * as styles from './styles';
-import { IERC20AssetType, IERC721AssetType, INFT, IOrder } from '../../../../types';
+import { ICollection, IERC20AssetType, IERC721AssetType, INFT, IOrder } from '../../../../types';
 import { isNFTAssetAudio, isNFTAssetImage, isNFTAssetVideo } from '../../../../helpers';
 import { getTokenByAddress, TOKENS_MAP } from '../../../../../../constants';
 import { TokenTicker } from '../../../../../../enums';
@@ -51,13 +51,14 @@ const { contracts: contractsData } = Contracts[process.env.REACT_APP_NETWORK_CHA
 
 interface INFTCheckoutPopupProps {
   NFT?: INFT;
+  collection?: ICollection;
   NFTs?: INFT[];
   order: IOrder;
   isOpen: boolean;
   onClose: () => void;
 }
 
-export const NFTCheckoutPopup = ({ NFT, NFTs, order, isOpen, onClose }: INFTCheckoutPopupProps) => {
+export const NFTCheckoutPopup = ({ NFT, collection, NFTs, order, isOpen, onClose }: INFTCheckoutPopupProps) => {
   const router = useHistory();
 
   const { address, signer, web3Provider } = useAuthContext() as any;
@@ -191,7 +192,7 @@ export const NFTCheckoutPopup = ({ NFT, NFTs, order, isOpen, onClose }: INFTChec
         const collectionAddress = NFT?._collectionAddress || '';
 
         // Fetch order api until a diffrent response is returned
-        const newNft = await GetNFT2Api(collectionAddress, tokenId);
+        const newNft = await GetNFT2Api(collectionAddress, tokenId, false);
 
         // Change query information about order
         if (NFT?._ownerAddress?.toLowerCase() !== newNft._ownerAddress?.toLowerCase()) {
@@ -334,7 +335,7 @@ export const NFTCheckoutPopup = ({ NFT, NFTs, order, isOpen, onClose }: INFTChec
                     <Box flex={1} p={'20px'}>
                       <Text>{NFT?.name}</Text>
                       <Text {...styles.CollectionNameStyle}>
-                        {NFT?.collection?.name || shortenEthereumAddress(NFT?._collectionAddress)}
+                        {collection?.name || shortenEthereumAddress(NFT?._collectionAddress)}
                       </Text>
                     <Box {...styles.PriceContainerStyle}>
                       <Text fontSize={'14px'}>

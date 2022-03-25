@@ -385,7 +385,7 @@ const FiltersContextProvider = (props: IFiltersProviderProps) => {
 
       queryClient.setQueryData(nftKeys.nftInfo({collectionAddress: NFT._collectionAddress || "", tokenId: NFT.tokenId}), NFT)
 
-      const key = `${NFT.collection?.address}:${NFT.tokenId}`;
+      const key = `${NFT._collectionAddress?.toLowerCase()}:${NFT.tokenId}`;
 
       acc[key] = NFT;
 

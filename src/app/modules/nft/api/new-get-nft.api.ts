@@ -67,27 +67,33 @@ interface IGetNFTResponse {
   sentForMediaAt: string;
 }
 
-export const GetNFT2Api = async (collectionAddress: string, tokenId: string | number) => {
+export const GetNFT2Api = async (collectionAddress: string, tokenId: string | number, fetchCollection = true) => {
   const url = `${process.env.REACT_APP_DATASCRAPER_BACKEND}/v1/tokens/${ethers.utils.getAddress(collectionAddress)}/${tokenId}`;
 
-  const [{ data }, collectionData] = await Promise.all([
+  if (fetchCollection) {
+    const [{ data }, collectionData] = await Promise.all([
+      axios.get<INFTBackendType>(url),
+      GetCollectionApi(collectionAddress)
+    ])
+  
+    return mapNft(data, collectionData);
+  }
+
+  const [{ data }] = await Promise.all([
     axios.get<INFTBackendType>(url),
-    GetCollectionApi(collectionAddress)
   ])
 
-  return mapNft(data, collectionData);
+  return mapNft(data, undefined);
+
 };
 
 export const GetMoreFromCollectionApi = async (collectionAddress: string, tokenId: string) => {
   try {
     const url = `${process.env.REACT_APP_DATASCRAPER_BACKEND}/v1/collections/${collectionAddress}/more`;
 
-    const [{ data }, collectionData] = await Promise.all([
-      axios.get<INFTBackendType[]>(url, {params: { excludeTokenId: tokenId, maxCount: 4 }}),
-      GetCollectionApi(collectionAddress)
-    ])
+    const { data } = await axios.get<INFTBackendType[]>(url, {params: { excludeTokenId: tokenId, maxCount: 4 }})
 
-    const NFT = data.map((nft: INFTBackendType) => mapNft(nft, collectionData));
+    const NFT = data.map((nft: INFTBackendType) => mapNft(nft, undefined));
 
     return NFT;
   } catch (e) {

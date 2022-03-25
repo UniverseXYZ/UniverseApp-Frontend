@@ -105,7 +105,7 @@ export const WalletTab = ({ getTotalNfts }: IWalletTabProps) => {
                               order={order}
                               key={order.id}
                               NFT={NFTs[0]}
-                              collection={`${NFTs[0].collection?.address}`}
+                              collection={`${NFTs[0]._collectionAddress}`}
                               renderContent={({
                                 NFT,
                                 collection,

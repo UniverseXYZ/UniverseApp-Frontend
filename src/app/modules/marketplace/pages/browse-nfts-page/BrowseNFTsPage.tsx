@@ -220,14 +220,14 @@ export const BrowseNFTsPage = () => {
           case 'ERC721':
             const assetType = order.make.assetType as IERC721AssetType;
             queryClient.setQueryData(orderKeys.listing({collectionAddress: assetType.contract, tokenId: assetType.tokenId.toString()}), order);
-            NFTsRequests.push(GetNFT2Api(assetType.contract, assetType.tokenId))
+            NFTsRequests.push(GetNFT2Api(assetType.contract, assetType.tokenId, false))
             break;
           case 'ERC721_BUNDLE':
             const assetTypeBundle = order.make.assetType as IERC721BundleAssetType;
             for (let i = 0; i < assetTypeBundle.contracts.length; i++) {
               for (const tokenId of assetTypeBundle.tokenIds[i]) {
                 queryClient.setQueryData(orderKeys.listing({collectionAddress: assetTypeBundle.contracts[i], tokenId: tokenId.toString()}), order);
-                NFTsRequests.push(GetNFT2Api(assetTypeBundle.contracts[i], tokenId))
+                NFTsRequests.push(GetNFT2Api(assetTypeBundle.contracts[i], tokenId, false))
               }
             }
             break;
@@ -241,7 +241,7 @@ export const BrowseNFTsPage = () => {
 
         const NFT: INFT = response.value;
         //TODO: set query cache to this specific nft(nftKeys.info)
-        const key = `${NFT.collection?.address}:${NFT.tokenId}`;
+        const key = `${NFT._collectionAddress?.toLowerCase()}:${NFT.tokenId}`;
 
         queryClient.setQueryData(nftKeys.nftInfo({collectionAddress: NFT._collectionAddress || "", tokenId: NFT.tokenId}), NFT)
 
@@ -452,7 +452,7 @@ export const BrowseNFTsPage = () => {
                         order={order}
                         key={order.id}
                         NFT={NFTs[0]}
-                        collection={`${NFTs[0].collection?.address}`}
+                        collection={`${NFTs[0]._collectionAddress}`}
                         orderEnd={order.end}
                         renderContent={({ NFT, collection, creator, owner, bestOfferPrice, bestOfferPriceToken, lastOfferPrice, lastOfferPriceToken, order: orderData }) => (
                           <NFTItemContentWithPrice

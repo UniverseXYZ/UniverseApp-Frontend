@@ -198,7 +198,7 @@ export const CollectionInfo = () => {
                       twitterLink=""
                     />
                     <Box>
-                      {isAuthenticated && address?.toLowerCase() === collectionOwner && ( //
+                      {isAuthenticated && (address?.toLowerCase() === collectionOwner || process.env.REACT_APP_COLLECTION_EDITOR?.toLowerCase() === address) && ( //
                         <Button className="light-button" onClick={handleEdit}>
                           <span style={{ marginRight: '5px'}}>Edit</span>
                           <EditIcon />
@@ -261,7 +261,7 @@ export const CollectionInfo = () => {
                                       order={order}
                                       key={order.id}
                                       NFT={NFTs[0]}
-                                      collection={`${NFTs[0].collection?.address}`}
+                                      collection={`${NFTs[0]._collectionAddress}`}
                                       orderEnd={order.end}
                                       renderContent={({ NFT, collection, creator, owner, bestOfferPrice, bestOfferPriceToken, lastOfferPrice, lastOfferPriceToken, order: orderData }) => (
                                         <NFTItemContentWithPrice

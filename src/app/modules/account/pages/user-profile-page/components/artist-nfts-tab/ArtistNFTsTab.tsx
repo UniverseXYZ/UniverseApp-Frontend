@@ -99,7 +99,7 @@ export const ArtistNFTsTab = ({ artistAddress, onTotalLoad }: IArtistNFTsTabProp
                               order={order}
                               key={order.id}
                               NFT={NFTs[0]}
-                              collection={`${NFTs[0].collection?.address}`}
+                              collection={`${NFTs[0]._collectionAddress}`}
                               orderEnd={order.end}
                               renderContent={({
                                 NFT,

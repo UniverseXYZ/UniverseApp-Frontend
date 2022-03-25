@@ -144,7 +144,8 @@ const App = () => {
   const { showLoading, closeLoading, loadingTitle, loadingBody, transactions } =
     useLoadingPopupContext();
 
-  const { NFT, NFTs, order, isOpen, onClose, closeCheckout } = useNftCheckoutPopupContext();
+  const { NFT, collection, NFTs, order, isOpen, onClose, closeCheckout } =
+    useNftCheckoutPopupContext();
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -183,6 +184,7 @@ const App = () => {
                               {NFT?.tokenId && order?.id && (
                                 <NFTCheckoutPopup
                                   NFT={NFT}
+                                  collection={collection}
                                   NFTs={NFTs}
                                   order={order}
                                   isOpen={isOpen}
