@@ -91,12 +91,9 @@ export const GetMoreFromCollectionApi = async (collectionAddress: string, tokenI
   try {
     const url = `${process.env.REACT_APP_DATASCRAPER_BACKEND}/v1/collections/${collectionAddress}/more`;
 
-    const [{ data }, collectionData] = await Promise.all([
-      axios.get<INFTBackendType[]>(url, {params: { excludeTokenId: tokenId, maxCount: 4 }}),
-      GetCollectionApi(collectionAddress)
-    ])
+    const { data } = await axios.get<INFTBackendType[]>(url, {params: { excludeTokenId: tokenId, maxCount: 4 }})
 
-    const NFT = data.map((nft: INFTBackendType) => mapNft(nft, collectionData));
+    const NFT = data.map((nft: INFTBackendType) => mapNft(nft, undefined));
 
     return NFT;
   } catch (e) {
