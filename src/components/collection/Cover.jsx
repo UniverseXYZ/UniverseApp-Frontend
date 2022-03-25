@@ -39,7 +39,8 @@ const Cover = ({ selectedCollection, collectionGeneralInfo, collectionOwner }) =
   return (
     <div className="collection__page__cover">
       {isAuthenticated &&
-        address?.toLowerCase() === collectionOwner && ( //
+        (address?.toLowerCase() === collectionOwner ||
+          process.env.REACT_APP_COLLECTION_EDITOR?.toLowerCase() === address) && ( //
           <>
             <p className="image-upload-error">{imageUploadError}</p>
             <div className="upload" onClick={() => ref.current.click()} aria-hidden="true">

@@ -35,7 +35,7 @@ const NFTPageProvider: FC = ({ children }) => {
   // NFT Data query
   const { data: NFT, isLoading: isLoadingNFT } = useQuery(
     nftKeys.nftInfo({collectionAddress, tokenId}),
-    () => GetNFT2Api(collectionAddress, tokenId),
+    () => GetNFT2Api(collectionAddress, tokenId, false),
     {
       enabled: !!collectionAddress && !!tokenId,
       onSuccess: (NFT) => console.log('NFT', NFT) 

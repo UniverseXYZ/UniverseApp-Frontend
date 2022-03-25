@@ -1,7 +1,7 @@
 import { Box, BoxProps, Flex } from '@chakra-ui/react';
 import React from 'react';
 
-import { INFT, IOrder, NFTStandard } from '../../../../types';
+import { ICollection, INFT, IOrder, NFTStandard } from '../../../../types';
 import { NFTLike } from '../nft-like';
 import * as styles from './styles';
 import {
@@ -15,6 +15,7 @@ import { useAuthContext } from '../../../../../../../contexts/AuthContext';
 import { useNftCheckoutPopupContext } from '../../../../../../providers/NFTCheckoutProvider';
 interface INFTItemFooterProps extends BoxProps {
   NFT?: INFT;
+  collection?: ICollection;
   order?: any;
   isCheckoutPopupOpened?: boolean;
   showBuyNowButton?: boolean;
@@ -24,6 +25,7 @@ interface INFTItemFooterProps extends BoxProps {
 export const NFTItemFooter = (
   {
     NFT,
+    collection,
     order,
     children,
     isCheckoutPopupOpened,
@@ -34,7 +36,7 @@ export const NFTItemFooter = (
 ) => {
   const showLikes = false;
   const { address, isAuthenticated } = useAuthContext() as any;
-  const {setNFT, setIsOpen, setOrder, setOnClose} = useNftCheckoutPopupContext();
+  const {setNFT, setCollection, setIsOpen, setOrder, setOnClose} = useNftCheckoutPopupContext();
 
 
   const handleCheckoutModal = (event: React.MouseEvent<Element, MouseEvent>) => {
@@ -44,10 +46,12 @@ export const NFTItemFooter = (
       setIsOpen(false);
       setOrder({} as IOrder);
       setNFT({} as INFT);
+      setCollection({} as ICollection);
     } else {
       setIsOpen(true);
       setOrder(order || {} as IOrder);
       setNFT(NFT || {} as INFT)
+      setCollection(collection as ICollection);
     }
   }
 

@@ -1,10 +1,12 @@
 import React, { createContext, useState, useContext } from 'react';
 import PropTypes from 'prop-types';
-import { INFT, IOrder } from '../modules/nft/types';
+import { ICollection, INFT, IOrder } from '../modules/nft/types';
 
 interface INFTCheckoutValue {
   NFT: INFT,
   setNFT: (nft: INFT) => void,
+  collection: ICollection,
+  setCollection: (collection: ICollection) => void,
   NFTs: INFT[],
   setNFTs: (nfts: INFT[]) => void,
   order: IOrder,
@@ -25,6 +27,7 @@ interface INFTCheckoutProviderProps {
 
 const NFTCheckoutContextProvider = (props: INFTCheckoutProviderProps) => {
   const [NFT, setNFT] = useState<INFT>({} as INFT);
+  const [collection, setCollection] = useState<ICollection>({} as ICollection);
   const [NFTs, setNFTs] = useState<INFT[]>([]);
   const [order, setOrder] = useState<IOrder>({} as IOrder);
   const [isOpen, setIsOpen] = useState(false);
@@ -33,6 +36,7 @@ const NFTCheckoutContextProvider = (props: INFTCheckoutProviderProps) => {
   const closeCheckout = () => {
     setIsOpen(false);
     setNFT({} as INFT);
+    setCollection({} as ICollection);
     setNFTs([] as INFT[]);
     setOrder({} as IOrder);
   };
@@ -40,6 +44,8 @@ const NFTCheckoutContextProvider = (props: INFTCheckoutProviderProps) => {
   const value: INFTCheckoutValue = {
     NFT,
     setNFT,
+    collection,
+    setCollection,
     NFTs,
     setNFTs,
     order,
