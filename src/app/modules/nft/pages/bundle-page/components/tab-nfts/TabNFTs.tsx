@@ -32,7 +32,7 @@ export const TabNFTs = ({ NFTs: _NFTs }: ITabNFTsProps) => {
       {Object.keys(NFTs).map((key, i) => {
         const NFT = NFTs[key][0];
         return (
-          <Box key={i} {...styles.ItemStyle} onClick={() => handleNFTClick(NFT.collection?.address, NFT.tokenId)}>
+          <Box key={i} {...styles.ItemStyle} onClick={() => handleNFTClick(NFT._collectionAddress, NFT.tokenId)}>
             {isNFTAssetImage(NFT.artworkTypes) && <Image src={NFT.thumbnailUrl} /> ||
              isNFTAssetVideo(NFT.artworkTypes) && <video src={NFT.thumbnailUrl} /> ||
              isNFTAssetAudio(NFT.artworkTypes) && <Image src={AudioNFTPreviewImage} />}

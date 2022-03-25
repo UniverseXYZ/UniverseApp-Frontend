@@ -55,7 +55,7 @@ export const NFTAcceptOfferPopup = ({ NFT, NFTs, order, isOpen, onClose }: INFTA
 
   const { setShowError, setErrorBody } = useErrorContext() as any;
 
-  const contract = new Contract(`${NFT?.collection?.address}`, contractsData[NFT?.standard].abi, signer);
+  const contract = new Contract(`${NFT?._collectionAddress}`, contractsData[NFT?.standard].abi, signer);
 
   const queryClient = useQueryClient();
   const { offers } = useNFTPageData();
@@ -181,7 +181,7 @@ export const NFTAcceptOfferPopup = ({ NFT, NFTs, order, isOpen, onClose }: INFTA
         const collectionAddress = NFT?._collectionAddress || '';
 
         // Fetch order api until a diffrent response is returned
-        const newNft = await GetNFT2Api(collectionAddress, tokenId);
+        const newNft = await GetNFT2Api(collectionAddress, tokenId, false);
 
         // Change query information about order
         if (NFT?._ownerAddress?.toLowerCase() !== newNft._ownerAddress?.toLowerCase()) {
@@ -333,7 +333,7 @@ export const NFTAcceptOfferPopup = ({ NFT, NFTs, order, isOpen, onClose }: INFTA
                 </Box>
                 <Box flex={1} p={'20px'}>
                   <Text>{NFT?.name}</Text>
-                  <Text {...styles.CollectionNameStyle}>{NFT?.collection?.name}</Text>
+                  <Text {...styles.CollectionNameStyle}>{NFT?._collectionAddress}</Text>
                 </Box>
                 <Box {...styles.PriceContainerStyle}>
                   <Text fontSize={'14px'}>

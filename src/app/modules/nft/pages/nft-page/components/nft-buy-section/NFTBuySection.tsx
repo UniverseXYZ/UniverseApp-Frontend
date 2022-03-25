@@ -9,7 +9,7 @@ import ClockIcon from '../../../../../../../assets/images/clock.svg';
 import { useDateCountdown } from '../../../../../../hooks';
 import * as styles from './styles';
 import { HighestBid } from './components';
-import { IERC20AssetType, IERC721AssetType, INFT, IOrder, IUser } from '../../../../types';
+import { ICollection, IERC20AssetType, IERC721AssetType, INFT, IOrder, IUser } from '../../../../types';
 import { NFTCheckoutPopup } from '../nft-checkout-popup';
 import { NFTPlaceABidPopup } from '../nft-place-a-bid-popup';
 import { NFTMakeAnOfferPopup } from '../nft-make-an-offer-popup';
@@ -24,6 +24,7 @@ import { getRoyaltiesFromRegistry } from '../../../../../../../utils/marketplace
 import { HighestOffer } from './components/highest-offer';
 import { isEmpty } from '../../../../../../../utils/helpers';
 import { useNftCheckoutPopupContext } from '../../../../../../providers/NFTCheckoutProvider';
+import { useNFTPageData } from '../../NFTPage.context';
 
 interface INFTBuySectionProps {
   NFT?: INFT;
@@ -43,7 +44,8 @@ export const NFTBuySection = ({ NFT, owner, NFTs, order, highestOffer, onMeasure
 
   const [state, setState] = useState<BuyNFTSectionState>();
 
-  const { setIsOpen, setNFT, setOrder } = useNftCheckoutPopupContext();
+  const { setIsOpen, setNFT, setCollection, setOrder } = useNftCheckoutPopupContext();
+  const { collection } = useNFTPageData();
 
   const updateSectionState = useCallback(async () => {
     if (!isAuthenticated) {
@@ -120,6 +122,7 @@ export const NFTBuySection = ({ NFT, owner, NFTs, order, highestOffer, onMeasure
         setIsOpen(true);
         setOrder(order || {} as IOrder);
         setNFT(NFT || {} as INFT);
+        setCollection(collection || {} as ICollection);
       }} disabled={!canCheckoutOrder} style={{"width": "100%"}}>
         Buy for {listingPrice && listingPrice.length > 7 ? `${listingPrice.substring(0, 5)}...` : listingPrice} {getTokenByAddress((order?.take.assetType as IERC20AssetType).contract).ticker}
       </Button>

@@ -74,7 +74,7 @@ export const NFTTransferPopup = ({ NFT, isOpen, onClose, }: INFTTransferPopupPro
       try {
         setState(INFTTransferState.PROCESSING);
 
-        const contract = new Contract(`${NFT.collection?.address}`, contractsData[NFT.standard].abi, signer);
+        const contract = new Contract(`${NFT._collectionAddress}`, contractsData[NFT.standard].abi, signer);
         const address = await signer.getAddress();
 
         let methodName = 'safeTransferFrom(address,address,uint256)';

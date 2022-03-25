@@ -16,7 +16,6 @@ import { getTokenByAddress, TOKENS_MAP } from '../../../../constants';
 import { NFTCheckoutPopup } from '../../pages/nft-page/components';
 import { shortenEthereumAddress } from '../../../../../utils/helpers/format';
 import { collectionKeys, nftKeys, orderKeys, userKeys } from '../../../../utils/query-keys';
-import { useNftCheckoutPopupContext } from '../../../../providers/NFTCheckoutProvider';
 import { OrderSide, OrderStatus } from '../../../marketplace/enums';
 
 type IRenderFuncProps = {
@@ -84,7 +83,7 @@ export const NftItem = (
   // Get NFT Info Query
   const { data: NFT, isLoading: isLoadingNFT } = useQuery(
     nftKeys.nftInfo({collectionAddress: _NFT._collectionAddress || '', tokenId: _NFT.tokenId || ""}),
-    () => GetNFT2Api(_NFT._collectionAddress || "", _NFT.tokenId),
+    () => GetNFT2Api(_NFT._collectionAddress || "", _NFT.tokenId, false),
     {
       enabled: !!_NFT._collectionAddress && !!_NFT.tokenId,
       retry: false,
@@ -280,6 +279,7 @@ export const NftItem = (
                   setIsCheckoutPopupOpened={setIsCheckoutPopupOpened}
                   showBuyNowButton={showBuyNowButton && (orderData || order) && (orderData || order)?.side === OrderSide.SELL && (orderData || order)?.status === OrderStatus.CREATED ? true : false}
                   NFT={NFT as INFT}
+                  collection={collection}
                   order={(order || orderData) as IOrder}
                 />
               )
