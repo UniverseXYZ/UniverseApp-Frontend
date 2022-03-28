@@ -1,15 +1,14 @@
 import { Box, Button, Center, Flex, Heading, Image, SimpleGrid, Text } from '@chakra-ui/react';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Navigation } from 'swiper';
-import { Swiper, SwiperSlide } from 'swiper/react/swiper-react';
+import { Swiper, SwiperSlide } from 'swiper/react';
 import { useUpdate } from 'react-use';
-import { useParams } from 'react-router-dom';
 import { default as dayjs } from 'dayjs';
 import { default as UTC } from 'dayjs/plugin/utc';
 import { Contract, BigNumber } from 'ethers';
 
-import 'swiper/swiper-bundle.min.css';
-import 'swiper/swiper.min.css';
+// import 'swiper/swiper-bundle.min.css';
+// import 'swiper/swiper.min.css';
 
 import BundleWhiteIcon from '../../../../../../../assets/images/marketplace/v2/bundle-white.svg';
 import CheckBlackIcon from '../../../../../../../assets/images/check-black.svg';
@@ -39,7 +38,8 @@ import { fetchRoyalties, fetchDAOFee } from '../../../../../../../utils/api/roya
 import { CollectionPageLoader } from '../../../../../../../containers/collection/CollectionPageLoader';
 import { getCollectionBackgroundColor } from '../../../../../../../utils/helpers';
 import { shortenEthereumAddress } from '../../../../../../../utils/helpers/format';
-import './SummaryTab.scss';
+import { useRouter } from 'next/router';
+// import './SummaryTab.scss';
 
 dayjs.extend(UTC);
 
@@ -61,7 +61,9 @@ export const SummaryTab = () => {
   const { signer, address} = useAuthContext() as any;
   const { myNFTs } = useMyNftsContext() as any;
   const { loggedInArtist } = useAuthContext();
-  const params = useParams<{ collectionAddress: string; tokenId: string; }>();
+  // const params = useParams<{ collectionAddress: string; tokenId: string; }>();
+  const router = useRouter();
+  const params = router.query as { collectionAddress: string; tokenId: string; };
 
   const [activeIndex, setActiveIndex] = useState(0);
   const [collections, setCollections] = useState<IApproveCollection[]>([]);

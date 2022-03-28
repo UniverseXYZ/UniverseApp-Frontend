@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { DebounceInput } from 'react-debounce-input';
 import { utils } from 'ethers';
 import PropTypes from 'prop-types';
-import './RevenueSplits.scss';
+// import './RevenueSplits.scss';
 import Input from '../../input/Input.jsx';
 import Button from '../../button/Button.jsx';
 import { ReactComponent as InfoIcon } from '../../../assets/images/info-icon.svg';
@@ -234,7 +234,7 @@ const RevenueSplits = (props) => {
           aria-hidden="true"
         >
           <h5>
-            <img src={addIcon} alt="Add" />
+            <img src={addIcon} alt="Add" style={{ display: 'inline-block' }} />
             Add wallet
           </h5>
         </div>

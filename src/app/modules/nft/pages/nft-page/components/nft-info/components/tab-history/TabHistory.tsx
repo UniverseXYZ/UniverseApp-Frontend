@@ -12,7 +12,7 @@ export const TabHistory = ({ historyData = { orderHistory: [], mintEvent: null a
   return (
     <Box>
       {events.map(
-        (event: IOrder | any, i: number) => event && <HistoryEvent key={event.id ?? event._id} event={event} />
+        (event: IOrder | any, i: number) => event && <HistoryEvent key={i} event={event} />
       )}
     </Box>
   );

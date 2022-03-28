@@ -9,7 +9,8 @@ import {
 } from '@chakra-ui/react';
 import { useState, useRef, useEffect } from 'react';
 import { Contract } from 'ethers';
-import { useHistory } from 'react-router-dom';
+import { useIntersection } from 'react-use';
+import { useRouter } from 'next/router';
 
 import Contracts from '../../../../../../../contracts/contracts.json';
 import SocialLinks from '../../../../../../../../src/components/collection/SocialLinks';
@@ -28,12 +29,11 @@ import NftCardSkeleton from '../../../../../../../components/skeletons/nftCardSk
 import { shortenEthereumAddress } from '../../../../../../../utils/helpers/format';
 import { useAuthContext } from '../../../../../../../contexts/AuthContext.jsx';
 import EditIcon from '../../../../../../../components/svgs/EditIcon';
-import { useIntersection } from 'react-use';
 
 export const CollectionInfo = () => {
   const [totalNftsCount, setTotalNftsCount] = useState(0);
   const { address, signer, isAuthenticated } = useAuthContext() as any;
-  const history = useHistory();
+  const router = useRouter();
   const [collectionOwner, setCollectionOwner] = useState<string>('');
 
   const {
@@ -109,17 +109,7 @@ export const CollectionInfo = () => {
   }, [collectionGeneralInfo?.contractAddress , collection?.address, signer]);
 
   const handleEdit = () => {
-    history.push('/my-nfts/create', {
-      tabIndex: 1,
-      nftType: 'collection',
-      collection: {
-        ...collection,
-        ...collectionGeneralInfo,
-        address: collection.address || collectionGeneralInfo?.contractAddress,
-        name: collection.name || collectionGeneralInfo?.name,
-      },
-      collectionAddress
-    });
+    router.push(`/my-nfts/create?tabIndex=1&nftType=collection&collection=${collection.address || collectionGeneralInfo?.contractAddress}`);
   };
 
   const hasOrderBookFilters = hasSelectedOrderBookFilters();

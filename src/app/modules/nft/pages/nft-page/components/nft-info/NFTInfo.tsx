@@ -15,7 +15,8 @@ import {
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import ReadMoreAndLess from 'react-read-more-less';
 import { UseMeasureRect } from 'react-use/lib/useMeasure';
-import { useHistory } from 'react-router-dom';
+import Head from 'next/head';
+import { useRouter } from 'next/router';
 
 import { LineTabList } from '../../../../../../components';
 import { NFTAssetImage, NFTAssetAudio, NFTBuySection, NFTAssetVideo } from '../';
@@ -55,7 +56,8 @@ import { TabListings } from './components/tab-listings';
 
 // TODO: hide metadata tab for not Polymorph NFT type
 export const NFTInfo = () => {
-  const router = useHistory();
+  const router = useRouter();
+
   const { getTokenPriceByTicker, ethUsdPrice, daiUsdPrice, usdcUsdPrice, xyzUsdPrice, wethUsdPrice, address } =
     useAuthContext() as any;
   const { NFT, isLoading, order, creator, owner, collection, collectionAddress, history, offers, moreFromCollection } =
@@ -182,6 +184,10 @@ export const NFTInfo = () => {
         </div>
       ) : NFT ? (
         <>
+          <Head>
+            <title>{NFT.name} - Universe.XYZ</title>
+            <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+          </Head>
           <Box layerStyle={'StoneBG'}>
             <Box {...styles.NFTAssetContainerStyle}>
               {(!NFT.artworkTypes || !NFT.artworkTypes.length) && <NFTAssetBroken {...styles2.BrokenAssetStyle} /> ||

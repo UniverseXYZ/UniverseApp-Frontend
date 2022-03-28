@@ -13,8 +13,8 @@ import WrongNetworkPopup from '../../popups/WrongNetworkPopup';
 import NotAuthenticatedPopup from '../../popups/NotAuthenticatedPopup';
 
 const MintingPage = () => {
+  const router = useRouter();
   const { isAuthenticated, isWalletConnected } = useAuthContext();
-  const history = useRouter();
   const { setDarkMode } = useThemeContext();
   const [showNotAuthenticatedPopup, setShowNotAuthenticatedPopup] = useState(false);
 
@@ -24,14 +24,14 @@ const MintingPage = () => {
     if (!isAuthenticated && !isWalletConnected) {
       setShowNotAuthenticatedPopup(true);
     } else {
-      history.push('/my-nfts/create?tabIndex=1&nftType=single&backPath=minting');
+      router.push('/my-nfts/create?tabIndex=1&nftType=single&backPath=minting');
     }
   };
   const collectionBoxHandleClick = () => {
     if (!isAuthenticated || !isWalletConnected) {
       setShowNotAuthenticatedPopup(true);
     } else {
-      history.push('/my-nfts/create?tabIndex=1&nftType=collection&backPath=minting');
+      router.push('/my-nfts/create?tabIndex=1&nftType=collection&backPath=minting');
     }
   };
 

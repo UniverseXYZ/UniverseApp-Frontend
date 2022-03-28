@@ -41,12 +41,16 @@ const Polymorphs = () => {
   const [mobile, setMobile] = useState(false);
   const { data } = useGraphQueryHook(queryPolymorphsGraph(morphedPolymorphs));
   const { polymorphsFilter, navigateToMyUniverseNFTsTab } = useMyNftsContext();
-  const { ethPrice } = useAuthContext();
+  const { ethUsdPrice, ethPrice } = useAuthContext();
   const windowSize = useWindowSize();
 
-  useEffect(() => {
-    setMobile(+windowSize.width <= 575);
-  }, [windowSize]);
+  useLayoutEffect(() => {
+    function handleResize() {
+      if (+window.innerWidth <= 575) setMobile(true);
+      else setMobile(false);
+    }
+    window.addEventListener('resize', handleResize);
+  });
 
   useEffect(() => {
     setDarkMode(true);

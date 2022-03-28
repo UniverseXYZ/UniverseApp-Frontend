@@ -1,10 +1,10 @@
 import { FC, createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { useQuery, useQueryClient } from 'react-query';
-import { useParams } from 'react-router-dom';
 
 import { ICollection, IERC721AssetType, INFT, IOrder, IUser } from '../../types';
 import { GetCollectionApi, GetNFT2Api, GetHistoryApi, GetOrdersApi, GetUserApi, INFTHistory, GetMoreFromCollectionApi, GetActiveListingApi } from '../../api';
 import { collectionKeys, nftKeys, orderKeys, userKeys } from '../../../../utils/query-keys';
+import { useRouter } from 'next/router';
 
 export interface INFTPageContext {
   NFT: INFT;
@@ -28,7 +28,9 @@ export function useNFTPageData(): INFTPageContext {
 }
 
 const NFTPageProvider: FC = ({ children }) => {
-  const { collectionAddress, tokenId } = useParams<{ collectionAddress: string; tokenId: string; }>();
+  const router = useRouter();
+  // const { collectionAddress, tokenId } = useParams<{ collectionAddress: string; tokenId: string; }>();
+  const { collectionAddress, tokenId } = router.query as { collectionAddress: string; tokenId: string; };
   const queryClient = useQueryClient();
 
 

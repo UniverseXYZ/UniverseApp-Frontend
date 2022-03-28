@@ -1,6 +1,5 @@
-import { useTitle } from 'react-use';
+import { useTitle, useWindowSize } from 'react-use';
 import React, { useState } from 'react';
-import { useParams } from 'react-router-dom';
 import { useQuery } from 'react-query';
 import Skeleton from 'react-loading-skeleton';
 
@@ -11,10 +10,15 @@ import { Box, Container, Tab, TabList, TabPanel, TabPanels, Tabs } from '@chakra
 import { ArtistNFTsTab } from './components';
 import { TabLabel } from '../../../../components';
 import FiltersContextProvider from '../../../account/pages/my-nfts-page/components/search-filters/search-filters.context';
+import { useRouter } from 'next/router';
 
 export const UserProfilePage = () => {
 
-  const { artistUsername } = useParams<{ artistUsername: string; }>();
+  // const { artistUsername } = useParams<{ artistUsername: string; }>();
+  const windowSize = useWindowSize();
+  const router = useRouter();
+
+  const { artistUsername } = router.query as { artistUsername: string; };
 
   const [artist, setArtist] = useState<any>();
   const [artistAddress, setArtistAddress] = useState('');
@@ -45,8 +49,8 @@ export const UserProfilePage = () => {
         <div className="artist__details__section__container">
           <div className="avatar">
             <Skeleton
-              height={window.innerWidth > 576 ? 280 : 90}
-              width={window.innerWidth > 576 ? 280 : 90}
+              height={windowSize?.width > 576 ? 280 : 90}
+              width={windowSize?.width > 576 ? 280 : 90}
               circle
             />
             <h2 className="show__on__mobile">

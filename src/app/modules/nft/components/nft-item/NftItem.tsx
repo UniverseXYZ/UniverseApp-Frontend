@@ -1,9 +1,9 @@
 import { Box, LinkBox, LinkOverlay, Text } from '@chakra-ui/react';
 import React, { useMemo, useRef, useState } from 'react';
 import { useQuery } from 'react-query';
-import { Link } from 'react-router-dom';
 import { useHoverDirty } from 'react-use';
 import { utils } from 'ethers';
+import NextLink from 'next/link';
 
 import { ICollection, IERC721AssetType, INFT, IUser, IOrder } from '../../types';
 import { NFTItemAsset, NFTItemFooter, NFTItemRelation } from './components';
@@ -184,26 +184,10 @@ export const NftItem = (
       }}
     >
       <LinkBox>
-        <LinkOverlay
-          as={Link}
-          to={!onClick ? `/nft/${NFT?._collectionAddress}/${NFT?.tokenId}`: 'javascript: void(0);'}
-          display={'contents'}
-        >
-          {!NFT || renderHeader === null ? null :
-            renderHeader ? renderHeader({
-              NFT: NFT as INFT,
-              collection: collection as ICollection,
-              creator,
-              owner,
-              isLoadingNFT,
-              isLoadingCollection,
-              isLoadingCreator,
-              isLoadingOwner,
-            }) : null}
-
-          <Box {...styles.AssetContainerStyle} borderRadius={renderHeader ? '' : '12px 12px 0 0'}>
-            {!NFT || renderAsset === null ? null :
-              renderAsset ? renderAsset({
+        <NextLink href={!onClick ? `/nft/${NFT?._collectionAddress}/${NFT?.tokenId}`: 'javascript: void(0);'}>
+          <LinkOverlay display={'contents'}>
+            {!NFT || renderHeader === null ? null :
+              renderHeader ? renderHeader({
                 NFT: NFT as INFT,
                 collection: collection as ICollection,
                 creator,
@@ -212,80 +196,94 @@ export const NftItem = (
                 isLoadingCollection,
                 isLoadingCreator,
                 isLoadingOwner,
-              }) : (
-                <NFTItemAsset NFT={NFT} orderEnd={orderEnd || orderData?.end || 0} isHover={isHover} />
-              )
-            }
-          </Box>
-          <Box {...styles.NFTContentStyle}>
-            {!NFT || renderContent === null ? null :
-              renderContent ? renderContent({
-                NFT: NFT as INFT,
-                collection: collection as ICollection,
-                creator,
-                owner,
-                isLoadingNFT,
-                isLoadingCollection,
-                isLoadingCreator,
-                isLoadingOwner,
-                bestOfferPrice: bestOfferPrice || "0",
-                bestOfferPriceToken: bestOfferPriceToken?.ticker, 
-                lastOfferPrice: lastOfferPrice || "0",
-                lastOfferPriceToken: lastOfferPriceToken?.ticker,
-                order: order || orderData
-              }) : (
-                <>
-                  <Text fontSize={'14px'} fontWeight={700} mb={'12px'}>{NFT?.name}</Text>
+              }) : null}
 
-                  <Box mb={'14px'}>
-                    <Box>
-                      <NFTItemRelation
-                        type={NFTRelationType.CREATOR}
-                        image={creator?.profileImageUrl ?? ''}
-                        value={creator?.displayName ?? ''}
-                        linkParam={creator?.universePageUrl || NFT._creatorAddress?.toLowerCase() || ""}
-                      />
-                      <NFTItemRelation
-                        type={NFTRelationType.COLLECTION}
-                        image={collection?.coverUrl ?? ''}
-                        value={collection?.name ?? ''}
-                        linkParam={NFT._collectionAddress ?? ''}
-                      />
-                      <NFTItemRelation
-                        type={NFTRelationType.OWNER}
-                        image={owner?.profileImageUrl ?? ''}
-                        value={owner?.displayName || NFT._ownerAddress || ''}
-                        linkParam={owner?.universePageUrl || owner?.address || NFT._ownerAddress?.toLowerCase() || ""}
-                      />
+            <Box {...styles.AssetContainerStyle} borderRadius={renderHeader ? '' : '12px 12px 0 0'}>
+              {!NFT || renderAsset === null ? null :
+                renderAsset ? renderAsset({
+                  NFT: NFT as INFT,
+                  collection: collection as ICollection,
+                  creator,
+                  owner,
+                  isLoadingNFT,
+                  isLoadingCollection,
+                  isLoadingCreator,
+                  isLoadingOwner,
+                }) : (
+                  <NFTItemAsset NFT={NFT} orderEnd={orderEnd || orderData?.end || 0} isHover={isHover} />
+                )
+              }
+            </Box>
+            <Box {...styles.NFTContentStyle}>
+              {!NFT || renderContent === null ? null :
+                renderContent ? renderContent({
+                  NFT: NFT as INFT,
+                  collection: collection as ICollection,
+                  creator,
+                  owner,
+                  isLoadingNFT,
+                  isLoadingCollection,
+                  isLoadingCreator,
+                  isLoadingOwner,
+                  bestOfferPrice: bestOfferPrice || "0",
+                  bestOfferPriceToken: bestOfferPriceToken?.ticker,
+                  lastOfferPrice: lastOfferPrice || "0",
+                  lastOfferPriceToken: lastOfferPriceToken?.ticker,
+                  order: order || orderData
+                }) : (
+                  <>
+                    <Text fontSize={'14px'} fontWeight={700} mb={'12px'}>{NFT?.name}</Text>
+
+                    <Box mb={'14px'}>
+                      <Box>
+                        <NFTItemRelation
+                          type={NFTRelationType.CREATOR}
+                          image={creator?.profileImageUrl ?? ''}
+                          value={creator?.displayName ?? ''}
+                          linkParam={creator?.universePageUrl || NFT._creatorAddress?.toLowerCase() || ""}
+                        />
+                        <NFTItemRelation
+                          type={NFTRelationType.COLLECTION}
+                          image={collection?.coverUrl ?? ''}
+                          value={collection?.name ?? ''}
+                          linkParam={NFT._collectionAddress ?? ''}
+                        />
+                        <NFTItemRelation
+                          type={NFTRelationType.OWNER}
+                          image={owner?.profileImageUrl ?? ''}
+                          value={owner?.displayName || NFT._ownerAddress || ''}
+                          linkParam={owner?.universePageUrl || owner?.address || NFT._ownerAddress?.toLowerCase() || ""}
+                        />
+                      </Box>
                     </Box>
-                  </Box>
-                </>
-              )
-            }
+                  </>
+                )
+              }
 
-            {!NFT || renderFooter === null ? null :
-              renderFooter ? renderFooter({
-                NFT: NFT as INFT,
-                collection: collection as ICollection,
-                creator,
-                owner,
-                isLoadingNFT,
-                isLoadingCollection,
-                isLoadingCreator,
-                isLoadingOwner,
-              }) : (
-                <NFTItemFooter
-                  isCheckoutPopupOpened={isCheckoutPopupOpened}
-                  setIsCheckoutPopupOpened={setIsCheckoutPopupOpened}
-                  showBuyNowButton={showBuyNowButton && (orderData || order) && (orderData || order)?.side === OrderSide.SELL && (orderData || order)?.status === OrderStatus.CREATED ? true : false}
-                  NFT={NFT as INFT}
-                  collection={collection}
-                  order={(order || orderData) as IOrder}
-                />
-              )
-            }
-          </Box>
-        </LinkOverlay>
+              {!NFT || renderFooter === null ? null :
+                renderFooter ? renderFooter({
+                  NFT: NFT as INFT,
+                  collection: collection as ICollection,
+                  creator,
+                  owner,
+                  isLoadingNFT,
+                  isLoadingCollection,
+                  isLoadingCreator,
+                  isLoadingOwner,
+                }) : (
+                  <NFTItemFooter
+                    isCheckoutPopupOpened={isCheckoutPopupOpened}
+                    setIsCheckoutPopupOpened={setIsCheckoutPopupOpened}
+                    showBuyNowButton={showBuyNowButton && (orderData || order) && (orderData || order)?.side === OrderSide.SELL && (orderData || order)?.status === OrderStatus.CREATED ? true : false}
+                    NFT={NFT as INFT}
+                    collection={collection}
+                    order={(order || orderData) as IOrder}
+                  />
+                )
+              }
+            </Box>
+          </LinkOverlay>
+        </NextLink>
       </LinkBox>
     </ItemWrapper>
   );

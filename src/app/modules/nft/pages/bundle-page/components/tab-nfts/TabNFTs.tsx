@@ -1,7 +1,7 @@
 import { Box, Image, Text } from '@chakra-ui/react';
 import { useCallback, useMemo } from 'react';
-import { useHistory } from 'react-router-dom';
 import { groupBy } from 'lodash';
+import { useRouter } from 'next/router';
 
 import { INFT } from '../../../../types';
 import * as styles from './styles';
@@ -14,7 +14,7 @@ interface ITabNFTsProps {
 }
 
 export const TabNFTs = ({ NFTs: _NFTs }: ITabNFTsProps) => {
-  const router = useHistory();
+  const router = useRouter();
 
   const handleNFTClick = useCallback((address, tokenId) => {
     router.push(`/nft/${address}/${tokenId}`);

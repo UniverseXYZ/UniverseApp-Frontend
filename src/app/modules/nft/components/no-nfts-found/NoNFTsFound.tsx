@@ -9,7 +9,7 @@ import {
   Text,
 } from '@chakra-ui/react';
 import React from 'react';
-import { useHistory } from 'react-router-dom';
+import { useRouter } from 'next/router';
 
 import BubbleIcon from '../../../../../assets/images/text-bubble.png';
 import PlusIcon from '../../../../../assets/images/plus.svg';
@@ -20,7 +20,7 @@ const MENU_ITEMS: Array<{ name: string; nftType: string; }> = [
 ];
 
 export const NoNFTsFound = () => {
-  const history = useHistory();
+  const router = useRouter();
 
   return (
     <Box color={'rgba(0 0 0 / 40%)'} textAlign={'center'} m={'90px 0 120px'}>
@@ -39,7 +39,7 @@ export const NoNFTsFound = () => {
         <MenuButton as={Button} rightIcon={<Image src={PlusIcon} />}>Create</MenuButton>
         <MenuList>
           {MENU_ITEMS.map(({ name, nftType }, i) => (
-            <MenuItem key={i} onClick={() => history.push('/my-nfts/create', { tabIndex: 1, nftType })}>
+            <MenuItem key={i} onClick={() => router.push(`/my-nfts/create?tabIndex=1&nftType=${nftType}`)}>
               {name}
             </MenuItem>
           ))}
