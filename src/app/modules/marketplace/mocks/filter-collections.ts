@@ -42,4 +42,5 @@ export const FilterCollectionsItems = [
   {id: 41, address: "0xCa7cA7BcC765F77339bE2d648BA53ce9c8a262bD", name: "Tubby Cats", image:"https://lh3.googleusercontent.com/XHZY9623keDQqFSDHKqOdcjD99Y7N82K1egYRM2Mm1Z-Jxn5myrkKiC5NBktWKStVtTzDzwELy9dNpzTWJTIkLsdMIxUHI86jduQ=s130"},
   {id: 42, address: "0x1a2F71468F656E97c2F86541E57189F59951efe7", name: "CryptoMories", image:"https://lh3.googleusercontent.com/vb1frYDXLe4AHtDQORgr1O1EODOkq31xePpKvgsN3uE5wopK0M8rBYECcDbvTkOpx5Y-9x1TQIP61ae4wI9lq9qwe-wdSUsXywlw=s130"},
   {id: 43, address: "0x0f468766CC936E059a6f4cC8c9826F8958B67Ce2", name: "The Coldest Drop: Subjects", image:"https://lh3.googleusercontent.com/3exmVN-FNqchr-fVZhGpNIPuAdgZZSaChGtD1wGrLWEWcsGPPbSE3Nsyl39WEMAZeYcdLg3Y06KQiUJjpncs7afgwzIU7eH4ohaqVQ=s130"},
+  {id: 44, address: "0x79FCDEF22feeD20eDDacbB2587640e45491b757f", name: "Mfer", image:"https://lh3.googleusercontent.com/J2iIgy5_gmA8IS6sXGKGZeFVZwhldQylk7w7fLepTE9S7ICPCn_dlo8kypX8Ju0N6wvLVOKsbP_7bNGd8cpKmWhFQmqMXOC8q2sOdqw=s130"},
   ];
