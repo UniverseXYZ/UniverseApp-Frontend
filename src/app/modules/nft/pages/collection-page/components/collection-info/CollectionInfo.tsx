@@ -265,6 +265,7 @@ export const CollectionInfo = () => {
                                       orderEnd={order.end}
                                       renderContent={({ NFT, collection, creator, owner, bestOfferPrice, bestOfferPriceToken, lastOfferPrice, lastOfferPriceToken, order: orderData }) => (
                                         <NFTItemContentWithPrice
+                                          collectionAddress={NFT._collectionAddress}
                                           name={NFT.name}
                                           collection={collection}
                                           creator={creator || undefined}
@@ -303,6 +304,7 @@ export const CollectionInfo = () => {
                                     collection={`${NFT._collectionAddress}`}
                                     renderContent={({ NFT, collection, creator, owner, bestOfferPrice, bestOfferPriceToken, lastOfferPrice, lastOfferPriceToken, order: orderData }) => (
                                       <NFTItemContentWithPrice
+                                        collectionAddress={NFT._collectionAddress}
                                         name={NFT.name}
                                         collection={collection}
                                         creator={creator || undefined}
