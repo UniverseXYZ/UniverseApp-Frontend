@@ -113,6 +113,7 @@ export const ArtistNFTsTab = ({ artistAddress, onTotalLoad }: IArtistNFTsTabProp
                                 order: orderData,
                               }) => (
                                 <NFTItemContentWithPrice
+                                  collectionAddress={NFT._collectionAddress}
                                   name={NFT.name}
                                   collection={collection}
                                   creator={creator || undefined}
@@ -122,7 +123,7 @@ export const ArtistNFTsTab = ({ artistAddress, onTotalLoad }: IArtistNFTsTabProp
                                   bestOfferPriceToken={bestOfferPriceToken || undefined}
                                   lastOfferPrice={lastOfferPrice || 0}
                                   lastOfferPriceToken={lastOfferPriceToken || undefined}
-                                /> 
+                                />
                               )}
                             />
                           );
@@ -177,6 +178,7 @@ export const ArtistNFTsTab = ({ artistAddress, onTotalLoad }: IArtistNFTsTabProp
                             order,
                           }) => (
                             <NFTItemContentWithPrice
+                              collectionAddress={NFT._collectionAddress}
                               name={NFT.name}
                               collection={collection}
                               creator={creator || undefined}
