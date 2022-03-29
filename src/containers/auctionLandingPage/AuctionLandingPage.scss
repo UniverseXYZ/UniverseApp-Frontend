@@ -2,64 +2,6 @@
 @import "../../assets/scss/mixins";
 
 .auction__landing__page {
-  .preview--auction--container {
-    padding: 30px 60px 0;
-    .preview--auction {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      max-width: 1110px;
-      margin: 0 auto;
-      background: rgba(0, 0, 0, 0.6);
-      border-radius: 12px;
-      padding: 20px 30px;
-      div {
-        &:nth-child(1) {
-          display: flex;
-          align-items: center;
-          font-family: $sharpGroteskBoldFont;
-          font-style: normal;
-          font-weight: 600;
-          font-size: 12px;
-          line-height: 130%;
-          color: $white;
-          svg {
-            margin-right: 11px;
-            path {
-              fill: $white;
-              fill-opacity: 1;
-            }
-          }
-        }
-        &:nth-child(2) {
-          button {
-            background: none;
-            font-family: $spaceGroteskFont;
-            font-style: normal;
-            font-weight: 500;
-            font-size: 14px;
-            line-height: 140%;
-            text-decoration-line: underline;
-            color: $white;
-          }
-        }
-      }
-      .preview--auction__exit--mobile {
-        display: none;
-        @include sm {
-          display: block;
-        }
-      }
-      .preview--auction__exit {
-        @include sm {
-          display: none;
-        }
-      }
-    }
-    @include lg {
-      padding: 30px 20px 0;
-    }
-  }
   .artist__personal__logo {
     position: fixed;
     top: 12px;
@@ -217,6 +159,61 @@
     &__container {
       max-width: 1110px;
       margin: 0 auto;
+
+      .preview--auction--container {
+        position: relative;
+        margin-bottom: 40px;
+        .preview--auction {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          background: rgba(0, 0, 0, 0.6);
+          border-radius: 12px;
+          padding: 20px 30px;
+          div {
+            &:nth-child(1) {
+              display: flex;
+              align-items: center;
+              font-family: $sharpGroteskBoldFont;
+              font-style: normal;
+              font-weight: 600;
+              font-size: 12px;
+              line-height: 130%;
+              color: $white;
+              svg {
+                margin-right: 11px;
+                path {
+                  fill: $white;
+                  fill-opacity: 1;
+                }
+              }
+            }
+            &:nth-child(2) {
+              button {
+                background: none;
+                font-family: $spaceGroteskFont;
+                font-style: normal;
+                font-weight: 500;
+                font-size: 14px;
+                line-height: 140%;
+                text-decoration-line: underline;
+                color: $white;
+              }
+            }
+          }
+          .preview--auction__exit--mobile {
+            display: none;
+            @include sm {
+              display: block;
+            }
+          }
+          .preview--auction__exit {
+            @include sm {
+              display: none;
+            }
+          }
+        }
+      }
 
       .slick-slider {
         margin-bottom: 40px;
