@@ -3,7 +3,7 @@ import React, { useMemo } from 'react';
 
 import { NFTItemRelation } from '../nft-item-relation';
 import { NFTRelationType, OrderAssetClass } from '../../../../enums';
-import { ICollection, IERC20AssetType, IOrder, IUser } from '../../../../types';
+import { ICollection, IERC20AssetType, IOrder, IUser, INFT } from '../../../../types';
 import { TokenTicker } from '../../../../../../enums';
 import { TokenIcon } from '../../../../../../components';
 import { getTokenByAddress, TOKENS_MAP } from '../../../../../../constants';
@@ -12,6 +12,7 @@ import { shortenEthereumAddress } from '../../../../../../../utils/helpers/forma
 import * as style from './NFTItemContentWithPrice.styles';
 
 export interface INFTItemContentWithPriceProps {
+  collectionAddress?: string;
   name: string;
   creator?: IUser;
   collection?: ICollection;
@@ -25,6 +26,7 @@ export interface INFTItemContentWithPriceProps {
 
 export const NFTItemContentWithPrice = (
   {
+    collectionAddress,
     name,
     creator,
     collection,
@@ -102,8 +104,8 @@ export const NFTItemContentWithPrice = (
             <NFTItemRelation
               type={NFTRelationType.COLLECTION}
               image={collection.coverUrl ?? ''}
-              value={collection.name ?? ''}
-              linkParam={collection.address ?? ''}
+              value={(collection.name || collectionAddress) ?? ''}
+              linkParam={(collection.address || collectionAddress) ?? ''}
             />
           )}
           {owner && (

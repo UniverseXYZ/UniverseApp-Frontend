@@ -9,15 +9,16 @@ import { RelationAvatar } from './RelationAvatar';
 
 interface INFTPageCollectionRelationProps {
   collection: ICollection;
+  collectionAddress?: string;
   avatarStyle?: BoxProps;
 }
 
-export const NFTPageCollectionRelation = ({ collection, avatarStyle = {} } : INFTPageCollectionRelationProps) => {
+export const NFTPageCollectionRelation = ({ collection, collectionAddress, avatarStyle = {} } : INFTPageCollectionRelationProps) => {
   return (
     <NFTPageRelation
       type={NFTRelationType.COLLECTION}
-      href={`/collection/${collection?.address}`}
-      value={`${collection?.name}`}
+      href={`/collection/${collection?.address || collectionAddress}`}
+      value={`${collection?.name || collectionAddress}`}
       renderAvatar={() => (collection?.coverUrl
           ? <RelationAvatar src={collection?.coverUrl} {...avatarStyle} />
           : (
@@ -32,7 +33,7 @@ export const NFTPageCollectionRelation = ({ collection, avatarStyle = {} } : INF
                 h: '30px',
                 w: '30px',
               }}
-            >{collection?.name.charAt(0)}</Box>
+            >{collection?.name?.charAt(0) || collectionAddress?.charAt(collectionAddress?.length - 1)}</Box>
           )
       )}
     />

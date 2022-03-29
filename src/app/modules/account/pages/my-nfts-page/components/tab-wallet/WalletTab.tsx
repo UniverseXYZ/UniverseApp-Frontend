@@ -118,6 +118,7 @@ export const WalletTab = ({ getTotalNfts }: IWalletTabProps) => {
                                 order: orderData,
                               }) => (
                                 <NFTItemContentWithPrice
+                                  collectionAddress={NFT._collectionAddress}
                                   name={NFT.name}
                                   collection={collection}
                                   creator={creator || undefined}
@@ -182,6 +183,7 @@ export const WalletTab = ({ getTotalNfts }: IWalletTabProps) => {
                             order,
                           }) => (
                             <NFTItemContentWithPrice
+                              collectionAddress={NFT._collectionAddress}
                               name={NFT.name}
                               collection={collection}
                               creator={creator || undefined}
