@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState } from 'react';
 // import './NFTCard.scss';
 import { Link, useHistory, useLocation } from 'react-router-dom';
 import PropTypes from 'prop-types';
@@ -23,11 +23,11 @@ const NFTCard = React.memo(
   ({ nft, canSelect, collectionAddress, selectedNFTsIds, setSelectedNFTsIds }) => {
     const { loggedInArtist } = useAuthContext();
     const router = useRouter();
-    const [showDropdown, setShowDropdown] = useState(false);
+    const location = useLocation();
     const [searchValue, setSearchValue] = useState('');
 
     const { creator } = nft;
-    const owner = router.asPath === '/my-nfts' ? loggedInArtist : nft.owner;
+    const owner = location.pathname === '/my-nfts' ? loggedInArtist : nft.owner;
 
     // const sliderSettings = {
     //   dots: true,
@@ -76,18 +76,9 @@ const NFTCard = React.memo(
         <NFTCardHeader nft={nft} owner={owner} creator={creator} collection={nft.collection} />
         <div className="nft--card--body" aria-hidden="true">
           {nft.artworkType !== 'bundles' ? (
-            <div
-              onClick={() =>
-                !canSelect
-                  ? router.push(
-                      `/nft/${nft.collection?.address || collectionAddress}/${nft.tokenId}`,
-                      {
-                        nft,
-                      }
-                    )
-                  : handleSelectNFT(nft.id)
-              }
-              aria-hidden="true"
+            <Link
+              href={`/nft/${nft.contractAddress}/${nft.tokenId}`}
+              to={`/nft/${nft.contractAddress}/${nft.tokenId}`}
             >
               {nft.artworkType !== 'audio/mpeg' && nft.artworkType !== 'mp4' && showNftImage()}
               {nft.artworkType === 'mp4' && (
@@ -171,10 +162,7 @@ const NFTCard = React.memo(
                 <div
                   className="slider--box"
                   onClick={() =>
-                    router.push(
-                      `/nft/${nft.collection?.address || collectionAddress}/${nft.tokenId}`,
-                      { nft }
-                    )
+                    router.push(`/nft/${nft.collection?.address || collectionAddress}/${nft.tokenId}`)
                   }
                   aria-hidden="true"
                   key={nft.id}

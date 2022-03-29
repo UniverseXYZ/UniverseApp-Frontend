@@ -1,15 +1,16 @@
-import React, { createContext, useState, useEffect, useContext } from 'react';
+/* eslint-disable no-use-before-define */
+import React, { createContext, useState, useEffect, useContext, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { Contract, providers, utils } from 'ethers';
 import uuid from 'react-uuid';
 import WalletConnectProvider from '@walletconnect/web3-provider';
 import { getERC20PriceCoingecko, getEthPriceCoingecko } from '../utils/api/etherscan';
-import { getEthPriceCoingecko } from '../utils/api/etherscan';
 import Contracts from '../contracts/contracts.json';
 import { CONNECTORS_NAMES } from '../utils/dictionary';
 import { getProfileInfo, setChallenge, userAuthenticate } from '../utils/api/profile';
 import { mapUserData } from '../utils/helpers';
 import { useErrorContext } from './ErrorContext';
+import { TokenTicker } from '../app/enums/token-ticker';
 import { useRouter } from 'next/router';
 import Cookies from 'js-cookie'
 
@@ -41,7 +42,6 @@ const AuthContextProvider = ({ children }) => {
   const [isWalletConnected, setIsWalletConnected] = useState(false);
   const [ethereumNetwork, setEthereumNetwork] = useState('');
   const [usdEthBalance, setUsdEthBalance] = useState(0);
-  const [ethPrice, setEthPrice] = useState({});
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [showWrongNetworkPopup, setShowWrongNetworkPopup] = useState(false);
   const [universeERC721CoreContract, setUniverseERC721CoreContract] = useState(null);
@@ -49,24 +49,94 @@ const AuthContextProvider = ({ children }) => {
   const [contracts, setContracts] = useState(false);
   const [deployedCollections, setDeployedCollections] = useState([]);
   const history = useRouter();
-  // Getters
-  const getEthPriceData = async (balance) => {
-    const ethUsdPice = await getEthPriceCoingecko();
-    setUsdEthBalance(ethUsdPice?.market_data?.current_price?.usd * balance);
-    setEthPrice(ethUsdPice);
-  };
+  const [ethUsdPrice, setEthUsdPrice] = useState(0);
+  const [daiUsdPrice, setDaiUsdPrice] = useState(0);
+  const [usdcUsdPrice, setUsdcUsdPrice] = useState(0);
+  const [xyzUsdPrice, setXyzUsdPrice] = useState(0);
+  const [wethUsdPrice, setWethUsdPrice] = useState(0);
+  const [isAuthenticating, setIsAuthenticating] = useState(false);
+  const [isSigning, setIsSigning] = useState(false);
+  const [loginFn, setLoginFn] = useState();
+
+  const web3ProviderRef = useRef(web3Provider);
+  const networkRef = useRef(ethereumNetwork);
+  const isAuthenticatingRef = useRef(isAuthenticating);
+  const isSigningRef = useRef(isSigning);
 
   useEffect(() => {
-    if (yourBalance) {
-      getEthPriceData(yourBalance);
+    web3ProviderRef.current = web3Provider;
+  }, [web3Provider]);
+
+  useEffect(() => {
+    networkRef.current = ethereumNetwork;
+  }, [ethereumNetwork]);
+
+  useEffect(() => {
+    isAuthenticatingRef.current = isAuthenticating;
+  }, [web3Provider]);
+
+  useEffect(() => {
+    isSigningRef.current = isSigning;
+  }, [isSigning]);
+
+  // Getters
+  useEffect(() => {
+    (async () => {
+      try {
+        const [ethPrice, daiInfo, usdcInfo, xyzInfo, wethInfo] = await Promise.all([
+          getEthPriceCoingecko(),
+          getERC20PriceCoingecko('dai'),
+          getERC20PriceCoingecko('usd-coin'),
+          getERC20PriceCoingecko('universe-xyz'),
+          getERC20PriceCoingecko('weth'),
+        ]);
+
+        console.log(`wethPrice: ${wethInfo?.market_data?.current_price?.usd}`);
+        console.log(`ethPrice: ${ethPrice?.market_data?.current_price?.usd}`);
+        console.log(`usdcPrice: ${usdcInfo?.market_data?.current_price?.usd}`);
+        console.log(`daiPrice: ${daiInfo?.market_data?.current_price?.usd}`);
+        console.log(`xyzPrice: ${xyzInfo?.market_data?.current_price?.usd}`);
+
+        setEthUsdPrice(ethPrice?.market_data?.current_price?.usd);
+        setDaiUsdPrice(daiInfo?.market_data?.current_price?.usd);
+        setUsdcUsdPrice(usdcInfo?.market_data?.current_price?.usd);
+        setXyzUsdPrice(xyzInfo?.market_data?.current_price?.usd);
+        setWethUsdPrice(wethInfo?.market_data?.current_price?.usd);
+      } catch (err) {
+        console.log('coingecko price fetching failed');
+        console.log(err);
+      }
+    })();
+  }, []);
+
+  useEffect(() => {
+    if (yourBalance && usdcUsdPrice) {
+      setUsdEthBalance(ethUsdPrice * yourBalance);
     }
-  }, [yourBalance]);
+  }, [yourBalance, usdcUsdPrice]);
 
   // HELPERS
   const clearStorageAuthData = () => {
     Cookies.remove('xyz_access_token');
     Cookies.remove('user_address');
     Cookies.remove('providerName');
+  };
+
+  const getTokenPriceByTicker = (ticker) => {
+    switch (ticker) {
+      case TokenTicker.ETH:
+        return ethUsdPrice;
+      case TokenTicker.USDC:
+        return usdcUsdPrice;
+      case TokenTicker.DAI:
+        return daiUsdPrice;
+      case TokenTicker.WETH:
+        return wethUsdPrice;
+      case TokenTicker.XYZ:
+        return xyzUsdPrice;
+      default:
+        return ethUsdPrice;
+    }
   };
 
   // Authentication and Web3
@@ -105,7 +175,7 @@ const AuthContextProvider = ({ children }) => {
     );
 
     setWeb3Provider(provider);
-    setAddress(accounts[0] || '');
+    setAddress(accounts.length ? accounts[0].toLowerCase() : '');
     setSigner(signerResult);
     setYourBalance(utils.formatEther(balance));
     setYourEnsDomain(ensDomain);
@@ -139,6 +209,36 @@ const AuthContextProvider = ({ children }) => {
     setLobsterContract(null);
   };
 
+  const onAccountsChanged = async ([account]) => {
+    // IF ACCOUNT CHANGES, CLEAR TOKEN AND ADDRESS FROM LOCAL STORAGE
+    clearStorageAuthData();
+    if (account) {
+      connectWeb3();
+      history.push('/');
+      web3AuthenticationProccess(web3ProviderRef.current, networkRef.current, [account]);
+    } else {
+      resetConnectionState();
+    }
+  };
+
+  const onChainChanged = async (networkId) => {
+    clearStorageAuthData();
+    window.location.reload();
+  };
+
+  const signOut = () => {
+    resetConnectionState();
+    // setIsAccountDropdownOpened(false);
+    setIsWalletConnected(!isWalletConnected);
+    history.push('/');
+
+    const { ethereum } = window;
+
+    ethereum.removeListener('accountsChanged', onAccountsChanged);
+    ethereum.removeListener('disconnect', resetConnectionState);
+    ethereum.removeListener('chainChanged', onChainChanged);
+  };
+
   const connectWithMetaMask = async () => {
     const { ethereum } = window;
 
@@ -158,27 +258,11 @@ const AuthContextProvider = ({ children }) => {
       Cookies.set('providerName', name);
       return name;
     });
+    ethereum.on('accountsChanged', onAccountsChanged);
 
-    ethereum.on('accountsChanged', async ([account]) => {
-      // IF ACCOUNT CHANGES, CLEAR TOKEN AND ADDRESS FROM LOCAL STORAGE
-      clearStorageAuthData();
-      if (account) {
-        // await connectWithMetaMask();
-        history.push('/');
-        web3AuthenticationProccess(provider, network, [account]);
-      } else {
-        resetConnectionState();
-      }
-    });
+    ethereum.on('chainChanged', onChainChanged);
 
-    ethereum.on('chainChanged', async (networkId) => {
-      clearStorageAuthData();
-      window.location.reload();
-    });
-
-    ethereum.on('disconnect', async (error) => {
-      resetConnectionState();
-    });
+    ethereum.on('disconnect', resetConnectionState);
   };
 
   const connectWithWalletConnect = async () => {
@@ -194,7 +278,7 @@ const AuthContextProvider = ({ children }) => {
 
       const web3ProviderWrapper = new providers.Web3Provider(provider);
       const network = await web3ProviderWrapper.getNetwork();
-      const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
+      const accounts = await web3ProviderWrapper.listAccounts();
 
       if (network.chainId !== +process.env.REACT_APP_NETWORK_CHAIN_ID) {
         await provider.disconnect();
@@ -234,17 +318,25 @@ const AuthContextProvider = ({ children }) => {
   };
 
   const connectWeb3 = async () => {
-    if (providerName === CONNECTORS_NAMES.MetaMask) connectWithMetaMask();
-    if (providerName === CONNECTORS_NAMES.WalletConnect) connectWithWalletConnect();
+    if (isAuthenticatingRef.current) {
+      // Don't run authentication twice
+      return;
+    }
+    setIsAuthenticating(true);
+    if (providerName === CONNECTORS_NAMES.MetaMask) {
+      await connectWithMetaMask();
+    }
+
+    if (providerName === CONNECTORS_NAMES.WalletConnect) {
+      await connectWithWalletConnect();
+    }
   };
 
   useEffect(() => {
-    if (
-      !(providerName === CONNECTORS_NAMES.WalletConnect && !Cookies.get('walletconnect'))
-    ) {
+    if (providerName) {
       connectWeb3();
     }
-  }, []);
+  }, [providerName]);
 
   // Sign message for BE authentication
   const signMessage = async () => {
@@ -256,7 +348,15 @@ const AuthContextProvider = ({ children }) => {
         if (!hasSigned) {
           const chanllenge = uuid();
           const challengeResult = await setChallenge(chanllenge);
-          const signedMessage = await signer?.signMessage(chanllenge);
+          const data = utils.toUtf8Bytes(chanllenge);
+
+          // we need to use this way of signature, otherwise wrong signer is returned on the BE
+          // see issue here https://github.com/ethers-io/ethers.js/issues/491#issuecomment-483899968 for more info
+          const signedMessage = await web3Provider.send('personal_sign', [
+            utils.hexlify(data),
+            address.toLowerCase(),
+          ]);
+
           const authInfo = await userAuthenticate({
             address,
             signedMessage,
@@ -272,6 +372,9 @@ const AuthContextProvider = ({ children }) => {
             Cookies.set('user_address', address);
           } else {
             setIsAuthenticated(false);
+            setErrorBody('Please try again in a few minutes.');
+            setErrorTitle('Failed to authenticate');
+            setShowError(true);
           }
         } else {
           // THE USER ALREADY HAS SIGNED
@@ -293,6 +396,7 @@ const AuthContextProvider = ({ children }) => {
             });
           }
         }
+        setIsAuthenticating(false);
         closeError();
       }
     } catch (err) {
@@ -306,11 +410,16 @@ const AuthContextProvider = ({ children }) => {
       setIsWalletConnected(false);
       setIsAuthenticated(false);
       console.error(err);
+      setIsAuthenticating(false);
     }
   };
 
   useEffect(async () => {
-    if (signer?.address !== address) signMessage();
+    if (!isSigningRef.current && signer?.address !== address) {
+      setIsSigning(true);
+      await signMessage();
+      setIsSigning(false);
+    }
   }, [signer]);
 
   return (
@@ -342,8 +451,6 @@ const AuthContextProvider = ({ children }) => {
         setEthereumNetwork,
         usdEthBalance,
         setUsdEthBalance,
-        ethPrice,
-        setEthPrice,
         isAuthenticated,
         setIsAuthenticated,
         showWrongNetworkPopup,
@@ -360,6 +467,16 @@ const AuthContextProvider = ({ children }) => {
         connectWithMetaMask,
         connectWeb3,
         connectWithWalletConnect,
+        ethUsdPrice,
+        daiUsdPrice,
+        usdcUsdPrice,
+        xyzUsdPrice,
+        wethUsdPrice,
+        getTokenPriceByTicker,
+        signOut,
+        isAuthenticating,
+        loginFn,
+        setLoginFn,
       }}
     >
       {children}

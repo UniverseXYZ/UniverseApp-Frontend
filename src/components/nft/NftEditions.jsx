@@ -21,9 +21,7 @@ const NftEditions = ({ push, searchValue, nft, setSearchValue, collectionAddress
                     key={uuid()}
                     aria-hidden="true"
                     onClick={() => {
-                      push(`/nft/${nft.collection?.address || collectionAddress}/${tokenId}`, {
-                        nft,
-                      });
+                      push(`/nft/${nft.collection?.address || collectionAddress}/${tokenId}`);
                     }}
                   >{`#${tokenId}`}</li>
                 ))}
