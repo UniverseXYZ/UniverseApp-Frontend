@@ -35,10 +35,6 @@ export const UserProfilePage = () => {
 
   useTitle(`Universe Minting - Artist - ${artist?.name}`, { restoreOnUnmount: true });
 
-  if (isError) {
-    return (<NotFound />);
-  }
-
   let content = (
     <div className="artist__details__section">
       <div style={{ marginTop: 60, marginBottom: 60 }} className="artist__page">
@@ -69,7 +65,7 @@ export const UserProfilePage = () => {
     </div>
   );
 
-    if (artist) {
+    if (!isLoading) {
       content = (
         <div className="artist__page">
           <Box sx={{ 'img': { display: 'inline' } }}>
@@ -91,9 +87,9 @@ export const UserProfilePage = () => {
               </TabPanel>
             </TabPanels>
           </Tabs>
-          {artist && artist.personalLogo && (
+          {artist && artist?.personalLogo && (
             <div className="artist__personal__logo">
-              <img src={artist.personalLogo} alt="Artist personal logo" />
+              <img src={artist?.personalLogo} alt="Artist personal logo" />
             </div>
           )}
         </div>
