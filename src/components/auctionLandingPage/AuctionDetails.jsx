@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Animated } from 'react-animated-css';
-import { useHistory } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import Popup from 'reactjs-popup';
 import BidRankingsPopup from '../popups/BidRankingsPopup.jsx';
 import leftArrow from '../../assets/images/arrow.svg';
@@ -12,6 +12,7 @@ import AuctionHeader from './AuctionHeader.jsx';
 import { getBidTypeByName } from '../../utils/fixtures/BidOptions.js';
 import { useAuctionContext } from '../../contexts/AuctionContext.jsx';
 import { useAuthContext } from '../../contexts/AuthContext.jsx';
+import PreviewModeSection from './PreviewModeSection.jsx';
 
 const AuctionDetails = ({
   onAuction,
@@ -38,7 +39,7 @@ const AuctionDetails = ({
   claimableFunds,
   unreleasedFunds,
 }) => {
-  const history = useHistory();
+  const locationState = useLocation().state;
   const { options } = useAuctionContext();
   const { address } = useAuthContext();
   const [showBidRankings, setShowBidRankings] = useState(false);
@@ -131,6 +132,11 @@ const AuctionDetails = ({
         <></>
       )}
       <div className="auction__details__section__container">
+        {locationState && locationState.previewMode ? (
+          <PreviewModeSection locationState={locationState} />
+        ) : (
+          <></>
+        )}
         <ActiveAuctions mainAuction={onAuction} />
         <Animated animationIn="zoomIn" key={onAuction.auction.id}>
           <div className="auction__details__box">

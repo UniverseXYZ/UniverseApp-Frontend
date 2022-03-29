@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext, useRef } from 'react';
-import { useLocation, useParams, useHistory } from 'react-router-dom';
+import { useParams, useHistory } from 'react-router-dom';
 import './AuctionLandingPage.scss';
 import Popup from 'reactjs-popup';
 import BigNumber from 'bignumber.js';
@@ -24,12 +24,10 @@ import { LandingPageLoader } from '../../components/auctionLandingPage/LandingPa
 import SuccessBidPopup from '../../components/popups/SuccessBidPopup';
 import { createRewardsTiersSlots } from '../../utils/helpers';
 import { isBeforeNow } from '../../utils/dates';
-import { ReactComponent as InfoIcon } from '../../assets/images/info-icon.svg';
 
 const AuctionLandingPage = () => {
   const defaultLoadingText =
     'The transaction is in progress. Keep this window opened. Navigating away from the page will reset the current progress.';
-  const locationState = useLocation().state;
   const history = useHistory();
   const { setActiveTxHashes, activeTxHashes } = useMyNftsContext();
   const { myAuctions } = useAuctionContext();
@@ -475,34 +473,8 @@ const AuctionLandingPage = () => {
 
   const bidsHidden = isBeforeNow(auction?.auction?.endDate);
 
-  const exitPreview = () => {
-    if (locationState?.savePreview) {
-      history.push('/my-auctions');
-    } else {
-      history.goBack();
-    }
-  };
-
   return auction ? (
     <div className="auction__landing__page">
-      {locationState && locationState.previewMode ? (
-        <div className="preview--auction--container">
-          <div className="preview--auction">
-            <div>
-              <InfoIcon />
-              Preview mode
-            </div>
-            <div>
-              <button type="button" onClick={exitPreview}>
-                <span className="preview--auction__exit">Exit preview mode</span>
-                <span className="preview--auction__exit--mobile">Exit</span>
-              </button>
-            </div>
-          </div>
-        </div>
-      ) : (
-        <></>
-      )}
       <AuctionDetails
         onAuction={auction}
         bidders={bidders}
