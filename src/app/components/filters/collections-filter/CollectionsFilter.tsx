@@ -56,7 +56,7 @@ export const CollectionsFilter = (props: ICollectionsFilterProps) => {
       return items;
     }
 
-    return [...items].filter(collection => collection.name.toLowerCase().includes(searchValue));
+    return [...items].filter(collection => collection.name?.toLowerCase().includes(searchValue));
   }, [items, searchValue]);
 
   return (
