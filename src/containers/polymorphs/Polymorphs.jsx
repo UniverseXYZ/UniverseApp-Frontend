@@ -12,8 +12,8 @@ import { morphedPolymorphs, queryPolymorphsGraph } from '../../utils/graphql/pol
 import { useGraphQueryHook } from '../../utils/hooks/useGraphQueryHook';
 import { useThemeContext } from '../../contexts/ThemeContext';
 import { useMyNftsContext } from '../../contexts/MyNFTsContext';
-import { useAuthContext } from '../../contexts/AuthContext';
 import { useWindowSize } from 'react-use';
+import { useErc20PriceStore } from '../../stores/erc20PriceStore';
 
 const marquee = () => (
   <p>
@@ -41,7 +41,7 @@ const Polymorphs = () => {
   const [mobile, setMobile] = useState(false);
   const { data } = useGraphQueryHook(queryPolymorphsGraph(morphedPolymorphs));
   const { polymorphsFilter, navigateToMyUniverseNFTsTab } = useMyNftsContext();
-  const { ethUsdPrice, ethPrice } = useAuthContext();
+  const ethUsdPrice = useErc20PriceStore(state => state.ethUsdPrice);
   const windowSize = useWindowSize();
 
   useLayoutEffect(() => {

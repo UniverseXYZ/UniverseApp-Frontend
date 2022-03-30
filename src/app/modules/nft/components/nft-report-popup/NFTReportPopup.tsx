@@ -20,7 +20,7 @@ import { Select } from '../../../../components';
 import { ReportPopupValidationSchema } from './constants';
 import { sendReportRequest } from '../../../../../utils/api/marketplace';
 import { ReportStatusPopup, Status as ReportState } from '../../pages/nft-page/components/nft-info/components/tab-offers/components/report-status-popup';
-import { useAuthContext } from '../../../../../contexts/AuthContext';
+import { useAuthStore } from '../../../../../stores/authStore';
 
 interface INFTReportPopupProps {
   isOpen: boolean;
@@ -32,7 +32,7 @@ interface INFTReportPopupProps {
 export const NFTReportPopup = ({ isOpen, onClose, collectionAddress, tokenId }: INFTReportPopupProps) => {
   const [reportStatus, setReportStatus] = useState(ReportState.HIDDEN);
 
-  const { isAuthenticated, loginFn } = useAuthContext() as any;
+  const { isAuthenticated, loginFn } = useAuthStore(s => ({isAuthenticated: s.isAuthenticated, loginFn: s.loginFn}))
 
   const submitReport = async (values: any) => {
     if (!isAuthenticated) {

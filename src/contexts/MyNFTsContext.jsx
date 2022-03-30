@@ -4,13 +4,13 @@ import PropTypes from 'prop-types';
 import { useHistory } from 'react-router';
 import { getNftSummary } from '../utils/api/mintNFT';
 import { nftKeys } from '../app/utils/query-keys';
-import { useAuthContext } from './AuthContext';
 import { useRouter } from 'next/router';
+import { useAuthStore } from '../stores/authStore';
 
 const MyNFTsContext = createContext(null);
 
 const MyNFTsContextProvider = ({ children }) => {
-  const { address, isAuthenticated, isAuthenticating } = useAuthContext();
+  const { address, isAuthenticated, isAuthenticating } = useAuthStore(s => ({address: s.address, isAuthenticated: s.isAuthenticated, isAuthenticating: s.isAuthenticating}));
   const history = useRouter();
 
   const allCharactersFilter = 'All Characters';

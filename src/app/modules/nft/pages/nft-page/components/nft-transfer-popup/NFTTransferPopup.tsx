@@ -26,8 +26,8 @@ import SuccessIcon from '../../../../../../../assets/images/bid-submitted.png';
 import * as styles from './styles';
 import { Loading, Select } from '../../../../../../components';
 import { INFT, NFTStandard } from '../../../../types';
-import { useAuthContext } from '../../../../../../../contexts/AuthContext';
 import Contracts from '../../../../../../../contracts/contracts.json';
+import { useAuthStore } from '../../../../../../../stores/authStore';
 
 export enum INFTTransferState {
   FORM,
@@ -59,7 +59,7 @@ interface INFTTransferPopupProps {
 }
 
 export const NFTTransferPopup = ({ NFT, isOpen, onClose, }: INFTTransferPopupProps) => {
-  const { signer } = useAuthContext() as any;
+  const signer = useAuthStore(s => s.signer)
 
   const [state, setState] = useState<INFTTransferState>(INFTTransferState.FORM);
 
@@ -72,6 +72,9 @@ export const NFTTransferPopup = ({ NFT, isOpen, onClose, }: INFTTransferPopupPro
     validationSchema: getTransferSchema(NFT),
     onSubmit: async (value) => {
       try {
+        if (!signer) {
+          return;
+        }
         setState(INFTTransferState.PROCESSING);
 
         const contract = new Contract(`${NFT._collectionAddress}`, contractsData[NFT.standard].abi, signer);

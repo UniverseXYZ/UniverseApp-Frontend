@@ -40,13 +40,17 @@ import {
 import { RouterPrompt } from '../../../utils/routerPrompt';
 import { parseDataForBatchMint } from '../../../utils/helpers/pureFunctions/minting';
 import { useMyNftsContext } from '../../../contexts/MyNFTsContext';
-import { useAuthContext } from '../../../contexts/AuthContext';
 import { useErrorContext } from '../../../contexts/ErrorContext';
 import CollectionChoice from './CollectionChoice';
 import universeIcon from '../../../assets/images/universe-img.svg';
 import { timeout } from '../../../app/utils/debounceConfig';
 import { nftKeys } from '../../../app/utils/query-keys';
 import { useSearchParam } from 'react-use';
+import { useAuthStore } from '../../../stores/authStore';
+import { useContractsStore } from '../../../stores/contractsStore';
+import Contracts from '../../../contracts/contracts.json';
+ 
+const { contracts } = Contracts[process.env.REACT_APP_NETWORK_CHAIN_ID];
 
 const MAX_FIELD_CHARS_LENGTH = {
   name: 32,
@@ -78,14 +82,13 @@ const INVALID_ADDRESS_TEXT = 'Please enter valid address or ENS';
 const SingleNFTForm = ({ scrollToTop }) => {
   const { setActiveTxHashes, setMyNFTsSelectedTabIndex } = useMyNftsContext();
 
+  const universeERC721CoreContract = useContractsStore(s => s.universeERC721CoreContract);
+
   const {
-    deployedCollections,
-    universeERC721CoreContract,
     address,
-    contracts,
     signer,
     web3Provider,
-  } = useAuthContext();
+  } = useAuthStore(s => ({address: s.address, signer: s.signer, web3Provider: s.web3Provider}))
 
   const queryClient = useQueryClient();
 

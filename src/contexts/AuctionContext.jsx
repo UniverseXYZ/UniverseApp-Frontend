@@ -2,12 +2,10 @@ import React, { createContext, useState, useEffect, useContext } from 'react';
 import PropTypes from 'prop-types';
 import BidOptions from '../utils/fixtures/BidOptions';
 import { getFutureAuctions } from '../utils/api/auctions';
-import { useAuthContext } from './AuthContext';
 
 const AuctionContext = createContext(null);
 
 const AuctionContextProvider = ({ children }) => {
-  const { isAuthenticated } = useAuthContext();
 
   const [myAuctions, setMyAuctions] = useState([]);
   const [activeAuctions, setActiveAuctions] = useState([]);

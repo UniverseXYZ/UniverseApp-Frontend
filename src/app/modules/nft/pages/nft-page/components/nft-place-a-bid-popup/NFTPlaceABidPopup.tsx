@@ -34,13 +34,13 @@ import { TOKENS, TOKENS_MAP } from '../../../../../../constants';
 import { Checkbox, Loading, TokenIcon } from '../../../../../../components';
 import { ETH_USD_RATE } from '../../../../../../mocks';
 import { IOrder } from '../../../../types';
-import { useAuthContext } from '../../../../../../../contexts/AuthContext';
 import { TokenTicker } from '../../../../../../enums';
 import { sign } from '../../../../../../helpers';
 
 import ArrowIcon from '../../../../../../../assets/images/arrow-down.svg';
 import SuccessIcon from '../../../../../../../assets/images/bid-submitted.png';
 import { GetSaltApi } from '../../../../../../api';
+import { useAuthStore } from '../../../../../../../stores/authStore';
 
 export enum PlaceABidState {
   FORM,
@@ -62,7 +62,7 @@ interface INFTPlaceABidPopupProps {
 export const NFTPlaceABidPopup = ({ order, isOpen, onClose, }: INFTPlaceABidPopupProps) => {
   const tokensBtnRef = useRef<HTMLButtonElement>(null);
 
-  const { signer, web3Provider } = useAuthContext() as any;
+  const { signer, web3Provider } = useAuthStore(s => ({signer: s.signer, web3Provider: s.web3Provider}));
 
   const [state, setState] = useState<PlaceABidState>(PlaceABidState.FORM);
   const [agree, setAgree] = useState(false);

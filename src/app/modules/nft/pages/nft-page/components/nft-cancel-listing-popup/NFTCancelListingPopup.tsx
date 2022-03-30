@@ -17,11 +17,11 @@ import Contracts from '../../../../../../../contracts/contracts.json';
 
 import * as styles from './styles';
 import { IERC721AssetType, IOrder } from '../../../../types';
-import { useAuthContext } from '../../../../../../../contexts/AuthContext';
 import { useLoadingPopupContext } from '../../../../../../providers/LoadingProvider';
 import { EncodeOrderApi } from '../../../../../../api';
 import { GetActiveListingApi } from '../../../../api';
 import { orderKeys } from '../../../../../../utils/query-keys';
+import { useAuthStore } from '../../../../../../../stores/authStore';
 
 // @ts-ignore
 const { contracts: contractsData } = Contracts[process.env.REACT_APP_NETWORK_CHAIN_ID];
@@ -36,7 +36,7 @@ const INDEXING_TAKING_TOO_LONG = "Receving the event from the blockchain is taki
 
 export const NFTCancelListingPopup = ({ order, isOpen, onClose }: INFTCancelListingPopupProps) => {
 
-  const { signer } = useAuthContext();
+  const signer = useAuthStore(s => s.signer)
   const { setShowLoading, setLoadingTitle, setLoadingBody, closeLoading, setTransactions } = useLoadingPopupContext();
   const queryClient = useQueryClient();
 
