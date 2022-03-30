@@ -1,6 +1,11 @@
 import axios from 'axios';
 import { ethers } from 'ethers';
 
+import { INFTBackendType } from '@app/types';
+import { getArtworkType } from '@app/helpers';
+
+import { ARTWORK_TYPES } from '@legacy/helpers/pureFunctions/nfts';
+
 import {
   ICollectionBackend,
   INFT,
@@ -15,56 +20,12 @@ import {
   ICollectionOrderBookData,
 } from '../types';
 import { mapBackendCollection, mapBackendNft, mapBackendUser, mapDropdownCollection } from '../helpers';
-import { INFTBackendType } from '../../../types';
-import { getArtworkType } from '../../../helpers';
-import { ARTWORK_TYPES } from '../../../../utils/helpers/pureFunctions/nfts';
 
 interface ICollectionNFTsResponse {
   data: any[];
   page: number;
   size: string;
   total: number;
-}
-interface IGetNFTResponse {
-  _id: string;
-  contractAddress: string;
-  tokenId: string;
-  createdAt: string;
-  needToRefresh: boolean;
-  alternativeMediaFiles: Array<{
-    type: string; // image
-    url: string;
-  }>;
-  firstOwner: string;
-  owners: Array<{
-    address: string;
-    transactionHash: string;
-    value: number;
-  }>;
-  tokenType: string;
-  updatedAt: string;
-  sentAt: string;
-  externalDomainViewUrl: string;
-  metadata: {
-    description: string;
-    name: string;
-    image: string;
-    image_url: string;
-    image_preview_url: string;
-    image_thumbnail_url: string;
-    image_original_url: string;
-    external_url: string;
-    attributes: Array<{
-      trait_type: string;
-      value: string;
-      display_type?: string;
-    }>;
-    royalties?: Array<{
-      address: string;
-      amount: number;
-    }>;
-  };
-  sentForMediaAt: string;
 }
 
 export const GetNFT2Api = async (collectionAddress: string, tokenId: string | number, fetchCollection = true) => {
@@ -83,7 +44,7 @@ export const GetNFT2Api = async (collectionAddress: string, tokenId: string | nu
     axios.get<INFTBackendType>(url),
   ])
 
-  return mapNft(data, undefined);
+  return mapNft(data, null);
 
 };
 
@@ -93,7 +54,7 @@ export const GetMoreFromCollectionApi = async (collectionAddress: string, tokenI
 
     const { data } = await axios.get<INFTBackendType[]>(url, {params: { excludeTokenId: tokenId, maxCount: 4 }})
 
-    const NFT = data.map((nft: INFTBackendType) => mapNft(nft, undefined));
+    const NFT = data.map((nft: INFTBackendType) => mapNft(nft, null));
 
     return NFT;
   } catch (e) {
@@ -174,7 +135,7 @@ export const getURL = (url: string | null | undefined) => {
   return url;
 }
 
-export const mapNft = (data: INFTBackendType, collectionData: ICollection | undefined): INFT => {
+export const mapNft = (data: INFTBackendType, collectionData: ICollection | null): INFT => {
   const alternativeImage = data.alternativeMediaFiles.find(file => file.type === ARTWORK_TYPES.image);
   const altImgComponents = alternativeImage?.url.split('.');
 
@@ -274,7 +235,7 @@ export const GetCollectionNFTsApi = async (address: string, page: string | numbe
     const { data: { data, ...responseData } } = await axios.get<ICollectionNFTsResponse>(url);
 
     return {
-      data: data.map((nft: INFTBackendType) => mapNft(nft, undefined)),
+      data: data.map((nft: INFTBackendType) => mapNft(nft, null)),
       ...responseData,
     }
   } catch (e) {

@@ -13,7 +13,36 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "jsx": "preserve",
-    "incremental": true
+    "incremental": true,
+    "baseUrl": "./",
+    "paths": {
+      "@legacy/*": [
+        "src/components/*",
+        "src/containers/*",
+        "src/contexts/*",
+        "src/contracts/*",
+        "src/userFlows/*",
+        "src/utils/*"
+      ],
+      "@assets/*": [
+        "src/assets/*"
+      ],
+      "@app": [
+        "src/app"
+      ],
+      "@app/*": [
+        "src/app/*"
+      ],
+      "@app/nft": [
+        "src/app/modules/nft/*"
+      ],
+      "@app/account": [
+        "src/app/modules/account/*"
+      ],
+      "@app/marketplace": [
+        "src/app/modules/marketplace/*"
+      ]
+    }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
   "exclude": ["node_modules"]
