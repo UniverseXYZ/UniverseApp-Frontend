@@ -97,7 +97,7 @@ export const NftItem = (
       retry: false,
     },
   );
-  console.log('rerender');
+
   // Get Owner Query
   const { data: owner, isLoading: isLoadingOwner } = useQuery(
     userKeys.info(NFT?._ownerAddress || ""),
