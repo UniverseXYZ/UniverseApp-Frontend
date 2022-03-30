@@ -134,6 +134,7 @@ import { Theme } from '../src/app/theme';
 import { LayoutProvider } from '../src/app/providers';
 import { useErc20PriceStore } from '../src/stores/erc20PriceStore';
 import { useAuthStore } from '../src/stores/authStore';
+import Cookies from 'js-cookie'
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -155,7 +156,7 @@ function MyApp({ Component, pageProps }: AppProps) {
   // }
   
   const fetchPrices = useErc20PriceStore(s => useCallback(s.fetchPrices, []));
-  const { providerName, connectWeb3, signer, loggedInArtist, address, signMessage, setIsSigning, isSigning } = useAuthStore(s => ({providerName: s.providerName, connectWeb3: s.connectWeb3, signer: s.signer, loggedInArtist: s.loggedInArtist, address: s.address, signMessage: s.signMessage, setIsSigning: s.setIsSigning, isSigning: s.isSigning}))
+  const setProviderName = useAuthStore(s => useCallback(s.setProviderName, []));
 
   useEffect(() => {
     fetchPrices();
@@ -168,24 +169,13 @@ function MyApp({ Component, pageProps }: AppProps) {
     return () => clearInterval(priceInterval);
   }, []);
 
+  // SSR causes a mismatch between providerName if we set it in authStore as default value
   useEffect(() => {
+    const providerName = Cookies.get('providerName');
     if (providerName) {
-      connectWeb3();
+      setProviderName(providerName);
     }
-  }, [providerName]);
-
-  useEffect(() => {
-    const trySignIn = async () => {
-      const signerAddress = await signer?.getAddress();
-      if (!isSigning && (!signer || (signerAddress !== address))) {
-        setIsSigning(true);
-        await signMessage();
-        setIsSigning(false);
-      }
-    }
-
-    trySignIn();
-  }, [signer]);
+  }, [])
 
   return (
     // <ErrorContextProvider>
