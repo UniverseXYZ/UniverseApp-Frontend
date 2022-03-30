@@ -43,6 +43,7 @@ jobs:
     - name: Build
       run: npm run build
       env:
+        REACT_APP_BASE_URL: "https://universe.xyz"
         REACT_APP_API_BASE_URL: "https://api.universe.xyz"
         REACT_APP_NETWORK_CHAIN_ID: "1"
         REACT_APP_NETWORK_NAME: "Mainnet"

@@ -30,9 +30,9 @@ import { collectionKeys } from '../../../app/utils/query-keys.ts';
 import { useRouter } from 'next/router';
 import { useSearchParam } from 'react-use';
 import universeIcon from '../../../assets/images/universe-img.svg';
-import { useAuthStore } from '../../../stores/authStore.js';
-import { useContractsStore } from '../../../stores/contractsStore.js';
-import { useErrorStore } from '../../../stores/errorStore.js';
+import { useAuthStore } from '../../../stores/authStore';
+import { useContractsStore } from '../../../stores/contractsStore';
+import { useErrorStore } from '../../../stores/errorStore';
 
 const MAX_FIELD_CHARS_LENGTH = {
   name: 32,
@@ -52,7 +52,11 @@ const NFTCollectionForm = ({ scrollToTop }) => {
   const signer = useAuthStore(s => s.signer);
   const universeERC721FactoryContract = useContractsStore(s => s.universeERC721FactoryContract);
 
-  const { setShowError, setErrorTitle, setErrorBody } = useErrorStore(s => ({setErrorBody: s.setErrorBody, setErrorTitle: s.setErrorTitle, setErrorBody: s.setErrorBody}))
+  const { setShowError, setErrorTitle, setErrorBody } = useErrorStore(s => ({
+    setErrorBody: s.setErrorBody,
+    setErrorTitle: s.setErrorTitle,
+  }))
+
   const [showPrompt, setShowPrompt] = useState(false);
 
   const inputFile = useRef(null);

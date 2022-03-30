@@ -15,6 +15,7 @@ export function mapBackendNft(
 ): INFT {
   return {
     ...NFT,
+    collection: null,
     optimizedUrl: optimized_url,
     originalUrl: original_url,
     thumbnailUrl: thumbnail_url,
