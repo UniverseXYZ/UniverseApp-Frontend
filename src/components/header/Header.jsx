@@ -24,12 +24,12 @@ import mp3Icon from '../../assets/images/mp3-icon.png';
 import audioIcon from '../../assets/images/marketplace/audio-icon.svg';
 import { defaultColors } from '../../utils/helpers';
 import { CONNECTORS_NAMES } from '../../utils/dictionary';
-import { useAuthContext } from '../../contexts/AuthContext';
 import { useThemeContext } from '../../contexts/ThemeContext';
 import { useLayout } from '../../app/providers';
 import SelectWalletPopup from '../popups/SelectWalletPopup';
 import { useRouter } from 'next/router';
 import Link from 'next/link'
+import { useAuthStore } from '../../stores/authStore';
 
 const Header = () => {
   const {
@@ -39,7 +39,14 @@ const Header = () => {
     connectWithMetaMask,
     address,
     setLoginFn,
-  } = useAuthContext();
+  } = useAuthStore(s => ({
+    isWalletConnected: s.isWalletConnected,
+    setIsWalletConnected: s.setIsWalletConnected,
+    connectWithWalletConnect: s.connectWithWalletConnect,
+    connectWithMetaMask: s.connectWithMetaMask,
+    address: s.address,
+    setLoginFn: s.setLoginFn
+  }))
 
   const router = useRouter();
 

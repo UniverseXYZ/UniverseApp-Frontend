@@ -64,10 +64,11 @@ import {
   shortenEnsDomain,
   shortenEthereumAddress,
 } from '../../../../utils/helpers/format';
-import { useAuthContext } from '../../../../contexts/AuthContext';
 import { useAuctionContext } from '../../../../contexts/AuctionContext';
 import supportIcon from '../../../../assets/images/supportIcon.svg';
 import Badge from '../../../badge/Badge';
+import { useUserBalanceStore } from '../../../../stores/balanceStore';
+import { useAuthStore } from '../../../../stores/authStore';
 
 const MobileView = (props) => {
   const {
@@ -86,8 +87,10 @@ const MobileView = (props) => {
     showMobileSearch,
     setShowMobileSearch,
   } = props;
-  const { address, yourBalance, yourEnsDomain, usdEthBalance, signOut, isAuthenticating } =
-    useAuthContext();
+  const { yourEnsDomain, signOut, isAuthenticating } = useAuthStore(s => ({yourEnsDomain: s.yourEnsDomain, signOut: s.signOut, isAuthenticating: s.isAuthenticating}))
+  
+  const { yourBalance, usdEthBalance } = useUserBalanceStore(state => ({yourBalance: state.yourBalance, usdEthBalance: state.usdEthBalance}));
+
   const [isAccountDropdownOpened, setIsAccountDropdownOpened] = useState(false);
   const [copied, setCopied] = useState(false);
   const ref = useRef(null);
@@ -95,7 +98,6 @@ const MobileView = (props) => {
   const searchRef = useRef();
   const [searchValue, setSearchValue] = useState('');
   const [searchFocus, setSearchFocus] = useState(false);
-  const { loggedInArtist } = useAuthContext();
   const { editProfileButtonClick } = useAuctionContext();
   const [showProducts, setShowProducts] = useState(false);
   const [showNFTDrops, setShowNFTDrops] = useState(false);
@@ -527,6 +529,7 @@ const MobileView = (props) => {
                     className="signOut"
                     onClick={() => {
                       signOut();
+                      history.push('/');
                       setIsAccountDropdownOpened(false);
                     }}
                   >

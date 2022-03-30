@@ -8,13 +8,13 @@ import singleIcon from '../../../assets/images/minting-create-nft.png';
 import singleIconHover from '../../../assets/images/minting-create-nft-hover.png';
 import collectionIcon from '../../../assets/images/minting-create-collection.png';
 import collectionIconHover from '../../../assets/images/minting-create-collection-hover.png';
-import { useAuthContext } from '../../../contexts/AuthContext';
 import WrongNetworkPopup from '../../popups/WrongNetworkPopup';
 import NotAuthenticatedPopup from '../../popups/NotAuthenticatedPopup';
+import { useAuthStore } from '../../../stores/authStore';
 
 const MintingPage = () => {
   const router = useRouter();
-  const { isAuthenticated, isWalletConnected } = useAuthContext();
+  const { isAuthenticated, isWalletConnected } = useAuthStore(s => ({isAuthenticated: s.isAuthenticated, isWalletConnected: s.isWalletConnected}));
   const { setDarkMode } = useThemeContext();
   const [showNotAuthenticatedPopup, setShowNotAuthenticatedPopup] = useState(false);
 

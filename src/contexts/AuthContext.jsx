@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import { Contract, providers, utils } from 'ethers';
 import uuid from 'react-uuid';
 import WalletConnectProvider from '@walletconnect/web3-provider';
-import { getERC20PriceCoingecko, getEthPriceCoingecko } from '../utils/api/etherscan';
 import Contracts from '../contracts/contracts.json';
 import { CONNECTORS_NAMES } from '../utils/dictionary';
 import { getProfileInfo, setChallenge, userAuthenticate } from '../utils/api/profile';
@@ -18,9 +17,11 @@ const AuthContext = createContext(null);
 
 const AuthContextProvider = ({ children }) => {
   const { setShowError, setErrorTitle, setErrorBody, closeError } = useErrorContext();
+  
+  const setYourBalance = useUserBalanceStore(state => state.setUsdEthBalance);
 
   const [loggedInArtist, setLoggedInArtist] = useState({
-    id: uuid(),
+    id: '',
     name: '',
     universePageAddress: '',
     avatar: null,
@@ -30,33 +31,27 @@ const AuthContextProvider = ({ children }) => {
     twitterLink: '',
     social: true,
   });
-  const [myBalance, setMyBalance] = useState(48.24);
+
   const [polymorphContract, setPolymorphContract] = useState(null);
   const [lobsterContract, setLobsterContract] = useState(null);
   const [providerName, setProviderName] = useState(Cookies.get('providerName') || '');
   const [web3Provider, setWeb3Provider] = useState(null);
   const [address, setAddress] = useState('');
   const [signer, setSigner] = useState(null);
-  const [yourBalance, setYourBalance] = useState(0);
   const [yourEnsDomain, setYourEnsDomain] = useState(null);
   const [isWalletConnected, setIsWalletConnected] = useState(false);
   const [ethereumNetwork, setEthereumNetwork] = useState('');
-  const [usdEthBalance, setUsdEthBalance] = useState(0);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [showWrongNetworkPopup, setShowWrongNetworkPopup] = useState(false);
   const [universeERC721CoreContract, setUniverseERC721CoreContract] = useState(null);
   const [universeERC721FactoryContract, setUniverseERC721FactoryContract] = useState(null);
   const [contracts, setContracts] = useState(false);
   const [deployedCollections, setDeployedCollections] = useState([]);
-  const history = useRouter();
-  const [ethUsdPrice, setEthUsdPrice] = useState(0);
-  const [daiUsdPrice, setDaiUsdPrice] = useState(0);
-  const [usdcUsdPrice, setUsdcUsdPrice] = useState(0);
-  const [xyzUsdPrice, setXyzUsdPrice] = useState(0);
-  const [wethUsdPrice, setWethUsdPrice] = useState(0);
   const [isAuthenticating, setIsAuthenticating] = useState(false);
   const [isSigning, setIsSigning] = useState(false);
   const [loginFn, setLoginFn] = useState();
+
+  const history = useRouter();
+  const [showWrongNetworkPopup, setShowWrongNetworkPopup] = useState(false);
 
   const web3ProviderRef = useRef(web3Provider);
   const networkRef = useRef(ethereumNetwork);
@@ -79,64 +74,11 @@ const AuthContextProvider = ({ children }) => {
     isSigningRef.current = isSigning;
   }, [isSigning]);
 
-  // Getters
-  useEffect(() => {
-    (async () => {
-      try {
-        const [ethPrice, daiInfo, usdcInfo, xyzInfo, wethInfo] = await Promise.all([
-          getEthPriceCoingecko(),
-          getERC20PriceCoingecko('dai'),
-          getERC20PriceCoingecko('usd-coin'),
-          getERC20PriceCoingecko('universe-xyz'),
-          getERC20PriceCoingecko('weth'),
-        ]);
-
-        console.log(`wethPrice: ${wethInfo?.market_data?.current_price?.usd}`);
-        console.log(`ethPrice: ${ethPrice?.market_data?.current_price?.usd}`);
-        console.log(`usdcPrice: ${usdcInfo?.market_data?.current_price?.usd}`);
-        console.log(`daiPrice: ${daiInfo?.market_data?.current_price?.usd}`);
-        console.log(`xyzPrice: ${xyzInfo?.market_data?.current_price?.usd}`);
-
-        setEthUsdPrice(ethPrice?.market_data?.current_price?.usd);
-        setDaiUsdPrice(daiInfo?.market_data?.current_price?.usd);
-        setUsdcUsdPrice(usdcInfo?.market_data?.current_price?.usd);
-        setXyzUsdPrice(xyzInfo?.market_data?.current_price?.usd);
-        setWethUsdPrice(wethInfo?.market_data?.current_price?.usd);
-      } catch (err) {
-        console.log('coingecko price fetching failed');
-        console.log(err);
-      }
-    })();
-  }, []);
-
-  useEffect(() => {
-    if (yourBalance && usdcUsdPrice) {
-      setUsdEthBalance(ethUsdPrice * yourBalance);
-    }
-  }, [yourBalance, usdcUsdPrice]);
-
   // HELPERS
   const clearStorageAuthData = () => {
     Cookies.remove('xyz_access_token');
     Cookies.remove('user_address');
     Cookies.remove('providerName');
-  };
-
-  const getTokenPriceByTicker = (ticker) => {
-    switch (ticker) {
-      case TokenTicker.ETH:
-        return ethUsdPrice;
-      case TokenTicker.USDC:
-        return usdcUsdPrice;
-      case TokenTicker.DAI:
-        return daiUsdPrice;
-      case TokenTicker.WETH:
-        return wethUsdPrice;
-      case TokenTicker.XYZ:
-        return xyzUsdPrice;
-      default:
-        return ethUsdPrice;
-    }
   };
 
   // Authentication and Web3
@@ -177,7 +119,8 @@ const AuthContextProvider = ({ children }) => {
     setWeb3Provider(provider);
     setAddress(accounts.length ? accounts[0].toLowerCase() : '');
     setSigner(signerResult);
-    setYourBalance(utils.formatEther(balance));
+    setYourBalance(Number(utils.formatEther(balance)));
+    
     setYourEnsDomain(ensDomain);
     // setIsWalletConnected(true);
     setEthereumNetwork(network);
@@ -427,8 +370,6 @@ const AuthContextProvider = ({ children }) => {
       value={{
         loggedInArtist,
         setLoggedInArtist,
-        myBalance,
-        setMyBalance,
         polymorphContract,
         setPolymorphContract,
         lobsterContract,
@@ -441,16 +382,12 @@ const AuthContextProvider = ({ children }) => {
         setAddress,
         signer,
         setSigner,
-        yourBalance,
-        setYourBalance,
         yourEnsDomain,
         setYourEnsDomain,
         isWalletConnected,
         setIsWalletConnected,
         ethereumNetwork,
         setEthereumNetwork,
-        usdEthBalance,
-        setUsdEthBalance,
         isAuthenticated,
         setIsAuthenticated,
         showWrongNetworkPopup,
@@ -467,12 +404,6 @@ const AuthContextProvider = ({ children }) => {
         connectWithMetaMask,
         connectWeb3,
         connectWithWalletConnect,
-        ethUsdPrice,
-        daiUsdPrice,
-        usdcUsdPrice,
-        xyzUsdPrice,
-        wethUsdPrice,
-        getTokenPriceByTicker,
         signOut,
         isAuthenticating,
         loginFn,

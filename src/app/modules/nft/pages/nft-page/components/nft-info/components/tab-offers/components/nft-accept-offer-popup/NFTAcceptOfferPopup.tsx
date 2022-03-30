@@ -19,7 +19,6 @@ import { useMutation, useQueryClient } from 'react-query';
 
 import AudioNFTPreviewImage from '../../../../../../../../../../../assets/images/v2/audio-nft-preview.png';
 
-import { useAuthContext } from '../../../../../../../../../../../contexts/AuthContext';
 import { Loading, TokenIcon } from '../../../../../../../../../../components';
 import { NFTType } from './components';
 import { AcceptState } from './enums';
@@ -31,13 +30,14 @@ import { TokenTicker } from '../../../../../../../../../../enums';
 import { Fee } from '../../../../../../../../../marketplace/pages/sell-page/components/tab-summary/compoents';
 import { getRoyaltiesFromRegistry } from '../../../../../../../../../../../utils/marketplace/utils';
 import { useTokenPrice } from '../../../../../../../../../../hooks';
-import { useErrorContext } from '../../../../../../../../../../../contexts/ErrorContext';
 import { nftKeys, orderKeys } from '../../../../../../../../../../utils/query-keys';
 import { GetActiveListingApi, GetNFT2Api, GetOrdersApi } from '../../../../../../../../api';
 import { useNFTPageData } from '../../../../../../NFTPage.context';
 import CheckIcon from '../../../../../../../../../../../assets/images/check-vector.svg';
 import Contracts from '../../../../../../../../../../../contracts/contracts.json';
 import { NFTCustomError } from '../../../../../nft-custom-error/NFTCustomError';
+import { useAuthStore } from '../../../../../../../../../../../stores/authStore';
+import { useErrorStore } from '../../../../../../../../../../../stores/errorStore';
 
 interface INFTAcceptOfferPopupProps {
   NFT?: INFT;
@@ -51,11 +51,11 @@ interface INFTAcceptOfferPopupProps {
 const { contracts: contractsData } = Contracts[process.env.REACT_APP_NETWORK_CHAIN_ID];
 
 export const NFTAcceptOfferPopup = ({ NFT, NFTs, order, isOpen, onClose }: INFTAcceptOfferPopupProps) => {
-  const { address, signer } = useAuthContext() as any;
+  const { address, signer } = useAuthStore(s => ({address: s.address, signer: s.signer}))
 
-  const { setShowError, setErrorBody } = useErrorContext() as any;
+  const { setShowError, setErrorBody } = useErrorStore(s => ({setErrorBody: s.setErrorBody, setShowError: s.setShowError}))
 
-  const contract = new Contract(`${NFT?._collectionAddress}`, contractsData[NFT?.standard].abi, signer);
+  const contract = useCallback(() => !signer ? null : new Contract(`${NFT?._collectionAddress}`, contractsData[NFT?.standard].abi, signer), [signer]);
 
   const queryClient = useQueryClient();
   const { offers } = useNFTPageData();
@@ -118,6 +118,9 @@ export const NFTAcceptOfferPopup = ({ NFT, NFTs, order, isOpen, onClose }: INFTA
 
   const handleAcceptClick = useCallback(async () => {
     try {
+      if (!signer || !contract) {
+        return;
+      }
       const isApprovedForAll = await contract.isApprovedForAll(address, process.env.REACT_APP_MARKETPLACE_CONTRACT);
       if (!isApprovedForAll) {
         setState(AcceptState.APPROVAL);

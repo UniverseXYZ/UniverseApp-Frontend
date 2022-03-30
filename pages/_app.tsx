@@ -116,7 +116,7 @@ import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 
 import type { AppProps } from 'next/app'
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { QueryClient, QueryClientProvider } from 'react-query';
 
 import { AuthContextProvider } from '../src/contexts/AuthContext';
@@ -132,6 +132,8 @@ import { PolymorphContextProvider } from '../src/contexts/PolymorphContext';
 import { Popups } from '../src/app/components/AppPopups';
 import { Theme } from '../src/app/theme';
 import { LayoutProvider } from '../src/app/providers';
+import { useErc20PriceStore } from '../src/stores/erc20PriceStore';
+import { useAuthStore } from '../src/stores/authStore';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -151,11 +153,44 @@ function MyApp({ Component, pageProps }: AppProps) {
   // if (!mounted) {
   //   return null;
   // }
+  
+  const fetchPrices = useErc20PriceStore(s => useCallback(s.fetchPrices, []));
+  const { providerName, connectWeb3, signer, loggedInArtist, address, signMessage, setIsSigning, isSigning } = useAuthStore(s => ({providerName: s.providerName, connectWeb3: s.connectWeb3, signer: s.signer, loggedInArtist: s.loggedInArtist, address: s.address, signMessage: s.signMessage, setIsSigning: s.setIsSigning, isSigning: s.isSigning}))
+
+  useEffect(() => {
+    fetchPrices();
+
+    // Refetch erc20 prices every 60 seconds  
+    const priceInterval = setInterval(() => {
+      fetchPrices();
+    }, 60000);
+
+    return () => clearInterval(priceInterval);
+  }, []);
+
+  useEffect(() => {
+    if (providerName) {
+      connectWeb3();
+    }
+  }, [providerName]);
+
+  useEffect(() => {
+    const trySignIn = async () => {
+      const signerAddress = await signer?.getAddress();
+      if (!isSigning && (!signer || (signerAddress !== address))) {
+        setIsSigning(true);
+        await signMessage();
+        setIsSigning(false);
+      }
+    }
+
+    trySignIn();
+  }, [signer]);
 
   return (
-    <ErrorContextProvider>
+    // <ErrorContextProvider>
       <QueryClientProvider client={queryClient}>
-        <AuthContextProvider>
+        {/* <AuthContextProvider> */}
           <ThemeContextProvider>
             <PolymorphContextProvider>
               <LobsterContextProvider>
@@ -178,9 +213,9 @@ function MyApp({ Component, pageProps }: AppProps) {
               </LobsterContextProvider>
             </PolymorphContextProvider>
           </ThemeContextProvider>
-        </AuthContextProvider>
+        {/* </AuthContextProvider> */}
       </QueryClientProvider>
-    </ErrorContextProvider>
+    // </ErrorContextProvider>
   );
 }
 

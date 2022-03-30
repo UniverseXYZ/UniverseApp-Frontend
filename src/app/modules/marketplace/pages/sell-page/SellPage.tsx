@@ -27,7 +27,6 @@ import { SelectMethodType, SettingsTab, SummaryTab, TabPanel } from './component
 import { SellAmountType, SellMethod, SellPageTabs } from './enums';
 import { IMarketplaceSellContextData, ISellForm } from './types';
 import { sign } from '../../../../helpers';
-import { useAuthContext } from '../../../../../contexts/AuthContext';
 import { TOKENS_MAP, ZERO_ADDRESS } from '../../../../constants';
 import { TokenTicker } from '../../../../enums';
 import { GetActiveListingApi, GetHistoryApi, GetNFT2Api } from '../../../nft/api';
@@ -40,9 +39,10 @@ import { useQueryClient } from 'react-query'
 // @ts-ignore
 const { contracts: contractsData } = Contracts[process.env.REACT_APP_NETWORK_CHAIN_ID];
 import { Status, Status as PostingPopupStatus } from './components/tab-summary/compoents/posting-popup/enums/index';
-import { useErrorContext } from '../../../../../contexts/ErrorContext';
 import { nftKeys, orderKeys } from '../../../../utils/query-keys';
 import { useRouter } from 'next/router';
+import { useAuthStore } from '../../../../../stores/authStore';
+import { useErrorStore } from '../../../../../stores/errorStore';
 
 const getValidationSchema = (amountType?: SellAmountType, sellMethod?: SellMethod) => {
   switch (sellMethod) {
@@ -64,9 +64,9 @@ export const SellPage = () => {
 
   const params = router.query as { collectionAddress: string; tokenId: string; };
 
-  const { signer, web3Provider, address } = useAuthContext() as any;
+  const { signer, web3Provider } = useAuthStore(state => ({signer: state.signer, web3Provider: state.web3Provider})) as any;
 
-  const { setShowError, setErrorBody} = useErrorContext() as any;
+  const { setShowError, setErrorBody } = useErrorStore(s => ({setShowError: s.setShowError, setErrorBody: s.setErrorBody}))
 
   const queryClient = useQueryClient();
 

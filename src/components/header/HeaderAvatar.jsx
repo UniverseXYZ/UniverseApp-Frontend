@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Blockies from 'react-blockies';
-import { useAuthContext } from '../../contexts/AuthContext';
+import { useAuthStore } from '../../stores/authStore';
 
 const HeaderAvatar = ({ scale }) => {
-  const { loggedInArtist, address } = useAuthContext();
+  const { loggedInArtist, address } = useAuthStore(s => ({loggedInArtist: s.loggedInArtist, address: s.address}))
 
   return (
     <>

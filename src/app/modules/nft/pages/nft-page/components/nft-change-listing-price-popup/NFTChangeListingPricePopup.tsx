@@ -35,11 +35,11 @@ import { Loading, TokenIcon } from '../../../../../../components';
 import { IERC721AssetType, INFT, IOrder } from '../../../../types';
 import { TokenTicker } from '../../../../../../enums';
 import { EncodeOrderApi, GetSaltApi, IEncodeOrderApiData } from '../../../../../../api';
-import { useAuthContext } from '../../../../../../../contexts/AuthContext';
-import { useErrorContext } from '../../../../../../../contexts/ErrorContext';
 import { sign } from '../../../../../../helpers';
 import { NFTCancelListingPopup } from '..';
 import { nftKeys, orderKeys } from '../../../../../../utils/query-keys';
+import { useAuthStore } from '../../../../../../../stores/authStore';
+import { useErrorStore } from '../../../../../../../stores/errorStore';
 
 export enum ChangeListingPriceState {
   FORM,
@@ -69,9 +69,9 @@ export const NFTChangeListingPricePopup = ({ nft, order, isOpen, onClose, }: INF
 
   const tokens = useMemo(() => TOKENS, []);
 
-  const { signer, web3Provider } = useAuthContext() as any;
+  const { signer, web3Provider } = useAuthStore(s => ({signer: s.signer, web3Provider: s.web3Provider}))
 
-  const { setShowError } = useErrorContext() as any;
+  const setShowError = useErrorStore(s => s.setShowError);
 
   const getSaltMutation = useMutation(GetSaltApi);
 
@@ -110,7 +110,7 @@ export const NFTChangeListingPricePopup = ({ nft, order, isOpen, onClose, }: INF
   const updateListing = async (value: any) => {
     try {
 
-      if (nft == undefined || oldOrder == undefined) {
+      if (nft == undefined || oldOrder == undefined || !web3Provider || !signer) {
         return;
       }
 

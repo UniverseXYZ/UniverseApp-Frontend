@@ -10,13 +10,13 @@ import { fetchTokensMetadataJson } from '../../../utils/api/polymorphs';
 import LoadingPopup from '../../popups/LoadingPopup';
 import MintPolymorphConfirmationPopup from '../../popups/MintPolymorphConfirmationPopup';
 import { useLobsterContext } from '../../../contexts/LobsterContext';
-import { useAuthContext } from '../../../contexts/AuthContext';
 import { useWindowSize } from 'react-use';
+import { useAuthStore } from '../../../stores/authStore';
 
 const MintLobbyLobsterSection = React.forwardRef((props, ref) => {
   const { userLobsters, setUserLobsters, lobstersFilter } = useLobsterContext();
 
-  const { lobsterContract } = useAuthContext();
+  const lobsterContract = useAuthStore(s => s.lobsterContract)
 
   const [sliderValue, setSliderValue] = useState(10000);
   const [quantity, setQuantity] = useState(1);

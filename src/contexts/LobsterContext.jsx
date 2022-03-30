@@ -1,9 +1,9 @@
 import React, { createContext, useState, useEffect, useContext } from 'react';
 import PropTypes from 'prop-types';
-import { useAuthContext } from './AuthContext';
 import { queryLobstersGraph, transferLobsters } from '../utils/graphql/lobsterQueries';
 import { fetchTokensMetadataJson } from '../utils/api/lobsters';
 import { convertLobsterObjects } from '../utils/helpers/lobsters';
+import { useAuthStore } from '../stores/authStore';
 
 const LobsterContext = createContext(null);
 
@@ -11,7 +11,7 @@ const LobsterContextProvider = ({ children }) => {
   const [userLobsters, setUserLobsters] = useState([]);
   const [userLobstersWithMetadata, setUserLobstersWithMetadata] = useState([]);
   const [userLobstersLoaded, setUserLobstersLoaded] = useState(false);
-  const { address } = useAuthContext();
+  const address = useAuthStore(s => s.address);
 
   const fetchUserLobstersTheGraph = async (newAddress) => {
     setUserLobstersLoaded(false);
