@@ -35,7 +35,7 @@ export const getUserNFTsApi = async (props: IGetUserNFTsProps) => {
   const { data: { data, ...responseData } } = await axios.get<IUserNFTsResponse>(url);
 
   return {
-    data: data.map((nft) => mapNft(nft, undefined)) as INFT[],
+    data: data.map((nft) => mapNft(nft, null)) as INFT[],
     ...responseData,
   }
 };

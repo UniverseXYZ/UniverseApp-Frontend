@@ -81,7 +81,7 @@ export const NFTTransferPopup = ({ NFT, isOpen, onClose, }: INFTTransferPopupPro
         const address = await signer.getAddress();
 
         let methodName = 'safeTransferFrom(address,address,uint256)';
-        let params = [address, value.receiverAddress, value.tokenId];
+        let params: Array<string | number> = [address, value.receiverAddress, value.tokenId];
 
         if (NFT.standard === NFTStandard.ERC1155) {
           methodName = 'safeTransferFrom';
