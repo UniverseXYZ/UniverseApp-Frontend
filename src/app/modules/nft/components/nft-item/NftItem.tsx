@@ -1,8 +1,7 @@
 import { Box, LinkBox, LinkOverlay, Text } from '@chakra-ui/react';
-import React, { useMemo, useRef, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { useQuery } from 'react-query';
 import { Link } from 'react-router-dom';
-import { useHoverDirty } from 'react-use';
 import { utils } from 'ethers';
 
 import { ICollection, IERC721AssetType, INFT, IUser, IOrder } from '../../types';
@@ -12,9 +11,7 @@ import * as styles from './styles';
 import { NFTRelationType } from '../../enums';
 import { GetActiveListingApi, GetBestAndLastOffer, GetCollectionApi, GetNFT2Api, GetUserApi } from '../../api';
 import { TokenTicker } from '../../../../enums';
-import { getTokenByAddress, TOKENS_MAP } from '../../../../constants';
-import { NFTCheckoutPopup } from '../../pages/nft-page/components';
-import { shortenEthereumAddress } from '../../../../../utils/helpers/format';
+import { getTokenByAddress } from '../../../../constants';
 import { collectionKeys, nftKeys, orderKeys, userKeys } from '../../../../utils/query-keys';
 import { OrderSide, OrderStatus } from '../../../marketplace/enums';
 
@@ -100,7 +97,7 @@ export const NftItem = (
       retry: false,
     },
   );
-
+  console.log('rerender');
   // Get Owner Query
   const { data: owner, isLoading: isLoadingOwner } = useQuery(
     userKeys.info(NFT?._ownerAddress || ""),
@@ -156,13 +153,8 @@ export const NftItem = (
     return [bestOfferPriceT, bestOfferP, lastOfferPriceT, lastOfferP]
   }, [orderData]);
 
-  const ref = useRef(null);
-
-  const isHover = useHoverDirty(ref);
-
   return (
     <ItemWrapper
-      ref={ref}
       isBundle={NFT && NFT.numberOfEditions > 1}
       isSelected={isSelected}
       selectedLabel={selectedLabel}
@@ -213,7 +205,7 @@ export const NftItem = (
                 isLoadingCreator,
                 isLoadingOwner,
               }) : (
-                <NFTItemAsset NFT={NFT} orderEnd={orderEnd || orderData?.end || 0} isHover={isHover} />
+                <NFTItemAsset NFT={NFT} orderEnd={orderEnd || orderData?.end || 0}/>
               )
             }
           </Box>
