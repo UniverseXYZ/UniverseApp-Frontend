@@ -3,10 +3,10 @@ import PropTypes from 'prop-types';
 import Button from '../button/Button.jsx';
 import closeIcon from '../../assets/images/close-menu.svg';
 import wrongNetworkIcon from '../../assets/images/wrong-network.svg';
-import { useErrorContext } from '../../contexts/ErrorContext.jsx';
+import { useErrorStore } from '../../stores/errorStore';
 
 const ErrorPopup = () => {
-  const { errorBody, errorTitle, closeError } = useErrorContext();
+  const { errorBody, errorTitle, closeError } = useErrorStore(s => ({errorBody: s.errorBody, errorTitle: s.errorTitle, closeError: s.closeError}))
   const defaulTtitle = 'Unexpected error';
   const defaultBody = 'Unexpected error ocurred.\nPlease try again in a few minutes.';
 

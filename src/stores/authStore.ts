@@ -8,6 +8,7 @@ import uuid from 'react-uuid';
 import { mapUserData } from "../utils/helpers";
 import { useContractsStore } from "./contractsStore";
 import WalletConnectProvider from "@walletconnect/web3-provider";
+import { useErrorStore } from "./errorStore";
 
 interface IDefaultAuthStoreGeters {
   // Getters
@@ -52,7 +53,6 @@ interface IAuthStore extends IDefaultAuthStoreGeters {
 
 // const history = useRouter();
 
-// const { setShowError, setErrorTitle, setErrorBody, closeError } = useErrorContext() as any;
 const defaultState: IDefaultAuthStoreGeters = {
   // Logged in user info
   loggedInArtist: {
@@ -95,6 +95,8 @@ export const useAuthStore = create<IAuthStore>((set, get) => ({
       set(state => ({
         ...state,
         showWrongNetworkPopup: true,
+        isSigning: false,
+        isAuthenticating: false,
       }))
     } else {
       await get().web3AuthenticationProccess(provider, network, accounts);
@@ -128,8 +130,13 @@ export const useAuthStore = create<IAuthStore>((set, get) => ({
 
       if (network.chainId !== Number(process.env.REACT_APP_NETWORK_CHAIN_ID)) {
         await provider.disconnect();
-        get().setShowWrongNetworkPopup(true);
-      } else {
+        set(state => ({
+          ...state,
+          showWrongNetworkPopup: true,
+          isSigning: false,
+          isAuthenticating: false
+        }))
+        } else {
         get().web3AuthenticationProccess(web3ProviderWrapper, network, accounts);
       }
 
@@ -258,10 +265,12 @@ export const useAuthStore = create<IAuthStore>((set, get) => ({
               ...state,
               isAuthenticated: false,
               isAuthenticating: false,
+              isSigning: false,
             }))
-            // setErrorBody('Please try again in a few minutes.');
-            // setErrorTitle('Failed to authenticate');
-            // setShowError(true);
+            
+            useErrorStore.getState().setErrorBody('Please try again in a few minutes.');
+            useErrorStore.getState().setErrorTitle('Failed to authenticate');
+            useErrorStore.getState().setShowError(true);
           }
         } else {
           // THE USER ALREADY HAS SIGNED
@@ -285,11 +294,11 @@ export const useAuthStore = create<IAuthStore>((set, get) => ({
       }
     } catch (err: any) {
       if (err?.code === 4001) {
-        // setShowError(true);
-        // setErrorTitle('Signature is required');
-        // setErrorBody(
-        //   "Signing a challenge is part of the authentication process.\nWithout it the application can't authenticate you."
-        // );
+        useErrorStore.getState().setShowError(true);
+        useErrorStore.getState().setErrorTitle('Signature is required');
+        useErrorStore.getState().setErrorBody(
+          "Signing a challenge is part of the authentication process.\nWithout it the application can't authenticate you."
+        );
       }
 
       set(state => ({

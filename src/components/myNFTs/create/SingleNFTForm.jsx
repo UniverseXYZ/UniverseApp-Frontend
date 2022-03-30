@@ -40,7 +40,6 @@ import {
 import { RouterPrompt } from '../../../utils/routerPrompt';
 import { parseDataForBatchMint } from '../../../utils/helpers/pureFunctions/minting';
 import { useMyNftsContext } from '../../../contexts/MyNFTsContext';
-import { useErrorContext } from '../../../contexts/ErrorContext';
 import CollectionChoice from './CollectionChoice';
 import universeIcon from '../../../assets/images/universe-img.svg';
 import { timeout } from '../../../app/utils/debounceConfig';
@@ -49,6 +48,7 @@ import { useSearchParam } from 'react-use';
 import { useAuthStore } from '../../../stores/authStore';
 import { useContractsStore } from '../../../stores/contractsStore';
 import Contracts from '../../../contracts/contracts.json';
+import { useErrorStore } from '../../../stores/errorStore';
  
 const { contracts } = Contracts[process.env.REACT_APP_NETWORK_CHAIN_ID];
 
@@ -92,7 +92,7 @@ const SingleNFTForm = ({ scrollToTop }) => {
 
   const queryClient = useQueryClient();
 
-  const { setShowError, setErrorTitle, setErrorBody } = useErrorContext();
+  const { setShowError, setErrorTitle, setErrorBody } = useErrorStore(s => ({setErrorBody: s.setErrorBody, setErrorTitle: s.setErrorTitle, setErrorBody: s.setErrorBody}))
 
   const [errors, setErrors] = useState({
     name: '',

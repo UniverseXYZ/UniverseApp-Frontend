@@ -49,8 +49,8 @@ import { useNFTPageData } from '../../NFTPage.context';
 import { getEtherscanTxUrl} from '../../../../../../../utils/helpers';
 import { formatAddress } from '../../../../../../../utils/helpers/format';
 import { NFTCustomError } from '../nft-custom-error/NFTCustomError';
-import { useErrorContext } from '../../../../../../../contexts/ErrorContext';
 import { useAuthStore } from '../../../../../../../stores/authStore';
+import { useErrorStore } from '../../../../../../../stores/errorStore';
 
 // @ts-ignore
 const { contracts: contractsData } = Contracts[process.env.REACT_APP_NETWORK_CHAIN_ID];
@@ -79,7 +79,7 @@ interface INFTMakeAnOfferPopupProps {
 export const NFTMakeAnOfferPopup = ({ nft, order, isOpen, onClose, }: INFTMakeAnOfferPopupProps) => {
   const tokensBtnRef = useRef<HTMLButtonElement>(null);
   
-  const { setShowError, setErrorBody} = useErrorContext() as any;
+  const { setShowError, setErrorBody} = useErrorStore(s => ({setShowError: s.setShowError, setErrorBody: s.setErrorBody}))
 
   const { signer, web3Provider } = useAuthStore(s => ({signer: s.signer, web3Provider: s.web3Provider}));
   const { refetchOffers } = useNFTPageData();
@@ -117,6 +117,9 @@ export const NFTMakeAnOfferPopup = ({ nft, order, isOpen, onClose, }: INFTMakeAn
     validationSchema: NFTMakeAnOfferValidationSchema,
     onSubmit: async (value) => {
       try {
+        if (!signer || !web3Provider) {
+          return;
+        }
         setState(MakeAnOfferState.PROCESSING);
   
         const address = await signer.getAddress();
