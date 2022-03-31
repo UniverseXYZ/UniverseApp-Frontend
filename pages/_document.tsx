@@ -11,7 +11,6 @@ class MyDocument extends Document {
       <Html prefix="og: https://ogp.me/ns#" data-itemscope data-itemtype="https://schema.org/Article">
         <Head>
           <meta charSet="utf-8" />
-          <meta name="viewport" content="width=device-width, initial-scale=1" />
           <meta name="application-name" content="Universe.XYZ" />
           <meta name="description" content="Launch your own community-driven NFT universe baked with social tools, media services, and distribution - underpinned by the native $XYZ token." />
           <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css" />
