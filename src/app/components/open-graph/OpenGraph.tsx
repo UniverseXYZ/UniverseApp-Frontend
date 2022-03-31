@@ -1,5 +1,6 @@
 import Head from 'next/head';
 import { useRouter } from 'next/router';
+import { lookup } from 'mime-types';
 
 interface IOpenGraphProps {
   title: string;
@@ -15,6 +16,8 @@ export const OpenGraph = (props: IOpenGraphProps) => {
 
   const url = `${process.env.REACT_APP_BASE_URL}/${router.asPath}`;
 
+  const mimeType = image ? lookup(image) : false;
+
   return (
     <Head>
       <title>{title}</title>
@@ -27,7 +30,9 @@ export const OpenGraph = (props: IOpenGraphProps) => {
       <meta property="og:title" content={title} />
       {description && (<meta property="og:description" content={description} />)}
       {image && (<meta property="og:image" content={image} />)}
+      {image && (<meta property="og:image:url" content={image} />)}
       {imageAlt && <meta property="og:image:alt" content={imageAlt} />}
+      {mimeType && <meta property="og:image:type" content={mimeType.toString()} />}
 
       {/*TWITTER*/}
       <meta name="twitter:card" content="summary" />
