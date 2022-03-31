@@ -216,8 +216,10 @@ export const NFTCheckoutPopup = ({ NFT, collection, NFTs, order, isOpen, onClose
       // Check if error comes from api request and if the api has returned a meaningful messages
       if (prepareMutation.isError && !!(prepareMutation as any)?.error?.response?.data?.message) {
         setErrorBody((prepareMutation as any)?.error?.response?.data?.message);
-      } else if (err.response.data.message) {
+      } else if (err.response?.data?.message) {
         setErrorBody(err.response.data.message);
+      } else if (err.error?.message) {
+        setErrorBody(err.error.message);
       }
 
       setShowError(true);

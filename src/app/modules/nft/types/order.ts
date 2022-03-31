@@ -60,6 +60,7 @@ export interface IOrder {
   type: string;
   to: string;
   updatedAt: Date;
+  modified: boolean;
 }
 
 export interface IOrderBackend extends

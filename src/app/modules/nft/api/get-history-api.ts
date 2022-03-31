@@ -65,6 +65,7 @@ export const GetHistoryApi = async (collectionAddress: string, tokenId: string):
           createdAt: order.createdAt,
           side: OrderSide.BUY,
           status: OrderStatus.CREATED,
+          modified: true
         }
         orderHistory.push(listingOrder);
         order.createdAt = order.updatedAt;
@@ -74,6 +75,7 @@ export const GetHistoryApi = async (collectionAddress: string, tokenId: string):
           createdAt: order.createdAt,
           side: OrderSide.SELL,
           status: OrderStatus.CREATED,
+          modified: true
         }
         orderHistory.push(listingOrder);
         order.createdAt = order.updatedAt;
