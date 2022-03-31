@@ -52,6 +52,7 @@ import { useErc20PriceStore } from '../../../../../../../stores/erc20PriceStore'
 
 import * as styles from '../../styles';
 import * as styles2 from './NFTInfo.style';
+import { getArtistApi } from '@app/api';
 
 // TODO: hide metadata tab for not Polymorph NFT type
 export const NFTInfo = () => {
@@ -112,7 +113,7 @@ export const NFTInfo = () => {
       const userRequests: Array<any> = [];
       const uniqueUsers = [...Array.from(new Set(orders.map((order) => order.maker)))];
       for (const user of uniqueUsers) {
-        userRequests.push(GetUserApi(user));
+        userRequests.push(getArtistApi(user));
       }
 
       orders?.sort((a, b) => {
@@ -155,8 +156,8 @@ export const NFTInfo = () => {
           return acc;
         }
 
-        const user: IUser = response.value;
-        acc[user.address] = user;
+        const user = response.value;
+        acc[user.address] = user.mappedUser;
         return acc;
       }, {});
 
@@ -371,8 +372,8 @@ export const NFTInfo = () => {
                             <NFTItemContentWithPrice
                               name={NFT.name}
                               collection={collection}
-                              creator={creator || undefined}
-                              owner={owner || undefined}
+                              creator={creator?.mappedArtist || undefined}
+                              owner={owner?.mappedArtist || undefined}
                               order={orderData || undefined}
                               bestOfferPrice={bestOfferPrice || 0}
                               bestOfferPriceToken={bestOfferPriceToken || undefined}

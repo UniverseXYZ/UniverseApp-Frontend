@@ -5,6 +5,7 @@ import { ICollection, IERC721AssetType, INFT, IOrder, IUser } from '../../types'
 import { GetCollectionApi, GetNFT2Api, GetHistoryApi, GetOrdersApi, GetUserApi, INFTHistory, GetMoreFromCollectionApi, GetActiveListingApi } from '../../api';
 import { collectionKeys, nftKeys, orderKeys, userKeys } from '../../../../utils/query-keys';
 import { useRouter } from 'next/router';
+import { getArtistApi } from '@app/api';
 
 export interface INFTPageContext {
   NFT: INFT;
@@ -90,7 +91,7 @@ export const NFTPageProvider: FC<INFTPageProviderProps> = (props) => {
   // NFT Creator Data Query
   const { data: creator } = useQuery(
     userKeys.info(NFT?._creatorAddress || ""),
-    () => GetUserApi(`${NFT?._creatorAddress}`),
+    () => getArtistApi(`${NFT?._creatorAddress}`),
     {
       enabled: !!NFT?._creatorAddress,
       retry: false,
@@ -100,7 +101,7 @@ export const NFTPageProvider: FC<INFTPageProviderProps> = (props) => {
   // NFT Owner Data Query
   const { data: owner } = useQuery(
     userKeys.info(NFT?._ownerAddress || ""),
-    () => GetUserApi(`${NFT?._ownerAddress}`),
+    () => getArtistApi(`${NFT?._ownerAddress}`),
     {
       enabled: !!NFT?._ownerAddress, 
       retry: false,
@@ -126,8 +127,8 @@ export const NFTPageProvider: FC<INFTPageProviderProps> = (props) => {
   const value: INFTPageContext = {
     order,
     collectionAddress,
-    creator: creator as IUser,
-    owner: owner as IUser,
+    creator: creator?.mappedArtist as IUser,
+    owner: owner?.mappedArtist as IUser,
     collection: collection as ICollection,
     NFT: NFT as INFT,
     isLoading: isLoadingOrder,

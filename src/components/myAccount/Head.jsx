@@ -3,12 +3,13 @@ import { useHistory } from 'react-router-dom';
 import Button from '../button/Button.jsx';
 import { useAuctionContext } from '../../contexts/AuctionContext';
 import { useAuthStore } from '../../stores/authStore';
+import { useRouter } from 'next/router';
 
 const Head = () => {
   const { loggedInArtist } = useAuthStore(s => ({
     loggedInArtist: s.loggedInArtist,
   }));
-  const history = useHistory();
+  const router = useRouter();
   const { editProfileButtonClick, setEditProfileButtonClick } = useAuctionContext();
 
   const handlePublicPage = () => {
@@ -19,7 +20,7 @@ const Head = () => {
       loggedInArtist.avatar &&
       loggedInArtist.about
     ) {
-      history.push(`/${loggedInArtist.universePageAddress}`, { id: loggedInArtist.id });
+      router.push(`/${loggedInArtist.universePageAddress}`);
     }
   };
 
