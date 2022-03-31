@@ -53,7 +53,7 @@ export const signTypedData = (web3: any, from: any, data: any) => {
     if (web3.currentProvider.isMetaMask) {
       web3.currentProvider.sendAsync({
         jsonrpc: '2.0',
-        method: 'eth_signTypedData_v3',
+        method: 'eth_signTypedData_v4',
         params: [from, JSON.stringify(data)],
         id: new Date().getTime()
       }, cb);
