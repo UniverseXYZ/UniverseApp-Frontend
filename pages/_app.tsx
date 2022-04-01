@@ -117,7 +117,7 @@ import 'swiper/css/pagination';
 
 import type { AppProps } from 'next/app'
 import React, { useCallback, useEffect, useState } from 'react';
-import { QueryClient, QueryClientProvider } from 'react-query';
+import { Hydrate, QueryClient, QueryClientProvider } from 'react-query';
 
 import { AuthContextProvider } from '../src/contexts/AuthContext';
 import { ThemeContextProvider } from '../src/contexts/ThemeContext';
@@ -135,16 +135,7 @@ import { LayoutProvider } from '../src/app/providers';
 import { useErc20PriceStore } from '../src/stores/erc20PriceStore';
 import { useAuthStore } from '../src/stores/authStore';
 import Cookies from 'js-cookie'
-
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      refetchOnWindowFocus: false,
-      refetchOnMount: false,
-      refetchOnReconnect: false,
-    },
-  },
-});
+import { ReactQueryDevtools } from 'react-query/devtools';
 
 function MyApp({ Component, pageProps }: AppProps) {
   // const [mounted, setMounted] = useState(false);
@@ -154,6 +145,7 @@ function MyApp({ Component, pageProps }: AppProps) {
   // if (!mounted) {
   //   return null;
   // }
+  const [queryClient] = useState(() => new QueryClient());
   
   const fetchPrices = useErc20PriceStore(s => useCallback(s.fetchPrices, []));
   const setProviderName = useAuthStore(s => useCallback(s.setProviderName, []));
@@ -180,30 +172,33 @@ function MyApp({ Component, pageProps }: AppProps) {
   return (
     // <ErrorContextProvider>
       <QueryClientProvider client={queryClient}>
-        {/* <AuthContextProvider> */}
-          <ThemeContextProvider>
-            <PolymorphContextProvider>
-              <LobsterContextProvider>
-                <MyNFTsContextProvider>
-                  <AuctionContextProvider>
-                    <MarketplaceContextProvider>
-                      <LayoutProvider>
-                        <Theme>
-                          <div id="root">
-                            <Header />
-                            <Component {...pageProps} />
-                            <Footer />
-                            <Popups />
-                          </div>
-                        </Theme>
-                      </LayoutProvider>
-                    </MarketplaceContextProvider>
-                  </AuctionContextProvider>
-                </MyNFTsContextProvider>
-              </LobsterContextProvider>
-            </PolymorphContextProvider>
-          </ThemeContextProvider>
-        {/* </AuthContextProvider> */}
+        <Hydrate state={pageProps.dehydratedState}>
+          {/* <AuthContextProvider> */}
+            <ThemeContextProvider>
+              <PolymorphContextProvider>
+                <LobsterContextProvider>
+                  <MyNFTsContextProvider>
+                    <AuctionContextProvider>
+                      <MarketplaceContextProvider>
+                        <LayoutProvider>
+                          <Theme>
+                            <div id="root">
+                              <Header />
+                              <Component {...pageProps} />
+                              <Footer />
+                              <Popups />
+                            </div>
+                          </Theme>
+                        </LayoutProvider>
+                      </MarketplaceContextProvider>
+                    </AuctionContextProvider>
+                  </MyNFTsContextProvider>
+                </LobsterContextProvider>
+              </PolymorphContextProvider>
+            </ThemeContextProvider>
+          {/* </AuthContextProvider> */}
+          <ReactQueryDevtools initialIsOpen={false} />
+        </Hydrate>
       </QueryClientProvider>
     // </ErrorContextProvider>
   );

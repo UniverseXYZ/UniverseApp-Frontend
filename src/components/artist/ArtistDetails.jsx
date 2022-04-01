@@ -37,7 +37,7 @@ const ArtistDetails = ({ artistAddress, onArtist, loading }) => {
   const [blockieScale, setBlockieScale] = useState(31);
   // const [width, height] = useWindowSize();
   const { width, height } = useWindowSize();
-
+  
   useEffect(() => {
     if (width < blockieResizePoints.small && blockieScale !== blockieSizes.small) {
       setBlockieScale(blockieSizes.small);
@@ -101,20 +101,23 @@ const ArtistDetails = ({ artistAddress, onArtist, loading }) => {
                       URL copied!
                       <span />
                     </div>
-                    <CopyToClipboard
-                      text={window.location.href}
-                      onCopy={() => {
-                        setCopied(true);
-                        setTimeout(() => {
-                          setCopied(false);
-                        }, 1000);
-                      }}
-                    >
-                      <span>
-                        <img src={copyIcon} alt="Copy to clipboard icon" className="copyImg" />
-                        Copy URL
-                      </span>
-                    </CopyToClipboard>
+                    {/* During SSR we don't have window */}
+                    {typeof window !== `undefined` && 
+                      <CopyToClipboard
+                        text={window.location.href}
+                        onCopy={() => {
+                          setCopied(true);
+                          setTimeout(() => {
+                            setCopied(false);
+                          }, 1000);
+                        }}
+                      >
+                        <span>
+                          <img src={copyIcon} alt="Copy to clipboard icon" className="copyImg" />
+                          Copy URL
+                        </span>
+                      </CopyToClipboard>
+                    }
                   </div>
                 </div>
               </div>
@@ -174,20 +177,23 @@ const ArtistDetails = ({ artistAddress, onArtist, loading }) => {
                         URL copied!
                         <span />
                       </div>
-                      <CopyToClipboard
-                        text={window.location.href}
-                        onCopy={() => {
-                          setCopied(true);
-                          setTimeout(() => {
-                            setCopied(false);
-                          }, 1000);
-                        }}
-                      >
-                        <span>
-                          <img src={copyIcon} alt="Copy to clipboard icon" className="copyImg" />
-                          Copy URL
-                        </span>
-                      </CopyToClipboard>
+                      {/* During SSR we don't have window */}
+                      {typeof window !== `undefined` && 
+                        <CopyToClipboard
+                          text={window.location.href}
+                          onCopy={() => {
+                            setCopied(true);
+                            setTimeout(() => {
+                              setCopied(false);
+                            }, 1000);
+                          }}
+                        >
+                          <span>
+                            <img src={copyIcon} alt="Copy to clipboard icon" className="copyImg" />
+                            Copy URL
+                          </span>
+                        </CopyToClipboard>
+                      }
                     </div>
                   </div>
                 </div>
