@@ -9,12 +9,12 @@ import { convertLobsterObjects } from '../../../utils/helpers/lobsters';
 import { fetchTokensMetadataJson } from '../../../utils/api/polymorphs';
 import LoadingPopup from '../../popups/LoadingPopup';
 import MintPolymorphConfirmationPopup from '../../popups/MintPolymorphConfirmationPopup';
-import { useLobsterContext } from '../../../contexts/LobsterContext';
 import { useWindowSize } from 'react-use';
 import { useAuthStore } from '../../../stores/authStore';
+import { useLobsterStore } from 'src/stores/lobsterStore';
 
 const MintLobbyLobsterSection = React.forwardRef((props, ref) => {
-  const { userLobsters, setUserLobsters, lobstersFilter } = useLobsterContext();
+  const { userLobsters, setUserLobsters } = useLobsterStore(s => ({userLobsters: s.userLobsters, setUserLobsters: s.setUserLobsters}));
 
   const lobsterContract = useAuthStore(s => s.lobsterContract)
 
@@ -114,7 +114,6 @@ const MintLobbyLobsterSection = React.forwardRef((props, ref) => {
           loadingImage={lobsterLoadingBg}
           metadataLoaded={metadataLoaded}
           buttonText="My Lobsters"
-          collectionFilter={lobstersFilter}
         />
       </Popup>
     </div>

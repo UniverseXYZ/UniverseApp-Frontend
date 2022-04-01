@@ -9,7 +9,8 @@ import ethIcon from '../../assets/images/eth.svg';
 import SelectComponent from '../select/SelectComponent';
 import { getPolymorphMeta } from '../../utils/api/polymorphs.js';
 import { convertPolymorphObjects } from '../../utils/helpers/polymorphs';
-import { usePolymorphContext } from '../../contexts/PolymorphContext';
+import { usePolymorphStore } from 'src/stores/polymorphStore';
+import { useContractsStore } from 'src/stores/contractsStore';
 
 const GENE_POSITIONS_MAP = {
   BACKGROUND: 1,
@@ -43,7 +44,9 @@ const PolymorphScramblePopup = ({
   setShowLoading,
   setShowMetadataLoading,
 }) => {
-  const { polymorphContract, userPolymorphs, setUserPolymorphs } = usePolymorphContext();
+  const userPolymorphs = usePolymorphStore(s => s.userPolymorphs);
+  const polymorphContract = useContractsStore(s => s.polymorphContract);
+
   const [singleTraitTabSelected, setSingleTraitSelected] = useState(true);
   const [allTraitsTabSelected, setAllTraitsTabSelected] = useState(false);
   const [selectedTrait, setSelectedTrait] = useState('');

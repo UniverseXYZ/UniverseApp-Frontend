@@ -4,12 +4,12 @@ import { useHistory } from 'react-router-dom';
 import FloatingNFTsAnimation from './animations/FloatingNFTsAnimation';
 import EndlessWaveAnimation from './animations/EndlessWaveAnimation';
 import AppContext from '../../../ContextAPI';
-import { useLobsterContext } from '../../../contexts/LobsterContext';
-import { useMyNftsContext } from '../../../contexts/MyNFTsContext';
+import { useRouter } from 'next/router';
+import { useMyNftsStore } from 'src/stores/myNftsStore';
 
 const HeroSection = React.forwardRef((props, ref) => {
-  const { navigateToMyUniverseNFTsTab, lobstersFilter } = useMyNftsContext();
-
+  const { navigateToMyUniverseNFTsTab, lobstersFilter } = useMyNftsStore(s => ({navigateToMyUniverseNFTsTab: s.navigateToMyUniverseNFTsTab, lobstersFilter: s.lobstersFilter}))
+  const router = useRouter();
   return (
     <div className="lobby--lobsters--hero--section">
       <div className="wave--img">
@@ -26,6 +26,7 @@ const HeroSection = React.forwardRef((props, ref) => {
             type="button"
             onClick={() => {
               navigateToMyUniverseNFTsTab(lobstersFilter);
+              router.push('/my-nfts');
             }}
           >
             My Lobby Lobsters

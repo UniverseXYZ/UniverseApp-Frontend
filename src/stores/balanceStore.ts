@@ -2,8 +2,11 @@ import create from "zustand";
 import { useErc20PriceStore } from "./erc20PriceStore";
 
 interface IBalanceStore {
+  // Getters
   yourBalance: number;
   usdEthBalance: number;
+
+  // Setters
   setYourBalance: (newBalance: number) => void;
   setUsdEthBalance: (newBalance: number) => void;
 }

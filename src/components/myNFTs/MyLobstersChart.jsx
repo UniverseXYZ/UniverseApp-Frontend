@@ -8,11 +8,11 @@ import LobsterRarityFilters from '../rarityCharts/filters/LobsterRarityFilters';
 import { categoriesArray } from '../../containers/rarityCharts/categories';
 import LobsterRarityList from '../rarityCharts/list/LobsterRarityList';
 import CollectionDropdown from './CollectionDropdown';
-import { useLobsterContext } from '../../contexts/LobsterContext';
 import { useThemeStore } from 'src/stores/themeStore';
+import { useLobsterStore } from 'src/stores/lobsterStore';
 
 const MyLobstersChart = ({ isDropdownOpened, setIsDropdownOpened, scrollContainer }) => {
-  const { userLobstersWithMetadata, loadLobsterMetadata } = useLobsterContext();
+  const { userLobstersWithMetadata, loadLobsterMetadata } = useLobsterStore(s => ({userLobstersWithMetadata: s.userLobstersWithMetadata, loadLobsterMetadata: s.loadLobsterMetadata}))
   const setDarkMode = useThemeStore(s => s.setDarkMode);
   const [offset, setOffset] = useState(0);
   const [perPage, setPerPage] = useState(8);
