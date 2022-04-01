@@ -1,54 +1,64 @@
-import { Box, Image, ImageProps } from '@chakra-ui/react';
+import { Box, BoxProps } from '@chakra-ui/react';
 import React, { useState } from 'react';
+import NextImage from 'next/image';
 
 import BrokenNFT from '../../../../../../../components/marketplaceNFT/BrokenNFT';
 import { NFTAssetFullscreen } from '../nft-asset-full-screen';
-import * as styles from '../nft-info/NFTInfo.style';
+import * as NFTInfoStyles from '../nft-info/NFTInfo.style';
+import * as styles from './NFTAssetImage.styles';
 
-interface INFTAssetImageProps extends ImageProps {
+interface INFTAssetImageProps {
   image: string;
+  alt: string;
+  containerProps?: BoxProps;
   allowFullscreen?: boolean;
 }
 
-const ImageStyle: ImageProps = {
-  borderRadius: '12px',
-  objectFit: 'cover',
-  maxH: {sm: '335px', md: '600px'},
-  maxW: {sm: '335px', md: '600px'},
-  h: 'calc(100vh - 84px - 120px)',
-  w: 'calc(100vh - 84px - 120px)',
-}
+export const NFTAssetImage = (props: INFTAssetImageProps) => {
+  const {
+    image,
+    alt,
+    containerProps = {},
+    allowFullscreen = true,
+  } = props;
 
-
-export const NFTAssetImage = ({ image, allowFullscreen = true, ...rest }: INFTAssetImageProps) => {
   const [fullscreen, setFullscreen] = useState(false);
   const [showError, setShowError] = useState(false);
 
-  return showError ? <Box {...styles.BrokenAssetStyle}>
-    <BrokenNFT />
-    </Box>
+  return showError ? (
+    <Box {...NFTInfoStyles.BrokenAssetStyle}>
+      <BrokenNFT />
+    </Box>)
    : (
     <>
-      <Image
-        src={image}
-        {...ImageStyle}
-        cursor={allowFullscreen ? 'zoom-in' : 'default'}
-        onClick={() => allowFullscreen && setFullscreen(true)}
-        {...rest}
-        onError={() => setShowError(true)}
-      />
+      <Box {...styles.ImageWrapperStyle} {...containerProps}>
+        <NextImage
+          src={image}
+          alt={alt}
+          layout={'fill'}
+          objectFit={'cover'}
+          style={{
+            cursor: allowFullscreen ? 'zoom-in' : 'default',
+            borderRadius: '12px',
+          }}
+          onClick={() => allowFullscreen && setFullscreen(true)}
+          onError={() => setShowError(true)}
+        />
+      </Box>
       {!showError &&
         <NFTAssetFullscreen isOpen={fullscreen}>
-          <Image
+          <NextImage
             src={image}
-            borderRadius={0}
-            cursor={'zoom-out'}
-            maxH={'max'}
-            maxW={'max'}
+            alt={alt}
+            height={600}
+            width={600}
+            layout={'fill'}
             objectFit={'contain'}
-            height={'100vh'}
-            width={'100vw'}
-            onClick={() => setFullscreen(false)} />
+            style={{
+              cursor: 'zoom-out',
+            }}
+            onClick={() => allowFullscreen && setFullscreen(false)}
+          />
         </NFTAssetFullscreen>
       }
     </>

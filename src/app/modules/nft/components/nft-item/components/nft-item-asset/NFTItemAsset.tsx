@@ -1,17 +1,16 @@
-import { Box, Center, Image, useImage } from '@chakra-ui/react';
+import { Box, Center } from '@chakra-ui/react';
 import React, { useState } from 'react';
 import { useMeasure } from 'react-use';
 
-import AudioNFTPreviewImage from '../../../../../../../assets/images/v2/audio-nft-preview.png';
+import AudioNFTPreviewImage from '@assets/images/v2/audio-nft-preview.png';
+import { Loading } from '@app/components';
+import { INFT } from '@app/modules/nft/types';
 
-import { INFT } from '../../../../types';
-import { isNFTAssetAudio, isNFTAssetImage, isNFTAssetVideo } from '../../../../helpers';
 import * as styles from './styles';
 import { NFTItemAuctionCountdown } from '..';
-import { NFTItemAssetType } from './components';
+import { NFTCardImageAsset, NFTCardVideoAsset, NFTItemAssetType } from './components';
 import { NFTAssetBroken } from '../../../../pages/nft-page/components/nft-asset-broken';
-import { getArtworkType, getArtworkTypeByUrl } from '../../../../../../helpers';
-import { Loading } from '../../../../../../components';
+import { useNFTAsset } from './hooks';
 
 interface INFTItemAssetProps {
   NFT: INFT;
@@ -19,48 +18,63 @@ interface INFTItemAssetProps {
   orderEnd?: number;
   isHover?: boolean;
 }
+
 export const NFTItemAsset = (props: INFTItemAssetProps) => {
   const { NFT, renderAssetLabel, orderEnd, isHover } = props;
 
   const [ref, { width }] = useMeasure<HTMLDivElement>();
 
-  const isImage = isNFTAssetImage(NFT.artworkTypes);
-  const isVideo = isNFTAssetVideo(NFT.artworkTypes);
-  const isAudio = isNFTAssetAudio(NFT.artworkTypes);
+  const { asset, preview } = useNFTAsset(NFT);
 
-  const previewUrl = NFT.previewUrl || NFT.thumbnailUrl || NFT.originalUrl;
-  const previewArtworkType = getArtworkTypeByUrl(previewUrl);
-  const isImagePreview = !previewArtworkType || isNFTAssetImage([previewArtworkType]);
-
-  const gifUrl = NFT.gifUrl;
+  const [state, setState] = useState<'loading' | 'error' | 'loaded'>(asset.url ? 'loading' : 'error');
 
   const [showCountdown, setShowCountdown] = useState(!!orderEnd && orderEnd > Math.floor(new Date().getTime() / 1000));
-  const [showError, setShowError] = useState(false);
-
-  const imageState = useImage({ src: isImage ? NFT.thumbnailUrl : undefined });
 
   return (
     <Box ref={ref} pos={'relative'}>
-      {NFT.artworkTypes && NFT.artworkTypes.length && !showError ? 
-        <Box {...styles.AssetStyle(width)}>
-          {isVideo &&
-            <>
-              {isImagePreview
-                ? <Image src={isHover && gifUrl ? gifUrl : previewUrl} onError={() => setShowError(true)} alt={NFT.name}  />
-                : <video src={NFT.videoUrl || NFT.thumbnailUrl} onError={() => setShowError(true)} />}
-            </>
-           || isImage && (
-             <Image
-               src={NFT.thumbnailUrl}
-               fallback={<Center h={`${width}px`}><Loading /></Center>}
-               onError={() => {setShowError(true)}} alt={imageState}
-             />)
-           || isAudio && (<Image src={AudioNFTPreviewImage} onError={() => setShowError(true)} alt={NFT.name} />)}
-        </Box> : 
+      {state === 'error' && (
         <Box {...styles.BrokenAssetStyle(width)}>
           <NFTAssetBroken _before={{ borderRadius: '6px 6px 0 0' }} />
         </Box>
-      }
+      )}
+      {(state === 'loading' || state === 'loaded') && (
+        <Box {...styles.AssetStyle(width)}>
+          {asset.type === 'image' && (
+            <NFTCardImageAsset
+              assetUrl={asset.url}
+              NFT={NFT}
+              onLoadingComplete={() => setState('loaded')}
+              onError={() => setState('error')}
+            />
+          )}
+
+          {asset.type === 'video' && (
+            <NFTCardVideoAsset
+              assetUrl={asset.url}
+              preview={preview}
+              NFT={NFT}
+              isHover={isHover}
+              onLoadingComplete={() => setState('loaded')}
+              onError={() => setState('error')}
+            />
+          )}
+
+          {asset.type === 'audio' && (
+            <NFTCardImageAsset
+              assetUrl={AudioNFTPreviewImage}
+              NFT={NFT}
+              onLoadingComplete={() => setState('loaded')}
+              onError={() => setState('error')}
+            />
+          )}
+        </Box>
+      )}
+
+      {state === 'loading' && (
+        <Center boxSize={`${width}px`} pos={'absolute'} top={0} left={0}>
+          <Loading />
+        </Center>
+      )}
 
       {renderAssetLabel === null ? null :
         renderAssetLabel ? renderAssetLabel(NFT) : (<NFTItemAssetType NFT={NFT} />)

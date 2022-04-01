@@ -1,6 +1,5 @@
 import {
   Box,
-  BoxProps,
   Button,
   Container,
   Flex,
@@ -192,46 +191,14 @@ export const NFTInfo = () => {
           <Box layerStyle={'StoneBG'}>
             <Box {...styles.NFTAssetContainerStyle}>
               {(!NFT.artworkTypes || !NFT.artworkTypes.length) && <NFTAssetBroken {...styles2.BrokenAssetStyle} /> ||
-              isNFTAssetVideo(NFT.artworkTypes) && (
-                <NFTAssetVideo video={NFT.videoUrl || NFT.optimizedUrl || NFT.originalUrl} />
-              ) ||
-              isNFTAssetImage(NFT.artworkTypes) && <NFTAssetImage image={NFT.optimizedUrl || NFT.originalUrl} /> ||
+              isNFTAssetVideo(NFT.artworkTypes) && (<NFTAssetVideo video={NFT.videoUrl || NFT.optimizedUrl || NFT.originalUrl} />) ||
+              isNFTAssetImage(NFT.artworkTypes) && <NFTAssetImage image={NFT.optimizedUrl || NFT.originalUrl} alt={NFT.name} /> ||
               isNFTAssetAudio(NFT.artworkTypes) && <NFTAssetAudio audio={NFT.optimizedUrl || NFT.originalUrl} />}
             </Box>
             <Box {...styles.NFTDetailsContainerStyle}>
-              <Box
-                sx={{
-                  p: { sm: '40px 20px', md: '60px 40px' },
-                  overflowY: { 
-                    xl: 'scroll'
-                  },
-                }}
-                css={{
-                  '&::-webkit-scrollbar': {
-                    display: 'none',
-                  }
-                }}
-              >
-                <Flex
-                  sx={{
-                    mb: '12px',
-                    justifyContent: 'space-between',
-                  }}
-                >
-                  <Heading
-                    as={'h2'}
-                    sx={{
-                      fontSize: '26px',
-                      color: 'transparent',
-                      background: 'black',
-                      backgroundClip: 'text',
-                      textShadow: '2px 2px 5px rgba(255, 255, 255, 0.3)',
-                      textOverflow: 'break-word',
-                      maxW: '90%',
-                    }}
-                  >
-                    {NFT.name}
-                  </Heading>
+              <Box {...styles2.NFTDetailsTopSectionStyle}>
+                <Flex justifyContent={'space-between'} mb={'12px'}>
+                  <Heading as={'h2'} {...styles2.NameStyle}>{NFT.name}</Heading>
                   <Box>
                     {/*<NFTLike likes={[]} isLiked={true} {...styles.LikeButtonStyle} />*/}
 
@@ -255,7 +222,7 @@ export const NFTInfo = () => {
                   {`${editionNumber}/${NFT.numberOfEditions || editions.length}`}
                 </Text>
 
-                <Flex mb={'24px'} flexWrap={{ sm: 'wrap', md: 'nowrap' }}>
+                <Flex flexWrap={{ sm: 'wrap', md: 'nowrap' }} mb={'24px'}>
                   {creator && <NFTPageCreatorRelation creator={creator} />}
                   {collection && collection.id && <NFTPageCollectionRelation collection={collection} />}
                   {owner && <NFTPageOwnerRelation owner={owner} />}
@@ -285,9 +252,7 @@ export const NFTInfo = () => {
                     <Tab>Listings</Tab>
                   </LineTabList>
 
-                  <TabPanels sx={{ '> div': { px: 0, pt: '30px', pb: {
-                    xl: '30px'
-                  }}}}>
+                  <TabPanels {...styles2.TabPanelsStyle}>
                     <TabPanel>
                       <TabProperties properties={NFT?._properties ?? []} />
                     </TabPanel>
