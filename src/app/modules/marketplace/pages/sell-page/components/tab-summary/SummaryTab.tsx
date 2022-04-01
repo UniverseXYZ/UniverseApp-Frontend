@@ -273,8 +273,8 @@ export const SummaryTab = () => {
                 isNFTAssetImage(nft.artworkTypes) &&
                 <NFTAssetImage
                   image={nft.originalUrl}
-                  h={'var(--image-size)'}
-                  w={'var(--image-size)'}
+                  alt={nft.name}
+                  containerProps={{ boxSize: 'var(--image-size)' }}
                   allowFullscreen={false}
                 />
               ||
@@ -319,8 +319,8 @@ export const SummaryTab = () => {
                       {isNFTAssetImage(_NFT.artworkTypes) &&
                         <NFTAssetImage
                           image={_NFT.originalUrl}
-                          h={'var(--image-size)'}
-                          w={'var(--image-size)'}
+                          alt={nft.name}
+                          containerProps={{ boxSize: 'var(--image-size)' }}
                           allowFullscreen={false}
                         />
                       }
