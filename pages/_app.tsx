@@ -168,18 +168,17 @@ function MyApp({ Component, pageProps }: AppProps) {
       setProviderName(providerName);
     }
   }, [])
-
   return (
     // <ErrorContextProvider>
       <QueryClientProvider client={queryClient}>
         <Hydrate state={pageProps.dehydratedState}>
           {/* <AuthContextProvider> */}
-            <ThemeContextProvider>
+            {/* <ThemeContextProvider> */}
               <PolymorphContextProvider>
                 <LobsterContextProvider>
                   <MyNFTsContextProvider>
                     <AuctionContextProvider>
-                      <MarketplaceContextProvider>
+                      {/* <MarketplaceContextProvider> */}
                         <LayoutProvider>
                           <Theme>
                             <div id="root">
@@ -190,12 +189,12 @@ function MyApp({ Component, pageProps }: AppProps) {
                             </div>
                           </Theme>
                         </LayoutProvider>
-                      </MarketplaceContextProvider>
+                      {/* </MarketplaceContextProvider> */}
                     </AuctionContextProvider>
                   </MyNFTsContextProvider>
                 </LobsterContextProvider>
               </PolymorphContextProvider>
-            </ThemeContextProvider>
+            {/* </ThemeContextProvider> */}
           {/* </AuthContextProvider> */}
           <ReactQueryDevtools initialIsOpen={false} />
         </Hydrate>
