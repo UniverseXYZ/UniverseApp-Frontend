@@ -19,7 +19,6 @@ import closeIcon from '../../../../assets/images/close-menu.svg';
 import AppContext from '../../../../ContextAPI';
 import { defaultColors, getCollectionBackgroundColor } from '../../../../utils/helpers';
 import { useAuthContext } from '../../../../contexts/AuthContext';
-import { useMyNftsContext } from '../../../../contexts/MyNFTsContext';
 import universeIcon from '../../../../assets/images/universe-img.svg';
 import { shortenEthereumAddress } from '../../../../utils/helpers/format';
 

@@ -5,12 +5,12 @@ import Welcome from '../../components/rarityCharts/welcome/Welcome';
 import { useSearchPolymorphs } from '../../utils/hooks/useRarityDebouncer';
 import { categoriesArray } from './categories';
 import RarityList from '../../components/rarityCharts/list/RarityList';
-import { useThemeContext } from '../../contexts/ThemeContext';
-import { useMyNftsContext } from '../../contexts/MyNFTsContext';
+import { useThemeStore } from 'src/stores/themeStore';
+import { useMyNftsStore } from 'src/stores/myNftsStore';
 
 const RarityCharts = () => {
-  const { setMyUniverseNFTsActiverPage } = useMyNftsContext();
-  const { setDarkMode } = useThemeContext();
+  const setMyUniverseNFTsActiverPage = useMyNftsStore(s => s.setMyUniverseNFTsActiverPage);
+  const setDarkMode = useThemeStore(s => s.setDarkMode);
   const [offset, setOffset] = useState(0);
   const [perPage, setPerPage] = useState(9);
 

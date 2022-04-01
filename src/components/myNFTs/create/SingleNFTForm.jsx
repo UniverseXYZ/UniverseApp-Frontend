@@ -39,7 +39,6 @@ import {
 } from '../../../utils/helpers/contractInteraction';
 import { RouterPrompt } from '../../../utils/routerPrompt';
 import { parseDataForBatchMint } from '../../../utils/helpers/pureFunctions/minting';
-import { useMyNftsContext } from '../../../contexts/MyNFTsContext';
 import CollectionChoice from './CollectionChoice';
 import universeIcon from '../../../assets/images/universe-img.svg';
 import { timeout } from '../../../app/utils/debounceConfig';
@@ -49,6 +48,7 @@ import { useAuthStore } from '../../../stores/authStore';
 import { useContractsStore } from '../../../stores/contractsStore';
 import Contracts from '../../../contracts/contracts.json';
 import { useErrorStore } from '../../../stores/errorStore';
+import { useMyNftsStore } from 'src/stores/myNftsStore';
  
 const { contracts } = Contracts[process.env.REACT_APP_NETWORK_CHAIN_ID];
 
@@ -80,7 +80,10 @@ const SAVING_FOR_LATER_LOADING_TEXT =
 const INVALID_ADDRESS_TEXT = 'Please enter valid address or ENS';
 
 const SingleNFTForm = ({ scrollToTop }) => {
-  const { setActiveTxHashes, setMyNFTsSelectedTabIndex } = useMyNftsContext();
+  const { setActiveTxHashes, setMyNFTsSelectedTabIndex } = useMyNftsStore(s => ({
+    setActiveTxHashes: s.setActiveTxHashes,
+    setMyNFTsSelectedTabIndex: s.setMyNFTsSelectedTabIndex
+  }));
 
   const universeERC721CoreContract = useContractsStore(s => s.universeERC721CoreContract);
 

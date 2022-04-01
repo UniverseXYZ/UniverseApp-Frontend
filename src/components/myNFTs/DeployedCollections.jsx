@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import { getCollectionBackgroundColor } from '../../utils/helpers';
 import PendingCollections from './pendingDropdown/pendingCollections/PendingCollections';
 import universeIcon from '../../assets/images/universe-img.svg';
-import { useMyNftsContext } from '../../contexts/MyNFTsContext';
 import { shortenEthereumAddress } from '../../utils/helpers/format';
 import { useSearchMyCollections } from '../../utils/hooks/useMyCollectionsPageDebouncer';
 import CollectionCardSkeleton from '../skeletons/collectionCardSkeleton/CollectionCardSkeleton';

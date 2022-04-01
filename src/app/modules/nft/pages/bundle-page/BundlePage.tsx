@@ -38,7 +38,6 @@ import {
 import { TabBids, TabHistory, TabOffers } from '../nft-page/components/nft-info/components';
 import { BundleMenu, NftItem, NFTPageCreatorRelation, NFTPageRelation } from '../../components';
 import { LineTabList } from '../../../../components';
-import { useThemeContext } from '../../../../../contexts/ThemeContext';
 import { BundlePageProvider, useBundlePage } from './BundlePage.provider';
 import { TabNFTs } from './components';
 import { IERC721BundleAssetType, INFT, IOrder } from '../../types';
@@ -46,6 +45,7 @@ import { isNFTAssetAudio, isNFTAssetImage, isNFTAssetVideo } from '../../helpers
 import { NFTRelationType } from '../../enums';
 import { SwiperArrowButton } from '../../../../components/swiper-arrow-button';
 import { NFTAcceptOfferPopup } from '../nft-page/components/nft-info/components/tab-offers/components';
+import { useThemeStore } from 'src/stores/themeStore';
 
 export const BundlePageContent = () => {
   const prevRef = useRef(null);
@@ -53,7 +53,7 @@ export const BundlePageContent = () => {
 
   const router = useRouter();
 
-  const { setDarkMode } = useThemeContext() as any;
+  const setDarkMode = useThemeStore(s => s.setDarkMode);
 
   const { creator, NFTs, isLoading, moreFromCollection, order } = useBundlePage();
 

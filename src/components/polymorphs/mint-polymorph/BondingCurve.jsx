@@ -10,7 +10,8 @@ import backgroundTextLeft from '../../../assets/images/mint-polymorph-welcome-bg
 import backgroundTextRight from '../../../assets/images/mint-polymorph-welcome-bg-right.png';
 // import './styles/BondingCurve.scss';
 import AppContext from '../../../ContextAPI';
-import { useMyNftsContext } from '../../../contexts/MyNFTsContext';
+import { useRouter } from 'next/router';
+import { useMyNftsStore } from 'src/stores/myNftsStore';
 
 const BondingCurve = (props) => {
   const {
@@ -32,7 +33,8 @@ const BondingCurve = (props) => {
     title,
     soldOut,
   } = props;
-  const { lobstersFilter, navigateToMyUniverseNFTsTab } = useMyNftsContext();
+  const router = useRouter();
+  const { lobstersFilter, navigateToMyUniverseNFTsTab } = useMyNftsStore(s => ({lobstersFilter: s.lobstersFilter, navigateToMyUniverseNFTsTab: s.navigateToMyUniverseNFTsTab}))
   return (
     <div className={`welcome--slider--bonding--curve ${soldOut ? 'sold--out' : ''}`}>
       {blur && <img src={backgroundTextLeft} alt="img" className="left--blur" />}
@@ -99,6 +101,7 @@ const BondingCurve = (props) => {
             className={`light-button ${!mobile && !light ? 'dark' : 'light'}`}
             onClick={() => {
               navigateToMyUniverseNFTsTab(lobstersFilter);
+              router.push('/my-nfts');
             }}
           >
             My Lobby Lobsters

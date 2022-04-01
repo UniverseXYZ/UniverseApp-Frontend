@@ -4,13 +4,9 @@ import Popup from 'reactjs-popup';
 import { useClickAway, useTitle } from 'react-use';
 import { useRouter } from 'next/router';
 
-import { useMyNftsContext } from '../../../../../contexts/MyNFTsContext';
-import { useLobsterContext } from '../../../../../contexts/LobsterContext';
-import { usePolymorphContext } from '../../../../../contexts/PolymorphContext';
-import { useThemeContext } from '../../../../../contexts/ThemeContext';
 import useStateIfMounted from '../../../../../utils/hooks/useStateIfMounted';
 import { formatRoyaltiesForMinting } from '../../../../../utils/helpers/contractInteraction';
-import { createMintingNFT, getMetaForSavedNft } from '../../../../../utils/api/mintNFT';
+import { createMintingNFT, getMetaForSavedNft, getNftSummary } from '../../../../../utils/api/mintNFT';
 import { sendBatchMintRequest, sendMintRequest } from '../../../../../userFlows/api/ContractInteraction';
 import Tabs from '../../../../../components/tabs/Tabs';
 import LoadingPopup from '../../../../../components/popups/LoadingPopup';
@@ -28,6 +24,12 @@ import FiltersContextProvider from '../../../account/pages/my-nfts-page/componen
 import { useAuthStore } from '../../../../../stores/authStore';
 import Contracts from '../../../../../contracts/contracts.json';
 import { useErrorStore } from '../../../../../stores/errorStore';
+import { useThemeStore } from 'src/stores/themeStore';
+import { useLobsterStore } from 'src/stores/lobsterStore';
+import { usePolymorphStore } from 'src/stores/polymorphStore';
+import { useMyNftsStore } from 'src/stores/myNftsStore';
+import { useQuery } from 'react-query';
+import { nftKeys } from '@app/utils/query-keys';
  
 // @ts-ignore
 const { contracts } = Contracts[process.env.REACT_APP_NETWORK_CHAIN_ID];
@@ -42,11 +44,15 @@ export const MyNFTsPage = () => {
     setMyNFTsSelectedTabIndex,
     activeTxHashes,
     setActiveTxHashes,
-    nftSummary
-  } = useMyNftsContext() as any;
+  } = useMyNftsStore(s => ({
+    myNFTsSelectedTabIndex: s.myNFTsSelectedTabIndex,
+    setMyNFTsSelectedTabIndex: s.setMyNFTsSelectedTabIndex,
+    activeTxHashes: s.activeTxHashes,
+    setActiveTxHashes: s.setActiveTxHashes,
+  }))
 
-  const { userLobsters } = useLobsterContext() as any;
-  const { userPolymorphs } = usePolymorphContext() as any;
+  const userLobsters = useLobsterStore(s => s.userLobsters);
+  const userPolymorphs = usePolymorphStore(s => s.userPolymorphs)
 
   const { signer, address } = useAuthStore(state => ({
     signer: state.signer,
@@ -55,9 +61,15 @@ export const MyNFTsPage = () => {
 
   const { setShowError, setErrorTitle, setErrorBody } = useErrorStore(s => ({setShowError: s.setShowError, setErrorTitle: s.setErrorTitle, setErrorBody: s.setErrorBody}))
 
-  const { setDarkMode } = useThemeContext() as any;
+  const setDarkMode = useThemeStore(s => s.setDarkMode);
+
+  const {isAuthenticated, isAuthenticating} = useAuthStore(s => ({isAuthenticated: s.isAuthenticated, isAuthenticating: s.isAuthenticating}))
 
   const scrollContainer = useRef(null);
+
+  const { data: nftSummary } = useQuery(nftKeys.fetchNftSummary(address), getNftSummary, {
+    enabled: !!address && isAuthenticated && !isAuthenticating,
+  });
 
   // State hooks
   const [totalNfts, getTotalNfts] = useState<string | number>('-');

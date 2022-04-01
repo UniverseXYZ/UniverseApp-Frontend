@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState, useRef } from 'react';
+import React, { useContext, useEffect, useState, useRef, useCallback } from 'react';
 import { useHistory, withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import Popup from 'reactjs-popup';
@@ -22,14 +22,14 @@ import searchIcon from '../../assets/images/search-gray.svg';
 import closeIcon from '../../assets/images/close-menu.svg';
 import mp3Icon from '../../assets/images/mp3-icon.png';
 import audioIcon from '../../assets/images/marketplace/audio-icon.svg';
-import { defaultColors } from '../../utils/helpers';
+import { defaultColors, handleScroll } from '../../utils/helpers';
 import { CONNECTORS_NAMES } from '../../utils/dictionary';
-import { useThemeContext } from '../../contexts/ThemeContext';
 import { useLayout } from '../../app/providers';
 import SelectWalletPopup from '../popups/SelectWalletPopup';
 import { useRouter } from 'next/router';
 import Link from 'next/link'
 import { useAuthStore } from '../../stores/authStore';
+import { useThemeStore } from 'src/stores/themeStore';
 
 const Header = () => {
   const {
@@ -50,7 +50,7 @@ const Header = () => {
 
   const router = useRouter();
 
-  const { darkMode } = useThemeContext();
+  const darkMode = useThemeStore(s => s.darkMode)
   const { headerRef } = useLayout();
 
   const [selectedWallet, setSelectedWallet] = useState('');
@@ -145,12 +145,19 @@ const Header = () => {
   }, [showMenu, darkMode]);
 
   useEffect(() => {
+    window.addEventListener('scroll', handleScroll);
+  
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, []);  
+
+
+  useEffect(() => {
     setLoginFn(() => () => {
       setShowLoginPopup(true);
     });
   }, [setLoginFn]);
 
-  return (
+    return ( 
     <header ref={headerRef}>
       <meta name="viewport" content="width=device-width, initial-scale=1" />
       <div className="app__logo">

@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { getCollectionBackgroundColor } from '../../utils/helpers';
-import { useMyNftsContext } from '../../contexts/MyNFTsContext';
 import universeIcon from '../../assets/images/universe-img.svg';
 
 const Avatar = ({ selectedCollection }) => (

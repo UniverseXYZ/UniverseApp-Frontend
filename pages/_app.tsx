@@ -119,16 +119,9 @@ import type { AppProps } from 'next/app'
 import React, { useCallback, useEffect, useState } from 'react';
 import { Hydrate, QueryClient, QueryClientProvider } from 'react-query';
 
-import { AuthContextProvider } from '../src/contexts/AuthContext';
-import { ThemeContextProvider } from '../src/contexts/ThemeContext';
-import { ErrorContextProvider } from '../src/contexts/ErrorContext';
-import { LobsterContextProvider } from '../src/contexts/LobsterContext';
-import { MyNFTsContextProvider } from '../src/contexts/MyNFTsContext';
 import { AuctionContextProvider } from '../src/contexts/AuctionContext';
-import { MarketplaceContextProvider } from '../src/contexts/MarketplaceContext';
 import Header from '../src/components/header/Header';
 import Footer from '../src/components/footer/Footer';
-import { PolymorphContextProvider } from '../src/contexts/PolymorphContext';
 import { Popups } from '../src/app/components/AppPopups';
 import { Theme } from '../src/app/theme';
 import { LayoutProvider } from '../src/app/providers';
@@ -168,39 +161,24 @@ function MyApp({ Component, pageProps }: AppProps) {
       setProviderName(providerName);
     }
   }, [])
-
   return (
-    // <ErrorContextProvider>
-      <QueryClientProvider client={queryClient}>
-        <Hydrate state={pageProps.dehydratedState}>
-          {/* <AuthContextProvider> */}
-            <ThemeContextProvider>
-              <PolymorphContextProvider>
-                <LobsterContextProvider>
-                  <MyNFTsContextProvider>
-                    <AuctionContextProvider>
-                      <MarketplaceContextProvider>
-                        <LayoutProvider>
-                          <Theme>
-                            <div id="root">
-                              <Header />
-                              <Component {...pageProps} />
-                              <Footer />
-                              <Popups />
-                            </div>
-                          </Theme>
-                        </LayoutProvider>
-                      </MarketplaceContextProvider>
-                    </AuctionContextProvider>
-                  </MyNFTsContextProvider>
-                </LobsterContextProvider>
-              </PolymorphContextProvider>
-            </ThemeContextProvider>
-          {/* </AuthContextProvider> */}
-          <ReactQueryDevtools initialIsOpen={false} />
-        </Hydrate>
-      </QueryClientProvider>
-    // </ErrorContextProvider>
+    <QueryClientProvider client={queryClient}>
+      <Hydrate state={pageProps.dehydratedState}>
+        <AuctionContextProvider>
+            <LayoutProvider>
+              <Theme>
+                <div id="root">
+                  <Header />
+                  <Component {...pageProps} />
+                  <Footer />
+                  <Popups />
+                </div>
+              </Theme>
+            </LayoutProvider>
+        </AuctionContextProvider>
+        <ReactQueryDevtools initialIsOpen={false} />
+      </Hydrate>
+    </QueryClientProvider>
   );
 }
 
