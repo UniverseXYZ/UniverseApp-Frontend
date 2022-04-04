@@ -70,12 +70,13 @@ export const DateTimePicker = ({ value, onChange, onOpen, onClose, minDate, vali
       handleClose();
     }
   });
-
+  const hours = new Date().getHours();
+  const minutes = new Date().getMinutes();
   const handleOpen = useCallback(() => {
     formik.setValues({
       date: value,
-      hours: value ? value?.getHours().toString().padStart(2, '0') : `0${new Date().getHours()}`.slice(-2),
-      minutes: value ? value?.getMinutes().toString().padStart(2, '0') : `0${new Date().getMinutes() + 1}`.slice(-2),
+      hours: value ? value?.getHours().toString().padStart(2, '0') : minutes === 59 ? `0${hours + 1}`.slice(-2) : `0${hours}`.slice(-2),
+      minutes: value ? value?.getMinutes().toString().padStart(2, '0') : minutes === 59 ? '00' : `0${minutes + 1}`.slice(-2),
     });
     openDisclosure();
     onOpen && onOpen();
@@ -116,7 +117,7 @@ export const DateTimePicker = ({ value, onChange, onOpen, onClose, minDate, vali
     if(value.length > 2) return;
     formik.handleChange(event)
   }
-
+  console.log(formik.values.minutes, formik.values.hours);
   return (
     <>
       <Button

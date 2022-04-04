@@ -250,7 +250,7 @@ export const NFTInfo = () => {
 
                 <Flex mb={'24px'} flexWrap={{ sm: 'wrap', md: 'nowrap' }}>
                   {creator && <NFTPageCreatorRelation creator={creator} />}
-                  {collection && collection.id && <NFTPageCollectionRelation collection={collection} />}
+                  {((collection && collection.id) || NFT?._collectionAddress) && <NFTPageCollectionRelation collection={collection} collectionAddress={NFT._collectionAddress} />}
                   {owner && <NFTPageOwnerRelation owner={owner} />}
                 </Flex>
 
@@ -363,6 +363,7 @@ export const NFTInfo = () => {
                             order: orderData,
                           }) => (
                             <NFTItemContentWithPrice
+                              collectionAddress={NFT._collectionAddress}
                               name={NFT.name}
                               collection={collection}
                               creator={creator || undefined}

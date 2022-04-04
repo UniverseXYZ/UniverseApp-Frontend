@@ -10,19 +10,19 @@ import * as styles from './styles';
 import { NFTItemAuctionCountdown } from '..';
 import { NFTItemAssetType } from './components';
 import { NFTAssetBroken } from '../../../../pages/nft-page/components/nft-asset-broken';
-import { getArtworkType, getArtworkTypeByUrl } from '../../../../../../helpers';
+import { getArtworkTypeByUrl } from '../../../../../../helpers';
 import { Loading } from '../../../../../../components';
 
 interface INFTItemAssetProps {
   NFT: INFT;
   renderAssetLabel?: ((NFT: INFT) => React.ReactNode) | null;
   orderEnd?: number;
-  isHover?: boolean;
 }
 export const NFTItemAsset = (props: INFTItemAssetProps) => {
-  const { NFT, renderAssetLabel, orderEnd, isHover } = props;
+  const { NFT, renderAssetLabel, orderEnd } = props;
 
   const [ref, { width }] = useMeasure<HTMLDivElement>();
+  const [isHover, setIsHover] = useState(false);
 
   const isImage = isNFTAssetImage(NFT.artworkTypes);
   const isVideo = isNFTAssetVideo(NFT.artworkTypes);
@@ -40,14 +40,29 @@ export const NFTItemAsset = (props: INFTItemAssetProps) => {
   const imageState = useImage({ src: isImage ? NFT.thumbnailUrl : undefined });
 
   return (
-    <Box ref={ref} pos={'relative'}>
+    <Box 
+      ref={ref} 
+      pos={'relative'} 
+      onMouseEnter={() => {
+        setIsHover(true);
+      }} 
+      onMouseLeave={() => {
+        setIsHover(false);
+      }}
+    >
       {NFT.artworkTypes && NFT.artworkTypes.length && !showError ? 
         <Box {...styles.AssetStyle(width)}>
           {isVideo &&
             <>
               {isImagePreview
                 ? <Image src={isHover && gifUrl ? gifUrl : previewUrl} onError={() => setShowError(true)} alt={NFT.name}  />
-                : <video src={NFT.videoUrl || NFT.thumbnailUrl} onError={() => setShowError(true)} />}
+                : <video 
+                    src={NFT.videoUrl || NFT.thumbnailUrl} 
+                    onError={() => setShowError(true)}
+                    onMouseOver={(event: any) => event.target.play()}
+                    onMouseOut={(event: any) => event.target.pause()}
+                    muted
+                  />}
             </>
            || isImage && (
              <Image

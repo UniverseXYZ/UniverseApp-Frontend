@@ -111,7 +111,7 @@ export const GetUserApi = async (address: string) => {
     },
   });
 
-  return data ? mapBackendUser(data) : undefined;
+  return data ? mapBackendUser(data) : { address: address };
 };
 
 /**

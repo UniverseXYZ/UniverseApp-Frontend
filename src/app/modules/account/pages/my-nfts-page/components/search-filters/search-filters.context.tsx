@@ -1,8 +1,7 @@
 import { FC, createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { useFormik, FormikProps} from 'formik';
 import { useInfiniteQuery, useQuery, InfiniteData, useQueryClient } from 'react-query';
-import { utils } from 'ethers';
-import { useMedia } from 'react-use';
+import { ethers, utils } from 'ethers';
 
 // API Calls & Interfaces
 import { getUserNFTsApi, IGetUserNFTsProps } from '../../../../../../api';
@@ -30,9 +29,6 @@ import {
 // Constants
 const PER_PAGE = 12;
 import { getTokenAddressByTicker } from '../../../../../../constants';
-import { breakpoints } from '../../../../../../theme/constants';
-import { R } from '../../../../../nft/pages/nft-page/components/nft-asset-audio/hooks';
-import { RLP } from 'ethers/lib/utils';
 
 // Interfaces
 interface INFTsResult {
@@ -385,7 +381,7 @@ const FiltersContextProvider = (props: IFiltersProviderProps) => {
 
       queryClient.setQueryData(nftKeys.nftInfo({collectionAddress: NFT._collectionAddress || "", tokenId: NFT.tokenId}), NFT)
 
-      const key = `${NFT._collectionAddress?.toLowerCase()}:${NFT.tokenId}`;
+      const key = `${NFT._collectionAddress}:${NFT.tokenId}`;
 
       acc[key] = NFT;
 
@@ -398,11 +394,13 @@ const FiltersContextProvider = (props: IFiltersProviderProps) => {
       switch (order.make.assetType.assetClass) {
         case 'ERC721':
           const assetType = order.make.assetType as IERC721AssetType;
-          if (NFTsMapKeys.includes(`${assetType.contract}:${assetType.tokenId}`)) {
+				const checkedAddress = ethers.utils.getAddress(assetType.contract);
+
+          if (NFTsMapKeys.includes(`${checkedAddress}:${assetType.tokenId}`)) {
             acc.push({
               order,
-              NFTs: nftsMap[`${assetType.contract}:${assetType.tokenId}`]
-                ? [nftsMap[`${assetType.contract}:${assetType.tokenId}`]]
+              NFTs: nftsMap[`${checkedAddress}:${assetType.tokenId}`]
+                ? [nftsMap[`${checkedAddress}:${assetType.tokenId}`]]
                 : []
             })
           }

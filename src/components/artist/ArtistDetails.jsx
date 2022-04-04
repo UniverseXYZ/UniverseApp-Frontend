@@ -15,7 +15,7 @@ import { useAuthContext } from '../../contexts/AuthContext';
 import { shortenEthereumAddress } from '../../utils/helpers/format';
 import { useWindowSize } from '../../utils/hooks/useWindowSize';
 
-const ArtistDetails = ({ artistAddress, onArtist, loading }) => {
+const ArtistDetails = ({ artistAddress, onArtist = {}, loading }) => {
   const blockieSizes = {
     small: 9,
     medium: 24,

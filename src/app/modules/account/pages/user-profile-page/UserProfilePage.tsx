@@ -1,19 +1,20 @@
 import { useTitle } from 'react-use';
-import React, { useState } from 'react';
+import  { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useQuery } from 'react-query';
 import Skeleton from 'react-loading-skeleton';
 
-import NotFound from '../../../../../components/notFound/NotFound';
 import ArtistDetails from '../../../../../components/artist/ArtistDetails';
 import { getArtistApi } from '../../../../api';
-import { Box, Container, Tab, TabList, TabPanel, TabPanels, Tabs } from '@chakra-ui/react';
+import { Box, Tab, TabList, TabPanel, TabPanels, Tabs } from '@chakra-ui/react';
 import { ArtistNFTsTab } from './components';
 import { TabLabel } from '../../../../components';
 import FiltersContextProvider from '../../../account/pages/my-nfts-page/components/search-filters/search-filters.context';
+import { ethers } from 'ethers';
 
 export const UserProfilePage = () => {
 
+  // artistUsername could be either a string or a user address
   const { artistUsername } = useParams<{ artistUsername: string; }>();
 
   const [artist, setArtist] = useState<any>();
@@ -29,15 +30,19 @@ export const UserProfilePage = () => {
         setArtist(data.artist);
         setArtistAddress(data.address)
       },
+      onError: () => {
+        try {
+          const checked = ethers.utils.getAddress(artistUsername);
+          setArtistAddress(checked);
+        } catch (e) {
+          console.log(e);
+        }
+      },
       refetchOnMount: 'always'
     },
   );
 
   useTitle(`Universe Minting - Artist - ${artist?.name}`, { restoreOnUnmount: true });
-
-  if (isError) {
-    return (<NotFound />);
-  }
 
   let content = (
     <div className="artist__details__section">
@@ -69,7 +74,7 @@ export const UserProfilePage = () => {
     </div>
   );
 
-    if (artist) {
+    if (!isLoading) {
       content = (
         <div className="artist__page">
           <Box sx={{ 'img': { display: 'inline' } }}>
@@ -91,9 +96,9 @@ export const UserProfilePage = () => {
               </TabPanel>
             </TabPanels>
           </Tabs>
-          {artist && artist.personalLogo && (
+          {artist && artist?.personalLogo && (
             <div className="artist__personal__logo">
-              <img src={artist.personalLogo} alt="Artist personal logo" />
+              <img src={artist?.personalLogo} alt="Artist personal logo" />
             </div>
           )}
         </div>

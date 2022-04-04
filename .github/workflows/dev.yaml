@@ -2,7 +2,7 @@ name: Dev Environment
 on:
   push:
     branches:
-    - features/marketplace-v2
+    - dev-marketplace-v*
 
 jobs:
   build:

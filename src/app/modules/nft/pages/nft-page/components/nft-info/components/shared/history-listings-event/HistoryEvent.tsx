@@ -65,9 +65,9 @@ const HistoryEvent: React.FC<IHistoryEventProps> = ({ event, onlyListings, cance
 
   const usd = new BigNumber(price).multipliedBy(usdPrice).toFixed(2);
 
-  const endDate = new Date(event.end * 1000);
+  const endDate = event.end > 0 ? new Date(event.end * 1000) : 0;
   const canceled = (type === HistoryType.OFFER || type === HistoryType.LISTED) && (event.status === OrderStatus.CANCELLED || event.status === OrderStatus.STALE);
-  const expired = !canceled && type === HistoryType.OFFER ? dayjs().diff(endDate) > 0 || event.status === OrderStatus.STALE : false;
+  const expired = !canceled && !event.modified && (type === HistoryType.OFFER || type === HistoryType.LISTED) && event.end > 0 ? dayjs().diff(endDate) > 0 || event.status === OrderStatus.STALE : false;
 
   const getBlockTimestamp = async () => {
     const blockTimestamp = await web3Provider?.getBlock(event?.blockNum);
