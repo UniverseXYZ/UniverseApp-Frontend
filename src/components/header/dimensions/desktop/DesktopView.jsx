@@ -24,6 +24,7 @@ import yieldFarmingIcon from '../../../../assets/images/yield-farming.svg';
 import mintingIcon from '../../../../assets/images/Minting.svg';
 import forumIcon from '../../../../assets/images/forum.svg';
 import signalIcon from '../../../../assets/images/signal.svg';
+import airdropIcon from '../../../../assets/images/airdrop.svg';
 import docsIcon from '../../../../assets/images/docs.svg';
 import supportIcon from '../../../../assets/images/supportIcon.svg';
 import myProfileIcon from '../../../../assets/images/my-profile.svg';
@@ -318,6 +319,16 @@ const DesktopView = ({
               >
                 <img src={signalIcon} alt="Signal" />
                 <span>Signal</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setIsDAODropdownOpened(false);
+                  // window.open('https://signal.universe.xyz/#/');
+                }}
+              >
+                <img src={airdropIcon} alt="Airdrop" />
+                <span>Airdrop</span>
               </button>
             </div>
           </div>
