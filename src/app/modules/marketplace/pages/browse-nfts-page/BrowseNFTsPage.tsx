@@ -4,7 +4,6 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useInfiniteQuery, useQueryClient } from 'react-query';
 import { utils } from 'ethers';
 import { useIntersection } from 'react-use';
-import Head from 'next/head';
 import { useRouter } from 'next/router';
 
 import NoiseTextureImage from './../../../../../assets/images/v2/marketplace/noise_texture.png';
@@ -23,7 +22,7 @@ import {
   ISearchBarValue,
 } from '../../components';
 import { SortOrderOptions, SortOrderOptionsEnum } from '../../constants';
-import { BackToTopButton, Loading, Select, FiltersPopup } from '../../../../components';
+import { BackToTopButton, Loading, Select, FiltersPopup, OpenGraph } from '../../../../components';
 import {
   NftItem,
   NFTItemContentWithPrice,
@@ -58,6 +57,7 @@ import {
 } from '../../../../components/filters';
 import { useAuthStore } from '../../../../../stores/authStore';
 import { useThemeStore } from 'src/stores/themeStore';
+import OpenGraphImage from '@assets/images/open-graph/marketplace.png';
 
 export type ICollectionsFilterValue = Array<any>;
 
@@ -334,9 +334,11 @@ export const BrowseNFTsPage = () => {
 
   return (
     <Box layerStyle={'StoneBG'}>
-      <Head>
-        <title>Marketplace - Universe.XYZ</title>
-      </Head>
+      <OpenGraph
+        title={'Browse NFTs on Universe Marketplace'}
+        description={'Universe NFT marketplace is completely decentralized and rigged with multiple open source tools and features.'}
+        image={OpenGraphImage}
+      />
       <Flex {...styles.IntroSectionStyle}>
         <Box>
           <Text fontSize={'12px'} fontWeight={500} textTransform={'uppercase'} mb={'23px'} letterSpacing={'5px'}>Welcome to the</Text>

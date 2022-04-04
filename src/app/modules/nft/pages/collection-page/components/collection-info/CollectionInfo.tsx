@@ -135,10 +135,9 @@ export const CollectionInfo = () => {
   return (
     <>
       <OpenGraph
-        title={`${collection?.name || collection?.address} - Universe.XYZ`}
+        title={`${collection?.name || collection?.address} – Collection`}
         description={collection?.description || undefined}
         image={collection?.bannerUrl || collection?.coverUrl || undefined}
-        imageAlt={collection?.name || collection?.address || ''}
       />
       {(waitingCollectionGeneralInfo && !collectionGeneralInfo) || (waitingCollectionOffChainInfo && !collection) ? (
         <div className='loader-wrapper'>

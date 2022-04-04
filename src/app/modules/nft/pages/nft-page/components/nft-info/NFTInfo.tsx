@@ -177,8 +177,8 @@ export const NFTInfo = () => {
   return (
     <>
       <OpenGraph
-        title={`${NFT?.name} - Universe.XYZ`}
-        description={NFT?.description || undefined}
+        title={`${NFT?.name} – ${collection?.name}`}
+        description={collection?.description || undefined}
         image={NFT.optimizedUrl || NFT.previewUrl || NFT.originalUrl || undefined}
         imageAlt={NFT?.name || ''}
       />
