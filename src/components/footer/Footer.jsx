@@ -201,6 +201,12 @@ const Footer = () => {
                   >
                     Signal
                   </li>
+                  <li
+                    aria-hidden="true"
+                    // onClick={() => window.open('')}
+                  >
+                    Airdrop
+                  </li>
                 </ul>
               </div>
             </div>
