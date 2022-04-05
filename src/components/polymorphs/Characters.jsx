@@ -9,6 +9,7 @@ import Section3RightImageBrowser from '../../assets/images/polymorph-Section3 - 
 import Section3MobileTopImg from '../../assets/images/Section-3-Top-characters-(mobile)-min.png';
 import Section3MobileBottomImg from '../../assets/images/Section-3-Bottom-characters-(mobile)-min.png';
 import { useRouter } from 'next/router';
+import { useWindowSize } from 'react-use';
 
 const getWindow = (width, changeStateFunc) => {
   if (+width > 834) changeStateFunc('browser');
@@ -23,16 +24,13 @@ const Characters = () => {
     left: Section3LeftImageBrowser,
     right: Section3RightImageBrowser,
   });
-
-  useLayoutEffect(() => {
-    function handleResize() {
-      getWindow(window.innerWidth, setWindows);
-    }
-    window.addEventListener('resize', handleResize);
-  });
+  const windowSize = useWindowSize();
 
   useEffect(() => {
-    getWindow(window.innerWidth, setWindows);
+    getWindow(windowSize.width, setWindows);
+  }, [windowSize]);
+
+  useEffect(() => {
     if (windows === 'browser' || windows === 'table') {
       setSection3Images({ left: Section3LeftImageBrowser, right: Section3RightImageBrowser });
     } else if (windows === 'mobile') {

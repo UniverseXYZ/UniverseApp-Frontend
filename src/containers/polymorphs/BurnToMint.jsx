@@ -12,6 +12,7 @@ import Section4 from '../../components/polymorphs/Section4';
 import data from '../../utils/fixtures/newPolymorphBaseSkins';
 import './BurnToMint.scss';
 import { useThemeContext } from '../../contexts/ThemeContext';
+import { useWindowSize } from 'react-use';
 
 const marquee = () => (
   <p>
@@ -38,20 +39,15 @@ const BurnToMint = () => {
   const { setDarkMode } = useThemeContext();
   const history = useHistory();
   const [mobile, setMobile] = useState(false);
-  const [windowSize, setWindowSize] = useState({
-    width: window.innerWidth,
-    height: window.innerHeight,
-  });
+  const windowSize = useWindowSize();
 
   useEffect(() => {
     setDarkMode(true);
   }, []);
 
   useEffect(() => {
-    setWindowSize({ width: window.innerWidth, height: window.innerHeight });
-    if (+window.innerWidth <= 576) setMobile(true);
-    else setMobile(false);
-  }, []);
+    setMobile(+windowSize.width <= 576);
+  }, [windowSize]);
 
   return (
     <div className="burn--to--mint">
