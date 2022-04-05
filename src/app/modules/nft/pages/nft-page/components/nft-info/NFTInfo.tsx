@@ -15,10 +15,9 @@ import {
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import ReadMoreAndLess from 'react-read-more-less';
 import { UseMeasureRect } from 'react-use/lib/useMeasure';
-import Head from 'next/head';
 import { useRouter } from 'next/router';
 
-import { LineTabList } from '../../../../../../components';
+import { LineTabList, OpenGraph } from '../../../../../../components';
 import { NFTAssetImage, NFTAssetAudio, NFTBuySection, NFTAssetVideo } from '../';
 import { useNFTPageData } from '../../NFTPage.context';
 import { isNFTAssetAudio, isNFTAssetImage, isNFTAssetVideo } from '../../../../helpers';
@@ -32,8 +31,6 @@ import {
 import { TabBids, TabHistory, TabMetadata, TabOffers, TabOwners, TabProperties } from './components';
 import { CollectionPageLoader } from '../../../../../../../containers/collection/CollectionPageLoader';
 import NotFound from '../../../../../../../components/notFound/NotFound';
-import * as styles from '../../styles';
-import * as styles2 from './styles';
 import { NFTItemContentWithPrice, NFTLike } from '../../../../components/nft-item/components';
 import { NFTTransferPopup } from '../nft-transfer-popup';
 import { BigNumber as EthersBigNumber, utils } from 'ethers';
@@ -49,10 +46,12 @@ import { Status } from './components/tab-offers/components/refresh-metadata-popu
 import { RefreshMetadataPopup } from './components/tab-offers/components/refresh-metadata-popup';
 import { ReportStatusPopup } from './components/tab-offers/components/report-status-popup';
 import { NFTAcceptOfferPopup } from './components/tab-offers/components';
-import { useQueryClient } from 'react-query';
 import { userKeys } from '../../../../../../utils/query-keys';
 import { TabListings } from './components/tab-listings';
 import { useErc20PriceStore } from '../../../../../../../stores/erc20PriceStore';
+
+import * as styles from '../../styles';
+import * as styles2 from './NFTInfo.style';
 
 // TODO: hide metadata tab for not Polymorph NFT type
 export const NFTInfo = () => {
@@ -73,8 +72,6 @@ export const NFTInfo = () => {
   const [refreshMetadataStatus, setRefreshMetadataStatus] = useState(Status.HIDDEN);
   const [showOfferPopup, setShowOfferPopup] = useState(false);
   const [offerForAccept, setOfferForAccept] = useState<IOrder | null>(null);
-
-  const queryClient = useQueryClient();
 
   const handleClickViewCollection = useCallback(() => {
     if (collectionAddress) {
@@ -179,16 +176,18 @@ export const NFTInfo = () => {
 
   return (
     <>
+      <OpenGraph
+        title={`${NFT?.name} - Universe.XYZ`}
+        description={NFT?.description || undefined}
+        image={NFT.optimizedUrl || NFT.originalUrl || undefined}
+        imageAlt={NFT?.name || ''}
+      />
       {isLoading ? (
         <div className="loader-wrapper">
           <CollectionPageLoader />
         </div>
       ) : NFT ? (
         <>
-          <Head>
-            <title>{NFT.name} - Universe.XYZ</title>
-            <meta name="viewport" content="initial-scale=1.0, width=device-width" />
-          </Head>
           <Box layerStyle={'StoneBG'}>
             <Box {...styles.NFTAssetContainerStyle}>
               {(!NFT.artworkTypes || !NFT.artworkTypes.length) && <NFTAssetBroken {...styles2.BrokenAssetStyle} /> ||
