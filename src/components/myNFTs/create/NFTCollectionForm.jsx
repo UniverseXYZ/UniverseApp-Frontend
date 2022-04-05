@@ -22,7 +22,6 @@ import {
   attachTxHashToCollection, getMyMintableCollections,
 } from '../../../utils/api/mintNFT';
 import { useMyNftsContext } from '../../../contexts/MyNFTsContext.jsx';
-import { useErrorContext } from '../../../contexts/ErrorContext';
 import RevenueSplits from '../revenueSplits/RevenueSplits.jsx';
 import SocialConnections from '../socialConnections/SocialConnections.jsx';
 import { formatRoyaltiesForMinting } from '../../../utils/helpers/contractInteraction.js';
@@ -33,6 +32,7 @@ import { useSearchParam } from 'react-use';
 import universeIcon from '../../../assets/images/universe-img.svg';
 import { useAuthStore } from '../../../stores/authStore.js';
 import { useContractsStore } from '../../../stores/contractsStore.js';
+import { useErrorStore } from '../../../stores/errorStore.js';
 
 const MAX_FIELD_CHARS_LENGTH = {
   name: 32,
@@ -52,7 +52,7 @@ const NFTCollectionForm = ({ scrollToTop }) => {
   const signer = useAuthStore(s => s.signer);
   const universeERC721FactoryContract = useContractsStore(s => s.universeERC721FactoryContract);
 
-  const { setShowError, setErrorTitle, setErrorBody } = useErrorContext();
+  const { setShowError, setErrorTitle, setErrorBody } = useErrorStore(s => ({setErrorBody: s.setErrorBody, setErrorTitle: s.setErrorTitle, setErrorBody: s.setErrorBody}))
   const [showPrompt, setShowPrompt] = useState(false);
 
   const inputFile = useRef(null);

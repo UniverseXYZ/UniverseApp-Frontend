@@ -188,7 +188,7 @@ function MyApp({ Component, pageProps }: AppProps) {
   }, [signer]);
 
   return (
-    <ErrorContextProvider>
+    // <ErrorContextProvider>
       <QueryClientProvider client={queryClient}>
         {/* <AuthContextProvider> */}
           <ThemeContextProvider>
@@ -215,7 +215,7 @@ function MyApp({ Component, pageProps }: AppProps) {
           </ThemeContextProvider>
         {/* </AuthContextProvider> */}
       </QueryClientProvider>
-    </ErrorContextProvider>
+    // </ErrorContextProvider>
   );
 }
 
