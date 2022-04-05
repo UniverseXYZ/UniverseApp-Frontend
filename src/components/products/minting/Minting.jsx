@@ -11,6 +11,8 @@ import WrongNetworkPopup from '../../popups/WrongNetworkPopup';
 import NotAuthenticatedPopup from '../../popups/NotAuthenticatedPopup';
 import { useAuthStore } from '../../../stores/authStore';
 import { useThemeStore } from 'src/stores/themeStore';
+import OpenGraphImage from '@assets/images/open-graph/minting.png';
+import { OpenGraph } from '@app/components';
 
 const MintingPage = () => {
   const router = useRouter();
@@ -37,6 +39,11 @@ const MintingPage = () => {
 
   return (
     <div className="minting-page">
+      <OpenGraph
+        title={'Mint NFT or Create an NFT Collection'}
+        description={'Universe Minting is an easy to use platform that allows users to create their NFTs to the Ethereum Blockchain.'}
+        image={OpenGraphImage}
+      />
       <div className="select--title">
         <div className="container">
           <h1>Minting</h1>

@@ -15,6 +15,9 @@ import { useErc20PriceStore } from '../../stores/erc20PriceStore';
 import { useThemeStore } from 'src/stores/themeStore';
 import { useMyNftsStore } from 'src/stores/myNftsStore';
 import { useRouter } from 'next/router';
+import { OpenGraph } from '@app/components';
+
+import OpenGraphImage from '@assets/images/open-graph/polymorphs.png';
 
 const marquee = () => (
   <p>
@@ -68,6 +71,11 @@ const Polymorphs = () => {
   };
   return (
     <div className="polymorphs">
+      <OpenGraph
+        title={'Polymorphs NFT Drop'}
+        description={'A universe of polymorphic creatures with the power to mutate on demand.'}
+        image={OpenGraphImage}
+      />
       <WelcomeWrapper
         title="Polymorph Universe"
         hintText="A universe of polymorphic creatures with the power to mutate on demand"
