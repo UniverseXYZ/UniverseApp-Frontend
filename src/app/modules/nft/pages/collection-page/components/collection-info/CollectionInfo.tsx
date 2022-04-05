@@ -42,6 +42,9 @@ export const CollectionInfo = () => {
 		collectionAddress,
 		collectionGeneralInfo,
 		collectionOrderBookData,
+    isLoadingCollectionApi,
+		isFetchingCollectionApi,
+		isIdleCollectionApi,
     isLoadingCollectionGeneralInfo,
     isFetchingCollectionGeneralInfo,
     isIdleCollectionGeneralInfo,
@@ -118,7 +121,8 @@ export const CollectionInfo = () => {
 	const hasCollectionNFTs = collectionNFTs?.pages?.length && collectionNFTs.pages[0].data?.length;
 	const waitingOrders = isFethingOrders || isLoadingOrders || isIdleOrders;
 	const waitingCollectionNFTs = isFetchingCollectionNFTs || isLoadingCollectionNFTs || isIdleCollectionNFTs;
-	const waitingCollectionGeneralInfo = isLoadingCollectionGeneralInfo || isFetchingCollectionGeneralInfo || isIdleCollectionGeneralInfo;
+  const waitingCollectionOffChainInfo = isFetchingCollectionApi || isLoadingCollectionApi || isIdleCollectionApi;
+  const waitingCollectionGeneralInfo = isLoadingCollectionGeneralInfo || isFetchingCollectionGeneralInfo || isIdleCollectionGeneralInfo;
 
   const filtersRef = useRef(null);
 
@@ -136,7 +140,7 @@ export const CollectionInfo = () => {
         image={collection?.bannerUrl || collection?.coverUrl || undefined}
         imageAlt={collection?.name || collection?.address || ''}
       />
-      {(waitingCollectionGeneralInfo && !collectionGeneralInfo) || !collection ? (
+      {(waitingCollectionGeneralInfo && !collectionGeneralInfo) || (waitingCollectionOffChainInfo && !collection) ? (
         <div className='loader-wrapper'>
           <CollectionPageLoader />
         </div>

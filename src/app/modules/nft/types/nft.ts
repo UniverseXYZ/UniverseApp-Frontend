@@ -99,7 +99,7 @@ export interface INFTProperty {
 
 export interface INFT {
   _ownerAddress?: string;
-  _creatorAddress?: string;
+  _creatorAddress?: string | null;
   _collectionAddress?: string;
   _properties?: INFTProperty[];
   id: string;
@@ -107,7 +107,7 @@ export interface INFT {
   artworkTypes: NFTArtworkType[];
   collectionId: number;
   collection: ICollection | null;
-  createdAt: Date;
+  createdAt?: Date;
   creator?: IUser;
   description: string | null;
   name: string;
@@ -126,7 +126,7 @@ export interface INFT {
   tokenIds: string[];
   tokenUri: string;
   txHash: string | null;
-  updatedAt: Date;
+  updatedAt?: Date;
   url: string;
   hidden?: boolean;
   moreFromCollection?: INFT[];
