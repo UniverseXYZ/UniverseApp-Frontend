@@ -3,7 +3,7 @@ import '../styles/globals.css'
 import '../src/assets/scss/normalize.scss';
 import '../src/assets/scss/_variables.scss';
 
-import '../public/static/fonts/style.css';
+import '../public/fonts/style.css';
 
 import '../src/components/input/Inputs.scss';
 import '../src/components/header/Header.scss';
