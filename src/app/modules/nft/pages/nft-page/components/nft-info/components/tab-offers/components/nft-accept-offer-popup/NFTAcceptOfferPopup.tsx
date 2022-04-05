@@ -35,7 +35,7 @@ import { useErrorContext } from '../../../../../../../../../../../contexts/Error
 import { nftKeys, orderKeys } from '../../../../../../../../../../utils/query-keys';
 import { GetActiveListingApi, GetNFT2Api, GetOrdersApi } from '../../../../../../../../api';
 import { useNFTPageData } from '../../../../../../NFTPage.context';
-import { ReactComponent as CheckIcon } from '../../../../../../../../../../../assets/images/check-vector.svg';
+import CheckIcon from '../../../../../../../../../../../assets/images/check-vector.svg';
 import Contracts from '../../../../../../../../../../../contracts/contracts.json';
 import { NFTCustomError } from '../../../../../nft-custom-error/NFTCustomError';
 
@@ -417,7 +417,7 @@ export const NFTAcceptOfferPopup = ({ NFT, NFTs, order, isOpen, onClose }: INFTA
                   '...'
                 ) : (
                   <Box display={'inline-block'} marginLeft={'5px'}>
-                    <CheckIcon />
+                    <Image src={CheckIcon} alt={''} />
                   </Box>
                 )}
               </Text>
@@ -428,7 +428,7 @@ export const NFTAcceptOfferPopup = ({ NFT, NFTs, order, isOpen, onClose }: INFTA
                   '...'
                 ) : (
                   <Box display={'inline-block'} marginLeft={'5px'}>
-                    <CheckIcon />
+                    <Image src={CheckIcon} alt={''} />
                   </Box>
                 )}
               </Text>

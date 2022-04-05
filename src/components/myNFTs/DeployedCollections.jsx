@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect } from 'react';
-import { useHistory } from 'react-router-dom';
+// import { useHistory } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { getCollectionBackgroundColor } from '../../utils/helpers';
 import PendingCollections from './pendingDropdown/pendingCollections/PendingCollections';
@@ -20,7 +20,8 @@ const CORE_COLLECTION_ADDRESS = process.env.REACT_APP_UNIVERSE_ERC_721_ADDRESS;
 const pollingInterval = 1000;
 
 const DeployedCollections = ({ scrollContainer }) => {
-  const history = useRouter();
+  // const history = useHistory();
+  const router = useRouter();
 
   const coreCollectionFirst = (a, b) => {
     if (a.address === CORE_COLLECTION_ADDRESS) {
@@ -136,9 +137,7 @@ const DeployedCollections = ({ scrollContainer }) => {
                   className="saved__collection__box"
                   key={collection.id}
                   aria-hidden="true"
-                  onClick={() =>
-                    history.push(`/collection/${collection.address}?collection=${collection.address}`)
-                  }
+                  onClick={() => router.push(`/collection/${collection.address}`)}
                 >
                   <div className="saved__collection__box__header">
                     {collection.bannerUrl ? (

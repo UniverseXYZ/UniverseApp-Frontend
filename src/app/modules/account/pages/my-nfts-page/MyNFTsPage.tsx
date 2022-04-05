@@ -1,7 +1,8 @@
-import { useHistory } from 'react-router-dom';
 import { Contract, utils } from 'ethers';
 import React, { useEffect, useRef, useState } from 'react';
 import Popup from 'reactjs-popup';
+import { useClickAway, useTitle } from 'react-use';
+import { useRouter } from 'next/router';
 
 import { useMyNftsContext } from '../../../../../contexts/MyNFTsContext';
 import { useLobsterContext } from '../../../../../contexts/LobsterContext';
@@ -24,17 +25,21 @@ import UniverseNFTs from '../../../../../components/myNFTs/UniverseNFTs';
 import HiddenNFTs from '../../../../../components/myNFTs/HiddenNFTs';
 import LikedNFTs from '../../../../../components/myNFTs/LikedNFTs';
 import NFTsActivity from '../../../../../components/myNFTs/NFTsActivity';
-import { useClickAway, useTitle } from 'react-use';
 import { WalletTab } from './components';
 import FiltersContextProvider from '../../../account/pages/my-nfts-page/components/search-filters/search-filters.context';
 
 export const MyNFTsPage = () => {
-  const history = useHistory();
+  const router = useRouter();
   const createButtonRef = useRef<HTMLButtonElement>(null);
 
   // Context hooks
-  const { myNFTsSelectedTabIndex, setMyNFTsSelectedTabIndex, activeTxHashes, setActiveTxHashes, nftSummary } =
-    useMyNftsContext() as any;
+  const {
+    myNFTsSelectedTabIndex,
+    setMyNFTsSelectedTabIndex,
+    activeTxHashes,
+    setActiveTxHashes,
+    nftSummary
+  } = useMyNftsContext() as any;
 
   const { userLobsters } = useLobsterContext() as any;
   const { userPolymorphs } = usePolymorphContext() as any;
@@ -293,25 +298,13 @@ export const MyNFTsPage = () => {
                       <ul>
                         <li
                           aria-hidden="true"
-                          onClick={() =>
-                            history.push('/my-nfts/create', {
-                              tabIndex: 1,
-                              nftType: 'single',
-                              backPath: 'myNFTs',
-                            })
-                          }
+                          onClick={() => router.push('/my-nfts/create?tabIndex=1&nftType=single&backPath=myNFTs')}
                         >
                           NFT
                         </li>
                         <li
                           aria-hidden="true"
-                          onClick={() =>
-                            history.push('/my-nfts/create', {
-                              tabIndex: 1,
-                              nftType: 'collection',
-                              backPath: 'myNFTs',
-                            })
-                          }
+                          onClick={() => router.push('/my-nfts/create?tabIndex=1&nftType=collection&backPath=myNFTs')}
                         >
                           Collection
                         </li>
@@ -325,7 +318,7 @@ export const MyNFTsPage = () => {
               <button
                 type="button"
                 className="light-border-button light--button--mobile"
-                onClick={() => history.push('/polymorph-rarity')}
+                onClick={() => router.push('/polymorph-rarity')}
               >
                 Polymorph rarity chart
               </button>
@@ -347,13 +340,13 @@ export const MyNFTsPage = () => {
                     <ul>
                       <li
                         aria-hidden="true"
-                        onClick={() => history.push('/my-nfts/create', { tabIndex: 1, nftType: 'single' })}
+                        onClick={() => router.push('/my-nfts/create?tabIndex=1&nftType=single')}
                       >
                         NFT
                       </li>
                       <li
                         aria-hidden="true"
-                        onClick={() => history.push('/my-nfts/create', { tabIndex: 1, nftType: 'collection' })}
+                        onClick={() => router.push('/my-nfts/create?tabIndex=1&nftType=collection')}
                       >
                         Collection
                       </li>

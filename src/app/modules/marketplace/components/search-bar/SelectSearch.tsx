@@ -1,5 +1,6 @@
 import { Box, BoxProps, CheckboxProps, Image, ImageProps, Text, Flex } from '@chakra-ui/react';
 import React, { useCallback, useEffect, useState, useRef } from 'react';
+import { useRouter } from 'next/router';
 
 import { SearchInput } from './SearchInput';
 import { ISearchBarValue } from './types';
@@ -7,7 +8,6 @@ import { ISearchBarDropdownCollection } from '../../../nft/types';
 import { Loading, InfoTooltip } from '../../../../components';
 import { getCollectionBackgroundColor } from '../../../../../utils/helpers';
 import goToCollectionIcon from '../../../../../assets/images/go-to-collection.svg';
-import { useHistory } from 'react-router-dom';
 
 const MIN_CHARS_LENGTH = 3;
 interface IStyles {
@@ -128,7 +128,7 @@ export const SearchSelect = (props: ISearchSelectProps) => {
   const [value, setValue] = useState<ISearchBarValue>({ searchValue: ''});
   const [filteredItems, setFilteredItems] = useState<ISearchBarDropdownCollection[]>(items);
   const ref = useRef<HTMLHeadingElement>(null);
-  const router = useHistory();
+  const router = useRouter();
 
   const handleItemSelect = useCallback((item) => {
     const result: ISearchBarValue = {

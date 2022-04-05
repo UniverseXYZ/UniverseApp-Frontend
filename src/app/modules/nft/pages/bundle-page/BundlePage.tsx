@@ -13,14 +13,14 @@ import {
   Text,
 } from '@chakra-ui/react';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { useHistory, useParams } from 'react-router-dom';
 import { uniqBy } from 'lodash';
 import ReadMoreAndLess from 'react-read-more-less';
-import { Swiper, SwiperSlide } from 'swiper/react/swiper-react';
+import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation } from 'swiper';
+import { useRouter } from 'next/router';
 
-import 'swiper/swiper-bundle.min.css';
-import 'swiper/swiper.min.css';
+// import 'swiper/swiper-bundle.min.css';
+// import 'swiper/swiper.min.css';
 
 import AudioNFTPreviewImage from './../../../../../assets/images/v2/audio-nft-preview.png';
 
@@ -51,7 +51,7 @@ export const BundlePageContent = () => {
   const prevRef = useRef(null);
   const nextRef = useRef(null);
 
-  const router = useHistory();
+  const router = useRouter();
 
   const { setDarkMode } = useThemeContext() as any;
 
@@ -217,10 +217,12 @@ export const BundlePageContent = () => {
 };
 
 export const BundlePage = () => {
-  const params = useParams<{ hash: string; }>();
+  const router = useRouter();
+
+  const { hash } = router.query as { hash: string; };
 
   return (
-    <BundlePageProvider hash={params.hash}>
+    <BundlePageProvider hash={hash}>
       <BundlePageContent />
     </BundlePageProvider>
   );

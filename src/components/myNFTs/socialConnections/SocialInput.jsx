@@ -7,7 +7,7 @@ const SocialInput = (props) => {
   return (
     <div className="social--links--item">
       <h5>{title}</h5>
-      <Icon />
+      <img src={Icon} alt="" />
       {url ? <div className="pre">{url}</div> : <></>}
       <Input
         placeholder={placeholder}
@@ -25,7 +25,7 @@ const SocialInput = (props) => {
 
 SocialInput.propTypes = {
   title: PropTypes.string.isRequired,
-  Icon: PropTypes.oneOfType([PropTypes.object]).isRequired,
+  Icon: PropTypes.oneOfType([PropTypes.object, PropTypes.string]).isRequired,
   url: PropTypes.string,
   placeholder: PropTypes.string.isRequired,
   customClassName: PropTypes.string,

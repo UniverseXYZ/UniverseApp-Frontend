@@ -1,6 +1,6 @@
 import React from 'react';
 import Skeleton from 'react-loading-skeleton';
-import './CollectionCardSkeleton.scss';
+// import './CollectionCardSkeleton.scss';
 
 const CollectionCardSkeleton = () => (
   <div className="saved__collection__skeleton__box">
