@@ -20,6 +20,9 @@ module.exports = withPlugins(
         'storage.googleapis.com',
         'partybears-3n0w057k710bfqcm.s3.us-west-2.amazonaws.com',
         // UNIVERSE S3 BUCKETS
+        'universeapp-assets-dev.s3.amazonaws.com',
+        'universeapp-assets-auctions.s3.amazonaws.com',
+        'universeapp-assets-local.s3.amazonaws.com',
         'universe-dev-datascraper-video.s3.amazonaws.com',
         'universe-dev-datascraper-images.s3.amazonaws.com',
         'universe-dev-datascraper-audio.s3.amazonaws.com',
