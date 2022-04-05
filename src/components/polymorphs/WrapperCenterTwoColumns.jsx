@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import './styles/WrapperCenterTwoColumns.scss';
+// import './styles/WrapperCenterTwoColumns.scss';
 
 const WrapperCenterTwoColumns = (props) => {
   const { leftBlock, leftClassName, rightBlock, rightClassName } = props;

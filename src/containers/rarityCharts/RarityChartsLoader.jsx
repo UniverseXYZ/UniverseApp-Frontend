@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import './RarityCharsLoader.scss';
-import './RarityCharts.scss';
+// import './RarityCharsLoader.scss';
+// import './RarityCharts.scss';
+// import uuid from 'react-uuid';
 import loadingBg from '../../assets/images/mint-polymorph-loading-bg.png';
 
 const RarityChartsLoader = React.memo(({ number }) =>

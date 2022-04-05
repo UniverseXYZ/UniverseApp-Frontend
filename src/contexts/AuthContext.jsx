@@ -4,13 +4,13 @@ import PropTypes from 'prop-types';
 import { Contract, providers, utils } from 'ethers';
 import uuid from 'react-uuid';
 import WalletConnectProvider from '@walletconnect/web3-provider';
-import { useHistory } from 'react-router-dom';
 import { getERC20PriceCoingecko, getEthPriceCoingecko } from '../utils/api/etherscan';
 import Contracts from '../contracts/contracts.json';
 import { CONNECTORS_NAMES } from '../utils/dictionary';
 import { getProfileInfo, setChallenge, userAuthenticate } from '../utils/api/profile';
 import { mapUserData } from '../utils/helpers';
 import { useErrorContext } from './ErrorContext';
+import { useRouter } from 'next/router';
 import { TokenTicker } from '../app/enums/token-ticker';
 
 const AuthContext = createContext(null);
@@ -47,7 +47,8 @@ const AuthContextProvider = ({ children }) => {
   const [universeERC721FactoryContract, setUniverseERC721FactoryContract] = useState(null);
   const [contracts, setContracts] = useState(false);
   const [deployedCollections, setDeployedCollections] = useState([]);
-  const history = useHistory();
+  const history = useRouter();
+
   const [ethUsdPrice, setEthUsdPrice] = useState(0);
   const [daiUsdPrice, setDaiUsdPrice] = useState(0);
   const [usdcUsdPrice, setUsdcUsdPrice] = useState(0);

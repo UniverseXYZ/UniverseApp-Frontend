@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import './PendingCollections.scss';
+// import './PendingCollections.scss';
 import PropTypes from 'prop-types';
 import { useMyNftsContext } from '../../../../contexts/MyNFTsContext';
 import { SpinningLoader } from '../misc/SpinningLoader';

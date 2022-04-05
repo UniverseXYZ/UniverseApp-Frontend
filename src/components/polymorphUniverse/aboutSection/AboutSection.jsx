@@ -4,7 +4,7 @@ import { useHistory } from 'react-router-dom';
 import WrapperCenter from '../../polymorphs/WrapperCenter';
 import WrapperCenterTwoColumns from '../../polymorphs/WrapperCenterTwoColumns';
 import ImgRow1 from '../../../assets/images/Section1-Illustration-min.png';
-import './AboutSection.scss';
+// import './AboutSection.scss';
 import Button from '../../button/Button';
 import imgRow2Chart from '../../../assets/images/universelandscape.png';
 import imgRow2ChartMobile from '../../../assets/images/universelandscapemobile.png';

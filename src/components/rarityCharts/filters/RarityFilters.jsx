@@ -5,7 +5,7 @@ import RaritySortBySelect from '../../input/RaritySortBySelect';
 import RaritySortByOrder from '../../input/RaritySortByOrder';
 import priceIcon from '../../../assets/images/eth-icon-new.svg';
 import filterIcon from '../../../assets/images/filters-icon-black.svg';
-import './RarityFilters.scss';
+// import './RarityFilters.scss';
 import RarityChartFiltersPopup from '../../popups/RarityChartFiltersPopup';
 import RaritySearchField from '../../input/RaritySearchField';
 

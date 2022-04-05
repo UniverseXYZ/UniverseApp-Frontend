@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import RarityFilters from '../../components/rarityCharts/filters/RarityFilters';
 import Welcome from '../../components/rarityCharts/welcome/Welcome';
-import './RarityCharts.scss';
+// import './RarityCharts.scss';
 import { useSearchPolymorphs } from '../../utils/hooks/useRarityDebouncer';
 import { categoriesArray } from './categories';
 import RarityList from '../../components/rarityCharts/list/RarityList';

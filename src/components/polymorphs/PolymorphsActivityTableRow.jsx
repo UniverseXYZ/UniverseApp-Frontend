@@ -18,7 +18,8 @@ import imgMariguana from '../../assets/images/Mariguana-small.png';
 import imgPaul from '../../assets/images/Paul-small.png';
 import imgRagnar from '../../assets/images/Ragnar-small.png';
 import imgXYZBot from '../../assets/images/XYZbot-small.png';
-import './styles/PolymorphsActivityTableRow.scss';
+import { useRouter } from 'next/router';
+// import './styles/PolymorphsActivityTableRow.scss';
 
 const characters = [
   'Diamond Paws',
@@ -89,7 +90,7 @@ const getCharacterBaseImage = (character) => characterImages[character];
 const PolymorphsActivityTableRow = (props) => {
   const { data, className, ethPrice } = props;
 
-  const history = useHistory();
+  const history = useRouter();
 
   return (
     <tr className={`row ${className}`}>
