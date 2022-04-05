@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import { utils, BigNumber, FixedNumber } from 'ethers';
 import Popup from 'reactjs-popup';
 import BondingCurve from '../../polymorphs/mint-polymorph/BondingCurve';
-import './MintLobbyLobsterSection.scss';
+// import './MintLobbyLobsterSection.scss';
 import lobsterLoadingBg from '../../../assets/images/lobby-lobsters/img_placeholder.png';
 import AppContext from '../../../ContextAPI';
 import { convertLobsterObjects } from '../../../utils/helpers/lobsters';

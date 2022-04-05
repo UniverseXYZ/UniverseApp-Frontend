@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import './HeroSection.scss';
+// import './HeroSection.scss';
 import { useHistory } from 'react-router-dom';
 import FloatingNFTsAnimation from './animations/FloatingNFTsAnimation';
 import EndlessWaveAnimation from './animations/EndlessWaveAnimation';
