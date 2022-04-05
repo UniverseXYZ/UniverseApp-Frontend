@@ -91,7 +91,7 @@ export const NFTItemContentWithPrice = (
       </Flex>
 
       <Flex justifyContent={'space-between'} alignItems={'center'} mb={'14px'}>
-        <Box>
+        <Flex>
           {creator && (
             <NFTItemRelation
               type={NFTRelationType.CREATOR}
@@ -117,7 +117,7 @@ export const NFTItemContentWithPrice = (
               externalOwner={!owner.displayName}
             />
           )}
-        </Box>
+        </Flex>
         {additionPriceValue && (
           <Text color={'#00000066'} fontSize={'11px'} fontWeight={600}>
             {additionPriceLabel}
