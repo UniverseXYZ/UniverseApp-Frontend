@@ -14,7 +14,28 @@ module.exports = withPlugins(
     trailingSlash: true,
     reactStrictMode: false,
     images: {
-      disableStaticImages: true
+      disableStaticImages: true,
+      domains: [
+        'ipfs.io',
+        'storage.googleapis.com',
+        'partybears-3n0w057k710bfqcm.s3.us-west-2.amazonaws.com',
+        // UNIVERSE S3 BUCKETS
+        'universe-dev-datascraper-video.s3.amazonaws.com',
+        'universe-dev-datascraper-images.s3.amazonaws.com',
+        'universe-dev-datascraper-audio.s3.amazonaws.com',
+        'universe-dev-datascraper-models.s3.amazonaws.com',
+        'universe-dev-datascraper-misc.s3.amazonaws.com',
+        'universe-rinkeby-datascraper-video.s3.amazonaws.com',
+        'universe-rinkeby-datascraper-images.s3.amazonaws.com',
+        'universe-rinkeby-datascraper-audio.s3.amazonaws.com',
+        'universe-rinkeby-datascraper-models.s3.amazonaws.com',
+        'universe-rinkeby-datascraper-misc.s3.amazonaws.com',
+        'universe-prod-datascraper-video.s3.amazonaws.com',
+        'universe-prod-datascraper-images.s3.amazonaws.com',
+        'universe-prod-datascraper-audio.s3.amazonaws.com',
+        'universe-prod-datascraper-models.s3.amazonaws.com',
+        'universe-prod-datascraper-misc.s3.amazonaws.com',
+      ],
     },
     webpack(config, options) {
       config.module.rules.push({
