@@ -7,7 +7,6 @@ import { useRouter } from 'next/router';
 import { useMyNftsContext } from '../../../../../contexts/MyNFTsContext';
 import { useLobsterContext } from '../../../../../contexts/LobsterContext';
 import { usePolymorphContext } from '../../../../../contexts/PolymorphContext';
-import { useAuthContext } from '../../../../../contexts/AuthContext';
 import { useErrorContext } from '../../../../../contexts/ErrorContext';
 import { useThemeContext } from '../../../../../contexts/ThemeContext';
 import useStateIfMounted from '../../../../../utils/hooks/useStateIfMounted';
@@ -27,6 +26,11 @@ import LikedNFTs from '../../../../../components/myNFTs/LikedNFTs';
 import NFTsActivity from '../../../../../components/myNFTs/NFTsActivity';
 import { WalletTab } from './components';
 import FiltersContextProvider from '../../../account/pages/my-nfts-page/components/search-filters/search-filters.context';
+import { useAuthStore } from '../../../../../stores/authStore';
+import Contracts from '../../../../../contracts/contracts.json';
+ 
+// @ts-ignore
+const { contracts } = Contracts[process.env.REACT_APP_NETWORK_CHAIN_ID];
 
 export const MyNFTsPage = () => {
   const router = useRouter();
@@ -44,7 +48,10 @@ export const MyNFTsPage = () => {
   const { userLobsters } = useLobsterContext() as any;
   const { userPolymorphs } = usePolymorphContext() as any;
 
-  const { universeERC721CoreContract, contracts, signer, address } = useAuthContext() as any;
+  const { signer, address } = useAuthStore(state => ({
+    signer: state.signer,
+    address: state.address
+  }));
 
   const { setShowError, setErrorTitle, setErrorBody } = useErrorContext() as any;
 
@@ -98,7 +105,6 @@ export const MyNFTsPage = () => {
 
       const mintingFlowContext = {
         collectionsIdAddressMapping: mapping,
-        universeERC721CoreContract,
         contracts,
         signer,
         address,
@@ -112,12 +118,12 @@ export const MyNFTsPage = () => {
         const contractAddress = mintingFlowContext.collectionsIdAddressMapping[nft.collectionId];
         requiredContracts[nft.collectionId] = requiredContracts[nft.collectionId] || {};
 
-        if (!contractAddress) {
-          requiredContracts[nft.collectionId] = mintingFlowContext.universeERC721CoreContract;
+        if (!contractAddress || !mintingFlowContext.signer) {
+          requiredContracts[nft.collectionId] = mintingFlowContext.contracts.UniverseERC721Core;
         } else {
           requiredContracts[nft.collectionId] = new Contract(
             contractAddress,
-            mintingFlowContext.contracts.UniverseERC721.abi,
+            mintingFlowContext.contracts.UniverseERC721Core.abi,
             mintingFlowContext.signer
           );
         }

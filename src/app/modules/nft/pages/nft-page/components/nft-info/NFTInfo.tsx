@@ -45,7 +45,6 @@ import { IERC721AssetType, INFT, IOrder, IUser } from '../../../../types';
 import { GetUserApi } from '../../../../api';
 import { OrderAssetClass } from '../../../../enums';
 import { getTokenByAddress } from '../../../../../../constants';
-import { useAuthContext } from '../../../../../../../contexts/AuthContext';
 import { Status } from './components/tab-offers/components/refresh-metadata-popup/enums';
 import { RefreshMetadataPopup } from './components/tab-offers/components/refresh-metadata-popup';
 import { ReportStatusPopup } from './components/tab-offers/components/report-status-popup';
@@ -53,13 +52,15 @@ import { NFTAcceptOfferPopup } from './components/tab-offers/components';
 import { useQueryClient } from 'react-query';
 import { userKeys } from '../../../../../../utils/query-keys';
 import { TabListings } from './components/tab-listings';
+import { useErc20PriceStore } from '../../../../../../../stores/erc20PriceStore';
 
 // TODO: hide metadata tab for not Polymorph NFT type
 export const NFTInfo = () => {
   const router = useRouter();
 
-  const { getTokenPriceByTicker, ethUsdPrice, daiUsdPrice, usdcUsdPrice, xyzUsdPrice, wethUsdPrice, address } =
-    useAuthContext() as any;
+  const { getTokenPriceByTicker, ethUsdPrice, daiUsdPrice, usdcUsdPrice, xyzUsdPrice, wethUsdPrice } =
+    useErc20PriceStore();
+
   const { NFT, isLoading, order, creator, owner, collection, collectionAddress, history, offers, moreFromCollection } =
     useNFTPageData();
 

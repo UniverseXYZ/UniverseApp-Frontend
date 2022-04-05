@@ -11,9 +11,9 @@ import pencilIcon from '../../assets/images/edit.svg';
 import copyIcon from '../../assets/images/copy.svg';
 import Button from '../button/Button';
 import { useAuctionContext } from '../../contexts/AuctionContext';
-import { useAuthContext } from '../../contexts/AuthContext';
 import { shortenEthereumAddress } from '../../utils/helpers/format';
 import { useWindowSize } from 'react-use';
+import { useAuthStore } from '../../stores/authStore';
 
 const ArtistDetails = ({ artistAddress, onArtist = {}, loading }) => {
   const blockieSizes = {
@@ -30,7 +30,7 @@ const ArtistDetails = ({ artistAddress, onArtist = {}, loading }) => {
   const history = useHistory();
 
   const { setEditProfileButtonClick } = useAuctionContext();
-  const { address } = useAuthContext();
+  const address = useAuthStore(s => s.address)
 
   const [copied, setCopied] = useState(false);
   const [copiedAddress, setCopiedAddress] = useState(false);

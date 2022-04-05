@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { fetchTokensMetadataJson } from '../utils/api/polymorphs';
 import { convertPolymorphObjects } from '../utils/helpers/polymorphs';
 import { queryPolymorphsGraph, transferPolymorphs } from '../utils/graphql/polymorphQueries';
-import { useAuthContext } from './AuthContext';
+import { useAuthStore } from '../stores/authStore';
 
 const PolymorphContext = createContext(null);
 
@@ -11,7 +11,7 @@ const PolymorphContextProvider = ({ children }) => {
   const [userPolymorphs, setUserPolymorphs] = useState([]);
   const [userPolymorphWithMetadata, setUserPolymorphsWithMetadata] = useState([]);
   const [userPolymorphsLoaded, setUserPolymorphsLoaded] = useState(false);
-  const { address } = useAuthContext();
+  const address = useAuthStore(s => s.address)
 
   const fetchUserPolymorphsTheGraph = async (newAddress) => {
     setUserPolymorphsLoaded(false);

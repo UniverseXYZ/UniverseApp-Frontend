@@ -38,7 +38,6 @@ import { UncheckBundleEditionsModal } from './components';
 import { FilterCollectionsItems } from '../../../../../../mocks/filter-collections';
 import { FilterArtistsItems } from '../../../../../../mocks/filter-artists';
 import { useMyNftsContext } from '../../../../../../../../../contexts/MyNFTsContext';
-import { useAuthContext } from '../../../../../../../../../contexts/AuthContext';
 import universeIcon from '../../../../../../../../../assets/images/universe-img.svg';
 import {
   isNFTAssetAudio,
@@ -48,6 +47,7 @@ import {
   mapBackendUser,
 } from '../../../../../../../nft';
 import { NFTItemFooter, NFTItemFooterEditionsLabel } from '../../../../../../../nft/components/nft-item/components';
+import { useAuthStore } from '../../../../../../../../../stores/authStore';
 
 interface IActionBarNFTItemProps {
   nft: INFT;
@@ -166,7 +166,7 @@ export const SelectNFTs = ({}: ISelectNFTsProps) => {
 
   const { myNFTs } = useMyNftsContext() as any;
 
-  const { loggedInArtist } = useAuthContext();
+  const loggedInArtist = useAuthStore(state => state.loggedInArtist);
 
   const { isOpen: isFiltersOpen, onToggle: onToggleFilters } = useDisclosure();
 

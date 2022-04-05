@@ -4,6 +4,7 @@ import dayjs from 'dayjs';
 import { utils } from 'ethers';
 import React, { useEffect, useMemo, useState } from 'react'
 import { NFTTabItemWrapper } from '../..';
+import { useAuthStore } from '../../../../../../../../../../stores/authStore';
 import { getEtherscanTxUrl } from '../../../../../../../../../../utils/helpers';
 import { shortenEthereumAddress } from '../../../../../../../../../../utils/helpers/format';
 import { getTokenByAddress, TOKENS_MAP, ZERO_ADDRESS } from '../../../../../../../../../constants';
@@ -17,7 +18,6 @@ import { actionIcon, nameLabels } from '../../tab-history/constants';
 import { getAddedAtLabel } from '../../tab-history/helpers';
 import * as styles from '../../tab-history/styles';
 import EtherScanIcon from './../../../../../../../../../../assets/images/etherscan.svg';
-import { useAuthContext } from '../../../../../../../../../../contexts/AuthContext';
 
 interface IHistoryEventProps {
   event: IOrder;
@@ -27,7 +27,7 @@ interface IHistoryEventProps {
 }
 
 const HistoryEvent: React.FC<IHistoryEventProps> = ({ event, onlyListings, cancelListing, isOwner }) => {
-  const { web3Provider } = useAuthContext() as any;
+  const web3Provider = useAuthStore(s => s.web3Provider);
   const [blockDate, setBlockDate] = useState(new Date());
 
   let type: HistoryType = HistoryType.MINTED;
@@ -70,14 +70,14 @@ const HistoryEvent: React.FC<IHistoryEventProps> = ({ event, onlyListings, cance
   const expired = !canceled && !event.modified && (type === HistoryType.OFFER || type === HistoryType.LISTED) && event.end > 0 ? dayjs().diff(endDate) > 0 || event.status === OrderStatus.STALE : false;
 
   const getBlockTimestamp = async () => {
-    const blockTimestamp = await web3Provider?.getBlock(event?.blockNum);
-    setBlockDate(new Date(blockTimestamp?.timestamp * 1000));
+    if (event.blockNum && web3Provider) {
+      const blockTimestamp = await web3Provider?.getBlock(event?.blockNum);
+      setBlockDate(new Date(blockTimestamp?.timestamp * 1000));
+    }
   }
 
   useEffect(() => {
-    if (event.blockNum && web3Provider) {
-      getBlockTimestamp();
-    }
+    getBlockTimestamp();
   }, [web3Provider, event])
 
   const addedAtLabel = useMemo(() => getAddedAtLabel(type === HistoryType.MINTED ? blockDate : event.createdAt), [blockDate, event.createdAt, type])

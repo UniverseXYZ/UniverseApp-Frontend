@@ -4,13 +4,13 @@ import BigNumber from 'bignumber.js';
 import React from 'react'
 import { getTokenByAddress } from '../../../../../../../../../../constants';
 import { IERC721AssetType, IOrder, IUser } from '../../../../../../../../types';
-import { useAuthContext } from '../../../../../../../../../../../contexts/AuthContext';
 import dayjs from 'dayjs';
 import { NFTTabItemWrapper } from '../../..';
 import Blockies from 'react-blockies';
 import * as styles from '../../styles';
 import { shortenEthereumAddress } from '../../../../../../../../../../../utils/helpers/format';
 import { useTokenPrice } from '../../../../../../../../../../hooks';
+import { useAuthStore } from '../../../../../../../../../../../stores/authStore';
 
 interface INFTOfferProps {
   offer: IOrder;
@@ -22,7 +22,7 @@ interface INFTOfferProps {
 }
 
 export const  NFTOffer: React.FC<INFTOfferProps> = ({offer, usersMap, owner, setOfferForAccept, setShowOfferPopup, cancelOffer}) => {
-  const { address } = useAuthContext() as any;
+  const address = useAuthStore(s => s.address);
   const neverExpired = !offer.start && !offer.end;
   const remainingHours = dayjs(offer.end * 1000).diff(new Date(), 'hours');
   const remainingMinutes = dayjs(offer.end * 1000).diff(new Date(), 'minutes');

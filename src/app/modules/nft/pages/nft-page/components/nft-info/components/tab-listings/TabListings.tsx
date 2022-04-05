@@ -1,7 +1,7 @@
 import { Box } from '@chakra-ui/react';
 import React, { useCallback, useMemo, useState } from 'react';
 import { NFTCancelListingPopup } from '../../..';
-import { useAuthContext } from '../../../../../../../../../contexts/AuthContext';
+import { useAuthStore } from '../../../../../../../../../stores/authStore';
 import { OrderSide, OrderStatus } from '../../../../../../../marketplace/enums';
 import { IOrder, IUser } from '../../../../../../types';
 import { useNFTPageData } from '../../../../NFTPage.context';
@@ -15,7 +15,7 @@ interface ITabListingsProps {
 export const TabListings = (props: ITabListingsProps) => {
   const [isCancelListingPopupOpened, setIsCancelListingPopupOpened] = useState(false);
   const { owner } = props;
-  const { address } = useAuthContext();
+  const address = useAuthStore(s => s.address)
   const { order } = useNFTPageData();
 
   if (!order) {
