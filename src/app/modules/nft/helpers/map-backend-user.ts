@@ -8,6 +8,6 @@ export function mapBackendUser(
 ): IUser {
   return {
     ...user,
-    // createdAt: new Date(createdAt),
+    createdAt: new Date(createdAt),
   };
 }
