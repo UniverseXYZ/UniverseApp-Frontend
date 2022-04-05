@@ -49,6 +49,7 @@ interface IAuthStore extends IDefaultAuthStoreGeters {
   setIsWalletConnected: (isWalletConnected: boolean) => void
   setLoginFn: (loginFn: () => void) => void
   setShowWrongNetworkPopup: (show: boolean) => void;
+  setLoggedInArtist: (artist: any) => void;
 }
 
 // const history = useRouter();
@@ -357,6 +358,12 @@ export const useAuthStore = create<IAuthStore>((set, get) => ({
       showWrongNetworkPopup: show
     }))
   },
+  setLoggedInArtist: (artist) => {
+    set(state => ({
+      ...state,
+      loggedInArtist: artist
+    }))
+  }
 }))
 
 const clearStorageAuthData = () => {

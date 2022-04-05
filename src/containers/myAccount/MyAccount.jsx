@@ -7,15 +7,29 @@ import CongratsProfilePopup from '../../components/popups/CongratsProfilePopup.j
 import LoadingPopup from '../../components/popups/LoadingPopup.jsx';
 import { saveProfileInfo, saveUserImage } from '../../utils/api/profile.js';
 import { useThemeContext } from '../../contexts/ThemeContext.jsx';
-import { useAuthContext } from '../../contexts/AuthContext.jsx';
-import { useErrorContext } from '../../contexts/ErrorContext';
 import { useAuctionContext } from '../../contexts/AuctionContext.jsx';
 import { useRouter } from 'next/router';
+import { useAuthStore } from '../../stores/authStore';
+import { useErrorStore } from '../../stores/errorStore';
 
 const MyAccount = () => {
-  const { isWalletConnected, loggedInArtist, setLoggedInArtist } = useAuthContext();
+  const {
+    isWalletConnected,
+    loggedInArtist,
+    setLoggedInArtist,
+  } = useAuthStore(s => ({
+    isWalletConnected: s.isWalletConnected,
+    loggedInArtist: s.loggedInArtist,
+    setLoggedInArtist: s.setLoggedInArtist,
+  }));
+
+  const { setShowError, setErrorTitle, setErrorBody } = useErrorStore(s => ({
+    setShowError: s.setShowError,
+    setErrorTitle: s.setErrorTitle,
+    setErrorBody: s.setErrorBody
+  }))
+
   const { editProfileButtonClick, setEditProfileButtonClick } = useAuctionContext();
-  const { setShowError, setErrorTitle, setErrorBody } = useErrorContext();
   const { setDarkMode } = useThemeContext();
 
   const history = useRouter();
