@@ -144,13 +144,10 @@ const Header = () => {
     }
   }, [showMenu, darkMode]);
 
-  const scrollCallback = useCallback(() => handleScroll(darkMode), [darkMode]);
-
   useEffect(() => {
-    window.addEventListener('scroll', () => handleScroll(darkMode));
+    window.addEventListener('scroll', handleScroll);
   
-    return () =>
-      window.removeEventListener('scroll', () => handleScroll(darkMode))
+    return () => window.removeEventListener('scroll', handleScroll)
   }, []);  
 
 
