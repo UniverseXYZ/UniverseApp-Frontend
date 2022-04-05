@@ -534,15 +534,15 @@ const NFTCollectionForm = ({ scrollToTop }) => {
         />
       )}
       <SocialConnections
-        siteLink={siteLink}
+        siteLink={siteLink || ''}
         setSiteLink={setSiteLink}
-        discordLink={discordLink}
+        discordLink={discordLink || ''}
         setDiscordLink={setDiscordLink}
-        instagramLink={instagramLink}
+        instagramLink={instagramLink || ''}
         setInstagramLink={setInstagramLink}
-        mediumLink={mediumLink}
+        mediumLink={mediumLink || ''}
         setMediumLink={setMediumLink}
-        telegramLink={telegramLink}
+        telegramLink={telegramLink || ''}
         setTelegramLink={setTelegramLink}
       />
       <div className="collection--nfts">
