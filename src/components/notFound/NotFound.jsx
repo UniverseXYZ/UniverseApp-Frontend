@@ -3,10 +3,10 @@ import { useHistory } from 'react-router-dom';
 import Button from '../button/Button';
 // import './NotFound.scss';
 import notFoundImg from '../../assets/images/404img.png';
-import { useThemeContext } from '../../contexts/ThemeContext';
+import { useThemeStore } from 'src/stores/themeStore';
 
 const NotFound = () => {
-  const { setDarkMode } = useThemeContext();
+  const setDarkMode = useThemeStore(s => s.setDarkMode);
   const history = useHistory();
   useEffect(() => {
     setDarkMode(false);

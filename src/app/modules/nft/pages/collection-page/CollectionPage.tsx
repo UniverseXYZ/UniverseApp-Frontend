@@ -3,11 +3,11 @@ import React, { useEffect } from 'react';
 import { CollectionInfo } from './components';
 import CollectionPageProvider from './CollectionPage.context'
 import FiltersContextProvider from '../../../account/pages/my-nfts-page/components/search-filters/search-filters.context';
-import { useThemeContext } from '../../../../../contexts/ThemeContext';
 import { GetCollectionApi } from '../../api';
 import { GetServerSideProps } from 'next';
 import { dehydrate, QueryClient } from 'react-query';
 import { collectionKeys } from '@app/utils/query-keys';
+import { useThemeStore } from 'src/stores/themeStore';
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { collectionAddress } = context.params as { collectionAddress: string;  };
@@ -28,7 +28,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 }
 
 export const CollectionPage = () => {
-  const { setDarkMode } = useThemeContext() as any;
+  const setDarkMode = useThemeStore(s => s.setDarkMode);
 
   useEffect(() => setDarkMode(false), []);
 

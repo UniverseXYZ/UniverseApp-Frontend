@@ -1,13 +1,13 @@
 import React, { useEffect } from 'react';
 import { Helmet } from 'react-helmet';
+import { useThemeStore } from 'src/stores/themeStore';
 import About from '../../components/homepage/About.jsx';
 import BuyUniverseNFTs from '../../components/homepage/BuyUniverseNFTs.jsx';
 import NonFungibleUniverse from '../../components/homepage/NonFungibleUniverse.jsx';
 import Welcome from '../../components/homepage/Welcome.jsx';
-import { useThemeContext } from '../../contexts/ThemeContext.jsx';
 
 const Homepage = () => {
-  const { setDarkMode } = useThemeContext();
+  const setDarkMode = useThemeStore(s => s.setDarkMode);
   useEffect(() => {
     setDarkMode(true);
   }, []);
