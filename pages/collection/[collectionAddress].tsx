@@ -1,4 +1,1 @@
-// import Collection from '../../src/containers/collection/Collection.jsx';
-import { CollectionPage } from '../../src/app/modules/nft';
-
-export default CollectionPage;
+export { CollectionPage as default, getServerSideProps } from '@app/modules/nft/pages/collection-page';

@@ -152,6 +152,7 @@ const Header = () => {
 
   return (
     <header ref={headerRef}>
+      <meta name="viewport" content="width=device-width, initial-scale=1" />
       <div className="app__logo">
         <Link href="/">
           <a className="dark">
