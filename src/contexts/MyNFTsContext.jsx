@@ -34,7 +34,6 @@ const MyNFTsContextProvider = ({ children }) => {
   const [myMintingCollections, setMyMintingCollections] = useState([]);
   const [mintingNftsCount, setMintingNftsCount] = useState(0);
   const [mintingCollectionsCount, setMintingCollectionsCount] = useState(0);
-  const [myNftsLoading, setMyNftsLoading] = useState(true);
   const [myMintableCollections, setMyMintableCollections] = useState([]);
   const [userPageNftsCount, setUserPageNftsCount] = useState(0);
 
@@ -92,7 +91,6 @@ const MyNFTsContextProvider = ({ children }) => {
         setMintingNftsCount,
         mintingCollectionsCount,
         setMintingCollectionsCount,
-        myNftsLoading,
         myMintableCollections,
         setMyMintableCollections,
         nftSummary,

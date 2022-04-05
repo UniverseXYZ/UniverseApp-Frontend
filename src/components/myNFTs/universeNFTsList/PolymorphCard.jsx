@@ -3,10 +3,8 @@ import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
 import neverScrambledIcon from '../../../assets/images/never-scrambled-badge.svg';
 import singleTraitScrambledIcon from '../../../assets/images/single-trait-scrambled-badge.svg';
-import { useMyNftsContext } from '../../../contexts/MyNFTsContext.jsx';
 
 const PolymorphCard = ({ item }) => {
-  const { setSelectedNftForScramble } = useMyNftsContext();
   const history = useHistory();
 
   return (
@@ -22,7 +20,6 @@ const PolymorphCard = ({ item }) => {
           alt={item.name}
           aria-hidden="true"
           onClick={() => {
-            setSelectedNftForScramble(item);
             history.push(
               item.type === 'polymorph'
                 ? `/polymorphs/${item.id}`

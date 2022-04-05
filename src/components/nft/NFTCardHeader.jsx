@@ -15,14 +15,17 @@ import unhideNFTIcon from '../../assets/images/unhide-nft.svg';
 import burnNFTIcon from '../../assets/images/burn-nft.svg';
 import universeIcon from '../../assets/images/universe-img.svg';
 import { getCollectionBackgroundColor } from '../../utils/helpers';
-import { useMyNftsContext } from '../../contexts/MyNFTsContext';
 import { useAuthContext } from '../../contexts/AuthContext';
 import TransferNFTPopup from '../popups/transferNFT/TransferNFTPopup';
 import { shortenEthereumAddress } from '../../utils/helpers/format';
+import { useMyNftsStore } from 'src/stores/myNftsStore';
 
 const NFTCardHeader = ({ nft, creator, owner, collection }) => {
   const history = useHistory();
-  const { myNFTs, setMyNFTs } = useMyNftsContext();
+  const { myNFTs, setMyNFTs } = useMyNftsStore(s => ({
+    myNFTs: s.setMyNFTs,
+    setMyNFTs: s.setMyNFTs
+  }))
   const { address } = useAuthContext();
   const [showDropdown, setShowDropdown] = useState(false);
   const [dropdownID, setDropdownID] = useState(0);

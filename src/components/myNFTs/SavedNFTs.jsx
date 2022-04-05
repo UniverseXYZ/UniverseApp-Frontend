@@ -11,7 +11,6 @@ import videoIcon from '../../assets/images/video-icon.svg';
 import bubbleIcon from '../../assets/images/text-bubble.png';
 import Button from '../button/Button';
 import RemovePopup from '../popups/RemoveNftPopup.jsx';
-import { useMyNftsContext } from '../../contexts/MyNFTsContext';
 import SimplePagination from '../pagination/SimplePaginations';
 import ItemsPerPageDropdown from '../pagination/ItemsPerPageDropdown';
 import LoadingImage from '../general/LoadingImage';
@@ -25,6 +24,7 @@ import { shortenEthereumAddress } from '../../utils/helpers/format';
 import universeIcon from '../../assets/images/universe-img.svg';
 import { removeSavedNft } from '../../utils/api/mintNFT';
 import Cookies from 'js-cookie';
+import { useMyNftsStore } from 'src/stores/myNftsStore';
 
 const SavedNFTs = ({
   setSelectedSavedNfts,
@@ -33,7 +33,7 @@ const SavedNFTs = ({
   setTriggerRefetch,
   scrollContainer,
 }) => {
-  const { setSavedNfts } = useMyNftsContext();
+  const setSavedNfts = useMyNftsStore(s => s.setSavedNfts);
 
   const [selectAllIsChecked, setSelectAllIsChecked] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
