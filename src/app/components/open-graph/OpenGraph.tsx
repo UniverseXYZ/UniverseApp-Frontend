@@ -6,10 +6,11 @@ interface IOpenGraphProps {
   description?: string;
   image?: string;
   imageAlt?: string;
+  mimeType?: string | boolean;
 }
 
 export const OpenGraph = (props: IOpenGraphProps) => {
-  const { title, description, image, imageAlt } = props;
+  const { title, description, image, imageAlt, mimeType } = props;
 
   const router = useRouter();
 
@@ -27,7 +28,9 @@ export const OpenGraph = (props: IOpenGraphProps) => {
       <meta property="og:title" content={title} />
       {description && (<meta property="og:description" content={description} />)}
       {image && (<meta property="og:image" content={image} />)}
+      {image && (<meta property="og:image:url" content={image} />)}
       {imageAlt && <meta property="og:image:alt" content={imageAlt} />}
+      {mimeType && <meta property="og:image:type" content={mimeType.toString()} />}
 
       {/*TWITTER*/}
       <meta name="twitter:card" content="summary" />

@@ -49,6 +49,7 @@ import { NFTAcceptOfferPopup } from './components/tab-offers/components';
 import { userKeys } from '../../../../../../utils/query-keys';
 import { TabListings } from './components/tab-listings';
 import { useErc20PriceStore } from '../../../../../../../stores/erc20PriceStore';
+import { lookup } from "mime-types";
 
 import * as styles from '../../styles';
 import * as styles2 from './NFTInfo.style';
@@ -179,8 +180,9 @@ export const NFTInfo = () => {
       <OpenGraph
         title={`${NFT?.name} - Universe.XYZ`}
         description={NFT?.description || undefined}
-        image={NFT.optimizedUrl || NFT.originalUrl || undefined}
+        image={NFT.optimizedUrl || NFT.previewUrl || NFT.originalUrl || undefined}
         imageAlt={NFT?.name || ''}
+        mimeType={lookup(NFT.optimizedUrl || NFT.previewUrl || NFT.originalUrl)}
       />
       {isLoading ? (
         <div className="loader-wrapper">
