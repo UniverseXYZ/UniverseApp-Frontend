@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import './PopupStyle.scss';
+// import './PopupStyle.scss';
 import twitter from '../../assets/images/twitter.svg';
 import facebook from '../../assets/images/facebook.svg';
 import telegram from '../../assets/images/telegram.svg';

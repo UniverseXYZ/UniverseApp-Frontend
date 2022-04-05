@@ -1,5 +1,5 @@
 import React from 'react';
-import './MarketplaceTabComponent.scss';
+// import './MarketplaceTabComponent.scss';
 import image1 from '../../assets/images/collection_img (3).svg';
 import image2 from '../../assets/images/collection_img (4).svg';
 import image3 from '../../assets/images/collection_img (6).svg';
