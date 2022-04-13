@@ -35,8 +35,6 @@ import { SelectEditionsDropdown } from '../../../select-editions-dropdown';
 import { useMarketplaceSellData } from '../../../../hooks';
 import { useStickyFooter } from '../../../../../../../../hooks';
 import { UncheckBundleEditionsModal } from './components';
-import { FilterCollectionsItems } from '../../../../../../mocks/filter-collections';
-import { FilterArtistsItems } from '../../../../../../mocks/filter-artists';
 import universeIcon from '../../../../../../../../../assets/images/universe-img.svg';
 import {
   isNFTAssetAudio,
