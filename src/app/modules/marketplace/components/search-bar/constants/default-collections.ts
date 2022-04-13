@@ -1,4 +1,6 @@
-export const FilterCollectionsItems = [
+import { ISearchBarDropdownCollection } from '@app/modules/nft/types';
+
+export const DEFAULT_COLLECTIONS: ISearchBarDropdownCollection[] = [
   {id: 34, address: "0xb67E6711C3bB2AA968bE26703dE20152d4948b38", name: "Universe Singularity", image:"https://universeapp-assets-dev.s3.amazonaws.com/1587a04f1c82f5740e53b679e8e15658f33fe5ea825f86ab.jpeg"},
   {id: 1,  address: "0xccc441ac31f02cd96c153db6fd5fe0a2f4e6a68d", name: "FLUF World", image:"https://lh3.googleusercontent.com/6A_zAw2qtq91-5x8yuJUwuV6ttgD2G__RWVApFWfUcH8Qb8oLhW3uP9MkonFAaHRnE4XodwYHCgESxQ3xdQlQrjTros61gPaG3qf2nQ=s0"},
   {id: 2,  address: "0x35471f47c3c0bc5fc75025b97a19ecdde00f78f8", name: "PartyBear", image:"https://lh3.googleusercontent.com/Pq4am5kMfPJxybtOv9OUcAIkYh6nn-A99Z_HcGnDk_G86qKm4P1yGTXEq2RBXsNirSXVJj0LxYIRKkx0wUNr_K8fPrEoRzc1M66lQQ=s0"},
@@ -43,4 +45,4 @@ export const FilterCollectionsItems = [
   {id: 42, address: "0x1a2F71468F656E97c2F86541E57189F59951efe7", name: "CryptoMories", image:"https://lh3.googleusercontent.com/vb1frYDXLe4AHtDQORgr1O1EODOkq31xePpKvgsN3uE5wopK0M8rBYECcDbvTkOpx5Y-9x1TQIP61ae4wI9lq9qwe-wdSUsXywlw=s130"},
   {id: 43, address: "0x0f468766CC936E059a6f4cC8c9826F8958B67Ce2", name: "The Coldest Drop: Subjects", image:"https://lh3.googleusercontent.com/3exmVN-FNqchr-fVZhGpNIPuAdgZZSaChGtD1wGrLWEWcsGPPbSE3Nsyl39WEMAZeYcdLg3Y06KQiUJjpncs7afgwzIU7eH4ohaqVQ=s130"},
   {id: 44, address: "0x79FCDEF22feeD20eDDacbB2587640e45491b757f", name: "Mfer", image:"https://lh3.googleusercontent.com/J2iIgy5_gmA8IS6sXGKGZeFVZwhldQylk7w7fLepTE9S7ICPCn_dlo8kypX8Ju0N6wvLVOKsbP_7bNGd8cpKmWhFQmqMXOC8q2sOdqw=s130"},
-  ];
+];
