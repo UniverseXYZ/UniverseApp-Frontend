@@ -58,7 +58,7 @@ export const SummaryTab = () => {
   const prevRef = useRef(null);
   const nextRef = useRef(null);
 
-  const { signer, address, loggedInArtist} = useAuthStore(state => ({signer: state.signer, address: state.signer, loggedInArtist: state.loggedInArtist}))
+  const { signer, address, loggedInArtist} = useAuthStore(state => ({signer: state.signer, address: state.address, loggedInArtist: state.loggedInArtist}))
   const myNFTs = useMyNftsStore(s => s.myNFTs)
   // const params = useParams<{ collectionAddress: string; tokenId: string; }>();
   const router = useRouter();
@@ -401,7 +401,8 @@ export const SummaryTab = () => {
                 bg={
                   collectionItem.collection?.coverUrl
                     ? `url(${collectionItem.collection?.coverUrl}) center / cover`
-                    : getCollectionBackgroundColor()
+                    // This is temporary fix so the color doesn't flicker on rerender
+                    : getCollectionBackgroundColor({id: nft.tokenId, address: nft._collectionAddress})
                 }
                 borderRadius={'50%'}
                 objectFit={'cover'}
