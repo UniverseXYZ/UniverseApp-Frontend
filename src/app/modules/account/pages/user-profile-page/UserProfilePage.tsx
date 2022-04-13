@@ -1,18 +1,17 @@
-import { useTitle, useWindowSize } from 'react-use';
+import { Box, Tab, TabList, TabPanel, TabPanels, Tabs } from '@chakra-ui/react';
+import { useSearchParam, useWindowSize } from 'react-use';
+import { GetServerSideProps } from 'next';
 import React, { useState } from 'react';
 import Skeleton from 'react-loading-skeleton';
+import { dehydrate, QueryClient, useQuery } from 'react-query';
+
+import { userKeys } from '@app/utils/query-keys';
+import { getArtistApi } from '@app/api';
+import { OpenGraph, TabLabel } from '@app/components';
 
 import ArtistDetails from '../../../../../components/artist/ArtistDetails';
-import { getArtistApi } from '../../../../api';
-import { Box, Tab, TabList, TabPanel, TabPanels, Tabs } from '@chakra-ui/react';
 import { ArtistNFTsTab } from './components';
-import { OpenGraph, TabLabel } from '../../../../components';
 import FiltersContextProvider from '../../../account/pages/my-nfts-page/components/search-filters/search-filters.context';
-import { ethers } from 'ethers';
-import { GetServerSideProps } from 'next';
-import { dehydrate, QueryClient, useQuery } from 'react-query';
-import { userKeys } from '@app/utils/query-keys';
-import router from 'next/router';
 import NotFound from '../../../../../components/notFound/NotFound';
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
@@ -49,8 +48,8 @@ export const UserProfilePage: React.FC<IUserProfilePage> = ({ artistUsername }) 
       refetchOnMount: 'always'
     },
   );
-    
-  useTitle(`Universe Artist - ${artist?.name || address }`, { restoreOnUnmount: true });
+
+  const collectionSearchParam = useSearchParam('collection');
 
   if (isError) {
     return (<NotFound />);
@@ -97,38 +96,38 @@ export const UserProfilePage: React.FC<IUserProfilePage> = ({ artistUsername }) 
     </>
   );
 
-    if (!isLoading) {
-      content = (
-        <>
-          {openGraph}
-          <div className="artist__page">
-            <Box sx={{ 'img': { display: 'inline' } }}>
-              <ArtistDetails artistAddress={artistUsername} onArtist={artist} loading={isLoading} />
-            </Box>
-            <Tabs padding={{ sm: '10px' }}>
-              <TabList maxW={'1110px'} m={'auto'}>
-                <Tab>NFTs {totalNFTs && (<TabLabel>{totalNFTs}</TabLabel>)}</Tab>
-                {/*<Tab>Active auctions</Tab>*/}
-                {/*<Tab>Future auctions</Tab>*/}
-                {/*<Tab>Past auctions</Tab>*/}
-              </TabList>
+  if (!isLoading) {
+    content = (
+      <>
+        {openGraph}
+        <div className="artist__page">
+          <Box sx={{ 'img': { display: 'inline' } }}>
+            <ArtistDetails artistAddress={artistUsername} onArtist={artist} loading={isLoading} />
+          </Box>
+          <Tabs padding={{ sm: '10px' }}>
+            <TabList maxW={'1110px'} m={'auto'}>
+              <Tab>NFTs {totalNFTs && (<TabLabel>{totalNFTs}</TabLabel>)}</Tab>
+              {/*<Tab>Active auctions</Tab>*/}
+              {/*<Tab>Future auctions</Tab>*/}
+              {/*<Tab>Past auctions</Tab>*/}
+            </TabList>
 
-              <TabPanels>
-                <TabPanel p={0} pt={'30px'}>
-                  <FiltersContextProvider defaultSorting={0}>
-                    <ArtistNFTsTab artistAddress={address} onTotalLoad={(total) => setTotalNFTs(total)} />
-                  </FiltersContextProvider>
-                </TabPanel>
-              </TabPanels>
-            </Tabs>
-            {artist && artist.personalLogo && (
-              <div className="artist__personal__logo">
-                <img src={artist.personalLogo} alt="Artist personal logo" />
-              </div>
-            )}
-          </div>
-        </>
-      )
+            <TabPanels>
+              <TabPanel p={0} pt={'30px'}>
+                <FiltersContextProvider defaultSorting={0} initialCollection={`${collectionSearchParam}`}>
+                  <ArtistNFTsTab artistAddress={address} onTotalLoad={(total) => setTotalNFTs(total)} />
+                </FiltersContextProvider>
+              </TabPanel>
+            </TabPanels>
+          </Tabs>
+          {artist && artist.personalLogo && (
+            <div className="artist__personal__logo">
+              <img src={artist.personalLogo} alt="Artist personal logo" />
+            </div>
+          )}
+        </div>
+      </>
+    )
   }
 
   return content;
