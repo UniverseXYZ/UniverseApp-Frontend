@@ -28,8 +28,6 @@ export const NFTItemAsset = (props: INFTItemAssetProps) => {
 
   const [state, setState] = useState<'loading' | 'error' | 'loaded'>(asset.url ? 'loading' : 'error');
 
-  const [showCountdown, setShowCountdown] = useState(!!orderEnd && orderEnd > Math.floor(new Date().getTime() / 1000));
-
   return (
     <Box ref={ref} pos={'relative'}>
       {state === 'error' && (
@@ -79,7 +77,7 @@ export const NFTItemAsset = (props: INFTItemAssetProps) => {
       {renderAssetLabel === null ? null :
         renderAssetLabel ? renderAssetLabel(NFT) : (<NFTItemAssetType NFT={NFT} />)
       }
-      {!!orderEnd && showCountdown && <NFTItemAuctionCountdown auctionExpireDate={new Date(orderEnd * 1000)} onAuctionTimeOut={() => setShowCountdown(false)} />}
+      {!!orderEnd && <NFTItemAuctionCountdown date={new Date(orderEnd * 1000)} />}
     </Box>
   );
 };
