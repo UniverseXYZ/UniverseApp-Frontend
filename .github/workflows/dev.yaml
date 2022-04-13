@@ -2,7 +2,7 @@ name: Dev Environment
 on:
   push:
     branches:
-    - dev-marketplace-v*
+    - universe-v*
 
 jobs:
   build:

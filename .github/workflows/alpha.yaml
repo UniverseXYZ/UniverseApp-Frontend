@@ -2,7 +2,7 @@ name: Alpha Environment
 on:
   push:
     tags:
-      - alpha-marketplace*
+      - alpha-universe-v*
 
 jobs:
   build:
