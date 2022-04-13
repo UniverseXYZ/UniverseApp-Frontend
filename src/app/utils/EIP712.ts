@@ -38,11 +38,21 @@ export const signTypedData = (web3: any, from: any, data: any) => {
         return reject(result.error);
       }
 
-      const sig = result.result;
+      let sig = result.result;
       const sig0 = sig.substring(2);
       const r = '0x' + sig0.substring(0, 64);
       const s = '0x' + sig0.substring(64, 128);
       const v = parseInt(sig0.substring(128, 130), 16);
+
+
+      // Signing sometimes returns invalid v part of signature.
+      // We need to patch it otherwise signature cannot be verified in smart contract
+      // https://ethereum.stackexchange.com/a/103755/79698
+      if (sig.endsWith("00")) {
+        sig = sig.slice(0, -2) + "1B"
+      } else if (sig.endsWith("01")) {
+        sig = sig.slice(0, -2) + "1C"
+      } 
 
       resolve({
         data,
