@@ -43,30 +43,22 @@ import { IToken } from '../../../../../../types';
 import { GetActiveListingApi, GetNFT2Api } from '../../../../api';
 import { nftKeys, orderKeys } from '../../../../../../utils/query-keys';
 import CheckIcon from '../../../../../../../assets/images/check-vector.svg';
-import { useNftCheckoutPopupContext } from '../../../../../../providers/NFTCheckoutProvider';
 import { useAuthStore } from '../../../../../../../stores/authStore';
 import { useErrorStore } from '../../../../../../../stores/errorStore';
+import { useNftCheckoutStore } from 'src/stores/nftCheckoutStore';
 // @ts-ignore
 const { contracts: contractsData } = Contracts[process.env.REACT_APP_NETWORK_CHAIN_ID];
 
-interface INFTCheckoutPopupProps {
-  NFT?: INFT;
-  collection?: ICollection;
-  NFTs?: INFT[];
-  order: IOrder;
-  isOpen: boolean;
-  onClose: () => void;
-}
-
-export const NFTCheckoutPopup = ({ NFT, collection, NFTs, order, isOpen, onClose }: INFTCheckoutPopupProps) => {
+export const NFTCheckoutPopup = () => {
   const router = useRouter();
 
   const { address, signer, web3Provider } = useAuthStore(s => ({address: s.address, signer: s.signer, web3Provider: s.web3Provider}))
   const { setShowError, setErrorBody } = useErrorStore(s => ({setShowError: s.setShowError, setErrorBody: s.setErrorBody}))
+  const { NFT, collection, NFTs, order, isOpen, onClose, setIsOpen } = useNftCheckoutStore(s => ({
+    NFT: s.NFT, collection: s.collection, NFTs: s.NFTs, order: s.order, isOpen: s.isOpen, onClose: s.onClose, setIsOpen: s.setIsOpen  
+  }))
   const { onCopy } = useClipboard(address);
   const queryClient = useQueryClient();
-
-  const { setIsOpen } = useNftCheckoutPopupContext();
 
   const [state, setState] = useState<CheckoutState>(CheckoutState.CHECKOUT);
   const [isNFTAudio] = useState(false);
@@ -91,7 +83,7 @@ export const NFTCheckoutPopup = ({ NFT, collection, NFTs, order, isOpen, onClose
 
   const tokenTicker = getTokenByAddress((order?.take?.assetType as IERC20AssetType)?.contract);
 
-  const listingPrice = Number(utils.formatUnits(order?.take.value || 0, tokenTicker.decimals));
+  const listingPrice = Number(utils.formatUnits(order?.take?.value || 0, tokenTicker.decimals));
 
   const usdPrice = useTokenPrice(tokenTicker.ticker);
 
@@ -306,7 +298,7 @@ export const NFTCheckoutPopup = ({ NFT, collection, NFTs, order, isOpen, onClose
   }
 
   return (
-    !!previewNFT && (
+    !!previewNFT && NFT?.tokenId && order?.id ? (
       <Modal
         isCentered
         isOpen={isOpen}
@@ -526,6 +518,6 @@ export const NFTCheckoutPopup = ({ NFT, collection, NFTs, order, isOpen, onClose
           </ModalBody>
         </ModalContent>
       </Modal>
-    )
+    ) : <></>
   );
 };
