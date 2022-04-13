@@ -1,6 +1,7 @@
 import { Box, BoxProps } from '@chakra-ui/react';
-import React, { useState } from 'react';
 import NextImage from 'next/image';
+import React, { useState } from 'react';
+import { useMeasure } from 'react-use';
 
 import BrokenNFT from '../../../../../../../components/marketplaceNFT/BrokenNFT';
 import { NFTAssetFullscreen } from '../nft-asset-full-screen';
@@ -22,6 +23,8 @@ export const NFTAssetImage = (props: INFTAssetImageProps) => {
     allowFullscreen = true,
   } = props;
 
+  const [ref, { width }] = useMeasure<HTMLDivElement>();
+
   const [fullscreen, setFullscreen] = useState(false);
   const [showError, setShowError] = useState(false);
 
@@ -31,15 +34,16 @@ export const NFTAssetImage = (props: INFTAssetImageProps) => {
     </Box>)
    : (
     <>
-      <Box {...styles.ImageWrapperStyle} {...containerProps}>
+      <Box ref={ref} {...styles.ImageWrapperStyle} {...containerProps}>
         <NextImage
           src={image}
           alt={alt}
-          layout={'fill'}
-          objectFit={'cover'}
+          layout={'fixed'}
+          width={width}
+          height={width}
+          objectFit={'contain'}
           style={{
             cursor: allowFullscreen ? 'zoom-in' : 'default',
-            borderRadius: '12px',
           }}
           onClick={() => allowFullscreen && setFullscreen(true)}
           onError={() => setShowError(true)}

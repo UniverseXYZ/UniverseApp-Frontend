@@ -27,7 +27,7 @@ import {
   NFTPageCreatorRelation,
   NFTPageOwnerRelation,
 } from '../../../../components';
-import { TabBids, TabHistory, TabMetadata, TabOffers, TabOwners, TabProperties } from './components';
+import { GoBackButton, TabBids, TabHistory, TabMetadata, TabOffers, TabOwners, TabProperties } from './components';
 import { CollectionPageLoader } from '../../../../../../../containers/collection/CollectionPageLoader';
 import NotFound from '../../../../../../../components/notFound/NotFound';
 import { NFTItemContentWithPrice, NFTLike } from '../../../../components/nft-item/components';
@@ -190,6 +190,7 @@ export const NFTInfo = () => {
         <>
           <Box layerStyle={'StoneBG'}>
             <Box {...styles.NFTAssetContainerStyle}>
+              <GoBackButton />
               {(!NFT.artworkTypes || !NFT.artworkTypes.length) && <NFTAssetBroken {...styles2.BrokenAssetStyle} /> ||
               isNFTAssetVideo(NFT.artworkTypes) && (<NFTAssetVideo video={NFT.videoUrl || NFT.optimizedUrl || NFT.originalUrl} />) ||
               isNFTAssetImage(NFT.artworkTypes) && <NFTAssetImage image={NFT.optimizedUrl || NFT.originalUrl} alt={NFT.name} /> ||
@@ -245,10 +246,10 @@ export const NFTInfo = () => {
                     <Tab>Properties</Tab>
                     {showMetadata && <Tab>Metadata</Tab>}
                     {/* TODO: Add implementation after release */}
-                    {/* <Tab>Owners</Tab> */}
-                    {/* <Tab>Bids</Tab> */}
+                    <Tab>Owners</Tab>
+                    <Tab>Bids</Tab>
                     <Tab>Offers</Tab>
-                    <Tab>Universe History</Tab>
+                    <Tab>History</Tab>
                     <Tab>Listings</Tab>
                   </LineTabList>
 
