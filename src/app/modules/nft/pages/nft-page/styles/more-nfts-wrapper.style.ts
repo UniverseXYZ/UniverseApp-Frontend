@@ -1,7 +1,11 @@
 import { BoxProps } from '@chakra-ui/react';
 
 export const MoreNFTsWrapperStyle: BoxProps = {
-  bg: 'linear-gradient(127.59deg, #F2F3FB -1.33%, #FCF9F4 91.03%)',
-  py: '80px',
-  px: '40px',
+  bg: 'rgba(0 0 0 / 5%)',
+
+  padding: {
+    base: '60px 20px',
+    md: '60px 50px',
+    lg: '80px 40px'
+  }
 }
