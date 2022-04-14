@@ -41,6 +41,7 @@
     "history": "^5.0.0",
     "ignore-styles": "^5.0.1",
     "js-cookie": "^3.0.1",
+    "mime-types": "^2.1.35",
     "moment": "^2.29.1",
     "moment-timezone": "^0.5.33",
     "next": "^12.1.1",
@@ -100,6 +101,7 @@
   "devDependencies": {
     "@svgr/webpack": "^6.2.1",
     "@types/jest": "^27.0.2",
+    "@types/mime-types": "^2.1.1",
     "@types/node": "^16.11.7",
     "@types/react": "17.0.35",
     "@types/react-datepicker": "^4.3.4",
