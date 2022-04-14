@@ -21,9 +21,9 @@ import { TokenTicker } from '../../../../../../enums';
 import { getRoyaltiesFromRegistry } from '../../../../../../../utils/marketplace/utils';
 import { HighestOffer } from './components/highest-offer';
 import { isEmpty } from '../../../../../../../utils/helpers';
-import { useNftCheckoutPopupContext } from '../../../../../../providers/NFTCheckoutProvider';
 import { useNFTPageData } from '../../NFTPage.context';
 import { useAuthStore } from '../../../../../../../stores/authStore';
+import { useNftCheckoutStore } from 'src/stores/nftCheckoutStore';
 
 interface INFTBuySectionProps {
   NFT?: INFT;
@@ -43,7 +43,10 @@ export const NFTBuySection = ({ NFT, owner, NFTs, order, highestOffer, onMeasure
 
   const [state, setState] = useState<BuyNFTSectionState>();
 
-  const { setIsOpen, setNFT, setCollection, setOrder } = useNftCheckoutPopupContext();
+  const { setIsOpen, setNFT, setCollection, setOrder } = useNftCheckoutStore(s => ({
+    setIsOpen: s.setIsOpen, setNFT: s.setNFT, setCollection: s.setCollection, setOrder: s.setOrder
+  }))
+  
   const { collection } = useNFTPageData();
 
   const updateSectionState = useCallback(async () => {

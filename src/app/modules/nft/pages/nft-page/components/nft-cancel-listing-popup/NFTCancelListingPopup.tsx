@@ -17,11 +17,11 @@ import Contracts from '../../../../../../../contracts/contracts.json';
 
 import * as styles from './styles';
 import { IERC721AssetType, IOrder } from '../../../../types';
-import { useLoadingPopupContext } from '../../../../../../providers/LoadingProvider';
 import { EncodeOrderApi } from '../../../../../../api';
 import { GetActiveListingApi } from '../../../../api';
 import { orderKeys } from '../../../../../../utils/query-keys';
 import { useAuthStore } from '../../../../../../../stores/authStore';
+import { useLoadingStore } from 'src/stores/loadingStore';
 
 // @ts-ignore
 const { contracts: contractsData } = Contracts[process.env.REACT_APP_NETWORK_CHAIN_ID];
@@ -37,7 +37,7 @@ const INDEXING_TAKING_TOO_LONG = "Receving the event from the blockchain is taki
 export const NFTCancelListingPopup = ({ order, isOpen, onClose }: INFTCancelListingPopupProps) => {
 
   const signer = useAuthStore(s => s.signer)
-  const { setShowLoading, setLoadingTitle, setLoadingBody, closeLoading, setTransactions } = useLoadingPopupContext();
+  const { setShowLoading, closeLoading, setLoadingTitle, setLoadingBody, setTransactions } = useLoadingStore(s => ({setShowLoading: s.setShowLoading, closeLoading: s.closeLoading, setLoadingTitle: s.setLoadingTitle, setLoadingBody: s.setLoadingBody, setTransactions: s.setTransactions}));
   const queryClient = useQueryClient();
 
   const [orderInterval, setOrderInterval] = useState<NodeJS.Timer>();
