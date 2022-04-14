@@ -5,7 +5,7 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import EthereumAddress from 'ethereum-address';
 import closeIcon from '../../../assets/images/close-menu.svg';
-import './TransferNFTPopup.scss';
+// import './TransferNFTPopup.scss';
 import { Step1, Step2, Step3 } from './components';
 import { Steps } from './constants';
 import Contracts from '../../../contracts/contracts.json';

@@ -12,7 +12,7 @@ import {
 } from '@chakra-ui/react';
 
 // Styles
-import './SearchFilters.scss';
+// import './SearchFilters.scss';
 
 // Icons
 import filtersIcon from '../../../../../../../../assets/images/marketplace/filters.svg';

@@ -2,9 +2,10 @@ import { Box, Button, Container, Flex, Heading, Image, Link, SimpleGrid, Text } 
 import { useFormik } from 'formik';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useInfiniteQuery, useQueryClient } from 'react-query';
-import { useHistory } from 'react-router-dom';
 import { utils } from 'ethers';
 import { useIntersection } from 'react-use';
+import Head from 'next/head';
+import { useRouter } from 'next/router';
 
 import NoiseTextureImage from './../../../../../assets/images/v2/marketplace/noise_texture.png';
 import IntroDesktopBGImage from './../../../../../assets/images/v2/marketplace/img_hero_desktop.png';
@@ -65,7 +66,7 @@ export const BrowseNFTsPage = () => {
   const { isWalletConnected } = useAuthContext();
   const queryClient = useQueryClient();
 
-  const router = useHistory();
+  const router = useRouter();
 
   const [sortBy, setSortBy] = useState(SortOrderOptionsEnum.RecentlyListed);
   const [isOpen, setIsOpen] = useState(false);
@@ -333,6 +334,9 @@ export const BrowseNFTsPage = () => {
 
   return (
     <Box layerStyle={'StoneBG'}>
+      <Head>
+        <title>Marketplace - Universe.XYZ</title>
+      </Head>
       <Flex {...styles.IntroSectionStyle}>
         <Box>
           <Text fontSize={'12px'} fontWeight={500} textTransform={'uppercase'} mb={'23px'} letterSpacing={'5px'}>Welcome to the</Text>

@@ -4,10 +4,11 @@ import { useHistory, useLocation } from 'react-router-dom';
 import Button from '../button/Button.jsx';
 import closeIcon from '../../assets/images/cross.svg';
 import checkIcon from '../../assets/images/bid-submitted.png';
+import { useRouter } from 'next/router';
 
 const CongratsPopup = ({ onClose, backButtonText, title, message, showCreateMore }) => {
-  const history = useHistory();
-  const location = useLocation();
+  const router = useRouter();
+
   return (
     <div className="popup-div congrats-popup">
       <button type="button" className="popup-close" onClick={onClose}>
@@ -27,8 +28,8 @@ const CongratsPopup = ({ onClose, backButtonText, title, message, showCreateMore
           className="light-button"
           onClick={() => {
             onClose();
-            history.push(
-              location.pathname === '/create-tiers/my-nfts/create' ? '/create-tiers' : '/my-nfts'
+            router.push(
+              router.asPath === '/create-tiers/my-nfts/create' ? '/create-tiers' : '/my-nfts'
             );
           }}
         >

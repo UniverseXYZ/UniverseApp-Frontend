@@ -1,8 +1,8 @@
 import { Box, Button, Image, Popover, PopoverBody, PopoverContent, PopoverTrigger, SimpleGrid, Text, Tooltip } from '@chakra-ui/react';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { useHistory } from 'react-router-dom';
 import { useMeasure } from 'react-use';
 import { UseMeasureRect } from 'react-use/lib/useMeasure';
+import { useRouter } from 'next/router';
 
 import ClockIcon from '../../../../../../../assets/images/clock.svg';
 
@@ -38,7 +38,7 @@ interface INFTBuySectionProps {
 export const NFTBuySection = ({ NFT, owner, NFTs, order, highestOffer, onMeasureChange }: INFTBuySectionProps) => {
   const [ref, measure] = useMeasure<HTMLDivElement>();
 
-  const router = useHistory();
+  const router = useRouter();
 
   const { signer, isAuthenticated } = useAuthContext() as any;
 

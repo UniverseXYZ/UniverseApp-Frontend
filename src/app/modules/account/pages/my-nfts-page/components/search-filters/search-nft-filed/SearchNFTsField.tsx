@@ -5,7 +5,7 @@ import { DebounceInput } from 'react-debounce-input';
 import searchIcon from '../../../../../../../../assets/images/search-gray.svg';
 
 // Styles
-import './SearchField.scss';
+// import './SearchField.scss';
 
 // Interfaces
 import { ISearchBarValue } from '../index';

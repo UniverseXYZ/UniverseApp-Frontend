@@ -4,7 +4,7 @@ import Social from './Social';
 import Button from '../button/Button.jsx';
 import Input from '../input/Input.jsx';
 import defaultImage from '../../assets/images/default-img.svg';
-import { ReactComponent as InfoIcon } from '../../assets/images/info-icon.svg';
+import InfoIcon from '../../assets/images/info-icon.svg';
 import warningIcon from '../../assets/images/Exclamation.svg';
 import errorIcon from '../../assets/images/red-msg.svg';
 import { useAuthContext } from '../../contexts/AuthContext';
@@ -178,7 +178,9 @@ const ProfileForm = ({
             <span>
               Universe Page Address
               <div className="universe__page__address">
-                <InfoIcon
+                <img
+                  src={InfoIcon}
+                  alt=""
                   onMouseEnter={() => setHideIcon(true)}
                   onMouseLeave={() => setHideIcon(false)}
                 />

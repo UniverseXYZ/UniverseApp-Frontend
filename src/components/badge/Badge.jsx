@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import './Badge.scss';
+// import './Badge.scss';
 
 const Badge = ({ text, ...rest }) => (
   <span className="badge" {...rest}>
