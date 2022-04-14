@@ -94,7 +94,7 @@ import { MarketplaceContextProvider } from '../src/contexts/MarketplaceContext';
 import Header from '../src/components/header/Header';
 import Footer from '../src/components/footer/Footer';
 import { PolymorphContextProvider } from '../src/contexts/PolymorphContext';
-import { Popups } from './_popups';
+import { Popups } from '../src/app/components/AppPopups';
 
 function MyApp({ Component, pageProps }: AppProps) {
   const [mounted, setMounted] = useState(false);
