@@ -1,117 +1,26 @@
-import { Box, BoxProps, CheckboxProps, Image, ImageProps, Text, Flex } from '@chakra-ui/react';
+import { Box, Image, Text, Flex } from '@chakra-ui/react';
 import React, { useCallback, useEffect, useState, useRef } from 'react';
 import { useRouter } from 'next/router';
+import { useClickAway } from 'react-use';
+
+import GoToCollectionIcon from '@assets/images/go-to-collection.svg';
+import { Loading, InfoTooltip } from '@app/components';
+import { getCollectionBackgroundColor } from '@legacy/helpers';
 
 import { SearchInput } from './SearchInput';
-import { ISearchBarValue } from './types';
 import { ISearchBarDropdownCollection } from '../../../nft/types';
-import { Loading, InfoTooltip } from '../../../../components';
-import { getCollectionBackgroundColor } from '../../../../../utils/helpers';
-import goToCollectionIcon from '../../../../../assets/images/go-to-collection.svg';
+import * as styles from './SelectSearch.styles';
 
-const MIN_CHARS_LENGTH = 3;
-interface IStyles {
-  selectedItemsContainer: BoxProps;
-  selectedItem: BoxProps;
-  selectedItemImage: (isRoundedImage: boolean) => ImageProps;
-  selectedItemRemove: ImageProps;
-  itemsContainer: (isFetchingCollections: boolean, itemsCount: number) => BoxProps;
-  item: BoxProps;
-  itemImage: (isRoundedImage: boolean) => ImageProps;
-  itemCheckbox: (isRoundedImage: boolean) => CheckboxProps;
-}
-
-const styles: IStyles = {
-  selectedItemsContainer: {
-    flexWrap: 'wrap',
-  },
-  selectedItem: {
-    alignItems: 'center',
-    bg: 'linear-gradient(135deg, rgba(188, 235, 0, 0.1) 15.57%, rgba(0, 234, 234, 0.1) 84.88%), #FFFFFF',
-    border: '1px solid #BCEB00',
-    borderRadius: '8px',
-    display: 'flex',
-    fontSize: '14px',
-    fontWeight: 500,
-    lineHeight: '20px',
-    p: '5px 11px 5px 6px',
-    maxH: '32px',
-    mb: '8px',
-    mr: '8px',
-    _last: {
-      mb: '20px',
-    }
-  },
-  selectedItemImage: (isRoundedImage) => ({
-    borderRadius: isRoundedImage ? '50%' : '5px',
-    display: 'inline-block',
-    height: '20px',
-    marginRight: '8px',
-    width: '20px',
-  }),
-  selectedItemRemove: {
-    cursor: 'pointer',
-    height: '10px',
-    marginLeft: '8px',
-    width: '10px',
-  },
-  itemsContainer: (isFetchingCollections, itemsCount) => ({
-    maxH: '215px',
-    minH: '215px',
-    mt: '5px',
-    overflowY: 'scroll',
-    px: '5px',
-    background: 'white',
-    borderRadius: '12px',
-    display: (isFetchingCollections || !itemsCount) ? 'flex' : 'block',
-    justifyContent: 'center',
-    alignItems: 'center',
-    position: 'absolute',
-    w: '100%',
-    zIndex: '100'
-  }) ,
-  item: {
-    alignItems: 'center',
-    borderRadius: '10px',
-    display: 'flex',
-    fontSize: '14px',
-    fontWeight: 500,
-    padding: '10px',
-    _hover: {
-      bg: 'rgba(0, 0, 0, 0.05)',
-      cursor: 'pointer',
-    },
-    _last: {
-      mb: '10px',
-    }
-  },
-  itemImage: (isRoundedImage) => ({
-    borderRadius: isRoundedImage ? '50%' : '5px',
-    display: 'inline-block',
-    height: '30px',
-    marginRight: '12px',
-    width: '30px',
-  }),
-  itemCheckbox: (isRoundedImage) => ({
-    mr: '12px',
-    sx: {
-      '.chakra-checkbox__control': {
-        borderRadius: isRoundedImage ? '50%' : '5px',
-        height: '30px',
-        width: '30px',
-      }
-    }
-  }),
-};
 interface ISearchSelectProps {
   items: ISearchBarDropdownCollection[];
   isFetchingCollections: boolean;
   label?: string;
   icon?: string;
   searchPlaceholder?: string;
-  onItemSelect: (value: string) => void;
-  onChange: (value: ISearchBarValue) => void;
+  search?: string;
+  onChange: (value: ISearchBarDropdownCollection) => void;
   onClear: () => void;
+  onSearch: (value: string) => void;
 }
 
 export const SearchSelect = (props: ISearchSelectProps) => {
@@ -119,81 +28,44 @@ export const SearchSelect = (props: ISearchSelectProps) => {
     items,
     isFetchingCollections,
     searchPlaceholder,
+    search,
     onChange,
-    onItemSelect,
     onClear,
+    onSearch,
   } = props;
 
-  const [isOpened, setIsOpened] = useState<boolean>(false);
-  const [value, setValue] = useState<ISearchBarValue>({ searchValue: ''});
-  const [filteredItems, setFilteredItems] = useState<ISearchBarDropdownCollection[]>(items);
   const ref = useRef<HTMLHeadingElement>(null);
+
   const router = useRouter();
 
-  const handleItemSelect = useCallback((item) => {
-    const result: ISearchBarValue = {
-      searchValue: item.name,
-    };
+  const [isOpened, setIsOpened] = useState<boolean>(false);
 
-    setValue(result);
-    onItemSelect(item.address);
+  useClickAway(ref, () => setIsOpened(false));
 
-    // For some reason the component did not set the value properly
-    setTimeout(() => setIsOpened(false) , 100);
+  const handleItemSelect = useCallback((e: React.MouseEvent<HTMLElement>, item) => {
+    e.stopPropagation();
+
+    onChange(item);
+
+    setIsOpened(false);
   }, [onChange]);
 
-  const onSearch = (searchedValue: any) => {
-    const result: ISearchBarValue = {
-      searchValue: searchedValue.target.value
-    };
-    setValue(result);
+  const handleSearch = useCallback((searchedValue: any) => {
+    const { value } = searchedValue.target;
 
-    onChange(result);
-  };
+    onSearch(value);
+  }, [onSearch]);
 
-  const getRandomInt = useCallback((max) => {
-    return Math.floor(Math.random() * max);
+  const handleClearClick = useCallback(() => {
+    onClear();
+  }, [onClear]);
+
+  const handleGoToCollection = useCallback((address: string) => {
+    router.push(`/collection/${address}`);
   }, []);
 
-  const handleClearClick = () => {
-    const result: ISearchBarValue = {
-      searchValue: ''
-    };
-
-    setValue(result);
-    onClear();
-  }
-
-  const handleGoToCollection = (address: string) => {
-    router.push(`/collection/${address}`);
-  }
-
-  useEffect(() => {
-    // Upon new items, update the filtered ones
-    if (items) {
-      setFilteredItems(items);
-    }
-  }, [items])
-
-  const handleClickOutside = (event: any) => {
-    if (ref.current && !ref.current.contains(event.target)) {
-      setIsOpened(false);
-    }
-  };
-
-  useEffect(() => {
-    document.addEventListener('click', handleClickOutside, true);
-    return () => {
-      document.removeEventListener('click', handleClickOutside, true);
-    };
-  });
-
   return (
-    <Box
-      onClick={() => setIsOpened(true)}
-      ref={ref}
-      pos={'relative'}
-    >
+    <Box ref={ref} pos={'relative'} onClick={() => setIsOpened(true)}>
       <Box>
         <SearchInput
           shadowProps={{
@@ -201,6 +73,10 @@ export const SearchSelect = (props: ISearchSelectProps) => {
           }}
           inputGroupProps={{
             sx: {
+              background: 'white',
+              borderRadius: '12px',
+              boxShadow: isOpened ? '0px 0px 0px 5px rgba(102, 234, 90, 0.15)' : '',
+
               '.chakra-input__left-element': {
                 height: '60px',
                 width: '60px',
@@ -209,9 +85,6 @@ export const SearchSelect = (props: ISearchSelectProps) => {
                 height: '60px',
                 width: '60px',
               },
-              background: 'white',
-              borderRadius: '12px',
-              boxShadow: isOpened ? '0px 0px 0px 5px rgba(102, 234, 90, 0.15)' : '',
             }
           }}
           inputProps={{
@@ -219,57 +92,51 @@ export const SearchSelect = (props: ISearchSelectProps) => {
             pl: '60px',
             placeholder: searchPlaceholder,
           }}
-          value={value.searchValue}
-          onChange={onSearch}
+          value={search}
+          onChange={handleSearch}
           onClear={handleClearClick}
         />
       </Box>
 
       {isOpened && (
-        <Box {...styles.itemsContainer(isFetchingCollections, filteredItems.length)}>
+        <Box
+          {...styles.ItemsContainerStyle}
+          display={(isFetchingCollections || !items.length) ? 'flex' : 'block'}
+        >
           {isFetchingCollections && (
             <Loading />
           )}
 
-          {!isFetchingCollections && filteredItems.length > 0 && (
+          {!isFetchingCollections && items.length > 0 && (
             <Text textAlign={'left'} p={'20px 10px 10px 10px'} color={'rgba(0, 0, 0, 0.4)'} fontWeight={'bold'}>
               Collections
             </Text>
           )}
 
-          {!isFetchingCollections && !filteredItems.length && (
-            <Text>
-              No Collections Found
-            </Text>
+          {!isFetchingCollections && !items.length && (
+            <Text>No Collections Found</Text>
           )}
 
-          {!isFetchingCollections && filteredItems.map((item, i) => (
-            <Box key={item.address} {...styles.item} >
+          {!isFetchingCollections && items.map((item, i) => (
+            <Box key={item.address} {...styles.ItemStyle} >
 
               <Flex w={'100%'}>
-                <Box flex='1' onClick={() => handleItemSelect(item)} textAlign={'initial'}>
+                <Box flex='1' onClick={(e) => handleItemSelect(e, item)} textAlign={'initial'}>
                   {item?.image?.length && (
-                    <Image
-                      src={item.image || ''}
-                      {...styles.itemImage(true)}
-                      borderRadius={'50%'}
-                    />
+                    <Image src={item.image || ''} {...styles.ItemImageStyle} />
                   )}
 
                   {!item.image && (
                     <Box
                       sx={{
                         alignItems: 'center',
-                        bg: getCollectionBackgroundColor({
-                          id: getRandomInt(10000),
-                          address: item.address,
-                        }),
+                        bg: getCollectionBackgroundColor({ address: item.address }),
                         borderRadius: '50%',
                         display: 'inline-flex',
                         justifyContent: 'center',
                         h: '30px',
                         w: '30px',
-                        mr: '20px'
+                        mr: '12px'
                       }}
                     >{(item.name || item.address)?.charAt(0)}</Box>
                   )}
@@ -279,7 +146,7 @@ export const SearchSelect = (props: ISearchSelectProps) => {
 
                 <Box>
                   <InfoTooltip
-                    icon={goToCollectionIcon}
+                    icon={GoToCollectionIcon}
                     label="Go to collection"
                     onClick={() => handleGoToCollection(item?.address)}
                   />

@@ -69,10 +69,11 @@ export const getCollectionBackgroundColor = (collection) => {
     return defaultColors[r];
   }
 
+  const id = collection?.id || getRandomInt(1000);
+
   return defaultColors[
     Math.floor(
-      (collection?.id * collection?.address.charCodeAt(collection?.address.length - 1)) %
-        defaultColors.length
+      (id * collection?.address.charCodeAt(collection?.address.length - 1)) % defaultColors.length
     )
   ];
 };
