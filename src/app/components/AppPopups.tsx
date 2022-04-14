@@ -13,7 +13,6 @@ export const Popups = () => {
   const { showWrongNetworkPopup, setShowWrongNetworkPopup } = useAuthStore(state => ({showWrongNetworkPopup: state.showWrongNetworkPopup, setShowWrongNetworkPopup: state.setShowWrongNetworkPopup}));
   const showError = useErrorStore(s => s.showError)
   const {showLoading, closeLoading, loadingTitle, loadingBody, transactions} = useLoadingStore(s => ({showLoading: s.showLoading, closeLoading: s.closeLoading, loadingTitle: s.loadingTitle, loadingBody: s.loadingBody, transactions: s.transactions}));
-  const { NFT, order } = useNftCheckoutStore(s => ({ NFT: s.NFT, order: s.order }))
 
   return (
     <>
@@ -30,9 +29,7 @@ export const Popups = () => {
         text={loadingBody}
         transactions={transactions}
       />
-      {NFT?.tokenId && order?.id && (
-        <NFTCheckoutPopup />
-      )}
+      <NFTCheckoutPopup />
     </>
   );
 }

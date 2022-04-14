@@ -83,7 +83,7 @@ export const NFTCheckoutPopup = () => {
 
   const tokenTicker = getTokenByAddress((order?.take?.assetType as IERC20AssetType)?.contract);
 
-  const listingPrice = Number(utils.formatUnits(order?.take.value || 0, tokenTicker.decimals));
+  const listingPrice = Number(utils.formatUnits(order?.take?.value || 0, tokenTicker.decimals));
 
   const usdPrice = useTokenPrice(tokenTicker.ticker);
 
@@ -298,7 +298,7 @@ export const NFTCheckoutPopup = () => {
   }
 
   return (
-    !!previewNFT ? (
+    !!previewNFT && NFT?.tokenId && order?.id ? (
       <Modal
         isCentered
         isOpen={isOpen}
