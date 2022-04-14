@@ -145,12 +145,12 @@ export const MyNFTsPage = () => {
       }
 
       const nftsAttachedTokenUri = formatNfts.map((nft: any) => {
-        const tokenData = tokenURIs.find((data) => data.nftId === nft.id);
+        const tokenData = tokenURIs.find((data: any) => data.nftId === nft.id) as any;
 
         return {
           ...nft,
-          tokenUri: tokenData.tokenUris,
-          mintingId: tokenData.mintingNft.id,
+          tokenUri: tokenData?.tokenUris,
+          mintingId: tokenData?.mintingNft.id,
         };
       });
 
