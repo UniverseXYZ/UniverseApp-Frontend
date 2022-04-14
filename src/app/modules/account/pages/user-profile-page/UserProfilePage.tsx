@@ -21,10 +21,9 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   
   await queryClient.prefetchQuery(userKeys.info(artistUsername), async () => {
     const result = await getArtistApi(artistUsername);
-    return result.address ? result : {
-      address: artistUsername,
-      artist: null,
-    };
+    // Dehydration will fail if there's a Date or undefined value in the data
+    // This will strip any invalid values
+    return JSON.parse(JSON.stringify(result))
   });
 
   return {
