@@ -1,15 +1,17 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useMemo, useState } from 'react';
 import Popup from 'reactjs-popup';
 import { utils } from 'ethers';
 import { useHistory, useParams } from 'react-router-dom';
 import uuid from 'react-uuid';
+import { useRouter } from 'next/router';
+import { useMutation } from 'react-query';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import AppContext from '../../../ContextAPI';
 import backArrow from '../../../assets/images/go-back-arrow.svg';
 import Button from '../../button/Button';
 import Tabs from '../../tabs/Tabs';
 import PolymorphScrambleProp from './PolymorphScrambleProp';
-import './styles/PolymorphScramblePage.scss';
+// import './styles/PolymorphScramblePage.scss';
 import PolymorphScramblePopup from '../../popups/PolymorphScramblePopup';
 import LoadingPopup from '../../popups/LoadingPopup';
 import PolymorphScrambleCongratulationPopup from '../../popups/PolymorphScrambleCongratulationPopup';
@@ -20,20 +22,20 @@ import singleTraitScrambledIcon from '../../../assets/images/single-trait-scramb
 import { getPolymorphMeta } from '../../../utils/api/polymorphs.js';
 import { shortenEthereumAddress } from '../../../utils/helpers/format.js';
 import loadingBg from '../../../assets/images/mint-polymorph-loading-bg.png';
-import { polymorphOwner, queryPolymorphsGraph } from '../../../utils/graphql/polymorphQueries';
+import { polymorphOwner, queryPolymorphsGraph2 } from '../../../utils/graphql/polymorphQueries';
 import { getScrambleStatus } from '../../../utils/helpers/polymorphs';
 import GeneParser from '../../../utils/helpers/GeneParser.js';
 import PolymorphMetadataLoading from '../../popups/PolymorphMetadataLoading';
 import { useGraphQueryHook } from '../../../utils/hooks/useGraphQueryHook';
 import { useAuthContext } from '../../../contexts/AuthContext';
-import { useRouter } from 'next/router';
+
 
 const PolymorphScramblePage = () => {
-  const history = useRouter();
+  const router = useRouter();
   const { address } = useAuthContext();
   const [propertiesTabSelected, setPropertiesTabSelected] = useState(true);
   const [metadataTabSelected, setMetadataTabSelected] = useState(false);
-  const [polymorphId, setPolymorphId] = useState(useParams().id);
+  const [polymorphId, setPolymorphId] = useState();
   const [polymorphData, setPolymorphData] = useState({});
   const [polymorpGene, setPolymorphGene] = useState('');
   const [loading, setLoading] = useState(false);
@@ -43,12 +45,22 @@ const PolymorphScramblePage = () => {
   const [ownerCopied, setOwnerCopied] = useState(false);
   const [morphSingleGenePrise, setMorphSingleGenePrice] = useState('');
   const [scrambled, setScrambled] = useState('none');
-  const { data } = useGraphQueryHook(queryPolymorphsGraph(polymorphOwner(useParams().id)));
   const [traitsMap, setTraitsMap] = useState({});
   const [showLoading, setShowLoading] = useState(false);
   const [showMetadataLoading, setShowMetadataLoading] = useState(false);
   const [showScramblePopup, setShowScramblePopup] = useState(false);
   const [showCongratulations, setShowCongratulations] = useState(false);
+
+  const { data, ...mutation  } = useMutation(queryPolymorphsGraph2);
+
+  useEffect(() => {
+    const id = router.query?.id;
+    if (id) {
+      mutation.mutate(polymorphOwner(id));
+      setPolymorphId(id);
+    }
+  }, [router.query?.id]);
+
   useEffect(() => {
     if (!data) return;
     const ownerOf = data?.transferEntities[0]?.to;
@@ -71,14 +83,6 @@ const PolymorphScramblePage = () => {
     setPolymorphGene(gene.toString());
     const parsedGenes = GeneParser.parse(gene.toString());
     setTraitsMap(parsedGenes);
-  }, [data]);
-
-  useEffect(async () => {
-    if (!data) return;
-    const genomChangePrice =
-      data?.tokenMorphedEntities[data?.tokenMorphedEntities.length - 1]?.priceForGenomeChange;
-    const genomChangePriceToEther = utils.formatEther(genomChangePrice);
-    setMorphSingleGenePrice(genomChangePriceToEther);
   }, [data]);
 
   useEffect(async () => {
@@ -118,14 +122,18 @@ const PolymorphScramblePage = () => {
     setShowScramblePopup(true);
   };
 
-  const getAttributesMapping = (attributes = []) =>
-    attributes.map((attr) => ({
+  const attributes = useMemo(() => {
+    const attributes = polymorphData?.data?.attributes || [];
+    return attributes.map((attr) => ({
       trait: attr.trait_type,
       name: attr.value,
       // chance: PropTypes.string.isRequired, //TODO:: We dont have it
     }));
+  }, [polymorphData?.data?.attributes])
 
-  const attributes = getAttributesMapping(polymorphData?.data?.attributes);
+  if (!polymorphId) {
+    return null;
+  }
 
   return (
     <div className="container scramble--wrapper">
@@ -165,7 +173,7 @@ const PolymorphScramblePage = () => {
       <div
         className="go--back--wrapper"
         aria-hidden="true"
-        onClick={() => history.push('/my-nfts')}
+        onClick={() => router.push('/my-nfts')}
       >
         <img src={backArrow} alt="go back" />
         <span>My NFTs</span>
