@@ -4,13 +4,16 @@ import { TokenTicker } from "../app/enums";
 import { useUserBalanceStore } from "./balanceStore";
 
 interface IErc20PriceStoreState {
+  // Getters
   ethUsdPrice: number;
   daiUsdPrice: number;
   usdcUsdPrice: number;
   xyzUsdPrice: number;
   wethUsdPrice: number;
-  getTokenPriceByTicker: (ticker: TokenTicker) => number;
+
+  // Helpers
   fetchPrices: () => void;
+  getTokenPriceByTicker: (ticker: TokenTicker) => number;
 }
 
 export const useErc20PriceStore = create<IErc20PriceStoreState>((set, get) => ({

@@ -8,7 +8,7 @@ import { PLACEHOLDER_MINTED_POLYMORPHS } from '../../utils/fixtures/MintedPolymo
 // import './PopupStyle.scss';
 // import './LobsterLoader.scss';
 import AppContext from '../../ContextAPI.js';
-import { useMyNftsContext } from '../../contexts/MyNFTsContext.jsx';
+import { useMyNftsStore } from 'src/stores/myNftsStore';
 
 const MintPolymorphConfirmationPopup = ({
   onClose,
@@ -21,7 +21,7 @@ const MintPolymorphConfirmationPopup = ({
   collectionFilter,
 }) => {
   const history = useHistory();
-  const { setCollectionFilter } = useMyNftsContext();
+  const setCollectionFilter= useMyNftsStore(s => s.setCollectionFilter);
   const navigateMyPolymorphs = () => {
     onClose();
     history.push('/my-nfts');

@@ -10,10 +10,11 @@ import Section6 from '../../components/polymorphs/Section6';
 // import './Polymorphs.scss';
 import { morphedPolymorphs, queryPolymorphsGraph } from '../../utils/graphql/polymorphQueries';
 import { useGraphQueryHook } from '../../utils/hooks/useGraphQueryHook';
-import { useMyNftsContext } from '../../contexts/MyNFTsContext';
 import { useWindowSize } from 'react-use';
 import { useErc20PriceStore } from '../../stores/erc20PriceStore';
 import { useThemeStore } from 'src/stores/themeStore';
+import { useMyNftsStore } from 'src/stores/myNftsStore';
+import { useRouter } from 'next/router';
 
 const marquee = () => (
   <p>
@@ -40,9 +41,10 @@ const Polymorphs = () => {
   const setDarkMode = useThemeStore(s => s.setDarkMode);
   const [mobile, setMobile] = useState(false);
   const { data } = useGraphQueryHook(queryPolymorphsGraph(morphedPolymorphs));
-  const { polymorphsFilter, navigateToMyUniverseNFTsTab } = useMyNftsContext();
+  const { polymorphsFilter, navigateToMyUniverseNFTsTab } = useMyNftsStore(s => ({polymorphsFilter: s.polymorphsFilter, navigateToMyUniverseNFTsTab: s.navigateToMyUniverseNFTsTab}))
   const ethUsdPrice = useErc20PriceStore(state => state.ethUsdPrice);
   const windowSize = useWindowSize();
+  const router = useRouter();
 
   useLayoutEffect(() => {
     function handleResize() {
@@ -62,6 +64,7 @@ const Polymorphs = () => {
 
   const redirectToMyPolymorphs = () => {
     navigateToMyUniverseNFTsTab(polymorphsFilter);
+    router.push('/my-nfts');
   };
   return (
     <div className="polymorphs">

@@ -3,12 +3,12 @@ import PropTypes from 'prop-types';
 import uploadIcon from '../../assets/images/upload.svg';
 import { editCollectionBanner } from '../../utils/api/mintNFT';
 import { getCollectionBackgroundColor } from '../../utils/helpers';
-import { useMyNftsContext } from '../../contexts/MyNFTsContext';
 import { useAuthStore } from '../../stores/authStore';
+import { useMyNftsStore } from 'src/stores/myNftsStore';
 
 const Cover = ({ selectedCollection, collectionGeneralInfo, collectionOwner }) => {
   const { isAuthenticated, address } = useAuthStore(s => ({isAuthenticated: s.isAuthenticated, address: s.address}));
-  const { setMyMintableCollections, myMintableCollections } = useMyNftsContext();
+  const { setMyMintableCollections, myMintableCollections } = useMyNftsStore(s => ({setMyMintableCollections: s.setMyMintableCollections, myMintableCollections: s.myMintableCollections}))
   const ref = useRef(null);
   const [bgImage, setBgImage] = useState(selectedCollection?.bgImage);
   const [imageUploadError, setError] = useState('');

@@ -3,6 +3,7 @@ import create from "zustand";
 import Contracts from '../contracts/contracts.json';
 
 interface IContracts {
+  // Getters
   polymorphContract: Contract | null;
   lobsterContract:  Contract | null;
   universeERC721CoreContract: Contract | null;
@@ -10,11 +11,12 @@ interface IContracts {
 }
 
 interface IContractsStore extends IContracts {
+  // Setters
   setContracts: (signer: any, network: any) => void;
   clearContracts: () => void;
 }
 
-export const useContractsStore = create<IContractsStore>((set, get) => ({
+export const useContractsStore = create<IContractsStore>((set) => ({
   polymorphContract: null,
   lobsterContract: null,
   universeERC721CoreContract: null,
