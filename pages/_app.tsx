@@ -134,14 +134,13 @@ import Cookies from 'js-cookie'
 import { ReactQueryDevtools } from 'react-query/devtools';
 
 function MyApp({ Component, pageProps }: AppProps) {
-  // const [mounted, setMounted] = useState(false);
-  //
-  // useEffect(() => setMounted(true), []);
-  //
-  // if (!mounted) {
-  //   return null;
-  // }
-  const [queryClient] = useState(() => new QueryClient());
+  const [queryClient] = useState(() => new QueryClient({
+    defaultOptions: {
+      queries: {
+        refetchOnWindowFocus: false,
+      }
+    },
+  }));
   
   const fetchPrices = useErc20PriceStore(s => useCallback(s.fetchPrices, []));
   const setProviderName = useAuthStore(s => useCallback(s.setProviderName, []));

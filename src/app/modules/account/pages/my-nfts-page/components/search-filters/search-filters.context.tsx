@@ -121,6 +121,7 @@ interface IFiltersRequiredProviderProps {
 interface IFilterProviderOptionalProps {
   defaultSorting: number;
   clearSorting: number;
+	initialCollection?: string;
 }
 interface IFiltersProviderProps
   extends IFiltersRequiredProviderProps,
@@ -128,7 +129,7 @@ interface IFiltersProviderProps
 
 const filterDefaultProps: IFilterProviderOptionalProps = {
   defaultSorting: SortOrderOptions.LowestPrice,
-  clearSorting: 0
+  clearSorting: 0,
 };
 
 const FiltersContextProvider = (props: IFiltersProviderProps) => {
@@ -527,6 +528,13 @@ const FiltersContextProvider = (props: IFiltersProviderProps) => {
 			enabled: !!userAddress,
 			keepPreviousData: true,
 			retry: false,
+			onSuccess: (collections) => {
+				if (props.initialCollection) {
+					collectionFilterForm.setValues({
+						collections: collections.filter((c) => c.address.toLowerCase() === props.initialCollection?.toLowerCase())
+					});
+				}
+			},
 			onError: ({ error, message }) => {
 				// TODO:: think about how to handle the errors
 			},
