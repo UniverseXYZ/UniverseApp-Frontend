@@ -5,11 +5,13 @@ import './UsersResult.scss';
 import Button from '../../button/Button.jsx';
 import Pagination from '../../pagination/Pagionation.jsx';
 import ItemsPerPageDropdown from '../../pagination/ItemsPerPageDropdown.jsx';
+import { useWindowSize } from 'react-use';
 
 const UsersResult = ({ query, data }) => {
   const [users, setUsers] = useState(data);
   const [offset, setOffset] = useState(0);
   const [perPage, setPerPage] = useState(12);
+  const windowSize = useWindowSize();
 
   const handleFollow = (idx) => {
     const newUsers = [...users];
@@ -49,7 +51,7 @@ const UsersResult = ({ query, data }) => {
             </div>
             <div className="galleries">
               {user.galleries.map((gallery, index) =>
-                window.innerWidth > 1230 && index < 4 ? (
+                windowSize.width > 1230 && index < 4 ? (
                   <img src={gallery} alt="Gallery" key={uuid()} />
                 ) : (
                   index < 2 && <img src={gallery} alt="Gallery" key={uuid()} />
