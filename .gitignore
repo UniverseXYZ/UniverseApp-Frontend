@@ -42,6 +42,6 @@ yarn-error.log*
 .firebaserc
 firebase.json
 
-.vscode
+.vscode/launch.json
 .idea
 .history
