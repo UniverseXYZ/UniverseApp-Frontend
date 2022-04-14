@@ -106,7 +106,7 @@ export interface INFT {
   amount: number;
   artworkTypes: NFTArtworkType[];
   collectionId: number;
-  collection?: ICollection;
+  collection: ICollection | null;
   createdAt: Date;
   creator?: IUser;
   description: string | null;

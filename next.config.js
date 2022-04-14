@@ -31,6 +31,7 @@ module.exports = withPlugins(
       return config;
     },
     env: {
+      REACT_APP_BASE_URL: process.env.REACT_APP_BASE_URL,
       REACT_APP_API_BASE_URL: process.env.REACT_APP_API_BASE_URL,
       REACT_APP_NETWORK_CHAIN_ID: process.env.REACT_APP_NETWORK_CHAIN_ID,
       REACT_APP_NETWORK_NAME: process.env.REACT_APP_NETWORK_NAME,
