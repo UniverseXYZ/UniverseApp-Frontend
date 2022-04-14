@@ -1,20 +1,22 @@
 import Head from 'next/head';
 import { useRouter } from 'next/router';
+import { lookup } from 'mime-types';
 
 interface IOpenGraphProps {
   title: string;
   description?: string;
   image?: string;
   imageAlt?: string;
-  mimeType?: string | boolean;
 }
 
 export const OpenGraph = (props: IOpenGraphProps) => {
-  const { title, description, image, imageAlt, mimeType } = props;
+  const { title, description, image, imageAlt } = props;
 
   const router = useRouter();
 
   const url = `${process.env.REACT_APP_BASE_URL}/${router.asPath}`;
+
+  const mimeType = image ? lookup(image) : false;
 
   return (
     <Head>
