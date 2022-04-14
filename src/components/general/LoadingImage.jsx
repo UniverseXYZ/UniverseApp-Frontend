@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import loadingBg from '../../assets/images/loading-white-background.png';
-import './LoadingImage.scss';
+// import './LoadingImage.scss';
 import { useImageLoaded } from '../../utils/hooks/useImageLoaded';
 import BrokenNFT from '../marketplaceNFT/BrokenNFT';
 

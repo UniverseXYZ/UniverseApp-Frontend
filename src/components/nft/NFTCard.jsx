@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import './NFTCard.scss';
 import { Link, useHistory, useLocation } from 'react-router-dom';
 import PropTypes from 'prop-types';
@@ -17,16 +17,17 @@ import PendingNextArrow from '../myNFTs/pendingDropdown/misc/PendingNextArrow';
 import NftEditions from './NftEditions';
 import SVGImageLoader from '../marketplaceNFT/InlineSVG';
 import BrokenNFT from '../marketplaceNFT/BrokenNFT';
+import { useRouter } from 'next/router';
 
 const NFTCard = React.memo(
   ({ nft, canSelect, collectionAddress, selectedNFTsIds, setSelectedNFTsIds }) => {
     const { loggedInArtist } = useAuthContext();
-    const history = useHistory();
-    const location = useLocation();
+    const router = useRouter();
+    const [showDropdown, setShowDropdown] = useState(false);
     const [searchValue, setSearchValue] = useState('');
 
     const { creator } = nft;
-    const owner = location.pathname === '/my-nfts' ? loggedInArtist : nft.owner;
+    const owner = router.asPath === '/my-nfts' ? loggedInArtist : nft.owner;
 
     // const sliderSettings = {
     //   dots: true,
@@ -75,9 +76,18 @@ const NFTCard = React.memo(
         <NFTCardHeader nft={nft} owner={owner} creator={creator} collection={nft.collection} />
         <div className="nft--card--body" aria-hidden="true">
           {nft.artworkType !== 'bundles' ? (
-            <Link
-              href={`/nft/${nft.contractAddress}/${nft.tokenId}`}
-              to={`/nft/${nft.contractAddress}/${nft.tokenId}`}
+            <div
+              onClick={() =>
+                !canSelect
+                  ? router.push(
+                      `/nft/${nft.collection?.address || collectionAddress}/${nft.tokenId}`,
+                      {
+                        nft,
+                      }
+                    )
+                  : handleSelectNFT(nft.id)
+              }
+              aria-hidden="true"
             >
               {nft.artworkType !== 'audio/mpeg' && nft.artworkType !== 'mp4' && showNftImage()}
               {nft.artworkType === 'mp4' && (
@@ -126,7 +136,7 @@ const NFTCard = React.memo(
                           className="slider--box"
                           onClick={() =>
                             !canSelect
-                              ?history.push(`/nft/${nft.collection?.address || collectionAddress}/${nft.tokenId}`, { nft })
+                              ?router.push(`/nft/${nft.collection?.address || collectionAddress}/${nft.tokenId}`, { nft })
                               : handleSelectNFT(nft.id)
                           }
                           aria-hidden="true"
@@ -161,7 +171,7 @@ const NFTCard = React.memo(
                 <div
                   className="slider--box"
                   onClick={() =>
-                    history.push(
+                    router.push(
                       `/nft/${nft.collection?.address || collectionAddress}/${nft.tokenId}`,
                       { nft }
                     )
@@ -205,7 +215,7 @@ const NFTCard = React.memo(
           <div className="quantity--and--offer">
             {/* // TODO:: we need a property from the BE about the total editions count */}
             <NftEditions
-              push={history.push}
+              push={router.push}
               searchValue={searchValue}
               nft={nft}
               setSearchValue={setSearchValue}

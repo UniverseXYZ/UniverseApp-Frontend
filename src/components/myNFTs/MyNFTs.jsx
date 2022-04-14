@@ -2,8 +2,7 @@
 /* eslint-disable no-return-assign */
 import React, { useEffect, useState, useRef } from 'react';
 import Popup from 'reactjs-popup';
-import { useHistory } from 'react-router-dom';
-import './MyNFTs.scss';
+// import './MyNFTs.scss';
 import { Contract, utils } from 'ethers';
 import Wallet from './Wallet.jsx';
 import SavedNFTs from './SavedNFTs.jsx';
@@ -27,10 +26,11 @@ import { createMintingNFT, getMetaForSavedNft } from '../../utils/api/mintNFT';
 import { formatRoyaltiesForMinting } from '../../utils/helpers/contractInteraction';
 import useStateIfMounted from '../../utils/hooks/useStateIfMounted';
 import { getNftsPerAddress } from '../../utils/api/marketplace.ts';
+import { useRouter } from 'next/router';
 
 const MyNFTs = () => {
   const tabs = ['Wallet', 'Collections', 'Saved NFTs', 'Universe NFTs'];
-  const history = useHistory();
+  const history = useRouter();
   const createButtonRef = useRef(null);
 
   // Context hooks
@@ -320,25 +320,13 @@ const MyNFTs = () => {
                       <ul>
                         <li
                           aria-hidden="true"
-                          onClick={() =>
-                            history.push('/my-nfts/create', {
-                              tabIndex: 1,
-                              nftType: 'single',
-                              backPath: 'myNFTs',
-                            })
-                          }
+                          onClick={() => history.push('/my-nfts/create?tabIndex=1&nftType=single&backPath=myNFTs')}
                         >
                           NFT
                         </li>
                         <li
                           aria-hidden="true"
-                          onClick={() =>
-                            history.push('/my-nfts/create', {
-                              tabIndex: 1,
-                              nftType: 'collection',
-                              backPath: 'myNFTs',
-                            })
-                          }
+                          onClick={() => history.push('/my-nfts/create?tabIndex=1&nftType=collection&backPath=myNFTs')}
                         >
                           Collection
                         </li>
@@ -374,20 +362,13 @@ const MyNFTs = () => {
                     <ul>
                       <li
                         aria-hidden="true"
-                        onClick={() =>
-                          history.push('/my-nfts/create', { tabIndex: 1, nftType: 'single' })
-                        }
+                        onClick={() => history.push('/my-nfts/create?tabIndex=1&nftType=single')}
                       >
                         NFT
                       </li>
                       <li
                         aria-hidden="true"
-                        onClick={() =>
-                          history.push('/my-nfts/create', {
-                            tabIndex: 1,
-                            nftType: 'collection',
-                          })
-                        }
+                        onClick={() => history.push('/my-nfts/create?tabIndex=1&nftType=collection')}
                       >
                         Collection
                       </li>

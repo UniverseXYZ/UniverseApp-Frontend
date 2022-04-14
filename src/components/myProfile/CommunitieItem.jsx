@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import './styles/CommunitieItem.scss';
+// import './styles/CommunitieItem.scss';
 
 const CommunitieItem = (props) => {
   const { name, image, members } = props;

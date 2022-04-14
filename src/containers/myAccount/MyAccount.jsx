@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Popup from 'reactjs-popup';
-import { useHistory } from 'react-router-dom';
 import ProfileForm from '../../components/myAccount/ProfileForm.jsx';
-import './MyAccount.scss';
+// import './MyAccount.scss';
 import Head from '../../components/myAccount/Head.jsx';
 import CongratsProfilePopup from '../../components/popups/CongratsProfilePopup.jsx';
 import LoadingPopup from '../../components/popups/LoadingPopup.jsx';
@@ -11,6 +10,7 @@ import { useThemeContext } from '../../contexts/ThemeContext.jsx';
 import { useAuthContext } from '../../contexts/AuthContext.jsx';
 import { useErrorContext } from '../../contexts/ErrorContext';
 import { useAuctionContext } from '../../contexts/AuctionContext.jsx';
+import { useRouter } from 'next/router';
 
 const MyAccount = () => {
   const { isWalletConnected, loggedInArtist, setLoggedInArtist } = useAuthContext();
@@ -18,7 +18,7 @@ const MyAccount = () => {
   const { setShowError, setErrorTitle, setErrorBody } = useErrorContext();
   const { setDarkMode } = useThemeContext();
 
-  const history = useHistory();
+  const history = useRouter();
   const [showLoading, setShowLoading] = useState(false);
   const [about, setAbout] = useState(loggedInArtist.about);
   const [twitterLink, setTwitterLink] = useState(loggedInArtist.twitterLink);

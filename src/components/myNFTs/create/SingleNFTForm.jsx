@@ -2,10 +2,9 @@
 import React, { useRef, useState, useEffect, useMemo } from 'react';
 import uuid from 'react-uuid';
 import Popup from 'reactjs-popup';
-import { useLocation } from 'react-router-dom';
 import { Contract, utils } from 'ethers';
 import { DebounceInput } from 'react-debounce-input';
-import './CreateSingleNft.scss';
+// import './CreateSingleNft.scss';
 import PropTypes from 'prop-types';
 import { useQueryClient } from 'react-query';
 import Button from '../../button/Button.jsx';
@@ -47,6 +46,7 @@ import CollectionChoice from './CollectionChoice';
 import universeIcon from '../../../assets/images/universe-img.svg';
 import { timeout } from '../../../app/utils/debounceConfig';
 import { nftKeys } from '../../../app/utils/query-keys';
+import { useRouter } from 'next/router';
 
 const MAX_FIELD_CHARS_LENGTH = {
   name: 32,
@@ -91,12 +91,21 @@ const SingleNFTForm = ({ scrollToTop }) => {
 
   const { setShowError, setErrorTitle, setErrorBody } = useErrorContext();
 
+  const router = useRouter();
+
   const [errors, setErrors] = useState({
     name: '',
     edition: '',
     previewImage: '',
   });
-  const location = useLocation();
+  // TODO: fix
+  // const location = useLocation();
+  const location = {
+    state: {
+      collection: ''
+    }
+  };
+
 
   const [saveForLateClick, setSaveForLateClick] = useState(false);
   const [mintNowClick, setMintNowClick] = useState(false);
@@ -769,7 +778,7 @@ const SingleNFTForm = ({ scrollToTop }) => {
 
   useEffect(() => {
     setShowPrompt(true);
-  }, [location.pathname]);
+  }, [router.asPath]);
 
   useEffect(() => {
     if (!showLoadingPopup) setActiveTxHashes([]);

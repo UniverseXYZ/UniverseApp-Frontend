@@ -4,7 +4,7 @@ import WrapperCenter from './WrapperCenter';
 import PolymorphsActivityTable from './PolymorphsActivityTable';
 import PolymorphsActivityTableRow from './PolymorphsActivityTableRow';
 import PolymorphsActivityTableRowMobile from './PolymorphsActivityTableRowMobile';
-import './styles/PolymorphsActivity.scss';
+// import './styles/PolymorphsActivity.scss';
 import SimplePagination from '../pagination/SimplePaginations';
 
 const tableHead = [

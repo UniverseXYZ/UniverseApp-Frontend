@@ -1,14 +1,14 @@
 import React from 'react';
-import { useHistory } from 'react-router-dom';
 import TimKangImg from '../../../assets/images/Tim-Kang.png';
 import TylerWardImg from '../../../assets/images/Tyler-Ward.png';
 import TroyMurrayImg from '../../../assets/images/Troy-Murray.png';
 import MarkWardImg from '../../../assets/images/Mark-Ward.png';
 import RyanShtirmerImg from '../../../assets/images/Ryan-Shtirmer.png';
 import Button from '../../button/Button.jsx';
+import { useRouter } from 'next/router';
 
 const OurTeam = () => {
-  const history = useHistory();
+  const history = useRouter();
 
   return (
     <div className="our__team__section">

@@ -6,7 +6,7 @@ import WrapperCenterTwoColumns from './WrapperCenterTwoColumns';
 import Section6LeftImg from '../../assets/images/Section6-Illustration-min.png';
 import Button from '../button/Button.jsx';
 
-import './styles/Section6.scss';
+// import './styles/Section6.scss';
 
 const leftBlock = () => (
   <div>
@@ -26,7 +26,6 @@ const rightBlock = () => (
 );
 
 const Section6 = () => {
-  const history = useHistory();
   return (
     <>
       <div className="polymorphs--section6">

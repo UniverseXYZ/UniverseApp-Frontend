@@ -3,46 +3,48 @@ import { useHistory } from 'react-router';
 import PropTypes from 'prop-types';
 import PopupComponent from '../components/popups/Popup';
 
-export function RouterPrompt({ when, onOK, editing, handleSaveForLater }) {
-  const history = useHistory();
+export function RouterPrompt({ when, onOK, editing }) {
+  // TODO: history.block()
+  return null;
+  // const history = useHistory();
+  //
+  // const [currentPath, setCurrentPath] = useState('');
+  //
+  // useEffect(() => {
+  //   if (when && editing) {
+  //     history.block((prompt) => {
+  //       if (
+  //         prompt.pathname !== '/setup-auction/auction-settings' &&
+  //         prompt.pathname !== '/setup-auction/reward-tiers' &&
+  //         prompt.pathname !== '/create-tiers' &&
+  //         prompt.pathname !== '/setup-auction/review-auction'
+  //       ) {
+  //         setCurrentPath(prompt.pathname);
+  //         document.getElementById('show-popup')?.click();
+  //         return 'true';
+  //       }
+  //       return {};
+  //     });
+  //   } else {
+  //     history.block(() => {});
+  //   }
+  //
+  //   return () => {
+  //     history.block(() => {});
+  //   };
+  // }, [history, when, editing]);
+  //
+  // const handleOK = useCallback(async () => {
+  //   if (onOK) {
+  //     const canRoute = await Promise.resolve(onOK());
+  //     if (canRoute) {
+  //       history.block(() => {});
+  //       history.push(currentPath);
+  //     }
+  //   }
+  // }, [currentPath, history, onOK]);
 
-  const [currentPath, setCurrentPath] = useState('');
-
-  useEffect(() => {
-    if (when && editing) {
-      history.block((prompt) => {
-        if (
-          prompt.pathname !== '/setup-auction/auction-settings' &&
-          prompt.pathname !== '/setup-auction/reward-tiers' &&
-          prompt.pathname !== '/create-tiers' &&
-          prompt.pathname !== '/setup-auction/review-auction'
-        ) {
-          setCurrentPath(prompt.pathname);
-          document.getElementById('show-popup')?.click();
-          return 'true';
-        }
-        return {};
-      });
-    } else {
-      history.block(() => {});
-    }
-
-    return () => {
-      history.block(() => {});
-    };
-  }, [history, when, editing]);
-
-  const handleOK = useCallback(async () => {
-    if (onOK) {
-      const canRoute = await Promise.resolve(onOK());
-      if (canRoute) {
-        history.block(() => {});
-        history.push(currentPath);
-      }
-    }
-  }, [currentPath, history, onOK]);
-
-  return <PopupComponent onClose={handleOK} handleSaveForLater={handleSaveForLater} />;
+  // return <PopupComponent onClose={handleOK} />;
 }
 
 RouterPrompt.propTypes = {
