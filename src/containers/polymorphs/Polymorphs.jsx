@@ -84,7 +84,7 @@ const Polymorphs = () => {
       {/* <Characters /> */}
       <Section4 />
       <PolymorphsActivity
-        ethPrice={ethPrice?.market_data?.current_price?.usd.toString()}
+        ethPrice={`${ethUsdPrice}`}
         mobile={mobile}
         morphEntities={data?.tokenMorphedEntities}
       />
