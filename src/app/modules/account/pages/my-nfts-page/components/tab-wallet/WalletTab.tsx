@@ -1,7 +1,6 @@
 import { Button, SimpleGrid, Box } from '@chakra-ui/react';
 
 // Contexts
-import { useAuthContext } from '../../../../../../../contexts/AuthContext';
 import { useFiltersContext } from '../search-filters/search-filters.context';
 
 // Components
@@ -13,13 +12,14 @@ import { SearchFilters } from '../search-filters';
 // Constants
 import { useEffect, useRef } from 'react';
 import { useIntersection } from 'react-use';
+import { useAuthStore } from '../../../../../../../stores/authStore';
 
 interface IWalletTabProps {
   getTotalNfts: (total: number) => void;
 }
 
 export const WalletTab = ({ getTotalNfts }: IWalletTabProps) => {
-  const { address } = useAuthContext();
+  const address = useAuthStore(state => state.address);
 
   const {
     setUserAddress,
