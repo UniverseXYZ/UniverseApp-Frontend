@@ -28,6 +28,7 @@ import { listingValidation } from './listingValidation';
 import calendarIcon from '../../../assets/images/calendar-small.svg';
 import { DateTimePickerHeader } from './components';
 import { DateTimeValidationSchema } from './constants';
+import 'react-datepicker/dist/react-datepicker.css'
 import * as styles from './styles';
 
 dayjs.extend(UTC);
@@ -117,7 +118,7 @@ export const DateTimePicker = ({ value, onChange, onOpen, onClose, minDate, vali
     if(value.length > 2) return;
     formik.handleChange(event)
   }
-  console.log(formik.values.minutes, formik.values.hours);
+
   return (
     <>
       <Button
