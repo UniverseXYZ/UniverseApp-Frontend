@@ -4,12 +4,11 @@ import Welcome from '../../../components/products/about/Welcome.jsx';
 import DigitalTools from '../../../components/products/about/DigitalTools.jsx';
 import HowItWorks from '../../../components/products/about/howItWorks/HowItWorks.jsx';
 import OurTeam from '../../../components/products/about/OurTeam.jsx';
-import { useThemeContext } from '../../../contexts/ThemeContext.jsx';
 import Head from 'next/head';
+import { useThemeStore } from 'src/stores/themeStore';
 
 const About = () => {
-  const { setDarkMode } = useThemeContext();
-
+  const setDarkMode = useThemeStore(s => s.setDarkMode);
   useEffect(() => setDarkMode(true), []);
 
   return (

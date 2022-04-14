@@ -13,7 +13,6 @@ import bg from '../../../../../assets/images/marketplace/v2/bg.png';
 import arrow from '../../../../../assets/images/arrow.svg';
 import BGImage from './../../../../../assets/images/v2/stone_bg.jpg';
 
-import { useThemeContext } from '../../../../../contexts/ThemeContext';
 import {
   defaultDutchAuctionForm,
   defaultEnglishAuctionForm,
@@ -43,6 +42,7 @@ import { nftKeys, orderKeys } from '../../../../utils/query-keys';
 import { useRouter } from 'next/router';
 import { useAuthStore } from '../../../../../stores/authStore';
 import { useErrorStore } from '../../../../../stores/errorStore';
+import { useThemeStore } from 'src/stores/themeStore';
 
 const getValidationSchema = (amountType?: SellAmountType, sellMethod?: SellMethod) => {
   switch (sellMethod) {
@@ -102,7 +102,7 @@ export const SellPage = () => {
 
   const getSaltMutation = useMutation(GetSaltApi);
 
-  const { setDarkMode } = useThemeContext() as any;
+  const setDarkMode = useThemeStore(s => s.setDarkMode);
   const [activeTab, setActiveTab] = useState<SellPageTabs>(SellPageTabs.SELL_METHOD);
   const [amountType, setAmountType] = useState<SellAmountType>(SellAmountType.SINGLE); // TODO: add Bundle
   const [sellMethod, setSellMethod] = useState<SellMethod>();
