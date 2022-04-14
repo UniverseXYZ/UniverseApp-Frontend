@@ -73,7 +73,7 @@ export const NFTItemRelation = ({ type, image, value, linkParam, externalOwner }
       variant={'black'}
       fontWeight={700}
     >
-      {avatar}
+      <>{avatar}</>
     </Tooltip>
   );
 };
