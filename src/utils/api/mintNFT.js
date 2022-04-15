@@ -1,6 +1,7 @@
 /* eslint-disable prefer-const */
 /* eslint-disable no-debugger */
 /* eslint-disable no-useless-return */
+import Cookies from 'js-cookie';
 const SAVE_FOR_LATER_MINT_URL = `${process.env.REACT_APP_API_BASE_URL}/api/saved-nfts`;
 const GET_SAVED_NFTS_URL = `${process.env.REACT_APP_API_BASE_URL}/api/saved-nfts`;
 const GET_MY_MINTED_NFTS_URL = `${process.env.REACT_APP_API_BASE_URL}/api/pages/my-nfts`;
@@ -58,7 +59,7 @@ export const saveNftForLater = async (data) => {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=UTF-8',
-      Authorization: `Bearer ${localStorage.getItem('xyz_access_token')}`,
+      Authorization: `Bearer ${Cookies.get('xyz_access_token')}`,
     },
     body: JSON.stringify({
       ...requestData,
@@ -86,7 +87,7 @@ export const saveNftImage = async (file, id) => {
   const request = await fetch(UPLOAG_NFT_IMAGE_URL, {
     method: 'post',
     headers: {
-      Authorization: `Bearer ${localStorage.getItem('xyz_access_token')}`,
+      Authorization: `Bearer ${Cookies.get('xyz_access_token')}`,
     },
     body: formData,
   });
@@ -105,7 +106,7 @@ export const getSavedNfts = async () => {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${localStorage.getItem('xyz_access_token')}`,
+      Authorization: `Bearer ${Cookies.get('xyz_access_token')}`,
     },
   });
 
@@ -124,7 +125,7 @@ export const getMyNfts = async () => {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${localStorage.getItem('xyz_access_token')}`,
+      Authorization: `Bearer ${Cookies.get('xyz_access_token')}`,
     },
   });
 
@@ -141,7 +142,7 @@ export const getMyMintingNfts = async () => {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${localStorage.getItem('xyz_access_token')}`,
+      Authorization: `Bearer ${Cookies.get('xyz_access_token')}`,
     },
   });
 
@@ -158,7 +159,7 @@ export const getMyMintingNftsCount = async () => {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${localStorage.getItem('xyz_access_token')}`,
+      Authorization: `Bearer ${Cookies.get('xyz_access_token')}`,
     },
   });
 
@@ -181,7 +182,7 @@ export const getMetaForSavedNft = async (id) => {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${localStorage.getItem('xyz_access_token')}`,
+      Authorization: `Bearer ${Cookies.get('xyz_access_token')}`,
     },
   });
 
@@ -228,7 +229,7 @@ export const updateSavedForLaterNft = async (data) => {
     method: 'PATCH',
     headers: {
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${localStorage.getItem('xyz_access_token')}`,
+      Authorization: `Bearer ${Cookies.get('xyz_access_token')}`,
     },
     body: JSON.stringify({
       ...requestData,
@@ -278,7 +279,7 @@ export const getTokenURI = async ({
   const request = await fetch(GENERATE_TOKEN_URI_URL, {
     method: 'post',
     headers: {
-      Authorization: `Bearer ${localStorage.getItem('xyz_access_token')}`,
+      Authorization: `Bearer ${Cookies.get('xyz_access_token')}`,
     },
     body: formData,
   });
@@ -328,7 +329,7 @@ export const saveCollection = async (data) => {
   const requestOptions = {
     method: 'POST',
     headers: {
-      Authorization: `Bearer ${localStorage.getItem('xyz_access_token')}`,
+      Authorization: `Bearer ${Cookies.get('xyz_access_token')}`,
     },
     body: formData,
   };
@@ -347,7 +348,7 @@ export const attachTxHashToCollection = (txHash, collectionId) => {
     method: 'PATCH',
     headers: {
       'Content-type': 'application/json; charset=UTF-8',
-      Authorization: `Bearer ${localStorage.getItem('xyz_access_token')}`,
+      Authorization: `Bearer ${Cookies.get('xyz_access_token')}`,
     },
     body: JSON.stringify({
       txHash,
@@ -362,7 +363,7 @@ export const removeSavedNft = (id) =>
     method: 'DELETE',
     headers: {
       'Content-type': 'application/json; charset=UTF-8',
-      Authorization: `Bearer ${localStorage.getItem('xyz_access_token')}`,
+      Authorization: `Bearer ${Cookies.get('xyz_access_token')}`,
     },
   });
 
@@ -390,7 +391,7 @@ export const updateSavedNft = async ({
     method: 'PATCH',
     headers: {
       'Content-type': 'application/json; charset=UTF-8',
-      Authorization: `Bearer ${localStorage.getItem('xyz_access_token')}`,
+      Authorization: `Bearer ${Cookies.get('xyz_access_token')}`,
     },
     body: JSON.stringify({
       ...requestData,
@@ -407,7 +408,7 @@ export const getMyMintableCollections = async () => {
     method: 'GET',
     headers: {
       'Content-type': 'application/json; charset=UTF-8',
-      Authorization: `Bearer ${localStorage.getItem('xyz_access_token')}`,
+      Authorization: `Bearer ${Cookies.get('xyz_access_token')}`,
     },
   };
   const url = `${GET_MY_MINTED_COLLECTIONS}?mintable=true`;
@@ -422,7 +423,7 @@ export const getMyMintedCollections = async () => {
     method: 'GET',
     headers: {
       'Content-type': 'application/json; charset=UTF-8',
-      Authorization: `Bearer ${localStorage.getItem('xyz_access_token')}`,
+      Authorization: `Bearer ${Cookies.get('xyz_access_token')}`,
     },
   };
   const url = `${GET_MY_MINTED_COLLECTIONS}?mintable=false`;
@@ -448,7 +449,7 @@ export const getMyMintingCollections = async () => {
     method: 'GET',
     headers: {
       'Content-type': 'application/json; charset=UTF-8',
-      Authorization: `Bearer ${localStorage.getItem('xyz_access_token')}`,
+      Authorization: `Bearer ${Cookies.get('xyz_access_token')}`,
     },
   };
 
@@ -463,7 +464,7 @@ export const getMyMintingCollectionsCount = async () => {
     method: 'GET',
     headers: {
       'Content-type': 'application/json; charset=UTF-8',
-      Authorization: `Bearer ${localStorage.getItem('xyz_access_token')}`,
+      Authorization: `Bearer ${Cookies.get('xyz_access_token')}`,
     },
   };
 
@@ -500,7 +501,7 @@ export const editCollection = async (data) => {
     method: 'PATCH',
     headers: {
       'Content-type': 'application/json; charset=UTF-8',
-      Authorization: `Bearer ${localStorage.getItem('xyz_access_token')}`,
+      Authorization: `Bearer ${Cookies.get('xyz_access_token')}`,
     },
     body: JSON.stringify({
       description: data.description || '',
@@ -532,7 +533,7 @@ export const editCollectionImage = async (file, collectionId) => {
   const request = await fetch(URL, {
     method: 'post',
     headers: {
-      Authorization: `Bearer ${localStorage.getItem('xyz_access_token')}`,
+      Authorization: `Bearer ${Cookies.get('xyz_access_token')}`,
     },
     body: formData,
   });
@@ -552,7 +553,7 @@ export const editCollectionBanner = async (file, collectionAddress) => {
   const request = await fetch(URL, {
     method: 'post',
     headers: {
-      Authorization: `Bearer ${localStorage.getItem('xyz_access_token')}`,
+      Authorization: `Bearer ${Cookies.get('xyz_access_token')}`,
     },
     body: formData,
   });
@@ -589,7 +590,7 @@ export const createMintingNFT = async (txHash, nftId, actualMintedCount) => {
     method: 'PATCH',
     headers: {
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${localStorage.getItem('xyz_access_token')}`,
+      Authorization: `Bearer ${Cookies.get('xyz_access_token')}`,
     },
     body: JSON.stringify({
       txHash,
@@ -608,7 +609,7 @@ export const getNftSummary = async () => {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${localStorage.getItem('xyz_access_token')}`,
+      Authorization: `Bearer ${Cookies.get('xyz_access_token')}`,
     },
   });
 
@@ -623,7 +624,7 @@ export const getMyCollections = async (offset, limit) => {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${localStorage.getItem('xyz_access_token')}`,
+      Authorization: `Bearer ${Cookies.get('xyz_access_token')}`,
     },
   });
 

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import Cookies from 'js-cookie';
 import AwesomeDebouncePromise from 'awesome-debounce-promise';
 import useConstant from 'use-constant';
 import { useAsyncAbortable } from 'react-async-hook';
@@ -34,7 +35,7 @@ export const useSearchUserNfts = (username) => {
       signal: abortSignal,
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${localStorage.getItem('xyz_access_token')}`,
+        Authorization: `Bearer ${Cookies.get('xyz_access_token')}`,
       },
     });
     if (result.status !== 200) {
@@ -50,7 +51,7 @@ export const useSearchUserNfts = (username) => {
       signal: abortSignal,
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${localStorage.getItem('xyz_access_token')}`,
+        Authorization: `Bearer ${Cookies.get('xyz_access_token')}`,
       },
     });
     if (result.status !== 200) {

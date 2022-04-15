@@ -11,7 +11,7 @@ import { mapUserData } from '../utils/helpers';
 import { useErrorContext } from './ErrorContext';
 import { TokenTicker } from '../app/enums/token-ticker';
 import { useRouter } from 'next/router';
-import Cookies from 'js-cookie'
+import Cookies from 'js-cookie';
 
 const AuthContext = createContext(null);
 
