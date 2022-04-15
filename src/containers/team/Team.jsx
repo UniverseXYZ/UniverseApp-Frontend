@@ -17,7 +17,7 @@ const Team = () => {
     <div className="team__page">
       <OpenGraph
         title={'Meet the Universe Crew'}
-        description={'Universe team is full of creators, artists and DeFi minds from all over the world with a shared goal in mind, empower artists.'}
+        description={'Universe team is full of creators, artists and DeFi minds from all over the world with a shared goal in mind, to empower artists.'}
         image={OpenGraphImage}
       />
       <Welcome />
