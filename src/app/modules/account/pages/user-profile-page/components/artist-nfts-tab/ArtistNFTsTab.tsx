@@ -38,7 +38,6 @@ export const ArtistNFTsTab = ({ artistAddress, onTotalLoad }: IArtistNFTsTabProp
   } = useFiltersContext();
 
   const router = useRouter();
-  const [currentScrollTop, setCurrentScrollTop] = useState(0);
 
   useEffect(() => {
     setUserAddress(artistAddress);
@@ -54,10 +53,6 @@ export const ArtistNFTsTab = ({ artistAddress, onTotalLoad }: IArtistNFTsTabProp
       onTotalLoad(nftPages[0].total);
     }
   }, [userNFTs])
-
-  useEffect(() => {
-    window.scrollTo(0, currentScrollTop)
-  }, [currentScrollTop])
 
   const hasOrderBookFilters = hasSelectedOrderBookFilters();
 	const hasOrders = orders?.pages?.length && orders.pages[0].data?.length;
@@ -86,6 +81,18 @@ export const ArtistNFTsTab = ({ artistAddress, onTotalLoad }: IArtistNFTsTabProp
   }, [userCollections]);
 
   const filtersRef = useRef(null);
+  const divRef = useRef<null | HTMLDivElement>(null); 
+  const [loadMoreClicked, setLoadMoreClicked] = useState(false);
+  
+  const scrollToBottom = () => {
+    divRef?.current?.scrollIntoView({behavior: "smooth", block: "end", inline: "nearest"});
+  }
+
+  useEffect(() => {
+    if (!waitingUserNFTs) {
+      scrollToBottom();
+    };
+  }, [loadMoreClicked, waitingUserNFTs]);
 
   const intersection = useIntersection(filtersRef, {
     threshold: 1,
@@ -176,7 +183,7 @@ export const ArtistNFTsTab = ({ artistAddress, onTotalLoad }: IArtistNFTsTabProp
         ) : // User NFTs
         hasUserNFTs || waitingUserNFTs ? (
           <div className="mynfts__page">
-            <div className="container mynfts__page__body">
+            <div className="container mynfts__page__body" ref={divRef}>
               <SimpleGrid columns={{ base: 1, md: 2, lg: 4 }} spacing={'30px'}>
                 {
                   !waitingUserNFTs && (
@@ -220,7 +227,7 @@ export const ArtistNFTsTab = ({ artistAddress, onTotalLoad }: IArtistNFTsTabProp
 
               {!waitingUserNFTs && hasMoreUserNFTs && (
                 <Button variant={'outline'} isFullWidth={true} mt={10} onClick={() => {
-                  setCurrentScrollTop(document.documentElement.scrollTop);
+                  setLoadMoreClicked(true);
                   fetchNextUserNFTs();
                 }}>
                   Load more
