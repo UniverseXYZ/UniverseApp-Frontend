@@ -1,5 +1,5 @@
 import { Box, Button, SimpleGrid } from '@chakra-ui/react';
-import { useCallback, useEffect, useRef } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useIntersection } from 'react-use';
 
 import { NftItem, NFTItemContentWithPrice } from '@app/modules/nft/components';
@@ -81,6 +81,18 @@ export const ArtistNFTsTab = ({ artistAddress, onTotalLoad }: IArtistNFTsTabProp
   }, [userCollections]);
 
   const filtersRef = useRef(null);
+  const divRef = useRef<null | HTMLDivElement>(null); 
+  const [loadMoreClicked, setLoadMoreClicked] = useState(false);
+  
+  const scrollToBottom = () => {
+    divRef?.current?.scrollIntoView({behavior: "smooth", block: "end", inline: "nearest"});
+  }
+
+  useEffect(() => {
+    if (!waitingUserNFTs) {
+      scrollToBottom();
+    };
+  }, [loadMoreClicked, waitingUserNFTs]);
 
   const intersection = useIntersection(filtersRef, {
     threshold: 1,
@@ -171,7 +183,7 @@ export const ArtistNFTsTab = ({ artistAddress, onTotalLoad }: IArtistNFTsTabProp
         ) : // User NFTs
         hasUserNFTs || waitingUserNFTs ? (
           <div className="mynfts__page">
-            <div className="container mynfts__page__body">
+            <div className="container mynfts__page__body" ref={divRef}>
               <SimpleGrid columns={{ base: 1, md: 2, lg: 4 }} spacing={'30px'}>
                 {
                   !waitingUserNFTs && (
@@ -214,7 +226,10 @@ export const ArtistNFTsTab = ({ artistAddress, onTotalLoad }: IArtistNFTsTabProp
               </SimpleGrid>
 
               {!waitingUserNFTs && hasMoreUserNFTs && (
-                <Button variant={'outline'} isFullWidth={true} mt={10} onClick={() => fetchNextUserNFTs()}>
+                <Button variant={'outline'} isFullWidth={true} mt={10} onClick={() => {
+                  setLoadMoreClicked(true);
+                  fetchNextUserNFTs();
+                }}>
                   Load more
                 </Button>
               )}
