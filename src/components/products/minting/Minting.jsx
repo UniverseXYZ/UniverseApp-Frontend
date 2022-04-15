@@ -41,7 +41,7 @@ const MintingPage = () => {
     <div className="minting-page">
       <OpenGraph
         title={'Mint NFT or Create an NFT Collection'}
-        description={'Universe Minting is an easy to use platform that allows users to create their NFTs to the Ethereum Blockchain.'}
+        description={'Universe Minting is an easy to use platform that allows users to create their NFTs on the Ethereum Blockchain.'}
         image={OpenGraphImage}
       />
       <div className="select--title">
