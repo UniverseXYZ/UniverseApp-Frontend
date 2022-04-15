@@ -1,6 +1,6 @@
 import React, { useContext, useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
-import { useHistory } from 'react-router-dom';
+import { useRouter } from 'next/router';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { Animated } from 'react-animated-css';
 import Popup from 'reactjs-popup';
@@ -94,7 +94,7 @@ const MobileView = (props) => {
   const [isAccountDropdownOpened, setIsAccountDropdownOpened] = useState(false);
   const [copied, setCopied] = useState(false);
   const ref = useRef(null);
-  const history = useHistory();
+  const history = useRouter();
   const searchRef = useRef();
   const [searchValue, setSearchValue] = useState('');
   const [searchFocus, setSearchFocus] = useState(false);
