@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
-import { useHistory } from 'react-router-dom';
+import { useRouter } from 'next/router';
 import Popup from 'reactjs-popup';
 import { Animated } from 'react-animated-css';
 // import './TabletView.scss';
@@ -85,7 +85,7 @@ const TabletView = (props) => {
   const searchRef = useRef();
   const [searchValue, setSearchValue] = useState('');
   const ref = useRef(null);
-  const history = useHistory();
+  const history = useRouter();
 
   const handleSearchKeyDown = (e) => {
     if (e.keyCode === 13) {

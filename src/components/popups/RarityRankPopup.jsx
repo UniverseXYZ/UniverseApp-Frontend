@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 import closeIcon from '../../assets/images/close-menu.svg';
 import neverScrumbledIcon from '../../assets/images/never-scrambled-badge.svg';
 import scrumbledIcon from '../../assets/images/single-trait-scrambled-badge.svg';
@@ -10,6 +10,8 @@ import linkIcon from '../../assets/images/rarity-charts/linkIcon.svg';
 
 const RarityRankPopup = ({ onClose, item }) => {
   const [traitsMap, setTraitsMap] = useState(GeneParser.parse(item.currentgene));
+
+  const ctaText = <span className='view-link'>View on Universe <img src={linkIcon} alt="Link Icon" /></span>
 
   return (
     <div className="rarity--rank--popup">
@@ -35,10 +37,9 @@ const RarityRankPopup = ({ onClose, item }) => {
           <div className="rarity--rank--header">
             <div>
               <h1>{`Rarity Rank #${item.rank}`}</h1>
-              <Link
-                to={`/nft/${process.env.REACT_APP_POLYMORPHS_CONTRACT_ADDRESS}/${item.tokenid}`}
+              <Link href={`/nft/${process.env.REACT_APP_POLYMORPHS_CONTRACT_ADDRESS}/${item.tokenid}`}
               >
-                View on Universe <img src={linkIcon} alt="Link Icon" />
+                {ctaText}
               </Link>{' '}
             </div>
             <p className="number">{`#${item.tokenid}`}</p>

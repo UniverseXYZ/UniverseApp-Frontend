@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import Popup from 'reactjs-popup';
 // import './Footer.scss';
-import { useHistory } from 'react-router-dom';
+import { useRouter } from 'next/router';
 import Logo from '../../assets/images/light.svg';
 import twitterIcon from '../../assets/images/twitter-icon.svg';
 import discordIcon from '../../assets/images/discord-icon.svg';
@@ -14,7 +14,7 @@ import { useLayout } from '../../app/providers';
 import Badge from '../badge/Badge';
 
 const Footer = () => {
-  const history = useHistory();
+  const history = useRouter();
   const [email, setEmail] = useState('');
   const { footerRef } = useLayout();
 
