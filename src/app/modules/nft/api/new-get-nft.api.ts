@@ -1,4 +1,5 @@
 import axios from 'axios';
+import Cookies from 'js-cookie';
 import { ethers } from 'ethers';
 
 import { INFTBackendType } from '@app/types';
@@ -68,7 +69,7 @@ export const GetUserApi = async (address: string) => {
 
   const { data } = await axios.get<IUserBackend>(url, {
     headers: {
-      Authorization: `Bearer ${localStorage.getItem('xyz_access_token')}`,
+      Authorization: `Bearer ${Cookies.get('xyz_access_token')}`,
     },
   });
 
