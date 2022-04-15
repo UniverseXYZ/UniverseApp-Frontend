@@ -117,7 +117,7 @@ export const DateTimePicker = ({ value, onChange, onOpen, onClose, minDate, vali
     if(value.length > 2) return;
     formik.handleChange(event)
   }
-  console.log(formik.values.minutes, formik.values.hours);
+
   return (
     <>
       <Button
