@@ -1,7 +1,7 @@
 /* eslint-disable array-callback-return */
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import './RarityList.scss';
+// import './RarityList.scss';
 // import './RarityList.scss';
 import PolymorphCard from './PolymorphCard';
 import ItemsPerPageDropdown from '../../pagination/ItemsPerPageDropdown';
