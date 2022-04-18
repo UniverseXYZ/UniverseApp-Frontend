@@ -13,7 +13,7 @@ import { useIntersection } from 'react-use';
 import { useRouter } from 'next/router';
 
 import Contracts from '../../../../../../../contracts/contracts.json';
-import SocialLinks from '../../../../../../../../src/components/collection/SocialLinks';
+import SocialLinks from '../../../../../../../components/collection/SocialLinks';
 import { useCollectionPageData } from '../../CollectionPage.context';
 import {
   NftItem, NFTItemContentWithPrice, NoNFTsFound,
@@ -29,6 +29,7 @@ import NftCardSkeleton from '../../../../../../../components/skeletons/nftCardSk
 import { shortenEthereumAddress } from '../../../../../../../utils/helpers/format';
 import EditIcon from '../../../../../../../components/svgs/EditIcon';
 import { useAuthStore } from '../../../../../../../stores/authStore';
+import { OpenGraph } from '@app/components';
 
 export const CollectionInfo = () => {
   const [totalNftsCount, setTotalNftsCount] = useState(0);
@@ -38,9 +39,6 @@ export const CollectionInfo = () => {
 
   const {
 		collection,
-		isLoadingCollectionApi,
-		isFetchingCollectionApi,
-		isIdleCollectionApi,
 		collectionAddress,
 		collectionGeneralInfo,
 		collectionOrderBookData,
@@ -120,7 +118,6 @@ export const CollectionInfo = () => {
 	const hasCollectionNFTs = collectionNFTs?.pages?.length && collectionNFTs.pages[0].data?.length;
 	const waitingOrders = isFethingOrders || isLoadingOrders || isIdleOrders;
 	const waitingCollectionNFTs = isFetchingCollectionNFTs || isLoadingCollectionNFTs || isIdleCollectionNFTs;
-	const waitingCollectionOffChainInfo = isFetchingCollectionApi || isLoadingCollectionApi || isIdleCollectionApi;
 	const waitingCollectionGeneralInfo = isLoadingCollectionGeneralInfo || isFetchingCollectionGeneralInfo || isIdleCollectionGeneralInfo;
 
   const filtersRef = useRef(null);
@@ -133,11 +130,17 @@ export const CollectionInfo = () => {
 
   return (
     <>
-      {(waitingCollectionGeneralInfo && !collectionGeneralInfo) || (waitingCollectionOffChainInfo && !collection) ? (
+      <OpenGraph
+        title={`${collection?.name || collection?.address} - Universe.XYZ`}
+        description={collection?.description || undefined}
+        image={collection?.bannerUrl || collection?.coverUrl || undefined}
+        imageAlt={collection?.name || collection?.address || ''}
+      />
+      {(waitingCollectionGeneralInfo && !collectionGeneralInfo) || !collection ? (
         <div className='loader-wrapper'>
           <CollectionPageLoader />
         </div>
-      ) : (!waitingCollectionGeneralInfo && !collectionGeneralInfo?.contractAddress) && (!waitingCollectionOffChainInfo && !collection?.address) ? (
+      ) : (!waitingCollectionGeneralInfo && !collectionGeneralInfo?.contractAddress) && !collection?.address ? (
         <NotFound />
       ) : (
         <Box layerStyle={'StoneBG'}>
