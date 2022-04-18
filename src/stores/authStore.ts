@@ -1,5 +1,5 @@
 import { providers, Signer, utils } from "ethers";
-import create from "zustand";
+import create, { GetState, Mutate, SetState, StoreApi } from "zustand";
 import { CONNECTORS_NAMES } from "../utils/dictionary";
 import Cookies from 'js-cookie'
 import { useUserBalanceStore } from "./balanceStore";
@@ -9,8 +9,9 @@ import { mapUserData } from "../utils/helpers";
 import { useContractsStore } from "./contractsStore";
 import WalletConnectProvider from "@walletconnect/web3-provider";
 import { useErrorStore } from "./errorStore";
+import { subscribeWithSelector } from 'zustand/middleware'
 
-interface IDefaultAuthStoreGeters {
+type IDefaultAuthStoreGeters = {
   // Getters
   web3Provider: providers.Web3Provider | null;
   ethereumNetwork: providers.Network | null;
@@ -25,17 +26,18 @@ interface IDefaultAuthStoreGeters {
   showWrongNetworkPopup: boolean,
   loggedInArtist: any,
 }
-interface IAuthStore extends IDefaultAuthStoreGeters {
+
+type IAuthStore = IDefaultAuthStoreGeters & {
   // Authentication functions
   connectWithMetaMask: () => Promise<void>;
   connectWithWalletConnect: () => Promise<void>;
-  web3AuthenticationProccess: (provider: providers.Web3Provider, network: providers.Network, accounts: string[]) => void;
-  connectWeb3: () => void;
-  signMessage: () => void;
+  web3AuthenticationProccess: (provider: providers.Web3Provider, network: providers.Network, accounts: string[]) => Promise<void>;
+  connectWeb3: () => Promise<void>;
+  signMessage: () => Promise<void>;
   signOut: () => void;
 
   // Event handlers
-  onAccountsChanged: (account: string[]) => void;
+  onAccountsChanged: (account: string[]) => Promise<void>;
   onChainChanged: () => void;
   
   // Helper functions
@@ -50,9 +52,8 @@ interface IAuthStore extends IDefaultAuthStoreGeters {
   setLoginFn: (loginFn: () => void) => void
   setShowWrongNetworkPopup: (show: boolean) => void;
   setLoggedInArtist: (artist: any) => void;
+  setProviderName: (providerName: string) => void;
 }
-
-// const history = useRouter();
 
 const defaultState: IDefaultAuthStoreGeters = {
   // Logged in user info
@@ -73,7 +74,7 @@ const defaultState: IDefaultAuthStoreGeters = {
   yourEnsDomain: null,
   ethereumNetwork: null,
   web3Provider: null,
-  providerName: Cookies.get('providerName') || '',
+  providerName: '',
 
   // State Variables
   isWalletConnected: false,
@@ -82,9 +83,22 @@ const defaultState: IDefaultAuthStoreGeters = {
   isSigning: false,
   isAuthenticating: false,
 }
-export const useAuthStore = create<IAuthStore>((set, get) => ({
+
+export const useAuthStore = 
+create<
+  IAuthStore,
+  SetState<IAuthStore>,
+  GetState<IAuthStore>,
+  Mutate<StoreApi<IAuthStore>, [['zustand/subscribeWithSelector', never]]>
+>(subscribeWithSelector((set, get) => ({
   ...defaultState,
   loginFn: () => {},
+  setProviderName: (providerName) => {
+    set(state => ({
+      ...state,
+      providerName
+    }))
+  },
   connectWithMetaMask: async () => {
     const { ethereum } = window as any;
 
@@ -364,10 +378,36 @@ export const useAuthStore = create<IAuthStore>((set, get) => ({
       loggedInArtist: artist
     }))
   }
-}))
+})))
 
 const clearStorageAuthData = () => {
   Cookies.remove('xyz_access_token');
   Cookies.remove('user_address');
   Cookies.remove('providerName');
 };
+
+useAuthStore.subscribe(s => s.providerName, () => {
+  console.log("Provider name changed");
+  const providerName = useAuthStore.getState().providerName;
+  if (providerName) {
+    console.log("Connecting web3...");
+    useAuthStore.getState().connectWeb3();
+  }
+  console.log("End of provider subscribe callback")
+})
+
+useAuthStore.subscribe(s => s.signer, async() => {
+  console.log("Signer changed");
+  const signer = useAuthStore.getState().signer;
+  const signerAddress = await signer?.getAddress();
+  const address = useAuthStore.getState().address;
+  const isSigning = useAuthStore.getState().isSigning;
+  if (!isSigning && (!signer || (signerAddress !== address))) {
+    console.log("Signing in...");
+    useAuthStore.getState().setIsSigning(true);
+    await useAuthStore.getState().signMessage();
+    useAuthStore.getState().setIsSigning(false);
+  }
+
+  console.log("End of signer subscribe callback")
+})
