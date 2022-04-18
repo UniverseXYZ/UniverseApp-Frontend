@@ -1,12 +1,17 @@
 import create from "zustand";
 
 interface IErrorStore {
+  // Getters
   showError: boolean;
   errorTitle: string;
   errorBody: string;
+
+  // Setters
   setShowError: (showError: boolean) => void;
   setErrorTitle: (errorTitle: string) => void;
   setErrorBody: (errorBody: string) => void;
+
+  // Helpers
   closeError: () => void;
 }
 

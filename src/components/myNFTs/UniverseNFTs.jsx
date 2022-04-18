@@ -4,11 +4,16 @@ import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import MyPolymorphsChart from './MyPolymorphsChart';
 import MyLobstersChart from './MyLobstersChart';
-import { useMyNftsContext } from '../../contexts/MyNFTsContext';
+import { useMyNftsStore } from 'src/stores/myNftsStore';
 
 const UniverseNFTs = ({ scrollContainer }) => {
   const { collectionFilter, setCollectionFilter, polymorphsFilter, lobstersFilter } =
-    useMyNftsContext();
+    useMyNftsStore(s => ({
+      collectionFilter: s.collectionFilter,
+      setCollectionFilter: s.setCollectionFilter,
+      polymorphsFilter: s.polymorphsFilter,
+      lobstersFilter: s.lobstersFilter,
+    }));
 
   const [isDropdownOpened, setIsDropdownOpened] = useState(false);
 

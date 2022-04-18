@@ -21,7 +21,6 @@ import {
   saveCollection,
   attachTxHashToCollection, getMyMintableCollections,
 } from '../../../utils/api/mintNFT';
-import { useMyNftsContext } from '../../../contexts/MyNFTsContext.jsx';
 import RevenueSplits from '../revenueSplits/RevenueSplits.jsx';
 import SocialConnections from '../socialConnections/SocialConnections.jsx';
 import { formatRoyaltiesForMinting } from '../../../utils/helpers/contractInteraction.js';
@@ -33,6 +32,7 @@ import universeIcon from '../../../assets/images/universe-img.svg';
 import { useAuthStore } from '../../../stores/authStore';
 import { useContractsStore } from '../../../stores/contractsStore';
 import { useErrorStore } from '../../../stores/errorStore';
+import { useMyNftsStore } from 'src/stores/myNftsStore';
 
 const MAX_FIELD_CHARS_LENGTH = {
   name: 32,
@@ -47,7 +47,13 @@ const NFTCollectionForm = ({ scrollToTop }) => {
     setActiveTxHashes,
     setMyNFTsSelectedTabIndex,
     myMintableCollections,
-  } = useMyNftsContext();
+  } = useMyNftsStore(s => ({
+    myNFTs: s.myNFTs,
+    activeTxHashes: s.activeTxHashes,
+    setActiveTxHashes: s.setActiveTxHashes,
+    setMyNFTsSelectedTabIndex: s.setMyNFTsSelectedTabIndex,
+    myMintableCollections: s.myMintableCollections,    
+  }));
   
   const signer = useAuthStore(s => s.signer);
   const universeERC721FactoryContract = useContractsStore(s => s.universeERC721FactoryContract);

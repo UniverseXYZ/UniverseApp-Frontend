@@ -6,13 +6,16 @@ import PropTypes from 'prop-types';
 import { useSearchPolymorphs } from '../../utils/hooks/useMyNftsRarityDebouncer';
 import { categoriesArray } from '../../containers/rarityCharts/categories';
 import CollectionDropdown from './CollectionDropdown';
-import { useMyNftsContext } from '../../contexts/MyNFTsContext';
 import LobsterRarityFilters from '../rarityCharts/filters/LobsterRarityFilters';
 import MyRarityList from '../rarityCharts/list/MyRarityList';
 import { useThemeStore } from 'src/stores/themeStore';
+import { useMyNftsStore } from 'src/stores/myNftsStore';
 
 const MyPolymorphsChart = ({ isDropdownOpened, setIsDropdownOpened, scrollContainer }) => {
-  const { setMyUniverseNFTsActiverPage, myUniverseNFTsActiverPage } = useMyNftsContext();
+  const { setMyUniverseNFTsActiverPage, myUniverseNFTsActiverPage } = useMyNftsStore(s => ({
+    setMyUniverseNFTsActiverPage: s.setMyUniverseNFTsActiverPage,
+    myUniverseNFTsActiverPage: s.myUniverseNFTsActiverPage
+  }));
   const [offset, setOffset] = useState(0);
   const [perPage, setPerPage] = useState(9);
   const {

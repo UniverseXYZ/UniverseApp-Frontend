@@ -37,7 +37,6 @@ import { useStickyFooter } from '../../../../../../../../hooks';
 import { UncheckBundleEditionsModal } from './components';
 import { FilterCollectionsItems } from '../../../../../../mocks/filter-collections';
 import { FilterArtistsItems } from '../../../../../../mocks/filter-artists';
-import { useMyNftsContext } from '../../../../../../../../../contexts/MyNFTsContext';
 import universeIcon from '../../../../../../../../../assets/images/universe-img.svg';
 import {
   isNFTAssetAudio,
@@ -48,6 +47,7 @@ import {
 } from '../../../../../../../nft';
 import { NFTItemFooter, NFTItemFooterEditionsLabel } from '../../../../../../../nft/components/nft-item/components';
 import { useAuthStore } from '../../../../../../../../../stores/authStore';
+import { useMyNftsStore } from 'src/stores/myNftsStore';
 
 interface IActionBarNFTItemProps {
   nft: INFT;
@@ -164,7 +164,7 @@ export const SelectNFTs = ({}: ISelectNFTsProps) => {
   const prevRef = useRef(null);
   const nextRef = useRef(null);
 
-  const { myNFTs } = useMyNftsContext() as any;
+  const myNFTs = useMyNftsStore(s => s.myNFTs)
 
   const loggedInArtist = useAuthStore(state => state.loggedInArtist);
 

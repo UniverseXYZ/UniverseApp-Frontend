@@ -30,7 +30,6 @@ import {
 import { NFTAssetAudio, NFTAssetImage, NFTAssetVideo } from '../../../../../nft/pages/nft-page/components';
 import * as styles from './styles';
 import { ICollection, INFT, INFTBackend, NFTStandard } from '../../../../../nft/types';
-import { useMyNftsContext } from '../../../../../../../contexts/MyNFTsContext';
 import { SwiperArrowButton } from '../../../../../../components/swiper-arrow-button';
 import Contracts from '../../../../../../../contracts/contracts.json';
 import { fetchRoyalties, fetchDAOFee } from '../../../../../../../utils/api/royaltyRegistry';
@@ -39,6 +38,7 @@ import { getCollectionBackgroundColor } from '../../../../../../../utils/helpers
 import { shortenEthereumAddress } from '../../../../../../../utils/helpers/format';
 import { useRouter } from 'next/router';
 import { useAuthStore } from '../../../../../../../stores/authStore';
+import { useMyNftsStore } from 'src/stores/myNftsStore';
 // import './SummaryTab.scss';
 
 dayjs.extend(UTC);
@@ -59,7 +59,7 @@ export const SummaryTab = () => {
   const nextRef = useRef(null);
 
   const { signer, address, loggedInArtist} = useAuthStore(state => ({signer: state.signer, address: state.signer, loggedInArtist: state.loggedInArtist}))
-  const { myNFTs } = useMyNftsContext() as any;
+  const myNFTs = useMyNftsStore(s => s.myNFTs)
   // const params = useParams<{ collectionAddress: string; tokenId: string; }>();
   const router = useRouter();
   const params = router.query as { collectionAddress: string; tokenId: string; };

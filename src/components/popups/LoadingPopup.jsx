@@ -4,13 +4,13 @@ import PropTypes from 'prop-types';
 import Button from '../button/Button.jsx';
 // import './PopupStyle.scss';
 import closeIcon from '../../assets/images/cross.svg';
-import { useMyNftsContext } from '../../contexts/MyNFTsContext';
 import Contracts from '../../contracts/contracts.json';
 import { formatAddress } from '../../utils/helpers/format.js';
 import { getEtherscanTxUrl } from '../../utils/helpers.js';
+import { useMyNftsStore } from 'src/stores/myNftsStore';
 
 const LoadingPopup = ({ onClose, text, contractInteraction }) => {
-  const { activeTxHashes } = useMyNftsContext();
+  const activeTxHashes = useMyNftsStore(s => s.activeTxHashes)
 
   return (
     <div className="loading-div popup-div" id="loading-popup-div">
