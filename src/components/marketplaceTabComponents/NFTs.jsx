@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import './MarketplaceTabComponent.scss';
+// import './MarketplaceTabComponent.scss';
 import { useHistory } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import uuid from 'react-uuid';

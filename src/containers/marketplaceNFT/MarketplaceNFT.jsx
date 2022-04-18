@@ -3,14 +3,17 @@ import { useParams } from 'react-router-dom';
 // import './MarketplaceNFT.scss';
 import NotFound from '../../components/notFound/NotFound.jsx';
 import MarketplaceNFTDetails from '../../components/marketplaceNFT/MarketplaceNFTDetails';
-import '../../components/marketplace/browseNFT/NFTsList.scss';
+// import '../../components/marketplace/browseNFT/NFTsList.scss';
 import { useThemeContext } from '../../contexts/ThemeContext';
 import { getNftData } from '../../utils/api/mintNFT';
 import { CollectionPageLoader } from '../collection/CollectionPageLoader';
+import { useRouter } from 'next/router';
 
 const MarketplaceNFT = () => {
+  const router = useRouter();
   const { setDarkMode } = useThemeContext();
-  const { collectionAddress, tokenId } = useParams();
+  // const { collectionAddress, tokenId } = useParams();
+  const { collectionAddress, tokenId } = router.query;
   const [nft, setNft] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -19,6 +22,10 @@ const MarketplaceNFT = () => {
   }, []);
 
   useEffect(() => {
+    if (!collectionAddress || !tokenId) {
+      return;
+    }
+
     const fetchInfo = async () => {
       try {
         const data = await getNftData(collectionAddress, tokenId);
