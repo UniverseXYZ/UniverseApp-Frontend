@@ -1,4 +1,1 @@
-// import MarketplaceNFT from '../../../src/containers/marketplaceNFT/MarketplaceNFT';
-import { NFTPage } from '../../../../src/app/modules/nft';
-
-export default NFTPage;
+export { NFTPage as default, getServerSideProps } from '@app/modules/nft';

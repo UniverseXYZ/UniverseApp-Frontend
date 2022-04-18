@@ -1,8 +1,9 @@
 import { Box, Image, ImageProps } from '@chakra-ui/react';
 import React, { useState } from 'react';
+
 import BrokenNFT from '../../../../../../../components/marketplaceNFT/BrokenNFT';
 import { NFTAssetFullscreen } from '../nft-asset-full-screen';
-import * as styles from "../nft-info/styles/broken-asset.style";
+import * as styles from '../nft-info/NFTInfo.style';
 
 interface INFTAssetImageProps extends ImageProps {
   image: string;
