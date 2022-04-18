@@ -3,24 +3,17 @@ import { useFormik } from 'formik';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useInfiniteQuery, useQueryClient } from 'react-query';
 import { utils } from 'ethers';
-import { useIntersection } from 'react-use';
+import { useIntersection, useSearchParam } from 'react-use';
+import Head from 'next/head';
 import { useRouter } from 'next/router';
 
-import NoiseTextureImage from './../../../../../assets/images/v2/marketplace/noise_texture.png';
-import IntroDesktopBGImage from './../../../../../assets/images/v2/marketplace/img_hero_desktop.png';
-import IntroTabletBGImage from './../../../../../assets/images/v2/marketplace/img_hero_tablet.png';
-import IntroMobileBGImage from './../../../../../assets/images/v2/marketplace/img_hero_mobile.png';
-import BGImage from './../../../../../assets/images/v2/stone_bg.jpg';
 import SaleTypeIcon from '../../../../../assets/images/v2/marketplace/filter-sale-type.svg';
 import NFTTypeIcon from '../../../../../assets/images/v2/marketplace/filter-nft-type.svg';
 import PriceRangeIcon from '../../../../../assets/images/v2/marketplace/filter-price-range.svg';
 import ArrowDownIcon from '../../../../../assets/images/arrow-down.svg';
 
-import { SigninPopup } from './components'
-import {
-  SearchBar,
-  ISearchBarValue,
-} from '../../components';
+import { ListingBanner, SigninPopup } from './components';
+import { SearchBar } from '../../components';
 import { SortOrderOptions, SortOrderOptionsEnum } from '../../constants';
 import { BackToTopButton, Loading, Select, FiltersPopup, OpenGraph } from '../../../../components';
 import {
@@ -55,7 +48,6 @@ import {
   usePriceRangeFilter,
   useSaleTypeFilter,
 } from '../../../../components/filters';
-import { useAuthStore } from '../../../../../stores/authStore';
 import { useThemeStore } from 'src/stores/themeStore';
 import OpenGraphImage from '@assets/images/open-graph/marketplace.png';
 
@@ -63,73 +55,20 @@ export type ICollectionsFilterValue = Array<any>;
 
 export const BrowseNFTsPage = () => {
   const setDarkMode = useThemeStore(s => s.setDarkMode);
-  const isWalletConnected = useAuthStore(state => state.isWalletConnected);
   const queryClient = useQueryClient();
 
   const router = useRouter();
 
-  const [sortBy, setSortBy] = useState(SortOrderOptionsEnum.RecentlyListed);
-  const [isOpen, setIsOpen] = useState(false);
+  const collectionSearchParam = useSearchParam('collection');
 
-  const [selectedAddress, setSelectedAddress] = useState<string>();
+  const [sortBy, setSortBy] = useState(SortOrderOptionsEnum.RecentlyListed);
+  const [isOpenLoginModal, setIsOpenLoginModal] = useState(false);
+
+  const [selectedAddress, setSelectedAddress] = useState(collectionSearchParam?.toString() || undefined);
 
   const { form: saleTypeFilterForm } = useSaleTypeFilter();
   const { form: nftTypeFilterForm } = useNFTTypeFilter();
   const { form: priceRangeFilterForm } = usePriceRangeFilter();
-
-  const searchBarForm = useFormik<ISearchBarValue>({
-    initialValues: {
-      searchValue: '',
-    },
-    onSubmit: () => {},
-  });
-
-  const handleSearchBarItemSelect = (address: string) => {
-    // Clear all the current filters
-
-    // Refetch the orders based on the new address
-    setSelectedAddress(address);
-  }
-
-  const { data: collectionsResult, isFetching: isFetchingCollections } = useInfiniteQuery([
-    'collections',
-    searchBarForm.values,
-    sortBy
-  ], async () => {
-
-    const searchQuery = searchBarForm.values;
-
-    // The Input field is empty, no need to send request to the Scraper.
-    if (!searchQuery?.searchValue) return;
-
-    // Get the collections data
-    const scraperData = await GetCollectionsFromScraperApi(searchQuery.searchValue);
-    // The scraper doesn't return off chain info like (images, etc.) so we need to call the Universe Backend App for more info.
-
-    // Fetch collection (off chain) data from the Universe API
-    const getOffChainCollectionDataPromises = scraperData.map(async (c: ISearchBarDropdownCollection) => {
-      const copy: ISearchBarDropdownCollection  = { ...c };
-      const offChainData = await GetCollectionApi(copy.address);
-      queryClient.setQueryData(collectionKeys.centralizedInfo(copy.address), offChainData)
-      // Mutate the copy
-      if (offChainData) {
-        copy.image = offChainData.coverUrl ?? null;
-        copy.name = copy.name || offChainData.name;
-      }
-
-      return copy;
-    })
-
-    const fullCollectionData = await Promise.all(getOffChainCollectionDataPromises);
-
-    // TODO:: Fetch the items count from the Scrapper API (ако има време !)
-    return { data: fullCollectionData };
-  }, {
-    retry: false,
-    onSuccess: (result) => {
-      console.log('Get collections Success', result);
-    }
-  });
 
   const { data: ordersResult, fetchNextPage, hasNextPage, isFetching } = useInfiniteQuery(
     orderKeys.browse({
@@ -293,9 +232,6 @@ export const BrowseNFTsPage = () => {
       getNextPageParam: (lastPage, pages) => {
         return pages.length * ORDERS_PER_PAGE < lastPage.total ? pages.length + 1 : undefined;
       },
-      onSuccess: (result) => {
-        console.log('onSuccess 5:', result);
-      }
     }
   );
 
@@ -316,17 +252,22 @@ export const BrowseNFTsPage = () => {
     setSelectedAddress(undefined);
   }, []);
 
-  useEffect(() => setDarkMode(false), []);
+  useEffect(() => {
+    const queryParams = {...router.query};
 
-  const onModalClose = () => setIsOpen(false);
-
-  const handleListNft = () => {
-    if(!isWalletConnected) {
-      setIsOpen(true);
-      return;
+    if (selectedAddress) {
+      queryParams.collection = selectedAddress;
+    } else {
+      delete queryParams.collection;
     }
-    router.push('/my-nfts')
-  }
+
+    router.push({
+      pathname: router.pathname,
+      query: queryParams,
+    }, undefined, { shallow: true });
+  }, [selectedAddress]);
+
+  useEffect(() => setDarkMode(false), []);
 
   const isFiltersDirty = saleTypeFilterForm.dirty
     || nftTypeFilterForm.dirty
@@ -353,15 +294,9 @@ export const BrowseNFTsPage = () => {
           mx={{ sm: '20px', md: 'auto' }}
         >
           <SearchBar
-            collections={collectionsResult?.pages[0]?.data || []}
-            isFetchingCollections={isFetchingCollections}
-            value={searchBarForm.values}
-            onChange={(value) => searchBarForm.setValues(value)}
-            onClear={() => {
-              handleClear();
-              searchBarForm.resetForm();
-            }}
-            onItemSelect={(value) => handleSearchBarItemSelect(value)}
+            value={selectedAddress}
+            onChange={(address) => setSelectedAddress(address)}
+            onClear={() => handleClear()}
           />
         </Box>
       </Flex>
@@ -506,40 +441,11 @@ export const BrowseNFTsPage = () => {
             </Button>
           )}
 
-          <Box sx={{
-            bg: `linear-gradient(92.86deg, #D5ACFD -3.25%, #ABB3FC 49.31%, #81EEBF 104.41%)`,
-            borderRadius: '12px',
-            position: 'relative',
-            filter: 'drop-shadow(0px 10px 36px rgba(136, 120, 172, 0.14))',
-            mt: '60px',
-            p: {sm: '30px', md: '60px'},
-            _before: {
-              bg: `url(${NoiseTextureImage}) center / 20%, linear-gradient(92.86deg, #D5ACFD -3.25%, #ABB3FC 49.31%, #81EEBF 104.41%)`,
-              borderRadius: 'inherit',
-              position: 'absolute',
-              backgroundBlendMode: 'overlay',
-              top: 0,
-              left: 0,
-              w: '100%',
-              h: '100%',
-              content: '""',
-              opacity: 0.3,
-              zIndex: -1,
-            },
-          }}>
-            <Flex alignItems={'center'} justifyContent={'space-between'} flexWrap={{ sm: 'wrap', md: 'nowrap' }}>
-              <Box>
-                <Heading fontSize={{ sm: '20px', md: '26px' }} mb={'10px'}>List your NFTs</Heading>
-                <Text fontSize={'14px'}>Choose the NFT's you’d like to list from your wallet and put them on sale.</Text>
-              </Box>
-              <Button sx={{ width: {sm: '100%', md: 'auto'}, marginTop: {sm: '20px', md: '0'} }} variant={'black'} onClick={handleListNft}>List an NFT</Button>
-            </Flex>
-          </Box>
-
+          <ListingBanner onLogin={() => setIsOpenLoginModal(true)} />
           <BackToTopButton />
         </Container>
       </Box>
-      <SigninPopup isOpen={isOpen} onModalClose={onModalClose} />
+      <SigninPopup isOpen={isOpenLoginModal} onModalClose={() => setIsOpenLoginModal(false)} />
     </Box>
   );
 };
