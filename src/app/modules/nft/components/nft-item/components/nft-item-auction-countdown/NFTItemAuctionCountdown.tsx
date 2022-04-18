@@ -1,34 +1,41 @@
 import { Box, Flex, Image, Text } from '@chakra-ui/react';
 import React, { useState } from 'react';
+import Countdown, { zeroPad } from 'react-countdown';
 
 import GreenClockIcon from '../../../../../../../assets/images/marketplace/green-clock.svg';
 
-import { useDateCountdown } from '../../../../../../hooks';
 import * as styles from './styles';
 
 export interface INFTItemAuctionCountdownProps {
-  auctionExpireDate: Date;
-  onAuctionTimeOut: () => void;
+  date: Date;
+  onComplete?: () => void;
 }
 
-export const NFTItemAuctionCountdown = ({ auctionExpireDate, onAuctionTimeOut }: INFTItemAuctionCountdownProps) => {
-  const [showAuctionTimer, setShowAuctionTimer] = useState(true);
+export const NFTItemAuctionCountdown = ({ date, onComplete }: INFTItemAuctionCountdownProps) => {
+  const [showCountDown, setShowCountDown] = useState(true);
 
-  const { countDownString, isRunning } = useDateCountdown(auctionExpireDate, () => {
-    setShowAuctionTimer(false);
-    onAuctionTimeOut();
-  });
-
-  return !showAuctionTimer ? null : (
+  return !showCountDown ? null : (
     <Flex {...styles.WrapperStyle}>
-      {isRunning && countDownString && (
-        <Box {...styles.ContainerStyle}>
-          <Text  {...styles.TextStyle}>
-            <Image src={GreenClockIcon} {...styles.IconStyle} />
-            {countDownString} left
-          </Text>
-        </Box>
-      )}
+      <Box {...styles.ContainerStyle}>
+        <Text  {...styles.TextStyle}>
+          <Image src={GreenClockIcon} {...styles.IconStyle} />
+          <Countdown
+            date={date}
+            renderer={({ days, hours, minutes, seconds }) => {
+              return [
+                days ? `${days}d` : '',
+                hours ? `${zeroPad(hours)}h` : '',
+                minutes ? `${zeroPad(minutes)}m` : '',
+                seconds ? `${zeroPad(seconds)}s` : '',
+              ].filter(Boolean).join(' : ') + ' left';
+            }}
+            onComplete={() => {
+              setShowCountDown(false);
+              onComplete && onComplete();
+            }}
+          />
+        </Text>
+      </Box>
     </Flex>
   );
 }
