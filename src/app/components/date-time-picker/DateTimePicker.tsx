@@ -19,6 +19,7 @@ import {
 import { useFormik } from 'formik';
 import { useCallback, useEffect, useState } from 'react';
 import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
 import { default as dayjs } from 'dayjs';
 import { default as UTC } from 'dayjs/plugin/utc';
 import { default as Timezone } from 'dayjs/plugin/timezone';

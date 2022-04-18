@@ -19,7 +19,7 @@ const Homepage = () => {
       <OpenGraph
         title={'Universe – Community-Driven NFT Protocol'}
         titlePostfix={null}
-        description={'Community-driven NFT Universe with the tools to empower artists and endless posibilities for creators'}
+        description={'Community-driven NFT Universe with the tools to empower artists and endless possibilities for creators.'}
         image={OpenGraphImage}
       >
         <title>Universe XYZ - The NFT Universe Built on Ethereum</title>
