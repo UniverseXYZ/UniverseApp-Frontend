@@ -28,7 +28,6 @@ import { listingValidation } from './listingValidation';
 import calendarIcon from '../../../assets/images/calendar-small.svg';
 import { DateTimePickerHeader } from './components';
 import { DateTimeValidationSchema } from './constants';
-import 'react-datepicker/dist/react-datepicker.css'
 import * as styles from './styles';
 
 dayjs.extend(UTC);

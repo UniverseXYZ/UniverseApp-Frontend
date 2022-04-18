@@ -5,6 +5,8 @@ import '../src/assets/scss/_variables.scss';
 
 import '../public/fonts/style.css';
 
+import 'react-datepicker/dist/react-datepicker.css'
+
 import '../src/components/input/Inputs.scss';
 import '../src/components/header/Header.scss';
 import '../src/components/header/dimensions/desktop/DesktopView.scss';
