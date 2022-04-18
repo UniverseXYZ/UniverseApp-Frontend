@@ -4,10 +4,12 @@ import { AnimatedOnScroll } from 'react-animated-css-onscroll';
 import Skeleton from 'react-loading-skeleton';
 import twitterIcon from '../../assets/images/icons_twitter.svg';
 import instagramIcon from '../../assets/images/instagram-outlined.svg';
+import { useWindowSize } from 'react-use';
 
 const AuctionOwnerDetails = ({ artist }) => {
   // TODO:: all the info in this component should be dynamic
   const [loading, setLoading] = useState(true);
+  const windowSize = useWindowSize();
 
   useEffect(() => {
     // Here need to get artist details
@@ -54,8 +56,8 @@ const AuctionOwnerDetails = ({ artist }) => {
         <div className="artist__details__section__container">
           <div className="avatar">
             <Skeleton
-              height={window.innerWidth > 576 ? 280 : 90}
-              width={window.innerWidth > 576 ? 280 : 90}
+              height={windowSize.width > 576 ? 280 : 90}
+              width={windowSize.width > 576 ? 280 : 90}
               circle
             />
             <h2 className="show__on__mobile">

@@ -10,6 +10,7 @@ import sliderImage7 from '../../../assets/images/lobby-lobsters/7.png';
 import sliderImage8 from '../../../assets/images/lobby-lobsters/8.png';
 import sliderImage9 from '../../../assets/images/lobby-lobsters/9.png';
 import sliderImage10 from '../../../assets/images/lobby-lobsters/10.png';
+import { useWindowSize } from 'react-use';
 
 const SliderComponent = () => {
   const [sliderWidth, setSliderWidth] = useState(200);
@@ -25,20 +26,15 @@ const SliderComponent = () => {
     cssEase: 'linear',
     variableWidth: true,
   };
+  const windowSize = useWindowSize();
 
   useEffect(() => {
-    function handleResize() {
-      if (window.innerWidth < 768) {
-        setSliderWidth(140);
-      } else {
-        setSliderWidth(200);
-      }
+    if (windowSize.width < 768) {
+      setSliderWidth(140);
+    } else {
+      setSliderWidth(200);
     }
-    window.addEventListener('resize', handleResize);
-    handleResize();
-
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
+  }, [windowSize]);
 
   return (
     <div style={{ pointerEvents: 'none' }}>

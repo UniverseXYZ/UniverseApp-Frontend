@@ -8,10 +8,12 @@ import LeftTopImgMobile from '../../assets/images/planet2-charachters/planet-2-l
 import kuapoImgSection5 from '../../assets/images/planet3-charachters/kuapo-footer-planet.png';
 import adakaImgSection5 from '../../assets/images/planet1-charachters/adaka-footer-planet.png';
 import './Planet2.scss';
+import { useWindowSize } from 'react-use';
 
 const Planet2 = () => {
   const history = useHistory();
   const [legendaryBgFlag, setLegendaryBgFlag] = useState(LeftTopImg);
+  const windowSize = useWindowSize();
 
   const section5Planet1 = {
     planet: 'planet 1',
@@ -37,10 +39,10 @@ const Planet2 = () => {
   };
 
   useEffect(() => {
-    if (window.innerWidth <= 576) {
+    if (windowSize.width <= 576) {
       setLegendaryBgFlag(LeftTopImgMobile);
     }
-  }, []);
+  }, [windowSize]);
   return (
     <PlanetContainer
       title="Prosopon"

@@ -11,6 +11,7 @@ import { getProfilePage } from '../../utils/api/profile';
 import { mapUserData } from '../../utils/helpers';
 import { getUserNfts } from '../../utils/api/mintNFT';
 import { useRouter } from 'next/router';
+import { useWindowSize } from 'react-use';
 
 const Artist = () => {
   const router = useRouter();
@@ -18,8 +19,9 @@ const Artist = () => {
   const { artistUsername } = router.query;
   const [artist, setArtist] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [artistNFTs, setArtistNFTs] = useState([]);
   const [notFound, setNotFound] = useState(false);
-  const [artistAddress, setArtistAddress] = useState('');
+  const windowSize = useWindowSize();
 
   useEffect(() => {
     setDarkMode(false);
@@ -41,13 +43,22 @@ const Artist = () => {
           if (!artistInfo.error) {
             const mappedArtist = mapUserData(artistInfo);
             setArtist(mappedArtist);
-            setArtistAddress(artistInfo.address.toLowerCase());
           } else {
             setNotFound(true);
           }
         }
       } catch (err) {
         setNotFound(true);
+        console.log(err);
+      }
+
+      try {
+        const artistNftsInfo = await getUserNfts(artistUsername);
+        if (!artistNftsInfo.error) {
+          setArtistNFTs(artistNftsInfo.nfts);
+          console.log(artistNftsInfo.nfts);
+        }
+      } catch (err) {
         console.log(err);
       }
 
@@ -63,8 +74,8 @@ const Artist = () => {
         <div className="artist__details__section__container">
           <div className="avatar">
             <Skeleton
-              height={window.innerWidth > 576 ? 280 : 90}
-              width={window.innerWidth > 576 ? 280 : 90}
+              height={windowSize.width > 576 ? 280 : 90}
+              width={windowSize.width > 576 ? 280 : 90}
               circle
             />
             <h2 className="show__on__mobile">
@@ -90,7 +101,7 @@ const Artist = () => {
   ) : (
     <div className="artist__page">
       <ArtistDetails artistAddress={artistUsername} onArtist={artist} loading={loading} />
-      <ArtistPageTabs username={artistUsername} artistAddress={artistAddress} />
+      <ArtistPageTabs nfts={artistNFTs} />
       {artist && artist.personalLogo ? (
         <div className="artist__personal__logo">
           <img src={artist.personalLogo} alt="Artist personal logo" />
