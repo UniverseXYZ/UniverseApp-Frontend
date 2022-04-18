@@ -1,0 +1,22 @@
+@font-face {
+  font-family: 'Sharp Grotesk Medium';
+  src: url('SharpGroteskMedium.eot');
+  src: url('SharpGroteskMedium.eot?#iefix') format('embedded-opentype'), url('SharpGroteskMedium.woff2') format('woff2'), url('SharpGroteskMedium.woff') format('woff');
+}
+
+@font-face {
+  font-family: 'Sharp Grotesk SemiBold';
+  src: url('SharpGroteskSmBold.eot');
+  src: url('SharpGroteskSmBold.eot?#iefix') format('embedded-opentype'), url('SharpGroteskSmBold.woff2') format('woff2'), url('SharpGroteskSmBold.woff') format('woff');
+}
+
+@font-face {
+  font-family: 'Sharp Grotesk SemiBold';
+  src: url('SharpGroteskSmBold.eot');
+  src: url('SharpGroteskSmBold.eot?#iefix') format('embedded-opentype'), url('SharpGroteskSmBold.woff2') format('woff2'), url('SharpGroteskSmBold.woff') format('woff');
+}
+
+@font-face {
+  font-family: 'Sharp Grotesk Bold';
+  src: url('SharpGroteskBold.woff2') format('embedded-opentype');
+}
