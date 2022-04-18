@@ -1,3 +1,4 @@
+export * from './go-back-button';
 export * from './tab-bids';
 export * from './tab-history';
 export * from './tab-metadata';
