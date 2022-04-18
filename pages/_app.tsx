@@ -145,15 +145,7 @@ function MyApp({ Component, pageProps }: AppProps) {
   // if (!mounted) {
   //   return null;
   // }
-  const [queryClient] = useState(() => new QueryClient({
-    defaultOptions: {
-      queries: {
-        refetchOnWindowFocus: false,
-        refetchOnMount: false,
-        refetchOnReconnect: false,
-      },
-    },
-  }));
+  const [queryClient] = useState(() => new QueryClient());
   
   const fetchPrices = useErc20PriceStore(s => useCallback(s.fetchPrices, []));
   const setProviderName = useAuthStore(s => useCallback(s.setProviderName, []));
