@@ -30,7 +30,6 @@ import { TokenTicker } from '../../../../../../../../../../enums';
 import { Fee } from '../../../../../../../../../marketplace/pages/sell-page/components/tab-summary/compoents';
 import { getRoyaltiesFromRegistry } from '../../../../../../../../../../../utils/marketplace/utils';
 import { useTokenPrice } from '../../../../../../../../../../hooks';
-import { useErrorContext } from '../../../../../../../../../../../contexts/ErrorContext';
 import { nftKeys, orderKeys } from '../../../../../../../../../../utils/query-keys';
 import { GetActiveListingApi, GetNFT2Api, GetOrdersApi } from '../../../../../../../../api';
 import { useNFTPageData } from '../../../../../../NFTPage.context';
@@ -38,6 +37,7 @@ import CheckIcon from '../../../../../../../../../../../assets/images/check-vect
 import Contracts from '../../../../../../../../../../../contracts/contracts.json';
 import { NFTCustomError } from '../../../../../nft-custom-error/NFTCustomError';
 import { useAuthStore } from '../../../../../../../../../../../stores/authStore';
+import { useErrorStore } from '../../../../../../../../../../../stores/errorStore';
 
 interface INFTAcceptOfferPopupProps {
   NFT?: INFT;
@@ -53,7 +53,7 @@ const { contracts: contractsData } = Contracts[process.env.REACT_APP_NETWORK_CHA
 export const NFTAcceptOfferPopup = ({ NFT, NFTs, order, isOpen, onClose }: INFTAcceptOfferPopupProps) => {
   const { address, signer } = useAuthStore(s => ({address: s.address, signer: s.signer}))
 
-  const { setShowError, setErrorBody } = useErrorContext() as any;
+  const { setShowError, setErrorBody } = useErrorStore(s => ({setErrorBody: s.setErrorBody, setShowError: s.setShowError}))
 
   const contract = useCallback(() => !signer ? null : new Contract(`${NFT?._collectionAddress}`, contractsData[NFT?.standard].abi, signer), [signer]);
 
