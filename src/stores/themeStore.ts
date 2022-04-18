@@ -24,3 +24,8 @@ export const useThemeStore = create<
     }))
   }
 })))
+
+useThemeStore.subscribe(s => s.darkMode, () => {
+  const darkMode = useThemeStore.getState().darkMode;
+  console.log(`dark mode: ${darkMode}`);
+})
