@@ -149,7 +149,7 @@ export const CollectionInfo = () => {
         <Box layerStyle={'StoneBG'}>
           <Cover selectedCollection={collection} collectionGeneralInfo={collectionGeneralInfo} collectionOwner={collectionOwner} />
           <Box sx={{ position: 'relative', p: '0px 20px 80px 20px' }} >
-            <Flex sx={{ maxWidth: '1110px', margin: '-208px auto 0px' }}>
+            <Flex sx={{ maxWidth: '1110px', margin: '-160px auto 0px' }}>
               <Box w={'100%'}>
                 <Flex sx={{
                   alignItems: 'center',
