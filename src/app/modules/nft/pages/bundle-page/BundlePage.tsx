@@ -87,7 +87,11 @@ export const BundlePageContent = () => {
               <NFTAssetVideo video={uniqNFTs[selectedNFTIdx].thumbnailUrl} maxH={'512px'} maxW={'512px'} />
             ||
             isNFTAssetImage(uniqNFTs[selectedNFTIdx].artworkTypes) &&
-              <NFTAssetImage image={uniqNFTs[selectedNFTIdx].thumbnailUrl} maxH={'512px'} maxW={'512px'} />
+              <NFTAssetImage
+                image={uniqNFTs[selectedNFTIdx].thumbnailUrl}
+                alt={uniqNFTs[selectedNFTIdx]?.name ?? ''}
+                containerProps={{ maxW: '512px', maxH: '512px', }}
+              />
             ||
             isNFTAssetAudio(uniqNFTs[selectedNFTIdx].artworkTypes) &&
               <NFTAssetAudio audio={uniqNFTs[selectedNFTIdx].thumbnailUrl} maxH={'512px'} maxW={'512px'} />
