@@ -5,13 +5,13 @@ import { NFTOffer } from './components/nft-offer/NFTOffer';
 import { LoadingPopup } from '../../../../../../../marketplace/components/popups/loading-popup';
 import { Contract } from 'ethers';
 import { useMutation, useQueryClient } from 'react-query';
-import { useAuthContext } from '../../../../../../../../../contexts/AuthContext';
 import { EncodeOrderApi } from '../../../../../../../../api';
 import Contracts from '../../../../../../../../../contracts/contracts.json';
 import { GetActiveListingApi, GetOrdersApi } from '../../../../../../api';
 import { orderKeys } from '../../../../../../../../utils/query-keys';
 import { useNFTPageData } from '../../../../NFTPage.context';
 import { EventsEmpty } from '../shared';
+import { useAuthStore } from '../../../../../../../../../stores/authStore';
 
 interface ITabOffersProps {
   nft?: INFT;
@@ -35,7 +35,7 @@ export const TabOffers: React.FC<ITabOffersProps> = ({
   setShowOfferPopup,
   setOfferForAccept,
 }) => {
-  const { signer } = useAuthContext() as any;
+  const signer = useAuthStore(s => s.signer);
   const [offerCanceling, setOfferCanceling] = useState(false);
   const [offerCancelingText, setOfferCancelingText] = useState(CancelingText.PROGRESS);
   const [orderInterval, setOrderInterval] = useState<NodeJS.Timer>();
@@ -55,6 +55,10 @@ export const TabOffers: React.FC<ITabOffersProps> = ({
   }, []);
 
   const handleCancelOffer = async (offer: IOrder) => {
+    if (!signer) {
+      return;
+    }
+
     setOfferCanceling(true);
     setOfferCancelingText(CancelingText.PROGRESS);
     const contract = new Contract(

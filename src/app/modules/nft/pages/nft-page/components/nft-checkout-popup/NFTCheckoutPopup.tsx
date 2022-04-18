@@ -27,7 +27,6 @@ import WalletImage from '../../../../../../../assets/images/v2/wallet.png';
 import AudioNFTPreviewImage from '../../../../../../../assets/images/v2/audio-nft-preview.png';
 import Contracts from '../../../../../../../contracts/contracts.json';
 
-import { useAuthContext } from '../../../../../../../contexts/AuthContext';
 import { useErrorContext } from '../../../../../../../contexts/ErrorContext';
 import { Checkbox, InputShadow, Loading, TokenIcon } from '../../../../../../components';
 import { NFTType } from './components';
@@ -46,6 +45,7 @@ import { GetActiveListingApi, GetNFT2Api } from '../../../../api';
 import { nftKeys, orderKeys } from '../../../../../../utils/query-keys';
 import CheckIcon from '../../../../../../../assets/images/check-vector.svg';
 import { useNftCheckoutPopupContext } from '../../../../../../providers/NFTCheckoutProvider';
+import { useAuthStore } from '../../../../../../../stores/authStore';
 // @ts-ignore
 const { contracts: contractsData } = Contracts[process.env.REACT_APP_NETWORK_CHAIN_ID];
 
@@ -61,7 +61,7 @@ interface INFTCheckoutPopupProps {
 export const NFTCheckoutPopup = ({ NFT, collection, NFTs, order, isOpen, onClose }: INFTCheckoutPopupProps) => {
   const router = useRouter();
 
-  const { address, signer, web3Provider } = useAuthContext() as any;
+  const { address, signer, web3Provider } = useAuthStore(s => ({address: s.address, signer: s.signer, web3Provider: s.web3Provider}))
   const { setShowError, setErrorBody } = useErrorContext() as any;
   const { onCopy } = useClipboard(address);
   const queryClient = useQueryClient();
@@ -112,6 +112,9 @@ export const NFTCheckoutPopup = ({ NFT, collection, NFTs, order, isOpen, onClose
 
   const handleCheckoutClick = useCallback(async () => {
     try {
+      if (!signer || !web3Provider) {
+        return;
+      }
       setFetchOrderCount(0);
       setState(CheckoutState.PROCESSING);
       const paymentToken = getTokenByAddress((order?.take?.assetType as IERC20AssetType)?.contract);

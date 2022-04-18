@@ -15,7 +15,6 @@ import { NFTPlaceABidPopup } from '../nft-place-a-bid-popup';
 import { NFTMakeAnOfferPopup } from '../nft-make-an-offer-popup';
 import { NFTCancelListingPopup } from '../nft-cancel-listing-popup';
 import { NFTChangeListingPricePopup } from '../nft-change-listing-price-popup';
-import { useAuthContext } from '../../../../../../../contexts/AuthContext';
 import { BuyNFTSectionState } from './enums';
 import { utils } from 'ethers';
 import { getTokenByAddress, TOKENS_MAP } from '../../../../../../constants';
@@ -25,6 +24,7 @@ import { HighestOffer } from './components/highest-offer';
 import { isEmpty } from '../../../../../../../utils/helpers';
 import { useNftCheckoutPopupContext } from '../../../../../../providers/NFTCheckoutProvider';
 import { useNFTPageData } from '../../NFTPage.context';
+import { useAuthStore } from '../../../../../../../stores/authStore';
 
 interface INFTBuySectionProps {
   NFT?: INFT;
@@ -40,7 +40,7 @@ export const NFTBuySection = ({ NFT, owner, NFTs, order, highestOffer, onMeasure
 
   const router = useRouter();
 
-  const { signer, isAuthenticated } = useAuthContext() as any;
+  const { signer, isAuthenticated } = useAuthStore(s => ({signer: s.signer, isAuthenticated: s.isAuthenticated}))
 
   const [state, setState] = useState<BuyNFTSectionState>();
 
@@ -48,7 +48,7 @@ export const NFTBuySection = ({ NFT, owner, NFTs, order, highestOffer, onMeasure
   const { collection } = useNFTPageData();
 
   const updateSectionState = useCallback(async () => {
-    if (!isAuthenticated) {
+    if (!isAuthenticated || !signer) {
       return;
     }
 
