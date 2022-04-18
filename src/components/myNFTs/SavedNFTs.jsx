@@ -24,6 +24,7 @@ import { shortenEthereumAddress } from '../../utils/helpers/format';
 import universeIcon from '../../assets/images/universe-img.svg';
 import { removeSavedNft } from '../../utils/api/mintNFT';
 import { useRouter } from 'next/router';
+import Cookies from 'js-cookie';
 
 const SavedNFTs = ({
   setSelectedSavedNfts,
@@ -85,10 +86,10 @@ const SavedNFTs = ({
   };
 
   const toggleSelection = () => {
-    if (localStorage.localChecked) {
-      localStorage.localChecked = localStorage.localChecked === 'true' ? 'false' : 'true';
+    if (Cookies.get('localChecked')) {
+      Cookies.set('localChecked', Cookies.get('localChecked') === 'true' ? 'false' : 'true');
     } else {
-      localStorage.localChecked = 'true';
+      Cookies.set('localChecked', 'true');
     }
     setSelectAllIsChecked(!selectAllIsChecked);
 
@@ -128,10 +129,10 @@ const SavedNFTs = ({
     const res = (savedNftData?.nfts || []).filter((nft) => !nft.selected);
     if (res.length) {
       setSelectAllIsChecked(false);
-      localStorage.localChecked = 'false';
+      Cookies.set('localChecked', 'false');
     } else {
       setSelectAllIsChecked(true);
-      localStorage.localChecked = 'true';
+      Cookies.set('localChecked', 'true');
     }
   }, [savedNftData]);
 
