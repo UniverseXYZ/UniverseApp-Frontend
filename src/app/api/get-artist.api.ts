@@ -1,8 +1,8 @@
+import { mapBackendUser } from '@app/modules/nft';
 import axios from 'axios';
 import { utils } from 'ethers';
 
 import { mapUserData } from '../../utils/helpers';
-import { GetUserApi } from '../modules/nft/api';
 
 export const getArtistApi = async (artistUsername: string) => {
   if (utils.isAddress(artistUsername)) {
@@ -10,12 +10,17 @@ export const getArtistApi = async (artistUsername: string) => {
 
     const { data, status } = await axios.get(url);
     if (data.error || status !== 200) {
-      return new Error('404');
+      return {
+        mappedArtist: null,
+        artist: null,
+        address: "",
+      }    
     }
   
     return {
+      mappedArtist: mapBackendUser(data),
       artist: mapUserData(data),
-      address: data.address.toLowerCase()
+      address: data.address?.toLowerCase() || "",
     };
   
   }
@@ -24,11 +29,16 @@ export const getArtistApi = async (artistUsername: string) => {
 
   const { data, status } = await axios.get(url);
   if (data.error || status !== 200) {
-    return new Error('404');
+    return {
+      mappedArtist: null,
+      artist: null,
+      address: "",
+    }
   }
 
   return {
+    mappedArtist: mapBackendUser(data),
     artist: mapUserData(data),
-    address: data.address.toLowerCase()
+    address: data.address?.toLowerCase() || "",
   };
 }

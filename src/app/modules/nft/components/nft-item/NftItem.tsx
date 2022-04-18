@@ -15,12 +15,13 @@ import { TokenTicker } from '../../../../enums';
 import { getTokenByAddress } from '../../../../constants';
 import { collectionKeys, nftKeys, orderKeys, userKeys } from '../../../../utils/query-keys';
 import { OrderSide, OrderStatus } from '../../../marketplace/enums';
+import { getArtistApi } from '@app/api';
 
 type IRenderFuncProps = {
   NFT: INFT;
   collection: ICollection;
-  creator?: IUser | null;
-  owner?: IUser | null;
+  creator?: { mappedArtist: IUser | null } | null;
+  owner?: { mappedArtist: IUser | null }| null;
   isLoadingNFT: boolean;
   isLoadingCollection: boolean;
   isLoadingCreator: boolean;
@@ -89,10 +90,10 @@ export const NftItem = (
     },
   );
 
-  // Get Creataor Query
+  // Get Creator Query
   const { data: creator, isLoading: isLoadingCreator } = useQuery(
     userKeys.info(NFT?._creatorAddress || ""),
-    () => GetUserApi(NFT?._creatorAddress as string),
+    () => getArtistApi(NFT?._creatorAddress as string),
     {
       enabled: !!NFT?._creatorAddress,
       retry: false,
@@ -102,12 +103,13 @@ export const NftItem = (
   // Get Owner Query
   const { data: owner, isLoading: isLoadingOwner } = useQuery(
     userKeys.info(NFT?._ownerAddress || ""),
-    () => GetUserApi(NFT?._ownerAddress as string),
+    () => getArtistApi(NFT?._ownerAddress as string),
     {
       enabled: !!NFT?._ownerAddress,
       retry: false,
     },
   );
+
 
   // Get Last And Best Offer Query
   const { data, isLoading: isLoadingOffers } = useQuery(
@@ -212,8 +214,8 @@ export const NftItem = (
                 renderContent ? renderContent({
                   NFT: NFT as INFT,
                   collection: collection as ICollection,
-                  creator,
-                  owner,
+                  creator: creator,
+                  owner: owner,
                   isLoadingNFT,
                   isLoadingCollection,
                   isLoadingCreator,
@@ -231,9 +233,9 @@ export const NftItem = (
                       <Box>
                         <NFTItemRelation
                           type={NFTRelationType.CREATOR}
-                          image={creator?.profileImageUrl ?? ''}
-                          value={creator?.displayName ?? ''}
-                          linkParam={creator?.universePageUrl || NFT._creatorAddress?.toLowerCase() || ""}
+                          image={creator?.artist?.avatar ?? ''}
+                          value={creator?.artist?.name ?? ''}
+                          linkParam={creator?.artist?.universePageAddress || NFT._creatorAddress?.toLowerCase() || ""}
                         />
                         <NFTItemRelation
                           type={NFTRelationType.COLLECTION}
@@ -243,9 +245,9 @@ export const NftItem = (
                         />
                         <NFTItemRelation
                           type={NFTRelationType.OWNER}
-                          image={owner?.profileImageUrl ?? ''}
-                          value={owner?.displayName || NFT._ownerAddress || ''}
-                          linkParam={owner?.universePageUrl || owner?.address || NFT._ownerAddress?.toLowerCase() || ""}
+                          image={owner?.artist?.avatar ?? ''}
+                          value={owner?.artist?.name || NFT._ownerAddress || ''}
+                          linkParam={owner?.artist?.universePageAddress || owner?.address || NFT._ownerAddress?.toLowerCase() || ""}
                         />
                       </Box>
                     </Box>
