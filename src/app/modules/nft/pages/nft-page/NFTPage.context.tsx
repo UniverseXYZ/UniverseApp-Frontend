@@ -29,18 +29,24 @@ export function useNFTPageData(): INFTPageContext {
 }
 
 interface INFTPageProviderProps {
-  NFT: INFT;
   children: React.ReactNode;
 }
 
-export const NFTPageProvider: FC<INFTPageProviderProps> = (props) => {
-  const { NFT, children } = props;
-
+export const NFTPageProvider: FC<INFTPageProviderProps> = ({ children }) => {
   const router = useRouter();
   // const { collectionAddress, tokenId } = useParams<{ collectionAddress: string; tokenId: string; }>();
   const { collectionAddress, tokenId } = router.query as { collectionAddress: string; tokenId: string; };
   const queryClient = useQueryClient();
 
+  // NFT Data query
+  const { data: NFT, isLoading: isLoadingNFT } = useQuery(
+    nftKeys.nftInfo({collectionAddress, tokenId}),
+    () => GetNFT2Api(collectionAddress, tokenId, false),
+    {
+      enabled: !!collectionAddress && !!tokenId,
+    },
+  );
+  
   // NFT Order Listing 
   const { data: order, isLoading: isLoadingOrder } = useQuery(
     orderKeys.listing({collectionAddress, tokenId}),
@@ -68,7 +74,6 @@ export const NFTPageProvider: FC<INFTPageProviderProps> = (props) => {
     {
       enabled: !!collectionAddress && !!tokenId,
       staleTime: Infinity,
-      onSuccess: (NFTs) => console.log('NFTs', NFTs) 
     },
   );
 
@@ -131,7 +136,7 @@ export const NFTPageProvider: FC<INFTPageProviderProps> = (props) => {
     owner: owner?.mappedArtist as IUser,
     collection: collection as ICollection,
     NFT: NFT as INFT,
-    isLoading: isLoadingOrder,
+    isLoading: isLoadingNFT || isLoadingOrder,
     isPolymorph: NFT?._collectionAddress?.toUpperCase() === process.env.REACT_APP_POLYMORPHS_CONTRACT_ADDRESS?.toUpperCase(),
     refetchOffers,
     history,
