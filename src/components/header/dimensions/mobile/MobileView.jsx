@@ -49,6 +49,7 @@ import governanceIcon from '../../../../assets/images/governance.svg';
 import yieldFarmingIcon from '../../../../assets/images/yield-farming.svg';
 import forumIcon from '../../../../assets/images/forum.svg';
 import signalIcon from '../../../../assets/images/signal.svg';
+import airdropIcon from '../../../../assets/images/airdrop.svg';
 import docsIcon from '../../../../assets/images/docs.svg';
 import arrowDown from '../../../../assets/images/arrow-down.svg';
 import mintingIcon from '../../../../assets/images/Minting.svg';
@@ -822,6 +823,15 @@ const MobileView = (props) => {
                             >
                               <img src={signalIcon} alt="Signal" />
                               <span>Signal</span>
+                            </button>
+                          </div>
+                          <div>
+                            <button
+                              type="button"
+                              onClick={() => window.open('https://dao.universe.xyz/airdrop')}
+                            >
+                              <img src={airdropIcon} alt="Airdrop" />
+                              <span>Airdrop</span>
                             </button>
                           </div>
                         </>
