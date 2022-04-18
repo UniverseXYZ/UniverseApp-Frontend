@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useHistory, useLocation, Link } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 import uuid from 'react-uuid';
 import './CreateTiers.scss';
 import '../auctions/Tiers.scss';
@@ -9,6 +9,7 @@ import arrow from '../../assets/images/arrow.svg';
 import Input from '../input/Input.jsx';
 import infoIcon from '../../assets/images/icon.svg';
 import { useAuctionContext } from '../../contexts/AuctionContext';
+import Link from 'next/link';
 
 const Create = () => {
   const history = useHistory();
@@ -257,7 +258,7 @@ const Create = () => {
         <h1>Select NFTs</h1>
         <p>
           You can only select minted NFTs from your wallet. If you want to create NFTs, go to&nbsp;
-          <Link to="/my-nfts">Minting.</Link>
+          <Link href="/my-nfts"><a>Minting.</a></Link>
           <p className="second-line">
             Your progress with the current auction will be automatically saved.
           </p>

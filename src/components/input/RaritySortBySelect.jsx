@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef, useContext } from 'react';
 import PropTypes from 'prop-types';
 import arrowDown from '../../assets/images/browse-nft-arrow-down.svg';
 
-import './SortBySelect.scss';
+// import './SortBySelect.scss';
 
 const SortBySelect = (props) => {
   const {

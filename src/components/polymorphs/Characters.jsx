@@ -1,6 +1,6 @@
 import React, { useLayoutEffect, useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import './styles/Characters.scss';
+// import './styles/Characters.scss';
 import { AnimatedOnScroll } from 'react-animated-css-onscroll';
 import Button from '../button/Button.jsx';
 import WrapperCenter from './WrapperCenter';
@@ -8,6 +8,7 @@ import Section3LeftImageBrowser from '../../assets/images/polymorph-Section3 - L
 import Section3RightImageBrowser from '../../assets/images/polymorph-Section3 - Right-characters-(desktop)-min.png';
 import Section3MobileTopImg from '../../assets/images/Section-3-Top-characters-(mobile)-min.png';
 import Section3MobileBottomImg from '../../assets/images/Section-3-Bottom-characters-(mobile)-min.png';
+import { useRouter } from 'next/router';
 
 const getWindow = (width, changeStateFunc) => {
   if (+width > 834) changeStateFunc('browser');
@@ -16,7 +17,7 @@ const getWindow = (width, changeStateFunc) => {
 };
 
 const Characters = () => {
-  const history = useHistory();
+  const history = useRouter();
   const [windows, setWindows] = useState('browser');
   const [section3Images, setSection3Images] = useState({
     left: Section3LeftImageBrowser,

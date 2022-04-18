@@ -23,6 +23,7 @@ import { getCollectionBackgroundColor } from '../../utils/helpers';
 import { shortenEthereumAddress } from '../../utils/helpers/format';
 import universeIcon from '../../assets/images/universe-img.svg';
 import { removeSavedNft } from '../../utils/api/mintNFT';
+import { useRouter } from 'next/router';
 
 const SavedNFTs = ({
   setSelectedSavedNfts,
@@ -41,7 +42,7 @@ const SavedNFTs = ({
   const [page, setPage] = useState(8);
 
   const ref = useRef(null);
-  const history = useHistory();
+  const history = useRouter();
 
   const [savedNftData, setSavedNftData] = useState(null);
   const [isSearching, setIsSearching] = useState(true);
@@ -143,11 +144,9 @@ const SavedNFTs = ({
 
   const handleEdit = (id) => {
     // document.body.classList.add('no__scroll');
-    history.push('/my-nfts/create', {
-      tabIndex: 1,
-      nftType: 'single',
-      savedNft: savedNftData.nfts.find((nft) => nft.id === id),
-    });
+    setSavedNFTsID(id);
+    setActiveView('single');
+    history.push('/my-nfts/create?tabIndex=1&nftType=single');
   };
 
   const changePerPage = (newPerPage) => {

@@ -38,7 +38,7 @@ const ActiveAuctionsFilters = () => {
           className={`dropdown ${isDropdownOpened ? 'opened' : ''}`}
           onClick={() => setIsDropdownOpened(!isDropdownOpened)}
           aria-hidden="true"
-          hoverBoxShadowGradient
+          // hoverBoxShadowGradient
         >
           <span className="selected__item">{selectedItem}</span>
           <img className="chevron__down" src={arrowDown} alt="Arrow" />

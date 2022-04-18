@@ -1,6 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import './Tabs.scss';
+import { handleTabLeftScrolling, handleTabRightScrolling } from '../../utils/scrollingHandlers';
+import tabArrow from '../../assets/images/tab-arrow.svg';
+// import './Tabs.scss';
 
 const Tabs = ({ items, scrollContainer }) => (
   <div className="container tabs__wrapper">

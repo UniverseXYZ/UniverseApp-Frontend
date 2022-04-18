@@ -1,7 +1,9 @@
-import React, { useState, useEffect } from 'react';
-import '../pagination/Pagination.scss';
-import '../marketplace/browseNFT/NFTsList.scss';
 import { utils } from 'ethers';
+import React, { useState, useEffect, useRef } from 'react';
+import PropTypes from 'prop-types';
+import ItemsPerPageDropdown from '../pagination/ItemsPerPageDropdown.jsx';
+// import '../pagination/Pagination.scss';
+// import '../marketplace/browseNFT/NFTsList.scss';
 import NFTCard from '../nft/NFTCard';
 import NftCardSkeleton from '../skeletons/nftCardSkeleton/NftCardSkeleton';
 import { CollectionPageLoader } from '../../containers/collection/CollectionPageLoader.jsx';

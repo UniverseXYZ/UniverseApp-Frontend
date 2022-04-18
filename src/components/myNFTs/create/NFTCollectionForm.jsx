@@ -48,7 +48,6 @@ const NFTCollectionForm = ({ scrollToTop }) => {
   const { universeERC721FactoryContract, signer } = useAuthContext();
   const { setShowError, setErrorTitle, setErrorBody } = useErrorContext();
   const [showPrompt, setShowPrompt] = useState(false);
-  const location = useLocation();
 
   const inputFile = useRef(null);
   const history = useHistory();
