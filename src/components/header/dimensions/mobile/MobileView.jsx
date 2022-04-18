@@ -828,7 +828,7 @@ const MobileView = (props) => {
                           <div>
                             <button
                               type="button"
-                              // onClick={() => window.open('')}
+                              onClick={() => window.open('https://dao.universe.xyz/airdrop')}
                             >
                               <img src={airdropIcon} alt="Airdrop" />
                               <span>Airdrop</span>

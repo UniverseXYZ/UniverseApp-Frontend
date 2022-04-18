@@ -324,7 +324,7 @@ const DesktopView = ({
                 type="button"
                 onClick={() => {
                   setIsDAODropdownOpened(false);
-                  // window.open('https://signal.universe.xyz/#/');
+                  window.open('https://dao.universe.xyz/airdrop');
                 }}
               >
                 <img src={airdropIcon} alt="Airdrop" />
