@@ -103,6 +103,10 @@ export const NFTReportPopup = ({ isOpen, onClose, collectionAddress, tokenId }: 
   useEffect(() => {
     formik.validateForm();
   }, []);
+
+  useEffect(() => {
+    setError(false);
+  }, [isOpen]);
   
   return reportStatus !== ReportState.HIDDEN
     ? (<ReportStatusPopup status={reportStatus} onClose={() => setReportStatus(ReportState.HIDDEN)} />)
@@ -174,7 +178,7 @@ export const NFTReportPopup = ({ isOpen, onClose, collectionAddress, tokenId }: 
 
             <Flex justifyContent={'center'}>
               <Button variant={'outline'} mr={'15px'} onClick={onModalClose}>Cancel</Button>
-              <Button boxShadow={'lg'} onClick={() => formik.submitForm()}>Report</Button>
+              <Button disabled={!formik.isValid} boxShadow={'lg'} onClick={() => formik.submitForm()}>Report</Button>
             </Flex>
           </ModalBody>
         </ModalContent>
