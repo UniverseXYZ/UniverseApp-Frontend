@@ -30,7 +30,6 @@ import { shortenEthereumAddress } from '../../../../../../../utils/helpers/forma
 import EditIcon from '../../../../../../../components/svgs/EditIcon';
 import { useAuthStore } from '../../../../../../../stores/authStore';
 import { OpenGraph } from '@app/components';
-import { lookup } from "mime-types";
 
 export const CollectionInfo = () => {
   const [totalNftsCount, setTotalNftsCount] = useState(0);
@@ -136,7 +135,6 @@ export const CollectionInfo = () => {
         description={collection?.description || undefined}
         image={collection?.bannerUrl || collection?.coverUrl || undefined}
         imageAlt={collection?.name || collection?.address || ''}
-        mimeType={lookup(collection?.bannerUrl || collection?.coverUrl)}
       />
       {(waitingCollectionGeneralInfo && !collectionGeneralInfo) || !collection ? (
         <div className='loader-wrapper'>
