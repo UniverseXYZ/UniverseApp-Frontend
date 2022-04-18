@@ -201,6 +201,12 @@ const Footer = () => {
                   >
                     Signal
                   </li>
+                  <li
+                    aria-hidden="true"
+                    onClick={() => window.open('https://dao.universe.xyz/airdrop')}
+                  >
+                    Airdrop
+                  </li>
                 </ul>
               </div>
             </div>
