@@ -1,10 +1,10 @@
 import { Box, LinkBox, LinkOverlay, Text } from '@chakra-ui/react';
 import React from 'react';
 import { Navigation, Pagination } from 'swiper';
-import { Swiper, SwiperSlide } from 'swiper/react/swiper-react';
+import { Swiper, SwiperSlide } from 'swiper/react';
 
-import 'swiper/swiper-bundle.min.css';
-import 'swiper/swiper.min.css';
+// import 'swiper/swiper-bundle.min.css';
+// import 'swiper/swiper.min.css';
 
 import { IERC721BundleAssetType, INFT, IOrder } from '../../types';
 import { ItemWrapper } from '../../../../components';

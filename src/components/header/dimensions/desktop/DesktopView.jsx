@@ -55,6 +55,8 @@ const DesktopView = ({
   const [isDAODropdownOpened, setIsDAODropdownOpened] = useState(false);
   const [copied, setCopied] = useState(false);
   const history = useRouter();
+
+  // const location = useLocation();
   const {
     address,
     isAuthenticated,

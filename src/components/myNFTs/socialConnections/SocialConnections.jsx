@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
-import './SocialConnections.scss';
+// import './SocialConnections.scss';
 import PropTypes from 'prop-types';
-import { ReactComponent as InfoIcon } from '../../../assets/images/info-icon.svg';
-import { ReactComponent as CloseIcon } from '../../../assets/images/close-menu.svg';
-import { ReactComponent as TwitterIcon } from '../../../assets/images/social-icons/twitter.svg';
-import { ReactComponent as SiteIcon } from '../../../assets/images/social-icons/site.svg';
-import { ReactComponent as DiscordIcon } from '../../../assets/images/social-icons/discord.svg';
-import { ReactComponent as InstagramIcon } from '../../../assets/images/social-icons/instagram.svg';
-import { ReactComponent as MediumIcon } from '../../../assets/images/social-icons/medium.svg';
-import { ReactComponent as TelegramIcon } from '../../../assets/images/social-icons/telegram.svg';
+import InfoIcon from '../../../assets/images/info-icon.svg';
+import CloseIcon from '../../../assets/images/close-menu.svg';
+import TwitterIcon from '../../../assets/images/social-icons/twitter.svg';
+import SiteIcon from '../../../assets/images/social-icons/site.svg';
+import DiscordIcon from '../../../assets/images/social-icons/discord.svg';
+import InstagramIcon from '../../../assets/images/social-icons/instagram.svg';
+import MediumIcon from '../../../assets/images/social-icons/medium.svg';
+import TelegramIcon from '../../../assets/images/social-icons/telegram.svg';
 import Button from '../../button/Button';
 import SocialInput from './SocialInput';
 
@@ -41,7 +41,7 @@ const SocialConnections = (props) => {
         <h4>Social connections</h4>
         <span>(optional)</span>
         {/* <div className="social--connections--info">
-          <InfoIcon />
+          <img src={InfoIcon} alt="" />
           <div className="social--connections--info--text">
             <p>Help collectors verify your collection by connecting Twitter</p>
           </div>
@@ -50,7 +50,7 @@ const SocialConnections = (props) => {
       <div className="social--items--grid">
         <div className="twitter--section">
           <div className="title--icon">
-            <TwitterIcon /> Twitter
+            <img src={TwitterIcon} alt="" /> Twitter
           </div>
           <div className="connect--btn">
             {!isTwitterConnected ? (
@@ -64,7 +64,7 @@ const SocialConnections = (props) => {
                   className="light-border-button"
                   onClick={() => setIsTwitterConnected(false)}
                 >
-                  <CloseIcon /> fluffworld
+                  <img src={CloseIcon} alt="" /> fluffworld
                 </Button>
                 <span className="tooltiptext">Disconnect</span>
               </div>

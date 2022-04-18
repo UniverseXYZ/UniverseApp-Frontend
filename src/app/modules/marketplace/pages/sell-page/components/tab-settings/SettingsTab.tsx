@@ -4,8 +4,8 @@ import {
 } from '@chakra-ui/react';
 import React, { useEffect } from 'react';
 
-import 'swiper/swiper-bundle.min.css';
-import 'swiper/swiper.min.css';
+// import 'swiper/swiper-bundle.min.css';
+// import 'swiper/swiper.min.css';
 
 import { useMarketplaceSellData } from '../../hooks';
 import * as styles from './styles';

@@ -6,7 +6,7 @@ import {
   MenuList,
 } from '@chakra-ui/react';
 import React, { useCallback, useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useRouter } from 'next/router';
 
 import DotsIcon from '../../../../../assets/images/marketplace/3-dots.svg';
 import SellIcon from '../../../../../assets/images/sell-nft.svg';
@@ -74,7 +74,7 @@ export const NFTMenu = (
     onRefresh
   }: INFTMenuProps
 ) => {
-  const router = useHistory();
+  const router = useRouter();
   const [isReportPopupOpened, setIsReportPopupOpened] = useState(false);
   const [isSharePopupOpened, setIsSharePopupOpened] = useState(false);
 

@@ -15,15 +15,18 @@ import {
   useClipboard,
 } from '@chakra-ui/react';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { useHistory } from 'react-router-dom';
-import { BigNumber, Signer, utils } from 'ethers';
+import { BigNumber, Signer, utils, Contract, constants } from 'ethers';
+import { useMutation, useQueryClient } from 'react-query';
+import axios, { AxiosResponse } from 'axios';
+import { Web3Provider } from '@ethersproject/providers';
+import { useRouter } from 'next/router';
 
 import WarningSVGIcon from '../../../../../../../assets/images/yellowIcon.svg';
 import ArrowSVGIcon from '../../../../../../../assets/images/arrow.svg';
 import WalletImage from '../../../../../../../assets/images/v2/wallet.png';
 import AudioNFTPreviewImage from '../../../../../../../assets/images/v2/audio-nft-preview.png';
 import Contracts from '../../../../../../../contracts/contracts.json';
-import { Contract, constants } from 'ethers';
+
 import { useAuthContext } from '../../../../../../../contexts/AuthContext';
 import { useErrorContext } from '../../../../../../../contexts/ErrorContext';
 import { Checkbox, InputShadow, Loading, TokenIcon } from '../../../../../../components';
@@ -34,9 +37,6 @@ import { ICollection, IERC20AssetType, IERC721AssetType, INFT, IOrder } from '..
 import { isNFTAssetAudio, isNFTAssetImage, isNFTAssetVideo } from '../../../../helpers';
 import { getTokenByAddress, TOKENS_MAP } from '../../../../../../constants';
 import { TokenTicker } from '../../../../../../enums';
-import { useMutation, useQueryClient } from 'react-query';
-import axios, { AxiosResponse } from 'axios';
-import { Web3Provider } from '@ethersproject/providers';
 import { NFTCustomError } from '../nft-custom-error/NFTCustomError';
 import { getEtherscanTxUrl } from '../../../../../../../utils/helpers';
 import { formatAddress, shortenEthereumAddress } from '../../../../../../../utils/helpers/format';
@@ -44,7 +44,7 @@ import { useTokenPrice } from '../../../../../../hooks';
 import { IToken } from '../../../../../../types';
 import { GetActiveListingApi, GetNFT2Api } from '../../../../api';
 import { nftKeys, orderKeys } from '../../../../../../utils/query-keys';
-import { ReactComponent as CheckIcon } from '../../../../../../../assets/images/check-vector.svg';
+import CheckIcon from '../../../../../../../assets/images/check-vector.svg';
 import { useNftCheckoutPopupContext } from '../../../../../../providers/NFTCheckoutProvider';
 // @ts-ignore
 const { contracts: contractsData } = Contracts[process.env.REACT_APP_NETWORK_CHAIN_ID];
@@ -59,7 +59,7 @@ interface INFTCheckoutPopupProps {
 }
 
 export const NFTCheckoutPopup = ({ NFT, collection, NFTs, order, isOpen, onClose }: INFTCheckoutPopupProps) => {
-  const router = useHistory();
+  const router = useRouter();
 
   const { address, signer, web3Provider } = useAuthContext() as any;
   const { setShowError, setErrorBody } = useErrorContext() as any;
@@ -419,7 +419,7 @@ export const NFTCheckoutPopup = ({ NFT, collection, NFTs, order, isOpen, onClose
                     '...'
                   ) : (
                     <Box display={'inline-block'} marginLeft={'5px'}>
-                      <CheckIcon />
+                      <Image src={CheckIcon} alt={''} />
                     </Box>
                   )}
                 </Text>
@@ -430,7 +430,7 @@ export const NFTCheckoutPopup = ({ NFT, collection, NFTs, order, isOpen, onClose
                     '...'
                   ) : (
                     <Box display={'inline-block'} marginLeft={'5px'}>
-                      <CheckIcon />
+                      <Image src={CheckIcon} alt={''} />
                     </Box>
                   )}
                 </Text>

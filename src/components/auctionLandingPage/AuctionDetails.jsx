@@ -18,13 +18,15 @@ import currencyETHIcon from '../../assets/images/currency-eth.svg';
 import smallCongratsIcon from '../../assets/images/congrats-small.png';
 import frankie from '../../assets/images/frankie.png';
 import { useLocation, useWindowSize } from 'react-use';
+import { useRouter } from 'next/router';
 
 const AuctionDetails = ({ onAuction, bidders, setBidders }) => {
   const { myAuctions } = useAuctionContext();
   const { loggedInArtist } = useAuthContext();
   const getAllAuctionsForCurrentArtist = myAuctions;
   const [selectedAuction, setSelectedAuction] = useState(onAuction);
-  const location = useLocation();
+  // const location = useLocation();
+  const router = useRouter();
 
   const [sliderSettings, setSliderSettings] = useState({
     dots: false,
@@ -259,7 +261,7 @@ const AuctionDetails = ({ onAuction, bidders, setBidders }) => {
                         <span />
                       </div>
                       <CopyToClipboard
-                        text={location.href}
+                        text={location ? location.href : ''}
                         onCopy={() => {
                           setCopied(true);
                           setTimeout(() => {

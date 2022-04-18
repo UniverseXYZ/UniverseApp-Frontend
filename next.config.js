@@ -6,7 +6,9 @@ const withVideos = require('next-videos')
 module.exports = withPlugins(
   [
     withVideos,
-    withImages,
+    [withImages, {
+      fileExtensions: ['jpg', 'jpeg', 'png', 'gif', 'ico', 'webp', 'jp2', 'avif']
+    }],
   ],
   {
     trailingSlash: true,
@@ -20,6 +22,11 @@ module.exports = withPlugins(
         use: {
           loader: 'file-loader',
         },
+      });
+
+      config.module.rules.push({
+        test: /\.svg$/,
+        use: ['@svgr/webpack', 'url-loader'],
       });
       return config;
     },
@@ -38,6 +45,13 @@ module.exports = withPlugins(
       REACT_APP_ETHERSCAN_URL: process.env.REACT_APP_ETHERSCAN_URL,
       REACT_APP_UNIVERSE_ERC_721_ADDRESS: process.env.REACT_APP_UNIVERSE_ERC_721_ADDRESS,
       REACT_APP_UNIVERSE_ERC_721_FACTORY_ADDRESS: process.env.REACT_APP_UNIVERSE_ERC_721_FACTORY_ADDRESS,
+      REACT_APP_DATASCRAPER_BACKEND: process.env.REACT_APP_DATASCRAPER_BACKEND,
+      REACT_APP_MARKETPLACE_BACKEND: process.env.REACT_APP_MARKETPLACE_BACKEND,
+      REACT_APP_MARKETPLACE_CONTRACT: process.env.REACT_APP_MARKETPLACE_CONTRACT,
+      REACT_APP_ROYALTY_REGISTRY_CONTRACT: process.env.REACT_APP_ROYALTY_REGISTRY_CONTRACT,
+      REACT_APP_FACEBOOK_APP_ID: process.env.REACT_APP_FACEBOOK_APP_ID,
+      REACT_APP_CAPTCHA_ID: process.env.REACT_APP_CAPTCHA_ID,
+      REACT_APP_COLLECTION_EDITOR: process.env.REACT_APP_COLLECTION_EDITOR,
     },
   }
 );

@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 import React, { useState, useEffect, useRef } from 'react';
-import './NFTCard.scss';
+// import './NFTCard.scss';
 import { Link, useHistory, useLocation } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import videoIcon from '../../assets/images/marketplace/video-icon.svg';

@@ -1,10 +1,11 @@
 import { Avatar, Box, Tooltip } from '@chakra-ui/react';
 import React from 'react';
-import { NFTRelationType } from '../../../../enums';
-import { NFT_RELATION_TYPE_NAMES } from '../../../../constants';
-import { useHistory } from 'react-router-dom';
 import Blockies from 'react-blockies';
 import { utils } from 'ethers';
+import { useRouter } from 'next/router';
+
+import { NFTRelationType } from '../../../../enums';
+import { NFT_RELATION_TYPE_NAMES } from '../../../../constants';
 import { shortenEthereumAddress } from '../../../../../../../utils/helpers/format'
 
 export interface INFTItemRelationProps {
@@ -16,7 +17,7 @@ export interface INFTItemRelationProps {
 }
 
 export const NFTItemRelation = ({ type, image, value, linkParam, externalOwner }: INFTItemRelationProps) => {
-  const router = useHistory();
+  const router = useRouter();
 
   let owner = value; // * displayName or address
   let ownerName = '';

@@ -1,10 +1,10 @@
 import { FC, createContext, useContext } from 'react';
 import { useQuery } from 'react-query';
-import { useParams } from 'react-router-dom';
 
 import { ICollection, ICollectionOrderBookData, ICollectionInfoResponse } from '../../types';
 import { GetCollectionOrderBookData, GetCollectionApi, GetCollectionGeneralInfo } from '../../api';
 import { collectionKeys } from '../../../../utils/query-keys';
+import { useRouter } from 'next/router';
 
 export interface ICollectionPageContext {
   collection: ICollection;
@@ -26,7 +26,9 @@ export function useCollectionPageData(): ICollectionPageContext {
 }
 
 const CollectionPageProvider: FC = ({ children }) => {
-  const { collectionAddress } = useParams<{ collectionAddress: string }>();
+  // const { collectionAddress } = useParams<{ collectionAddress: string }>();
+  const router = useRouter();
+  const { collectionAddress } = router.query as { collectionAddress: string };
 
   const {
     data: collection,
