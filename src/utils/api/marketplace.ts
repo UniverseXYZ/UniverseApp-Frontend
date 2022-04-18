@@ -1,4 +1,5 @@
 import { utils } from 'ethers';
+import Cookies from 'js-cookie';
 
 const GET_TOKENS_PER_ADDRESS = (address: string, page: number, perPage: number) =>
   `${process.env.REACT_APP_DATASCRAPER_BACKEND}/v1/users/${address}/tokens?page=${page}&size=${perPage}`;
@@ -56,7 +57,7 @@ export const sendReportRequest = async (values: any) => {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${localStorage.getItem('xyz_access_token')}`,
+      Authorization: `Bearer ${Cookies.get('xyz_access_token')}`,
     },
     body: JSON.stringify(values),
   });

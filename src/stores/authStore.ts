@@ -1,7 +1,7 @@
 import { providers, Signer, utils } from "ethers";
 import create, { GetState, Mutate, SetState, StoreApi } from "zustand";
 import { CONNECTORS_NAMES } from "../utils/dictionary";
-import Cookies from 'js-cookie'
+import Cookies from 'js-cookie';
 import { useUserBalanceStore } from "./balanceStore";
 import { getProfileInfo, setChallenge, userAuthenticate } from "../utils/api/profile";
 import uuid from 'react-uuid';
