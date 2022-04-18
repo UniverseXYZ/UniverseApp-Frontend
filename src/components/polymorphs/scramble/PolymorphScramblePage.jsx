@@ -27,12 +27,14 @@ import { getScrambleStatus } from '../../../utils/helpers/polymorphs';
 import GeneParser from '../../../utils/helpers/GeneParser.js';
 import PolymorphMetadataLoading from '../../popups/PolymorphMetadataLoading';
 import { useGraphQueryHook } from '../../../utils/hooks/useGraphQueryHook';
-import { useAuthContext } from '../../../contexts/AuthContext';
+import { useAuthStore } from '../../../stores/authStore';
 
 
 const PolymorphScramblePage = () => {
   const router = useRouter();
-  const { address } = useAuthContext();
+  const { address } = useAuthStore(s => ({
+    address: s.address,
+  }));
   const [propertiesTabSelected, setPropertiesTabSelected] = useState(true);
   const [metadataTabSelected, setMetadataTabSelected] = useState(false);
   const [polymorphId, setPolymorphId] = useState();

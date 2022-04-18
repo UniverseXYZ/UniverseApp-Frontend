@@ -1,11 +1,13 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
 import Button from '../button/Button.jsx';
-import { useAuthContext } from '../../contexts/AuthContext';
 import { useAuctionContext } from '../../contexts/AuctionContext';
+import { useAuthStore } from '../../stores/authStore';
 
 const Head = () => {
-  const { loggedInArtist } = useAuthContext();
+  const { loggedInArtist } = useAuthStore(s => ({
+    loggedInArtist: s.loggedInArtist,
+  }));
   const history = useHistory();
   const { editProfileButtonClick, setEditProfileButtonClick } = useAuctionContext();
 
