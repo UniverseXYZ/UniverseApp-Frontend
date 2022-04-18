@@ -175,7 +175,7 @@ const MyAccount = () => {
         fetchedUserData={fetchedUserData}
       />
       <Popup closeOnDocumentClick={false} open={showCongrats}>
-        <CongratsProfilePopup onClose={() => setShowCongrats(false)} />
+        <CongratsProfilePopup loggedInArtist={loggedInArtist} onClose={() => setShowCongrats(false)} />
       </Popup>
       <Popup closeOnDocumentClick={false} open={showLoading}>
         <LoadingPopup text="Saving your profile changes" onClose={() => setShowLoading(false)} />
