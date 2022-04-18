@@ -17,6 +17,7 @@ export interface INFTItemContentWithPriceProps {
   creator?: IUser;
   collection?: ICollection;
   owner?: IUser;
+  ownerAddress?: string;
   order?: IOrder;
   bestOfferPrice?: number | string;
   bestOfferPriceToken?: TokenTicker;
@@ -31,6 +32,7 @@ export const NFTItemContentWithPrice = (
     creator,
     collection,
     owner,
+    ownerAddress,
     order,
     bestOfferPrice,
     bestOfferPriceToken,
@@ -112,7 +114,7 @@ export const NFTItemContentWithPrice = (
             <NFTItemRelation
               type={NFTRelationType.OWNER}
               image={owner.profileImageUrl ?? ''}
-              value={owner.displayName || owner.address || ''}
+              value={owner.displayName || ownerAddress || ''}
               linkParam={owner.universePageUrl ?? ''}
               externalOwner={!owner.displayName}
             />

@@ -401,6 +401,7 @@ export const BrowseNFTsPage = () => {
                             collection={collection}
                             creator={creator?.mappedArtist || undefined}
                             owner={owner?.mappedArtist || undefined}
+                            ownerAddress={NFT._ownerAddress}
                             order={orderData || undefined}
                             bestOfferPrice={bestOfferPrice || 0}
                             bestOfferPriceToken={bestOfferPriceToken || undefined}
