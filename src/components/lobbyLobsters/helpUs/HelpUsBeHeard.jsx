@@ -1,6 +1,6 @@
 import React from 'react';
 import Lottie from 'react-lottie';
-import './HelpUsBeHeard.scss';
+// import './HelpUsBeHeard.scss';
 import icon from '../../../assets/images/lobby-lobsters/icon_info.svg';
 import animationData from '../../../utils/animations/megaphone_lobster_animation.json';
 

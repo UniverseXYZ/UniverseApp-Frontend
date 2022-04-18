@@ -8,7 +8,7 @@ import PriceETHIconWhite from '../../../assets/images/ethereum-white.svg';
 import PriceETHIconBlack from '../../../assets/images/ethereum-black.svg';
 import backgroundTextLeft from '../../../assets/images/mint-polymorph-welcome-bg-left.png';
 import backgroundTextRight from '../../../assets/images/mint-polymorph-welcome-bg-right.png';
-import './styles/BondingCurve.scss';
+// import './styles/BondingCurve.scss';
 import AppContext from '../../../ContextAPI';
 import { useMyNftsContext } from '../../../contexts/MyNFTsContext';
 
