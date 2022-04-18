@@ -5,6 +5,7 @@ import DigitalTools from '../../../components/products/about/DigitalTools.jsx';
 import HowItWorks from '../../../components/products/about/howItWorks/HowItWorks.jsx';
 import OurTeam from '../../../components/products/about/OurTeam.jsx';
 import { useThemeContext } from '../../../contexts/ThemeContext.jsx';
+import Head from 'next/head';
 
 const About = () => {
   const { setDarkMode } = useThemeContext();
@@ -13,13 +14,13 @@ const About = () => {
 
   return (
     <div className="about__page">
-      <Helmet>
+      <Head>
         <title>A Universe Made for Artists by Artists – Universe XYZ</title>
         <meta
           name="description"
           content="Mint single or multiple NFTs, create and edit NFT Collections, and run auctions with multiple NFTs per winner. In this Universe anything is possible."
         />
-      </Helmet>
+      </Head>
       <Welcome />
       <DigitalTools />
       <HowItWorks />
