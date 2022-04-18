@@ -203,7 +203,7 @@ const Footer = () => {
                   </li>
                   <li
                     aria-hidden="true"
-                    // onClick={() => window.open('')}
+                    onClick={() => window.open('https://dao.universe.xyz/airdrop')}
                   >
                     Airdrop
                   </li>
