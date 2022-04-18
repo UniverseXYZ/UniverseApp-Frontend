@@ -43,7 +43,20 @@ import {
 } from '../../../../../../../components/filters';
 import { FiltersPopup } from '../../../../../../../components';
 
-export const SearchFilters = () => {
+interface ISearchFiltersProps {
+  onFilterChanges?: (values: {
+    searchBar: unknown;
+    collectionFilter: unknown;
+    saleType: unknown;
+    nftType: unknown;
+    priceRange: unknown;
+    sortBy: unknown;
+  }) => void;
+}
+
+export const SearchFilters = (props: ISearchFiltersProps) => {
+  const { onFilterChanges } = props;
+
   const {
     userCollections,
     disabledSortByFilters,
@@ -87,6 +100,25 @@ export const SearchFilters = () => {
 
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
+
+  useEffect(() => {
+    onFilterChanges && onFilterChanges({
+      searchBar: searchBarForm.values,
+      collectionFilter: collectionFilterForm.values,
+      saleType: saleTypeForm.values,
+      nftType: nftTypeForm.values,
+      priceRange: priceRangeForm.values,
+      sortBy: sortByForm.values,
+    });
+  }, [
+    onFilterChanges,
+    searchBarForm.values,
+    collectionFilterForm.values,
+    saleTypeForm.values,
+    nftTypeForm.values,
+    priceRangeForm.values,
+    sortByForm.values,
+  ])
 
   return (
     <div className="search--sort--filters--section">
