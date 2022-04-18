@@ -1,13 +1,13 @@
 import React, { useEffect } from 'react';
 import { Helmet } from 'react-helmet';
+import { useThemeStore } from 'src/stores/themeStore';
 import UniverseContributors from '../../components/team/UniverseContributors.jsx';
 import UniverseCreators from '../../components/team/UniverseCreators.jsx';
 import Welcome from '../../components/team/Welcome.jsx';
-import { useThemeContext } from '../../contexts/ThemeContext.jsx';
 // import './Team.scss';
 
 const Team = () => {
-  const { setDarkMode } = useThemeContext();
+  const setDarkMode = useThemeStore(s => s.setDarkMode);
 
   useEffect(() => setDarkMode(true), []);
 

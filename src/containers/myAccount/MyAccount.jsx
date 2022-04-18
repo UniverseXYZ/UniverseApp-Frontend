@@ -6,11 +6,11 @@ import Head from '../../components/myAccount/Head.jsx';
 import CongratsProfilePopup from '../../components/popups/CongratsProfilePopup.jsx';
 import LoadingPopup from '../../components/popups/LoadingPopup.jsx';
 import { saveProfileInfo, saveUserImage } from '../../utils/api/profile.js';
-import { useThemeContext } from '../../contexts/ThemeContext.jsx';
 import { useAuctionContext } from '../../contexts/AuctionContext.jsx';
 import { useRouter } from 'next/router';
 import { useAuthStore } from '../../stores/authStore';
 import { useErrorStore } from '../../stores/errorStore';
+import { useThemeStore } from 'src/stores/themeStore';
 
 const MyAccount = () => {
   const {
@@ -30,8 +30,7 @@ const MyAccount = () => {
   }))
 
   const { editProfileButtonClick, setEditProfileButtonClick } = useAuctionContext();
-  const { setDarkMode } = useThemeContext();
-
+  const setDarkMode = useThemeStore(s => s.setDarkMode);
   const history = useRouter();
   const [showLoading, setShowLoading] = useState(false);
   const [about, setAbout] = useState(loggedInArtist.about);
