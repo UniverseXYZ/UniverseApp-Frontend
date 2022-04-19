@@ -1,4 +1,4 @@
-import Homepage from '../src/containers/homepage/Homepage';
+import Homepage from './marketplace';
 
 
 export default Homepage
