@@ -2,6 +2,7 @@ import { Box, Button, Image, Popover, PopoverBody, PopoverContent, PopoverTrigge
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useMeasure } from 'react-use';
 import { UseMeasureRect } from 'react-use/lib/useMeasure';
+import Countdown, { zeroPad } from 'react-countdown';
 import { useRouter } from 'next/router';
 
 import ClockIcon from '../../../../../../../assets/images/clock.svg';
@@ -42,6 +43,8 @@ export const NFTBuySection = ({ NFT, owner, NFTs, order, highestOffer, onMeasure
   const { signer, isAuthenticated } = useAuthStore(s => ({signer: s.signer, isAuthenticated: s.isAuthenticated}))
 
   const [state, setState] = useState<BuyNFTSectionState>();
+
+  const [showCountDown, setShowCountDown] = useState(false);
 
   const { setIsOpen, setNFT, setCollection, setOrder } = useNftCheckoutStore(s => ({
     setIsOpen: s.setIsOpen, setNFT: s.setNFT, setCollection: s.setCollection, setOrder: s.setOrder
@@ -98,6 +101,10 @@ export const NFTBuySection = ({ NFT, owner, NFTs, order, highestOffer, onMeasure
     fetchNftRoyalties();
   }, [signer, NFT?._collectionAddress, NFT?.tokenId])
 
+  useEffect(() => {
+    setShowCountDown(!!(order?.end && new Date(order?.end * 1000) > new Date()));
+  }, [order]);
+
   const [isCheckoutPopupOpened, setIsCheckoutPopupOpened] = useState(false);
   const [isPlaceABidPopupOpened, setIsPlaceABidPopupOpened] = useState(false);
   const [isMakeAnOfferPopupOpened, setIsMakeAnOfferPopupOpened] = useState(false);
@@ -137,15 +144,27 @@ export const NFTBuySection = ({ NFT, owner, NFTs, order, highestOffer, onMeasure
 
   return (
     <Box {...styles.WrapperStyle} ref={ref}>
-      {/*<Box {...styles.CountDownWrapperStyle} cursor={'pointer'}>*/}
-      {/*  <Box {...styles.CountDownContentStyle} minW={`${((countDownString?.length ?? 0) + 5) * 10}px`}>*/}
-      {/*    <Text>*/}
-      {/*      <Image src={ClockIcon} />*/}
-      {/*      {countDownString} left*/}
-      {/*    </Text>*/}
-      {/*    <Text>Reserve price has been met</Text>*/}
-      {/*  </Box>*/}
-      {/*</Box>*/}
+      {showCountDown && order && (
+        <Box {...styles.CountDownWrapperStyle} cursor={'pointer'}>
+          <Box {...styles.CountDownContentStyle}>
+            <Text>
+              <Image src={ClockIcon} />
+              <Countdown
+                date={new Date(order.end * 1000)}
+                renderer={({ days, hours, minutes, seconds }) => {
+                  return [
+                    days ? `${days}d` : '',
+                    hours || days ? `${zeroPad(hours)}h` : '',
+                    minutes || hours ? `${zeroPad(minutes)}m` : '',
+                    seconds || minutes ? `${zeroPad(seconds)}s` : '',
+                  ].filter(Boolean).join(' : ') + ' left';
+                }}
+                onComplete={() => setShowCountDown(false)}
+              />
+            </Text>
+          </Box>
+        </Box>
+      )}
       <Box {...styles.ContentStyle}>
 
         {state === BuyNFTSectionState.BUYER_AUCTION_BID_N_OFFER && (

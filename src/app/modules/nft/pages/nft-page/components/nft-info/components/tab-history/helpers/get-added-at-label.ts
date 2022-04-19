@@ -1,11 +1,25 @@
-import { default as dayjs } from 'dayjs';
+import { calcTimeDelta } from 'react-countdown';
 
 export const getAddedAtLabel = (addedAt: Date) => {
-  const dayDiff = dayjs().diff(addedAt, 'days');
+  const [leftDate, rightDate] = new Date() > new Date(addedAt)
+     ? [new Date(), new Date(addedAt)]
+     : [new Date(addedAt), new Date()];
 
-  switch (dayDiff) {
-    case 0: return 'Today';
-    case 1: return `1 day ago`;
-    default: return `${dayDiff} days ago`;
+  const res = calcTimeDelta(leftDate, {
+    now: () => rightDate.getTime(),
+  });
+
+  if (res.days) {
+    if (res.days > 365) {
+      return `${res.days / 365} years ${res.days - (res.days / 365)} days`;
+    } else {
+      return `${res.days} days ${res.hours} hours`;
+    }
   }
+
+  if (res.hours) {
+    return `${res.hours} hours ${res.minutes} minutes`;
+  }
+
+  return `${res.minutes} minutes`;
 }
