@@ -98,8 +98,8 @@ const DesktopView = ({
                 // className="disable"
                 onClick={() => {
                   setIsMintingDropdownOpened(false);
-                  if (history.asPath !== '/marketplace') {
-                    history.push('/marketplace');
+                  if (history.asPath !== '/') {
+                    history.push('/');
                   }
                 }}
               >
