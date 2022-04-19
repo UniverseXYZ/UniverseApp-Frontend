@@ -58,7 +58,7 @@ export const NFTBuySection = ({ NFT, owner, NFTs, order, highestOffer, onMeasure
       const address = (await signer.getAddress()) as string;
       if (!order) {
         if (NFT) {
-          if (address.toUpperCase() === owner?.address.toUpperCase()) {
+          if (address.toUpperCase() === (owner?.address.toUpperCase() || NFT?._ownerAddress)) {
             setState(BuyNFTSectionState.OWNER_PUT_ON_SALE);
           } else {
             setState(BuyNFTSectionState.BUYER_NO_LISTING_OFFER);

@@ -206,6 +206,7 @@ export const NFTInfo = () => {
                     <NFTMenu
                       NFT={NFT}
                       owner={owner}
+                      ownerAddress={NFT?._ownerAddress}
                       collectionAddress={collectionAddress}
                       showSell={!order}
                       showBurn={false}
@@ -226,7 +227,7 @@ export const NFTInfo = () => {
                 <Flex flexWrap={{ sm: 'wrap', md: 'nowrap' }} mb={'24px'}>
                   {creator && <NFTPageCreatorRelation creator={creator} />}
                   {((collection && collection.id) || NFT?._collectionAddress) && <NFTPageCollectionRelation collection={collection} collectionAddress={NFT._collectionAddress} />}
-                  {owner && <NFTPageOwnerRelation owner={owner} />}
+                  {owner && <NFTPageOwnerRelation owner={owner} ownerAddress={NFT?._ownerAddress}/>}
                 </Flex>
 
                 {NFT.description && (
@@ -278,7 +279,7 @@ export const NFTInfo = () => {
                       <TabHistory historyData={history} />
                     </TabPanel>
                     <TabPanel>
-                      <TabListings owner={owner} />
+                      <TabListings owner={owner} ownerAddress={NFT?._ownerAddress} />
                     </TabPanel>
                   </TabPanels>
                 </Tabs>
@@ -341,6 +342,7 @@ export const NFTInfo = () => {
                               collection={collection}
                               creator={creator?.mappedArtist || undefined}
                               owner={owner?.mappedArtist || undefined}
+                              ownerAddress={NFT._ownerAddress}
                               order={orderData || undefined}
                               bestOfferPrice={bestOfferPrice || 0}
                               bestOfferPriceToken={bestOfferPriceToken || undefined}
