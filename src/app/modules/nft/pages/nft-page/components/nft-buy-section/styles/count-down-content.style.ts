@@ -12,16 +12,11 @@ export const CountDownContentStyle: BoxProps = {
         fontSize: '14px',
         fontWeight: 700,
       },
-      _last: {
-        color: 'rgba(0, 0, 0, 0.4)',
-        fontSize: '10px',
-        fontWeight: 500,
-      },
     },
     img: {
       display: 'inline',
       mr: '8px',
-      mt: '-5px'
+      mt: '-3px'
     }
   },
 };
