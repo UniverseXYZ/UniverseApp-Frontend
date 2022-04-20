@@ -12,24 +12,26 @@ import { Contract } from 'ethers';
 import { useIntersection } from 'react-use';
 import { useRouter } from 'next/router';
 
+import CollectionOGPlaceholder from '@assets/images/open-graph/collection-placeholder.png';
+import { OpenGraph } from '@app/components';
+import { useFiltersContext } from '@app/modules/account/pages/my-nfts-page/components/search-filters/search-filters.context';
+import { SearchFilters } from '@app/modules/account/pages/my-nfts-page/components/search-filters';
+import { shortenEthereumAddress } from '@legacy/helpers/format';
+import { CollectionPageLoader } from '@legacy/collection/CollectionPageLoader';
+
 import Contracts from '../../../../../../../contracts/contracts.json';
 import SocialLinks from '../../../../../../../components/collection/SocialLinks';
 import { useCollectionPageData } from '../../CollectionPage.context';
 import {
   NftItem, NFTItemContentWithPrice, NoNFTsFound,
 } from '../../../../components';
-import { CollectionPageLoader } from '../../../../../../../containers/collection/CollectionPageLoader';
 import { CollectionStatistics } from './components/index';
 import NotFound from '../../../../../../../components/notFound/NotFound';
 import Cover from '../../../../../../../components/collection/Cover';
 import { NoDescriptionFound } from '../../../../components/no-description-found';
-import { useFiltersContext } from '../../../../../account/pages/my-nfts-page/components/search-filters/search-filters.context';
-import { SearchFilters } from '../../../../../account/pages/my-nfts-page/components/search-filters';
 import NftCardSkeleton from '../../../../../../../components/skeletons/nftCardSkeleton/NftCardSkeleton';
-import { shortenEthereumAddress } from '../../../../../../../utils/helpers/format';
 import EditIcon from '../../../../../../../components/svgs/EditIcon';
 import { useAuthStore } from '../../../../../../../stores/authStore';
-import { OpenGraph } from '@app/components';
 
 export const CollectionInfo = () => {
   const [totalNftsCount, setTotalNftsCount] = useState(0);
@@ -137,7 +139,7 @@ export const CollectionInfo = () => {
       <OpenGraph
         title={`${collection?.name || collection?.address} – Collection`}
         description={collection?.description || undefined}
-        image={collection?.bannerUrl || collection?.coverUrl || undefined}
+        image={collection?.bannerUrl || collection?.coverUrl || CollectionOGPlaceholder}
       />
       {(waitingCollectionGeneralInfo && !collectionGeneralInfo) || (waitingCollectionOffChainInfo && !collection) ? (
         <div className='loader-wrapper'>
