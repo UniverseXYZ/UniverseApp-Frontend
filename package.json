@@ -6,8 +6,15 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "sitemap": "next-sitemap"
+    "sitemap": "next-sitemap",
+    "find:unused": "next-unused"
   },
+  "next-unused": {
+   "alias": {},
+   "include": ["src/components"],
+   "exclude": [],
+   "entrypoints": []
+ },
   "dependencies": {
     "@apollo/client": "^3.4.11",
     "@chakra-ui/react": "^1.7.1",
@@ -33,6 +40,7 @@
     "next": "^12.1.1",
     "next-compose-plugins": "^2.2.1",
     "next-images": "^1.8.2",
+    "next-unused": "^0.0.6",
     "next-videos": "^1.4.0",
     "node-sass": "^6.0.1",
     "prop-types": "^15.7.2",
