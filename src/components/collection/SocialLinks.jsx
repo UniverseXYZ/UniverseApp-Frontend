@@ -119,31 +119,45 @@ const SocialLinks = ({
               </button>
             )}
             {!!discordLink && (
-              <button type="button">
+              <button
+                type="button"
+                onClick={() => window.open(`https://discord.gg/${discordLink}`, '_blank').focus()}
+              >
                 <DiscordIcon width="18" height="14" />
                 <span>Discord</span>
               </button>
             )}
             {!!siteLink && (
-              <button type="button">
+              <button type="button" onClick={() => window.open(siteLink, '_blank').focus()}>
                 <WebsiteIcon width="16" height="16" />
                 <span>Website</span>
               </button>
             )}
             {!!instagramLink && (
-              <button type="button">
+              <button
+                type="button"
+                onClick={() =>
+                  window.open(`https://instagram.com/${instagramLink}`, '_blank').focus()
+                }
+              >
                 <InstagramIcon width="16" height="16" />
                 <span>Instagram</span>
               </button>
             )}
             {!!mediumLink && (
-              <button type="button">
+              <button
+                type="button"
+                onClick={() => window.open(`https://medium.com/@${mediumLink}`, '_blank').focus()}
+              >
                 <MediumIcon width="18" height="14" />
                 <span>Medium</span>
               </button>
             )}
             {!!telegramLink && (
-              <button type="button">
+              <button
+                type="button"
+                onClick={() => window.open(`https://t.me/${telegramLink}`, '_blank').focus()}
+              >
                 <TelegramIcon width="19" height="15" />
                 <span>Telegram</span>
               </button>
