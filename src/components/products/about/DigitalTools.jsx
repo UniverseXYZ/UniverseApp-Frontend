@@ -1,13 +1,13 @@
 import React from 'react';
 import { AnimatedOnScroll } from 'react-animated-css-onscroll';
-import { useHistory } from 'react-router-dom';
+import { useRouter } from 'next/router';
 import blockOne from '../../../assets/images/about-page-block1.png';
 import blockTwo from '../../../assets/images/about-page-block2.png';
 import blockThree from '../../../assets/images/about-page-block3.png';
 import Button from '../../button/Button.jsx';
 
 const DigitalTools = () => {
-  const history = useHistory();
+  const history = useRouter();
   return (
     <div className="digital__tools__section">
       <div className="digital__tools__section__container">
@@ -28,7 +28,10 @@ const DigitalTools = () => {
             <Button
               className="light-button"
               onClick={() =>
-                history.push('/my-nfts/create', { tabIndex: 1, nftType: 'collection' })
+                history.push({
+                  pathname: '/my-nfts/create',
+                  query: { tabIndex: 1, nftType: 'collection' }
+                })
               }
             >
               Create NFT Collection
@@ -46,7 +49,12 @@ const DigitalTools = () => {
             </p>
             <Button
               className="light-button"
-              onClick={() => history.push('/my-nfts/create', { tabIndex: 1, nftType: 'single' })}
+              onClick={() =>
+                history.push({
+                  pathname: '/my-nfts/create',
+                  query: { tabIndex: 1, nftType: 'single' }
+                })
+              }
             >
               Create NFT
             </Button>
