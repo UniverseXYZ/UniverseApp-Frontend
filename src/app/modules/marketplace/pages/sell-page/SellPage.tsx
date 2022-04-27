@@ -173,10 +173,7 @@ export const SellPage = () => {
           end: values.endDate ? Math.floor(values.endDate.getTime() / 1000) : 0,
           data: {
             dataType: 'ORDER_DATA',
-            revenueSplits: nft?.royalties?.map((royalty: any) => ({
-              account: royalty.address as string,
-              value: royalty.amount * 100,
-            })) || []
+            revenueSplits: [],
           },
         };
   
