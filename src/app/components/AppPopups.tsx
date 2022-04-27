@@ -1,18 +1,36 @@
-import Popup from 'reactjs-popup';
-import React from 'react';
-import WrongNetworkPopup from '../../components/popups/WrongNetworkPopup';
-import ErrorPopup from '../../components/popups/ErrorPopup';
-import { useAuthStore } from '../../stores/authStore';
-import { useLoadingStore } from '../../stores/loadingStore';
-import { useErrorStore } from '../../stores/errorStore';
-import { useNftCheckoutStore } from '../../stores/nftCheckoutStore';
-import { LoadingPopup } from '@app/modules/marketplace/components/popups/loading-popup';
-import { NFTCheckoutPopup } from '@app/modules/nft/pages/nft-page/components';
+import { LoadingPopup } from "@app/modules/marketplace/components/popups/loading-popup";
+import { NFTCheckoutPopup } from "@app/modules/nft/pages/nft-page/components";
+import NotAuthenticatedPopup from "@legacy/popups/NotAuthenticatedPopup";
+import React from "react";
+import Popup from "reactjs-popup";
+import { useSignInPopupStore } from "src/stores/signInPopup";
+import ErrorPopup from "../../components/popups/ErrorPopup";
+import WrongNetworkPopup from "../../components/popups/WrongNetworkPopup";
+import { useAuthStore } from "../../stores/authStore";
+import { useErrorStore } from "../../stores/errorStore";
+import { useLoadingStore } from "../../stores/loadingStore";
 
 export const Popups = () => {
-  const { showWrongNetworkPopup, setShowWrongNetworkPopup } = useAuthStore(state => ({showWrongNetworkPopup: state.showWrongNetworkPopup, setShowWrongNetworkPopup: state.setShowWrongNetworkPopup}));
-  const showError = useErrorStore(s => s.showError)
-  const {showLoading, closeLoading, loadingTitle, loadingBody, transactions} = useLoadingStore(s => ({showLoading: s.showLoading, closeLoading: s.closeLoading, loadingTitle: s.loadingTitle, loadingBody: s.loadingBody, transactions: s.transactions}));
+  const { showWrongNetworkPopup, setShowWrongNetworkPopup } = useAuthStore(
+    (state) => ({
+      showWrongNetworkPopup: state.showWrongNetworkPopup,
+      setShowWrongNetworkPopup: state.setShowWrongNetworkPopup,
+    })
+  );
+  const showError = useErrorStore((s) => s.showError);
+  const { showLoading, closeLoading, loadingTitle, loadingBody, transactions } =
+    useLoadingStore((s) => ({
+      showLoading: s.showLoading,
+      closeLoading: s.closeLoading,
+      loadingTitle: s.loadingTitle,
+      loadingBody: s.loadingBody,
+      transactions: s.transactions,
+    }));
+
+  const { showNotAuthenticatedPopup, onClose } = useSignInPopupStore((s) => ({
+    showNotAuthenticatedPopup: s.showNotAuthenticatedPopup,
+    onClose: s.onClose,
+  }));
 
   return (
     <>
@@ -30,6 +48,10 @@ export const Popups = () => {
         transactions={transactions}
       />
       <NFTCheckoutPopup />
+
+      <Popup closeOnDocumentClick={false} open={showNotAuthenticatedPopup}>
+        <NotAuthenticatedPopup close={onClose} />
+      </Popup>
     </>
   );
-}
+};
