@@ -67,7 +67,7 @@ export const MyNFTsPage = () => {
 
   const scrollContainer = useRef(null);
 
-  const { data: nftSummary } = useQuery(nftKeys.fetchNftSummary(address), getNftSummary, {
+  const { data: nftSummary, refetch: refetchSummary } = useQuery(nftKeys.fetchNftSummary(address), getNftSummary, {
     enabled: !!address && isAuthenticated && !isAuthenticating,
   });
 
@@ -241,6 +241,9 @@ export const MyNFTsPage = () => {
         setShowLoading(false);
         setShowError(true);
       }
+
+      setSelectedSavedNfts([]);
+      refetchSummary();
     } catch (e: any) {
       console.error(e, 'Error !');
       setShowLoading(false);
@@ -392,6 +395,7 @@ export const MyNFTsPage = () => {
             triggerRefetch={triggerRefetch}
             setTriggerRefetch={setTriggerRefetch}
             scrollContainer={scrollContainer}
+            onNFTRemoved={() => refetchSummary()}
           />
         )}
         {myNFTsSelectedTabIndex === 3 && <UniverseNFTs scrollContainer={scrollContainer} />}

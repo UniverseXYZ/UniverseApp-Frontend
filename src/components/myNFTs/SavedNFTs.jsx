@@ -32,6 +32,7 @@ const SavedNFTs = ({
   triggerRefetch,
   setTriggerRefetch,
   scrollContainer,
+  onNFTRemoved,
 }) => {
   const setSavedNfts = useMyNftsStore(s => s.setSavedNfts);
 
@@ -183,6 +184,7 @@ const SavedNFTs = ({
       setSelectedSavedNfts(newSelected);
     }
     setTriggerRefetch(true);
+    onNFTRemoved();
   };
 
   useEffect(() => {
@@ -372,5 +374,6 @@ SavedNFTs.propTypes = {
   triggerRefetch: PropTypes.bool.isRequired,
   setTriggerRefetch: PropTypes.func.isRequired,
   scrollContainer: PropTypes.oneOfType([PropTypes.object]).isRequired,
+  onNFTRemoved: PropTypes.func.isRequired,
 };
 export default SavedNFTs;
