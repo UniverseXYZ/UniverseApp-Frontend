@@ -152,11 +152,15 @@ export const NFTBuySection = ({ NFT, owner, NFTs, order, highestOffer, onMeasure
               <Countdown
                 date={new Date(order.end * 1000)}
                 renderer={({ days, hours, minutes, seconds }) => {
+                  if (!days && !hours && !minutes) {
+                    return [
+                      seconds || minutes ? `${zeroPad(seconds)}s` : '',
+                    ].filter(Boolean).join(' : ') + ' left';
+                  }
                   return [
                     days ? `${days}d` : '',
                     hours || days ? `${zeroPad(hours)}h` : '',
                     minutes || hours ? `${zeroPad(minutes)}m` : '',
-                    seconds || minutes ? `${zeroPad(seconds)}s` : '',
                   ].filter(Boolean).join(' : ') + ' left';
                 }}
                 onComplete={() => setShowCountDown(false)}
