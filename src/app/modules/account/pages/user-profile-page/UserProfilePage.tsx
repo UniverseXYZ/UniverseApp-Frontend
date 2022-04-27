@@ -3,12 +3,12 @@ import { OpenGraph, TabLabel } from "@app/components";
 import { userKeys } from "@app/utils/query-keys";
 import { Box, Tab, TabList, TabPanel, TabPanels, Tabs } from "@chakra-ui/react";
 import { GetServerSideProps } from "next";
+import NotFound from "pages/404";
 import React, { useState } from "react";
 import Skeleton from "react-loading-skeleton";
 import { dehydrate, QueryClient, useQuery } from "react-query";
 import { useSearchParam, useWindowSize } from "react-use";
 import ArtistDetails from "../../../../../components/artist/ArtistDetails";
-import NotFound from "../../../../../components/notFound/NotFound";
 import FiltersContextProvider from "../../../account/pages/my-nfts-page/components/search-filters/search-filters.context";
 import { ArtistNFTsTab } from "./components";
 
