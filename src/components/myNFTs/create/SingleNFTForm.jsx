@@ -201,13 +201,13 @@ const SingleNFTForm = ({ scrollToTop }) => {
       const mintableColls = await getMyMintableCollections();
       setMintableCollections(mintableColls.collections || []);
 
-      const universeColl = mintableColls.collections.filter(
+      const universeColl = mintableColls?.collections?.filter(
         (coll) =>
           coll.address.toLowerCase() ===
           process.env.REACT_APP_UNIVERSE_ERC_721_ADDRESS.toLowerCase()
       )[0];
       if (!universeColl) {
-        alert("Failed to load Universe Singularity Collection");
+        console.error("Failed to load Universe Singularity Collection");
       } else {
         setUniverseCollection({ ...universeColl, coverUrl: universeIcon });
       }
