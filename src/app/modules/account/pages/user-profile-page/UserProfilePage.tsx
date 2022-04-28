@@ -7,8 +7,9 @@ import NotFound from "pages/404";
 import React, { useState } from "react";
 import Skeleton from "react-loading-skeleton";
 import { dehydrate, QueryClient, useQuery } from "react-query";
-import { useSearchParam, useWindowSize } from "react-use";
+import { useMedia, useSearchParam, useWindowSize } from "react-use";
 import ArtistDetails from "../../../../../components/artist/ArtistDetails";
+import { breakpoints } from "../../../../theme/constants";
 import FiltersContextProvider from "../../../account/pages/my-nfts-page/components/search-filters/search-filters.context";
 import { ArtistNFTsTab } from "./components";
 
@@ -38,7 +39,8 @@ export const UserProfilePage: React.FC<IUserProfilePage> = ({
   artistUsername,
 }) => {
   const windowSize = useWindowSize();
-
+  const isMobile = useMedia(`(max-width: ${breakpoints.md})`);
+  
   const [totalNFTs, setTotalNFTs] = useState<number>();
 
   const { data, isLoading, isError } = useQuery<any>(
@@ -113,9 +115,9 @@ export const UserProfilePage: React.FC<IUserProfilePage> = ({
               loading={isLoading}
             />
           </Box>
-          <Tabs padding={{ sm: "10px" }}>
-            <TabList maxW={"1110px"} m={"auto"}>
-              <Tab>NFTs {totalNFTs && <TabLabel>{totalNFTs}</TabLabel>}</Tab>
+          <Tabs>
+            <TabList maxW={'1110px'} m={'auto'} padding={isMobile ? '20px' : '0px'}>
+              <Tab>NFTs {totalNFTs && (<TabLabel>{totalNFTs}</TabLabel>)}</Tab>
               {/*<Tab>Active auctions</Tab>*/}
               {/*<Tab>Future auctions</Tab>*/}
               {/*<Tab>Past auctions</Tab>*/}
