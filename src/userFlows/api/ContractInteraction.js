@@ -125,7 +125,7 @@ export async function sendBatchMintRequest(
           contract: requiredContracts[collectionId],
         });
 
-        helpers.setActiveTxHashes((txHashes) => [...txHashes, txn.hash]);
+        helpers.setActiveTxHashes([...helpers.activeTxHashes, txn.hash]);
 
         const mintReceipt = await txn.wait();
 

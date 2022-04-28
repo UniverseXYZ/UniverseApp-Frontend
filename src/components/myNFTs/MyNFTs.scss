@@ -139,6 +139,7 @@
     position: relative;
     width: 100%;
     display: block;
+    padding: 0px 20px;
     background-image: url("../../assets/images/my-nfts-desktop.png");
     background-repeat: no-repeat;
     background-position: center;
@@ -164,7 +165,7 @@
     align-items: center;
     margin-bottom: 40px;
     margin-top: 0;
-    padding: 60px 20px 0px 0px;
+    padding: 60px 0px 0px 0px;
     flex-wrap: wrap;
 
     h1.title {
@@ -250,12 +251,16 @@
       }
     }
     @include xl {
-      padding: 60px 20px 0 20px;
+      padding: 60px 0px 0px 0px;
+    }
+    @include md {
+      padding-left: 20px;
+      padding-right: 20px;
     }
     @include sm {
       flex-wrap: wrap;
       margin-bottom: 0px;
-      padding: 40px 20px 0;
+      padding: 40px 0px 0px;
     }
   }
 }
@@ -1918,6 +1923,10 @@
       grid-template-columns: 1fr;
     }
   }
+
+  @include md {
+    padding: 0px 20px;
+  }
 }
 
 .tab__saved__collections {
@@ -2082,6 +2091,8 @@
     }
     @include md {
       grid-template-columns: repeat(2, 1fr);
+      padding-left: 20px;
+      padding-right: 20px;
     }
     @include sm {
       grid-template-columns: 1fr;
