@@ -35,19 +35,27 @@ interface INFTBuySectionProps {
   onMeasureChange?: (measure: UseMeasureRect) => void;
 }
 
-export const NFTBuySection = ({ NFT, owner, NFTs, order, highestOffer, onMeasureChange }: INFTBuySectionProps) => {
+export const NFTBuySection = (props: INFTBuySectionProps) => {
+  const { NFT, owner, NFTs, order, highestOffer, onMeasureChange } = props;
+
   const [ref, measure] = useMeasure<HTMLDivElement>();
 
   const router = useRouter();
-
-  const { signer, isAuthenticated } = useAuthStore(s => ({signer: s.signer, isAuthenticated: s.isAuthenticated}))
 
   const [state, setState] = useState<BuyNFTSectionState>();
 
   const [showCountDown, setShowCountDown] = useState(false);
 
+  const { signer, isAuthenticated } = useAuthStore(s => ({
+    signer: s.signer,
+    isAuthenticated: s.isAuthenticated,
+  }))
+
   const { setIsOpen, setNFT, setCollection, setOrder } = useNftCheckoutStore(s => ({
-    setIsOpen: s.setIsOpen, setNFT: s.setNFT, setCollection: s.setCollection, setOrder: s.setOrder
+    setIsOpen: s.setIsOpen,
+    setNFT: s.setNFT,
+    setCollection: s.setCollection,
+    setOrder: s.setOrder,
   }))
   
   const { collection } = useNFTPageData();
@@ -58,8 +66,11 @@ export const NFTBuySection = ({ NFT, owner, NFTs, order, highestOffer, onMeasure
     }
 
     try {
+      const isOrderExpired = order && order.end ? order.end * 1000 <= Date.now() : false;
+
       const address = (await signer.getAddress()) as string;
-      if (!order) {
+
+      if (!order || isOrderExpired) {
         if (NFT) {
           if (address.toUpperCase() === (owner?.address.toUpperCase() || NFT?._ownerAddress)) {
             setState(BuyNFTSectionState.OWNER_PUT_ON_SALE);
@@ -163,7 +174,11 @@ export const NFTBuySection = ({ NFT, owner, NFTs, order, highestOffer, onMeasure
                     minutes || hours ? `${zeroPad(minutes)}m` : '',
                   ].filter(Boolean).join(' : ') + ' left';
                 }}
-                onComplete={() => setShowCountDown(false)}
+                onComplete={() => {
+                  setShowCountDown(false);
+                  // update();
+                  updateSectionState();
+                }}
               />
             </Text>
           </Box>
