@@ -177,21 +177,15 @@ export const CollectionInfo = () => {
         !collection?.address ? (
         <NotFound />
       ) : (
-        <Box layerStyle={"StoneBG"}>
-          <Cover
-            selectedCollection={collection}
-            collectionGeneralInfo={collectionGeneralInfo}
-            collectionOwner={collectionOwner}
-          />
-          <Box sx={{ position: "relative", p: "0px 20px 80px 20px" }}>
-            <Flex sx={{ maxWidth: "1110px", margin: "-160px auto 0px" }}>
-              <Box w={"100%"}>
-                <Flex
-                  sx={{
-                    alignItems: "center",
-                    mb: "30px",
-                  }}
-                >
+        <Box layerStyle={'StoneBG'}>
+          <Cover selectedCollection={collection} collectionGeneralInfo={collectionGeneralInfo} collectionOwner={collectionOwner} />
+          <Box sx={{ position: 'relative', p: (intersection?.intersectionRect.top ?? 1) !== 0 && '0px 20px 80px 20px' }} >
+            <Flex sx={{ maxWidth: '1110px', margin: '-160px auto 0px' }}>
+              <Box w={'100%'}>
+                <Flex sx={{
+                  alignItems: 'center',
+                  mb: '30px',
+                }}>
                   <Avatar
                     src={collection?.coverUrl}
                     name={collectionGeneralInfo?.name || collection?.name}
