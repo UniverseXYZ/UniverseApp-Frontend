@@ -1,10 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { useHistory } from 'react-router';
+import { useRouter } from 'next/router';
+
 import bubbleIcon from '../../assets/images/text-bubble.png';
 import plusIcon from '../../assets/images/plus.svg';
 
 const NoCollectionsFound = () => {
-  const history = useHistory();
+  const router = useRouter();
   const [isDropdownOpened, setIsDropdownOpened] = useState(false);
 
   const ref2 = useRef(null);
@@ -43,17 +44,13 @@ const NoCollectionsFound = () => {
               <ul>
                 <li
                   aria-hidden="true"
-                  onClick={() =>
-                    history.push('/my-nfts/create', { tabIndex: 1, nftType: 'single' })
-                  }
+                  onClick={() => router.push('/my-nfts/create?tabIndex=1&nftType=single')}
                 >
                   NFT
                 </li>
                 <li
                   aria-hidden="true"
-                  onClick={() =>
-                    history.push('/my-nfts/create', { tabIndex: 1, nftType: 'collection' })
-                  }
+                  onClick={() => router.push('/my-nfts/create?tabIndex=1&nftType=collection')}
                 >
                   Collection
                 </li>

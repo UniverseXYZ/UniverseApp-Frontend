@@ -1,7 +1,8 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { useHistory } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { utils } from 'ethers';
+import { useRouter } from 'next/router';
+
 import bubbleIcon from '../../../../assets/images/text-bubble.png';
 import Button from '../../../button/Button';
 import plusIcon from '../../../../assets/images/PlusIcon.png';
@@ -22,7 +23,7 @@ const NFTsTab = React.memo(({ showMintPrompt, artistAddress }) => {
   const [showSkeleton, setShowSkeleton] = useState(true);
   const [showSpinner, setShowSpinner] = useState(false);
   const [showLoadMore, setShowLoadMore] = useState(false);
-  const history = useHistory();
+  const router = useRouter();
   const { address } = useAuthContext();
   const { setShowError, setErrorTitle, setErrorBody } = useErrorContext();
 
@@ -125,20 +126,13 @@ const NFTsTab = React.memo(({ showMintPrompt, artistAddress }) => {
                   <ul>
                     <li
                       aria-hidden="true"
-                      onClick={() =>
-                        history.push('/my-nfts/create', { tabIndex: 1, nftType: 'single' })
-                      }
+                      onClick={() => router.push('/my-nfts/create?tabIndex=1&nftType=single')}
                     >
                       NFT
                     </li>
                     <li
                       aria-hidden="true"
-                      onClick={() =>
-                        history.push('/my-nfts/create', {
-                          tabIndex: 1,
-                          nftType: 'collection',
-                        })
-                      }
+                      onClick={() => router.push('/my-nfts/create?tabIndex=1&nftType=collection')}
                     >
                       Collection
                     </li>
