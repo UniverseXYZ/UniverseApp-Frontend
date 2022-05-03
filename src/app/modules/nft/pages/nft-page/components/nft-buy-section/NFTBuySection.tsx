@@ -6,7 +6,6 @@ import { useRouter } from 'next/router';
 
 import ClockIcon from '../../../../../../../assets/images/clock.svg';
 
-import { useDateCountdown } from '../../../../../../hooks';
 import * as styles from './styles';
 import { HighestBid } from './components';
 import { ICollection, IERC20AssetType, IERC721AssetType, INFT, IOrder, IUser } from '../../../../types';
@@ -95,8 +94,6 @@ export const NFTBuySection = ({ NFT, owner, NFTs, order, highestOffer, onMeasure
   useEffect(() => {
     fetchNftRoyalties();
   }, [signer, NFT?._collectionAddress, NFT?.tokenId])
-
-  // const { countDownString } = useDateCountdown(new Date(new Date().setDate(new Date().getDate() + 1)));
 
   const [isCheckoutPopupOpened, setIsCheckoutPopupOpened] = useState(false);
   const [isPlaceABidPopupOpened, setIsPlaceABidPopupOpened] = useState(false);
