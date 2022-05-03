@@ -30,6 +30,7 @@ import { useAuthStore } from '../../../../../stores/authStore';
 interface INFTMenuProps {
   NFT: INFT;
   owner: IUser;
+  ownerAddress: string | undefined;
   collectionAddress: string;
   showSell?: boolean;
   showTransfer?: boolean;
@@ -54,6 +55,7 @@ export const NFTMenu = (
   {
     NFT,
     owner,
+    ownerAddress,
     collectionAddress,
     showSell = true,
     showTransfer = true,
@@ -138,7 +140,7 @@ export const NFTMenu = (
     }
   }, [onRefresh])
 
-  const isOwner = owner?.address.toUpperCase() === `${address}`.toUpperCase();
+  const isOwner = owner?.address?.toUpperCase() || ownerAddress === `${address}`.toUpperCase();
 
   return (
     <>

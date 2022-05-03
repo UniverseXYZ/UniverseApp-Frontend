@@ -269,6 +269,7 @@ export const CollectionInfo = () => {
                                           collection={collection}
                                           creator={creator?.mappedArtist || undefined}
                                           owner={owner?.mappedArtist || undefined}
+                                          ownerAddress={NFT._ownerAddress}
                                           order={orderData || undefined}
                                           bestOfferPrice={bestOfferPrice || 0}
                                           bestOfferPriceToken={bestOfferPriceToken || undefined}
@@ -309,6 +310,7 @@ export const CollectionInfo = () => {
                                         creator={creator?.mappedArtist || undefined}
                                         owner={owner?.mappedArtist || undefined}
                                         order={orderData || undefined}
+                                        ownerAddress={NFT._ownerAddress}
                                         bestOfferPrice={bestOfferPrice || 0}
                                         bestOfferPriceToken={bestOfferPriceToken || undefined}
                                         lastOfferPrice={lastOfferPrice || 0}

@@ -9,20 +9,21 @@ import { RelationAvatar } from './RelationAvatar';
 
 interface INFTPageOwnerRelationProps {
   owner: IUser;
+  ownerAddress: string | undefined;
   avatarStyle?: BoxProps;
 }
 
-export const NFTPageOwnerRelation = ({ owner, avatarStyle = {} } : INFTPageOwnerRelationProps) => {
+export const NFTPageOwnerRelation = ({ owner, ownerAddress, avatarStyle = {} } : INFTPageOwnerRelationProps) => {
   return (
     <NFTPageRelation
       type={NFTRelationType.OWNER}
-      href={`/${owner?.universePageUrl || owner?.address.toLowerCase()}`}
-      value={`${owner?.displayName || owner?.address}`}
+      href={`/${owner?.universePageUrl || owner?.address?.toLowerCase() || ownerAddress}`}
+      value={`${owner?.displayName || owner?.address || ownerAddress}`}
       renderAvatar={() => (owner?.profileImageUrl
           ? <RelationAvatar src={owner?.profileImageUrl} {...avatarStyle} />
           : (
             <Box style={{ borderRadius: '50%', overflow: 'hidden'}} {...avatarStyle}>
-              <Blockies seed={owner.address} size={9} scale={4} />
+              <Blockies seed={owner?.address || ownerAddress} size={9} scale={4} />
             </Box>
           )
       )}

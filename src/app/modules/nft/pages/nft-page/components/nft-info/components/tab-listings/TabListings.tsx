@@ -10,11 +10,12 @@ import HistoryEvent from '../shared/history-listings-event/HistoryEvent';
 
 interface ITabListingsProps {
   owner: IUser;
+  ownerAddress: string | undefined;
 }
 
 export const TabListings = (props: ITabListingsProps) => {
   const [isCancelListingPopupOpened, setIsCancelListingPopupOpened] = useState(false);
-  const { owner } = props;
+  const { owner, ownerAddress } = props;
   const address = useAuthStore(s => s.address)
   const { order } = useNFTPageData();
 
@@ -32,7 +33,7 @@ export const TabListings = (props: ITabListingsProps) => {
               event={{ ...listing, makerData: owner } as IOrder}
               onlyListings
               cancelListing={setIsCancelListingPopupOpened}
-              isOwner={owner?.address === address}
+              isOwner={(owner?.address || ownerAddress) === address}
             />
             <NFTCancelListingPopup
               order={listing}
