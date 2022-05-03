@@ -7,7 +7,6 @@ import { useRouter } from 'next/router';
 import { useMyNftsContext } from '../../../../../contexts/MyNFTsContext';
 import { useLobsterContext } from '../../../../../contexts/LobsterContext';
 import { usePolymorphContext } from '../../../../../contexts/PolymorphContext';
-import { useThemeContext } from '../../../../../contexts/ThemeContext';
 import useStateIfMounted from '../../../../../utils/hooks/useStateIfMounted';
 import { formatRoyaltiesForMinting } from '../../../../../utils/helpers/contractInteraction';
 import { createMintingNFT, getMetaForSavedNft } from '../../../../../utils/api/mintNFT';
@@ -28,6 +27,7 @@ import FiltersContextProvider from '../../../account/pages/my-nfts-page/componen
 import { useAuthStore } from '../../../../../stores/authStore';
 import Contracts from '../../../../../contracts/contracts.json';
 import { useErrorStore } from '../../../../../stores/errorStore';
+import { useThemeStore } from 'src/stores/themeStore';
  
 // @ts-ignore
 const { contracts } = Contracts[process.env.REACT_APP_NETWORK_CHAIN_ID];
@@ -55,7 +55,7 @@ export const MyNFTsPage = () => {
 
   const { setShowError, setErrorTitle, setErrorBody } = useErrorStore(s => ({setShowError: s.setShowError, setErrorTitle: s.setErrorTitle, setErrorBody: s.setErrorBody}))
 
-  const { setDarkMode } = useThemeContext() as any;
+  const setDarkMode = useThemeStore(s => s.setDarkMode);
 
   const scrollContainer = useRef(null);
 

@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 // import './Minting.scss';
-import { useThemeContext } from '../../../contexts/ThemeContext';
 import { useRouter } from 'next/router';
 import Popup from 'reactjs-popup';
 import singleIcon from '../../../assets/images/minting-create-nft.png';
@@ -11,11 +10,12 @@ import collectionIconHover from '../../../assets/images/minting-create-collectio
 import WrongNetworkPopup from '../../popups/WrongNetworkPopup';
 import NotAuthenticatedPopup from '../../popups/NotAuthenticatedPopup';
 import { useAuthStore } from '../../../stores/authStore';
+import { useThemeStore } from 'src/stores/themeStore';
 
 const MintingPage = () => {
   const router = useRouter();
   const { isAuthenticated, isWalletConnected } = useAuthStore(s => ({isAuthenticated: s.isAuthenticated, isWalletConnected: s.isWalletConnected}));
-  const { setDarkMode } = useThemeContext();
+  const setDarkMode = useThemeStore(s => s.setDarkMode);
   const [showNotAuthenticatedPopup, setShowNotAuthenticatedPopup] = useState(false);
 
   useEffect(() => setDarkMode(false), []);

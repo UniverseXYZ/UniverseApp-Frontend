@@ -38,7 +38,6 @@ import {
   GetCollectionsFromScraperApi,
   GetCollectionApi
 } from '../../../nft/api';
-import { useThemeContext } from '../../../../../contexts/ThemeContext';
 import { OrderAssetClass } from '../../../nft/enums';
 import * as styles from './BrowseNFTsPage.styles';
 import { getTokenAddressByTicker } from '../../../../constants';
@@ -58,11 +57,12 @@ import {
   useSaleTypeFilter,
 } from '../../../../components/filters';
 import { useAuthStore } from '../../../../../stores/authStore';
+import { useThemeStore } from 'src/stores/themeStore';
 
 export type ICollectionsFilterValue = Array<any>;
 
 export const BrowseNFTsPage = () => {
-  const { setDarkMode } = useThemeContext() as any;
+  const setDarkMode = useThemeStore(s => s.setDarkMode);
   const isWalletConnected = useAuthStore(state => state.isWalletConnected);
   const queryClient = useQueryClient();
 

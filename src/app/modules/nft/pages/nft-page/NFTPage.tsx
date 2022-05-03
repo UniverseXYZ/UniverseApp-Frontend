@@ -3,12 +3,11 @@ import { GetServerSideProps } from 'next';
 
 import { GetNFT2Api } from '@app/modules/nft/api';
 
-import { useThemeContext } from '@legacy/ThemeContext';
-
 import { NFTInfo } from './components';
 import { NFTPageProvider } from './NFTPage.context';
 import { dehydrate, QueryClient } from 'react-query';
 import { nftKeys } from '@app/utils/query-keys';
+import { useThemeStore } from 'src/stores/themeStore';
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const queryClient = new QueryClient();
@@ -29,7 +28,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 }
 
 export const NFTPage = () => {
-  const { setDarkMode } = useThemeContext() as any;
+  const setDarkMode = useThemeStore(s => s.setDarkMode);
 
   useEffect(() => setDarkMode(false), []);
 

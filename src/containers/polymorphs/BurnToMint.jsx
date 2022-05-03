@@ -11,7 +11,6 @@ import BurnPolymorphBg from '../../assets/images/BurnPolymorphBg.png';
 import Section4 from '../../components/polymorphs/Section4';
 import data from '../../utils/fixtures/newPolymorphBaseSkins';
 import './BurnToMint.scss';
-import { useThemeContext } from '../../contexts/ThemeContext';
 import { useWindowSize } from 'react-use';
 
 const marquee = () => (

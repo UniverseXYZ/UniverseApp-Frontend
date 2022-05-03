@@ -10,10 +10,10 @@ import Section6 from '../../components/polymorphs/Section6';
 // import './Polymorphs.scss';
 import { morphedPolymorphs, queryPolymorphsGraph } from '../../utils/graphql/polymorphQueries';
 import { useGraphQueryHook } from '../../utils/hooks/useGraphQueryHook';
-import { useThemeContext } from '../../contexts/ThemeContext';
 import { useMyNftsContext } from '../../contexts/MyNFTsContext';
 import { useWindowSize } from 'react-use';
 import { useErc20PriceStore } from '../../stores/erc20PriceStore';
+import { useThemeStore } from 'src/stores/themeStore';
 
 const marquee = () => (
   <p>
@@ -37,7 +37,7 @@ const marquee = () => (
 );
 
 const Polymorphs = () => {
-  const { setDarkMode } = useThemeContext();
+  const setDarkMode = useThemeStore(s => s.setDarkMode);
   const [mobile, setMobile] = useState(false);
   const { data } = useGraphQueryHook(queryPolymorphsGraph(morphedPolymorphs));
   const { polymorphsFilter, navigateToMyUniverseNFTsTab } = useMyNftsContext();
