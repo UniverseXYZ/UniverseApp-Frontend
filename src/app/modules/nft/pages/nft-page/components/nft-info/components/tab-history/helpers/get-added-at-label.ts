@@ -11,7 +11,7 @@ export const getAddedAtLabel = (addedAt: Date) => {
 
   if (res.days) {
     if (res.days > 365) {
-      return `${res.days / 365} years ${res.days - (res.days / 365)} days`;
+      return `${Math.floor(res.days / 365)} years ${res.days - Math.floor(res.days / 365)} days`;
     } else {
       return `${res.days} days ${res.hours} hours`;
     }
