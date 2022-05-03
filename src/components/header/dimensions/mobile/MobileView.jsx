@@ -578,7 +578,7 @@ const MobileView = (props) => {
                               // className="disable"
                               onClick={() => {
                                 setShowMenu(false);
-                                history.push('/marketplace');
+                                history.push('/');
                               }}
                             >
                               <img src={marketplaceIcon} alt="NFT Marketplace" />
