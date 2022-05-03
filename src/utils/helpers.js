@@ -1,3 +1,5 @@
+import { useThemeStore } from "src/stores/themeStore";
+
 export const handleClickOutside = (event, className, ref, cb) => {
   if (!event.target.classList.contains(className)) {
     if (ref.current && !ref.current.contains(event.target)) {
@@ -6,7 +8,9 @@ export const handleClickOutside = (event, className, ref, cb) => {
   }
 };
 
-export const handleScroll = (darkMode) => {
+export const handleScroll = () => {
+  const darkMode = useThemeStore.getState().darkMode;
+
   if (window.scrollY > 0) {
     if (document.querySelector('header')) {
       // document.querySelector('header').style.position = 'fixed';
