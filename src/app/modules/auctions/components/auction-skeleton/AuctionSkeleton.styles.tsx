@@ -1,5 +1,7 @@
-import { useMeasure } from 'react-use';
-import { Box, BoxProps, Flex, SimpleGridProps } from '@chakra-ui/react';
+import { BoxProps, SimpleGridProps, SkeletonProps } from '@chakra-ui/react';
+
+const START_COLOR = '#E6E6E6';
+const END_COLOR = '#c7c7c7';
 
 export const Wrapper: BoxProps = {
   bg: 'white',
@@ -8,9 +10,17 @@ export const Wrapper: BoxProps = {
   overflow: 'hidden',
 };
 
-export const Asset: BoxProps = {
-  bg: '#ECECEC',
+export const AssetWrapper: BoxProps = {
   pos: 'relative',
+};
+
+export const Asset: SkeletonProps = {
+  startColor: '#ECECEC',
+  endColor: '#dadada',
+  pos: 'absolute',
+  left: 0,
+  top: 0,
+  boxSize: '100%',
 };
 
 export const TimerWrapper: BoxProps = {
@@ -26,16 +36,20 @@ export const TimerWrapper: BoxProps = {
   transform: 'translateX(-50%)',
 };
 
-export const TimerLabel: BoxProps = {
-  bg: 'rgba(0, 0, 0, 0.05)',
+export const TimerLabel: SkeletonProps = {
+  startColor: 'rgba(0, 0, 0, 0.05)',
+  endColor: 'rgba(0, 0, 0, 0.15)',
+  speed: 1,
   borderRadius: '30px',
   h: '8px',
   mb: '4px',
   w: '50%',
 };
 
-export const TimerValue: BoxProps = {
-  bg: 'rgba(0, 0, 0, 0.05)',
+export const TimerValue: SkeletonProps = {
+  startColor: 'rgba(0, 0, 0, 0.05)',
+  endColor: 'rgba(0, 0, 0, 0.15)',
+  speed: 1,
   borderRadius: '30px',
   h: '14px',
   w: '86px',
@@ -45,23 +59,29 @@ export const ContentWrapper: BoxProps = {
   padding: '18px 14px',
 };
 
-export const Title: BoxProps = {
-  bg: '#E6E6E6',
+export const Title: SkeletonProps = {
+  startColor: START_COLOR,
+  endColor: END_COLOR,
+  speed: 1,
   borderRadius: '30px',
   height: '18px',
   mb: '6px',
   width: '75%',
 };
 
-export const CreatorAvatar: BoxProps = {
-  bg: '#E6E6E6',
+export const CreatorAvatar: SkeletonProps = {
+  startColor: START_COLOR,
+  endColor: END_COLOR,
+  speed: 1,
   borderRadius: '50%',
   boxSize: '24px',
   mr: '6px',
 };
 
-export const CreatorName: BoxProps = {
-  bg: '#E6E6E6',
+export const CreatorName: SkeletonProps = {
+  startColor: START_COLOR,
+  endColor: END_COLOR,
+  speed: 1,
   borderRadius: '30px',
   h: '12px',
   w: '30%',
@@ -85,16 +105,20 @@ export const DetailsItem: BoxProps = {
   },
 };
 
-export const DetailsItemLabel: BoxProps = {
-  background: '#E6E6E6',
+export const DetailsItemLabel: SkeletonProps = {
+  startColor: START_COLOR,
+  endColor: END_COLOR,
+  speed: 1,
   borderRadius: '30px',
   h: '10px',
   w: '80%',
   mb: '8px',
 };
 
-export const DetailsItemValue: BoxProps = {
-  background: '#E6E6E6',
+export const DetailsItemValue: SkeletonProps = {
+  startColor: START_COLOR,
+  endColor: END_COLOR,
+  speed: 1,
   borderRadius: '30px',
   h: '17px',
   w: '40%',
@@ -110,29 +134,39 @@ export const MyBidWrapper: BoxProps = {
   mb: '14px',
 };
 
-export const MyBidLabel: BoxProps = {
-  bg: '#E6E6E6',
-  border: '2px solid white',
+export const MyBidLabelWrapper: BoxProps = {
+  bg: 'white',
   borderRadius: '30px',
   left: '20px',
+  padding: '2px',
   pos: 'absolute',
   top: '-1px',
   transform: 'translateY(-50%)',
+};
+
+export const MyBidLabel: SkeletonProps = {
+  startColor: START_COLOR,
+  endColor: END_COLOR,
+  speed: 1,
+  borderRadius: 'inherit',
   h: '12px',
   w: '45px',
 };
 
-export const MyBidValue: BoxProps = {
-  bg: '#E6E6E6',
+export const MyBidValue: SkeletonProps = {
+  startColor: START_COLOR,
+  endColor: END_COLOR,
+  speed: 1,
   borderRadius: '30px',
   mr: '4px',
   h: '26px',
   w: '35%',
 };
 
-
-export const MyBidValueUSD: BoxProps = {
-  bg: '#E6E6E6',
+export const MyBidValueUSD: SkeletonProps = {
+  startColor: START_COLOR,
+  endColor: END_COLOR,
+  speed: 1,
   borderRadius: '30px',
   mr: '4px',
   h: '14px',

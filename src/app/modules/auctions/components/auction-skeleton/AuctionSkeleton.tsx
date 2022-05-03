@@ -1,4 +1,4 @@
-import { Box, Flex, SimpleGrid } from '@chakra-ui/react';
+import { Box, Flex, SimpleGrid, Skeleton } from '@chakra-ui/react';
 import { useMeasure } from 'react-use';
 
 import * as styles from './AuctionSkeleton.styles';
@@ -20,33 +20,36 @@ export const AuctionSkeleton = (props: IAuctionSkeletonProps) => {
   const renderDetails = useCallback(() => {
     return new Array(showHighestLowestBids ? 4 : 2).fill(null).map((_, i) => (
       <Box key={i} {...styles.DetailsItem}>
-        <Box {...styles.DetailsItemLabel} />
-        <Box {...styles.DetailsItemValue} />
+        <Skeleton {...styles.DetailsItemLabel} />
+        <Skeleton {...styles.DetailsItemValue} />
       </Box>
     ));
   }, [showHighestLowestBids]);
 
   return (
     <Box ref={ref} {...styles.Wrapper}>
-      <Box h={`${width}px`} {...styles.Asset}>
+      <Box h={`${width}px`} {...styles.AssetWrapper}>
+        <Skeleton {...styles.Asset} />
         <Box {...styles.TimerWrapper}>
-          <Box {...styles.TimerLabel} />
-          <Box {...styles.TimerValue} />
+          <Skeleton {...styles.TimerLabel} />
+          <Skeleton {...styles.TimerValue} />
         </Box>
       </Box>
       <Box {...styles.ContentWrapper}>
-        <Box {...styles.Title} />
+        <Skeleton {...styles.Title} />
 
         <Flex alignItems={'center'} mb={'20px'}>
-          <Box {...styles.CreatorAvatar} />
-          <Box {...styles.CreatorName} />
+          <Skeleton {...styles.CreatorAvatar} />
+          <Skeleton {...styles.CreatorName} />
         </Flex>
 
         {showMyBid && (
           <Box {...styles.MyBidWrapper}>
-            <Box {...styles.MyBidLabel} />
-            <Box {...styles.MyBidValue} />
-            <Box {...styles.MyBidValueUSD} />
+            <Box {...styles.MyBidLabelWrapper}>
+              <Skeleton {...styles.MyBidLabel} />
+            </Box>
+            <Skeleton {...styles.MyBidValue} />
+            <Skeleton {...styles.MyBidValueUSD} />
           </Box>
         )}
 

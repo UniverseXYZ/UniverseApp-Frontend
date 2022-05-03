@@ -5,6 +5,7 @@ import BubbleImage from '@assets/images/text-bubble-2x.png';
 import plusIcon from '@assets/images/plus.svg';
 import { Alert } from '@app/components';
 import { AuctionSkeleton } from '@app/modules/auctions/components';
+import { useCallback } from 'react';
 
 type IAuction = any;
 
@@ -21,18 +22,14 @@ export const AuctionsList = (props: IAuctionsListProps) => {
 
   const isFillOutProfileAlert = false;
 
+  const renderLoading = useCallback(() => (
+    <SimpleGrid columns={4} spacing={'30px'} my={'30px'}>
+      {new Array(4).fill(null).map((_, i) => (<AuctionSkeleton key={i} />))}
+    </SimpleGrid>
+  ), []);
+
   if (isLoading) {
-    return (
-      <SimpleGrid columns={4} spacing={'30px'} my={'30px'}>
-        {auctions.map(x => (
-          <AuctionSkeleton
-            key={x}
-            showHighestLowestBids={true}
-            showMyBid={true}
-          />
-        ))}
-      </SimpleGrid>
-    );
+    return renderLoading();
   }
 
   if (!auctions.length) {
