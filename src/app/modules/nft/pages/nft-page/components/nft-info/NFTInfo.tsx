@@ -246,8 +246,8 @@ export const NFTInfo = () => {
                     <Tab>Properties</Tab>
                     {showMetadata && <Tab>Metadata</Tab>}
                     {/* TODO: Add implementation after release */}
-                    <Tab>Owners</Tab>
-                    <Tab>Bids</Tab>
+                    {/*<Tab>Owners</Tab>*/}
+                    {/*<Tab>Bids</Tab>*/}
                     <Tab>Offers</Tab>
                     <Tab>History</Tab>
                     <Tab>Listings</Tab>
