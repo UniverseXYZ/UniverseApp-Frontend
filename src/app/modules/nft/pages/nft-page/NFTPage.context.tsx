@@ -1,4 +1,4 @@
-import { FC, createContext, useContext, useState, useEffect, useCallback } from 'react';
+import React, { FC, createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { useQuery, useQueryClient } from 'react-query';
 
 import { ICollection, IERC721AssetType, INFT, IOrder, IUser } from '../../types';
@@ -27,22 +27,18 @@ export function useNFTPageData(): INFTPageContext {
   return useContext(NFTPageContext);
 }
 
-const NFTPageProvider: FC = ({ children }) => {
+interface INFTPageProviderProps {
+  NFT: INFT;
+  children: React.ReactNode;
+}
+
+export const NFTPageProvider: FC<INFTPageProviderProps> = (props) => {
+  const { NFT, children } = props;
+
   const router = useRouter();
   // const { collectionAddress, tokenId } = useParams<{ collectionAddress: string; tokenId: string; }>();
   const { collectionAddress, tokenId } = router.query as { collectionAddress: string; tokenId: string; };
   const queryClient = useQueryClient();
-
-
-  // NFT Data query
-  const { data: NFT, isLoading: isLoadingNFT } = useQuery(
-    nftKeys.nftInfo({collectionAddress, tokenId}),
-    () => GetNFT2Api(collectionAddress, tokenId, false),
-    {
-      enabled: !!collectionAddress && !!tokenId,
-      onSuccess: (NFT) => console.log('NFT', NFT) 
-    },
-  );
 
   // NFT Order Listing 
   const { data: order, isLoading: isLoadingOrder } = useQuery(
@@ -53,7 +49,6 @@ const NFTPageProvider: FC = ({ children }) => {
     },
     {
       enabled: !!tokenId && !!collectionAddress,
-      onSuccess: (order) => console.log('Order', order) 
     });
 
   // More from collection NFTs query
@@ -80,9 +75,6 @@ const NFTPageProvider: FC = ({ children }) => {
   const { data: history, refetch: refetchHistory } = useQuery(
     orderKeys.history({collectionAddress, tokenId}),
     () => GetHistoryApi(collectionAddress, tokenId),
-    {
-      onSuccess: (history) => console.log('history', history)
-    },
   );
 
   // NFT Offers Query
@@ -93,9 +85,6 @@ const NFTPageProvider: FC = ({ children }) => {
       tokenIds: tokenId,
       collection: collectionAddress
     }),
-    {
-      onSuccess: (offers) => console.log('offers', offers)
-    },
   );
  
   // NFT Creator Data Query
@@ -105,7 +94,6 @@ const NFTPageProvider: FC = ({ children }) => {
     {
       enabled: !!NFT?._creatorAddress,
       retry: false,
-      onSuccess: (creator) => console.log('creator', creator)
     },
   );
 
@@ -116,7 +104,6 @@ const NFTPageProvider: FC = ({ children }) => {
     {
       enabled: !!NFT?._ownerAddress, 
       retry: false,
-      onSuccess: (owner) => console.log('owner', owner)
     },
   );
 
@@ -127,7 +114,6 @@ const NFTPageProvider: FC = ({ children }) => {
     { 
       enabled: !!NFT?._collectionAddress,
       retry: false,
-      onSuccess: (collection) => console.log('collection', collection) 
     },
   );
 
@@ -144,7 +130,7 @@ const NFTPageProvider: FC = ({ children }) => {
     owner: owner as IUser,
     collection: collection as ICollection,
     NFT: NFT as INFT,
-    isLoading: isLoadingNFT || isLoadingOrder,
+    isLoading: isLoadingOrder,
     isPolymorph: NFT?._collectionAddress?.toUpperCase() === process.env.REACT_APP_POLYMORPHS_CONTRACT_ADDRESS?.toUpperCase(),
     refetchOffers,
     history,
@@ -158,5 +144,3 @@ const NFTPageProvider: FC = ({ children }) => {
     </NFTPageContext.Provider>
   );
 };
-
-export default NFTPageProvider;
