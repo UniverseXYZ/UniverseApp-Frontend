@@ -1,5 +1,5 @@
 import React from 'react';
-import './SliderSection.scss';
+// import './SliderSection.scss';
 import SkinsAnimation from './animations/SkinsAnimation';
 import AttributesAnimation from './animations/AttributesAnimation';
 import MissionAnimation from './animations/MissionAnimation';
