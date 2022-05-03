@@ -1,5 +1,5 @@
-import { Box, LinkBox, LinkOverlay, Text } from '@chakra-ui/react';
-import React, { useMemo, useState } from 'react';
+import { Box, Flex, LinkBox, LinkOverlay, Text } from '@chakra-ui/react';
+import React, { useMemo, useRef, useState } from 'react';
 import { useQuery } from 'react-query';
 import { useHoverDirty } from 'react-use';
 import { utils } from 'ethers';
@@ -230,7 +230,7 @@ export const NftItem = (
                     <Text fontSize={'14px'} fontWeight={700} mb={'12px'}>{NFT?.name}</Text>
 
                     <Box mb={'14px'}>
-                      <Box>
+                      <Flex>
                         <NFTItemRelation
                           type={NFTRelationType.CREATOR}
                           image={creator?.artist?.avatar ?? ''}
@@ -249,7 +249,7 @@ export const NftItem = (
                           value={owner?.artist?.name || NFT._ownerAddress || ''}
                           linkParam={owner?.artist?.universePageAddress || owner?.address || NFT._ownerAddress?.toLowerCase() || ""}
                         />
-                      </Box>
+                      </Flex>
                     </Box>
                   </>
                 )
