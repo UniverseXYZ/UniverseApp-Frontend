@@ -16,6 +16,8 @@ import ReadMoreAndLess from 'react-read-more-less';
 import { UseMeasureRect } from 'react-use/lib/useMeasure';
 import { useRouter } from 'next/router';
 
+import VideoPlaceholder from '@assets/images/open-graph/video-placeholder.png';
+
 import { LineTabList, OpenGraph } from '../../../../../../components';
 import { NFTAssetImage, NFTAssetAudio, NFTBuySection, NFTAssetVideo } from '../';
 import { useNFTPageData } from '../../NFTPage.context';
@@ -52,6 +54,7 @@ import { useErc20PriceStore } from '../../../../../../../stores/erc20PriceStore'
 import * as styles from '../../styles';
 import * as styles2 from './NFTInfo.style';
 import { getArtistApi } from '@app/api';
+import { useNFTAsset } from '@app/modules/nft/components/nft-item/components/nft-item-asset/hooks';
 
 // TODO: hide metadata tab for not Polymorph NFT type
 export const NFTInfo = () => {
@@ -174,12 +177,20 @@ export const NFTInfo = () => {
     }
   }, [offers, ethUsdPrice, daiUsdPrice, usdcUsdPrice, xyzUsdPrice, wethUsdPrice]);
 
+  const isAssetVideo = isNFTAssetVideo(NFT?.artworkTypes ?? []);
+  const isAssetImage = isNFTAssetImage(NFT?.artworkTypes ?? []);
+  const isAssetAudio = isNFTAssetAudio(NFT?.artworkTypes ?? []);
+
+  const { preview } = useNFTAsset(NFT);
+
+  const OGImage = preview ? (preview.indexOf('.mp4') !== -1 ? VideoPlaceholder : preview) : undefined;
+
   return (
     <>
       <OpenGraph
         title={`${NFT?.name} – ${collection?.name}`}
         description={collection?.description || undefined}
-        image={NFT?.optimizedUrl || NFT?.previewUrl || NFT?.originalUrl || undefined}
+        image={OGImage}
         imageAlt={NFT?.name || ''}
       />
       {isLoading ? (
@@ -192,9 +203,9 @@ export const NFTInfo = () => {
             <Box {...styles.NFTAssetContainerStyle}>
               <GoBackButton />
               {(!NFT.artworkTypes || !NFT.artworkTypes.length) && <NFTAssetBroken {...styles2.BrokenAssetStyle} /> ||
-              isNFTAssetVideo(NFT.artworkTypes) && (<NFTAssetVideo video={NFT.videoUrl || NFT.optimizedUrl || NFT.originalUrl} />) ||
-              isNFTAssetImage(NFT.artworkTypes) && <NFTAssetImage image={NFT.optimizedUrl || NFT.originalUrl} alt={NFT.name} /> ||
-              isNFTAssetAudio(NFT.artworkTypes) && <NFTAssetAudio audio={NFT.optimizedUrl || NFT.originalUrl} />}
+              isAssetVideo && (<NFTAssetVideo video={NFT.videoUrl || NFT.optimizedUrl || NFT.originalUrl} />) ||
+              isAssetImage && <NFTAssetImage image={NFT.optimizedUrl || NFT.originalUrl} alt={NFT.name} /> ||
+              isAssetAudio && <NFTAssetAudio audio={NFT.optimizedUrl || NFT.originalUrl} />}
             </Box>
             <Box {...styles.NFTDetailsContainerStyle}>
               <Box {...styles2.NFTDetailsTopSectionStyle}>
