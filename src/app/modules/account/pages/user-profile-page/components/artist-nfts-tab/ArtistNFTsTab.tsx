@@ -1,5 +1,5 @@
 import { Box, Button, SimpleGrid } from '@chakra-ui/react';
-import { useCallback, useEffect, useRef } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useIntersection } from 'react-use';
 
 import { NftItem, NFTItemContentWithPrice } from '@app/modules/nft/components';
@@ -38,6 +38,7 @@ export const ArtistNFTsTab = ({ artistAddress, onTotalLoad }: IArtistNFTsTabProp
   } = useFiltersContext();
 
   const router = useRouter();
+  const [currentScrollTop, setCurrentScrollTop] = useState(0);
 
   useEffect(() => {
     setUserAddress(artistAddress);
@@ -53,6 +54,10 @@ export const ArtistNFTsTab = ({ artistAddress, onTotalLoad }: IArtistNFTsTabProp
       onTotalLoad(nftPages[0].total);
     }
   }, [userNFTs])
+
+  useEffect(() => {
+    window.scrollTo(0, currentScrollTop)
+  }, [currentScrollTop])
 
   const hasOrderBookFilters = hasSelectedOrderBookFilters();
 	const hasOrders = orders?.pages?.length && orders.pages[0].data?.length;
@@ -87,6 +92,8 @@ export const ArtistNFTsTab = ({ artistAddress, onTotalLoad }: IArtistNFTsTabProp
     rootMargin: '0px',
     root: null,
   });
+
+  console.log(waitingUserNFTs);
 
   return (
     <Box>
@@ -214,7 +221,10 @@ export const ArtistNFTsTab = ({ artistAddress, onTotalLoad }: IArtistNFTsTabProp
               </SimpleGrid>
 
               {!waitingUserNFTs && hasMoreUserNFTs && (
-                <Button variant={'outline'} isFullWidth={true} mt={10} onClick={() => fetchNextUserNFTs()}>
+                <Button variant={'outline'} isFullWidth={true} mt={10} onClick={() => {
+                  setCurrentScrollTop(document.documentElement.scrollTop);
+                  fetchNextUserNFTs();
+                }}>
                   Load more
                 </Button>
               )}
