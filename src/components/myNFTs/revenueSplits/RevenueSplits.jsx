@@ -11,6 +11,7 @@ import smallDeleteIcon from '../../../assets/images/del-icon.svg';
 import addIcon from '../../../assets/images/Add.svg';
 import { useAuthContext } from '../../../contexts/AuthContext.jsx';
 import { timeout } from '../../../app/utils/debounceConfig';
+import { useAuthStore } from '../../../stores/authStore';
 
 const REVENUE_SPLITS_COUNT = 5;
 
@@ -19,7 +20,11 @@ const ADDRESS_PLACEHOLDER = '0x89205A3A3b2A69De6Dbf7f01ED13B2108B2c43e7';
 const INVALID_ADDRESS_TEXT = 'Please enter valid address or ENS';
 
 const RevenueSplits = (props) => {
-  const { address, web3Provider } = useAuthContext();
+  const { address, web3Provider } = useAuthStore(state => ({
+    address: state.address,
+    web3Provider: state.web3Provider,
+  }));
+
   const {
     showRevenueSplits,
     setShowRevenueSplits,
