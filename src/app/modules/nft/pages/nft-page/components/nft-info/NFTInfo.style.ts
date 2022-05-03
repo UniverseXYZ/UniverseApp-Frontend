@@ -1,4 +1,4 @@
-import { BoxProps, HeadingProps, TabPanelsProps, TextProps } from '@chakra-ui/react';
+import { BoxProps, ButtonProps, HeadingProps, TabPanelsProps, TextProps, TooltipProps } from '@chakra-ui/react';
 
 export const EditionTextStyle: TextProps = {
   color: 'rgba(0, 0, 0, 0.6)',
@@ -36,8 +36,8 @@ export const NameStyle: HeadingProps = {
 
 export const NFTDetailsTopSectionStyle: BoxProps = {
   p: {
-    sm: '40px 20px',
-    md: '60px 40px'
+    base: '40px 20px',
+    md: '40px',
   },
   overflowY: {
     xl: 'scroll'
@@ -51,7 +51,7 @@ export const NFTDetailsTopSectionStyle: BoxProps = {
 };
 
 export const TabPanelsStyle: TabPanelsProps = {
-  css: {
+  sx: {
     '> div': {
       px: 0,
       pt: '30px',
