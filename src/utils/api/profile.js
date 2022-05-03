@@ -1,3 +1,4 @@
+import Cookies from 'js-cookie';
 const SAVE_PROFILE_INFO_URL = `${process.env.REACT_APP_API_BASE_URL}/api/user/save-profile-info`;
 const UPLOAD_PROFILE_IMAGE_URL = `${process.env.REACT_APP_API_BASE_URL}/api/user/upload-profile-image`;
 const UPLOAD_LOGO_URL = `${process.env.REACT_APP_API_BASE_URL}/api/user/upload-logo-image`;
@@ -31,7 +32,7 @@ export const saveProfileInfo = async (loggedInArtist) => {
     method: 'post',
     headers: {
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${localStorage.getItem('xyz_access_token')}`,
+      Authorization: `Bearer ${Cookies.get('xyz_access_token')}`,
     },
     body: JSON.stringify({
       ...requestData,
@@ -55,7 +56,7 @@ export const saveUserImage = async (file) => {
   const request = await fetch(UPLOAD_PROFILE_IMAGE_URL, {
     method: 'post',
     headers: {
-      Authorization: `Bearer ${localStorage.getItem('xyz_access_token')}`,
+      Authorization: `Bearer ${Cookies.get('xyz_access_token')}`,
     },
     body: formData,
   });
@@ -74,7 +75,7 @@ export const saveUserLogo = async (file) => {
   const request = await fetch(UPLOAD_LOGO_URL, {
     method: 'post',
     headers: {
-      Authorization: `Bearer ${localStorage.getItem('xyz_access_token')}`,
+      Authorization: `Bearer ${Cookies.get('xyz_access_token')}`,
     },
     body: formData,
   });
@@ -101,7 +102,7 @@ export const getProfileInfo = async (address) => {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${localStorage.getItem('xyz_access_token')}`,
+      Authorization: `Bearer ${Cookies.get('xyz_access_token')}`,
     },
   });
   if (!request.ok && request.status !== 201) {

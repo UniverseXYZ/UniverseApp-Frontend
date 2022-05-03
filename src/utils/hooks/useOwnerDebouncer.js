@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import Cookies from 'js-cookie';
 import AwesomeDebouncePromise from 'awesome-debounce-promise';
 import useConstant from 'use-constant';
 import { useAsyncAbortable } from 'react-async-hook';
@@ -13,7 +14,7 @@ const searchOwner = async (address, abortSignal) => {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${localStorage.getItem('xyz_access_token')}`,
+      Authorization: `Bearer ${Cookies.get('xyz_access_token')}`,
     },
     signal: abortSignal,
   });

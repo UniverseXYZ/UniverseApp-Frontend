@@ -132,7 +132,7 @@ import { Theme } from '../src/app/theme';
 import { LayoutProvider } from '../src/app/providers';
 import { useErc20PriceStore } from '../src/stores/erc20PriceStore';
 import { useAuthStore } from '../src/stores/authStore';
-import Cookies from 'js-cookie'
+import Cookies from 'js-cookie';
 import { ReactQueryDevtools } from 'react-query/devtools';
 
 function MyApp({ Component, pageProps }: AppProps) {

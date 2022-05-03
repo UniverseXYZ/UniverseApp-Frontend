@@ -1,4 +1,5 @@
 import axios from 'axios';
+import Cookies from 'js-cookie';
 import { utils } from 'ethers';
 import { ZERO_ADDRESS } from '../../../constants';
 import { OrderSide, OrderStatus } from '../../marketplace/enums';
@@ -39,7 +40,7 @@ const getHistoryData = async (collectionAddress: string, tokenId: string): Promi
 
   const { data } = await axios.get(url, {
     headers: {
-      Authorization: `Bearer ${localStorage.getItem('xyz_access_token')}`,
+      Authorization: `Bearer ${Cookies.get('xyz_access_token')}`,
     },
   });
 
