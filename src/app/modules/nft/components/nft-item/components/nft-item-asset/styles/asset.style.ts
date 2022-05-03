@@ -4,6 +4,8 @@ export const AssetStyle: (width: string | number) => ImageProps = (width: string
   const _width = typeof width === 'number' ? `${width}px` : width;
 
   return {
+    display: 'flex',
+
     sx: {
       img: {
         boxSize: _width,
