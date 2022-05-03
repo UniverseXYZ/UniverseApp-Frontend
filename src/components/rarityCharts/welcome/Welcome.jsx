@@ -1,6 +1,6 @@
 import React from 'react';
 import WelcomeWrapper from '../../ui-elements/WelcomeWrapper';
-import './Welcome.scss';
+// import './Welcome.scss';
 
 const marquee = () => (
   <p>

@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { useHistory, useLocation } from 'react-router-dom';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import Popup from 'reactjs-popup';
-import './DesktopView.scss';
+// import './DesktopView.scss';
 import HeaderAvatar from '../../HeaderAvatar';
 import SelectWalletPopup from '../../../popups/SelectWalletPopup.jsx';
 import copyIcon from '../../../../assets/images/copy.svg';
@@ -36,6 +35,7 @@ import {
   toFixed,
 } from '../../../../utils/helpers/format';
 import { useAuthContext } from '../../../../contexts/AuthContext';
+import { useRouter } from 'next/router';
 import Badge from '../../../badge/Badge';
 
 const DesktopView = ({
@@ -54,8 +54,7 @@ const DesktopView = ({
   const [isAboutDropdownOpened, setIsAboutDropdownOpened] = useState(false);
   const [isDAODropdownOpened, setIsDAODropdownOpened] = useState(false);
   const [copied, setCopied] = useState(false);
-  const history = useHistory();
-  const location = useLocation();
+  const history = useRouter();
   const {
     address,
     isAuthenticated,
@@ -90,7 +89,7 @@ const DesktopView = ({
                 // className="disable"
                 onClick={() => {
                   setIsMintingDropdownOpened(false);
-                  if (location.pathname !== '/marketplace') {
+                  if (history.asPath !== '/marketplace') {
                     history.push('/marketplace');
                   }
                 }}

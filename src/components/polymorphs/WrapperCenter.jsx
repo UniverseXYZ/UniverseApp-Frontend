@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import './styles/WrapperCenter.scss';
+// import './styles/WrapperCenter.scss';
 
 const WrapperCenter = (props) => {
   const { children, className } = props;

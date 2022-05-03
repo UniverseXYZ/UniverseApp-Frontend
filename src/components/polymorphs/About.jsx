@@ -5,7 +5,7 @@ import WrapperCenterTwoColumns from './WrapperCenterTwoColumns';
 import ImgRow1 from '../../assets/images/Section1-Illustration-min.png';
 import ImgRow2Chart from '../../assets/images/chart-min1.svg';
 import ImgRow2Background from '../../assets/images/curve-bg.jpg';
-import './styles/About.scss';
+// import './styles/About.scss';
 
 const row1RightBlock = () => (
   <AnimatedOnScroll animationIn="fadeIn" animationInDelay={200}>

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import './styles/GalleryPhotoItem.scss';
+// import './styles/GalleryPhotoItem.scss';
 
 const GalleryPhotoItem = (props) => {
   const { image, name, index } = props;

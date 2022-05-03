@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import GalleryPhotoItem from './GalleryPhotoItem';
 import Button from '../button/Button';
-import './styles/GallerySection.scss';
+// import './styles/GallerySection.scss';
 
 const GallerySection = (props) => {
   const { gallery, className, title, actionText, emptyGalleryText, btnText, btnIcon, btnOnClick } =

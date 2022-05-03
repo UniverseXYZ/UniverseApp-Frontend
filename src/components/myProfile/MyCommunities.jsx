@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import CommunitieItem from './CommunitieItem';
-import './styles/MyCommunities.scss';
+// import './styles/MyCommunities.scss';
 
 const MyCommunities = (props) => {
   const { communities } = props;

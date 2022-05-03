@@ -1,5 +1,5 @@
 import React, { useMemo, useState, useEffect } from 'react';
-import './PendingNFTs.scss';
+// import './PendingNFTs.scss';
 import PropTypes from 'prop-types';
 import Blockies from 'react-blockies';
 import mp3Icon from '../../../../assets/images/mp3-icon.png';
