@@ -1,56 +1,65 @@
+import { OpenGraph } from "@app/components";
+import { SearchFilters } from "@app/modules/account/pages/my-nfts-page/components/search-filters";
+import { useFiltersContext } from "@app/modules/account/pages/my-nfts-page/components/search-filters/search-filters.context";
+import CollectionOGPlaceholder from "@assets/images/open-graph/collection-placeholder.png";
 import {
   Avatar,
   Box,
   Button,
   Flex,
+  Link,
   SimpleGrid,
+  Tab,
+  TabList,
+  TabPanel,
+  TabPanels,
+  Tabs,
   Text,
-  Link, Tabs, TabList, Tab, TabPanels, TabPanel,
-} from '@chakra-ui/react';
-import { useState, useRef, useEffect } from 'react';
-import { Contract } from 'ethers';
-import { useIntersection } from 'react-use';
-import { useRouter } from 'next/router';
-
-import CollectionOGPlaceholder from '@assets/images/open-graph/collection-placeholder.png';
-import { OpenGraph } from '@app/components';
-import { useFiltersContext } from '@app/modules/account/pages/my-nfts-page/components/search-filters/search-filters.context';
-import { SearchFilters } from '@app/modules/account/pages/my-nfts-page/components/search-filters';
-import { shortenEthereumAddress } from '@legacy/helpers/format';
-import { CollectionPageLoader } from '@legacy/collection/CollectionPageLoader';
-
-import Contracts from '../../../../../../../contracts/contracts.json';
-import SocialLinks from '../../../../../../../components/collection/SocialLinks';
-import { useCollectionPageData } from '../../CollectionPage.context';
+} from "@chakra-ui/react";
+import { CollectionPageLoader } from "@legacy/collection/CollectionPageLoader";
+import { shortenEthereumAddress } from "@legacy/helpers/format";
+import { Contract } from "ethers";
+import { useRouter } from "next/router";
+import NotFound from "pages/404";
+import { useEffect, useRef, useState } from "react";
+import { useIntersection } from "react-use";
+import Cover from "../../../../../../../components/collection/Cover";
+import SocialLinks from "../../../../../../../components/collection/SocialLinks";
+import NftCardSkeleton from "../../../../../../../components/skeletons/nftCardSkeleton/NftCardSkeleton";
+import EditIcon from "../../../../../../../components/svgs/EditIcon";
+import Contracts from "../../../../../../../contracts/contracts.json";
+import { useAuthStore } from "../../../../../../../stores/authStore";
 import {
-  NftItem, NFTItemContentWithPrice, NoNFTsFound,
-} from '../../../../components';
-import { CollectionStatistics } from './components/index';
-import NotFound from '../../../../../../../components/notFound/NotFound';
-import Cover from '../../../../../../../components/collection/Cover';
-import { NoDescriptionFound } from '../../../../components/no-description-found';
-import NftCardSkeleton from '../../../../../../../components/skeletons/nftCardSkeleton/NftCardSkeleton';
-import EditIcon from '../../../../../../../components/svgs/EditIcon';
-import { useAuthStore } from '../../../../../../../stores/authStore';
+  NftItem,
+  NFTItemContentWithPrice,
+  NoNFTsFound,
+} from "../../../../components";
+import { NoDescriptionFound } from "../../../../components/no-description-found";
+import { useCollectionPageData } from "../../CollectionPage.context";
+import { CollectionStatistics } from "./components/index";
 
 export const CollectionInfo = () => {
   const [totalNftsCount, setTotalNftsCount] = useState(0);
-  const { address, signer, isAuthenticated } = useAuthStore(s => ({address: s.address, signer: s.signer, isAuthenticated: s.isAuthenticated}))
+  const { address, signer, isAuthenticated } = useAuthStore((s) => ({
+    address: s.address,
+    signer: s.signer,
+    isAuthenticated: s.isAuthenticated,
+  }));
   const router = useRouter();
-  const [collectionOwner, setCollectionOwner] = useState<string>('');
+  const [collectionOwner, setCollectionOwner] = useState<string>("");
 
   const {
-		collection,
-		collectionAddress,
-		collectionGeneralInfo,
-		collectionOrderBookData,
+    collection,
+    collectionAddress,
+    collectionGeneralInfo,
+    collectionOrderBookData,
     isLoadingCollectionApi,
-		isFetchingCollectionApi,
-		isIdleCollectionApi,
+    isFetchingCollectionApi,
+    isIdleCollectionApi,
     isLoadingCollectionGeneralInfo,
     isFetchingCollectionGeneralInfo,
     isIdleCollectionGeneralInfo,
-	 } = useCollectionPageData();
+  } = useCollectionPageData();
 
   const scrollContainer = useRef(null);
 
@@ -66,9 +75,9 @@ export const CollectionInfo = () => {
     orders,
     hasSelectedOrderBookFilters,
     hasMoreOrders,
-		isFethingOrders,
-		isLoadingOrders,
-		isIdleOrders,
+    isFethingOrders,
+    isLoadingOrders,
+    isIdleOrders,
     isFetchingCollectionNFTs,
     isLoadingCollectionNFTs,
     isIdleCollectionNFTs,
@@ -79,24 +88,24 @@ export const CollectionInfo = () => {
     setShowSaleTypeFilters(true);
     setShowPriceRangeFilters(true);
     setShowNFTTypeFilters(true);
-  }, [collectionAddress])
+  }, [collectionAddress]);
 
   useEffect(() => {
     if (collectionNFTs && totalNftsCount === 0) {
       setTotalNftsCount(collectionNFTs.pages[0].total);
     }
-  }, [collectionNFTs])
+  }, [collectionNFTs]);
 
   const fetchCollectionOwner = async () => {
     try {
       if (!signer) {
-        return
+        return;
       }
       // @ts-ignore
       const { contracts } = Contracts[process.env.REACT_APP_NETWORK_CHAIN_ID];
       // We use the UniserveERC721Core ABI because it implements the Ownable interface
       const collectionContract = new Contract(
-        collectionGeneralInfo?.contractAddress || collection?.address || '',
+        collectionGeneralInfo?.contractAddress || collection?.address || "",
         contracts.UniverseERC721Core.abi,
         signer
       );
@@ -109,28 +118,41 @@ export const CollectionInfo = () => {
   };
 
   useEffect(() => {
-    if ((collectionGeneralInfo?.contractAddress || collection?.address) && signer) {
+    if (
+      (collectionGeneralInfo?.contractAddress || collection?.address) &&
+      signer
+    ) {
       fetchCollectionOwner();
     }
-  }, [collectionGeneralInfo?.contractAddress , collection?.address, signer]);
+  }, [collectionGeneralInfo?.contractAddress, collection?.address, signer]);
 
   const handleEdit = () => {
-    router.push(`/my-nfts/create?tabIndex=1&nftType=collection&collection=${collection.address || collectionGeneralInfo?.contractAddress}`);
+    router.push(
+      `/my-nfts/create?tabIndex=1&nftType=collection&collection=${
+        collection.address || collectionGeneralInfo?.contractAddress
+      }`
+    );
   };
 
   const hasOrderBookFilters = hasSelectedOrderBookFilters();
-	const hasOrders = orders?.pages?.length && orders.pages[0].data?.length;
-	const hasCollectionNFTs = collectionNFTs?.pages?.length && collectionNFTs.pages[0].data?.length;
-	const waitingOrders = isFethingOrders || isLoadingOrders || isIdleOrders;
-	const waitingCollectionNFTs = isFetchingCollectionNFTs || isLoadingCollectionNFTs || isIdleCollectionNFTs;
-  const waitingCollectionOffChainInfo = isFetchingCollectionApi || isLoadingCollectionApi || isIdleCollectionApi;
-  const waitingCollectionGeneralInfo = isLoadingCollectionGeneralInfo || isFetchingCollectionGeneralInfo || isIdleCollectionGeneralInfo;
+  const hasOrders = orders?.pages?.length && orders.pages[0].data?.length;
+  const hasCollectionNFTs =
+    collectionNFTs?.pages?.length && collectionNFTs.pages[0].data?.length;
+  const waitingOrders = isFethingOrders || isLoadingOrders || isIdleOrders;
+  const waitingCollectionNFTs =
+    isFetchingCollectionNFTs || isLoadingCollectionNFTs || isIdleCollectionNFTs;
+  const waitingCollectionOffChainInfo =
+    isFetchingCollectionApi || isLoadingCollectionApi || isIdleCollectionApi;
+  const waitingCollectionGeneralInfo =
+    isLoadingCollectionGeneralInfo ||
+    isFetchingCollectionGeneralInfo ||
+    isIdleCollectionGeneralInfo;
 
   const filtersRef = useRef(null);
 
   const intersection = useIntersection(filtersRef, {
     threshold: 1,
-    rootMargin: '0px',
+    rootMargin: "0px",
     root: null,
   });
 
@@ -139,92 +161,129 @@ export const CollectionInfo = () => {
       <OpenGraph
         title={`${collection?.name || collection?.address} – Collection`}
         description={collection?.description || undefined}
-        image={collection?.bannerUrl || collection?.coverUrl || CollectionOGPlaceholder}
+        image={
+          collection?.bannerUrl ||
+          collection?.coverUrl ||
+          CollectionOGPlaceholder
+        }
       />
-      {(waitingCollectionGeneralInfo && !collectionGeneralInfo) || (waitingCollectionOffChainInfo && !collection) ? (
-        <div className='loader-wrapper'>
+      {(waitingCollectionGeneralInfo && !collectionGeneralInfo) ||
+      (waitingCollectionOffChainInfo && !collection) ? (
+        <div className="loader-wrapper">
           <CollectionPageLoader />
         </div>
-      ) : (!waitingCollectionGeneralInfo && !collectionGeneralInfo?.contractAddress) && !collection?.address ? (
+      ) : !waitingCollectionGeneralInfo &&
+        !collectionGeneralInfo?.contractAddress &&
+        !collection?.address ? (
         <NotFound />
       ) : (
-        <Box layerStyle={'StoneBG'}>
-          <Cover selectedCollection={collection} collectionGeneralInfo={collectionGeneralInfo} collectionOwner={collectionOwner} />
-          <Box sx={{ position: 'relative', p: '0px 20px 80px 20px' }} >
-            <Flex sx={{ maxWidth: '1110px', margin: '-160px auto 0px' }}>
-              <Box w={'100%'}>
-                <Flex sx={{
-                  alignItems: 'center',
-                  mb: '30px',
-                }}>
+        <Box layerStyle={"StoneBG"}>
+          <Cover
+            selectedCollection={collection}
+            collectionGeneralInfo={collectionGeneralInfo}
+            collectionOwner={collectionOwner}
+          />
+          <Box sx={{ position: "relative", p: "0px 20px 80px 20px" }}>
+            <Flex sx={{ maxWidth: "1110px", margin: "-160px auto 0px" }}>
+              <Box w={"100%"}>
+                <Flex
+                  sx={{
+                    alignItems: "center",
+                    mb: "30px",
+                  }}
+                >
                   <Avatar
                     src={collection?.coverUrl}
                     name={collectionGeneralInfo?.name || collection?.name}
-                    borderRadius={'50%'}
-                    pointerEvents={'none'}
-                    objectFit={'cover'}
-                    w={'65px'}
-                    h={'65px'}
+                    borderRadius={"50%"}
+                    pointerEvents={"none"}
+                    objectFit={"cover"}
+                    w={"65px"}
+                    h={"65px"}
                   />
-                    <Flex direction={'column'} alignItems={'flex-start'}>
-                      <Text
-                        fontFamily={'"Sharp Grotesk SemiBold",sans-serif'}
-                        fontSize={'20px'}
-                        lineHeight={'130%'}
-                        color={'#fff'}
-                        ml={'20px'}
+                  <Flex direction={"column"} alignItems={"flex-start"}>
+                    <Text
+                      fontFamily={'"Sharp Grotesk SemiBold",sans-serif'}
+                      fontSize={"20px"}
+                      lineHeight={"130%"}
+                      color={"#fff"}
+                      ml={"20px"}
                     >
-                        {collectionGeneralInfo?.name || collection.name}
+                      {collectionGeneralInfo?.name || collection.name}
                     </Text>
                     <Link
-                      href={`${process.env.REACT_APP_ETHERSCAN_URL}/address/${collectionGeneralInfo?.contractAddress || collection?.address}`}
+                      href={`${process.env.REACT_APP_ETHERSCAN_URL}/address/${
+                        collectionGeneralInfo?.contractAddress ||
+                        collection?.address
+                      }`}
                       isExternal
-                      padding={'4px 10px'}
-                      ml={'18px'}
-                      mt={'10px'}
-                      borderRadius={'20px'}
-                      backgroundColor={'#000'}
-                      opacity={'0.6'}
-                      _hover={{ textDecoration: 'none' }}
+                      padding={"4px 10px"}
+                      ml={"18px"}
+                      mt={"10px"}
+                      borderRadius={"20px"}
+                      backgroundColor={"#000"}
+                      opacity={"0.6"}
+                      _hover={{ textDecoration: "none" }}
                     >
-                        <Text color={'#4D66EB'} fontSize={'12px'} fontWeight={600}>{shortenEthereumAddress(collectionGeneralInfo?.contractAddress || collection?.address)}</Text>
+                      <Text
+                        color={"#4D66EB"}
+                        fontSize={"12px"}
+                        fontWeight={600}
+                      >
+                        {shortenEthereumAddress(
+                          collectionGeneralInfo?.contractAddress ||
+                            collection?.address
+                        )}
+                      </Text>
                     </Link>
-                    </Flex>
-                    <SocialLinks
-                      instagramLink={collection?.instagramLink || ''}
-                      siteLink={collection?.siteLink || ''}
-                      mediumLink={collection?.mediumLink || ''}
-                      discordLink={collection?.discordLink || ''}
-                      telegramLink={collection?.telegramLink || ''}
-                      twitterLink=""
-                    />
-                    <Box>
-                      {isAuthenticated && (address?.toLowerCase() === collectionOwner || process.env.REACT_APP_COLLECTION_EDITOR?.toLowerCase() === address) && ( //
+                  </Flex>
+                  <SocialLinks
+                    instagramLink={collection?.instagramLink || ""}
+                    siteLink={collection?.siteLink || ""}
+                    mediumLink={collection?.mediumLink || ""}
+                    discordLink={collection?.discordLink || ""}
+                    telegramLink={collection?.telegramLink || ""}
+                    twitterLink=""
+                  />
+                  <Box>
+                    {isAuthenticated &&
+                      (address?.toLowerCase() === collectionOwner ||
+                        process.env.REACT_APP_COLLECTION_EDITOR?.toLowerCase() ===
+                          address) && ( //
                         <Button className="light-button" onClick={handleEdit}>
-                          <span style={{ marginRight: '5px'}}>Edit</span>
+                          <span style={{ marginRight: "5px" }}>Edit</span>
                           <EditIcon />
                         </Button>
                       )}
-                    </Box>
+                  </Box>
                 </Flex>
-                <Box sx={{
-                  bgColor: '#e5e5e5',
-                  borderRadius: '12px',
-                  overflow: 'hidden',
-                  boxSizing: 'border-box',
-                  boxShadow: '0px 10px 30px rgba(0, 0, 0, 0.1)',
-                }}>
-                  <CollectionStatistics nftsCount={totalNftsCount} ownersCount={collectionGeneralInfo?.owners} floorPrice={collectionOrderBookData?.floorPrice} volumeTraded={collectionOrderBookData?.volumeTraded} />
+                <Box
+                  sx={{
+                    bgColor: "#e5e5e5",
+                    borderRadius: "12px",
+                    overflow: "hidden",
+                    boxSizing: "border-box",
+                    boxShadow: "0px 10px 30px rgba(0, 0, 0, 0.1)",
+                  }}
+                >
+                  <CollectionStatistics
+                    nftsCount={totalNftsCount}
+                    ownersCount={collectionGeneralInfo?.owners}
+                    floorPrice={collectionOrderBookData?.floorPrice}
+                    volumeTraded={collectionOrderBookData?.volumeTraded}
+                  />
                 </Box>
               </Box>
             </Flex>
-            <Flex sx={{
-              // maxWidth: '1110px',
-              margin: '0 auto',
-              flexDirection: 'column',
-            }}>
-              <Tabs mt={'60px'}>
-                <TabList maxW={'1110px'} m={'auto'}>
+            <Flex
+              sx={{
+                // maxWidth: '1110px',
+                margin: "0 auto",
+                flexDirection: "column",
+              }}
+            >
+              <Tabs mt={"60px"}>
+                <TabList maxW={"1110px"} m={"auto"}>
                   <Tab>Items</Tab>
                   <Tab>Description</Tab>
                 </TabList>
@@ -234,12 +293,15 @@ export const CollectionInfo = () => {
                     <Box
                       ref={filtersRef}
                       sx={{
-                        bg: (intersection?.intersectionRect.top ?? 1) === 0 ? 'white' : 'transparent',
-                        pos: 'sticky',
-                        top: '-1px',
-                        mb: '40px',
+                        bg:
+                          (intersection?.intersectionRect.top ?? 1) === 0
+                            ? "white"
+                            : "transparent",
+                        pos: "sticky",
+                        top: "-1px",
+                        mb: "40px",
                         zIndex: 20,
-                        '.search--sort--filters--section': {
+                        ".search--sort--filters--section": {
                           mb: 0,
                         },
                       }}
@@ -251,7 +313,10 @@ export const CollectionInfo = () => {
                       hasOrders ? (
                         <div className="mynfts__page">
                           <div className="container mynfts__page__body">
-                            <SimpleGrid columns={{ base: 1, md: 2, lg: 4 }} spacing={'30px'}>
+                            <SimpleGrid
+                              columns={{ base: 1, md: 2, lg: 4 }}
+                              spacing={"30px"}
+                            >
                               {(orders?.pages ?? []).map((page) => {
                                 return page.data.map(({ order, NFTs }) => {
                                   if (!NFTs.length) {
@@ -264,114 +329,175 @@ export const CollectionInfo = () => {
                                       NFT={NFTs[0]}
                                       collection={`${NFTs[0]._collectionAddress}`}
                                       orderEnd={order.end}
-                                      renderContent={({ NFT, collection, creator, owner, bestOfferPrice, bestOfferPriceToken, lastOfferPrice, lastOfferPriceToken, order: orderData }) => (
+                                      renderContent={({
+                                        NFT,
+                                        collection,
+                                        creator,
+                                        owner,
+                                        bestOfferPrice,
+                                        bestOfferPriceToken,
+                                        lastOfferPrice,
+                                        lastOfferPriceToken,
+                                        order: orderData,
+                                      }) => (
                                         <NFTItemContentWithPrice
-                                          collectionAddress={NFT._collectionAddress}
+                                          collectionAddress={
+                                            NFT._collectionAddress
+                                          }
                                           name={NFT.name}
                                           collection={collection}
-                                          creator={creator?.mappedArtist || undefined}
-                                          owner={owner?.mappedArtist || undefined}
+                                          creator={
+                                            creator?.mappedArtist || undefined
+                                          }
+                                          owner={
+                                            owner?.mappedArtist || undefined
+                                          }
                                           ownerAddress={NFT._ownerAddress}
                                           order={orderData || undefined}
                                           bestOfferPrice={bestOfferPrice || 0}
-                                          bestOfferPriceToken={bestOfferPriceToken || undefined}
+                                          bestOfferPriceToken={
+                                            bestOfferPriceToken || undefined
+                                          }
                                           lastOfferPrice={lastOfferPrice || 0}
-                                          lastOfferPriceToken={lastOfferPriceToken || undefined}
+                                          lastOfferPriceToken={
+                                            lastOfferPriceToken || undefined
+                                          }
                                         />
                                       )}
                                     />
-                                  )
-                                })
+                                  );
+                                });
                               })}
                             </SimpleGrid>
 
                             {!waitingOrders && hasMoreOrders && (
-                              <Button variant={'outline'} isFullWidth={true} mt={10} onClick={() => fetchNextOrders()}>Load more</Button>
+                              <Button
+                                variant={"outline"}
+                                isFullWidth={true}
+                                mt={10}
+                                onClick={() => fetchNextOrders()}
+                              >
+                                Load more
+                              </Button>
                             )}
-
                           </div>
                         </div>
-                      ) : (!waitingOrders && <NoNFTsFound />)
-                    ) : (
-                      // Collection NFTs
-                      hasCollectionNFTs ? (
-                        <div className="mynfts__page">
-                          <div className="container mynfts__page__body">
-                            <SimpleGrid columns={{ base: 1, md: 2, lg: 4 }} spacing={'30px'}>
-                              {(collectionNFTs?.pages ?? []).map((page) => {
-                                return page.data.map((NFT) => (
-                                  <NftItem
-                                    key={NFT.id}
-                                    NFT={NFT}
-                                    collection={`${NFT._collectionAddress}`}
-                                    renderContent={({ NFT, collection, creator, owner, bestOfferPrice, bestOfferPriceToken, lastOfferPrice, lastOfferPriceToken, order: orderData }) => (
-                                      <NFTItemContentWithPrice
-                                        collectionAddress={NFT._collectionAddress}
-                                        name={NFT.name}
-                                        collection={collection}
-                                        creator={creator?.mappedArtist || undefined}
-                                        owner={owner?.mappedArtist || undefined}
-                                        order={orderData || undefined}
-                                        ownerAddress={NFT._ownerAddress}
-                                        bestOfferPrice={bestOfferPrice || 0}
-                                        bestOfferPriceToken={bestOfferPriceToken || undefined}
-                                        lastOfferPrice={lastOfferPrice || 0}
-                                        lastOfferPriceToken={lastOfferPriceToken || undefined}
-                                      />
-                                    )}
-                                  />
-                                ))
-                              })}
+                      ) : (
+                        !waitingOrders && <NoNFTsFound />
+                      )
+                    ) : // Collection NFTs
+                    hasCollectionNFTs ? (
+                      <div className="mynfts__page">
+                        <div className="container mynfts__page__body">
+                          <SimpleGrid
+                            columns={{ base: 1, md: 2, lg: 4 }}
+                            spacing={"30px"}
+                          >
+                            {(collectionNFTs?.pages ?? []).map((page) => {
+                              return page.data.map((NFT) => (
+                                <NftItem
+                                  key={NFT.id}
+                                  NFT={NFT}
+                                  collection={`${NFT._collectionAddress}`}
+                                  renderContent={({
+                                    NFT,
+                                    collection,
+                                    creator,
+                                    owner,
+                                    bestOfferPrice,
+                                    bestOfferPriceToken,
+                                    lastOfferPrice,
+                                    lastOfferPriceToken,
+                                    order: orderData,
+                                  }) => (
+                                    <NFTItemContentWithPrice
+                                      collectionAddress={NFT._collectionAddress}
+                                      name={NFT.name}
+                                      collection={collection}
+                                      creator={
+                                        creator?.mappedArtist || undefined
+                                      }
+                                      owner={owner?.mappedArtist || undefined}
+                                      order={orderData || undefined}
+                                      ownerAddress={NFT._ownerAddress}
+                                      bestOfferPrice={bestOfferPrice || 0}
+                                      bestOfferPriceToken={
+                                        bestOfferPriceToken || undefined
+                                      }
+                                      lastOfferPrice={lastOfferPrice || 0}
+                                      lastOfferPriceToken={
+                                        lastOfferPriceToken || undefined
+                                      }
+                                    />
+                                  )}
+                                />
+                              ));
+                            })}
+                          </SimpleGrid>
+
+                          {!waitingCollectionNFTs && hasMoreCollectionNFTs && (
+                            <Button
+                              variant={"outline"}
+                              isFullWidth={true}
+                              mt={10}
+                              onClick={() => fetchNextCollectionNFTs()}
+                            >
+                              Load more
+                            </Button>
+                          )}
+
+                          {((hasOrderBookFilters && waitingOrders) ||
+                            (!hasOrderBookFilters &&
+                              waitingCollectionNFTs)) && (
+                            <SimpleGrid
+                              columns={{ base: 1, md: 2, lg: 4 }}
+                              spacing={"30px"}
+                              mt={10}
+                            >
+                              <NftCardSkeleton />
+                              <NftCardSkeleton />
+                              <NftCardSkeleton />
+                              <NftCardSkeleton />
                             </SimpleGrid>
-
-                            {!waitingCollectionNFTs && hasMoreCollectionNFTs && (
-                              <Button variant={'outline'} isFullWidth={true} mt={10} onClick={() => fetchNextCollectionNFTs()}>Load more</Button>
-                            )}
-
-                                {
-                                  ((hasOrderBookFilters && waitingOrders) || (!hasOrderBookFilters && waitingCollectionNFTs)) && (
-                                    <SimpleGrid columns={{ base: 1, md: 2, lg: 4 }} spacing={'30px'} mt={10}>
-                                      <NftCardSkeleton />
-                                      <NftCardSkeleton />
-                                      <NftCardSkeleton />
-                                      <NftCardSkeleton />
-                                    </SimpleGrid>
-                                  )
-                                }
-                          </div>
+                          )}
                         </div>
-                      ) : (!waitingCollectionNFTs && <NoNFTsFound />)
+                      </div>
+                    ) : (
+                      !waitingCollectionNFTs && <NoNFTsFound />
                     )}
 
                     <div className="mynfts__page">
                       <div className="container mynfts__page__body">
-                        {
-                          ((hasOrderBookFilters && waitingOrders) || (!hasOrderBookFilters && waitingCollectionNFTs)) && (
-                            <SimpleGrid columns={{ base: 1, md: 2, lg: 4 }} spacing={'30px'} mt={10}>
-                              <NftCardSkeleton />
-                              <NftCardSkeleton />
-                              <NftCardSkeleton />
-                              <NftCardSkeleton />
-                            </SimpleGrid>
-                          )
-                        }
+                        {((hasOrderBookFilters && waitingOrders) ||
+                          (!hasOrderBookFilters && waitingCollectionNFTs)) && (
+                          <SimpleGrid
+                            columns={{ base: 1, md: 2, lg: 4 }}
+                            spacing={"30px"}
+                            mt={10}
+                          >
+                            <NftCardSkeleton />
+                            <NftCardSkeleton />
+                            <NftCardSkeleton />
+                            <NftCardSkeleton />
+                          </SimpleGrid>
+                        )}
                       </div>
                     </div>
-
                   </TabPanel>
                   <TabPanel px={0}>
-                    {collection.description
-                      ? (
-                        <div className="container mynfts__page__body">
-                          <Box sx={{
-                            whiteSpace: 'break-spaces'
-                          }}>
-                            {collection.description}
-                          </Box>
-                        </div>
-                      )
-                      : (<NoDescriptionFound />)
-                    }
+                    {collection.description ? (
+                      <div className="container mynfts__page__body">
+                        <Box
+                          sx={{
+                            whiteSpace: "break-spaces",
+                          }}
+                        >
+                          {collection.description}
+                        </Box>
+                      </div>
+                    ) : (
+                      <NoDescriptionFound />
+                    )}
                   </TabPanel>
                 </TabPanels>
               </Tabs>
@@ -380,5 +506,5 @@ export const CollectionInfo = () => {
         </Box>
       )}
     </>
-  )
+  );
 };

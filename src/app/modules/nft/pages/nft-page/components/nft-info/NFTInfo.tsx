@@ -1,3 +1,6 @@
+import { getArtistApi } from "@app/api";
+import { useNFTAsset } from "@app/modules/nft/components/nft-item/components/nft-item-asset/hooks";
+import VideoPlaceholder from "@assets/images/open-graph/video-placeholder.png";
 import {
   Box,
   Button,
@@ -10,61 +13,81 @@ import {
   TabPanels,
   Tabs,
   Text,
-} from '@chakra-ui/react';
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import ReadMoreAndLess from 'react-read-more-less';
-import { UseMeasureRect } from 'react-use/lib/useMeasure';
-import { useRouter } from 'next/router';
-
-import VideoPlaceholder from '@assets/images/open-graph/video-placeholder.png';
-
-import { LineTabList, OpenGraph } from '../../../../../../components';
-import { NFTAssetImage, NFTAssetAudio, NFTBuySection, NFTAssetVideo } from '../';
-import { useNFTPageData } from '../../NFTPage.context';
-import { isNFTAssetAudio, isNFTAssetImage, isNFTAssetVideo } from '../../../../helpers';
+} from "@chakra-ui/react";
+import BigNumber from "bignumber.js";
+import { utils } from "ethers";
+import { useRouter } from "next/router";
+import NotFound from "pages/404";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
+import ReadMoreAndLess from "react-read-more-less";
+import { UseMeasureRect } from "react-use/lib/useMeasure";
+import {
+  NFTAssetAudio,
+  NFTAssetImage,
+  NFTAssetVideo,
+  NFTBuySection,
+} from "../";
+import { CollectionPageLoader } from "../../../../../../../containers/collection/CollectionPageLoader";
+import { useErc20PriceStore } from "../../../../../../../stores/erc20PriceStore";
+import { sendRefreshMetadataRequest } from "../../../../../../../utils/api/marketplace";
+import { LineTabList, OpenGraph } from "../../../../../../components";
+import { getTokenByAddress } from "../../../../../../constants";
 import {
   NftItem,
   NFTMenu,
   NFTPageCollectionRelation,
   NFTPageCreatorRelation,
   NFTPageOwnerRelation,
-} from '../../../../components';
-import { GoBackButton, TabBids, TabHistory, TabMetadata, TabOffers, TabOwners, TabProperties } from './components';
-import { CollectionPageLoader } from '../../../../../../../containers/collection/CollectionPageLoader';
-import NotFound from '../../../../../../../components/notFound/NotFound';
-import { NFTItemContentWithPrice, NFTLike } from '../../../../components/nft-item/components';
-import { NFTTransferPopup } from '../nft-transfer-popup';
-import { BigNumber as EthersBigNumber, utils } from 'ethers';
-import BigNumber from 'bignumber.js';
-import { sendRefreshMetadataRequest } from '../../../../../../../utils/api/marketplace';
-import BrokenNFT from '../../../../../../../components/marketplaceNFT/BrokenNFT';
-import { NFTAssetBroken } from '../nft-asset-broken';
-import { IERC721AssetType, INFT, IOrder, IUser } from '../../../../types';
-import { GetUserApi } from '../../../../api';
-import { OrderAssetClass } from '../../../../enums';
-import { getTokenByAddress } from '../../../../../../constants';
-import { Status } from './components/tab-offers/components/refresh-metadata-popup/enums';
-import { RefreshMetadataPopup } from './components/tab-offers/components/refresh-metadata-popup';
-import { ReportStatusPopup } from './components/tab-offers/components/report-status-popup';
-import { NFTAcceptOfferPopup } from './components/tab-offers/components';
-import { userKeys } from '../../../../../../utils/query-keys';
-import { TabListings } from './components/tab-listings';
-import { useErc20PriceStore } from '../../../../../../../stores/erc20PriceStore';
-
-import * as styles from '../../styles';
-import * as styles2 from './NFTInfo.style';
-import { getArtistApi } from '@app/api';
-import { useNFTAsset } from '@app/modules/nft/components/nft-item/components/nft-item-asset/hooks';
+} from "../../../../components";
+import { NFTItemContentWithPrice } from "../../../../components/nft-item/components";
+import {
+  isNFTAssetAudio,
+  isNFTAssetImage,
+  isNFTAssetVideo,
+} from "../../../../helpers";
+import { IERC721AssetType, IOrder, IUser } from "../../../../types";
+import { useNFTPageData } from "../../NFTPage.context";
+import * as styles from "../../styles";
+import { NFTAssetBroken } from "../nft-asset-broken";
+import { NFTTransferPopup } from "../nft-transfer-popup";
+import {
+  GoBackButton,
+  TabHistory,
+  TabMetadata,
+  TabOffers,
+  TabProperties,
+} from "./components";
+import { TabListings } from "./components/tab-listings";
+import { NFTAcceptOfferPopup } from "./components/tab-offers/components";
+import { RefreshMetadataPopup } from "./components/tab-offers/components/refresh-metadata-popup";
+import { Status } from "./components/tab-offers/components/refresh-metadata-popup/enums";
+import * as styles2 from "./NFTInfo.style";
 
 // TODO: hide metadata tab for not Polymorph NFT type
 export const NFTInfo = () => {
   const router = useRouter();
 
-  const { getTokenPriceByTicker, ethUsdPrice, daiUsdPrice, usdcUsdPrice, xyzUsdPrice, wethUsdPrice } =
-    useErc20PriceStore();
+  const {
+    getTokenPriceByTicker,
+    ethUsdPrice,
+    daiUsdPrice,
+    usdcUsdPrice,
+    xyzUsdPrice,
+    wethUsdPrice,
+  } = useErc20PriceStore();
 
-  const { NFT, isLoading, order, creator, owner, collection, collectionAddress, history, offers, moreFromCollection } =
-    useNFTPageData();
+  const {
+    NFT,
+    isLoading,
+    order,
+    creator,
+    owner,
+    collection,
+    collectionAddress,
+    history,
+    offers,
+    moreFromCollection,
+  } = useNFTPageData();
 
   const [buySectionMeasure, setBuySectionMeasure] = useState<UseMeasureRect>();
   const [isTransferOpened, setIsTransferOpened] = useState(false);
@@ -72,7 +95,9 @@ export const NFTInfo = () => {
   const [highestOffer, setHighestOffer] = useState<IOrder>();
   const [highestOfferCreator, setHighestOfferCreator] = useState<IUser>();
   const [offerUsersMap, setUsersMap] = useState<Record<string, IUser>>({});
-  const [refreshMetadataStatus, setRefreshMetadataStatus] = useState(Status.HIDDEN);
+  const [refreshMetadataStatus, setRefreshMetadataStatus] = useState(
+    Status.HIDDEN
+  );
   const [showOfferPopup, setShowOfferPopup] = useState(false);
   const [offerForAccept, setOfferForAccept] = useState<IOrder | null>(null);
 
@@ -88,15 +113,21 @@ export const NFTInfo = () => {
     return editions.findIndex((edition) => edition === NFT.tokenId) + 1;
   }, [editions]);
 
-  const showMetadata = process.env.REACT_APP_POLYMORPHS_CONTRACT_ADDRESS && process.env.REACT_APP_LOBSTERS_CONTRACT_ADDRESS && [
-    process.env.REACT_APP_POLYMORPHS_CONTRACT_ADDRESS.toLowerCase(),
-    process.env.REACT_APP_LOBSTERS_CONTRACT_ADDRESS.toLowerCase(),
-  ].includes((NFT?._collectionAddress || "").toLowerCase() ?? '');
+  const showMetadata =
+    process.env.REACT_APP_POLYMORPHS_CONTRACT_ADDRESS &&
+    process.env.REACT_APP_LOBSTERS_CONTRACT_ADDRESS &&
+    [
+      process.env.REACT_APP_POLYMORPHS_CONTRACT_ADDRESS.toLowerCase(),
+      process.env.REACT_APP_LOBSTERS_CONTRACT_ADDRESS.toLowerCase(),
+    ].includes((NFT?._collectionAddress || "").toLowerCase() ?? "");
 
   const handleRefresh = async () => {
     try {
       setRefreshMetadataStatus(Status.PROCESSING);
-      const request = await sendRefreshMetadataRequest(NFT?._collectionAddress || '', NFT.tokenId);
+      const request = await sendRefreshMetadataRequest(
+        NFT?._collectionAddress || "",
+        NFT.tokenId
+      );
 
       if (request.status === 204) {
         setRefreshMetadataStatus(Status.SUCCESS);
@@ -110,10 +141,16 @@ export const NFTInfo = () => {
 
   const getOrderOffers = async () => {
     try {
-      const orders = offers?.orders?.filter(item => item?.maker?.toLowerCase() !== NFT?._ownerAddress?.toLowerCase()) || [];
+      const orders =
+        offers?.orders?.filter(
+          (item) =>
+            item?.maker?.toLowerCase() !== NFT?._ownerAddress?.toLowerCase()
+        ) || [];
 
       const userRequests: Array<any> = [];
-      const uniqueUsers = [...Array.from(new Set(orders.map((order) => order.maker)))];
+      const uniqueUsers = [
+        ...Array.from(new Set(orders.map((order) => order.maker))),
+      ];
       for (const user of uniqueUsers) {
         userRequests.push(getArtistApi(user));
       }
@@ -123,8 +160,13 @@ export const NFTInfo = () => {
         const tokenContractA = (a.make.assetType as IERC721AssetType).contract;
         const tokenA = getTokenByAddress(tokenContractA);
         const tokenPriceA = getTokenPriceByTicker(tokenA.ticker);
-        const orderPriceA = utils.formatUnits(a.make.value, tokenA.decimals ?? 18);
-        const orderUsdPriceA = new BigNumber(orderPriceA).multipliedBy(tokenPriceA);
+        const orderPriceA = utils.formatUnits(
+          a.make.value,
+          tokenA.decimals ?? 18
+        );
+        const orderUsdPriceA = new BigNumber(orderPriceA).multipliedBy(
+          tokenPriceA
+        );
 
         let tokenB = null;
         let tokenPriceB = null;
@@ -139,8 +181,13 @@ export const NFTInfo = () => {
           tokenPriceB = getTokenPriceByTicker(tokenB.ticker);
         }
 
-        const orderPriceB = utils.formatUnits(b.make.value, tokenB.decimals ?? 18);
-        const orderUsdPriceB = new BigNumber(orderPriceB).multipliedBy(tokenPriceB);
+        const orderPriceB = utils.formatUnits(
+          b.make.value,
+          tokenB.decimals ?? 18
+        );
+        const orderUsdPriceB = new BigNumber(orderPriceB).multipliedBy(
+          tokenPriceB
+        );
 
         if (orderUsdPriceB.eq(orderUsdPriceA)) {
           return 0;
@@ -153,8 +200,10 @@ export const NFTInfo = () => {
         return 1;
       });
 
-      const usersMap = (await Promise.allSettled(userRequests)).reduce<Record<string, IUser>>((acc, response) => {
-        if (response.status !== 'fulfilled') {
+      const usersMap = (await Promise.allSettled(userRequests)).reduce<
+        Record<string, IUser>
+      >((acc, response) => {
+        if (response.status !== "fulfilled") {
           return acc;
         }
 
@@ -172,10 +221,23 @@ export const NFTInfo = () => {
   };
 
   useEffect(() => {
-    if (ethUsdPrice && daiUsdPrice && usdcUsdPrice && xyzUsdPrice && wethUsdPrice) {
+    if (
+      ethUsdPrice &&
+      daiUsdPrice &&
+      usdcUsdPrice &&
+      xyzUsdPrice &&
+      wethUsdPrice
+    ) {
       getOrderOffers();
     }
-  }, [offers, ethUsdPrice, daiUsdPrice, usdcUsdPrice, xyzUsdPrice, wethUsdPrice]);
+  }, [
+    offers,
+    ethUsdPrice,
+    daiUsdPrice,
+    usdcUsdPrice,
+    xyzUsdPrice,
+    wethUsdPrice,
+  ]);
 
   const isAssetVideo = isNFTAssetVideo(NFT?.artworkTypes ?? []);
   const isAssetImage = isNFTAssetImage(NFT?.artworkTypes ?? []);
@@ -183,7 +245,11 @@ export const NFTInfo = () => {
 
   const { preview } = useNFTAsset(NFT);
 
-  const OGImage = preview ? (preview.indexOf('.mp4') !== -1 ? VideoPlaceholder : preview) : undefined;
+  const OGImage = preview
+    ? preview.indexOf(".mp4") !== -1
+      ? VideoPlaceholder
+      : preview
+    : undefined;
 
   return (
     <>
@@ -191,7 +257,7 @@ export const NFTInfo = () => {
         title={`${NFT?.name} – ${collection?.name}`}
         description={collection?.description || undefined}
         image={OGImage}
-        imageAlt={NFT?.name || ''}
+        imageAlt={NFT?.name || ""}
       />
       {isLoading ? (
         <div className="loader-wrapper">
@@ -199,18 +265,33 @@ export const NFTInfo = () => {
         </div>
       ) : NFT ? (
         <>
-          <Box layerStyle={'StoneBG'}>
+          <Box layerStyle={"StoneBG"}>
             <Box {...styles.NFTAssetContainerStyle}>
               <GoBackButton />
-              {(!NFT.artworkTypes || !NFT.artworkTypes.length) && <NFTAssetBroken {...styles2.BrokenAssetStyle} /> ||
-              isAssetVideo && (<NFTAssetVideo video={NFT.videoUrl || NFT.optimizedUrl || NFT.originalUrl} />) ||
-              isAssetImage && <NFTAssetImage image={NFT.optimizedUrl || NFT.originalUrl} alt={NFT.name} /> ||
-              isAssetAudio && <NFTAssetAudio audio={NFT.optimizedUrl || NFT.originalUrl} />}
+              {((!NFT.artworkTypes || !NFT.artworkTypes.length) && (
+                <NFTAssetBroken {...styles2.BrokenAssetStyle} />
+              )) ||
+                (isAssetVideo && (
+                  <NFTAssetVideo
+                    video={NFT.videoUrl || NFT.optimizedUrl || NFT.originalUrl}
+                  />
+                )) ||
+                (isAssetImage && (
+                  <NFTAssetImage
+                    image={NFT.optimizedUrl || NFT.originalUrl}
+                    alt={NFT.name}
+                  />
+                )) ||
+                (isAssetAudio && (
+                  <NFTAssetAudio audio={NFT.optimizedUrl || NFT.originalUrl} />
+                ))}
             </Box>
             <Box {...styles.NFTDetailsContainerStyle}>
               <Box {...styles2.NFTDetailsTopSectionStyle}>
-                <Flex justifyContent={'space-between'} mb={'12px'}>
-                  <Heading as={'h2'} {...styles2.NameStyle}>{NFT.name}</Heading>
+                <Flex justifyContent={"space-between"} mb={"12px"}>
+                  <Heading as={"h2"} {...styles2.NameStyle}>
+                    {NFT.name}
+                  </Heading>
                   <Box>
                     {/*<NFTLike likes={[]} isLiked={true} {...styles.LikeButtonStyle} />*/}
 
@@ -232,28 +313,47 @@ export const NFTInfo = () => {
 
                 <Text {...styles2.EditionTextStyle}>
                   Edition&nbsp;
-                  {`${editionNumber}/${NFT.numberOfEditions || editions.length}`}
+                  {`${editionNumber}/${
+                    NFT.numberOfEditions || editions.length
+                  }`}
                 </Text>
 
-                <Flex flexWrap={{ sm: 'wrap', md: 'nowrap' }} mb={'24px'}>
+                <Flex flexWrap={{ sm: "wrap", md: "nowrap" }} mb={"24px"}>
                   {creator && <NFTPageCreatorRelation creator={creator} />}
-                  {((collection && collection.id) || NFT?._collectionAddress) && <NFTPageCollectionRelation collection={collection} collectionAddress={NFT._collectionAddress} />}
-                  {owner && <NFTPageOwnerRelation owner={owner} ownerAddress={NFT?._ownerAddress}/>}
+                  {((collection && collection.id) ||
+                    NFT?._collectionAddress) && (
+                    <NFTPageCollectionRelation
+                      collection={collection}
+                      collectionAddress={NFT._collectionAddress}
+                    />
+                  )}
+                  {owner && (
+                    <NFTPageOwnerRelation
+                      owner={owner}
+                      ownerAddress={NFT?._ownerAddress}
+                    />
+                  )}
                 </Flex>
 
                 {NFT.description && (
                   <Box {...styles.DescriptionStyle}>
-                    <ReadMoreAndLess charLimit={150} readMoreText="Read more" readLessText="Read less">
+                    <ReadMoreAndLess
+                      charLimit={150}
+                      readMoreText="Read more"
+                      readLessText="Read less"
+                    >
                       {`${NFT.description} `}
                     </ReadMoreAndLess>
                   </Box>
                 )}
 
-                <Tabs sx={{
-                  h: {
-                    xl: 'calc(100vh - 466px)'
-                  }
-                }}>
+                <Tabs
+                  sx={{
+                    h: {
+                      xl: "calc(100vh - 466px)",
+                    },
+                  }}
+                >
                   <LineTabList>
                     <Tab>Properties</Tab>
                     {showMetadata && <Tab>Metadata</Tab>}
@@ -280,7 +380,11 @@ export const NFTInfo = () => {
                     <TabPanel>
                       <TabOffers
                         nft={NFT}
-                        offers={offers?.orders?.filter(item => item?.maker?.toLowerCase() !== NFT?._ownerAddress?.toLowerCase())}
+                        offers={offers?.orders?.filter(
+                          (item) =>
+                            item?.maker?.toLowerCase() !==
+                            NFT?._ownerAddress?.toLowerCase()
+                        )}
                         usersMap={offerUsersMap}
                         setOfferForAccept={setOfferForAccept}
                         setShowOfferPopup={setShowOfferPopup}
@@ -290,7 +394,10 @@ export const NFTInfo = () => {
                       <TabHistory historyData={history} />
                     </TabPanel>
                     <TabPanel>
-                      <TabListings owner={owner} ownerAddress={NFT?._ownerAddress} />
+                      <TabListings
+                        owner={owner}
+                        ownerAddress={NFT?._ownerAddress}
+                      />
                     </TabPanel>
                   </TabPanels>
                 </Tabs>
@@ -299,7 +406,10 @@ export const NFTInfo = () => {
                 NFT={NFT}
                 owner={owner}
                 order={order}
-                highestOffer={{ offer: highestOffer || ({} as IOrder), creator: highestOfferCreator || ({} as IUser) }}
+                highestOffer={{
+                  offer: highestOffer || ({} as IOrder),
+                  creator: highestOfferCreator || ({} as IUser),
+                }}
                 onMeasureChange={(measure) => setBuySectionMeasure(measure)}
               />
             </Box>
@@ -316,18 +426,18 @@ export const NFTInfo = () => {
           {moreFromCollection && (
             <Box {...styles.MoreNFTsWrapperStyle}>
               {moreFromCollection.length > 0 && (
-                <Heading {...styles.MoreNFTsTitleStyle}>More from this collection</Heading>
+                <Heading {...styles.MoreNFTsTitleStyle}>
+                  More from this collection
+                </Heading>
               )}
-              <Container
-                {...styles.MoreNFTsContainerStyle}
-              >
+              <Container {...styles.MoreNFTsContainerStyle}>
                 <SimpleGrid
                   columns={{
                     base: 1,
                     md: 2,
                     lg: 4,
                   }}
-                  spacing={'20px'}
+                  spacing={"20px"}
                 >
                   {moreFromCollection.map(
                     (NFT) =>
@@ -356,9 +466,13 @@ export const NFTInfo = () => {
                               ownerAddress={NFT._ownerAddress}
                               order={orderData || undefined}
                               bestOfferPrice={bestOfferPrice || 0}
-                              bestOfferPriceToken={bestOfferPriceToken || undefined}
+                              bestOfferPriceToken={
+                                bestOfferPriceToken || undefined
+                              }
                               lastOfferPrice={lastOfferPrice || 0}
-                              lastOfferPriceToken={lastOfferPriceToken || undefined}
+                              lastOfferPriceToken={
+                                lastOfferPriceToken || undefined
+                              }
                             />
                           )}
                         />
@@ -366,12 +480,19 @@ export const NFTInfo = () => {
                   )}
                 </SimpleGrid>
               </Container>
-              <Button {...styles.MoreNFTsButtonStyle} onClick={handleClickViewCollection}>
+              <Button
+                {...styles.MoreNFTsButtonStyle}
+                onClick={handleClickViewCollection}
+              >
                 View collection
               </Button>
             </Box>
           )}
-          <NFTTransferPopup NFT={NFT} isOpen={isTransferOpened} onClose={() => setIsTransferOpened(false)} />
+          <NFTTransferPopup
+            NFT={NFT}
+            isOpen={isTransferOpened}
+            onClose={() => setIsTransferOpened(false)}
+          />
           <RefreshMetadataPopup
             status={refreshMetadataStatus}
             onClose={() => setRefreshMetadataStatus(Status.HIDDEN)}
