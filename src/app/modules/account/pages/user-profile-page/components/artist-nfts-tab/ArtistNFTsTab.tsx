@@ -93,8 +93,6 @@ export const ArtistNFTsTab = ({ artistAddress, onTotalLoad }: IArtistNFTsTabProp
     root: null,
   });
 
-  console.log(waitingUserNFTs);
-
   return (
     <Box>
       <Box
