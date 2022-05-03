@@ -11,8 +11,9 @@ import { SearchFilters } from '../search-filters';
 
 // Constants
 import { useEffect, useRef } from 'react';
-import { useIntersection } from 'react-use';
+import { useIntersection, useMedia } from 'react-use';
 import { useAuthStore } from '../../../../../../../stores/authStore';
+import { breakpoints } from '../../../../../../theme/constants';
 
 interface IWalletTabProps {
   getTotalNfts: (total: number) => void;
@@ -20,6 +21,7 @@ interface IWalletTabProps {
 
 export const WalletTab = ({ getTotalNfts }: IWalletTabProps) => {
   const address = useAuthStore(state => state.address);
+  const isMobile = useMedia(`(max-width: ${breakpoints.md})`);
 
   const {
     setUserAddress,
@@ -75,6 +77,7 @@ export const WalletTab = ({ getTotalNfts }: IWalletTabProps) => {
         ref={filtersRef}
         sx={{
           bg: (intersection?.intersectionRect.top ?? 1) === 0 ? 'white' : 'transparent',
+          p: isMobile && '0px 20px',
           pos: 'sticky',
           top: '-1px',
           mb: '40px',
@@ -87,7 +90,7 @@ export const WalletTab = ({ getTotalNfts }: IWalletTabProps) => {
         <SearchFilters />
       </Box>
 
-      <div className="container mynfts__page__body">
+      <div className="container mynfts__page__body" style={{padding: isMobile ? '0px 20px' : '0px'}}>
         {hasOrderBookFilters ? (
           hasOrders || waitingOrders ? (
             <div className="mynfts__page">

@@ -1,6 +1,6 @@
 import { Box, Button, SimpleGrid } from '@chakra-ui/react';
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { useIntersection } from 'react-use';
+import { useIntersection, useMedia } from 'react-use';
 
 import { NftItem, NFTItemContentWithPrice } from '@app/modules/nft/components';
 import { useFiltersContext } from '@app/modules/account/pages/my-nfts-page/components/search-filters/search-filters.context';
@@ -10,6 +10,7 @@ import NoNftsFound from '../../../../../../../components/myNFTs/NoNftsFound';
 import NftCardSkeleton from '../../../../../../../components/skeletons/nftCardSkeleton/NftCardSkeleton';
 import * as styles from './ArtistNFTsTab.styles';
 import { useRouter } from 'next/router';
+import { breakpoints } from '../../../../../../theme/constants';
 
 interface IArtistNFTsTabProps {
   artistAddress: string;
@@ -83,6 +84,7 @@ export const ArtistNFTsTab = ({ artistAddress, onTotalLoad }: IArtistNFTsTabProp
   const filtersRef = useRef(null);
   const divRef = useRef<null | HTMLDivElement>(null); 
   const [loadMoreClicked, setLoadMoreClicked] = useState(false);
+  const isMobile = useMedia(`(max-width: ${breakpoints.md})`);
   
   const scrollToBottom = () => {
     divRef?.current?.scrollIntoView({behavior: "smooth", block: "end", inline: "nearest"});
@@ -106,13 +108,14 @@ export const ArtistNFTsTab = ({ artistAddress, onTotalLoad }: IArtistNFTsTabProp
         ref={filtersRef}
         {...styles.FiltersWrapperStyle}
         bg={(intersection?.intersectionRect.top ?? 1) === 0 ? 'white' : 'transparent'}
+        p={isMobile ? '0px 20px' : '0px'}
       >
         <SearchFilters onFilterChanges={handleFilterChange} />
       </Box>
 
       {hasOrderBookFilters ? (
           hasOrders || waitingOrders ? (
-            <div className="mynfts__page">
+            <div className="mynfts__page" style={{padding: isMobile ? '0px 20px' : '0px'}}>
               <div className="container mynfts__page__body">
                 <SimpleGrid columns={{ base: 1, md: 2, lg: 4 }} spacing={'30px'}>
                   {
@@ -183,7 +186,7 @@ export const ArtistNFTsTab = ({ artistAddress, onTotalLoad }: IArtistNFTsTabProp
           )
         ) : // User NFTs
         hasUserNFTs || waitingUserNFTs ? (
-          <div className="mynfts__page">
+          <div className="mynfts__page" style={{padding: isMobile ? '0px 20px' : '0px'}}>
             <div className="container mynfts__page__body" ref={divRef}>
               <SimpleGrid columns={{ base: 1, md: 2, lg: 4 }} spacing={'30px'}>
                 {
