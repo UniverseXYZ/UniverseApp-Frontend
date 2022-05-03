@@ -1,37 +1,34 @@
 /* eslint-disable no-await-in-loop */
-import React, { useState, useRef, useEffect, useMemo } from 'react';
-import PropTypes from 'prop-types';
 import { BigNumber } from 'ethers';
-import Popup from 'reactjs-popup';
+import { useRouter } from 'next/router';
+import PropTypes from 'prop-types';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useQueryClient } from 'react-query';
-import Input from '../../input/Input.jsx';
-import Button from '../../button/Button.jsx';
-import uploadIcon from '../../../assets/images/ion_cloud.svg';
+import { useSearchParam } from 'react-use';
+import Popup from 'reactjs-popup';
+import { useMyNftsStore } from 'src/stores/myNftsStore';
+import { collectionKeys } from '../../../app/utils/query-keys.ts';
 import closeIcon from '../../../assets/images/close-menu.svg';
 import errorIcon from '../../../assets/images/error-icon.svg';
+import uploadIcon from '../../../assets/images/ion_cloud.svg';
 import leftArrow from '../../../assets/images/marketplace/bundles-left-arrow.svg';
 import rightArrow from '../../../assets/images/marketplace/bundles-right-arrow.svg';
-import LoadingPopup from '../../popups/LoadingPopup.jsx';
-import CongratsPopup from '../../popups/CongratsPopup.jsx';
-import { RouterPrompt } from '../../../utils/routerPrompt.js';
-import {
-  editCollection,
-  editCollectionImage,
-  saveCollection,
-  attachTxHashToCollection, getMyMintableCollections,
-} from '../../../utils/api/mintNFT';
-import RevenueSplits from '../revenueSplits/RevenueSplits.jsx';
-import SocialConnections from '../socialConnections/SocialConnections.jsx';
-import { formatRoyaltiesForMinting } from '../../../utils/helpers/contractInteraction.js';
-import { fetchRoyalties } from '../../../utils/api/royaltyRegistry';
-import { collectionKeys } from '../../../app/utils/query-keys.ts';
-import { useRouter } from 'next/router';
-import { useSearchParam } from 'react-use';
-import universeIcon from '../../../assets/images/universe-img.svg';
 import { useAuthStore } from '../../../stores/authStore';
 import { useContractsStore } from '../../../stores/contractsStore';
 import { useErrorStore } from '../../../stores/errorStore';
-import { useMyNftsStore } from 'src/stores/myNftsStore';
+import {
+  attachTxHashToCollection, editCollection,
+  editCollectionImage, getMyMintableCollections, saveCollection
+} from '../../../utils/api/mintNFT';
+import { fetchRoyalties } from '../../../utils/api/royaltyRegistry';
+import { formatRoyaltiesForMinting } from '../../../utils/helpers/contractInteraction.js';
+import { RouterPrompt } from '../../../utils/routerPrompt.js';
+import Button from '../../button/Button.jsx';
+import Input from '../../input/Input.jsx';
+import CongratsPopup from '../../popups/CongratsPopup.jsx';
+import LoadingPopup from '../../popups/LoadingPopup.jsx';
+import RevenueSplits from '../revenueSplits/RevenueSplits.jsx';
+import SocialConnections from '../socialConnections/SocialConnections.jsx';
 
 const MAX_FIELD_CHARS_LENGTH = {
   name: 32,
@@ -65,6 +62,7 @@ const NFTCollectionForm = ({ scrollToTop }) => {
   const [showPrompt, setShowPrompt] = useState(false);
 
   const inputFile = useRef(null);
+  const inputFileMobile = useRef(null);
   const router = useRouter();
 
   const [coverImage, setCoverImage] = useState('');
@@ -465,10 +463,10 @@ const NFTCollectionForm = ({ scrollToTop }) => {
             Cover image <span>(opt)</span>
           </h3>
           <p>(min 200x200px, PNG/JPEG/GIF, max 1mb)</p>
-          <Button className="light-border-button" onClick={() => inputFile.current.click()}>
+          <Button className="light-border-button" onClick={() => inputFileMobile.current.click()}>
             Choose file
           </Button>
-          <input type="file" ref={inputFile} onChange={(e) => validateFile(e.target.files[0])} />
+          <input type="file" ref={inputFileMobile} onChange={(e) => validateFile(e.target.files[0])} />
         </div>
         <div className="collection--name--and--token">
           <div className="collection--name">
