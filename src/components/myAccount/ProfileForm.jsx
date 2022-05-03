@@ -7,8 +7,8 @@ import defaultImage from '../../assets/images/default-img.svg';
 import InfoIcon from '../../assets/images/info-icon.svg';
 import warningIcon from '../../assets/images/Exclamation.svg';
 import errorIcon from '../../assets/images/red-msg.svg';
-import { useAuthContext } from '../../contexts/AuthContext';
 import { sanitizeUrlString } from '../../utils/helpers';
+import { useAuthStore } from '../../stores/authStore';
 
 const MAX_FIELD_CHARS_LENGTH = {
   name: 100,
@@ -46,7 +46,9 @@ const ProfileForm = ({
 
   const hasError = [accountName, accountPage, about].some((e) => !e);
 
-  const { loggedInArtist } = useAuthContext();
+  const { loggedInArtist } = useAuthStore(s => ({
+    loggedInArtist: s.loggedInArtist,
+  }));
   const [hideIcon, setHideIcon] = useState(false);
   const [inputName, setInputName] = useState('inp empty');
   const accountInput = useRef(null);
