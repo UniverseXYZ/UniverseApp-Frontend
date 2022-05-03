@@ -1,25 +1,25 @@
-import { calcTimeDelta } from 'react-countdown';
+import dayjs from 'dayjs';
 
 export const getAddedAtLabel = (addedAt: Date) => {
   const [leftDate, rightDate] = new Date() > new Date(addedAt)
-     ? [new Date(), new Date(addedAt)]
-     : [new Date(addedAt), new Date()];
+    ? [dayjs(), dayjs(addedAt)]
+    : [dayjs(addedAt), dayjs()];
 
-  const res = calcTimeDelta(leftDate, {
-    now: () => rightDate.getTime(),
-  });
-
-  if (res.days) {
-    if (res.days > 365) {
-      return `${Math.floor(res.days / 365)} years ${res.days - Math.floor(res.days / 365)} days`;
-    } else {
-      return `${res.days} days ${res.hours} hours`;
-    }
+  const diffYears = leftDate.diff(rightDate, 'years');
+  if (diffYears > 0) {
+    return `${diffYears} years ${leftDate.add(-diffYears, 'years').diff(rightDate, 'days')} days`;
   }
 
-  if (res.hours) {
-    return `${res.hours} hours ${res.minutes} minutes`;
+  const diffDays = leftDate.diff(rightDate, 'days');
+  if (diffDays > 0) {
+    return `${diffDays} days ${leftDate.add(-diffDays, 'days').diff(rightDate, 'hours')} hours`;
   }
 
-  return `${res.minutes} minutes`;
+  const diffHours = leftDate.diff(rightDate, 'hours');
+  if (diffHours > 0) {
+    return `${diffHours} hours ${leftDate.add(-diffHours, 'hours').diff(rightDate, 'minutes')} minutes`;
+  }
+
+
+  return `${leftDate.diff(rightDate, 'minutes')} minutes`;
 }
