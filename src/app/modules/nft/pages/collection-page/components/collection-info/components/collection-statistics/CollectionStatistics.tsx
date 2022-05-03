@@ -14,7 +14,7 @@ export const CollectionStatistics = ({ nftsCount, ownersCount, floorPrice, volum
 
   return (
     <>
-      <SimpleGrid columns={{ base: 1, md: 2, lg: 4 }} spacing={'1px'} borderRadius={'12px'}>
+      <SimpleGrid columns={{ base: 1, sm: 2, lg: 4 }} spacing={'1px'} borderRadius={'12px'}>
         <Flex {...styles.StatisticsContainerStyle}>
           <Box {...styles.LabelStyle}>
             <Box
