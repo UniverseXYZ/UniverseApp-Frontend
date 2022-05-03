@@ -255,7 +255,7 @@ export const NFTInfo = () => {
     <>
       <OpenGraph
         title={`${NFT?.name} – ${collection?.name}`}
-        description={collection?.description || undefined}
+        description={NFT?.description || collection?.description || undefined}
         image={OGImage}
         imageAlt={NFT?.name || ""}
       />
