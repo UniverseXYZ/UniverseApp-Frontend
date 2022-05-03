@@ -80,7 +80,9 @@ const HistoryEvent: React.FC<IHistoryEventProps> = ({ event, onlyListings, cance
     getBlockTimestamp();
   }, [web3Provider, event])
 
-  const addedAtLabel = useMemo(() => getAddedAtLabel(type === HistoryType.MINTED ? blockDate : event.createdAt), [blockDate, event.createdAt, type])
+  const addedAtLabel = useMemo(() => {
+    return getAddedAtLabel(type === HistoryType.MINTED ? blockDate : event.createdAt)
+  }, [blockDate, event.createdAt, type])
 
   return (
     <NFTTabItemWrapper>
@@ -95,7 +97,7 @@ const HistoryEvent: React.FC<IHistoryEventProps> = ({ event, onlyListings, cance
                 : shortenEthereumAddress(event.makerData.address))}
           </Text>
           <Text {...styles.AddedLabelStyle}>
-            {addedAtLabel}
+            {addedAtLabel} ago
             {!onlyListings && canceled && (
               <Box as={'span'} {...styles.ExpiredStyle}>
                 {' '}

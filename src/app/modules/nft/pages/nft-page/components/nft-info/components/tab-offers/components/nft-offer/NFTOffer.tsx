@@ -11,6 +11,7 @@ import * as styles from '../../styles';
 import { shortenEthereumAddress } from '../../../../../../../../../../../utils/helpers/format';
 import { useTokenPrice } from '../../../../../../../../../../hooks';
 import { useAuthStore } from '../../../../../../../../../../../stores/authStore';
+import { getAddedAtLabel } from '@app/modules/nft/pages/nft-page/components/nft-info/components/tab-history/helpers';
 
 interface INFTOfferProps {
   offer: IOrder;
@@ -24,11 +25,11 @@ interface INFTOfferProps {
 export const  NFTOffer: React.FC<INFTOfferProps> = ({offer, usersMap, owner, setOfferForAccept, setShowOfferPopup, cancelOffer}) => {
   const address = useAuthStore(s => s.address);
   const neverExpired = !offer.start && !offer.end;
-  const remainingHours = dayjs(offer.end * 1000).diff(new Date(), 'hours');
-  const remainingMinutes = dayjs(offer.end * 1000).diff(new Date(), 'minutes');
-  const expiredIn = neverExpired ? null : remainingHours > 0 ? remainingHours : remainingMinutes;
-  const timeLabel = neverExpired ? null : remainingHours > 1 ? 'hours' : remainingHours === 1 ? 'hour' : remainingMinutes === 1 ? 'minute' : 'minutes';
-  const isExpired = expiredIn && !(expiredIn > 0);
+
+  const expiredDate = new Date(offer.end * 1000);
+  const expiredLabel = getAddedAtLabel(new Date(offer.end * 1000));
+  const isExpired = expiredDate < new Date();
+
   const offerUser = usersMap?.hasOwnProperty(offer.maker) ? usersMap[offer.maker] : {} as IUser;
   const canAcceptsOffers = owner?.toLowerCase() === address && !isExpired;
   const canCancelOffers = offer.maker === address && !isExpired;
@@ -57,7 +58,7 @@ export const  NFTOffer: React.FC<INFTOfferProps> = ({offer, usersMap, owner, set
             : (
               isExpired
                 ? (<Text {...styles.ExpiredStyle} color={'#FF4949'}>Expired</Text>)
-                : (<Text {...styles.ExpiredStyle}>Expires in {expiredIn} {timeLabel}</Text>)
+                : (<Text {...styles.ExpiredStyle}>Expires in {expiredLabel}</Text>)
             )
           }
         </Box>
