@@ -2,12 +2,12 @@ import React, { useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import uploadIcon from '../../assets/images/upload.svg';
 import { editCollectionBanner } from '../../utils/api/mintNFT';
-import { useAuthContext } from '../../contexts/AuthContext';
 import { getCollectionBackgroundColor } from '../../utils/helpers';
 import { useMyNftsContext } from '../../contexts/MyNFTsContext';
+import { useAuthStore } from '../../stores/authStore';
 
 const Cover = ({ selectedCollection, collectionGeneralInfo, collectionOwner }) => {
-  const { isAuthenticated, address } = useAuthContext();
+  const { isAuthenticated, address } = useAuthStore(s => ({isAuthenticated: s.isAuthenticated, address: s.address}));
   const { setMyMintableCollections, myMintableCollections } = useMyNftsContext();
   const ref = useRef(null);
   const [bgImage, setBgImage] = useState(selectedCollection?.bgImage);

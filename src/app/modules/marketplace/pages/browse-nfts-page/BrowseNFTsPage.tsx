@@ -17,7 +17,6 @@ import NFTTypeIcon from '../../../../../assets/images/v2/marketplace/filter-nft-
 import PriceRangeIcon from '../../../../../assets/images/v2/marketplace/filter-price-range.svg';
 import ArrowDownIcon from '../../../../../assets/images/arrow-down.svg';
 
-import { useAuthContext } from '../../../../../contexts/AuthContext'
 import { SigninPopup } from './components'
 import {
   SearchBar,
@@ -58,12 +57,13 @@ import {
   usePriceRangeFilter,
   useSaleTypeFilter,
 } from '../../../../components/filters';
+import { useAuthStore } from '../../../../../stores/authStore';
 
 export type ICollectionsFilterValue = Array<any>;
 
 export const BrowseNFTsPage = () => {
   const { setDarkMode } = useThemeContext() as any;
-  const { isWalletConnected } = useAuthContext();
+  const isWalletConnected = useAuthStore(state => state.isWalletConnected);
   const queryClient = useQueryClient();
 
   const router = useRouter();

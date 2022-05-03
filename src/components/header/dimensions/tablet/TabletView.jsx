@@ -50,10 +50,11 @@ import {
   shortenEthereumAddress,
   toFixed,
 } from '../../../../utils/helpers/format';
-import { useAuthContext } from '../../../../contexts/AuthContext';
 import { useAuctionContext } from '../../../../contexts/AuctionContext';
 import supportIcon from '../../../../assets/images/supportIcon.svg';
 import Badge from '../../../badge/Badge';
+import { useUserBalanceStore } from '../../../../stores/balanceStore';
+import { useAuthStore } from '../../../../stores/authStore';
 
 const TabletView = (props) => {
   const {
@@ -71,15 +72,12 @@ const TabletView = (props) => {
     setShowSearch,
   } = props;
   const {
-    address,
-    yourBalance,
     yourEnsDomain,
-    usdEthBalance,
-    resetConnectionState,
-    loggedInArtist,
     signOut,
     isAuthenticating,
-  } = useAuthContext();
+  } = useAuthStore(s => ({yourEnsDomain: s.yourEnsDomain, signOut: s.signOut, isAuthenticating: s.isAuthenticating}))
+
+  const { yourBalance, usdEthBalance } = useUserBalanceStore(state => ({yourBalance: state.yourBalance, usdEthBalance: state.usdEthBalance}));
 
   const { editProfileButtonClick } = useAuctionContext();
   const [isAccountDropdownOpened, setIsAccountDropdownOpened] = useState(false);
@@ -480,6 +478,7 @@ const TabletView = (props) => {
                     className="signOut"
                     onClick={() => {
                       signOut();
+                      history.push('/');
                       setIsAccountDropdownOpened(false);
                     }}
                   >

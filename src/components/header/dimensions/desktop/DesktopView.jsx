@@ -34,9 +34,10 @@ import {
   shortenEthereumAddress,
   toFixed,
 } from '../../../../utils/helpers/format';
-import { useAuthContext } from '../../../../contexts/AuthContext';
 import { useRouter } from 'next/router';
 import Badge from '../../../badge/Badge';
+import { useUserBalanceStore } from '../../../../stores/balanceStore';
+import { useAuthStore } from '../../../../stores/authStore';
 
 const DesktopView = ({
   isWalletConnected,
@@ -60,14 +61,20 @@ const DesktopView = ({
   const {
     address,
     isAuthenticated,
-    yourBalance,
     yourEnsDomain,
-    usdEthBalance,
-    resetConnectionState,
     loggedInArtist,
     signOut,
     isAuthenticating,
-  } = useAuthContext();
+  } = useAuthStore(s => ({
+    address: s.address,
+    isAuthenticated: s.isAuthenticated,
+    yourEnsDomain: s.yourEnsDomain,
+    loggedInArtist: s.loggedInArtist,
+    signOut: s.signOut,
+    isAuthenticating: s.isAuthenticating,
+  }))
+
+  const { yourBalance, usdEthBalance } = useUserBalanceStore(state => ({yourBalance: state.yourBalance, usdEthBalance: state.usdEthBalance}))
 
   return (
     <div className="desktop__nav">
@@ -442,6 +449,7 @@ const DesktopView = ({
                   className="signOut"
                   onClick={() => {
                     signOut();
+                    history.push('/');
                     setIsAccountDropdownOpened(false);
                   }}
                 >

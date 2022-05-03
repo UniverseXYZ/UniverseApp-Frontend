@@ -25,7 +25,7 @@ import * as styles from './styles';
 import { ICollection, INFT, IUser } from '../../types';
 import { NFTReportPopup } from '../nft-report-popup';
 import { NFTSharePopup } from '../nft-share-popup';
-import { useAuthContext } from '../../../../../contexts/AuthContext';
+import { useAuthStore } from '../../../../../stores/authStore';
 
 interface INFTMenuProps {
   NFT: INFT;
@@ -78,7 +78,7 @@ export const NFTMenu = (
   const [isReportPopupOpened, setIsReportPopupOpened] = useState(false);
   const [isSharePopupOpened, setIsSharePopupOpened] = useState(false);
 
-  const { address } = useAuthContext();
+  const address = useAuthStore(s => s.address);
 
   const handleSell = useCallback(() => {
     router.push(`/nft/${collectionAddress}/${NFT.tokenId}/sell`)

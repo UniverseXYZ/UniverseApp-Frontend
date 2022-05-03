@@ -2,11 +2,11 @@ import Popup from 'reactjs-popup';
 import React from 'react';
 import WrongNetworkPopup from '../../components/popups/WrongNetworkPopup';
 import ErrorPopup from '../../components/popups/ErrorPopup';
-import { useAuthContext } from '../../contexts/AuthContext';
 import { useErrorContext } from '../../contexts/ErrorContext';
+import { useAuthStore } from '../../stores/authStore';
 
 export const Popups = () => {
-  const { showWrongNetworkPopup, setShowWrongNetworkPopup } = useAuthContext() as any;
+  const { showWrongNetworkPopup, setShowWrongNetworkPopup } = useAuthStore(state => ({showWrongNetworkPopup: state.showWrongNetworkPopup, setShowWrongNetworkPopup: state.setShowWrongNetworkPopup}));
   const { showError } = useErrorContext() as any;
 
   return (

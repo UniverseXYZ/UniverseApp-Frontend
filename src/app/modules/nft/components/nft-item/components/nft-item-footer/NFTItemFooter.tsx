@@ -11,8 +11,8 @@ import {
   NFTItemFooterCompositionLabel,
 } from './components';
 import { Button } from '@chakra-ui/react';
-import { useAuthContext } from '../../../../../../../contexts/AuthContext';
 import { useNftCheckoutPopupContext } from '../../../../../../providers/NFTCheckoutProvider';
+import { useAuthStore } from '../../../../../../../stores/authStore';
 interface INFTItemFooterProps extends BoxProps {
   NFT?: INFT;
   collection?: ICollection;
@@ -35,7 +35,7 @@ export const NFTItemFooter = (
   }: INFTItemFooterProps
 ) => {
   const showLikes = false;
-  const { address, isAuthenticated } = useAuthContext() as any;
+  const { address, isAuthenticated } = useAuthStore(s => ({address: s.address, isAuthenticated: s.isAuthenticated}))
   const {setNFT, setCollection, setIsOpen, setOrder, setOnClose} = useNftCheckoutPopupContext();
 
 

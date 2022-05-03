@@ -27,12 +27,12 @@ import { useFiltersContext } from '../../../../../account/pages/my-nfts-page/com
 import { SearchFilters } from '../../../../../account/pages/my-nfts-page/components/search-filters';
 import NftCardSkeleton from '../../../../../../../components/skeletons/nftCardSkeleton/NftCardSkeleton';
 import { shortenEthereumAddress } from '../../../../../../../utils/helpers/format';
-import { useAuthContext } from '../../../../../../../contexts/AuthContext.jsx';
 import EditIcon from '../../../../../../../components/svgs/EditIcon';
+import { useAuthStore } from '../../../../../../../stores/authStore';
 
 export const CollectionInfo = () => {
   const [totalNftsCount, setTotalNftsCount] = useState(0);
-  const { address, signer, isAuthenticated } = useAuthContext() as any;
+  const { address, signer, isAuthenticated } = useAuthStore(s => ({address: s.address, signer: s.signer, isAuthenticated: s.isAuthenticated}))
   const router = useRouter();
   const [collectionOwner, setCollectionOwner] = useState<string>('');
 
@@ -86,6 +86,9 @@ export const CollectionInfo = () => {
 
   const fetchCollectionOwner = async () => {
     try {
+      if (!signer) {
+        return
+      }
       // @ts-ignore
       const { contracts } = Contracts[process.env.REACT_APP_NETWORK_CHAIN_ID];
       // We use the UniserveERC721Core ABI because it implements the Ownable interface

@@ -35,7 +35,6 @@ import { Checkbox, DateTimePicker, Loading, TokenIcon } from '../../../../../../
 import { ETH_USD_RATE } from '../../../../../../mocks';
 import { INFT, IOrder } from '../../../../types';
 import { TokenTicker } from '../../../../../../enums';
-import { useAuthContext } from '../../../../../../../contexts/AuthContext';
 import { sign } from '../../../../../../helpers';
 
 import ArrowIcon from '../../../../../../../assets/images/arrow-down.svg';
@@ -51,6 +50,7 @@ import { getEtherscanTxUrl} from '../../../../../../../utils/helpers';
 import { formatAddress } from '../../../../../../../utils/helpers/format';
 import { NFTCustomError } from '../nft-custom-error/NFTCustomError';
 import { useErrorContext } from '../../../../../../../contexts/ErrorContext';
+import { useAuthStore } from '../../../../../../../stores/authStore';
 
 // @ts-ignore
 const { contracts: contractsData } = Contracts[process.env.REACT_APP_NETWORK_CHAIN_ID];
@@ -81,7 +81,7 @@ export const NFTMakeAnOfferPopup = ({ nft, order, isOpen, onClose, }: INFTMakeAn
   
   const { setShowError, setErrorBody} = useErrorContext() as any;
 
-  const { signer, web3Provider } = useAuthContext() as any;
+  const { signer, web3Provider } = useAuthStore(s => ({signer: s.signer, web3Provider: s.web3Provider}));
   const { refetchOffers } = useNFTPageData();
 
   const [state, setState] = useState<MakeAnOfferState>(MakeAnOfferState.FORM);

@@ -111,9 +111,6 @@ export const getProfileInfo = async (address) => {
   return result;
 };
 
-/**
- * @returns {string} challenge
- */
 export const setChallenge = async (challenge) => {
   const request = await fetch(CHALLENGE_RUL, {
     method: 'POST',
@@ -132,6 +129,7 @@ export const setChallenge = async (challenge) => {
  * @param {Object} param
  * @param {string} param.address user address
  * @param {string} param.signedMessage user signed message
+ * @param {string} param.uuid uuid
  * @returns {Object} result
  * @returns {string} result.xyz_access_token JWT of the user
  * @returns {string} result.user.about
