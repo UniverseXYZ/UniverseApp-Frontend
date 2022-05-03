@@ -13,13 +13,14 @@ import ApiPagination from '../pagination/ApiPagination';
 import ApiItemsPerPageDropdown from '../pagination/ApiItemsPerPageDropdown';
 import { getMyMintingCollectionsCount, getMyMintingCollections } from '../../utils/api/mintNFT';
 import { CollectionPageLoader } from '../../containers/collection/CollectionPageLoader';
+import { useRouter } from 'next/router';
 
 const CORE_COLLECTION_ADDRESS = process.env.REACT_APP_UNIVERSE_ERC_721_ADDRESS;
 
 const pollingInterval = 1000;
 
 const DeployedCollections = ({ scrollContainer }) => {
-  const history = useHistory();
+  const history = useRouter();
 
   const coreCollectionFirst = (a, b) => {
     if (a.address === CORE_COLLECTION_ADDRESS) {
@@ -136,10 +137,7 @@ const DeployedCollections = ({ scrollContainer }) => {
                   key={collection.id}
                   aria-hidden="true"
                   onClick={() =>
-                    history.push(`/collection/${collection.address}`, {
-                      collection,
-                      saved: true,
-                    })
+                    history.push(`/collection/${collection.address}?collection=${collection.address}`)
                   }
                 >
                   <div className="saved__collection__box__header">

@@ -90,7 +90,7 @@ export const useSearchCollection = (address) => {
       return debouncedLoadMoreNfts(nftsEndpoint, abortSignal);
     },
     // Ensure a new request is made everytime the text changes (even if it's debounced)
-    [perPage, inputText, apiPage]
+    [perPage, inputText, apiPage, address]
   );
 
   // Return everything needed for the hook consumer
