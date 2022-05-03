@@ -7,7 +7,6 @@ import arrow from '../../../assets/images/arrow.svg';
 // import './CreateNFT.scss';
 import SingleNFTForm from './SingleNFTForm';
 import NFTCollectionForm from './NFTCollectionForm';
-import { useMyNftsContext } from '../../../contexts/MyNFTsContext';
 import { useSearchParam } from 'react-use';
 
 const CreateNFT = () => {

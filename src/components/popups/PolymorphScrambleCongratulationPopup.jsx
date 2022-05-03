@@ -6,11 +6,12 @@ import Button from '../button/Button.jsx';
 import closeIcon from '../../assets/images/cross.svg';
 import AppContext from '../../ContextAPI';
 import person from '../../assets/images/randomise-person-images/person.png';
-import { useMyNftsContext } from '../../contexts/MyNFTsContext.jsx';
+import { useRouter } from 'next/router';
+import { useMyNftsStore } from 'src/stores/myNftsStore';
 
 const PolymorphScrambleCongratulationPopup = ({ onClose, onOpenOptionsPopUp, polymorph }) => {
-  const history = useHistory();
-  const { polymorphsFilter, navigateToMyUniverseNFTsTab } = useMyNftsContext();
+  const router = useRouter();
+  const { polymorphsFilter, navigateToMyUniverseNFTsTab } = useMyNftsStore(s => ({polymorphsFilter: s.polymorphsFilter, navigateToMyUniverseNFTsTab: s.navigateToMyUniverseNFTsTab}))
 
   return (
     <div className="polymorph_popup">
@@ -25,6 +26,7 @@ const PolymorphScrambleCongratulationPopup = ({ onClose, onOpenOptionsPopUp, pol
           className="light-button"
           onClick={() => {
             navigateToMyUniverseNFTsTab(polymorphsFilter);
+            router.push('/my-nfts');
           }}
         >
           My Polymorphs

@@ -3,8 +3,8 @@ import AwesomeDebouncePromise from 'awesome-debounce-promise';
 import useConstant from 'use-constant';
 import { useAsyncAbortable } from 'react-async-hook';
 import AppContext from '../../ContextAPI';
-import { usePolymorphContext } from '../../contexts/PolymorphContext';
 import useStateIfMounted from './useStateIfMounted';
+import { usePolymorphStore } from 'src/stores/polymorphStore';
 
 const buildRarityUrl = (
   page = 1,
@@ -76,7 +76,7 @@ const buildRarityUrl = (
 };
 
 export const useSearchPolymorphs = () => {
-  const { userPolymorphs } = usePolymorphContext();
+  const userPolymorphs = usePolymorphStore(s => s.userPolymorphs)
 
   const perPage = 100;
   const [inputText, setInputText] = useStateIfMounted('');
