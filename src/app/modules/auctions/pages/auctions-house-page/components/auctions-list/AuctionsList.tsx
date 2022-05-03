@@ -1,11 +1,11 @@
-import { Box, Button, Flex, Image, Link, SimpleGrid, Skeleton, Text } from '@chakra-ui/react';
+import { Button, Flex, Image, Link, SimpleGrid, Text } from '@chakra-ui/react';
 import NextLink from 'next/link';
+import { useCallback } from 'react';
 
 import BubbleImage from '@assets/images/text-bubble-2x.png';
 import plusIcon from '@assets/images/plus.svg';
 import { Alert } from '@app/components';
 import { AuctionSkeleton } from '@app/modules/auctions/components';
-import { useCallback } from 'react';
 
 type IAuction = any;
 
@@ -13,12 +13,12 @@ interface IAuctionsListProps {
   type: 'active' | 'future';
 }
 
-const auctions = [1, 2, 3, 4];
+const auctions = [];
 
 export const AuctionsList = (props: IAuctionsListProps) => {
   const { type } = props;
 
-  const isLoading = true;
+  const isLoading = false;
 
   const isFillOutProfileAlert = false;
 
