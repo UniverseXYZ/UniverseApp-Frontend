@@ -1,14 +1,15 @@
 import { Box, Button, SimpleGrid } from '@chakra-ui/react';
-import { useEffect, useRef } from 'react';
-
-import { NftItem, NFTItemContentWithPrice } from '../../../../../nft/components';
-import { OrderAssetClass } from '../../../../../nft/enums';
-import { Loading } from '../../../../../../components';
-import { SearchFilters } from '../../../my-nfts-page/components/search-filters';
-import { useFiltersContext } from '../../../../../account/pages/my-nfts-page/components/search-filters/search-filters.context';
-import NoNftsFound from '../../../../../../../components/myNFTs/NoNftsFound';
+import { useCallback, useEffect, useRef } from 'react';
 import { useIntersection } from 'react-use';
+
+import { NftItem, NFTItemContentWithPrice } from '@app/modules/nft/components';
+import { useFiltersContext } from '@app/modules/account/pages/my-nfts-page/components/search-filters/search-filters.context';
+
+import { SearchFilters } from '../../../my-nfts-page/components/search-filters';
+import NoNftsFound from '../../../../../../../components/myNFTs/NoNftsFound';
 import NftCardSkeleton from '../../../../../../../components/skeletons/nftCardSkeleton/NftCardSkeleton';
+import * as styles from './ArtistNFTsTab.styles';
+import { useRouter } from 'next/router';
 
 interface IArtistNFTsTabProps {
   artistAddress: string;
@@ -33,7 +34,10 @@ export const ArtistNFTsTab = ({ artistAddress, onTotalLoad }: IArtistNFTsTabProp
 		isFethingOrders,
 		isLoadingOrders,
     hasMoreOrders,
+    userCollections,
   } = useFiltersContext();
+
+  const router = useRouter();
 
   useEffect(() => {
     setUserAddress(artistAddress);
@@ -56,6 +60,26 @@ export const ArtistNFTsTab = ({ artistAddress, onTotalLoad }: IArtistNFTsTabProp
   const hasUserNFTs = userNFTs?.pages?.length && userNFTs?.pages[0]?.data?.length;
   const waitingUserNFTs = isFetchingUserNFTs || isLoadingUserNFTs;
 
+  const handleFilterChange = useCallback((filters) => {
+    const queryParams = {...router.query};
+
+    // if collections loaded
+    if (!userCollections.length) {
+      return;
+    }
+
+    if (filters?.collectionFilter?.collections?.length) {
+      queryParams.collection = filters?.collectionFilter?.collections[0].address;
+    } else {
+      delete queryParams.collection;
+    }
+
+    router.push({
+      pathname: router.pathname,
+      query: queryParams,
+    }, undefined, { shallow: true });
+  }, [userCollections]);
+
   const filtersRef = useRef(null);
 
   const intersection = useIntersection(filtersRef, {
@@ -68,18 +92,10 @@ export const ArtistNFTsTab = ({ artistAddress, onTotalLoad }: IArtistNFTsTabProp
     <Box>
       <Box
         ref={filtersRef}
-        sx={{
-          bg: (intersection?.intersectionRect.top ?? 1) === 0 ? 'white' : 'transparent',
-          pos: 'sticky',
-          top: '-1px',
-          mb: '40px',
-          zIndex: 20,
-          '.search--sort--filters--section': {
-            mb: 0,
-          },
-        }}
+        {...styles.FiltersWrapperStyle}
+        bg={(intersection?.intersectionRect.top ?? 1) === 0 ? 'white' : 'transparent'}
       >
-        <SearchFilters />
+        <SearchFilters onFilterChanges={handleFilterChange} />
       </Box>
 
       {hasOrderBookFilters ? (
