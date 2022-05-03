@@ -1,3 +1,4 @@
+export * from './alert';
 export * from './back-to-top-button';
 export * from './checkbox';
 export * from './collection-preview';
