@@ -1,35 +1,32 @@
-import {
-  Box,
-  Button,
-  Flex,
-  Heading,
-  Image,
-  Modal,
-  ModalBody,
-  ModalCloseButton,
-  ModalContent,
-  ModalFooter,
-  ModalHeader,
-  ModalOverlay,
-  useDisclosure,
-  Text,
-  NumberInput,
-  NumberInputField,
-} from '@chakra-ui/react';
+import
+  {
+    Box,
+    Button,
+    Flex,
+    Heading,
+    Image,
+    Modal,
+    ModalBody,
+    ModalCloseButton,
+    ModalContent,
+    ModalFooter,
+    ModalHeader,
+    ModalOverlay, NumberInput,
+    NumberInputField, Text, useDisclosure
+  } from '@chakra-ui/react';
+import { default as dayjs } from 'dayjs';
+import { default as AdvancedFormat } from 'dayjs/plugin/advancedFormat';
+import { default as Timezone } from 'dayjs/plugin/timezone';
+import { default as UTC } from 'dayjs/plugin/utc';
 import { useFormik } from 'formik';
 import { useCallback, useEffect, useState } from 'react';
 import DatePicker from 'react-datepicker';
-import 'react-datepicker/dist/react-datepicker.css';
-import { default as dayjs } from 'dayjs';
-import { default as UTC } from 'dayjs/plugin/utc';
-import { default as Timezone } from 'dayjs/plugin/timezone';
-import { default as AdvancedFormat } from 'dayjs/plugin/advancedFormat';
-import { listingValidation } from './listingValidation';
-
 import calendarIcon from '../../../assets/images/calendar-small.svg';
 import { DateTimePickerHeader } from './components';
 import { DateTimeValidationSchema } from './constants';
+import { listingValidation } from './listingValidation';
 import * as styles from './styles';
+
 
 dayjs.extend(UTC);
 dayjs.extend(Timezone);
