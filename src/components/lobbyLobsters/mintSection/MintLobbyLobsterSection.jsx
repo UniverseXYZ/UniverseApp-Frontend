@@ -11,6 +11,7 @@ import LoadingPopup from '../../popups/LoadingPopup';
 import MintPolymorphConfirmationPopup from '../../popups/MintPolymorphConfirmationPopup';
 import { useLobsterContext } from '../../../contexts/LobsterContext';
 import { useAuthContext } from '../../../contexts/AuthContext';
+import { useWindowSize } from 'react-use';
 
 const MintLobbyLobsterSection = React.forwardRef((props, ref) => {
   const { userLobsters, setUserLobsters, lobstersFilter } = useLobsterContext();
@@ -20,10 +21,7 @@ const MintLobbyLobsterSection = React.forwardRef((props, ref) => {
   const [sliderValue, setSliderValue] = useState(10000);
   const [quantity, setQuantity] = useState(1);
   const [mobile, setMobile] = useState(false);
-  const [windowSize, setWindowSize] = useState({
-    width: window.innerWidth,
-    height: window.innerHeight,
-  });
+  const windowSize = useWindowSize();
   const [mintedTokens, setMintedTokens] = useState([]);
   const [loading, setLoading] = useState(false);
   const [congrats, setCongrats] = useState(false);
@@ -31,10 +29,8 @@ const MintLobbyLobsterSection = React.forwardRef((props, ref) => {
   const [metadataLoaded, setMetadataLoaded] = useState(false);
 
   useEffect(() => {
-    setWindowSize({ width: window.innerWidth, height: window.innerHeight });
-    if (+window.innerWidth <= 576) setMobile(true);
-    else setMobile(false);
-  }, []);
+    setMobile(+windowSize.width <= 576);
+  }, [windowSize]);
 
   const mintLobsters = async (amount) => {
     if (!lobsterContract) {

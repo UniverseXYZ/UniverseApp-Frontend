@@ -13,6 +13,7 @@ import { useGraphQueryHook } from '../../utils/hooks/useGraphQueryHook';
 import { useThemeContext } from '../../contexts/ThemeContext';
 import { useMyNftsContext } from '../../contexts/MyNFTsContext';
 import { useAuthContext } from '../../contexts/AuthContext';
+import { useWindowSize } from 'react-use';
 
 const marquee = () => (
   <p>
@@ -40,22 +41,20 @@ const Polymorphs = () => {
   const [mobile, setMobile] = useState(false);
   const { data } = useGraphQueryHook(queryPolymorphsGraph(morphedPolymorphs));
   const { polymorphsFilter, navigateToMyUniverseNFTsTab } = useMyNftsContext();
-  const { ethUsdPrice } = useAuthContext();
-  useLayoutEffect(() => {
-    function handleResize() {
-      if (+window.innerWidth <= 575) setMobile(true);
-      else setMobile(false);
-    }
-    window.addEventListener('resize', handleResize);
-  });
+  const { ethPrice } = useAuthContext();
+  const windowSize = useWindowSize();
+
+  useEffect(() => {
+    setMobile(+windowSize.width <= 575);
+  }, [windowSize]);
 
   useEffect(() => {
     setDarkMode(true);
   }, []);
 
   useEffect(() => {
-    if (+window.innerWidth <= 575) setMobile(true);
-  }, [window.innerWidth]);
+    if (+windowSize.width <= 575) setMobile(true);
+  }, [windowSize.width]);
 
   const redirectToMyPolymorphs = () => {
     navigateToMyUniverseNFTsTab(polymorphsFilter);
@@ -64,7 +63,7 @@ const Polymorphs = () => {
     <div className="polymorphs">
       <WelcomeWrapper
         title="Polymorph Universe"
-        hintText="A universe of polymorphic creatures with the power to mutate on demand."
+        hintText="A universe of polymorphic creatures with the power to mutate on demand"
         popupBtnText="My Polymorphs"
         btnText="Mint a morph"
         btnOnClick={redirectToMyPolymorphs}
@@ -81,7 +80,7 @@ const Polymorphs = () => {
       {/* <Characters /> */}
       <Section4 />
       <PolymorphsActivity
-        ethPrice={ethUsdPrice.toString()}
+        ethPrice={ethPrice?.market_data?.current_price?.usd.toString()}
         mobile={mobile}
         morphEntities={data?.tokenMorphedEntities}
       />

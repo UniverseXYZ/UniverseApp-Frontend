@@ -11,6 +11,7 @@ import PastAuctions from './PastAuctions.jsx';
 import { handleTabLeftScrolling, handleTabRightScrolling } from '../../utils/scrollingHandlers';
 import { useAuctionContext } from '../../contexts/AuctionContext';
 import { useAuthContext } from '../../contexts/AuthContext';
+import { useWindowSize } from 'react-use';
 
 const MyAuction = () => {
   const { myAuctions, setMyAuctions, setAuction, selectedTabIndex, setSelectedTabIndex } =
@@ -22,6 +23,7 @@ const MyAuction = () => {
 
   const [showButton, setShowButton] = useState(true);
   const history = useHistory();
+  const windowSize = useWindowSize();
 
   useEffect(() => {
     document.title = 'Universe Minting - My Auctions';
@@ -31,59 +33,47 @@ const MyAuction = () => {
   }, []);
 
   useEffect(() => {
-    function handleResize() {
-      if (window.innerWidth < 500) {
-        document.querySelector('.tab__right__arrow').style.display = 'flex';
-      } else {
-        document.querySelector('.tab__right__arrow').style.display = 'none';
-        document.querySelector('.tab__left__arrow').style.display = 'none';
-      }
+    if (document && windowSize.width < 500) {
+      document.querySelector('.tab__right__arrow').style.display = 'flex';
+    } else {
+      document.querySelector('.tab__right__arrow').style.display = 'none';
+      document.querySelector('.tab__left__arrow').style.display = 'none';
     }
-    window.addEventListener('resize', handleResize);
-    handleResize();
-
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
+  }, [windowSize]);
 
   useEffect(() => {
-    function handleShowButton() {
-      if (window.innerWidth < 576) {
-        if (
-          selectedTabIndex === tabs.ActiveAuctions &&
-          !myAuctions.filter((item) => item.launch).length
-        ) {
-          setShowButton(false);
-        } else if (
-          selectedTabIndex === tabs.FutureAuctions &&
-          !myAuctions.filter(
-            (item) =>
-              !item.launch &&
-              !moment(item.endDate).isBefore(moment.now()) &&
-              !(
-                moment(item.endDate).isAfter(moment.now()) &&
-                (moment(item.endDate).diff(moment(item.startDate)) > 0 &&
-                  moment(item.startDate).isBefore(moment.now())) > 0
-              )
-          ).length
-        ) {
-          setShowButton(false);
-        } else if (
-          selectedTabIndex === tabs.PastAuctions &&
-          !myAuctions.filter((item) => moment(item.endDate).isBefore(moment.now())).length
-        ) {
-          setShowButton(false);
-        } else {
-          setShowButton(true);
-        }
+    if (windowSize.width < 576) {
+      if (
+        selectedTabIndex === tabs.ActiveAuctions &&
+        !myAuctions.filter((item) => item.launch).length
+      ) {
+        setShowButton(false);
+      } else if (
+        selectedTabIndex === tabs.FutureAuctions &&
+        !myAuctions.filter(
+          (item) =>
+            !item.launch &&
+            !moment(item.endDate).isBefore(moment.now()) &&
+            !(
+              moment(item.endDate).isAfter(moment.now()) &&
+              (moment(item.endDate).diff(moment(item.startDate)) > 0 &&
+                moment(item.startDate).isBefore(moment.now())) > 0
+            )
+        ).length
+      ) {
+        setShowButton(false);
+      } else if (
+        selectedTabIndex === tabs.PastAuctions &&
+        !myAuctions.filter((item) => moment(item.endDate).isBefore(moment.now())).length
+      ) {
+        setShowButton(false);
       } else {
         setShowButton(true);
       }
+    } else {
+      setShowButton(true);
     }
-    window.addEventListener('resize', handleShowButton);
-    handleShowButton();
-
-    return () => window.removeEventListener('resize', handleShowButton);
-  }, [selectedTabIndex]);
+  }, [selectedTabIndex, windowSize]);
 
   return (
     <div className="container auction__page">

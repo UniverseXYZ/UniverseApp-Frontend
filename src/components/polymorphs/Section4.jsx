@@ -8,6 +8,7 @@ import mobilebackground from '../../assets/images/mobilebackground.png';
 import tabletbackground from '../../assets/images/topmorph.png';
 import Button from '../button/Button';
 import { useRouter } from 'next/router';
+import { useWindowSize } from 'react-use';
 
 const getWindow = (width, changeStateFunc) => {
   if (+width > 834) changeStateFunc('browser');
@@ -15,17 +16,20 @@ const getWindow = (width, changeStateFunc) => {
   else if (+width <= 575) changeStateFunc('mobile');
 };
 
-const leftBlock = (windows) => (
-  <AnimatedOnScroll animationIn="fadeIn" animationInDelay={500}>
-    <div
-      className="section4--left--block"
-      style={windows === 'mobile' ? { height: window.innerWidth } : {}}
-    >
-      <img alt="mobile" src={mobilebackground} className="show--on--mobile" />
-      <img alt="tablet" src={tabletbackground} className="show--on--tablet" />
-    </div>
-  </AnimatedOnScroll>
-);
+const leftBlock = (windows) => {
+  const windowSize = useWindowSize();
+  return (
+    <AnimatedOnScroll animationIn='fadeIn' animationInDelay={500}>
+      <div
+        className='section4--left--block'
+        style={windows === 'mobile' ? { height: windowSize.width } : {}}
+      >
+        <img alt='mobile' src={mobilebackground} className='show--on--mobile' />
+        <img alt='tablet' src={tabletbackground} className='show--on--tablet' />
+      </div>
+    </AnimatedOnScroll>
+  );
+};
 
 const rightBlock = () => {
   const history = useRouter();
@@ -44,18 +48,11 @@ const rightBlock = () => {
 
 const Section4 = () => {
   const [windows, setWindows] = useState('browser');
-  const [width, setWidth] = useState(window.innerWidth);
-  useLayoutEffect(() => {
-    function handleResize() {
-      getWindow(window.innerWidth, setWindows);
-      setWidth(window.innerWidth);
-    }
-    window.addEventListener('resize', handleResize);
-  });
+  const windowSize = useWindowSize();
 
   useEffect(() => {
-    getWindow(window.innerWidth, setWindows);
-  }, [width]);
+    getWindow(windowSize.width, setWindows);
+  }, [windowSize]);
 
   return (
     <div className="polymorph--section4">
