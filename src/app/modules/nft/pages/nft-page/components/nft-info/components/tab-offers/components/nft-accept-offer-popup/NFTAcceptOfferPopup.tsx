@@ -336,7 +336,9 @@ export const NFTAcceptOfferPopup = ({ NFT, NFTs, order, isOpen, onClose }: INFTA
                 </Box>
                 <Box flex={1} p={'20px'}>
                   <Text>{NFT?.name}</Text>
-                  <Text {...styles.CollectionNameStyle}>{NFT?._collectionAddress}</Text>
+                  <Text isTruncated title={NFT?._collectionAddress} {...styles.CollectionNameStyle}>
+                    {NFT?._collectionAddress}
+                  </Text>
                 </Box>
                 <Box {...styles.PriceContainerStyle}>
                   <Text fontSize={'14px'}>
