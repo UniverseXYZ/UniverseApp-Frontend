@@ -1,14 +1,12 @@
 import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
-import { useHistory } from 'react-router-dom';
+import { useRouter } from 'next/router';
 import Button from '../button/Button.jsx';
 import closeIcon from '../../assets/images/cross.svg';
 import successImg from '../../assets/images/bid-submitted.png';
-import { useAuthContext } from '../../contexts/AuthContext.jsx';
 
-const CongratsProfilePopup = ({ onClose }) => {
-  const { loggedInArtist } = useAuthContext();
-  const history = useHistory();
+const CongratsProfilePopup = ({ loggedInArtist, onClose }) => {
+  const history = useRouter();
   return (
     <div className="popup-div congrats-popup">
       <button type="button" className="popup-close" onClick={onClose}>
@@ -27,7 +25,7 @@ const CongratsProfilePopup = ({ onClose }) => {
         <Button
           className="light-button"
           onClick={() => {
-            history.push(`/${loggedInArtist.universePageAddress}`, { id: loggedInArtist.id });
+            history.push(`/${loggedInArtist.universePageAddress}`);
           }}
         >
           Go to my profile
