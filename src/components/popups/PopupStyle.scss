@@ -4177,14 +4177,16 @@
             margin-left: 0%;
           }
         }
-        a {
+        .view-link {
           font-family: $spaceGroteskFont;
           font-style: normal;
           font-weight: normal;
           font-size: 14px;
           line-height: 140%;
           color: $black;
+          cursor: pointer;
           img {
+            display: inline-block;
             margin-left: 13px;
           }
           @include xl {
