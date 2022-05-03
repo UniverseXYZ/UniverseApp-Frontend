@@ -10,9 +10,9 @@ import {
 } from '@chakra-ui/react';
 import { DebounceInput } from 'react-debounce-input';
 
-import searchIcon from '../../../../../assets/images/search-gray.svg';
-import closeIcon from '../../../../../assets/images/close-menu.svg';
-import { timeout } from '../../../../utils/debounceConfig';
+import searchIcon from '@assets/images/search-gray.svg';
+import closeIcon from '@assets/images/close-menu.svg';
+import { timeout } from '@app/utils/debounceConfig';
 
 interface ISearchInputProps {
   inputGroupProps?: InputGroupProps;
