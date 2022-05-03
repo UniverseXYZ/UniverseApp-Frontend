@@ -6,7 +6,6 @@ import Popup from 'reactjs-popup';
 import { useQueryClient } from 'react-query';
 import Input from '../../input/Input.jsx';
 import Button from '../../button/Button.jsx';
-import NFTCollectible from './NFTCollectible.jsx';
 import uploadIcon from '../../../assets/images/ion_cloud.svg';
 import closeIcon from '../../../assets/images/close-menu.svg';
 import errorIcon from '../../../assets/images/error-icon.svg';
