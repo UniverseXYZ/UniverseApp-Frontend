@@ -2,11 +2,11 @@ import '../styles/globals.css'
 
 import '../src/assets/scss/normalize.scss';
 
+import '../src/components/input/Inputs.scss';
+import '../src/components/header/Header.scss';
 import '../src/components/header/dimensions/desktop/DesktopView.scss';
 import '../src/components/header/dimensions/mobile/MobileView.scss';
 import '../src/components/header/dimensions/tablet/TabletView.scss';
-import '../src/components/input/Inputs.scss';
-import '../src/components/header/Header.scss';
 import '../src/components/footer/Footer.scss';
 import '../src/components/button/Button.scss';
 import '../src/components/polymorphs/styles/About.scss';
@@ -99,6 +99,22 @@ import '../src/components/select/SelectComponent.scss';
 import '../src/components/lobbyLobsters/info/styles/LobstersInfoPage.scss';
 import '../src/components/marketplaceTabComponents/MarketplaceTabComponent.scss';
 
+import '../src/components/badge/Badge.scss';
+import '../src/components/nft/NFTCard.scss';
+import '../src/components/popups/transferNFT/TransferNFTPopup.scss';
+import '../src/app/modules/account/pages/my-nfts-page/components/search-filters/search-filters/SearchFilters.scss';
+import '../src/app/modules/account/pages/my-nfts-page/components/search-filters/search-nft-filed/SearchField.scss';
+import '../src/app/modules/marketplace/pages/sell-page/components/tab-summary/SummaryTab.scss';
+import '../src/app/modules/nft/pages/nft-page/components/nft-info/components/tab-properties/TabProperties.scss';
+import '../src/components/skeletons/collectionCardSkeleton/CollectionCardSkeleton.scss';
+import '../src/containers/collection/Collection.scss';
+import '../src/components/myNFTs/revenueSplits/RevenueSplits.scss';
+import '../src/components/myNFTs/socialConnections/SocialConnections.scss';
+
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
+
 import type { AppProps } from 'next/app'
 import React, { useEffect, useState } from 'react';
 import { QueryClient, QueryClientProvider } from 'react-query';
@@ -114,8 +130,18 @@ import Header from '../src/components/header/Header';
 import Footer from '../src/components/footer/Footer';
 import { PolymorphContextProvider } from '../src/contexts/PolymorphContext';
 import { Popups } from '../src/app/components/AppPopups';
+import { Theme } from '../src/app/theme';
+import { LayoutProvider } from '../src/app/providers';
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      refetchOnWindowFocus: false,
+      refetchOnMount: false,
+      refetchOnReconnect: false,
+    },
+  },
+});
 
 function MyApp({ Component, pageProps }: AppProps) {
   // const [mounted, setMounted] = useState(false);
@@ -136,10 +162,16 @@ function MyApp({ Component, pageProps }: AppProps) {
                 <MyNFTsContextProvider>
                   <AuctionContextProvider>
                     <MarketplaceContextProvider>
-                      <Header />
-                      <Component {...pageProps} />
-                      <Footer />
-                      <Popups />
+                      <LayoutProvider>
+                        <Theme>
+                          <div id="root">
+                            <Header />
+                            <Component {...pageProps} />
+                            <Footer />
+                            <Popups />
+                          </div>
+                        </Theme>
+                      </LayoutProvider>
                     </MarketplaceContextProvider>
                   </AuctionContextProvider>
                 </MyNFTsContextProvider>

@@ -11,7 +11,7 @@ import {
   Text,
 } from '@chakra-ui/react';
 import React, { useCallback } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useRouter } from 'next/router';
 
 import { useMarketplaceSellData } from '../../../../hooks';
 import { Status } from './enums';
@@ -31,7 +31,7 @@ export const PostingPopup = ({ status, onClose }: IPostingPopupProps) => {
   const isImage = isNFTAssetImage(nft.artworkTypes);
   const isVideo = isNFTAssetVideo(nft.artworkTypes);
   const isAudio = isNFTAssetAudio(nft.artworkTypes);
-  const router = useHistory();
+  const router = useRouter();
 
   const handleClickViewListing = useCallback(() => {
     router.push(`/nft/${nft._collectionAddress}/${nft.tokenId}`);

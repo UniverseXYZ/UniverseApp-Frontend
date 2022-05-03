@@ -8,7 +8,7 @@ import { NFTProperty } from '..';
 import { PolymorphPropertyTrait } from '..';
 import { PolymorphProperty } from '..';
 import { INFTProperty } from '../../../../../../types';
-import './TabProperties.scss';
+// import './TabProperties.scss';
 import { EventsEmpty } from '../shared';
 
 interface ITabPropertiesProps {

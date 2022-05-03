@@ -6,7 +6,6 @@ import {
   MenuList,
 } from '@chakra-ui/react';
 import React, { useCallback, useState } from 'react';
-import { useHistory } from 'react-router-dom';
 
 import { NFTReportPopup } from '../nft-report-popup';
 import { MenuItem } from './components';
@@ -48,7 +47,6 @@ export const BundleMenu = (
     collectionAddress
   }: IBundleMenuProps
 ) => {
-  const router = useHistory();
   const [isReportPopupOpened, setIsReportPopupOpened] = useState(false);
   const [isSharePopupOpened, setIsSharePopupOpened] = useState(false);
 

@@ -3,11 +3,11 @@ import axios from 'axios';
 import { utils } from 'ethers';
 import { useFormik } from 'formik';
 import React, { useCallback, useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
 import { useMutation, useQuery } from 'react-query';
 import * as Yup from 'yup';
 import { Contract } from 'ethers';
-import { Link } from 'react-router-dom';
+import { NextPageContext } from 'next';
+import NextLink from 'next/link';
 
 import bg from '../../../../../assets/images/marketplace/v2/bg.png';
 import arrow from '../../../../../assets/images/arrow.svg';
@@ -42,6 +42,7 @@ const { contracts: contractsData } = Contracts[process.env.REACT_APP_NETWORK_CHA
 import { Status, Status as PostingPopupStatus } from './components/tab-summary/compoents/posting-popup/enums/index';
 import { useErrorContext } from '../../../../../contexts/ErrorContext';
 import { nftKeys, orderKeys } from '../../../../utils/query-keys';
+import { useRouter } from 'next/router';
 
 const getValidationSchema = (amountType?: SellAmountType, sellMethod?: SellMethod) => {
   switch (sellMethod) {
@@ -58,7 +59,10 @@ const getValidationSchema = (amountType?: SellAmountType, sellMethod?: SellMetho
 }
 
 export const SellPage = () => {
-  const params = useParams<{ collectionAddress: string; tokenId: string; }>();
+  // const params = useParams<{ collectionAddress: string; tokenId: string; }>();
+  const router = useRouter();
+
+  const params = router.query as { collectionAddress: string; tokenId: string; };
 
   const { signer, web3Provider, address } = useAuthContext() as any;
 
@@ -302,14 +306,12 @@ export const SellPage = () => {
                 display={"inline-block"}
                 _hover={{ textDecoration: 'none' }}
               >
-                <LinkOverlay
-                  as={Link}
-                  display={'contents'}
-                  to={`/nft/${params.collectionAddress}/${params.tokenId}`}  
-                >
-                <Image src={arrow} display="inline" mr="10px" position="relative" top="-2px" />
-                {nft?.name ?? params.tokenId}
-              </LinkOverlay>
+                <NextLink href={`/nft/${params.collectionAddress}/${params.tokenId}`}>
+                  <LinkOverlay display={'contents'}>
+                    <Image src={arrow} display="inline" mr="10px" position="relative" top="-2px" />
+                    {nft?.name ?? params.tokenId}
+                  </LinkOverlay>
+                </NextLink>
               </LinkBox>
 
               <Heading as="h1" mb={'50px'}>Sell NFT</Heading>
@@ -343,3 +345,5 @@ export const SellPage = () => {
     </MarketplaceSellContext.Provider>
   );
 };
+
+SellPage.getInitialProps = (ctx: NextPageContext) => ({});
