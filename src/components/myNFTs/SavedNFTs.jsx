@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useHistory } from 'react-router-dom';
 import Popup from 'reactjs-popup';
 import PropTypes from 'prop-types';
+import { useRouter } from 'next/router';
+
 import checkIcon from '../../assets/images/Completed.svg';
 import editIcon from '../../assets/images/edit.svg';
 import removeIcon from '../../assets/images/remove.svg';
@@ -23,7 +24,6 @@ import { getCollectionBackgroundColor } from '../../utils/helpers';
 import { shortenEthereumAddress } from '../../utils/helpers/format';
 import universeIcon from '../../assets/images/universe-img.svg';
 import { removeSavedNft } from '../../utils/api/mintNFT';
-import { useRouter } from 'next/router';
 import Cookies from 'js-cookie';
 
 const SavedNFTs = ({
@@ -43,7 +43,7 @@ const SavedNFTs = ({
   const [page, setPage] = useState(8);
 
   const ref = useRef(null);
-  const history = useRouter();
+  const router = useRouter();
 
   const [savedNftData, setSavedNftData] = useState(null);
   const [isSearching, setIsSearching] = useState(true);
@@ -145,9 +145,7 @@ const SavedNFTs = ({
 
   const handleEdit = (id) => {
     // document.body.classList.add('no__scroll');
-    setSavedNFTsID(id);
-    setActiveView('single');
-    history.push('/my-nfts/create?tabIndex=1&nftType=single');
+    router.push(`/my-nfts/create?tabIndex=1&nftType=single&savedNft=${id}`);
   };
 
   const changePerPage = (newPerPage) => {
