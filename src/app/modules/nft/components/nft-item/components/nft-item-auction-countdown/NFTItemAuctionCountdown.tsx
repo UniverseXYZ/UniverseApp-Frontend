@@ -22,11 +22,15 @@ export const NFTItemAuctionCountdown = ({ date, onComplete }: INFTItemAuctionCou
           <Countdown
             date={date}
             renderer={({ days, hours, minutes, seconds }) => {
+              if (!days && !hours && !minutes) {
+                return [
+                  seconds || minutes ? `${zeroPad(seconds)}s` : '',
+                ].filter(Boolean).join(' : ') + ' left';
+              }
               return [
                 days ? `${days}d` : '',
                 hours ? `${zeroPad(hours)}h` : '',
                 minutes ? `${zeroPad(minutes)}m` : '',
-                seconds ? `${zeroPad(seconds)}s` : '',
               ].filter(Boolean).join(' : ') + ' left';
             }}
             onComplete={() => {
