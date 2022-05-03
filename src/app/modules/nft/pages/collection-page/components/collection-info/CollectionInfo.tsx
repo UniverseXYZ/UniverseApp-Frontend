@@ -287,13 +287,11 @@ export const CollectionInfo = () => {
                     <Box
                       ref={filtersRef}
                       sx={{
-                        bg:
-                          (intersection?.intersectionRect.top ?? 1) === 0
-                            ? "white"
-                            : "transparent",
-                        pos: "sticky",
-                        top: "-1px",
-                        mb: "40px",
+                        bg: (intersection?.intersectionRect.top ?? 1) === 0 ? 'white' : 'transparent',
+                        p: (intersection?.intersectionRect.top ?? 1) === 0 && '0px 20px',
+                        pos: 'sticky',
+                        top: '-1px',
+                        mb: '40px',
                         zIndex: 20,
                         ".search--sort--filters--section": {
                           mb: 0,
