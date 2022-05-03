@@ -95,7 +95,7 @@ const SavedNFTs = ({
     setSelectAllIsChecked(!selectAllIsChecked);
 
     const newSavedNfts = [...savedNftData?.nfts];
-    if (localStorage.localChecked === 'true') {
+    if (Cookies.get('localChecked') === 'true') {
       newSavedNfts.forEach((nft) => {
         nft.selected = true;
       });

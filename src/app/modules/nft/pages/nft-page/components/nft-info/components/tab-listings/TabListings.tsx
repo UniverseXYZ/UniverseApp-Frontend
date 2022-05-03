@@ -18,10 +18,19 @@ export const TabListings = (props: ITabListingsProps) => {
   const { owner, ownerAddress } = props;
   const address = useAuthStore(s => s.address)
   const { order } = useNFTPageData();
+  const [isOrderExpired, setIsOrderExpired] = useState(false);
+  const endTime = order ? (new Date(order?.end * 1000).getTime() - new Date().getTime()) : 10000;
 
-  if (!order) {
+  if (!order || isOrderExpired) {
     return <EventsEmpty title="No active listings yet." />;
   }
+  
+  setTimeout(
+    () => {
+      setIsOrderExpired(true)
+    }, 
+    endTime
+  );
 
   return (
     <Box>
