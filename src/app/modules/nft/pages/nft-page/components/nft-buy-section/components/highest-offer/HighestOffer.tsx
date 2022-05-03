@@ -33,14 +33,14 @@ export const HighestOffer = ({ offer, creator }: IHighestOfferProps) => {
         <Image src={creator.profileImageUrl} {...styles.ContentBidUserAvatarStyle} />
       ) : (
         <Box style={{ borderRadius: '50%', overflow: 'hidden' }} {...styles.ContentBidUserAvatarStyle}>
-          <Blockies seed={creator?.address || ''} size={10} scale={5} />
+          <Blockies seed={creator?.address || offer?.maker || ''} size={10} scale={5} />
         </Box>
       )}
       <Box>
         <Text {...styles.ContentBidLabelStyle}>
           Highest offer by{' '}
           <strong>
-            {creator && creator?.displayName ? creator?.displayName : shortenEthereumAddress(creator?.address)}
+            {creator && creator?.displayName ? creator?.displayName : shortenEthereumAddress(offer?.maker)}
           </strong>
         </Text>
         <Flex>
