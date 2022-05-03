@@ -1,5 +1,6 @@
 import React, { useRef, useEffect, useState } from 'react';
-import { useHistory } from 'react-router';
+import { useRouter } from 'next/router';
+
 import bubbleIcon from '../../assets/images/text-bubble.png';
 import plusIcon from '../../assets/images/plus.svg';
 import Button from '../button/Button';
@@ -11,7 +12,7 @@ const NoNftsFound = () => {
   const ref2 = useRef(null);
   const refMobile = useRef(null);
 
-  const history = useHistory();
+  const router = useRouter();
 
   const handleClickOutside = (event) => {
     if (!event.target.classList.contains('target')) {
@@ -63,17 +64,13 @@ const NoNftsFound = () => {
               <ul>
                 <li
                   aria-hidden="true"
-                  onClick={() =>
-                    history.push('/my-nfts/create', { tabIndex: 1, nftType: 'single' })
-                  }
+                  onClick={() => router.push('/my-nfts/create?tabIndex=1&nftType=single')}
                 >
                   NFT
                 </li>
                 <li
                   aria-hidden="true"
-                  onClick={() =>
-                    history.push('/my-nfts/create', { tabIndex: 1, nftType: 'collection' })
-                  }
+                  onClick={() => router.push('/my-nfts/create?tabIndex=1&nftType=collection')}
                 >
                   Collection
                 </li>
