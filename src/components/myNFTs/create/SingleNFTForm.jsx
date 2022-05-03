@@ -7,6 +7,7 @@ import { useQueryClient } from 'react-query';
 
 import InfoIcon from '../../../assets/images/info-icon.svg';
 import deleteIcon from '../../../assets/images/delred-icon.svg';
+import smallDeleteIcon from '../../../assets/images/del-icon.svg';
 import mp3Icon from '../../../assets/images/mp3-icon.png';
 import addIcon from '../../../assets/images/Add.svg';
 import CloudIcon from '../../../assets/images/gray_cloud.svg';
@@ -28,6 +29,7 @@ import {
   getMyNfts,
   createMintingNFT,
   getMyMintingNfts,
+  getMyMintableCollections,
 } from '../../../utils/api/mintNFT';
 import {
   parseRoyalties,
@@ -41,7 +43,9 @@ import { useMyNftsContext } from '../../../contexts/MyNFTsContext';
 import { useAuthContext } from '../../../contexts/AuthContext';
 import { useErrorContext } from '../../../contexts/ErrorContext';
 import CollectionChoice from './CollectionChoice';
-import { useRouter } from 'next/router';
+import universeIcon from '../../../assets/images/universe-img.svg';
+import { timeout } from '../../../app/utils/debounceConfig';
+import { nftKeys } from '../../../app/utils/query-keys';
 import { useSearchParam } from 'react-use';
 
 const MAX_FIELD_CHARS_LENGTH = {
@@ -59,33 +63,20 @@ const MIN_IMAGE_SIZE = {
   height: 800,
 };
 
+const CORE_COLLECTION_ADDRESS = process.env.REACT_APP_UNIVERSE_ERC_721_ADDRESS;
+
 const MAX_ROYALTY_PERCENT = 20;
 
 const COLLECTIONS_PER_ROW = 4;
 
 const MINTING_LOADING_TEXT =
-  'The transaction is in progress. Keep this window opened. Navigating away from the page will reset the curent progress.';
+  'The transaction is in progress. Keep this window opened. Navigating away from the page will reset the current progress.';
 const SAVING_FOR_LATER_LOADING_TEXT =
-  'You nft is being saved for later minting. Keep this window opened. Navigating away from the page will reset the curent progress.';
+  'You nft is being saved for later minting. Keep this window opened. Navigating away from the page will reset the current progress.';
 const INVALID_ADDRESS_TEXT = 'Please enter valid address or ENS';
 
-const SingleNFTForm = () => {
-  const {
-    savedNfts,
-    setSavedNfts,
-    savedNFTsID,
-    setSavedNFTsID,
-    myNFTs,
-    setMyNFTs,
-    setMyMintingNFTs,
-    activeTxHashes,
-    setActiveTxHashes,
-    mintingNftsCount,
-    setMintingNftsCount,
-    universeCollection,
-    setMyNFTsSelectedTabIndex,
-    myMintableCollections,
-  } = useMyNftsContext();
+const SingleNFTForm = ({ scrollToTop }) => {
+  const { setActiveTxHashes, setMyNFTsSelectedTabIndex } = useMyNftsContext();
 
   const {
     deployedCollections,
@@ -96,9 +87,9 @@ const SingleNFTForm = () => {
     web3Provider,
   } = useAuthContext();
 
-  const { setShowError, setErrorTitle, setErrorBody } = useErrorContext();
+  const queryClient = useQueryClient();
 
-  const router = useRouter();
+  const { setShowError, setErrorTitle, setErrorBody } = useErrorContext();
 
   const [errors, setErrors] = useState({
     name: '',
@@ -122,7 +113,11 @@ const SingleNFTForm = () => {
   const [hideIcon, setHideIcon] = useState(false);
   const [hideIcon1, setHideIcon1] = useState(false);
   const [hideRoyalitiesInfo, setHideRoyalitiesInfo] = useState(false);
+  const [hideMintToOtherWallet, setHideMintToOtherWallet] = useState(false);
   const [royalities, setRoyalities] = useState(true);
+  const [mintToOtherWallet, setMintToOtherWallet] = useState(false);
+  const [otherWalletValue, setOtherWalletValue] = useState('');
+  const [otherWalletError, setOtherWalletError] = useState(false);
   const [propertyCheck, setPropertyCheck] = useState(false);
   const inputFile = useRef(null);
   const [properties, setProperties] = useState([
@@ -156,6 +151,7 @@ const SingleNFTForm = () => {
   const [showPrompt, setShowPrompt] = useState(false);
   const [border, setBorder] = useState(false);
   const [loadingText, setLoadingText] = useState(MINTING_LOADING_TEXT);
+  const [mintableCollections, setMintableCollections] = useState([]);
 
   useEffect(() => {
     if (!savedNFTID) {
@@ -252,6 +248,18 @@ const SingleNFTForm = () => {
     setRoyaltyAddress(newProperties);
   };
 
+  const changeOtherMintAddress = async (val) => {
+    try {
+      const ens = await web3Provider.resolveName(val);
+      const ensToAddress = utils.isAddress(ens);
+      setOtherWalletValue(ensToAddress ? ens.toLowerCase() : val);
+      setOtherWalletError(!ensToAddress ? INVALID_ADDRESS_TEXT : '');
+    } catch (e) {
+      setOtherWalletValue(val.toLowerCase());
+      setOtherWalletError(!utils.isAddress(val) ? INVALID_ADDRESS_TEXT : '');
+    }
+  };
+
   const propertyChangesAddress = async (index, val) => {
     const prevProperties = [...royaltyAddress];
 
@@ -310,7 +318,11 @@ const SingleNFTForm = () => {
       if (royaltyIndex === index) {
         return {
           ...royalty,
-          amount: val,
+          amount: val
+            .toString()
+            .split('.')
+            .map((el, i) => (i ? el.split('').slice(0, 2).join('') : el))
+            .join('.'),
         };
       }
       return royalty;
@@ -368,6 +380,9 @@ const SingleNFTForm = () => {
 
   const propertyChangesValue = (index, value) => {
     const newProperties = [...properties];
+    if (!newProperties[index].errors) {
+      newProperties[index].errors = { name: '', value: '' };
+    }
     newProperties[index].value = value;
     newProperties[index].errors.value = !value ? '“Property value” is not allowed to be empty' : '';
     setProperties(newProperties);
@@ -481,7 +496,7 @@ const SingleNFTForm = () => {
       // Get the contract instance to mint from
       const collectionContract =
         selectedCollection && selectedCollection.address !== universeCollection.address
-          ? new Contract(selectedCollection.address, contracts.UniverseERC721.abi, signer)
+          ? new Contract(selectedCollection.address, contracts.UniverseERC721Core.abi, signer)
           : universeERC721CoreContract;
 
       // Update saved NFT data, before getting the TokenURI
@@ -520,39 +535,40 @@ const SingleNFTForm = () => {
 
       // Mint the data on Chunks
       const txHashes = [];
+      let actualMintedCount = 0;
       const mintPromises = tokensChunks.map(async (chunk, i) => {
-        const mintTransaction = await collectionContract.batchMintWithDifferentFees(
-          address,
-          chunk,
-          royaltiesChunks[i]
-        );
+        try {
+          const mintTransaction = await collectionContract.batchMintWithDifferentFees(
+            address,
+            chunk,
+            royaltiesChunks[i]
+          );
 
-        txHashes.push(mintTransaction.hash);
-        setActiveTxHashes([...txHashes]);
-        const mintReceipt = await mintTransaction.wait();
-        return mintReceipt.status;
+          txHashes.push(mintTransaction.hash);
+          setActiveTxHashes([...txHashes]);
+          const mintReceipt = await mintTransaction.wait();
+          actualMintedCount += chunk.length;
+          return mintReceipt.status;
+        } catch (err) {
+          // This means user rejected the transaction
+          if (err?.code === 4001) {
+            // This status is used below to show error
+            return 2;
+          }
+          // This status means the tx failed
+          return 0;
+        }
       });
 
-      const res = await Promise.all(mintPromises);
+      const txResults = await Promise.all(mintPromises);
       const mintNftPromises = [];
 
       for (let i = 0; i < txHashes.length; i += 1) {
         const txHash = txHashes[i];
-        mintNftPromises.push(createMintingNFT(txHash, mintInfo.mintingNft.id));
+        mintNftPromises.push(createMintingNFT(txHash, mintInfo.mintingNft.id, actualMintedCount));
       }
 
-      const hasFailedTransaction = res.includes(0);
-      if (!hasFailedTransaction) {
-        const [myNfts, mintingNfts, savedNFTS] = await Promise.all([
-          getMyNfts(),
-          getMyMintingNfts(),
-          getSavedNfts(),
-        ]);
-        setMyNFTs(myNfts || []);
-        setMyMintingNFTs(mintingNfts || []);
-        setSavedNfts(savedNFTS || []);
-
-        setMintingNftsCount(mintingNftsCount + 1);
+      if (!txResults.some((status) => status !== 2)) {
         setShowLoadingPopup(false);
         return;
       }
@@ -573,9 +589,9 @@ const SingleNFTForm = () => {
         setPreviewImage('');
         setProperties([{ name: '', value: '', errors: { name: '', value: '' } }]);
         setRoyaltyAddress([{ address, amount: '10' }]);
+        queryClient.invalidateQueries(nftKeys.fetchNftSummary(address));
       } else {
         setShowLoadingPopup(false);
-        console.error(e, 'Error !');
         setShowError(true);
       }
     } catch (err) {
@@ -616,9 +632,6 @@ const SingleNFTForm = () => {
     if (!saveImageResult) {
       console.error('server error. cant get meta data');
     }
-
-    const savedNFTS = await getSavedNfts();
-    setSavedNfts(savedNFTS || []);
 
     setShowLoadingPopup(false);
     setLoadingText(MINTING_LOADING_TEXT);
@@ -676,11 +689,11 @@ const SingleNFTForm = () => {
       return;
     }
 
-    const savedNFTS = await getSavedNfts();
-    setSavedNfts(savedNFTS || []);
+    // const savedNFTS = await getSavedNfts();
+    // setSavedNfts(savedNFTS || []);
     setShowLoadingPopup(false);
     setLoadingText(MINTING_LOADING_TEXT);
-    setShowCongratsPopup(true);
+    setShowCongratsPopupOnSaveForLaterClick(true);
     setName('');
     setDescription('');
     setEditions(1);
@@ -693,7 +706,7 @@ const SingleNFTForm = () => {
     if (typeof previewImage === 'string') {
       return previewImage;
     }
-    return URL.createObjectURL(previewImage);
+    return previewImage && URL.createObjectURL(previewImage);
   }, [previewImage]);
 
   const previewVideoSource = typeof previewImage === 'string' && previewImage.endsWith('.mp4');
@@ -715,6 +728,14 @@ const SingleNFTForm = () => {
   const onDragLeave = (e) => {
     e.preventDefault();
     setBorder(false);
+  };
+
+  const coreCollectionFirst = (a, b) => {
+    if (a.address === CORE_COLLECTION_ADDRESS) {
+      return -1;
+    }
+
+    return 1;
   };
 
   useEffect(async () => {
@@ -760,10 +781,6 @@ const SingleNFTForm = () => {
         setSelectedCollection(savedNftCollection || universeCollection);
       }
     }
-
-    return function resetSavedNFTsID() {
-      setSavedNFTsID(null);
-    };
   }, [savedNFTID, savedNFTs, mintableCollections]);
 
   useEffect(() => {
@@ -817,6 +834,7 @@ const SingleNFTForm = () => {
               royaltyAddress[1]
             )
           }
+          handleSaveForLater={handleSaveForLater}
         />
         <Popup open={showLoadingPopup} closeOnDocumentClick={false}>
           <LoadingPopup
@@ -831,6 +849,7 @@ const SingleNFTForm = () => {
             onClose={() => {
               setMyNFTsSelectedTabIndex(0);
               setShowCongratsPopup(false);
+              scrollToTop();
             }}
             message="NFT was successfully created and should be displayed in your wallet shortly"
           />
@@ -838,16 +857,23 @@ const SingleNFTForm = () => {
         <Popup open={showCongratsPopupOnSaveForLaterClick} closeOnDocumentClick={false}>
           <CongratsPopup
             showCreateMore={showCreateMoreButton}
-            onClose={() => setShowCongratsPopupOnSaveForLaterClick(false)}
+            onClose={() => {
+              setMyNFTsSelectedTabIndex(2);
+              setShowCongratsPopupOnSaveForLaterClick(false);
+              scrollToTop();
+            }}
             message="NFT was successfully saved for later"
+            backButtonText="Go to Saved NFTs"
           />
         </Popup>
         <Popup open={showCongratsMintedSavedForLater} closeOnDocumentClick={false}>
           <CongratsPopup
             showCreateMore={showCreateMoreButton}
+            backButtonText="Go to Saved NFTs"
             onClose={() => {
-              setMyNFTsSelectedTabIndex(0);
+              setMyNFTsSelectedTabIndex(2);
               setShowCongratsMintedSavedForLater(false);
+              scrollToTop();
             }}
             message="Saved for later NFT was successfully minted and should be displayed in your wallet shortly"
           />
@@ -873,7 +899,11 @@ const SingleNFTForm = () => {
                     }}
                     aria-hidden="true"
                   />
-                  <div className="single-nft-picture">
+                  <div
+                    className={`single-nft-picture ${
+                      previewImage.type === 'video/mp4' ? 'single-nft-video' : ''
+                    }`}
+                  >
                     <div className="preview__image">
                       {previewImage.type === 'video/mp4' && (
                         <video
@@ -921,18 +951,18 @@ const SingleNFTForm = () => {
                       ? 'single-nft-upload-file error'
                       : `single-nft-upload-file ${border ? 'single-nft-upload-file-border' : ''}`
                   }
+                  aria-hidden="true"
+                  onClick={() => inputFile.current.click()}
                 >
                   <div className="single-nft-drop-file">
-                     <img src={CloudIcon} alt="Cloud" style={{ margin: 'auto' }} />
+                    <img src={CloudIcon} alt="Cloud" style={{ margin: 'auto' }} />
                     {/*<CloudIcon />*/}
                     <h5>Drop your file here</h5>
                     <p>
                       <span>( min 800x800px, PNG/JPEG/GIF/WEBP/MP4,</span>
                       <span>max 30mb)</span>
                     </p>
-                    <Button className="light-button" onClick={() => inputFile.current.click()}>
-                      Choose file
-                    </Button>
+                    <Button className="light-button">Choose file</Button>
                     <input
                       type="file"
                       className="inp-disable"
@@ -985,7 +1015,7 @@ const SingleNFTForm = () => {
                 if (e.target.value.length > MAX_FIELD_CHARS_LENGTH.description) return;
                 setDescription(e.target.value);
               }}
-              value={description}
+              value={description || ''}
             />
             <div className="box--shadow--effect--block" />
           </div>
@@ -1013,12 +1043,12 @@ const SingleNFTForm = () => {
           </div>
           <div
             className={`banner ${
-              myMintableCollections.length >= COLLECTIONS_PER_ROW ? 'scroll-box' : ''
+              mintableCollections.length >= COLLECTIONS_PER_ROW ? 'scroll-box' : ''
             } single-nft-choose-collection`}
           >
             <h4>Choose collection</h4>
             <div className="choose__collection">
-              {myMintableCollections.map((col) => (
+              {mintableCollections.sort(coreCollectionFirst).map((col) => (
                 <CollectionChoice
                   key={col.id}
                   selectedCollection={selectedCollection}
@@ -1064,7 +1094,7 @@ const SingleNFTForm = () => {
                   <div key={i} className="properties">
                     <div className="property-name">
                       <h5>
-                        <span>Property name</span>
+                        <span>Property type</span>
                         <p className="input-max-chars">
                           {property.name ? property.name.length : 0}/
                           {MAX_FIELD_CHARS_LENGTH.propertyName}
@@ -1084,7 +1114,7 @@ const SingleNFTForm = () => {
                     </div>
                     <div className="property-value">
                       <h5>
-                        <span>Value</span>
+                        <span>Property name</span>
                         <p className="input-max-chars">
                           {property.value ? property.value.length : 0}/
                           {MAX_FIELD_CHARS_LENGTH.propertyValue}
@@ -1116,7 +1146,7 @@ const SingleNFTForm = () => {
                           onClick={() => removeProperty(i)}
                         >
                           <img
-                            src={deleteIcon}
+                            src={smallDeleteIcon}
                             className="del-icon"
                             alt="Delete"
                             aria-hidden="true"
@@ -1160,7 +1190,8 @@ const SingleNFTForm = () => {
                   <div className="royalities-info-text">
                     <p>
                       Add addresses you want resale royalties to go to. Each address receives the
-                      percent you choose. Suggested percent amount: 2.5%.
+                      percent you choose up to {MAX_ROYALTY_PERCENT}% total. Suggested percent
+                      amount: 2.5%.
                     </p>
                   </div>
                 )}
@@ -1183,12 +1214,11 @@ const SingleNFTForm = () => {
                       <div className="property-address">
                         <h5>Wallet address</h5>
                         <DebounceInput
-                          debounceTimeout={150}
+                          debounceTimeout={timeout}
                           className={`${error ? 'error-inp inp' : 'inp'}`}
                           placeholder="0x89205A3A3b2A69De6Dbf7f01ED13B2108B2c43e7"
                           value={elm.address}
                           onChange={(e) => propertyChangesAddress(i, e.target.value)}
-                          // hoverBoxShadowGradient
                         />
                         {error && <p className="error-message">{error}</p>}
                       </div>
@@ -1219,7 +1249,7 @@ const SingleNFTForm = () => {
                             onClick={() => removeRoyaltyAddress(i)}
                           >
                             <img
-                              src={deleteIcon}
+                              src={smallDeleteIcon}
                               className="del-icon"
                               alt="Delete"
                               aria-hidden="true"
@@ -1242,11 +1272,56 @@ const SingleNFTForm = () => {
                 >
                   <h5>
                     <img src={addIcon} alt="Add" style={{ float: 'left' }} />
-                    Add address
+                    Add wallet
                   </h5>
                 </div>
               )}
             </div>
+            {/* Hide Mint to other wallet section for the current release */}
+            {/* <div className="hr-div" />
+            <div className="royalities">
+              <div className="title">
+                <h4
+                  onMouseOver={() => setHideMintToOtherWallet(true)}
+                  onFocus={() => setHideMintToOtherWallet(true)}
+                  onMouseLeave={() => setHideMintToOtherWallet(false)}
+                  onBlur={() => setHideMintToOtherWallet(false)}
+                >
+                  Mint to other wallet <InfoIcon />
+                </h4>
+                {hideMintToOtherWallet && (
+                  <div className="royalities-info-text other-wallet">
+                    <p>
+                      You can mint the NFT to other wallet. Just specify a receiver wallet address.
+                    </p>
+                  </div>
+                )}
+                <label className="switch">
+                  <input
+                    type="checkbox"
+                    checked={mintToOtherWallet}
+                    onChange={(e) => setMintToOtherWallet(e.target.checked)}
+                  />
+                  <span className="slider round" />
+                </label>
+              </div>
+              {mintToOtherWallet && (
+                <div className="royalty properties">
+                  <div className="property-address other-wallet">
+                    <h5>Wallet address</h5>
+                    <DebounceInput
+                      debounceTimeout={timeout}
+                      className={`${otherWalletError ? 'error-inp inp' : 'inp'}`}
+                      placeholder="0x89205A3A3b2A69De6Dbf7f01ED13B2108B2c43e7"
+                      value={otherWalletValue}
+                      onChange={(e) => changeOtherMintAddress(e.target.value)}
+                      hoverBoxShadowGradient
+                    />
+                    {otherWalletError ? <p className="error-message">{otherWalletError}</p> : <></>}
+                  </div>
+                </div>
+              )}
+            </div> */}
           </div>
           {errors.name || errors.edition || errors.previewImage ? (
             <div className="single__final__error">
@@ -1291,10 +1366,12 @@ const SingleNFTForm = () => {
                       )) ||
                     (royalities &&
                       royaltyAddress.find(
-                        (royalty) => royalty.address === '' || royalty.amount === ''
+                        (royalty) =>
+                          royalty.address === '' || royalty.amount === '' || royalty.amount === '0'
                       )) ||
                     (propertyCheck && !properties.length) ||
-                    (royalities && !royaltyAddress.length)
+                    (royalities && !royaltyAddress.length) ||
+                    (mintToOtherWallet && (!otherWalletValue || otherWalletError))
                   }
                 >
                   Mint now
@@ -1331,4 +1408,7 @@ const SingleNFTForm = () => {
   );
 };
 
+SingleNFTForm.propTypes = {
+  scrollToTop: PropTypes.func.isRequired,
+};
 export default SingleNFTForm;
