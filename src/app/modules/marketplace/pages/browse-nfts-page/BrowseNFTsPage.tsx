@@ -89,6 +89,7 @@ export const BrowseNFTsPage = () => {
     fetchNextPage,
     hasNextPage,
     isFetching,
+    refetch,
   } = useInfiniteQuery(
     orderKeys.browse({
       selectedAddress,
@@ -492,6 +493,7 @@ export const BrowseNFTsPage = () => {
                       NFT={NFTs[0]}
                       collection={`${NFTs[0]._collectionAddress}`}
                       orderEnd={order.end}
+                      onAuctionTimerEnd={refetch}
                       renderContent={({
                         NFT,
                         collection,

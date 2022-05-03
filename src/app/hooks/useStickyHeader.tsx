@@ -55,13 +55,14 @@ export const useStaticHeader = () => {
     document.body.style.setProperty("padding-top", "0", "important");
 
     return () => {
-      if (!headerRef) {
+      if (!headerRef || !headerRef.current || !headerRef.current.style) {
         return;
       }
       (headerRef.current as HTMLElement).style.position = "";
-      if (!document) {
+      if (!document || !document.body || !document.body.style) {
         return;
       }
+
       document.body.style.setProperty("padding-top", "");
     };
   }, [headerRef.current]);
