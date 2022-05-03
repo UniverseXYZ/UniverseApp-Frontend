@@ -55,13 +55,15 @@ export const UserProfilePage: React.FC<IUserProfilePage> = ({ artistUsername }) 
   if (isError) {
     return (<NotFound />);
   }
-  let openGraph = <OpenGraph
-    title={`${artist?.name || address || ''} - Universe.XYZ`}
-    description={artist?.about || undefined}
-    image={artist?.avatar || undefined}
-    imageAlt={artist?.name || address || ''}
-  />
-  
+
+  const openGraph = (
+    <OpenGraph
+      title={`${artist?.name || address || ''} – Profile`}
+      description={artist?.about || undefined}
+      image={artist?.avatar || undefined}
+    />
+  );
+
   let content = (
     <>
       {openGraph}

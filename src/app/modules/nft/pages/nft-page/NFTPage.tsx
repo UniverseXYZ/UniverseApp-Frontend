@@ -1,12 +1,12 @@
 import React, { useEffect } from 'react';
 import { GetServerSideProps } from 'next';
+import { dehydrate, QueryClient } from 'react-query';
 
-import { GetNFT2Api } from '@app/modules/nft/api';
+import { GetCollectionApi, GetNFT2Api } from '@app/modules/nft/api';
+import { collectionKeys, nftKeys } from '@app/utils/query-keys';
 
 import { NFTInfo } from './components';
 import { NFTPageProvider } from './NFTPage.context';
-import { dehydrate, QueryClient } from 'react-query';
-import { nftKeys } from '@app/utils/query-keys';
 import { useThemeStore } from 'src/stores/themeStore';
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
@@ -17,6 +17,11 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     const result = await GetNFT2Api(collectionAddress, tokenId, false);
     // Dehydration will fail if there's a Date or undefined value in the NFT model
     // This will strip any invalid values
+    return JSON.parse(JSON.stringify(result));
+  });
+
+  await queryClient.prefetchQuery(collectionKeys.centralizedInfo(collectionAddress), async () => {
+    const result = await GetCollectionApi(collectionAddress);
     return JSON.parse(JSON.stringify(result));
   });
 

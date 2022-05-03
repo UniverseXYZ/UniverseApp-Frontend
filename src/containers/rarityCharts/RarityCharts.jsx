@@ -7,6 +7,8 @@ import { categoriesArray } from './categories';
 import RarityList from '../../components/rarityCharts/list/RarityList';
 import { useThemeStore } from 'src/stores/themeStore';
 import { useMyNftsStore } from 'src/stores/myNftsStore';
+import OpenGraphImage from '@assets/images/open-graph/polymorphs-rarity-charts.png';
+import { OpenGraph } from '@app/components';
 
 const RarityCharts = () => {
   const setMyUniverseNFTsActiverPage = useMyNftsStore(s => s.setMyUniverseNFTsActiverPage);
@@ -61,6 +63,11 @@ const RarityCharts = () => {
 
   return (
     <div className="rarity--charts--page">
+      <OpenGraph
+        title={'Polymorph Rarity Chart'}
+        description={'Check who has the rarest polymorph with Universe rarity chart.'}
+        image={OpenGraphImage}
+      />
       <Welcome />
       <div className="rarity--charts--page--container">
         <RarityFilters
