@@ -11,9 +11,6 @@ export interface ICollectionPageContext {
   collectionAddress: string;
   collectionGeneralInfo: ICollectionInfoResponse | undefined;
   collectionOrderBookData: ICollectionOrderBookData | undefined;
-  isLoadingCollectionApi: boolean;
-  isFetchingCollectionApi: boolean;
-  isIdleCollectionApi: boolean;
   isLoadingCollectionGeneralInfo: boolean;
   isFetchingCollectionGeneralInfo: boolean;
   isIdleCollectionGeneralInfo: boolean;
@@ -24,22 +21,17 @@ export const CollectionPageContext = createContext<ICollectionPageContext>({} as
 export function useCollectionPageData(): ICollectionPageContext {
   return useContext(CollectionPageContext);
 }
+interface ICollectionPageProviderProps {
+  collection: ICollection;
+  children: React.ReactNode;
+}
 
-const CollectionPageProvider: FC = ({ children }) => {
+const CollectionPageProvider: FC<ICollectionPageProviderProps> = (props) => {
+  const { collection, children } = props;
+ 
   // const { collectionAddress } = useParams<{ collectionAddress: string }>();
   const router = useRouter();
   const { collectionAddress } = router.query as { collectionAddress: string };
-
-  const {
-    data: collection,
-    isLoading: isLoadingCollectionApi,
-    isFetching: isFetchingCollectionApi,
-    isIdle: isIdleCollectionApi,
-   } = useQuery(
-    collectionKeys.centralizedInfo(collectionAddress),
-    () => GetCollectionApi(collectionAddress),
-    { onSuccess: (collection) => console.log('collection', collection) },
-  );
 
   const {
     data: collectionGeneralInfo,
@@ -63,9 +55,6 @@ const CollectionPageProvider: FC = ({ children }) => {
     collectionAddress,
     collectionGeneralInfo: collectionGeneralInfo,
     collectionOrderBookData: collectionOrderBookData,
-    isLoadingCollectionApi,
-    isFetchingCollectionApi,
-    isIdleCollectionApi,
     isLoadingCollectionGeneralInfo,
     isFetchingCollectionGeneralInfo,
     isIdleCollectionGeneralInfo,
