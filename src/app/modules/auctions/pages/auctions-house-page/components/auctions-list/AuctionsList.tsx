@@ -5,7 +5,7 @@ import { useCallback } from 'react';
 import BubbleImage from '@assets/images/text-bubble-2x.png';
 import plusIcon from '@assets/images/plus.svg';
 import { Alert } from '@app/components';
-import { AuctionSkeleton } from '@app/modules/auctions/components';
+import { AuctionCard, AuctionCardSkeleton } from '@app/modules/auctions/components';
 
 type IAuction = any;
 
@@ -13,7 +13,7 @@ interface IAuctionsListProps {
   type: 'active' | 'future';
 }
 
-const auctions = [];
+const auctions = [1];
 
 export const AuctionsList = (props: IAuctionsListProps) => {
   const { type } = props;
@@ -24,7 +24,7 @@ export const AuctionsList = (props: IAuctionsListProps) => {
 
   const renderLoading = useCallback(() => (
     <SimpleGrid columns={4} spacing={'30px'} my={'30px'}>
-      {new Array(4).fill(null).map((_, i) => (<AuctionSkeleton key={i} />))}
+      {new Array(4).fill(null).map((_, i) => (<AuctionCardSkeleton key={i} />))}
     </SimpleGrid>
   ), []);
 
@@ -57,6 +57,8 @@ export const AuctionsList = (props: IAuctionsListProps) => {
   }
 
   return (
-    <>{type} Auction list</>
+    <SimpleGrid columns={4} spacing={'30px'} my={'30px'}>
+      {new Array(4).fill(null).map((_, i) => (<AuctionCard key={i} />))}
+    </SimpleGrid>
   );
 };

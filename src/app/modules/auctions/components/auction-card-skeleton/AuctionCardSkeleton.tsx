@@ -1,15 +1,15 @@
 import { Box, Flex, SimpleGrid, Skeleton } from '@chakra-ui/react';
+import { useCallback } from 'react';
 import { useMeasure } from 'react-use';
 
-import * as styles from './AuctionSkeleton.styles';
-import { useCallback } from 'react';
+import * as styles from './AuctionCardSkeleton.styles';
 
-interface IAuctionSkeletonProps {
+interface IAuctionCardSkeletonProps {
   showMyBid?: boolean;
   showHighestLowestBids?: boolean;
 }
 
-export const AuctionSkeleton = (props: IAuctionSkeletonProps) => {
+export const AuctionCardSkeleton = (props: IAuctionCardSkeletonProps) => {
   const {
     showMyBid = false,
     showHighestLowestBids = false,
