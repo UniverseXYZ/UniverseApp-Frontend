@@ -3,7 +3,7 @@ import dayjs from 'dayjs';
 import NextLink from 'next/link';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useMeasure } from 'react-use';
-import Countdown  from 'react-countdown';
+import Countdown from 'react-countdown';
 
 import AuctionAssetImage from '@assets/images/_MOCK_AUCTION.png';
 import CreatorAvatarImage from '@assets/images/_MOCK_AUCTION_CREATOR.png';
@@ -66,6 +66,7 @@ export const AuctionCard = (props: IAuctionCardProps) => {
             <Text {...styles.TimerLabel}>{timerLabel}</Text>
             <Text {...styles.TimerValue}>
               {state === AuctionCardState.FUTURE && (
+                // @ts-ignore
                 <Countdown
                   date={auction.start}
                   renderer={renderCountdown}
@@ -73,6 +74,7 @@ export const AuctionCard = (props: IAuctionCardProps) => {
                 />
               )}
               {state === AuctionCardState.ACTIVE && (
+                // @ts-ignore
                 <Countdown
                   date={auction.end}
                   renderer={renderCountdown}
