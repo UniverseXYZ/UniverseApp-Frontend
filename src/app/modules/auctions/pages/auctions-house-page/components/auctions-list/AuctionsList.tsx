@@ -1,11 +1,13 @@
 import { Button, Flex, Image, Link, SimpleGrid, Text } from '@chakra-ui/react';
 import NextLink from 'next/link';
-import { useCallback } from 'react';
+import { useCallback, useState } from 'react';
 
 import BubbleImage from '@assets/images/text-bubble-2x.png';
 import plusIcon from '@assets/images/plus.svg';
 import { Alert } from '@app/components';
 import { AuctionCard, AuctionCardSkeleton } from '@app/modules/auctions/components';
+import { useMeasure } from 'react-use';
+import { useFluidGrid } from '@app/hooks';
 
 type IAuction = any;
 
@@ -13,18 +15,22 @@ interface IAuctionsListProps {
   type: 'active' | 'future';
 }
 
-const auctions = [1];
-
 export const AuctionsList = (props: IAuctionsListProps) => {
   const { type } = props;
+
+  const [ref, { width: containerWidth }] = useMeasure<HTMLDivElement>();
+
+  const { columns, spacingX } = useFluidGrid(containerWidth, 280, 24);
+
+  const [auctions] = useState(new Array(4).fill(null));
 
   const isLoading = false;
 
   const isFillOutProfileAlert = false;
 
   const renderLoading = useCallback(() => (
-    <SimpleGrid columns={4} spacing={'30px'} my={'30px'}>
-      {new Array(4).fill(null).map((_, i) => (<AuctionCardSkeleton key={i} />))}
+    <SimpleGrid ref={ref} columns={columns} spacing={`${spacingX}px`} my={'30px'}>
+      {new Array(columns).fill(null).map((_, i) => (<AuctionCardSkeleton key={i} />))}
     </SimpleGrid>
   ), []);
 
@@ -34,7 +40,7 @@ export const AuctionsList = (props: IAuctionsListProps) => {
 
   if (!auctions.length) {
     return (
-      <Flex alignItems={'center'} color={'rgba(0 0 0 / 40%)'} justifyContent={'center'} flexDir={'column'} py={'140px'}>
+      <Flex ref={ref} alignItems={'center'} color={'rgba(0 0 0 / 40%)'} justifyContent={'center'} flexDir={'column'} py={'140px'}>
         <Image src={BubbleImage} alt={'Bubble'} w={'100px'} mb={'30px'} />
         <Text fontSize={'18px'} fontWeight={500} mb={'6px'}>No {type} auctions found</Text>
         {!isFillOutProfileAlert ? (
@@ -57,8 +63,8 @@ export const AuctionsList = (props: IAuctionsListProps) => {
   }
 
   return (
-    <SimpleGrid columns={4} spacing={'30px'} my={'30px'}>
-      {new Array(4).fill(null).map((_, i) => (<AuctionCard key={i} />))}
+    <SimpleGrid ref={ref} columns={columns} spacing={`${spacingX}px`} my={'30px'}>
+      {auctions.map((_, i) => (<AuctionCard key={i} />))}
     </SimpleGrid>
   );
 };

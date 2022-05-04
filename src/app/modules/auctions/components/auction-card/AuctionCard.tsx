@@ -131,7 +131,7 @@ export const AuctionCard = (props: IAuctionCardProps) => {
               <>
                 <Box {...styles.DetailsItem}>
                   <Text {...styles.DetailsItemLabel}>Highest Winning Bid:</Text>
-                  <HStack spacing={'4px'} flexWrap={'wrap'}>
+                  <HStack spacing={'4px'}>
                     <TokenIcon ticker={TokenTicker.WETH} boxSize={'16px'} />
                     <Text {...styles.DetailsItemValue}>40,21</Text>
                     <Tooltip hasArrow variant={'black'} placement={'top'} label={'~$41,594'}>
@@ -141,11 +141,11 @@ export const AuctionCard = (props: IAuctionCardProps) => {
                 </Box>
                 <Box {...styles.DetailsItem}>
                   <Text {...styles.DetailsItemLabel}>Lowest Winning Bid:</Text>
-                  <HStack spacing={'4px'} flexWrap={'wrap'}>
+                  <HStack spacing={'4px'}>
                     <TokenIcon ticker={TokenTicker.WETH} boxSize={'16px'} />
-                    <Text {...styles.DetailsItemValue}>14,2</Text>
+                    <Text {...styles.DetailsItemValue}>1400,2</Text>
                     <Tooltip hasArrow variant={'black'} placement={'top'} label={'~$41,594'}>
-                      <Text {...styles.DetailsItemValueUSD}>~$41,594</Text>
+                      <Text {...styles.DetailsItemValueUSD}>~$41230,594</Text>
                     </Tooltip>
                   </HStack>
                 </Box>

@@ -44,11 +44,10 @@ export const AuctionsHousePage = () => {
   return (
     <Box layerStyle={'StoneBG'}>
       <OpenGraph title={'Universe Minting - Products - Auction House'} />
+
       <WelcomeSection />
 
-      {/*<Tabs />*/}
-
-      <Container maxW={'1110px'} m={'0 auto'} p={0}>
+      <Box m={'0 auto'} p={'0 30px'}>
         <Tabs mt={'-50px'}>
           <TabList {...styles.TabList}>
             <Tab {...styles.Tab}>Active auctions</Tab>
@@ -58,19 +57,15 @@ export const AuctionsHousePage = () => {
           <TabPanels>
             <TabPanel {...styles.TabPanel}>
               <Filters sortByItems={ACTIVE_AUCTION_SORT_BY_ITEMS} />
-              <AuctionsList
-                type={'active'}
-              />
+              <AuctionsList type={'active'} />
             </TabPanel>
             <TabPanel {...styles.TabPanel}>
               <Filters sortByItems={FUTURE_AUCTION_SORT_BY_ITEMS} />
-              <AuctionsList
-                type={'future'}
-              />
+              <AuctionsList type={'future'} />
             </TabPanel>
           </TabPanels>
         </Tabs>
-      </Container>
+      </Box>
       <CreateYourAuction />
     </Box>
   );

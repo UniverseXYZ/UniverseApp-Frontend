@@ -31,7 +31,7 @@ export const MyBidGradientWrapper: BoxProps = {
 export const MyBidWrapper: StackProps = {
   bg: 'white',
   borderRadius: '6px',
-  padding: '18px',
+  padding: '12px 18px',
   spacing: '4px',
 };
 
@@ -51,14 +51,14 @@ export const DetailsWrapper: SimpleGridProps = {
   bg: '#F7F7F7',
   border: '1px solid #F0F0F0',
   borderRadius: '6px',
-  paddingX: '16px',
+  paddingX: '12px',
   spacingX: '10px',
   w: '100%',
 };
 
 export const DetailsItem: BoxProps = {
   borderTop: '1px solid rgba(0, 0, 0, 0.1)',
-  paddingY: '16px',
+  paddingY: '12px',
 
   sx: {
     ':nth-of-type(1), :nth-of-type(2)': {
@@ -75,7 +75,7 @@ export const DetailsItemLabel: TextProps = {
   textOverflow: 'ellipsis',
   textTransform: 'uppercase',
   whiteSpace: 'nowrap',
-  mb: '8px',
+  mb: '2px',
 };
 
 export const DetailsItemValue: TextProps = {
@@ -96,6 +96,7 @@ export const DetailsItemValueUSD: TextProps = {
 export const AssetWrapper: BoxProps = {
   bg: 'white',
   pos: 'relative',
+  borderRadius: '12px',
 };
 
 export const getTimerWrapperStyle: (state: AuctionCardState, image: string, boxSize: number) => StackProps
