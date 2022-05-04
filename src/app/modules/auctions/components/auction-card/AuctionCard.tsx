@@ -6,7 +6,8 @@ import { useMeasure } from 'react-use';
 import Countdown from 'react-countdown';
 
 import AuctionAssetImage from '@assets/images/_MOCK_AUCTION.png';
-import CreatorAvatarImage from '@assets/images/_MOCK_AUCTION_CREATOR.png';
+import CreatorAvatarImage from '@assets/images/_MOCK_AUCTION_CREATOR2.png';
+import AuctionPlaceholderImage from '@assets/images/auction-placeholder.png';
 import { ItemWrapper, TokenIcon } from '@app/components';
 import { TokenTicker } from '@app/enums';
 
@@ -24,10 +25,11 @@ export const AuctionCard = (props: IAuctionCardProps) => {
   const [state, setState] = useState<AuctionCardState>(AuctionCardState.FUTURE);
   const [showMyBid] = useState(true);
   const [showHighestLowestBids] = useState(true);
+  const [hasImage] = useState(true);
 
   const [auction] = useState({
-    start: dayjs().add(90, 'seconds').toDate(),
-    end: dayjs().add(120, 'seconds').toDate(),
+    start: dayjs().add(-10, 'seconds').toDate(),
+    end: dayjs().add(12000, 'seconds').toDate(),
   });
 
   const updateState = useCallback(() => {
@@ -57,12 +59,16 @@ export const AuctionCard = (props: IAuctionCardProps) => {
     <ItemWrapper ref={ref}>
       <Box {...styles.Wrapper}>
         <Box {...styles.AssetWrapper}>
-          <Image
-            src={AuctionAssetImage}
-            alt={'Auction asset image'}
-            opacity={state === AuctionCardState.ENDED ? 0.6 : 1}
-          />
-          <VStack spacing={0} {...styles.getTimerWrapperStyle(state, AuctionAssetImage, width)}>
+          <Box opacity={state === AuctionCardState.ENDED ? 0.6 : 1}>
+            <Image src={hasImage ? AuctionAssetImage : AuctionPlaceholderImage} alt={'Auction asset image'} />
+            {!hasImage && (
+              <Image src={CreatorAvatarImage} alt={'Auction creator avatar'} {...styles.AssetPlaceholderCreatorAvatar} />
+            )}
+          </Box>
+          <VStack
+            spacing={0}
+            {...styles.getTimerWrapperStyle(state, hasImage ? AuctionAssetImage : AuctionPlaceholderImage, width)}
+          >
             <Text {...styles.TimerLabel}>{timerLabel}</Text>
             <Text {...styles.TimerValue}>
               {state === AuctionCardState.FUTURE && (

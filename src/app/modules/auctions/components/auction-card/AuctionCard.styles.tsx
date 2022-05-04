@@ -1,4 +1,4 @@
-import { BoxProps, SimpleGridProps, StackProps, TextProps } from '@chakra-ui/react';
+import { BoxProps, ImageProps, SimpleGridProps, StackProps, TextProps } from '@chakra-ui/react';
 import { AuctionCardState } from './enums';
 
 export const Wrapper: BoxProps = {
@@ -97,6 +97,16 @@ export const AssetWrapper: BoxProps = {
   bg: 'white',
   pos: 'relative',
   borderRadius: '12px',
+};
+
+export const AssetPlaceholderCreatorAvatar: ImageProps = {
+  border: '4px solid white',
+  borderRadius: 'full',
+  boxSize: '160px',
+  left: '50%',
+  pos: 'absolute',
+  top: '50%',
+  transform: 'translate(-50%, -50%)',
 };
 
 export const getTimerWrapperStyle: (state: AuctionCardState, image: string, boxSize: number) => StackProps
