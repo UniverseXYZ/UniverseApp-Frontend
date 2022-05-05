@@ -3,7 +3,7 @@ import NextLink from 'next/link';
 import { useCallback, useState } from 'react';
 
 import BubbleImage from '@assets/images/text-bubble-2x.png';
-import plusIcon from '@assets/images/plus.svg';
+import PlusIcon from '@assets/images/plus.svg';
 import { Alert } from '@app/components';
 import { AuctionCard, AuctionCardSkeleton } from '@app/modules/auctions/components';
 import { useMeasure } from 'react-use';
@@ -56,7 +56,7 @@ export const AuctionsList = (props: IAuctionsListProps) => {
 
         <Button boxShadow={'lg'} padding={'11px 16px'} disabled={isFillOutProfileAlert}>
           Set up auction
-          <Image src={plusIcon} alt="icon" ml={'12px'} />
+          <Image src={PlusIcon} alt="icon" ml={'12px'} />
         </Button>
       </Flex>
     );
