@@ -68,9 +68,6 @@ export const SearchSelect = (props: ISearchSelectProps) => {
     <Box ref={ref} pos={'relative'} onClick={() => setIsOpened(true)}>
       <Box>
         <SearchInput
-          shadowProps={{
-            display: 'contents',
-          }}
           inputGroupProps={{
             sx: {
               background: 'white',

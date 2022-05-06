@@ -91,9 +91,6 @@ export const CollectionsFilter = (props: ICollectionsFilterProps) => {
           ))}
         </Flex>
         <SearchInput
-          shadowProps={{
-            display: 'contents',
-          }}
           inputGroupProps={{
             sx: {
               '.chakra-input__left-element': {

@@ -190,9 +190,6 @@ export const MultiSelect = (props: IMultiSelectProps) => {
           ))}
         </Flex>
         <SearchInput
-          shadowProps={{
-            display: 'contents',
-          }}
           inputGroupProps={{
             sx: {
               '.chakra-input__left-element': {

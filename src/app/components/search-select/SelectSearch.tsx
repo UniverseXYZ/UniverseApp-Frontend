@@ -197,9 +197,6 @@ export const SearchSelect = (props: ISearchSelectProps) => {
           ))}
         </Flex>
         <SearchInput
-          shadowProps={{
-            display: 'contents',
-          }}
           inputGroupProps={{
             sx: {
               '.chakra-input__left-element': {

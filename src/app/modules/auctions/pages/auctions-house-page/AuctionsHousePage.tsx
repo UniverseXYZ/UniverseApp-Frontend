@@ -1,24 +1,13 @@
-import { Container, Tab as ChakraTab, TabList, TabPanel, TabPanels, Tabs, TabProps, Box, Icon } from '@chakra-ui/react';
+import { Tab as ChakraTab, TabList, TabPanel, TabPanels, Tabs, TabProps, Box, Icon } from '@chakra-ui/react';
 import { useEffect } from 'react';
 
 import { ReactComponent as TabActiveCorner } from '@assets/images/tab-active-corner.svg';
 import { OpenGraph } from '@app/components';
-
-import { AuctionsList, CreateYourAuction, Filters, WelcomeSection } from './components';
 import { useThemeStore } from '@app/stores';
+
+import { SORT_BY_ACTIVE_AUCTIONS, SORT_BY_FUTURE_AUCTIONS } from '../../constants';
+import { AuctionsList, CreateYourAuction, Filters, WelcomeSection } from './components';
 import * as styles from './AuctionsHousePage.styles';
-
-export const ACTIVE_AUCTION_SORT_BY_ITEMS = [
-  'Ending soon',
-  'Recently added',
-  'Highest winning bid',
-  'Lowest winning bid',
-];
-
-export const FUTURE_AUCTION_SORT_BY_ITEMS = [
-  'Starts soon',
-  'Recently added',
-];
 
 export const Tab = ({ children, ...props }: TabProps) => {
   return (
@@ -56,11 +45,11 @@ export const AuctionsHousePage = () => {
 
           <TabPanels>
             <TabPanel {...styles.TabPanel}>
-              <Filters sortByItems={ACTIVE_AUCTION_SORT_BY_ITEMS} />
+              <Filters sortByItems={SORT_BY_ACTIVE_AUCTIONS} />
               <AuctionsList type={'active'} />
             </TabPanel>
             <TabPanel {...styles.TabPanel}>
-              <Filters sortByItems={FUTURE_AUCTION_SORT_BY_ITEMS} />
+              <Filters sortByItems={SORT_BY_FUTURE_AUCTIONS} />
               <AuctionsList type={'future'} />
             </TabPanel>
           </TabPanels>

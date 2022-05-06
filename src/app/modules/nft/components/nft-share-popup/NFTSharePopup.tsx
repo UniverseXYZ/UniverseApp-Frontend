@@ -94,7 +94,6 @@ export const NFTSharePopup = ({ isOpen, onClose }: INFTSharePopupProps) => {
         {/*<ModalBody pt={'40px !important'}>*/}
         {/*  <Heading {...styles.TitleStyle} mb={'20px'}>Send to a friend</Heading>*/}
         {/*  <SearchInput*/}
-        {/*    shadowProps={{ width: '100%', }}*/}
         {/*    inputProps={{*/}
         {/*      placeholder: 'Search for people',*/}
         {/*      value: search,*/}

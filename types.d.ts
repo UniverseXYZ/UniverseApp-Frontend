@@ -36,5 +36,7 @@ declare module "react-animated-css-onscroll" {
 }
 
 declare module "react-debounce-input" {
+  const content: any;
+  export default content;
   export const DebounceInput: any;
 }

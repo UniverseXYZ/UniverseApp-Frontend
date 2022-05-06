@@ -1,16 +1,16 @@
-import { BoxProps, Flex, Image, Input, InputGroup, InputLeftElement } from '@chakra-ui/react';
+import { Image, Input, InputGroup, InputLeftElement, Stack, StackProps } from '@chakra-ui/react';
 import React, { useState } from 'react';
+import { useDebounce } from 'react-use';
 
 import SearchIcon from '@assets/images/search-gray.svg';
 import { Select } from '@app/components';
-import { useDebounce } from 'react-use';
 
-interface IFiltersProps extends BoxProps {
+interface IFiltersProps extends StackProps {
   sortByItems: Array<unknown>;
 }
 
 export const Filters = (props: IFiltersProps) => {
-  const { sortByItems, ...boxProps } = props;
+  const { sortByItems, ...stackProps } = props;
 
   const [searchVal, setSearchVal] = useState('');
 
@@ -19,8 +19,8 @@ export const Filters = (props: IFiltersProps) => {
   }, 1000, [searchVal]);
 
   return (
-    <Flex {...boxProps}>
-      <InputGroup mr={'14px'}>
+    <Stack direction={{ base: 'column', md: 'row' }} spacing={'14px'} {...stackProps}>
+      <InputGroup>
         <InputLeftElement pointerEvents="none">
           <Image src={SearchIcon} />
         </InputLeftElement>
@@ -34,12 +34,13 @@ export const Filters = (props: IFiltersProps) => {
       <Select
         items={sortByItems}
         value={sortByItems[0]}
+        label={'Sort By'}
         buttonProps={{
           size: 'lg',
           fontSize: '16px',
           minWidth: '280px',
         }}
       />
-    </Flex>
+    </Stack>
   );
 }
