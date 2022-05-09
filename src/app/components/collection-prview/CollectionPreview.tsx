@@ -14,7 +14,7 @@ import {
   Box,
   Center,
   Flex,
-  Image,
+  Image, Link,
   Popover,
   PopoverBody,
   PopoverContent,
@@ -26,9 +26,10 @@ import {
 } from "@chakra-ui/react";
 import Contracts from "@legacy/contracts.json";
 import { Contract, providers, utils } from "ethers";
-import React, { useCallback } from "react";
+import React, { useCallback, useState } from "react";
 import { useQuery } from "react-query";
 import { useCopyToClipboard } from "react-use";
+import NextLink from "next/link";
 import * as styles from "./CollectionPreview.styles";
 
 const formatPrice = (price: string) => {
@@ -50,6 +51,8 @@ export const CollectionPreview = (props: ICollectionPreviewProps) => {
   const { collection: initialCollection, children } = props;
 
   const [_, copyToClipboard] = useCopyToClipboard();
+
+  const [showCopiedAddress, setShowCopiedAddress] = useState(false);
 
   const collectionAddress: string | null = typeof initialCollection === "string"
     ? initialCollection
@@ -149,6 +152,14 @@ export const CollectionPreview = (props: ICollectionPreviewProps) => {
     }
   );
 
+  const handleCopyCollectionAddress = useCallback(() => {
+    copyToClipboard(collectionAddress ?? '');
+    setShowCopiedAddress(true);
+    setTimeout(() => {
+      setShowCopiedAddress(false);
+    }, 1000);
+  }, [collectionAddress]);
+
   const renderCollection = useCallback(() => {
     return (
       <Flex flexDir={"column"}>
@@ -177,24 +188,22 @@ export const CollectionPreview = (props: ICollectionPreviewProps) => {
           >
             <Box {...styles.GridItem}>
               <Text {...styles.GridItemLabel}>Contract address</Text>
-              <Text
-                {...styles.GridItemValue}
-                onClick={() => copyToClipboard(collectionAddress ?? "")}
-              >
-                {formatAddress(collectionAddress ?? null)}
-              </Text>
+              {showCopiedAddress ? (
+                <Text {...styles.GridItemValue} cursor={'text'}>Copied!</Text>
+              ) : (
+                <Text {...styles.GridItemValue} onClick={() => handleCopyCollectionAddress()}>
+                  {formatAddress(collectionAddress ?? null)}
+                </Text>
+              )}
             </Box>
             {collectionOwner && (
               <Box {...styles.GridItem}>
                 <Text {...styles.GridItemLabel}>Owned by</Text>
-                <Text
-                  {...styles.GridItemValue}
-                  onClick={() => copyToClipboard(collectionOwner)}
-                >
-                  {utils.isAddress(collectionOwner)
-                    ? formatAddress(collectionOwner)
-                    : collectionOwner}
-                </Text>
+                <NextLink href={`/${collectionOwner}`} passHref>
+                  <Link {...styles.GridItemValue}>
+                    {utils.isAddress(collectionOwner) ? formatAddress(collectionOwner) : collectionOwner}
+                  </Link>
+                </NextLink>
               </Box>
             )}
           </SimpleGrid>
@@ -250,7 +259,7 @@ export const CollectionPreview = (props: ICollectionPreviewProps) => {
         </VStack>
       </Flex>
     );
-  }, [collection, collectionOwner, collectionStatistic]);
+  }, [collection, collectionOwner, collectionStatistic, showCopiedAddress]);
 
   const renderLoading = useCallback(() => {
     return (

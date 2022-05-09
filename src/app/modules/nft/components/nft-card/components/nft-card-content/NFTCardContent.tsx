@@ -1,4 +1,4 @@
-import { Box, Flex, HStack, Link, Text } from '@chakra-ui/react';
+import { Box, Flex, HStack, Link, Text, Tooltip } from '@chakra-ui/react';
 import React, { useMemo } from 'react';
 import { utils } from 'ethers';
 import NextLink from 'next/link';
@@ -63,7 +63,9 @@ export const NFTCardContent = (props: INFTCardContentProps) => {
         <Text {...styles.NFTName}>{NFT.name}</Text>
         {order && (
           <HStack spacing={'4px'}>
-            <TokenIcon ticker={priceToken.ticker} boxSize={'20px'} />
+            <Tooltip label={priceToken.ticker} hasArrow placement={'top'}>
+              <Box><TokenIcon ticker={priceToken.ticker} boxSize={'20px'} /></Box>
+            </Tooltip>
             {/*TODO: provide text "top bit" | "min bit" in case of auction*/}
             <Text>{formatPrice(price)}</Text>
           </HStack>
@@ -84,7 +86,9 @@ export const NFTCardContent = (props: INFTCardContentProps) => {
           {additionPriceValue && (
             <HStack spacing={'4px'} fontSize={'11px'} fontWeight={600}>
               <Text color={'#00000066'}>{additionPriceLabel}</Text>
-              <TokenIcon ticker={additionPriceToken} boxSize={'16px'} />
+              <Tooltip label={additionPriceToken} hasArrow placement={'top'}>
+                <Box><TokenIcon ticker={additionPriceToken} boxSize={'16px'} /></Box>
+              </Tooltip>
               <Text color={'black'}>{formatSecondaryPrice(additionPriceValue)}</Text>
             </HStack>
           )}
