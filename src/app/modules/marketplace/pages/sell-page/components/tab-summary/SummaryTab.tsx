@@ -274,7 +274,10 @@ export const SummaryTab = () => {
                 <NFTAssetImage
                   image={nft.originalUrl}
                   alt={nft.name}
-                  containerProps={{ boxSize: 'var(--image-size)' }}
+                  containerProps={{
+                    flex: 1,
+                    w: 'var(--image-size)',
+                  }}
                   allowFullscreen={false}
                 />
               ||

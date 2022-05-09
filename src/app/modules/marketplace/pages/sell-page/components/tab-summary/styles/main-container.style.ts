@@ -1,6 +1,7 @@
 import { BoxProps } from '@chakra-ui/react';
 
 export const MainContainerStyle: BoxProps = {
+  alignItems: 'flex-start',
   bg: 'white',
   borderRadius: '12px',
   boxShadow: '0 10px 36px rgba(136, 120, 172, 0.14)',
