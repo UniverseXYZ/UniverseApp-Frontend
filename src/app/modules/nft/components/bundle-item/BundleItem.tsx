@@ -3,14 +3,12 @@ import React from 'react';
 import { Navigation, Pagination } from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
-// import 'swiper/swiper-bundle.min.css';
-// import 'swiper/swiper.min.css';
+import { ItemWrapper } from '@app/components';
 
 import { IERC721BundleAssetType, INFT, IOrder } from '../../types';
-import { ItemWrapper } from '../../../../components';
-import * as styles from '../nft-item/styles';
-import { NFTItemAsset, NFTItemFooter, NFTItemFooterBundleLabel, NFTItemRelation } from '../nft-item/components';
-import { NFTRelationType } from '../../enums';
+import * as styles from '../nft-card/NFTCard.styles';
+import { NFTCardAsset, NFTCardFooter, BundleLabel } from '../nft-card/components';
+// import { NFTRelationType } from '../../enums';
 
 interface IBundleItemProps {
   NFTs: INFT[];
@@ -82,7 +80,7 @@ export const BundleItem = (
                   <SwiperSlide key={i}>
                     {renderAsset === null ? null :
                       renderAsset ? renderAsset(NFT, order) : (
-                        <NFTItemAsset NFT={NFT} />
+                        <NFTCardAsset NFT={NFT} />
                       )
                     }
                   </SwiperSlide>
@@ -100,13 +98,13 @@ export const BundleItem = (
 
                   <Box mb={'14px'}>
                     <Box>
-                      <NFTItemRelation
-                        type={NFTRelationType.CREATOR}
-                        image={NFTs[0].owner?.profileImageUrl ?? ''}
-                        value={NFTs[0].owner?.displayName || NFTs[0]._ownerAddress || ''}
-                        linkParam={NFTs[0].owner?.universePageUrl ?? ''}
-                        externalOwner={!NFTs[0].owner?.displayName}
-                      />
+                      {/*<NFTItemRelation*/}
+                      {/*  type={NFTRelationType.CREATOR}*/}
+                      {/*  image={NFTs[0].owner?.profileImageUrl ?? ''}*/}
+                      {/*  value={NFTs[0].owner?.displayName || NFTs[0]._ownerAddress || ''}*/}
+                      {/*  linkParam={NFTs[0].owner?.universePageUrl ?? ''}*/}
+                      {/*  externalOwner={!NFTs[0].owner?.displayName}*/}
+                      {/*/>*/}
                     </Box>
                   </Box>
                 </>
@@ -115,9 +113,9 @@ export const BundleItem = (
 
             {renderFooter === null ? null :
               renderFooter ? renderFooter(NFTs, order) : (
-                <NFTItemFooter>
-                  <NFTItemFooterBundleLabel count={NFTs.length} />
-                </NFTItemFooter>
+                <NFTCardFooter NFT={NFTs[0]}>
+                  <BundleLabel count={NFTs.length} />
+                </NFTCardFooter>
               )
             }
           </Box>

@@ -6,7 +6,7 @@ import { useFiltersContext } from '../search-filters/search-filters.context';
 // Components
 import NftCardSkeleton from '../../../../../../../components/skeletons/nftCardSkeleton/NftCardSkeleton';
 import NoNftsFound from '../../../../../../../components/myNFTs/NoNftsFound';
-import { NftItem, NFTItemContentWithPrice } from '../../../../../nft/components';
+import { NFTCard } from '../../../../../nft/components';
 import { SearchFilters } from '../search-filters';
 
 // Constants
@@ -103,36 +103,7 @@ export const WalletTab = ({ getTotalNfts }: IWalletTabProps) => {
                           if (!NFTs.length) {
                             return null;
                           }
-                          return (
-                            <NftItem
-                              order={order}
-                              key={order.id}
-                              NFT={NFTs[0]}
-                              collection={`${NFTs[0]._collectionAddress}`}
-                              renderContent={({
-                                NFT,
-                                collection,
-                                creator,
-                                owner,
-                                bestOfferPrice,
-                                bestOfferPriceToken,
-                                lastOfferPrice,
-                                lastOfferPriceToken,
-                                order: orderData,
-                              }) => (
-                                <NFTItemContentWithPrice
-                                  collectionAddress={NFT._collectionAddress}
-                                  name={NFT.name}
-                                  collection={collection}
-                                  order={orderData || undefined}
-                                  bestOfferPrice={bestOfferPrice || 0}
-                                  bestOfferPriceToken={bestOfferPriceToken || undefined}
-                                  lastOfferPrice={lastOfferPrice || 0}
-                                  lastOfferPriceToken={lastOfferPriceToken || undefined}
-                                />
-                              )}
-                            />
-                          );
+                          return (<NFTCard key={order.id} NFT={NFTs[0]} order={order} />);
                         });
                       }
                     )
@@ -167,34 +138,7 @@ export const WalletTab = ({ getTotalNfts }: IWalletTabProps) => {
                   !waitingUserNFTs && (
                     userNFTs?.pages ?? []).map((page: any) => {
                       return page.data.map((NFT: any) => (
-                        <NftItem
-                          key={NFT.id}
-                          NFT={NFT}
-                          showBuyNowButton={false}
-                          collection={`${NFT._collectionAddress}`}
-                          renderContent={({
-                            NFT,
-                            collection,
-                            creator,
-                            owner,
-                            bestOfferPrice,
-                            bestOfferPriceToken,
-                            lastOfferPrice,
-                            lastOfferPriceToken,
-                            order,
-                          }) => (
-                            <NFTItemContentWithPrice
-                              collectionAddress={NFT._collectionAddress}
-                              name={NFT.name}
-                              collection={collection}
-                              order={order || undefined}
-                              bestOfferPrice={bestOfferPrice || 0}
-                              bestOfferPriceToken={bestOfferPriceToken || undefined}
-                              lastOfferPrice={lastOfferPrice || 0}
-                              lastOfferPriceToken={lastOfferPriceToken || undefined}
-                            />
-                          )}
-                        />
+                        <NFTCard key={NFT.id} NFT={NFT} showBuyNowButton={false} />
                       ));
                     }
                   )

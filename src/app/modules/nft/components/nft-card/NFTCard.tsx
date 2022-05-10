@@ -1,7 +1,7 @@
 import { Box, LinkBox, LinkOverlay } from "@chakra-ui/react";
 import { utils } from "ethers";
 import NextLink from "next/link";
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { useQuery } from "react-query";
 
 import { ItemWrapper } from '@app/components';
@@ -27,7 +27,7 @@ import {
   IOrder,
 } from "../../types";
 import { NFTCardAsset, NFTCardFooter, NFTCardContent, NFTCardCountdown } from './components';
-import * as styles from "./styles";
+import * as styles from "./NFTCard.styles";
 import { useAuthStore } from '../../../../../stores/authStore';
 import { useNftCheckoutStore } from '../../../../../stores/nftCheckoutStore';
 

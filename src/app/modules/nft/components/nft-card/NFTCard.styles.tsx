@@ -1,7 +1,19 @@
 import { BoxProps } from '@chakra-ui/react';
 
-import ArrowLeftIcon from '../../../../../../assets/images/marketplace/bundles-left-arrow.svg';
-import ArrowRightIcon from '../../../../../../assets/images/marketplace/bundles-right-arrow.svg';
+import ArrowLeftIcon from '@assets/images/marketplace/bundles-left-arrow.svg';
+import ArrowRightIcon from '@assets/images/marketplace/bundles-right-arrow.svg';
+
+export const AssetContainerStyle: BoxProps = {
+  overflow: 'hidden',
+  position: 'relative',
+  zIndex: 3,
+}
+
+export const NFTContentStyle: BoxProps = {
+  padding: '16px 14px 14px 14px',
+  position: 'relative',
+  zIndex: 4,
+};
 
 export const getSwiperArrowStyle = (icon: string) => ({
   bg: 'white',

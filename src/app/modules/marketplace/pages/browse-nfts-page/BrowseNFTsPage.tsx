@@ -7,7 +7,7 @@ import {
   HStack, Icon,
   Image,
   SimpleGrid,
-  Text,
+  Text, useBreakpointValue,
 } from '@chakra-ui/react';
 import { useRouter } from "next/router";
 import React, { useCallback, useEffect, useRef, useState } from "react";
@@ -49,9 +49,9 @@ import {
 } from "@app/components/filters";
 import { getTokenAddressByTicker } from "@app/constants";
 import { TokenTicker } from "@app/enums";
-import { useStaticHeader } from "@app/hooks";
+import { useStaticHeader, useNFTFluidGrid, NFTCardSize } from "@app/hooks";
 import { nftKeys, orderKeys } from "@app/utils/query-keys";
-import { useFluidGrid } from '@app/hooks/useFluidGrid';
+import { OrderAssetClass } from '@app/modules/nft/enums';
 
 import { GetActiveSellOrdersApi, GetNFT2Api } from "../../../nft/api";
 import { NFTCard } from "../../../nft/components";
@@ -63,16 +63,9 @@ import {
 } from "../../../nft/types";
 import { SearchBar } from "../../components";
 import { SortOrderOptions, SortOrderOptionsEnum } from "../../constants";
-import * as styles from "./BrowseNFTsPage.styles";
-import { ListingBanner } from "./components";
+import { ListingBanner, ToggleButton, ToggleButtonGroup } from "./components";
 import { OPEN_GRAPH_DESCRIPTION, OPEN_GRAPH_TITLE, ORDERS_PER_PAGE } from "./constants";
-import { ToggleButton, ToggleButtonGroup } from './components/toggle-button';
-import { OrderAssetClass } from '@app/modules/nft/enums';
-
-enum NFTSize {
-  LG = 300,
-  SM = 180,
-}
+import * as styles from "./BrowseNFTsPage.styles";
 
 export const BrowseNFTsPage = () => {
   const setDarkMode = useThemeStore((s) => s.setDarkMode);
@@ -90,9 +83,7 @@ export const BrowseNFTsPage = () => {
 
   const [ref, { width: containerWidth }] = useMeasure<HTMLDivElement>();
 
-  const [cardSize, setCardSize] = useState<NFTSize>(NFTSize.LG);
-
-  const { columns, spacingX } = useFluidGrid(containerWidth, cardSize, 16);
+  const NFTGrid = useNFTFluidGrid(containerWidth, 16);
 
   const collectionSearchParam = useSearchParam("collection");
 
@@ -285,8 +276,7 @@ export const BrowseNFTsPage = () => {
               }
               break;
             case "ERC721_BUNDLE":
-              const assetTypeBundle = order.make
-                .assetType as IERC721BundleAssetType;
+              const assetTypeBundle = order.make.assetType as IERC721BundleAssetType;
               const NFTs = [];
 
               for (let i = 0; i < assetTypeBundle.contracts.length; i++) {
@@ -453,17 +443,17 @@ export const BrowseNFTsPage = () => {
           />
           <ToggleButtonGroup
             name={"nftSize"}
-            value={cardSize}
+            value={NFTGrid.size}
             onChange={(val) => {
-              setCardSize(+val as NFTSize)
+              NFTGrid.setSize(val as NFTCardSize)
             }}
           >
-            <ToggleButton value={NFTSize.LG}>
+            <ToggleButton value={NFTCardSize.LG}>
               <Icon viewBox={"0 0 14 14"}>
                 <GridLGIcon />
               </Icon>
             </ToggleButton>
-            <ToggleButton value={NFTSize.SM}>
+            <ToggleButton value={NFTCardSize.SM}>
               <Icon viewBox={"0 0 14 14"}>
                 <GridSMIcon />
               </Icon>
@@ -478,8 +468,8 @@ export const BrowseNFTsPage = () => {
         ) : (
           <SimpleGrid
             ref={ref}
-            columns={columns}
-            spacing={`${spacingX}px`}
+            columns={NFTGrid.columns}
+            spacing={`${NFTGrid.spacing}px`}
             mb={"40px"}
           >
             {(ordersResult?.pages ?? []).map((page) => {

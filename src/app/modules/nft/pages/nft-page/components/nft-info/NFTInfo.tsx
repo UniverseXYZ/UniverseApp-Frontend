@@ -1,5 +1,5 @@
 import { getArtistApi } from "@app/api";
-import { useNFTAsset } from "@app/modules/nft/components/nft-item/components/nft-item-asset/hooks";
+import { useNFTAsset } from "@app/modules/nft/components/nft-card/components/nft-card-asset/hooks";
 import VideoPlaceholder from "@assets/images/open-graph/video-placeholder.png";
 import {
   Box,
@@ -33,13 +33,12 @@ import { sendRefreshMetadataRequest } from "../../../../../../../utils/api/marke
 import { LineTabList, OpenGraph } from "../../../../../../components";
 import { getTokenByAddress } from "../../../../../../constants";
 import {
-  NftItem,
+  NFTCard,
   NFTMenu,
   NFTPageCollectionRelation,
   NFTPageCreatorRelation,
   NFTPageOwnerRelation,
-} from "../../../../components";
-import { NFTItemContentWithPrice } from "../../../../components/nft-item/components";
+} from '../../../../components';
 import {
   isNFTAssetAudio,
   isNFTAssetImage,
@@ -439,38 +438,7 @@ export const NFTInfo = () => {
                   }}
                   spacing={"20px"}
                 >
-                  {moreFromCollection.map(
-                    (NFT) =>
-                      !!NFT.id && (
-                        <NftItem
-                          key={NFT.id}
-                          NFT={NFT}
-                          collection={`${NFT._collectionAddress}`}
-                          renderContent={({
-                            NFT,
-                            collection,
-                            creator,
-                            owner,
-                            bestOfferPrice,
-                            bestOfferPriceToken,
-                            lastOfferPrice,
-                            lastOfferPriceToken,
-                            order: orderData,
-                          }) => (
-                            <NFTItemContentWithPrice
-                              collectionAddress={NFT._collectionAddress}
-                              name={NFT.name}
-                              collection={collection}
-                              order={orderData || undefined}
-                              bestOfferPrice={bestOfferPrice || 0}
-                              bestOfferPriceToken={bestOfferPriceToken || undefined}
-                              lastOfferPrice={lastOfferPrice || 0}
-                              lastOfferPriceToken={lastOfferPriceToken || undefined}
-                            />
-                          )}
-                        />
-                      )
-                  )}
+                  {moreFromCollection.map((NFT) => !!NFT.id && (<NFTCard key={NFT.id} NFT={NFT} />))}
                 </SimpleGrid>
               </Container>
               <Button

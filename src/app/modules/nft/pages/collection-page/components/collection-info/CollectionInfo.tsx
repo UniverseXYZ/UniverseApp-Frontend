@@ -30,11 +30,7 @@ import EditIcon from "../../../../../../../components/svgs/EditIcon";
 import Contracts from "../../../../../../../contracts/contracts.json";
 import { useAuthStore } from "../../../../../../../stores/authStore";
 import { breakpoints } from "../../../../../../theme/constants";
-import {
-  NftItem,
-  NFTItemContentWithPrice,
-  NoNFTsFound,
-} from "../../../../components";
+import { NFTCard, NoNFTsFound } from '../../../../components';
 import { NoDescriptionFound } from "../../../../components/no-description-found";
 import { useCollectionPageData } from "../../CollectionPage.context";
 import { CollectionStatistics } from "./components/index";
@@ -312,47 +308,15 @@ export const CollectionInfo = () => {
                         <div className="mynfts__page">
                           <div className="container mynfts__page__body">
                             <SimpleGrid
-                              columns={{ base: 1, md: 2, lg: 4 }}
                               spacing={"30px"}
+                              columns={{ base: 1, md: 2, lg: 4 }}
                             >
                               {(orders?.pages ?? []).map((page) => {
                                 return page.data.map(({ order, NFTs }) => {
                                   if (!NFTs.length) {
                                     return null;
                                   }
-                                  return (
-                                    <NftItem
-                                      order={order}
-                                      key={order.id}
-                                      NFT={NFTs[0]}
-                                      collection={`${NFTs[0]._collectionAddress}`}
-                                      orderEnd={order.end}
-                                      renderContent={({
-                                        NFT,
-                                        collection,
-                                        creator,
-                                        owner,
-                                        bestOfferPrice,
-                                        bestOfferPriceToken,
-                                        lastOfferPrice,
-                                        lastOfferPriceToken,
-                                        order: orderData,
-                                      }) => (
-                                        <NFTItemContentWithPrice
-                                          collectionAddress={
-                                            NFT._collectionAddress
-                                          }
-                                          name={NFT.name}
-                                          collection={collection}
-                                          order={orderData || undefined}
-                                          bestOfferPrice={bestOfferPrice || 0}
-                                          bestOfferPriceToken={bestOfferPriceToken || undefined}
-                                          lastOfferPrice={lastOfferPrice || 0}
-                                          lastOfferPriceToken={lastOfferPriceToken || undefined}
-                                        />
-                                      )}
-                                    />
-                                  );
+                                  return (<NFTCard key={order.id} order={order} NFT={NFTs[0]} />);
                                 });
                               })}
                             </SimpleGrid>
@@ -377,38 +341,12 @@ export const CollectionInfo = () => {
                       <div className="mynfts__page">
                         <div className="container mynfts__page__body">
                           <SimpleGrid
-                            columns={{ base: 1, md: 2, lg: 4 }}
                             spacing={"30px"}
+                            columns={{ base: 1, md: 2, lg: 4 }}
                           >
                             {(collectionNFTs?.pages ?? []).map((page) => {
                               return page.data.map((NFT) => (
-                                <NftItem
-                                  key={NFT.id}
-                                  NFT={NFT}
-                                  collection={`${NFT._collectionAddress}`}
-                                  renderContent={({
-                                    NFT,
-                                    collection,
-                                    creator,
-                                    owner,
-                                    bestOfferPrice,
-                                    bestOfferPriceToken,
-                                    lastOfferPrice,
-                                    lastOfferPriceToken,
-                                    order: orderData,
-                                  }) => (
-                                    <NFTItemContentWithPrice
-                                      collectionAddress={NFT._collectionAddress}
-                                      name={NFT.name}
-                                      collection={collection}
-                                      order={orderData || undefined}
-                                      bestOfferPrice={bestOfferPrice || 0}
-                                      bestOfferPriceToken={bestOfferPriceToken || undefined}
-                                      lastOfferPrice={lastOfferPrice || 0}
-                                      lastOfferPriceToken={lastOfferPriceToken || undefined}
-                                    />
-                                  )}
-                                />
+                                <NFTCard key={NFT.id} NFT={NFT} />
                               ));
                             })}
                           </SimpleGrid>
