@@ -26,4 +26,8 @@ export const CollectionLink: LinkProps = {
   whiteSpace: 'nowrap',
   textOverflow: 'ellipsis',
   w: '100%',
+
+  _focus: {
+    boxShadow: 'none',
+  },
 };
