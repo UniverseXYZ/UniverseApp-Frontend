@@ -48,11 +48,12 @@ export const getItemWrapperStyle: (isBundle: boolean) => BoxProps = (isBundle) =
       background: 'transparent',
       border: 0,
     },
-    '& .buy-now': {
-      display: 'block'
+
+    '.show-on-hover': {
+      display: 'block',
     },
-    '& .nft-label': {
-      display: 'inline-block'
-    }
+    '.hide-on-hover': {
+      display: 'none',
+    },
   },
 });

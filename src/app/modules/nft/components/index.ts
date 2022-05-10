@@ -1,5 +1,6 @@
 export * from './bundle-item';
 export * from './bundle-menu';
+export * from './nft-card';
 export * from './nft-item';
 export * from './nft-item-loader';
 export * from './nft-likes-popup';

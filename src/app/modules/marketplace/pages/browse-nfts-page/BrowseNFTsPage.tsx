@@ -54,11 +54,7 @@ import { nftKeys, orderKeys } from "@app/utils/query-keys";
 import { useFluidGrid } from '@app/hooks/useFluidGrid';
 
 import { GetActiveSellOrdersApi, GetNFT2Api } from "../../../nft/api";
-import {
-  BundleItem,
-  NftItem,
-  NFTItemContentWithPrice,
-} from "../../../nft/components";
+import { NFTCard } from "../../../nft/components";
 import {
   IERC721AssetType,
   IERC721BundleAssetType,
@@ -71,6 +67,7 @@ import * as styles from "./BrowseNFTsPage.styles";
 import { ListingBanner } from "./components";
 import { OPEN_GRAPH_DESCRIPTION, OPEN_GRAPH_TITLE, ORDERS_PER_PAGE } from "./constants";
 import { ToggleButton, ToggleButtonGroup } from './components/toggle-button';
+import { OrderAssetClass } from '@app/modules/nft/enums';
 
 enum NFTSize {
   LG = 300,
@@ -224,8 +221,7 @@ export const BrowseNFTsPage = () => {
             );
             break;
           case "ERC721_BUNDLE":
-            const assetTypeBundle = order.make
-              .assetType as IERC721BundleAssetType;
+            const assetTypeBundle = order.make.assetType as IERC721BundleAssetType;
             for (let i = 0; i < assetTypeBundle.contracts.length; i++) {
               for (const tokenId of assetTypeBundle.tokenIds[i]) {
                 queryClient.setQueryData(
@@ -488,56 +484,15 @@ export const BrowseNFTsPage = () => {
           >
             {(ordersResult?.pages ?? []).map((page) => {
               return page.data.map(({ order, NFTs }) => {
-                if (!NFTs.length) {
+                if (!NFTs.length || order.make.assetType.assetClass !== OrderAssetClass.ERC721) {
                   return null;
                 }
-                return order.make.assetType.assetClass === "ERC721" ? (
-                  <NftItem
-                    order={order}
+                return (
+                  <NFTCard
                     key={order.id}
+                    order={order}
                     NFT={NFTs[0]}
-                    collection={`${NFTs[0]._collectionAddress}`}
-                    orderEnd={order.end}
-                    onAuctionTimerEnd={refetch}
-                    renderContent={({
-                      NFT,
-                      collection,
-                      creator,
-                      owner,
-                      bestOfferPrice,
-                      bestOfferPriceToken,
-                      lastOfferPrice,
-                      lastOfferPriceToken,
-                      order: orderData,
-                    }) => (
-                      <NFTItemContentWithPrice
-                        name={NFT.name}
-                        collection={collection}
-                        creator={creator?.mappedArtist || undefined}
-                        owner={owner?.mappedArtist || undefined}
-                        ownerAddress={NFT._ownerAddress}
-                        order={orderData || undefined}
-                        bestOfferPrice={bestOfferPrice || 0}
-                        bestOfferPriceToken={bestOfferPriceToken || undefined}
-                        lastOfferPrice={lastOfferPrice || 0}
-                        lastOfferPriceToken={lastOfferPriceToken || undefined}
-                      />
-                    )}
-                  />
-                ) : (
-                  <BundleItem
-                    key={order.id}
-                    NFTs={NFTs}
-                    order={order}
-                    renderContent={() => (
-                      <NFTItemContentWithPrice
-                        name={(order.make.assetType as IERC721BundleAssetType).bundleName}
-                        creator={NFTs[0].creator}
-                        order={order}
-                        // price={+utils.formatUnits(order.take.value, `${TOKENS_MAP[order.take.assetType.assetClass as TokenTicker].decimals}`)}
-                        // priceToken={order.take.assetType.assetClass as TokenTicker}
-                      />
-                    )}
+                    onTimerEnd={refetch}
                   />
                 );
               });

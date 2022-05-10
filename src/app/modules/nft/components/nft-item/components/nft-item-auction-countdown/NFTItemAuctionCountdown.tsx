@@ -1,10 +1,11 @@
 import { Box, Flex, Image, Text } from '@chakra-ui/react';
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import Countdown, { zeroPad } from 'react-countdown';
 
-import GreenClockIcon from '../../../../../../../assets/images/marketplace/green-clock.svg';
+import GreenClockIcon from '@assets/images/marketplace/green-clock.svg';
 
-import * as styles from './styles';
+import * as styles from './NFTItemAuctionCountdown.styles';
+import { CountdownRendererFn } from 'react-countdown/dist/Countdown';
 
 export interface INFTItemAuctionCountdownProps {
   date: Date;
@@ -14,25 +15,34 @@ export interface INFTItemAuctionCountdownProps {
 export const NFTItemAuctionCountdown = ({ date, onComplete }: INFTItemAuctionCountdownProps) => {
   const [showCountDown, setShowCountDown] = useState(true);
 
+  const renderCountdown: CountdownRendererFn = useCallback(({ days, hours, minutes, seconds }) => {
+    const generateCountdown = () => {
+      if (days) {
+        return `${days}d : ${zeroPad(hours)}h`;
+      }
+
+      if (hours) {
+        return `${zeroPad(hours)}h : ${zeroPad(minutes)}m`;
+      }
+
+      if (minutes) {
+        return `${zeroPad(minutes)}m`;
+      }
+
+      return `${zeroPad(seconds)}s`;
+    }
+    return `${generateCountdown()} left`;
+  }, [])
+
   return !showCountDown ? null : (
-    <Flex {...styles.WrapperStyle}>
-      <Box {...styles.ContainerStyle}>
-        <Text  {...styles.TextStyle}>
-          <Image src={GreenClockIcon} {...styles.IconStyle} />
+    <Flex {...styles.Wrapper}>
+      <Box {...styles.Container}>
+        <Text  {...styles.Text}>
+          <Image src={GreenClockIcon} {...styles.Icon} />
+          {/*@ts-ignore*/}
           <Countdown
             date={date}
-            renderer={({ days, hours, minutes, seconds }) => {
-              if (!days && !hours && !minutes) {
-                return [
-                  seconds || minutes ? `${zeroPad(seconds)}s` : '',
-                ].filter(Boolean).join(' : ') + ' left';
-              }
-              return [
-                days ? `${days}d` : '',
-                hours ? `${zeroPad(hours)}h` : '',
-                minutes ? `${zeroPad(minutes)}m` : '',
-              ].filter(Boolean).join(' : ') + ' left';
-            }}
+            renderer={renderCountdown}
             onComplete={() => {
               setShowCountDown(false);
               onComplete && onComplete();

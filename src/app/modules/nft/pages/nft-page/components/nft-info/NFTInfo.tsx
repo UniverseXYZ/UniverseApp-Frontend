@@ -461,18 +461,11 @@ export const NFTInfo = () => {
                               collectionAddress={NFT._collectionAddress}
                               name={NFT.name}
                               collection={collection}
-                              creator={creator?.mappedArtist || undefined}
-                              owner={owner?.mappedArtist || undefined}
-                              ownerAddress={NFT._ownerAddress}
                               order={orderData || undefined}
                               bestOfferPrice={bestOfferPrice || 0}
-                              bestOfferPriceToken={
-                                bestOfferPriceToken || undefined
-                              }
+                              bestOfferPriceToken={bestOfferPriceToken || undefined}
                               lastOfferPrice={lastOfferPrice || 0}
-                              lastOfferPriceToken={
-                                lastOfferPriceToken || undefined
-                              }
+                              lastOfferPriceToken={lastOfferPriceToken || undefined}
                             />
                           )}
                         />

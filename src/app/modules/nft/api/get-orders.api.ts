@@ -5,7 +5,6 @@ import { OrderAssetClass } from '../enums';
 import { IOrder, IOrderBackend } from '../types';
 import { mapBackendOrder } from '../helpers';
 
-
 export interface IGetOrdersApiParams {
   page: number;
   limit: number;
@@ -14,11 +13,6 @@ export interface IGetOrdersApiParams {
   assetClass: OrderAssetClass;
   collection: string;
   tokenIds: string;
-}
-
-export interface IGeBestAndLastApiParams {
-  collection: string;
-  tokenId: string;
 }
 
 export type IGetOrdersApiResponse = [IOrderBackend[], number];

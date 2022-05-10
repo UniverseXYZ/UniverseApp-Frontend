@@ -1,23 +1,19 @@
-import { Box, Flex, Text } from '@chakra-ui/react';
+import { Box, Flex, HStack, Text } from '@chakra-ui/react';
 import React, { useMemo } from 'react';
-
-import { NFTItemRelation } from '../nft-item-relation';
-import { NFTRelationType, OrderAssetClass } from '../../../../enums';
-import { ICollection, IERC20AssetType, IOrder, IUser, INFT } from '../../../../types';
-import { TokenTicker } from '../../../../../../enums';
-import { TokenIcon } from '../../../../../../components';
-import { getTokenByAddress, TOKENS_MAP } from '../../../../../../constants';
 import { utils } from 'ethers';
-import { shortenEthereumAddress } from '../../../../../../../utils/helpers/format';
-import * as style from './NFTItemContentWithPrice.styles';
+
+import { TokenTicker } from '@app/enums';
+import { TokenIcon } from '@app/components';
+import { getTokenByAddress, TOKENS_MAP } from '@app/constants';
+
+import { ICollection, IERC20AssetType, IOrder } from '../../../../types';
+import { formatPrice, formatSecondaryPrice } from './helpers';
+import * as styles from './NFTItemContentWithPrice.styles';
 
 export interface INFTItemContentWithPriceProps {
-  collectionAddress?: string;
   name: string;
-  creator?: IUser;
   collection?: ICollection;
-  owner?: IUser;
-  ownerAddress?: string;
+  collectionAddress?: string;
   order?: IOrder;
   bestOfferPrice?: number | string;
   bestOfferPriceToken?: TokenTicker;
@@ -27,12 +23,9 @@ export interface INFTItemContentWithPriceProps {
 
 export const NFTItemContentWithPrice = (
   {
-    collectionAddress,
     name,
-    creator,
     collection,
-    owner,
-    ownerAddress,
+    collectionAddress,
     order,
     bestOfferPrice,
     bestOfferPriceToken,
@@ -44,9 +37,9 @@ export const NFTItemContentWithPrice = (
     const defaultTicker = TOKENS_MAP.ETH.ticker;
 
     if (Number(bestOfferPrice)) {
-      return ['Offer for', bestOfferPrice?.toString(), bestOfferPriceToken ?? defaultTicker];
+      return ['Offer', bestOfferPrice?.toString(), bestOfferPriceToken ?? defaultTicker];
     }
-    
+
     if (Number(lastOfferPrice)) {
       return ['Last', lastOfferPrice?.toString(), lastOfferPriceToken ?? defaultTicker];
     }
@@ -62,9 +55,9 @@ export const NFTItemContentWithPrice = (
     return getTokenByAddress((order.take.assetType as IERC20AssetType).contract);
   }, [order]);
 
-  const price = useMemo(() => {
+  const price = useMemo<string>(() => {
     if (!order) {
-      return null;
+      return '';
     }
 
     return utils.formatUnits(order.take.value, `${priceToken.decimals}`);
@@ -72,74 +65,28 @@ export const NFTItemContentWithPrice = (
 
   return (
     <>
-      <Flex justifyContent={'space-between'} fontSize={'14px'} fontWeight={700} mb={'12px'}>
-        <Text {...style.NFTName}>{name}</Text>
-        <Text>
-          {/*TODO: provide text "top bit" | "min bit" in case of auction*/}
-          {order && (
-            <>
-              <TokenIcon
-                ticker={priceToken.ticker}
-                display={'inline'}
-                mx={'4px'}
-                position={'relative'}
-                top={'-2px'}
-                width={'20px'}
-              />
-              {Number(price) < 0.0001 ? '< 0.0001' : price && price.length > 7 ? `> ${price.substring(0, 5)}` : price}
-            </>
-          )}
-        </Text>
+      <Flex justifyContent={'space-between'} fontSize={'14px'} fontWeight={700} mb={'6px'}>
+        <Text {...styles.NFTName}>{name}</Text>
+        {order && (
+          <HStack spacing={'4px'}>
+            <TokenIcon ticker={priceToken.ticker} boxSize={'20px'} />
+            {/*TODO: provide text "top bit" | "min bit" in case of auction*/}
+            <Text>{formatPrice(price)}</Text>
+          </HStack>
+        )}
       </Flex>
 
-      <Flex justifyContent={'space-between'} alignItems={'center'} mb={'14px'}>
-        <Flex>
-          {creator && (
-            <NFTItemRelation
-              type={NFTRelationType.CREATOR}
-              image={creator.profileImageUrl ?? ''}
-              value={creator.displayName ?? ''}
-              linkParam={creator.universePageUrl ?? ''}
-            />
+      <Flex justifyContent={'space-between'} alignItems={'top'} mb={'14px'}>
+        <Text {...styles.CollectionName}>{collection?.name || collectionAddress}</Text>
+        <Box>
+          {additionPriceValue && (
+            <HStack spacing={'4px'} fontSize={'11px'} fontWeight={600}>
+              <Text color={'#00000066'}>{additionPriceLabel}</Text>
+              <TokenIcon ticker={additionPriceToken} boxSize={'16px'} />
+              <Text color={'black'}>{formatSecondaryPrice(additionPriceValue)}</Text>
+            </HStack>
           )}
-          {collection && (
-            <NFTItemRelation
-              type={NFTRelationType.COLLECTION}
-              image={collection.coverUrl ?? ''}
-              value={(collection.name || collectionAddress) ?? ''}
-              linkParam={(collection.address || collectionAddress) ?? ''}
-            />
-          )}
-          {owner && (
-            <NFTItemRelation
-              type={NFTRelationType.OWNER}
-              image={owner.profileImageUrl ?? ''}
-              value={owner.displayName || ownerAddress || ''}
-              linkParam={owner.universePageUrl ?? ''}
-              externalOwner={!owner.displayName}
-            />
-          )}
-        </Flex>
-        {additionPriceValue && (
-          <Text color={'#00000066'} fontSize={'11px'} fontWeight={600}>
-            {additionPriceLabel}
-            <TokenIcon
-              ticker={additionPriceToken}
-              display={'inline'}
-              mx={'4px'}
-              position={'relative'}
-              top={'-2px'}
-              width={'20px'}
-            />
-            <Box as={'span'} color={'black'}>
-              {Number(additionPriceValue) < 0.0001
-                ? '< 0.0001'
-                : additionPriceValue.length > 7
-                ? Number(additionPriceValue).toFixed(2)
-                : additionPriceValue}
-            </Box>
-          </Text>
-        )}
+        </Box>
       </Flex>
     </>
   );

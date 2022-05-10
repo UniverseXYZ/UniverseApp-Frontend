@@ -79,11 +79,12 @@ export const NFTItemAsset = (props: INFTItemAssetProps) => {
         </Center>
       )}
 
-      {renderAssetLabel === null ? null : renderAssetLabel ? (
-        renderAssetLabel(NFT)
-      ) : (
-        <NFTItemAssetType NFT={NFT} />
-      )}
+      {renderAssetLabel === null
+        ? null
+        : renderAssetLabel
+          ? renderAssetLabel(NFT)
+          : (<NFTItemAssetType NFT={NFT} />)
+      }
       {!!orderEnd && (
         <NFTItemAuctionCountdown
           date={new Date(orderEnd * 1000)}
