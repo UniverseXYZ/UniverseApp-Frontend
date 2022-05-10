@@ -6,7 +6,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "sitemap": "next-sitemap"
+    "sitemap": "next-sitemap",
+    "synpress:run": "dotenv -e .env synpress run -- --configFile ./tests/e2e/customConfig.json -ne"
   },
   "dependencies": {
     "@apollo/client": "^3.4.11",
@@ -16,6 +17,7 @@
     "@emotion/react": "^11",
     "@emotion/styled": "^11",
     "@ethersproject/web": "^5.4.0",
+    "@synthetixio/synpress": "^1.2.0",
     "@walletconnect/web3-provider": "^1.6.5",
     "awesome-debounce-promise": "^2.1.0",
     "axios": "^0.21.1",
