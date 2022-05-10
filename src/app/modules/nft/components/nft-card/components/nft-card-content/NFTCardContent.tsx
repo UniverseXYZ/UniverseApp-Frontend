@@ -1,9 +1,10 @@
-import { Box, Flex, HStack, Text } from '@chakra-ui/react';
+import { Box, Flex, HStack, Link, Text } from '@chakra-ui/react';
 import React, { useMemo } from 'react';
 import { utils } from 'ethers';
+import NextLink from 'next/link';
 
 import { TokenTicker } from '@app/enums';
-import { TokenIcon } from '@app/components';
+import { TokenIcon, CollectionPreview } from '@app/components';
 import { getTokenByAddress, TOKENS_MAP } from '@app/constants';
 
 import { ICollection, IERC20AssetType, IOrder } from '../../../../types';
@@ -69,8 +70,16 @@ export const NFTCardContent = (props: INFTCardContentProps) => {
         )}
       </Flex>
 
-      <Flex justifyContent={'space-between'} alignItems={'top'} mb={'14px'}>
-        <Text {...styles.CollectionName}>{collection?.name || collection?.address}</Text>
+      <Flex justifyContent={'space-between'} alignItems={'top'} mb={'14px'} onClick={(e) => e.stopPropagation()}>
+        <CollectionPreview collection={collection || null}>
+          <Text {...styles.CollectionName} tabIndex={0}>
+            <NextLink href={`/collection/${collection?.address}`} passHref>
+              <Link {...styles.CollectionLink}>
+                {collection?.name || collection?.address}
+              </Link>
+            </NextLink>
+          </Text>
+        </CollectionPreview>
         <Box>
           {additionPriceValue && (
             <HStack spacing={'4px'} fontSize={'11px'} fontWeight={600}>

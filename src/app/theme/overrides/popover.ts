@@ -8,7 +8,7 @@ export const Popover = {
   variants: {
     dropdown: {
       popper: {
-        zIndex: 12,
+        zIndex: 30,
       },
       content: {
         border: 0,

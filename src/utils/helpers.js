@@ -1,4 +1,5 @@
 import { useThemeStore } from "src/stores/themeStore";
+import { string } from 'yup';
 
 export const handleClickOutside = (event, className, ref, cb) => {
   if (!event.target.classList.contains(className)) {
@@ -63,6 +64,9 @@ export const defaultColors = [
 
 const getRandomInt = (max) => Math.floor(Math.random() * max);
 
+/**
+ * @deprecated use getRandomCollectionBGColor
+ */
 export const getCollectionBackgroundColor = (collection) => {
   if (!collection?.address) {
     const r = getRandomInt(defaultColors.length);

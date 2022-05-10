@@ -82,4 +82,6 @@ export const collectionKeys = {
   datascraperAdditionalInfo: (collectionAddress: string) =>  ['collections', 'collection', 'datascraper', 'additional', {collectionAddress: collectionAddress.toLowerCase()}] as const,
   datascraperGeneralInfo: (collectionAddress: string) =>  ['collections', 'collection', 'datascraper', 'general', {collectionAddress: collectionAddress.toLowerCase()}] as const,
   userCollections: (userAddress: string) =>  ['collections', 'user', {userAddress: userAddress.toLowerCase()}] as const,
+  collectionOwner: (address: string) => ['collection', address, 'owner'],
+  collectionStatistic: (address: string) => ['collection', address, 'statistic'],
 }
