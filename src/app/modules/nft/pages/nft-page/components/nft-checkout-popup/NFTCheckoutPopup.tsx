@@ -5,7 +5,6 @@ import {
   Heading,
   Image,
   Input,
-  Link,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -18,13 +17,11 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { BigNumber, Signer, utils, Contract, constants } from 'ethers';
 import { useMutation, useQueryClient } from 'react-query';
 import axios, { AxiosResponse } from 'axios';
-import { Web3Provider } from '@ethersproject/providers';
 import { useRouter } from 'next/router';
 
-import WarningSVGIcon from '../../../../../../../assets/images/yellowIcon.svg';
-import ArrowSVGIcon from '../../../../../../../assets/images/arrow.svg';
-import WalletImage from '../../../../../../../assets/images/v2/wallet.png';
-import AudioNFTPreviewImage from '../../../../../../../assets/images/v2/audio-nft-preview.png';
+import ArrowSVGIcon from '@assets/images/arrow.svg';
+import WalletImage from '@assets/images/v2/wallet.png';
+import AudioNFTPreviewImage from '@assets/images/v2/audio-nft-preview.png';
 import Contracts from '../../../../../../../contracts/contracts.json';
 
 import { Checkbox, InputShadow, Loading, TokenIcon } from '../../../../../../components';
@@ -75,7 +72,7 @@ export const NFTCheckoutPopup = () => {
   const [nftInterval, setNftInterval] = useState<NodeJS.Timer>();
   const [orderInterval, setOrderInterval] = useState<NodeJS.Timer>();
 
-  const [verificationChecked, setSerificationChecked] = useState(false);
+  const [verificationChecked, setVerificationChecked] = useState(false);
 
   const prepareMutation = useMutation(({ hash, data }: { hash: string; data: any }) => {
     return axios.post(`${process.env.REACT_APP_MARKETPLACE_BACKEND}/v1/orders/${hash}/prepare`, data);
@@ -291,6 +288,7 @@ export const NFTCheckoutPopup = () => {
 
   useEffect(() => {
     setState(CheckoutState.CHECKOUT);
+    setVerificationChecked(false);
   }, [isOpen, NFTs]);
 
   if (!order) {
@@ -356,7 +354,7 @@ export const NFTCheckoutPopup = () => {
                 </Flex>
 
                 <Flex>
-                  <Checkbox isChecked={verificationChecked} onChange={() => setSerificationChecked(!verificationChecked)} mr={"15px"} alignSelf={'flex-start'} />
+                  <Checkbox isChecked={verificationChecked} onChange={() => setVerificationChecked(!verificationChecked)} mr={"15px"} alignSelf={'flex-start'} />
                  <Box>
                    <Text mb={'12px'} fontSize={'12px'}>
                     Always verify on Etherscan to confirm that the contract address is the same address as the project you are trying to buy. Ethereum transactions are irreversible.

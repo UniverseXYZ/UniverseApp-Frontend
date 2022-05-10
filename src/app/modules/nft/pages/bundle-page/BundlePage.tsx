@@ -36,13 +36,12 @@ import {
   // TabOffers,
 } from '../nft-page/components';
 import { TabBids, TabHistory, TabOffers } from '../nft-page/components/nft-info/components';
-import { BundleMenu, NftItem, NFTPageCreatorRelation, NFTPageRelation } from '../../components';
+import { BundleMenu, NFTCard, NFTPageCreatorRelation } from '../../components';
 import { LineTabList } from '../../../../components';
 import { BundlePageProvider, useBundlePage } from './BundlePage.provider';
 import { TabNFTs } from './components';
 import { IERC721BundleAssetType, INFT, IOrder } from '../../types';
 import { isNFTAssetAudio, isNFTAssetImage, isNFTAssetVideo } from '../../helpers';
-import { NFTRelationType } from '../../enums';
 import { SwiperArrowButton } from '../../../../components/swiper-arrow-button';
 import { NFTAcceptOfferPopup } from '../nft-page/components/nft-info/components/tab-offers/components';
 import { useThemeStore } from 'src/stores/themeStore';
@@ -210,7 +209,7 @@ export const BundlePageContent = () => {
               }}
               spacing={'20px'}
             >
-              {moreFromCollection.map((NFT) => (<NftItem key={NFT.id} NFT={NFT} collection={`${NFT._collectionAddress}`} />))}
+              {moreFromCollection.map((NFT) => (<NFTCard key={NFT.id} NFT={NFT} />))}
             </SimpleGrid>
           </Container>
           <Button {...styles.MoreNFTsButtonStyle} onClick={handleClickViewCollection}>View collection</Button>

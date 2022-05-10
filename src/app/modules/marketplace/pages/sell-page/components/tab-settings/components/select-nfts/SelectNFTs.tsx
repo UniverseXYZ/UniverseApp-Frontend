@@ -29,7 +29,7 @@ import closeWhiteIcon from '../../../../../../../../../assets/images/marketplace
 
 import { SortOrderOptions } from '../../../../../../constants';
 import { InputShadow, Select } from '../../../../../../../../components';
-import { NftItem } from '../../../../../../../nft/components';
+import { NFTCard } from '../../../../../../../nft/components';
 import { INFT, INFTBackend } from '../../../../../../../nft/types';
 import { SelectEditionsDropdown } from '../../../select-editions-dropdown';
 import { useMarketplaceSellData } from '../../../../hooks';
@@ -43,7 +43,7 @@ import {
   mapBackendNft,
   mapBackendUser,
 } from '../../../../../../../nft';
-import { NFTItemFooter, NFTItemFooterEditionsLabel } from '../../../../../../../nft/components/nft-item/components';
+import { NFTCardFooter } from '../../../../../../../nft/components/nft-card/components';
 import { useAuthStore } from '../../../../../../../../../stores/authStore';
 import { useMyNftsStore } from 'src/stores/myNftsStore';
 
@@ -309,14 +309,13 @@ export const SelectNFTs = ({}: ISelectNFTsProps) => {
             }, []);
 
             return (
-              <NftItem
+              <NFTCard
                 key={nft.id}
                 NFT={nft}
-                collection={`${nft.collection?.address}`}
                 isSelected={!!selectedEditions.length}
                 selectedLabel={isMultipleEditions ? `${selectedEditions.length} / ${tokensNumber}` : undefined}
-                renderFooter={() => (
-                  <NFTItemFooter>
+                renderFooter={({ NFT }) => (
+                  <NFTCardFooter NFT={NFT}>
                     {isMultipleEditions
                       ? (
                         <SelectEditionsDropdown
@@ -330,7 +329,7 @@ export const SelectNFTs = ({}: ISelectNFTsProps) => {
                           {nft.tokenIds ? `#${nft.tokenIds[0]}` : ''}
                         </Box>
                       )}
-                  </NFTItemFooter>
+                  </NFTCardFooter>
                 )}
                 onClick={isMultipleEditions
                   ? () => {}

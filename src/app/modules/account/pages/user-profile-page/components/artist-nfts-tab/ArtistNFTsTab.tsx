@@ -2,7 +2,7 @@ import { Box, Button, SimpleGrid } from '@chakra-ui/react';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useIntersection, useMedia } from 'react-use';
 
-import { NftItem, NFTItemContentWithPrice } from '@app/modules/nft/components';
+import { NFTCard } from '@app/modules/nft/components';
 import { useFiltersContext } from '@app/modules/account/pages/my-nfts-page/components/search-filters/search-filters.context';
 
 import { SearchFilters } from '../../../my-nfts-page/components/search-filters';
@@ -126,38 +126,7 @@ export const ArtistNFTsTab = ({ artistAddress, onTotalLoad }: IArtistNFTsTabProp
                             return null;
                           }
                           return (
-                            <NftItem
-                              order={order}
-                              key={order.id}
-                              NFT={NFTs[0]}
-                              collection={`${NFTs[0]._collectionAddress}`}
-                              orderEnd={order.end}
-                              renderContent={({
-                                NFT,
-                                collection,
-                                creator,
-                                owner,
-                                bestOfferPrice,
-                                bestOfferPriceToken,
-                                lastOfferPrice,
-                                lastOfferPriceToken,
-                                order: orderData,
-                              }) => (
-                                <NFTItemContentWithPrice
-                                  collectionAddress={NFT._collectionAddress}
-                                  name={NFT.name}
-                                  collection={collection}
-                                  creator={creator?.mappedArtist || undefined}
-                                  owner={owner?.mappedArtist || undefined}
-                                  ownerAddress={NFT._ownerAddress}
-                                  order={orderData || undefined}
-                                  bestOfferPrice={bestOfferPrice || 0}
-                                  bestOfferPriceToken={bestOfferPriceToken || undefined}
-                                  lastOfferPrice={lastOfferPrice || 0}
-                                  lastOfferPriceToken={lastOfferPriceToken || undefined}
-                                />
-                              )}
-                            />
+                            <NFTCard key={order.id} NFT={NFTs[0]} order={order} />
                           );
                         });
                       }
@@ -193,36 +162,10 @@ export const ArtistNFTsTab = ({ artistAddress, onTotalLoad }: IArtistNFTsTabProp
                   !waitingUserNFTs && (
                     userNFTs?.pages ?? []).map((page: any) => {
                       return page.data.map((NFT: any) => (
-                        <NftItem
+                        <NFTCard
                           key={NFT.id}
                           NFT={NFT}
                           showBuyNowButton={false}
-                          collection={`${NFT._collectionAddress}`}
-                          renderContent={({
-                            NFT,
-                            collection,
-                            creator,
-                            owner,
-                            bestOfferPrice,
-                            bestOfferPriceToken,
-                            lastOfferPrice,
-                            lastOfferPriceToken,
-                            order,
-                          }) => (
-                            <NFTItemContentWithPrice
-                              collectionAddress={NFT._collectionAddress}
-                              name={NFT.name}
-                              collection={collection}
-                              creator={creator?.mappedArtist || undefined}
-                              owner={owner?.mappedArtist || undefined}
-                              ownerAddress={NFT._ownerAddress}
-                              order={order || undefined}
-                              bestOfferPrice={bestOfferPrice || 0}
-                              bestOfferPriceToken={bestOfferPriceToken || undefined}
-                              lastOfferPrice={lastOfferPrice || 0}
-                              lastOfferPriceToken={lastOfferPriceToken || undefined}
-                            />
-                          )}
                         />
                       ));
                     }

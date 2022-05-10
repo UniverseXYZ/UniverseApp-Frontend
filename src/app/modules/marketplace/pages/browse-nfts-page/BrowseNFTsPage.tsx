@@ -1,32 +1,40 @@
-import OpenGraphImage from "@assets/images/open-graph/marketplace.png";
 import {
   Box,
   Button,
-  Container,
+  Center,
   Flex,
   Heading,
+  HStack, Icon,
   Image,
   SimpleGrid,
-  Text,
-} from "@chakra-ui/react";
+  Text, useBreakpointValue,
+} from '@chakra-ui/react';
 import { useRouter } from "next/router";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useInfiniteQuery, useQueryClient } from "react-query";
-import { useIntersection, useSearchParam } from "react-use";
+import { useIntersection, useMeasure, useSearchParam } from "react-use";
+
+// Assets
+import OpenGraphImage from "@assets/images/open-graph/marketplace.png";
+import ArrowDownIcon from "@assets/images/arrow-down.svg";
+import NFTTypeIcon from "@assets/images/v2/marketplace/filter-nft-type.svg";
+import PriceRangeIcon from "@assets/images/v2/marketplace/filter-price-range.svg";
+import SaleTypeIcon from "@assets/images/v2/marketplace/filter-sale-type.svg";
+import { ReactComponent as GridSMIcon } from "@assets/images/grid-sm.svg";
+import { ReactComponent as GridLGIcon } from "@assets/images/grid-lg.svg";
+
+// Stores
 import { useSignInPopupStore } from "src/stores/signInPopup";
 import { useThemeStore } from "src/stores/themeStore";
-import ArrowDownIcon from "../../../../../assets/images/arrow-down.svg";
-import NFTTypeIcon from "../../../../../assets/images/v2/marketplace/filter-nft-type.svg";
-import PriceRangeIcon from "../../../../../assets/images/v2/marketplace/filter-price-range.svg";
-import SaleTypeIcon from "../../../../../assets/images/v2/marketplace/filter-sale-type.svg";
-import Badge from "../../../../../components/badge/Badge";
+
+// App
 import {
   BackToTopButton,
   FiltersPopup,
   Loading,
   OpenGraph,
   Select,
-} from "../../../../components";
+} from "@app/components";
 import {
   ClearAllButton,
   NFTTypeFilter,
@@ -38,17 +46,15 @@ import {
   useNFTTypeFilter,
   usePriceRangeFilter,
   useSaleTypeFilter,
-} from "../../../../components/filters";
-import { getTokenAddressByTicker } from "../../../../constants";
-import { TokenTicker } from "../../../../enums";
-import { useStaticHeader } from "../../../../hooks";
-import { nftKeys, orderKeys } from "../../../../utils/query-keys";
+} from "@app/components/filters";
+import { getTokenAddressByTicker } from "@app/constants";
+import { TokenTicker } from "@app/enums";
+import { useStaticHeader, useNFTFluidGrid, NFTCardSize } from "@app/hooks";
+import { nftKeys, orderKeys } from "@app/utils/query-keys";
+import { OrderAssetClass } from '@app/modules/nft/enums';
+
 import { GetActiveSellOrdersApi, GetNFT2Api } from "../../../nft/api";
-import {
-  BundleItem,
-  NftItem,
-  NFTItemContentWithPrice,
-} from "../../../nft/components";
+import { NFTCard } from "../../../nft/components";
 import {
   IERC721AssetType,
   IERC721BundleAssetType,
@@ -57,11 +63,9 @@ import {
 } from "../../../nft/types";
 import { SearchBar } from "../../components";
 import { SortOrderOptions, SortOrderOptionsEnum } from "../../constants";
+import { ListingBanner, ToggleButton, ToggleButtonGroup } from "./components";
+import { OPEN_GRAPH_DESCRIPTION, OPEN_GRAPH_TITLE, ORDERS_PER_PAGE } from "./constants";
 import * as styles from "./BrowseNFTsPage.styles";
-import { ListingBanner } from "./components";
-import { ORDERS_PER_PAGE } from "./constants";
-
-export type ICollectionsFilterValue = Array<any>;
 
 export const BrowseNFTsPage = () => {
   const setDarkMode = useThemeStore((s) => s.setDarkMode);
@@ -69,9 +73,22 @@ export const BrowseNFTsPage = () => {
 
   const router = useRouter();
 
+  const filtersRef = useRef(null);
+
+  const intersection = useIntersection(filtersRef, {
+    threshold: 1,
+    root: null,
+    rootMargin: "0px",
+  });
+
+  const [ref, { width: containerWidth }] = useMeasure<HTMLDivElement>();
+
+  const NFTGrid = useNFTFluidGrid(containerWidth, 16);
+
   const collectionSearchParam = useSearchParam("collection");
 
   const [sortBy, setSortBy] = useState(SortOrderOptionsEnum.RecentlyListed);
+
   const setShowNotAuthenticatedPopup = useSignInPopupStore(
     (s) => s.setShowNotAuthenticatedPopup
   );
@@ -195,8 +212,7 @@ export const BrowseNFTsPage = () => {
             );
             break;
           case "ERC721_BUNDLE":
-            const assetTypeBundle = order.make
-              .assetType as IERC721BundleAssetType;
+            const assetTypeBundle = order.make.assetType as IERC721BundleAssetType;
             for (let i = 0; i < assetTypeBundle.contracts.length; i++) {
               for (const tokenId of assetTypeBundle.tokenIds[i]) {
                 queryClient.setQueryData(
@@ -260,8 +276,7 @@ export const BrowseNFTsPage = () => {
               }
               break;
             case "ERC721_BUNDLE":
-              const assetTypeBundle = order.make
-                .assetType as IERC721BundleAssetType;
+              const assetTypeBundle = order.make.assetType as IERC721BundleAssetType;
               const NFTs = [];
 
               for (let i = 0; i < assetTypeBundle.contracts.length; i++) {
@@ -295,14 +310,6 @@ export const BrowseNFTsPage = () => {
       },
     }
   );
-
-  const filtersRef = useRef(null);
-
-  const intersection = useIntersection(filtersRef, {
-    threshold: 1,
-    root: null,
-    rootMargin: "0px",
-  });
 
   useStaticHeader();
 
@@ -342,44 +349,19 @@ export const BrowseNFTsPage = () => {
   return (
     <Box layerStyle={"StoneBG"}>
       <OpenGraph
-        title={"Browse NFTs on Universe Marketplace"}
-        description={
-          "Universe NFT marketplace is completely decentralized and rigged with multiple open source tools and features."
-        }
+        title={OPEN_GRAPH_TITLE}
+        description={OPEN_GRAPH_DESCRIPTION}
         image={OpenGraphImage}
       />
-      <Flex {...styles.IntroSectionStyle}>
-        <Box>
-          <Text
-            fontSize={"12px"}
-            fontWeight={500}
-            textTransform={"uppercase"}
-            mb={"23px"}
-            letterSpacing={"5px"}
-          >
-            Welcome to the
-          </Text>
-          <Heading as={"h1"} fontSize={"36px"}>
-            Marketplace{" "}
-            <Badge
-              style={{
-                fontSize: "12px",
-                padding: "4px 9px",
-                top: "-20px",
-                marginLeft: "-2px",
-              }}
-              text="beta"
-            />
-          </Heading>
-        </Box>
-      </Flex>
 
-      <Flex {...styles.SearchBarWrapperStyle}>
-        <Box
-          mb={"60px"}
-          w={{ sm: "100%", md: "600px" }}
-          mx={{ sm: "20px", md: "auto" }}
-        >
+      <Flex {...styles.IntroSection}>
+        <Text {...styles.WelcomeText}>Welcome to the</Text>
+        <Heading as={"h1"} fontSize={"36px"} mb={'30px'}>
+          Marketplace
+          <Box as={'span'} {...styles.BetaBadge}>Beta</Box>
+        </Heading>
+
+        <Box {...styles.SearchBarWrapper}>
           <SearchBar
             value={selectedAddress}
             onChange={(address) => setSelectedAddress(address)}
@@ -393,178 +375,142 @@ export const BrowseNFTsPage = () => {
         {...styles.FiltersStickyWrapper}
         bg={intersection?.intersectionRect.top === 0 ? "white" : "transparent"}
       >
-        <Container {...styles.FiltersContainer}>
-          <FiltersPopup
-            mobileFilters={[
-              {
-                name: "Sale type",
-                form: saleTypeFilterForm,
-                icon: SaleTypeIcon,
-                renderFilter: (props) => <SaleTypeFilter {...props} />,
-              },
-              {
-                name: "NFT Type",
-                form: nftTypeFilterForm,
-                icon: NFTTypeIcon,
-                renderFilter: (props) => <NFTTypeFilter {...props} />,
-              },
-              {
-                name: "Price range",
-                form: priceRangeFilterForm,
-                icon: PriceRangeIcon,
-                renderFilter: (props) => <PriceRangeFilter {...props} />,
-              },
-            ]}
-          >
-            {({ openMobileFilters }) => (
-              <Box {...styles.FiltersWrapper}>
-                <SaleTypeFilterDropdown
-                  value={saleTypeFilterForm.values}
-                  onSave={(value) => saleTypeFilterForm.setValues(value)}
-                  onClear={() => saleTypeFilterForm.resetForm()}
-                />
-                <NFTTypeFilterDropdown
-                  value={nftTypeFilterForm.values}
-                  onSave={(value) => nftTypeFilterForm.setValues(value)}
-                  onClear={() => nftTypeFilterForm.resetForm()}
-                />
-                <PriceRangeFilterDropdown
-                  value={priceRangeFilterForm.values}
-                  isDirty={priceRangeFilterForm.dirty}
-                  onSave={(value) => priceRangeFilterForm.setValues(value)}
-                  onClear={() => priceRangeFilterForm.resetForm()}
-                />
-                <Button
-                  variant={"dropdown"}
-                  rightIcon={
-                    <Image
-                      src={ArrowDownIcon}
-                      sx={{
-                        width: "10px",
-                        transition: "200ms",
-                        transform: "rotate(0deg)",
-                      }}
-                    />
-                  }
-                  {...styles.MoreFiltersButton}
-                  onClick={openMobileFilters}
-                >
-                  More
-                </Button>
-                {isFiltersDirty && <ClearAllButton onClick={handleClear} />}
-              </Box>
-            )}
-          </FiltersPopup>
+        <FiltersPopup
+          mobileFilters={[
+            {
+              name: "Sale type",
+              form: saleTypeFilterForm,
+              icon: SaleTypeIcon,
+              renderFilter: (props) => <SaleTypeFilter {...props} />,
+            },
+            {
+              name: "NFT Type",
+              form: nftTypeFilterForm,
+              icon: NFTTypeIcon,
+              renderFilter: (props) => <NFTTypeFilter {...props} />,
+            },
+            {
+              name: "Price range",
+              form: priceRangeFilterForm,
+              icon: PriceRangeIcon,
+              renderFilter: (props) => <PriceRangeFilter {...props} />,
+            },
+          ]}
+        >
+          {({ openMobileFilters }) => (
+            <HStack spacing={'14px'} {...styles.FiltersWrapper}>
+              <SaleTypeFilterDropdown
+                value={saleTypeFilterForm.values}
+                onSave={(value) => saleTypeFilterForm.setValues(value)}
+                onClear={() => saleTypeFilterForm.resetForm()}
+              />
+              <NFTTypeFilterDropdown
+                value={nftTypeFilterForm.values}
+                onSave={(value) => nftTypeFilterForm.setValues(value)}
+                onClear={() => nftTypeFilterForm.resetForm()}
+              />
+              <PriceRangeFilterDropdown
+                value={priceRangeFilterForm.values}
+                isDirty={priceRangeFilterForm.dirty}
+                onSave={(value) => priceRangeFilterForm.setValues(value)}
+                onClear={() => priceRangeFilterForm.resetForm()}
+              />
+              <Button
+                variant={"dropdown"}
+                rightIcon={<Image src={ArrowDownIcon} {...styles.MoreFiltersButtonArrow} />}
+                {...styles.MoreFiltersButton}
+                onClick={openMobileFilters}
+              >
+                More
+              </Button>
+              {isFiltersDirty && <ClearAllButton onClick={handleClear} />}
+            </HStack>
+          )}
+        </FiltersPopup>
+        <HStack spacing={'14px'} w={{ base: '100%', md: 'fit-content' }}>
           <Select
             label={"Sort by"}
             items={SortOrderOptions}
             value={sortBy}
             buttonProps={{
               justifyContent: "space-between",
-              w: { base: "100%", md: "fit-content" },
+              w: {
+                base: "100%",
+                md: "fit-content"
+              },
             }}
             onSelect={(val) => setSortBy(val)}
           />
-        </Container>
+          <ToggleButtonGroup
+            name={"nftSize"}
+            value={NFTGrid.size}
+            onChange={(val) => {
+              NFTGrid.setSize(val as NFTCardSize)
+            }}
+          >
+            <ToggleButton value={NFTCardSize.LG}>
+              <Icon viewBox={"0 0 14 14"}>
+                <GridLGIcon />
+              </Icon>
+            </ToggleButton>
+            <ToggleButton value={NFTCardSize.SM}>
+              <Icon viewBox={"0 0 14 14"}>
+                <GridSMIcon />
+              </Icon>
+            </ToggleButton>
+          </ToggleButtonGroup>
+        </HStack>
       </Box>
 
-      <Box px={"20px"} pt={{ base: "20px", md: 0 }}>
-        <Container maxW={"1360px"} pt={"0 !important"} position={"relative"}>
-          {!isFetching && !ordersResult?.pages[0].data.length ? (
-            <Container centerContent>
-              <div>No results found</div>
-            </Container>
-          ) : (
-            <SimpleGrid
-              columns={{ base: 1, md: 2, lg: 4 }}
-              spacingX={"20px"}
-              spacingY={"30px"}
-              mb={"40px"}
-            >
-              {(ordersResult?.pages ?? []).map((page) => {
-                return page.data.map(({ order, NFTs }) => {
-                  if (!NFTs.length) {
-                    return null;
-                  }
-                  return order.make.assetType.assetClass === "ERC721" ? (
-                    <NftItem
-                      order={order}
-                      key={order.id}
-                      NFT={NFTs[0]}
-                      collection={`${NFTs[0]._collectionAddress}`}
-                      orderEnd={order.end}
-                      onAuctionTimerEnd={refetch}
-                      renderContent={({
-                        NFT,
-                        collection,
-                        creator,
-                        owner,
-                        bestOfferPrice,
-                        bestOfferPriceToken,
-                        lastOfferPrice,
-                        lastOfferPriceToken,
-                        order: orderData,
-                      }) => (
-                        <NFTItemContentWithPrice
-                          name={NFT.name}
-                          collection={collection}
-                          creator={creator?.mappedArtist || undefined}
-                          owner={owner?.mappedArtist || undefined}
-                          ownerAddress={NFT._ownerAddress}
-                          order={orderData || undefined}
-                          bestOfferPrice={bestOfferPrice || 0}
-                          bestOfferPriceToken={bestOfferPriceToken || undefined}
-                          lastOfferPrice={lastOfferPrice || 0}
-                          lastOfferPriceToken={lastOfferPriceToken || undefined}
-                        />
-                      )}
-                    />
-                  ) : (
-                    <BundleItem
-                      key={order.id}
-                      NFTs={NFTs}
-                      order={order}
-                      renderContent={() => (
-                        <NFTItemContentWithPrice
-                          name={
-                            (order.make.assetType as IERC721BundleAssetType)
-                              .bundleName
-                          }
-                          creator={NFTs[0].creator}
-                          order={order}
-                          // price={+utils.formatUnits(order.take.value, `${TOKENS_MAP[order.take.assetType.assetClass as TokenTicker].decimals}`)}
-                          // priceToken={order.take.assetType.assetClass as TokenTicker}
-                        />
-                      )}
-                    />
-                  );
-                });
-              })}
-            </SimpleGrid>
-          )}
-          {isFetching && (
-            <Container centerContent py={"20px !important"}>
-              <Loading />
-            </Container>
-          )}
-          {hasNextPage && !isFetching && (
-            <Button
-              variant={"outline"}
-              isFullWidth
-              mb={"20px"}
-              onClick={() => fetchNextPage()}
-            >
-              {isFetching ? "Loading..." : "Load More"}
-            </Button>
-          )}
+      <Box {...styles.ContentWrapper}>
+        {!isFetching && !ordersResult?.pages[0].data.length ? (
+          <Center py={'60px'}>No results found</Center>
+        ) : (
+          <SimpleGrid
+            ref={ref}
+            columns={NFTGrid.columns}
+            spacing={`${NFTGrid.spacing}px`}
+            mb={"40px"}
+          >
+            {(ordersResult?.pages ?? []).map((page) => {
+              return page.data.map(({ order, NFTs }) => {
+                if (!NFTs.length || order.make.assetType.assetClass !== OrderAssetClass.ERC721) {
+                  return null;
+                }
+                return (
+                  <NFTCard
+                    key={order.id}
+                    order={order}
+                    NFT={NFTs[0]}
+                    onTimerEnd={refetch}
+                  />
+                );
+              });
+            })}
+          </SimpleGrid>
+        )}
+        {isFetching && (
+          <Center py={"20px"}>
+            <Loading />
+          </Center>
+        )}
+        {hasNextPage && !isFetching && (
+          <Button
+            isFullWidth
+            variant={"outline"}
+            mb={"20px"}
+            onClick={() => fetchNextPage()}
+          >
+            {isFetching ? "Loading..." : "Load More"}
+          </Button>
+        )}
 
-          <ListingBanner
-            onLogin={() => {
-              setShowNotAuthenticatedPopup(true);
-            }}
-          />
-          <BackToTopButton />
-        </Container>
+        <ListingBanner
+          onLogin={() => {
+            setShowNotAuthenticatedPopup(true);
+          }}
+        />
+        <BackToTopButton />
       </Box>
     </Box>
   );
