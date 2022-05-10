@@ -10,6 +10,19 @@ import React, { useCallback, useEffect, useState } from 'react';
 
 import arrowDownIcon from '../../../assets/images/arrow-down.svg';
 
+const getButtonPadding = (size: string = 'md') => {
+  const paddings: Record<string, [string, string]> = {
+    lg: ['16px', '16px'],
+    md: ['11px', '12px'],
+  }
+
+  if (!['lg', 'md'].includes(size)) {
+    size = 'md';
+  }
+
+  return paddings[size];
+};
+
 export interface IDropdownProps {
   children?: React.ReactNode;
   label?: string;
@@ -80,37 +93,30 @@ export const Dropdown = (
               }} />
             }
             sx={{
-              '--button-lg-padding-x': '16px',
-              '--button-lg-padding-y': '16px',
-              '--button-md-padding-x': '12px',
-              '--button-md-padding-y': '11px',
-              fontSize: '14px',
-              minWidth: 'fit-content',
-              padding: `var(--button-${buttonProps?.size || 'md'}-padding-y) var(--button-${buttonProps?.size || 'md'}-padding-x)`,
-              position: 'relative',
-              zIndex: 1,
               '.chakra-button__icon:nth-of-type(1)': {
                 marginRight: '10px',
               },
             }}
+            fontSize={'14px'}
+            minWidth={'fit-content'}
+            padding={getButtonPadding(buttonProps?.size).join(' ')}
+            position={'relative'}
+            zIndex={1}
             {...buttonProps}
           >
             <Box as={'span'} flex={1} textAlign={'left'}>
               <Box
                 as={'span'}
                 sx={{
-                  '--padding': '4px',
-                  '--opened-label-font-size': '11px',
                   bg: value ? 'white' : 'transparent',
                   borderRadius: '4px',
-                  fontSize: value ? '11px' : 'inherit',
-                  padding: value ? 'var(--padding)' : '',
-                  position: value ? 'absolute' : 'relative',
                   display: 'inline-block',
-                  transition: '200ms',
-                  transform: value
-                    ? `translate(${buttonProps?.leftIcon ? '-24px' : '0px'}, calc((var(--button-${buttonProps?.size || 'md'}-padding-y) + var(--padding) + (var(--opened-label-font-size) / 2)) * -1))`
-                    : '',
+                  fontSize: value ? '11px' : 'inherit',
+                  left: value ? getButtonPadding(buttonProps?.size)[1] : 0,
+                  padding: value ? '4px' : '',
+                  position: value ? 'absolute' : 'relative',
+                  top: 0,
+                  transform: value ? 'translateY(-50%)' : '',
                   visibility: !!label ? 'visible' : 'hidden',
                   zIndex: 20,
                 }}

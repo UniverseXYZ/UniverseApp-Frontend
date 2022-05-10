@@ -26,32 +26,28 @@ interface ISearchInputProps {
 
 export const SearchInput = (props: ISearchInputProps) => (
   <InputGroup {...props.inputGroupProps}>
-      <InputLeftElement pointerEvents="none" style={{
-        position: 'initial'
-      }}>
-        <Image src={searchIcon} {...props.iconProps} />
-      </InputLeftElement>
-`      <DebounceInput
-          debounceTimeout={timeout}
-          className="search-bar-input"
-          style={{
-            width: '90%',
-            borderRadius: '12px',
-          }}
-          placeholder={props.inputProps?.placeholder ?? 'Search'}
-          onChange={(value) => props.onChange(value)}
-          value={props.value}
-        />`
-      <InputRightElement
-        style={{
-          position: 'initial',
-          cursor: 'pointer'
-        }}
-        onClick={() => {
-          props.onClear();
-        }}
-      >
-        <Image src={closeIcon} {...props.iconProps} opacity={'0.3'}/>
-      </InputRightElement>
+    <InputLeftElement pointerEvents="none" pos={'initial'}>
+      <Image src={searchIcon} {...props.iconProps} />
+    </InputLeftElement>
+`   <DebounceInput
+      debounceTimeout={timeout}
+      className="search-bar-input"
+      style={{
+        flex: 1,
+        borderRadius: '12px',
+      }}
+      value={props.value}
+      placeholder={props.inputProps?.placeholder ?? 'Search'}
+      onChange={(value: any) => props.onChange(value)}
+    />`
+    <InputRightElement
+      cursor={"pointer"}
+      pos={"initial"}
+      onClick={() => {
+        props.onClear();
+      }}
+    >
+      <Image src={closeIcon} {...props.iconProps} opacity={'0.3'}/>
+    </InputRightElement>
   </InputGroup>
 );
