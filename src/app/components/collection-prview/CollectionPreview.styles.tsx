@@ -46,6 +46,7 @@ export const GridItemLabel: TextProps = {
 
 export const GridItemValue: TextProps = {
   color: '#4D66EB',
+  cursor: 'pointer',
   fontSize: '14px',
   fontWeight: 700,
 };

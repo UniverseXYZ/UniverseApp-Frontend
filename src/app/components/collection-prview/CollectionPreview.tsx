@@ -13,6 +13,7 @@ import {
 } from '@chakra-ui/react';
 import React, { useCallback } from 'react';
 import { useQuery } from 'react-query';
+import { useCopyToClipboard } from 'react-use';
 import { Contract, providers, utils } from 'ethers';
 
 import EthIcon from '@assets/images/eth-icon-new.svg'
@@ -46,6 +47,8 @@ export const CollectionPreview = (props: ICollectionPreviewProps) => {
     collection: initialCollection,
     children,
   } = props;
+
+  const [state, copyToClipboard] = useCopyToClipboard();
 
   const { data: collection, isLoading: isLoadingCollection } = useQuery(
     !initialCollection ? '' :
@@ -133,12 +136,14 @@ export const CollectionPreview = (props: ICollectionPreviewProps) => {
           <SimpleGrid columns={collectionOwner ? 2 : 1} spacing={'8px'} w={'100%'}>
             <Box {...styles.GridItem}>
               <Text {...styles.GridItemLabel}>Contract address</Text>
-              <Text {...styles.GridItemValue}>{formatAddress(collection?.address ?? null)}</Text>
+              <Text {...styles.GridItemValue} onClick={() => copyToClipboard(collection?.address ?? '')}>
+                {formatAddress(collection?.address ?? null)}
+              </Text>
             </Box>
             {collectionOwner && (
               <Box {...styles.GridItem}>
                 <Text {...styles.GridItemLabel}>Owned by</Text>
-                <Text {...styles.GridItemValue}>
+                <Text {...styles.GridItemValue} onClick={() => copyToClipboard(collectionOwner)}>
                   {utils.isAddress(collectionOwner) ? formatAddress(collectionOwner) : collectionOwner}
                 </Text>
               </Box>
