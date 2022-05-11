@@ -1,4 +1,5 @@
 import {
+  Box,
   Image,
   Input,
   InputGroup,
@@ -7,9 +8,12 @@ import {
   VStack,
 } from '@chakra-ui/react';
 import React from 'react';
+import ReactPaginate from 'react-paginate';
 
-import { Select } from '@app/components';
 import SearchIcon from '@assets/images/search-gray.svg';
+import ArrowIcon from '@assets/images/arrow-3.svg';
+
+import { Pagination, Select } from '@app/components';
 import { SORT_BY_ACTIVE_AUCTIONS } from '@app/modules/auctions/constants';
 import {
   AuctionManagedCard,
@@ -50,6 +54,12 @@ export const TabActiveAuctions = (props: ITabActiveAuctionsProps) => {
         </AuctionManagedCard>
       ))}
       <AuctionManagedCardSkeleton />
+      <Pagination
+        pageCount={10}
+        pageRangeDisplayed={5}
+        onPageChange={() => void 0}
+        w={'100%'}
+      />
     </VStack>
   )
 };
