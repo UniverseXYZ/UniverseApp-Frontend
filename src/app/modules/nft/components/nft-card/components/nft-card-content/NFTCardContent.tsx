@@ -7,12 +7,12 @@ import { TokenTicker } from '@app/enums';
 import { TokenIcon, CollectionPreview } from '@app/components';
 import { getTokenByAddress, TOKENS_MAP } from '@app/constants';
 
-import { ICollection, IERC20AssetType, IOrder } from '../../../../types';
+import { ICollection, IERC20AssetType, INFT, IOrder } from '../../../../types';
 import { formatPrice, formatSecondaryPrice } from './helpers';
 import * as styles from './NFTCardContent.styles';
 
 export interface INFTCardContentProps {
-  name: string;
+  NFT: INFT;
   collection?: ICollection;
   order?: IOrder;
   bestOfferPrice?: number | string;
@@ -23,7 +23,7 @@ export interface INFTCardContentProps {
 
 export const NFTCardContent = (props: INFTCardContentProps) => {
   const {
-    name,
+    NFT,
     collection,
     order,
     bestOfferPrice,
@@ -60,7 +60,7 @@ export const NFTCardContent = (props: INFTCardContentProps) => {
   return (
     <>
       <Flex justifyContent={'space-between'} fontSize={'14px'} fontWeight={700} mb={'6px'}>
-        <Text {...styles.NFTName}>{name}</Text>
+        <Text {...styles.NFTName}>{NFT.name}</Text>
         {order && (
           <HStack spacing={'4px'}>
             <TokenIcon ticker={priceToken.ticker} boxSize={'20px'} />
@@ -71,11 +71,11 @@ export const NFTCardContent = (props: INFTCardContentProps) => {
       </Flex>
 
       <Flex justifyContent={'space-between'} alignItems={'top'} mb={'14px'} onClick={(e) => e.stopPropagation()}>
-        <CollectionPreview collection={collection || null}>
+        <CollectionPreview collection={collection?.address ? collection : NFT._collectionAddress || null}>
           <Text {...styles.CollectionName} tabIndex={0}>
             <NextLink href={`/collection/${collection?.address}`} passHref>
               <Link {...styles.CollectionLink}>
-                {collection?.name || collection?.address}
+                {collection?.name || collection?.address || NFT._collectionAddress}
               </Link>
             </NextLink>
           </Text>

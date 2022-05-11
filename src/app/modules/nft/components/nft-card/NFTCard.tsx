@@ -228,7 +228,7 @@ export const NFTCard = (props: INFTCardProps) => {
               {!NFT || renderContent === null ? null :
                 renderContent ? renderContent(renderFuncProps) : (
                   <NFTCardContent
-                    name={NFT.name}
+                    NFT={NFT}
                     collection={collection}
                     order={order || undefined}
                     bestOfferPrice={bestOfferPrice || 0}

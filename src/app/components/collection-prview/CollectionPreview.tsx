@@ -49,16 +49,15 @@ interface ICollectionPreviewProps {
 export const CollectionPreview = (props: ICollectionPreviewProps) => {
   const { collection: initialCollection, children } = props;
 
-  const [state, copyToClipboard] = useCopyToClipboard();
+  const [_, copyToClipboard] = useCopyToClipboard();
+
+  const collectionAddress: string | null = typeof initialCollection === "string"
+    ? initialCollection
+    : initialCollection?.address || null;
 
   const { data: collection, isLoading: isLoadingCollection } = useQuery(
-    !initialCollection ||
-      (typeof initialCollection === "object" && !initialCollection.address)
-      ? ""
-      : typeof initialCollection === "string"
-      ? collectionKeys.centralizedInfo(initialCollection)
-      : collectionKeys.centralizedInfo(initialCollection?.address),
-    () => GetCollectionApi(initialCollection as string),
+    collectionKeys.centralizedInfo(collectionAddress || ""),
+    () => GetCollectionApi(collectionAddress as string),
     {
       retry: false,
       enabled:
@@ -71,7 +70,7 @@ export const CollectionPreview = (props: ICollectionPreviewProps) => {
   );
 
   const { data: collectionOwner } = useQuery(
-    collectionKeys.collectionOwner(collection?.address ?? ""),
+    collectionKeys.collectionOwner(collectionAddress || ""),
     async () => {
       try {
         const network = providers.getNetwork(
@@ -88,7 +87,7 @@ export const CollectionPreview = (props: ICollectionPreviewProps) => {
         // @ts-ignore
         const { abi } = Contracts[chainId].contracts.UniverseERC721Core;
 
-        const contract = new Contract(`${collection?.address}`, abi, provider);
+        const contract = new Contract(utils.getAddress(`${collectionAddress}`.toLowerCase()), abi, provider);
 
         const ownerAddress = await contract.owner();
 
@@ -106,17 +105,17 @@ export const CollectionPreview = (props: ICollectionPreviewProps) => {
     },
     {
       retry: false,
-      enabled: !!collection,
+      enabled: !!collectionAddress,
     }
   );
 
   const { data: collectionStatistic } = useQuery(
-    collectionKeys.collectionStatistic(collection?.address ?? ""),
+    collectionKeys.collectionStatistic(collectionAddress || ""),
     async () => {
       const [NFTsResponse, ownersResponse, orderResponse] =
         await Promise.allSettled([
           GetCollectionNFTsApi(
-            utils.getAddress(`${collection?.address.toLowerCase()}`),
+            utils.getAddress(`${collection?.address}`.toLowerCase()),
             1,
             1,
             ""
@@ -146,7 +145,7 @@ export const CollectionPreview = (props: ICollectionPreviewProps) => {
     },
     {
       retry: false,
-      enabled: !!collection,
+      enabled: !!collectionAddress,
     }
   );
 
@@ -180,9 +179,9 @@ export const CollectionPreview = (props: ICollectionPreviewProps) => {
               <Text {...styles.GridItemLabel}>Contract address</Text>
               <Text
                 {...styles.GridItemValue}
-                onClick={() => copyToClipboard(collection?.address ?? "")}
+                onClick={() => copyToClipboard(collectionAddress ?? "")}
               >
-                {formatAddress(collection?.address ?? null)}
+                {formatAddress(collectionAddress ?? null)}
               </Text>
             </Box>
             {collectionOwner && (
@@ -204,13 +203,13 @@ export const CollectionPreview = (props: ICollectionPreviewProps) => {
             <Box {...styles.StatisticGridItem}>
               <Text {...styles.StatisticGridItemLabel}>Items</Text>
               <Text {...styles.StatisticGridItemValue}>
-                {collectionStatistic?.NFTs}
+                {collectionStatistic?.NFTs || "-"}
               </Text>
             </Box>
             <Box {...styles.StatisticGridItem}>
               <Text {...styles.StatisticGridItemLabel}>Owners</Text>
               <Text {...styles.StatisticGridItemValue}>
-                {collectionStatistic?.owners}
+                {collectionStatistic?.owners || "-"}
               </Text>
             </Box>
             <Box {...styles.StatisticGridItem}>
