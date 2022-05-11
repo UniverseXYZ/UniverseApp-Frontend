@@ -2,7 +2,7 @@ import { Box, Icon } from '@chakra-ui/react';
 
 import { ReactComponent as InfoSVG } from '@assets/images/info.svg';
 import { IOrder } from '@app/modules/nft/types';
-import { INFTHistory } from '@app/modules/nft/api';
+import { INFTHistory } from '@app/api';
 
 import HistoryEvent from '../shared/history-listings-event/HistoryEvent';
 import * as styles from './styles';

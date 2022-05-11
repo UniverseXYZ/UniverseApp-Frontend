@@ -12,9 +12,9 @@ import {
 } from '@chakra-ui/react';
 
 import * as styles from './styles';
-import { Loading } from '../../../../../components';
-import { getEtherscanTxUrl} from '../../../../../../utils/helpers';
-import { formatAddress } from '../../../../../../utils/helpers/format';
+import { Loading } from '..';
+import { getEtherscanTxUrl} from '../../../utils/helpers';
+import { formatAddress } from '../../../utils/helpers/format';
 
 interface INFTCancelListingPopupProps {
   isOpen: boolean;

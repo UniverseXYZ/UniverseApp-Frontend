@@ -2,7 +2,7 @@ import { mapBackendUser } from '@app/modules/nft';
 import axios from 'axios';
 import { utils } from 'ethers';
 
-import { mapUserData } from '../../utils/helpers';
+import { mapUserData } from '../../../utils/helpers';
 
 export const getArtistApi = async (artistUsername: string) => {
   if (utils.isAddress(artistUsername)) {

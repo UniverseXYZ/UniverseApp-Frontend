@@ -1,6 +1,6 @@
 export * from './back-to-top-button';
 export * from './checkbox';
-export * from './collection-prview';
+export * from './collection-preview';
 export * from './currency-input';
 export * from './currency-select';
 export * from './date-time-picker';
@@ -17,3 +17,4 @@ export * from './select';
 export * from './tabs/line-tab-list';
 export * from './tabs/tab-label';
 export * from './token-icon';
+export * from './loading-popup';

@@ -1,11 +1,10 @@
-import React, { FC, createContext, useContext, useState, useEffect, useCallback } from 'react';
+import React, { FC, createContext, useContext, useCallback } from 'react';
 import { useQuery, useQueryClient } from 'react-query';
 
-import { ICollection, IERC721AssetType, INFT, IOrder, IUser } from '../../types';
-import { GetCollectionApi, GetNFT2Api, GetHistoryApi, GetOrdersApi, GetUserApi, INFTHistory, GetMoreFromCollectionApi, GetActiveListingApi } from '../../api';
+import { ICollection, INFT, IOrder, IUser } from '../../types';
 import { collectionKeys, nftKeys, orderKeys, userKeys } from '../../../../utils/query-keys';
 import { useRouter } from 'next/router';
-import { getArtistApi } from '@app/api';
+import { GetActiveListingApi, getArtistApi, GetCollectionApi, GetHistoryApi, GetMoreFromCollectionApi, GetNFT2Api, GetOrdersApi, INFTHistory } from '@app/api';
 
 export interface INFTPageContext {
   NFT: INFT;

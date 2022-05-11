@@ -1,22 +1,11 @@
-import { useState, useEffect } from 'react';
-import Popup from 'reactjs-popup';
-import {
-  Accordion,
-  AccordionButton,
-  AccordionIcon,
-  AccordionItem,
-  AccordionPanel,
-  Box, Flex,
-  Image,
-  Link, LinkProps,
-} from '@chakra-ui/react';
+import { useEffect } from 'react';
+import { Box, Flex } from '@chakra-ui/react';
 
 // Styles
 // import './SearchFilters.scss';
 
 // Icons
 import filtersIcon from '../../../../../../../../assets/images/marketplace/filters.svg';
-import closeIcon from '../../../../../../../../assets/images/close-menu.svg';
 import SaleTypeIcon from '../../../../../../../../assets/images/v2/marketplace/filter-sale-type.svg';
 import NFTTypeIcon from '../../../../../../../../assets/images/v2/marketplace/filter-nft-type.svg';
 import PriceRangeIcon from '../../../../../../../../assets/images/v2/marketplace/filter-price-range.svg';

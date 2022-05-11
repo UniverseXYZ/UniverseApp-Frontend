@@ -2,12 +2,12 @@ import React, { useEffect } from 'react';
 import { GetServerSideProps } from 'next';
 import { dehydrate, QueryClient } from 'react-query';
 
-import { GetCollectionApi, GetNFT2Api } from '@app/modules/nft/api';
 import { collectionKeys, nftKeys } from '@app/utils/query-keys';
 
 import { NFTInfo } from './components';
 import { NFTPageProvider } from './NFTPage.context';
 import { useThemeStore } from 'src/stores/themeStore';
+import { GetNFT2Api, GetCollectionApi } from '../../../../api';
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const queryClient = new QueryClient();

@@ -1,6 +1,6 @@
 import axios from 'axios';
-import { INFT } from '../modules/nft/types';
-import { mapNft } from '../modules/nft/api';
+import { mapNft } from '..';
+import { INFT } from '../../modules/nft/types';
 interface IUserNFTsResponse {
   data: any[];
   page: number;

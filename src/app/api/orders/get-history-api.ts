@@ -1,10 +1,10 @@
 import axios from 'axios';
 import Cookies from 'js-cookie';
 import { utils } from 'ethers';
-import { ZERO_ADDRESS } from '../../../constants';
-import { OrderSide, OrderStatus } from '../../marketplace/enums';
-import { GetUserApi } from '../api';
-import { IOrder, IUser } from '../types';
+import { ZERO_ADDRESS } from '../../constants';
+import { OrderSide, OrderStatus } from '../../modules/marketplace/enums';
+import { IOrder, IUser } from '../../modules/nft/types';
+import { GetUserApi } from '..';
 
 export interface INFTTransfer {
   contractAddress: string;

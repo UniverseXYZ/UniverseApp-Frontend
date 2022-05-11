@@ -15,12 +15,6 @@ import {
 
 import { OrderSide, OrderStatus } from "../../../marketplace/enums";
 import {
-  GetActiveListingApi,
-  GetBestAndLastOffer,
-  GetCollectionApi,
-  GetNFT2Api,
-} from "../../api";
-import {
   ICollection,
   IERC721AssetType,
   INFT,
@@ -30,6 +24,7 @@ import { NFTCardAsset, NFTCardFooter, NFTCardContent, NFTCardCountdown } from '.
 import * as styles from "./NFTCard.styles";
 import { useAuthStore } from '../../../../../stores/authStore';
 import { useNftCheckoutStore } from '../../../../../stores/nftCheckoutStore';
+import { GetNFT2Api, GetCollectionApi, GetActiveListingApi, GetBestAndLastOffer } from "../../../../api";
 
 type IRenderFuncProps = {
   NFT: INFT;

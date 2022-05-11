@@ -2,7 +2,7 @@ import React, { createContext, useContext } from 'react';
 import { useQuery } from 'react-query';
 
 import { INFT, IOrder, IUser } from '../../types';
-import { GetNFTApi, GetOrderByHashApi } from '../../api';
+import { GetNFTApi, GetOrderByHashApi } from '../../../../api';
 
 export interface IBundlePageContext {
   isLoading: boolean;

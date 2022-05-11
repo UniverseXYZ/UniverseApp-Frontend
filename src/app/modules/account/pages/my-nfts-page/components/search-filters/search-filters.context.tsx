@@ -1,13 +1,11 @@
-import { FC, createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import { FC, createContext, useContext, useState, ReactNode } from 'react';
 import { useFormik, FormikProps} from 'formik';
 import { useInfiniteQuery, useQuery, InfiniteData, useQueryClient } from 'react-query';
 import { ethers, utils } from 'ethers';
 
 // API Calls & Interfaces
-import { getUserNFTsApi, IGetUserNFTsProps } from '../../../../../../api';
-import { GetCollectionApi, GetUserCollectionsFromScraperApi, GetActiveSellOrdersApi, GetNFT2Api } from '../../../../../nft/api';
-import { IUserOwnedCollection, ISearchBarDropdownCollection, INFT, IERC721AssetType, IERC721BundleAssetType, IOrder } from '../../../../../nft/types';
-import { GetCollectionNFTsApi } from '../../../../../nft/api';
+import { GetActiveSellOrdersApi, GetCollectionApi, GetCollectionNFTsApi, GetNFT2Api, GetUserCollectionsFromScraperApi, getUserNFTsApi, IGetUserNFTsProps } from '../../../../../../api';
+import { IUserOwnedCollection, ISearchBarDropdownCollection, INFT, IERC721AssetType, IOrder } from '../../../../../nft/types';
 import { TokenTicker } from '../../../../../../enums';
 import {
 	ISearchBarValue,

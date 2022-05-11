@@ -1,5 +1,5 @@
 import { Box, Image, Text, Flex } from '@chakra-ui/react';
-import React, { useCallback, useEffect, useState, useRef } from 'react';
+import React, { useCallback, useState, useRef } from 'react';
 import { useRouter } from 'next/router';
 import { useClickAway } from 'react-use';
 

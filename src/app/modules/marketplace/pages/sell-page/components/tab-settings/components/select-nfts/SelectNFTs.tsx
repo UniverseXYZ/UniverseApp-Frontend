@@ -35,7 +35,6 @@ import { SelectEditionsDropdown } from '../../../select-editions-dropdown';
 import { useMarketplaceSellData } from '../../../../hooks';
 import { useStickyFooter } from '../../../../../../../../hooks';
 import { UncheckBundleEditionsModal } from './components';
-import universeIcon from '../../../../../../../../../assets/images/universe-img.svg';
 import {
   isNFTAssetAudio,
   isNFTAssetImage,

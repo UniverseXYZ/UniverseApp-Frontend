@@ -1,4 +1,3 @@
-export * from './encode-order.api';
-export * from './get-artist.api';
-export * from './get-salt.api';
-export * from './get-user-nfts.api';
+export * from './nfts';
+export * from './orders';
+export * from './users';

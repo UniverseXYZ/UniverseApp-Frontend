@@ -1,9 +1,8 @@
 import axios from 'axios';
-import { ethers } from 'ethers';
 
-import { OrderAssetClass } from '../enums';
-import { IOrder, IOrderBackend } from '../types';
-import { mapBackendOrder } from '../helpers';
+import { OrderAssetClass } from '../../modules/nft/enums';
+import { IOrder, IOrderBackend } from '../../modules/nft/types';
+import { mapBackendOrder } from '../../modules/nft/helpers';
 
 export interface IGetOrdersApiParams {
   page: number;

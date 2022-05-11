@@ -1,1 +1,1 @@
-export * from '../nft/pages/collection-page';
+export * from './pages/collection-page';

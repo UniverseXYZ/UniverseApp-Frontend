@@ -3,7 +3,7 @@ import React from 'react';
 
 import * as styles from '../../styles';
 
-import { IERC721AssetType, INFT, IOrder, IUser } from '../../../../../../types';
+import { IERC721AssetType, IOrder, IUser } from '../../../../../../types';
 import Blockies from 'react-blockies';
 import { ethers } from 'ethers';
 import { getTokenByAddress } from '../../../../../../../../constants';

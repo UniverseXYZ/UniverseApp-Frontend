@@ -1,4 +1,4 @@
-import { LoadingPopup } from "@app/modules/marketplace/components/popups/loading-popup";
+import { LoadingPopup } from "@app/components/loading-popup";
 import { NFTCheckoutPopup } from "@app/modules/nft/pages/nft-page/components";
 import NotAuthenticatedPopup from "@legacy/popups/NotAuthenticatedPopup";
 import React from "react";

@@ -1,7 +1,7 @@
 import axios from 'axios';
 
-import { ICollectionBackend, INFTBackend, IUserBackend } from '../types';
-import { mapBackendCollection, mapBackendNft, mapBackendUser } from '../helpers';
+import { ICollectionBackend, INFTBackend, IUserBackend } from '../../modules/nft/types';
+import { mapBackendCollection, mapBackendNft, mapBackendUser } from '../../modules/nft/helpers';
 
 interface IGetNFTResponse {
   collection: ICollectionBackend;

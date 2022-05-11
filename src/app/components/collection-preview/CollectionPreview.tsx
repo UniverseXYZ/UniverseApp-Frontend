@@ -20,16 +20,10 @@ import EthIcon from '@assets/images/eth-icon-new.svg'
 
 import { ICollection } from '@app/modules/nft/types';
 import { collectionKeys } from '@app/utils/query-keys';
-import {
-  GetCollectionApi,
-  GetCollectionGeneralInfo,
-  GetCollectionNFTsApi,
-  GetCollectionOrderBookData,
-} from '@app/modules/nft/api';
 import { Loading } from '@app/components';
 import { formatAddress } from '@app/helpers';
 import Contracts from '@legacy/contracts.json';
-import { getArtistApi } from '@app/api';
+import { getArtistApi, GetCollectionApi, GetCollectionGeneralInfo, GetCollectionNFTsApi, GetCollectionOrderBookData } from '@app/api';
 
 import * as styles from './CollectionPreview.styles';
 

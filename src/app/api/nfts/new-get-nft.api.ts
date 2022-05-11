@@ -11,7 +11,6 @@ import {
   ICollectionBackend,
   INFT,
   IUserBackend,
-  NFTArtworkType,
   NFTStandard,
   ICollectionScrapper,
   ISearchBarDropdownCollection,
@@ -19,8 +18,8 @@ import {
   ICollection,
   ICollectionInfoResponse,
   ICollectionOrderBookData,
-} from '../types';
-import { mapBackendCollection, mapBackendNft, mapBackendUser, mapDropdownCollection } from '../helpers';
+} from '../../modules/nft/types';
+import { mapBackendCollection, mapBackendUser, mapDropdownCollection } from '../../modules/nft/helpers';
 
 interface ICollectionNFTsResponse {
   data: any[];
