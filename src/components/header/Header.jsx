@@ -122,7 +122,7 @@ const Header = () => {
   useEffect(() => {
     setShowMenu(false);
     if (
-      router.asPath === '/' ||
+      // router.asPath === '/' ||
       router.asPath === '/about' ||
       router.asPath === '/minting-and-auctions/marketplace/active-auctions' ||
       router.asPath === '/minting-and-auctions/marketplace/future-auctions' ||
