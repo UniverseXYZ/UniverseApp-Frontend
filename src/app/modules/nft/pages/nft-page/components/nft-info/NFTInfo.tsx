@@ -27,6 +27,7 @@ import {
   NFTAssetVideo,
   NFTBuySection,
 } from "../";
+import notFoundImgOg from "../../../../../../../assets/images/404-og.png";
 import { CollectionPageLoader } from "../../../../../../../containers/collection/CollectionPageLoader";
 import { useErc20PriceStore } from "../../../../../../../stores/erc20PriceStore";
 import { sendRefreshMetadataRequest } from "../../../../../../../utils/api/marketplace";
@@ -250,14 +251,21 @@ export const NFTInfo = () => {
       : preview
     : undefined;
 
+  const ogProps = {
+    title: `${NFT?.name} – ${collection?.name}`,
+    description: NFT?.description || collection?.description || undefined,
+    image: OGImage,
+    imageAlt: NFT?.name || "",
+  };
+  if (!NFT || !collection) {
+    ogProps.title = "Page not found";
+    ogProps.description = "Oops.. page not found";
+    ogProps.image = notFoundImgOg;
+  }
+
   return (
     <>
-      <OpenGraph
-        title={`${NFT?.name} – ${collection?.name}`}
-        description={NFT?.description || collection?.description || undefined}
-        image={OGImage}
-        imageAlt={NFT?.name || ""}
-      />
+      <OpenGraph {...ogProps} />
       {isLoading ? (
         <div className="loader-wrapper">
           <CollectionPageLoader />
