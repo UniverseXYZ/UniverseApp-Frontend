@@ -79,10 +79,14 @@ export const CollectionPreview = (props: ICollectionPreviewProps) => {
         );
         const provider = providers.getDefaultProvider(network);
 
+        const chainId = process.env.REACT_APP_NETWORK_CHAIN_ID || null;
+
+        if (chainId === null) {
+          throw new Error("Chain ID is missing !");
+        }
+
         // @ts-ignore
-        const { abi } =
-          Contracts[process.env.REACT_APP_NETWORK_CHAIN_ID].contracts
-            .UniverseERC721Core;
+        const { abi } = Contracts[chainId].contracts.UniverseERC721Core;
 
         const contract = new Contract(`${collection?.address}`, abi, provider);
 
