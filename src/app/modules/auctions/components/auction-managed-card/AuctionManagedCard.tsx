@@ -4,14 +4,19 @@ import React, { useState } from 'react';
 import { ReactComponent as ArrowIcon } from '@assets/images/arrow-2.svg';
 
 import { Badge, Tire } from './components';
-import * as styles from './AuctionManagedCard.styles';
+import { IAuctionManagedCardState } from './types';
+import * as s from './AuctionManagedCard.styles';
 
 interface IAuctionManagedCardProps {
+  state?: IAuctionManagedCardState;
   children?: React.ReactChild;
 }
 
 export const AuctionManagedCard = (props: IAuctionManagedCardProps) => {
-  const { children } = props;
+  const {
+    state = 'active',
+    children
+  } = props;
 
   const [isExpanded, setIsExpanded] = useState(false);
 
@@ -28,16 +33,15 @@ export const AuctionManagedCard = (props: IAuctionManagedCardProps) => {
   ]);
 
   return (
-    <Box {...styles.GradientWrapper}>
-      <Box {...styles.Wrapper}>
+    <Box {...s.getGradientWrapperStyle(state)}>
+      <Box {...s.Wrapper}>
         <Flex alignItems={'center'} justifyContent={'space-between'} mb={'20px'}>
           <Heading fontSize={'20px'}>Auction name</Heading>
           <HStack spacing={'14px'}>
-            <Button variant={'outline'} padding={'11px 16px'}>Go to landing page</Button>
             <Tooltip variant={'black'} hasArrow placement={'top'} label={isExpanded ? 'Show less' :'Show more'}>
               <Button
                 variant={'simpleOutline'}
-                {...styles.ExpandButton}
+                {...s.ExpandButton}
                 onClick={() => setIsExpanded(!isExpanded)}
               >
                 <Icon
@@ -61,13 +65,11 @@ export const AuctionManagedCard = (props: IAuctionManagedCardProps) => {
 
           {!!children && (children)}
 
-          {isExpanded && (
-            <VStack spacing={'20px'} alignItems={'flex-start'} w={'100%'}>
-              {tires.map((tire, i) => (
-                <Tire key={i} name={tire.name} winners={tire.winners} />
-              ))}
-            </VStack>
-          )}
+          <VStack spacing={'20px'} {...s.getTiresWrapperStyles(isExpanded)}>
+            {tires.map((tire, i) => (
+              <Tire key={i} name={tire.name} winners={tire.winners} />
+            ))}
+          </VStack>
         </VStack>
       </Box>
     </Box>

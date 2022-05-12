@@ -13,7 +13,7 @@ import React, { useState } from 'react';
 import PlusIcon from '@assets/images/plus.svg';
 import { BadgedTab, LineTabList } from '@app/components';
 
-import { TabActiveAuctions, TabMyBids } from './components';
+import { TabActiveAuctions, TabDraftAuctions, TabMyBids } from './components';
 import * as styles from './MyAuctionsPage.styles';
 
 export const MyAuctionsPage = () => {
@@ -48,7 +48,7 @@ export const MyAuctionsPage = () => {
                 <TabActiveAuctions auctions={auctions} />
               </TabPanel>
               <TabPanel {...styles.TabPanel}>
-                <p>three!</p>
+                <TabDraftAuctions />
               </TabPanel>
               <TabPanel {...styles.TabPanel}>
                 <p>four!</p>

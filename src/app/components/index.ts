@@ -16,6 +16,7 @@ export * from './open-graph';
 export * from './pagination';
 export * from './search-input';
 export * from './select';
+export * from './stepper';
 export * from './tabs/badged-tab';
 export * from './tabs/line-tab-list';
 export * from './tabs/tab-label';
