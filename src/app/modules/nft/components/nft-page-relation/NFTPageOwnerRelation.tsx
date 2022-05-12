@@ -2,7 +2,7 @@ import { Box, BoxProps } from '@chakra-ui/react';
 import React from 'react';
 import Blockies from 'react-blockies';
 
-import { IUser } from '../../types';
+import { IUser } from '../../../account/types';
 import { NFTRelationType } from '../../enums';
 import { NFTPageRelation } from './NFTPageRelation';
 import { RelationAvatar } from './RelationAvatar';

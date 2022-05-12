@@ -31,11 +31,8 @@ import {
   NFTAssetImage,
   NFTAssetVideo,
   NFTBuySection,
-  // TabBids,
-  // TabHistory,
-  // TabOffers,
 } from '../nft-page/components';
-import { TabBids, TabHistory, TabOffers } from '../nft-page/components/nft-info/components';
+import { TabHistory, TabOffers } from '../nft-page/components/nft-info/components';
 import { BundleMenu, NFTCard, NFTPageCreatorRelation } from '../../components';
 import { LineTabList } from '../../../../components';
 import { BundlePageProvider, useBundlePage } from './BundlePage.provider';

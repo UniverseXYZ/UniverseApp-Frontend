@@ -16,7 +16,7 @@ import {
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { BigNumber, Signer, utils, Contract, constants } from 'ethers';
 import { useMutation, useQueryClient } from 'react-query';
-import axios, { AxiosResponse } from 'axios';
+import axios from 'axios';
 import { useRouter } from 'next/router';
 
 import ArrowSVGIcon from '@assets/images/arrow.svg';
@@ -28,21 +28,20 @@ import { Checkbox, InputShadow, Loading, TokenIcon } from '../../../../../../com
 import { NFTType } from './components';
 import { CheckoutState } from './enums';
 import * as styles from './styles';
-import { ICollection, IERC20AssetType, IERC721AssetType, INFT, IOrder } from '../../../../types';
+import { IERC20AssetType, IERC721AssetType, INFT, IOrder } from '../../../../types';
 import { isNFTAssetAudio, isNFTAssetImage, isNFTAssetVideo } from '../../../../helpers';
-import { getTokenByAddress, TOKENS_MAP } from '../../../../../../constants';
+import { getTokenByAddress } from '../../../../../../constants';
 import { TokenTicker } from '../../../../../../enums';
 import { NFTCustomError } from '../nft-custom-error/NFTCustomError';
 import { getEtherscanTxUrl } from '../../../../../../../utils/helpers';
 import { formatAddress, shortenEthereumAddress } from '../../../../../../../utils/helpers/format';
 import { useTokenPrice } from '../../../../../../hooks';
-import { IToken } from '../../../../../../types';
-import { GetActiveListingApi, GetNFT2Api } from '../../../../api';
 import { nftKeys, orderKeys } from '../../../../../../utils/query-keys';
 import CheckIcon from '../../../../../../../assets/images/check-vector.svg';
 import { useAuthStore } from '../../../../../../../stores/authStore';
 import { useErrorStore } from '../../../../../../../stores/errorStore';
 import { useNftCheckoutStore } from 'src/stores/nftCheckoutStore';
+import { GetActiveListingApi, GetNFTApi } from '../../../../../../api';
 // @ts-ignore
 const { contracts: contractsData } = Contracts[process.env.REACT_APP_NETWORK_CHAIN_ID];
 
@@ -184,7 +183,7 @@ export const NFTCheckoutPopup = () => {
         const collectionAddress = NFT?._collectionAddress || '';
 
         // Fetch order api until a diffrent response is returned
-        const newNft = await GetNFT2Api(collectionAddress, tokenId, false);
+        const newNft = await GetNFTApi(collectionAddress, tokenId, false);
 
         // Change query information about order
         if (NFT?._ownerAddress?.toLowerCase() !== newNft._ownerAddress?.toLowerCase()) {

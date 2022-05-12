@@ -18,14 +18,9 @@ import { useAuthStore } from "../../../../../../../stores/authStore";
 import { isEmpty } from "../../../../../../../utils/helpers";
 import { getRoyaltiesFromRegistry } from "../../../../../../../utils/marketplace/utils";
 import { getTokenByAddress } from "../../../../../../constants";
-import {
-  ICollection,
-  IERC20AssetType,
-  IERC721AssetType,
-  INFT,
-  IOrder,
-  IUser,
-} from "../../../../types";
+import { IUser } from "../../../../../account/types";
+import { ICollection } from "../../../../../collection/types";
+import { INFT, IOrder, IERC721AssetType, IERC20AssetType } from "../../../../types";
 import { useNFTPageData } from "../../NFTPage.context";
 import { NFTCancelListingPopup } from "../nft-cancel-listing-popup";
 import { NFTChangeListingPricePopup } from "../nft-change-listing-price-popup";

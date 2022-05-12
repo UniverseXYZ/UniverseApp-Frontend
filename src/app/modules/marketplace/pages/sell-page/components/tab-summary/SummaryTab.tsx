@@ -29,7 +29,8 @@ import {
 } from '../../../../../nft';
 import { NFTAssetAudio, NFTAssetImage, NFTAssetVideo } from '../../../../../nft/pages/nft-page/components';
 import * as styles from './styles';
-import { ICollection, INFT, INFTBackend, NFTStandard } from '../../../../../nft/types';
+import { INFT, INFTBackend, NFTStandard } from '../../../../../nft/types';
+import { ICollection } from '../../../../../collection/types';
 import { SwiperArrowButton } from '../../../../../../components/swiper-arrow-button';
 import Contracts from '../../../../../../../contracts/contracts.json';
 import { fetchRoyalties, fetchDAOFee } from '../../../../../../../utils/api/royaltyRegistry';

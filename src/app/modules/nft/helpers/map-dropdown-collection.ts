@@ -1,4 +1,4 @@
-import { ISearchBarDropdownCollection, ICollectionScrapper } from '../types';
+import { ISearchBarDropdownCollection, ICollectionScrapper } from "../../collection/types";
 
 export function mapDropdownCollection(
     collection: ICollectionScrapper

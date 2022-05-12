@@ -9,7 +9,6 @@ import {
   InputGroup,
   InputLeftElement,
   InputRightAddon,
-  Link,
   Menu,
   MenuButton,
   MenuItem,
@@ -26,12 +25,11 @@ import { useFormik } from 'formik';
 import { useMutation } from 'react-query';
 import axios from 'axios';
 import { utils } from 'ethers';
-import { default as dayjs } from 'dayjs';
 import * as Yup from 'yup';
 
 import * as styles from './styles';
 import { TOKENS, TOKENS_MAP } from '../../../../../../constants';
-import { Checkbox, Loading, TokenIcon } from '../../../../../../components';
+import { Loading, TokenIcon } from '../../../../../../components';
 import { ETH_USD_RATE } from '../../../../../../mocks';
 import { IOrder } from '../../../../types';
 import { TokenTicker } from '../../../../../../enums';

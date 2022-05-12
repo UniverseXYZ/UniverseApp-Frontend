@@ -1,4 +1,4 @@
-import { ICollection, ICollectionBackend } from '../types';
+import { ICollection, ICollectionBackend } from "../../collection/types";
 
 export function mapBackendCollection(
   {

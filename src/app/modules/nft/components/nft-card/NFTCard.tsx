@@ -14,22 +14,13 @@ import {
 } from '@app/utils/query-keys';
 
 import { OrderSide, OrderStatus } from "../../../marketplace/enums";
-import {
-  GetActiveListingApi,
-  GetBestAndLastOffer,
-  GetCollectionApi,
-  GetNFT2Api,
-} from "../../api";
-import {
-  ICollection,
-  IERC721AssetType,
-  INFT,
-  IOrder,
-} from "../../types";
+import { ICollection } from "../../../collection/types";
+import { INFT, IOrder, IERC721AssetType } from "../../types";
 import { NFTCardAsset, NFTCardFooter, NFTCardContent, NFTCardCountdown } from './components';
 import * as styles from "./NFTCard.styles";
 import { useAuthStore } from '../../../../../stores/authStore';
 import { useNftCheckoutStore } from '../../../../../stores/nftCheckoutStore';
+import { GetNFTApi, GetCollectionApi, GetActiveListingApi, GetBestAndLastOffer } from "../../../../api";
 
 type IRenderFuncProps = {
   NFT: INFT;
@@ -93,7 +84,7 @@ export const NFTCard = (props: INFTCardProps) => {
       collectionAddress: initialNFT._collectionAddress || "",
       tokenId: initialNFT.tokenId || "",
     }),
-    () => GetNFT2Api(initialNFT._collectionAddress || "", initialNFT.tokenId, false),
+    () => GetNFTApi(initialNFT._collectionAddress || "", initialNFT.tokenId, false),
     {
       retry: false,
       enabled: !!initialNFT._collectionAddress && !!initialNFT.tokenId,

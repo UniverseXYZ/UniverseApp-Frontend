@@ -1,10 +1,11 @@
 import axios from 'axios';
 import Cookies from 'js-cookie';
 import { utils } from 'ethers';
-import { ZERO_ADDRESS } from '../../../constants';
-import { OrderSide, OrderStatus } from '../../marketplace/enums';
-import { GetUserApi } from '../api';
-import { IOrder, IUser } from '../types';
+import { ZERO_ADDRESS } from '../../constants';
+import { OrderSide, OrderStatus } from '../../modules/marketplace/enums';
+import { getArtistApi } from '..';
+import { IUser } from '../../modules/account/types';
+import { IOrder } from '../../modules/nft/types';
 
 export interface INFTTransfer {
   contractAddress: string;
@@ -83,12 +84,14 @@ export const GetHistoryApi = async (collectionAddress: string, tokenId: string):
         order.maker = order.taker;
       }
       if (order.maker) {
-        order.makerData = await GetUserApi(order.maker);
+        const makerData = await getArtistApi(order.maker);
+        order.makerData = makerData.mappedArtist ? makerData.mappedArtist : { address: order.maker };
       }
     }
     
     if (mintEvent) {
-      mintEvent.makerData = await GetUserApi(mintEvent.to);
+      const makerData = await getArtistApi(mintEvent.to);
+      mintEvent.makerData = makerData.mappedArtist ? makerData.mappedArtist : { address: mintEvent.to };
       mintEvent.matchedTxHash = mintEvent.hash;
     }
 

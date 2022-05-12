@@ -5,7 +5,6 @@ import { useFormik } from 'formik';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useMutation, useQuery } from 'react-query';
 import * as Yup from 'yup';
-import { Contract } from 'ethers';
 import { NextPageContext } from 'next';
 import NextLink from 'next/link';
 
@@ -28,9 +27,8 @@ import { IMarketplaceSellContextData, ISellForm } from './types';
 import { sign } from '../../../../helpers';
 import { TOKENS_MAP, ZERO_ADDRESS } from '../../../../constants';
 import { TokenTicker } from '../../../../enums';
-import { GetActiveListingApi, GetHistoryApi, GetNFT2Api } from '../../../nft/api';
 import { INFT } from '../../../nft/types';
-import { EncodeOrderApi, GetSaltApi, IEncodeOrderApiData } from '../../../../api';
+import { EncodeOrderApi, GetActiveListingApi, GetHistoryApi, GetNFTApi, GetSaltApi, IEncodeOrderApiData } from '../../../../api';
 import Contracts from '../../../../../contracts/contracts.json';
 import { OrderAssetClass } from '../../../nft/enums';
 import { useQueryClient } from 'react-query'
@@ -94,7 +92,7 @@ export const SellPage = () => {
 
   const { data: nft } = useQuery(
     nftKeys.nftInfo({collectionAddress: params.collectionAddress, tokenId: params.tokenId}),
-    () => GetNFT2Api(params.collectionAddress, params.tokenId),
+    () => GetNFTApi(params.collectionAddress, params.tokenId),
     {
       onSuccess: (data) => console.log(data)
     }

@@ -1,15 +1,14 @@
 import { Box } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
-import { IERC721AssetType, INFT, IOrder, IUser } from '../../../../../../types';
+import { INFT, IOrder, IERC721AssetType } from '../../../../../../types';
+import { IUser } from '../../../../../../../account/types';
 import { NFTOffer } from './components/nft-offer/NFTOffer';
-import { LoadingPopup } from '../../../../../../../marketplace/components/popups/loading-popup';
+import { LoadingPopup } from '../../../../../../../../components/loading-popup';
 import { Contract } from 'ethers';
 import { useMutation, useQueryClient } from 'react-query';
-import { EncodeOrderApi } from '../../../../../../../../api';
 import Contracts from '../../../../../../../../../contracts/contracts.json';
-import { GetActiveListingApi, GetOrdersApi } from '../../../../../../api';
+import { EncodeOrderApi, GetOrdersApi } from '../../../../../../../../api';
 import { orderKeys } from '../../../../../../../../utils/query-keys';
-import { useNFTPageData } from '../../../../NFTPage.context';
 import { EventsEmpty } from '../shared';
 import { useAuthStore } from '../../../../../../../../../stores/authStore';
 

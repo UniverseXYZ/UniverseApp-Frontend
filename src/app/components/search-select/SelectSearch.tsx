@@ -1,5 +1,5 @@
 import { Box, BoxProps, CheckboxProps, Flex, Image, ImageProps } from '@chakra-ui/react';
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 
 import { Checkbox } from '../checkbox';
 import { Dropdown, DropdownFilterContainer } from '../dropdown';

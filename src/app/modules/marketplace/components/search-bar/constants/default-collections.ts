@@ -1,4 +1,4 @@
-import { ISearchBarDropdownCollection } from '@app/modules/nft/types';
+import { ISearchBarDropdownCollection } from "../../../../collection/types";
 
 export const DEFAULT_COLLECTIONS: ISearchBarDropdownCollection[] = [
   {id: 34, address: "0xb67E6711C3bB2AA968bE26703dE20152d4948b38", name: "Universe Singularity", image:"https://universeapp-assets-dev.s3.amazonaws.com/1587a04f1c82f5740e53b679e8e15658f33fe5ea825f86ab.jpeg"},

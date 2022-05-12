@@ -17,11 +17,10 @@ import Contracts from '../../../../../../../contracts/contracts.json';
 
 import * as styles from './styles';
 import { IERC721AssetType, IOrder } from '../../../../types';
-import { EncodeOrderApi } from '../../../../../../api';
-import { GetActiveListingApi } from '../../../../api';
 import { orderKeys } from '../../../../../../utils/query-keys';
 import { useAuthStore } from '../../../../../../../stores/authStore';
 import { useLoadingStore } from 'src/stores/loadingStore';
+import { EncodeOrderApi, GetActiveListingApi } from '../../../../../../api';
 
 // @ts-ignore
 const { contracts: contractsData } = Contracts[process.env.REACT_APP_NETWORK_CHAIN_ID];

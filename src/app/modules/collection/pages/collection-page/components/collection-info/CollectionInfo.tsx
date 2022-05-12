@@ -30,7 +30,7 @@ import EditIcon from "../../../../../../../components/svgs/EditIcon";
 import Contracts from "../../../../../../../contracts/contracts.json";
 import { useAuthStore } from "../../../../../../../stores/authStore";
 import { breakpoints } from "../../../../../../theme/constants";
-import { NFTCard, NoNFTsFound } from '../../../../components';
+import { NFTCard, NoNFTsFound } from '../../../../../nft/components';
 import { NoDescriptionFound } from "../../../../components/no-description-found";
 import { useCollectionPageData } from "../../CollectionPage.context";
 import { CollectionStatistics } from "./components/index";

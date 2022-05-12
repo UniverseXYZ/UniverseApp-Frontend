@@ -3,11 +3,11 @@ import { useMutation, useQueryClient } from 'react-query';
 import { useEffectOnce } from 'react-use';
 
 import { collectionKeys } from '@app/utils/query-keys';
-import { GetCollectionApi, GetCollectionsFromScraperApi } from '@app/modules/nft/api';
+import { GetCollectionApi, GetCollectionsFromScraperApi } from '@app/api';
 
 import { ISearchBarProps, } from './types';
 import { DEFAULT_COLLECTIONS } from './constants';
-import { ISearchBarDropdownCollection } from '../../../nft/types';
+import { ISearchBarDropdownCollection } from '../../../collection/types';
 import { SearchSelect } from './SelectSearch';
 
 export const SearchBar = (props: ISearchBarProps) => {

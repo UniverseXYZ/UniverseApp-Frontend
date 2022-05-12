@@ -44,3 +44,32 @@ In order to run the tests:
 1. Build the next app `npm run build`
 2. Run the next app `npm run dev`
 3. Open new terminal and run the tests `npm run synpress:run`
+
+
+## Modules Structure
+```
+app
+├── modules
+|  ├── account
+|  |  ├── index.ts
+|  |  ├── pages
+|  |  └── types
+|  ├── collection
+|  |  ├── components
+|  |  ├── index.ts
+|  |  ├── pages
+|  |  └── types
+|  ├── marketplace
+|  |  ├── components
+|  |  ├── constants
+|  |  ├── enums
+|  |  └── pages
+|  └── nft
+|     ├── components
+|     ├── constants
+|     ├── enums
+|     ├── helpers
+|     ├── index.ts
+|     ├── pages
+|     └── types
+```

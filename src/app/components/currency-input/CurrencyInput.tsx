@@ -11,15 +11,14 @@ import {
   NumberInputProps,
 } from '@chakra-ui/react';
 import { constants } from 'ethers';
-import React, { useCallback, useMemo, useRef } from 'react';
+import React, { useCallback } from 'react';
 
 import ArrowIcon from '../../../assets/images/arrow-down.svg';
 
 import { TOKENS, TOKENS_MAP } from '../../constants';
 import { TokenTicker } from '../../enums';
 import * as styles from './styles';
-import { useMeasure, useSize } from 'react-use';
-import useMeasureDirty from 'react-use/lib/useMeasureDirty';
+import { useMeasure } from 'react-use';
 
 interface ICurrencyInputProps extends Omit<NumberInputProps, 'onChange'> {
   currencyValue: string;

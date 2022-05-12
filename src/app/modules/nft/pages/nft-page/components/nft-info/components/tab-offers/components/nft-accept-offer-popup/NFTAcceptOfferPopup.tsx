@@ -31,7 +31,7 @@ import { Fee } from '../../../../../../../../../marketplace/pages/sell-page/comp
 import { getRoyaltiesFromRegistry } from '../../../../../../../../../../../utils/marketplace/utils';
 import { useTokenPrice } from '../../../../../../../../../../hooks';
 import { nftKeys, orderKeys } from '../../../../../../../../../../utils/query-keys';
-import { GetActiveListingApi, GetNFT2Api, GetOrdersApi } from '../../../../../../../../api';
+import { GetOrdersApi, GetNFTApi } from '../../../../../../../../../../api';
 import { useNFTPageData } from '../../../../../../NFTPage.context';
 import CheckIcon from '../../../../../../../../../../../assets/images/check-vector.svg';
 import Contracts from '../../../../../../../../../../../contracts/contracts.json';
@@ -184,7 +184,7 @@ export const NFTAcceptOfferPopup = ({ NFT, NFTs, order, isOpen, onClose }: INFTA
         const collectionAddress = NFT?._collectionAddress || '';
 
         // Fetch order api until a diffrent response is returned
-        const newNft = await GetNFT2Api(collectionAddress, tokenId, false);
+        const newNft = await GetNFTApi(collectionAddress, tokenId, false);
 
         // Change query information about order
         if (NFT?._ownerAddress?.toLowerCase() !== newNft._ownerAddress?.toLowerCase()) {

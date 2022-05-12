@@ -2,7 +2,6 @@ import {
   Box,
   Button,
   Heading,
-  Image,
   Modal,
   ModalBody,
   ModalCloseButton,

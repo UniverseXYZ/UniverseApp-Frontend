@@ -30,7 +30,7 @@ import ArrowIcon from '../../../../../../../assets/images/arrow-down.svg';
 import SuccessIcon from '../../../../../../../assets/images/bid-submitted.png';
 
 import * as styles from './styles';
-import { getTokenAddressByTicker, getTokenByAddress, TOKENS, TOKENS_MAP, ZERO_ADDRESS } from '../../../../../../constants';
+import { getTokenAddressByTicker, getTokenByAddress, TOKENS, TOKENS_MAP } from '../../../../../../constants';
 import { Loading, TokenIcon } from '../../../../../../components';
 import { IERC721AssetType, INFT, IOrder } from '../../../../types';
 import { TokenTicker } from '../../../../../../enums';
