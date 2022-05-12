@@ -1,3 +1,6 @@
+import { IUser } from "../../account/types";
+import { ICollection } from "../../collection/types/collection";
+
 export enum NFTArtworkType {
   JPG = 'jpg',
   JPEG = 'jpeg',
@@ -18,77 +21,6 @@ export enum NFTStandard {
 export interface IRoyalty {
   address: string;
   amount: number;
-}
-
-export interface IUser {
-  id?: number;
-  about?: string;
-  address: string;
-  createdAt?: Date;
-  displayName?: string;
-  instagramUser?: string;
-  logoImageUrl?: string;
-  profileImageUrl?: string;
-  twitterUser?: string;
-  universePageUrl?: string;
-}
-
-export interface IUserBackend extends Omit<IUser, 'createdAt'> {
-  createdAt: string;
-}
-
-export interface ICollection {
-  id: number;
-  address: string;
-  bannerUrl: string;
-  coverUrl: string;
-  creator: string;
-  description: string;
-  name: string;
-  owner: string;
-  publicCollection: boolean;
-  instagramLink: string;
-  discordLink: string;
-  telegramLink: string;
-  siteLink: string;
-  mediumLink: string;
-  shortUrl: string;
-  source: string;
-  symbol: string;
-  txHash: string;
-  createdAt: Date;
-  updatedAt: Date;
-}
-
-export interface ICollectionBackend extends Omit<ICollection, 'createdAt' | 'updatedAt'> {
-  createdAt: string;
-  updatedAt: string;
-}
-
-export interface ICollectionScrapper {
-  contractAddress: string;
-  createdAt: string;
-  createdAtBlock: number;
-  firstProcessedBlock: number;
-  isProcessing: boolean;
-  lastProcessedBlock: number;
-  name: string;
-  sentAt: string;
-  tokenType: string;
-  updatedAt: string;
-  _id: string;
-}
-
-export interface ISearchBarDropdownCollection {
-  id: string | number;
-  address: string;
-  name: string;
-  image: string | undefined;
-}
-
-export interface IUserOwnedCollection {
-  name: string;
-  contractAddress: string;
 }
 
 export interface INFTProperty {
@@ -151,15 +83,4 @@ export interface INFTBackend
   thumbnail_url: string;
   createdAt: string;
   updatedAt: string;
-}
-
-export interface ICollectionInfoResponse {
-  owners: number;
-  contractAddress: string;
-  name: string;
-}
-
-export interface ICollectionOrderBookData {
-  floorPrice: string;
-  volumeTraded: string;
 }

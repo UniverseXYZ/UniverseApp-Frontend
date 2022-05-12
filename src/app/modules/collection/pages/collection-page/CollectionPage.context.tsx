@@ -1,10 +1,10 @@
 import { FC, createContext, useContext } from 'react';
 import { useQuery } from 'react-query';
 
-import { ICollection, ICollectionOrderBookData, ICollectionInfoResponse } from '../../../nft/types';
+import { ICollection, ICollectionOrderBookData, ICollectionInfoResponse } from '../../types/collection';
 import { collectionKeys } from '../../../../utils/query-keys';
 import { useRouter } from 'next/router';
-import { GetCollectionApi, GetCollectionGeneralInfo, GetCollectionOrderBookData } from '../../../../api/nfts/new-get-nft.api';
+import { GetCollectionApi, GetCollectionGeneralInfo, GetCollectionOrderBookData } from '../../../../api';
 
 export interface ICollectionPageContext {
   collection: ICollection;

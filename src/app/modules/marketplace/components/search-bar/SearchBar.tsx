@@ -7,7 +7,7 @@ import { GetCollectionApi, GetCollectionsFromScraperApi } from '@app/api';
 
 import { ISearchBarProps, } from './types';
 import { DEFAULT_COLLECTIONS } from './constants';
-import { ISearchBarDropdownCollection } from '../../../nft/types';
+import { ISearchBarDropdownCollection } from '../../../collection/types';
 import { SearchSelect } from './SelectSearch';
 
 export const SearchBar = (props: ISearchBarProps) => {

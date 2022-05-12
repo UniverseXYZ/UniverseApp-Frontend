@@ -28,7 +28,7 @@ import { sign } from '../../../../helpers';
 import { TOKENS_MAP, ZERO_ADDRESS } from '../../../../constants';
 import { TokenTicker } from '../../../../enums';
 import { INFT } from '../../../nft/types';
-import { EncodeOrderApi, GetActiveListingApi, GetHistoryApi, GetNFT2Api, GetSaltApi, IEncodeOrderApiData } from '../../../../api';
+import { EncodeOrderApi, GetActiveListingApi, GetHistoryApi, GetNFTApi, GetSaltApi, IEncodeOrderApiData } from '../../../../api';
 import Contracts from '../../../../../contracts/contracts.json';
 import { OrderAssetClass } from '../../../nft/enums';
 import { useQueryClient } from 'react-query'
@@ -92,7 +92,7 @@ export const SellPage = () => {
 
   const { data: nft } = useQuery(
     nftKeys.nftInfo({collectionAddress: params.collectionAddress, tokenId: params.tokenId}),
-    () => GetNFT2Api(params.collectionAddress, params.tokenId),
+    () => GetNFTApi(params.collectionAddress, params.tokenId),
     {
       onSuccess: (data) => console.log(data)
     }

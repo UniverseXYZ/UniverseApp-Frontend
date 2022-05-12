@@ -1,7 +1,7 @@
 import { Box, BoxProps } from '@chakra-ui/react';
 import React from 'react';
 
-import { ICollection } from '../../types';
+import { ICollection } from '../../../collection/types';
 import { NFTRelationType } from '../../enums';
 import { getCollectionBackgroundColor } from '../../../../../utils/helpers';
 import { NFTPageRelation } from './NFTPageRelation';

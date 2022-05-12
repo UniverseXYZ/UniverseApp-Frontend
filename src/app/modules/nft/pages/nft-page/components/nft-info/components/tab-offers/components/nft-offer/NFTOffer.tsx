@@ -3,8 +3,8 @@ import { utils } from 'ethers';
 import BigNumber from 'bignumber.js';
 import React from 'react'
 import { getTokenByAddress } from '../../../../../../../../../../constants';
-import { IERC721AssetType, IOrder, IUser } from '../../../../../../../../types';
-import dayjs from 'dayjs';
+import { IERC721AssetType, IOrder } from '../../../../../../../../types';
+import { IUser } from '../../../../../../../../../account/types';
 import { NFTTabItemWrapper } from '../../..';
 import Blockies from 'react-blockies';
 import * as styles from '../../styles';

@@ -7,7 +7,8 @@ import { TokenTicker } from '@app/enums';
 import { TokenIcon, CollectionPreview } from '@app/components';
 import { getTokenByAddress, TOKENS_MAP } from '@app/constants';
 
-import { ICollection, IERC20AssetType, IOrder } from '../../../../types';
+import { IERC20AssetType, IOrder } from '../../../../types';
+import { ICollection } from '../../../../../collection/types';
 import { formatPrice, formatSecondaryPrice } from './helpers';
 import * as styles from './NFTCardContent.styles';
 

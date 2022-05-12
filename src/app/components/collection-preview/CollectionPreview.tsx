@@ -18,7 +18,7 @@ import { Contract, providers, utils } from 'ethers';
 
 import EthIcon from '@assets/images/eth-icon-new.svg'
 
-import { ICollection } from '@app/modules/nft/types';
+import { ICollection } from '@app/modules/collection/types';
 import { collectionKeys } from '@app/utils/query-keys';
 import { Loading } from '@app/components';
 import { formatAddress } from '@app/helpers';

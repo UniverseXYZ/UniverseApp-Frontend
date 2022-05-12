@@ -22,7 +22,8 @@ import ReportIcon from '../../../../../assets/images/report.svg';
 
 import { MenuItem } from './components';
 import * as styles from './styles';
-import { ICollection, INFT, IUser } from '../../types';
+import { IUser } from '../../../account/types';
+import { INFT } from '../../types';
 import { NFTReportPopup } from '../nft-report-popup';
 import { NFTSharePopup } from '../nft-share-popup';
 import { useAuthStore } from '../../../../../stores/authStore';

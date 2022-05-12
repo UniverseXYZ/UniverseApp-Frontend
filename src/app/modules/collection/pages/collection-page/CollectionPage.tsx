@@ -6,7 +6,7 @@ import { GetServerSideProps } from 'next';
 import { dehydrate, QueryClient } from 'react-query';
 import { collectionKeys } from '@app/utils/query-keys';
 import { useThemeStore } from 'src/stores/themeStore';
-import { GetCollectionApi } from '../../../../api/nfts/new-get-nft.api';
+import { GetCollectionApi } from '../../../../api';
 import { CollectionInfo } from './components';
 
 export const getServerSideProps: GetServerSideProps = async (context) => {

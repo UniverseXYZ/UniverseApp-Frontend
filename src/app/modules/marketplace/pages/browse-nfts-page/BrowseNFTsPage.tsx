@@ -65,7 +65,7 @@ import { SortOrderOptions, SortOrderOptionsEnum } from "../../constants";
 import { ListingBanner, ToggleButton, ToggleButtonGroup } from "./components";
 import { OPEN_GRAPH_DESCRIPTION, OPEN_GRAPH_TITLE, ORDERS_PER_PAGE } from "./constants";
 import * as styles from "./BrowseNFTsPage.styles";
-import { GetActiveSellOrdersApi, GetNFT2Api } from '../../../../api';
+import { GetActiveSellOrdersApi, GetNFTApi } from '../../../../api';
 
 export const BrowseNFTsPage = () => {
   const setDarkMode = useThemeStore((s) => s.setDarkMode);
@@ -208,7 +208,7 @@ export const BrowseNFTsPage = () => {
               order
             );
             NFTsRequests.push(
-              GetNFT2Api(assetType.contract, assetType.tokenId, false)
+              GetNFTApi(assetType.contract, assetType.tokenId, false)
             );
             break;
           case "ERC721_BUNDLE":
@@ -223,7 +223,7 @@ export const BrowseNFTsPage = () => {
                   order
                 );
                 NFTsRequests.push(
-                  GetNFT2Api(assetTypeBundle.contracts[i], tokenId, false)
+                  GetNFTApi(assetTypeBundle.contracts[i], tokenId, false)
                 );
               }
             }

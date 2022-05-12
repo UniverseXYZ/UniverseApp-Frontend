@@ -1,6 +1,7 @@
 import React, { createContext, useState, useContext } from 'react';
 import PropTypes from 'prop-types';
-import { ICollection, INFT, IOrder } from '../modules/nft/types';
+import { ICollection } from '../modules/collection/types';
+import { INFT, IOrder } from '../modules/nft/types';
 
 interface INFTCheckoutValue {
   NFT: INFT,

@@ -1,4 +1,4 @@
-import { IUser, IUserBackend } from '../types';
+import { IUser, IUserBackend } from "../../account/types";
 
 export function mapBackendUser(
   {

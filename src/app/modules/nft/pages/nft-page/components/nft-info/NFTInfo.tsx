@@ -45,7 +45,8 @@ import {
   isNFTAssetImage,
   isNFTAssetVideo,
 } from "../../../../helpers";
-import { IERC721AssetType, IOrder, IUser } from "../../../../types";
+import { IOrder, IERC721AssetType } from "../../../../types";
+import { IUser } from "../../../../../account/types";
 import { useNFTPageData } from "../../NFTPage.context";
 import * as styles from "../../styles";
 import { NFTAssetBroken } from "../nft-asset-broken";

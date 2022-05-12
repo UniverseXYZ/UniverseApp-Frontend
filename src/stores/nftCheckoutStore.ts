@@ -1,5 +1,6 @@
-import { ICollection, INFT, IOrder } from "@app/modules/nft/types";
 import create from "zustand"
+import { INFT, IOrder } from "../app/modules/nft/types"
+import { ICollection } from "../app/modules/collection/types"
 
 type INftCheckoutStore = {
   NFT: INFT,

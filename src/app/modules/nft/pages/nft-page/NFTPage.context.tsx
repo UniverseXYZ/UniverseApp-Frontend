@@ -1,10 +1,12 @@
 import React, { FC, createContext, useContext, useCallback } from 'react';
 import { useQuery, useQueryClient } from 'react-query';
 
-import { ICollection, INFT, IOrder, IUser } from '../../types';
+import { IOrder, INFT } from '../../types';
+import { IUser } from '../../../account/types';
+import { ICollection } from '../../../collection/types/collection';
 import { collectionKeys, nftKeys, orderKeys, userKeys } from '../../../../utils/query-keys';
 import { useRouter } from 'next/router';
-import { GetActiveListingApi, getArtistApi, GetCollectionApi, GetHistoryApi, GetMoreFromCollectionApi, GetNFT2Api, GetOrdersApi, INFTHistory } from '@app/api';
+import { GetActiveListingApi, getArtistApi, GetCollectionApi, GetHistoryApi, GetMoreFromCollectionApi, GetNFTApi, GetOrdersApi, INFTHistory } from '@app/api';
 
 export interface INFTPageContext {
   NFT: INFT;
@@ -40,7 +42,7 @@ export const NFTPageProvider: FC<INFTPageProviderProps> = ({ children }) => {
   // NFT Data query
   const { data: NFT, isLoading: isLoadingNFT } = useQuery(
     nftKeys.nftInfo({collectionAddress, tokenId}),
-    () => GetNFT2Api(collectionAddress, tokenId, false),
+    () => GetNFTApi(collectionAddress, tokenId, false),
     {
       enabled: !!collectionAddress && !!tokenId,
     },

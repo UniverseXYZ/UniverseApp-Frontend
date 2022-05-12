@@ -1,9 +1,9 @@
 import { Box } from '@chakra-ui/react';
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useState } from 'react';
 import { NFTCancelListingPopup } from '../../..';
 import { useAuthStore } from '../../../../../../../../../stores/authStore';
-import { OrderSide, OrderStatus } from '../../../../../../../marketplace/enums';
-import { IOrder, IUser } from '../../../../../../types';
+import { IUser } from '../../../../../../../account/types';
+import { IOrder } from '../../../../../../types';
 import { useNFTPageData } from '../../../../NFTPage.context';
 import { EventsEmpty } from '../shared';
 import HistoryEvent from '../shared/history-listings-event/HistoryEvent';

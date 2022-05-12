@@ -7,14 +7,14 @@ import { collectionKeys, nftKeys } from '@app/utils/query-keys';
 import { NFTInfo } from './components';
 import { NFTPageProvider } from './NFTPage.context';
 import { useThemeStore } from 'src/stores/themeStore';
-import { GetNFT2Api, GetCollectionApi } from '../../../../api';
+import { GetNFTApi, GetCollectionApi } from '../../../../api';
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const queryClient = new QueryClient();
   const { collectionAddress, tokenId } = context.params as { collectionAddress: string; tokenId: string;  };
 
   await queryClient.prefetchQuery(nftKeys.nftInfo({collectionAddress, tokenId}), async () => {
-    const result = await GetNFT2Api(collectionAddress, tokenId, false);
+    const result = await GetNFTApi(collectionAddress, tokenId, false);
     // Dehydration will fail if there's a Date or undefined value in the NFT model
     // This will strip any invalid values
     return JSON.parse(JSON.stringify(result));

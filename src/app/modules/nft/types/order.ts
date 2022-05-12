@@ -1,4 +1,4 @@
-import { IUser } from '.';
+import { IUser } from '../../account/types';
 import { OrderAssetClass } from '../enums';
 
 export interface IERC721AssetType {

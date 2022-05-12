@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { ICollectionOrderBookData } from '../../modules/collection/types/collection';
 
 import { OrderAssetClass } from '../../modules/nft/enums';
 import { IOrder, IOrderBackend } from '../../modules/nft/types';
@@ -61,3 +62,23 @@ export const GetBestAndLastOffer: IGetBestAndLastApiFn = async (collection:strin
   return {lastOffer, bestOffer}
 };
 
+/**
+ * Fetches collection additional data
+ * @param address collection address
+ * @returns returns floor price and volume traded
+ */
+export const GetCollectionOrderBookData = async (address: string) : Promise<ICollectionOrderBookData> => {
+  try {
+    const url = `${process.env.REACT_APP_MARKETPLACE_BACKEND}/v1/orders/collection/${address}`;
+
+    const { data: { floorPrice, volumeTraded } } = await axios.get<ICollectionOrderBookData>(url);
+
+    return {
+      floorPrice,
+      volumeTraded
+    };
+  } catch (e) {
+    console.log(e);
+    return {} as ICollectionOrderBookData;
+  }
+};

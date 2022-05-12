@@ -1,7 +1,8 @@
 import React, { createContext, useContext } from 'react';
 import { useQuery } from 'react-query';
 
-import { INFT, IOrder, IUser } from '../../types';
+import { INFT, IOrder } from '../../types';
+import { IUser } from '../../../account/types';
 import { GetNFTApi, GetOrderByHashApi } from '../../../../api';
 
 export interface IBundlePageContext {

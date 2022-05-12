@@ -41,7 +41,7 @@ import CheckIcon from '../../../../../../../assets/images/check-vector.svg';
 import { useAuthStore } from '../../../../../../../stores/authStore';
 import { useErrorStore } from '../../../../../../../stores/errorStore';
 import { useNftCheckoutStore } from 'src/stores/nftCheckoutStore';
-import { GetActiveListingApi, GetNFT2Api } from '../../../../../../api';
+import { GetActiveListingApi, GetNFTApi } from '../../../../../../api';
 // @ts-ignore
 const { contracts: contractsData } = Contracts[process.env.REACT_APP_NETWORK_CHAIN_ID];
 
@@ -183,7 +183,7 @@ export const NFTCheckoutPopup = () => {
         const collectionAddress = NFT?._collectionAddress || '';
 
         // Fetch order api until a diffrent response is returned
-        const newNft = await GetNFT2Api(collectionAddress, tokenId, false);
+        const newNft = await GetNFTApi(collectionAddress, tokenId, false);
 
         // Change query information about order
         if (NFT?._ownerAddress?.toLowerCase() !== newNft._ownerAddress?.toLowerCase()) {

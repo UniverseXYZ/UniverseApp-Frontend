@@ -1,34 +1,13 @@
 import axios from 'axios';
-import Cookies from 'js-cookie';
 import { ethers } from 'ethers';
-
 import { INFTBackendType } from '@app/types';
 import { getArtworkType } from '@app/helpers';
-
 import { ARTWORK_TYPES } from '@legacy/helpers/pureFunctions/nfts';
+import { GetCollectionApi } from '../collections';
+import { ICollection } from '../../modules/collection/types/collection';
+import { INFT, NFTStandard } from '../../modules/nft/types';
 
-import {
-  ICollectionBackend,
-  INFT,
-  IUserBackend,
-  NFTStandard,
-  ICollectionScrapper,
-  ISearchBarDropdownCollection,
-  IUserOwnedCollection,
-  ICollection,
-  ICollectionInfoResponse,
-  ICollectionOrderBookData,
-} from '../../modules/nft/types';
-import { mapBackendCollection, mapBackendUser, mapDropdownCollection } from '../../modules/nft/helpers';
-
-interface ICollectionNFTsResponse {
-  data: any[];
-  page: number;
-  size: string;
-  total: number;
-}
-
-export const GetNFT2Api = async (collectionAddress: string, tokenId: string | number, fetchCollection = true) => {
+export const GetNFTApi = async (collectionAddress: string, tokenId: string | number, fetchCollection = true) => {
   const url = `${process.env.REACT_APP_DATASCRAPER_BACKEND}/v1/tokens/${ethers.utils.getAddress(collectionAddress)}/${tokenId}`;
 
   if (fetchCollection) {
@@ -46,78 +25,6 @@ export const GetNFT2Api = async (collectionAddress: string, tokenId: string | nu
 
   return mapNft(data, null);
 
-};
-
-export const GetMoreFromCollectionApi = async (collectionAddress: string, tokenId: string) => {
-  try {
-    const url = `${process.env.REACT_APP_DATASCRAPER_BACKEND}/v1/collections/${collectionAddress}/more`;
-
-    const { data } = await axios.get<INFTBackendType[]>(url, {params: { excludeTokenId: tokenId, maxCount: 4 }})
-
-    const NFT = data.map((nft: INFTBackendType) => mapNft(nft, null));
-
-    return NFT;
-  } catch (e) {
-    console.log(e);
-    return [{}] as INFT[];
-  }
-};
-
-export const GetUserApi = async (address: string) => {
-  const url = `${process.env.REACT_APP_API_BASE_URL}/api/user/get-profile-info/${address.toLowerCase()}`;
-
-  const { data } = await axios.get<IUserBackend>(url, {
-    headers: {
-      Authorization: `Bearer ${Cookies.get('xyz_access_token')}`,
-    },
-  });
-
-  return data ? mapBackendUser(data) : { address: address };
-};
-
-/**
- * Fetch collection Information from the Universe Backend API
- * @param address :string
- * @returns ICollectionBackend
- */
-export const GetCollectionApi = async (address: string) : Promise<ICollection>=> {
-  const url = `${process.env.REACT_APP_API_BASE_URL}/api/pages/collection/${address.toLowerCase()}`;
-
-  try {
-    const { data } = await axios.get<{ collection: ICollectionBackend; }>(url, {
-      headers: {
-        'Content-Type': 'application/json; charset=UTF-8',
-      }
-    });
-
-    const mappedData: ICollection = mapBackendCollection(data.collection);
-
-    return mappedData;
-  } catch (e) {
-    console.log(e);
-    return {} as ICollection;
-  }
-};
-
-
-/**
- * Fetch collection information from the Datascraper API
- * @param search :string
- * @returns ISearchBarDropdownCollection
- */
-export const GetCollectionsFromScraperApi = async (search: string) : Promise<ISearchBarDropdownCollection[]> => {
-  const url = `${process.env.REACT_APP_DATASCRAPER_BACKEND}/v1/collections/search/collections?search=${search}`;
-
-  try {
-    const { data } = await axios.get<ICollectionScrapper[]>(url);
-
-    const mappedData: ISearchBarDropdownCollection[] = data.map((item) => mapDropdownCollection(item));
-
-    return mappedData;
-  } catch (e) {
-    console.log(e);
-    return [];
-  }
 };
 
 export const getURL = (url: string | null | undefined) => {
@@ -199,86 +106,3 @@ export const mapNft = (data: INFTBackendType, collectionData: ICollection | null
     })) : undefined,
   };
 }
-
-
-/**
- * Fetches user owned collections info from the Datascraper API
- * @param address user address
- * @returns returns all the collections from which the user has NFTs
- */
-export const GetUserCollectionsFromScraperApi = async (address: string) : Promise<IUserOwnedCollection[]> => {
-  try {
-    const checkedAddress = ethers.utils.getAddress(address)
-    const url = `${process.env.REACT_APP_DATASCRAPER_BACKEND}/v1/collections/user/${checkedAddress}`;
-
-    const { data } = await axios.get<IUserOwnedCollection[]>(url);
-
-    return data;
-  } catch (e) {
-    console.log(e);
-    return [];
-  }
-};
-
-
-/**
- * Fetches collection nfts from Datascraper API
- * @param address collection address
- * @param page page
- * @param size size
- * @returns returns all the collection nfts
- */
-export const GetCollectionNFTsApi = async (address: string, page: string | number, size: string | number, search?: string) => {
-  try {
-    const url = `${process.env.REACT_APP_DATASCRAPER_BACKEND}/v1/collections/${address}/tokens?page=${page}&size=${size}&search=${search}`;
-
-    const { data: { data, ...responseData } } = await axios.get<ICollectionNFTsResponse>(url);
-
-    return {
-      data: data.map((nft: INFTBackendType) => mapNft(nft, null)),
-      ...responseData,
-    }
-  } catch (e) {
-    console.log(e);
-    return {} as ICollectionNFTsResponse;
-  }
-};
-
-/**
- * Fetches collection owners count
- * @param address collection address
- * @returns returns owners count
- */
-export const GetCollectionGeneralInfo = async (address: string) : Promise<ICollectionInfoResponse> => {
-  try {
-    const url = `${process.env.REACT_APP_DATASCRAPER_BACKEND}/v1/collections/${ethers.utils.getAddress(address)}`;
-
-    const { data } = await axios.get<ICollectionInfoResponse>(url);
-
-    return data;
-  } catch (e) {
-    console.log(e);
-    return {} as ICollectionInfoResponse;
-  }
-};
-
-/**
- * Fetches collection additional data
- * @param address collection address
- * @returns returns floor price and volume traded
- */
-export const GetCollectionOrderBookData = async (address: string) : Promise<ICollectionOrderBookData> => {
-  try {
-    const url = `${process.env.REACT_APP_MARKETPLACE_BACKEND}/v1/orders/collection/${address}`;
-
-    const { data: { floorPrice, volumeTraded } } = await axios.get<ICollectionOrderBookData>(url);
-
-    return {
-      floorPrice,
-      volumeTraded
-    };
-  } catch (e) {
-    console.log(e);
-    return {} as ICollectionOrderBookData;
-  }
-};

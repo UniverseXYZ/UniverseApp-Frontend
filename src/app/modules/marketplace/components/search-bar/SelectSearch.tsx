@@ -8,7 +8,7 @@ import { Loading, InfoTooltip } from '@app/components';
 import { getCollectionBackgroundColor } from '@legacy/helpers';
 
 import { SearchInput } from './SearchInput';
-import { ISearchBarDropdownCollection } from '../../../nft/types';
+import { ISearchBarDropdownCollection } from '../../../collection/types';
 import * as styles from './SelectSearch.styles';
 
 interface ISearchSelectProps {
