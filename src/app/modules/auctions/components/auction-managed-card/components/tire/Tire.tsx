@@ -1,22 +1,25 @@
 import { Box, Button, Flex, Heading, HStack, Icon, Text } from '@chakra-ui/react';
-import React, { useRef, useState } from 'react';
-
-import { ReactComponent as Arrow3Icon } from '@assets/images/arrow-3.svg';
-
-import * as styles from './Tire.styles';
+import React, { useCallback, useMemo, useRef, useState } from 'react';
 import { FreeMode, Navigation, Controller } from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Swiper as SwiperClass } from 'swiper/types';
-import { SORT_BY_ACTIVE_AUCTIONS } from '@app/modules/auctions/constants';
+
+import { ReactComponent as Arrow3Icon } from '@assets/images/arrow-3.svg';
+import { ReactComponent as AuctionWinnerSVG } from '@assets/images/auction-winner.svg';
+
 import { Select } from '@app/components';
+
+import * as styles from './Tire.styles';
 
 interface ITireProps {
   name: string;
+  winners: number;
 }
 
 export const Tire = (props: ITireProps) => {
   const {
     name,
+    winners: initialWinnersAmount,
   } = props;
 
   const assetUrl = 'https://universe-prod-datascraper-images.s3.amazonaws.com/0x16de9D750F4AC24226154C40980Ef83d4D3fD4AD/4231/image.png';
@@ -25,20 +28,41 @@ export const Tire = (props: ITireProps) => {
   const nextRef = useRef(null);
 
   const [swiper, setSwiper] = useState<SwiperClass>();
+  const [winners] = useState(new Array(initialWinnersAmount).fill(null).map((_, i) => ({
+    id: i + 1,
+    name: `Winner #${i + 1}`,
+    amountNFTs: (i + 1) * 3,
+  })));
+
+  const totalNFTs = useMemo(() => {
+    return winners.reduce((total, winner) => total + winner.amountNFTs, 0);
+  }, [winners]);
+
+  const renderWinnerItem = useCallback((winner) => (
+    <HStack spacing={'10px'}>
+      <Icon viewBox={'0 0 14 16'}>
+        <AuctionWinnerSVG />
+      </Icon>
+      <Heading fontSize={'11px'}>{winner.name}</Heading>
+      <Text fontSize={'10px'}>{winner.amountNFTs} NFTs</Text>
+    </HStack>
+  ), []);
 
   return (
     <Box {...styles.Wrapper}>
       <Flex justifyContent={'space-between'} mb={'20px'}>
         <HStack fontSize={'14px'}>
           <Heading fontSize={'14px'}>{name}</Heading>
-          <Text>Winners: <strong>5</strong></Text>
-          <Text>Total NFTs: <strong>26</strong></Text>
+          <Text>Winners: <strong>{winners.length}</strong></Text>
+          <Text>Total NFTs: <strong>{totalNFTs}</strong></Text>
         </HStack>
 
         <Select
           buttonProps={{ minWidth: '200px', }}
-          items={SORT_BY_ACTIVE_AUCTIONS}
-          value={SORT_BY_ACTIVE_AUCTIONS[0]}
+          items={winners}
+          value={winners[0]}
+          renderSelectedItem={renderWinnerItem}
+          renderItem={renderWinnerItem}
         />
       </Flex>
 

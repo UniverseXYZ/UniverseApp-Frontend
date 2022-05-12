@@ -1,4 +1,4 @@
-import { Box, Button, Flex, Heading, HStack, Icon, SimpleGrid, Tooltip, VStack } from '@chakra-ui/react';
+import { Box, Button, Flex, Heading, HStack, Icon, SimpleGrid, Skeleton, Tooltip, VStack } from '@chakra-ui/react';
 import React, { useState } from 'react';
 
 import { ReactComponent as ArrowIcon } from '@assets/images/arrow-2.svg';
@@ -14,23 +14,23 @@ export const AuctionManagedCardSkeleton = () => {
     <Box {...styles.GradientWrapper}>
       <Box {...styles.Wrapper}>
         <Flex alignItems={'center'} justifyContent={'space-between'} mb={'20px'}>
-          <Box {...styles.Title} />
+          <Skeleton {...styles.Title} />
           <HStack spacing={'14px'}>
-            <Box {...styles.LandingPageButton} />
-            <Box {...styles.ExpandButton} />
+            <Skeleton {...styles.LandingPageButton} />
+            <Skeleton {...styles.ExpandButton} />
           </HStack>
         </Flex>
 
         <VStack spacing={'30px'} alignItems={'flex-start'}>
           <HStack spacing={'12px'}>
-            {badges.map((_, i) => <Box key={i} {...styles.Badge} />)}
+            {badges.map((_, i) => <Skeleton key={i} {...styles.Badge} />)}
           </HStack>
 
           <SimpleGrid columns={4} spacing={'20px'} w={'100%'}>
             {statistics.map((_, i) => (
               <Box key={i} {...styles.StatisticItem}>
-                <Box {...styles.StatisticItemName} />
-                <Box {...styles.StatisticItemValue} />
+                <Skeleton {...styles.StatisticItemName} />
+                <Skeleton {...styles.StatisticItemValue} />
               </Box>
             ))}
           </SimpleGrid>

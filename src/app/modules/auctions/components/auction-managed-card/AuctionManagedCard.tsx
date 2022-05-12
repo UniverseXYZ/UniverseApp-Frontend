@@ -22,9 +22,9 @@ export const AuctionManagedCard = (props: IAuctionManagedCardProps) => {
   ]);
 
   const [tires] = useState([
-    { name: 'Platinum tier', },
-    { name: 'Gold tier', },
-    { name: 'Silver tier', },
+    { name: 'Platinum tier', winners: 5 },
+    { name: 'Gold tier', winners: 10 },
+    { name: 'Silver tier', winners: 7 },
   ]);
 
   return (
@@ -64,7 +64,7 @@ export const AuctionManagedCard = (props: IAuctionManagedCardProps) => {
           {isExpanded && (
             <VStack spacing={'20px'} alignItems={'flex-start'} w={'100%'}>
               {tires.map((tire, i) => (
-                <Tire key={i} name={tire.name} />
+                <Tire key={i} name={tire.name} winners={tire.winners} />
               ))}
             </VStack>
           )}

@@ -1,4 +1,10 @@
-import { BoxProps, ButtonProps } from '@chakra-ui/react';
+import { BoxProps, SkeletonProps } from '@chakra-ui/react';
+
+const BaseSkeletonStyles: SkeletonProps = {
+  startColor: '#E6E6E6',
+  endColor: '#c7c7c7',
+  speed: 1,
+};
 
 export const GradientWrapper: BoxProps = {
   bg: '#E6E6E6',
@@ -14,28 +20,28 @@ export const Wrapper: BoxProps = {
   padding: '30px',
 };
 
-export const Title: BoxProps = {
-  bg: '#E6E6E6',
+export const Title: SkeletonProps = {
+  ...BaseSkeletonStyles,
   borderRadius: '100px',
   h: '22px',
   w: '300px',
 };
 
-export const LandingPageButton: BoxProps = {
-  bg: '#E6E6E6',
+export const LandingPageButton: SkeletonProps = {
+  ...BaseSkeletonStyles,
   borderRadius: '12px',
   h: '42px',
   w: '195px',
 };
 
-export const ExpandButton: BoxProps = {
-  bg: '#E6E6E6',
+export const ExpandButton: SkeletonProps = {
+  ...BaseSkeletonStyles,
   borderRadius: '12px',
   boxSize: '42px',
 };
 
-export const Badge: BoxProps = {
-  bg: '#E6E6E6',
+export const Badge: SkeletonProps = {
+  ...BaseSkeletonStyles,
   borderRadius: '100px',
   h: '33px',
   w: '150px',
@@ -48,16 +54,16 @@ export const StatisticItem: BoxProps = {
   minH: '90px'
 };
 
-export const StatisticItemName: BoxProps = {
-  bg: '#E6E6E6',
+export const StatisticItemName: SkeletonProps = {
+  ...BaseSkeletonStyles,
   borderRadius: '100px',
   h: '12px',
   mb: '18px',
   w: '40px',
 };
 
-export const StatisticItemValue: BoxProps = {
-  bg: '#E6E6E6',
+export const StatisticItemValue: SkeletonProps = {
+  ...BaseSkeletonStyles,
   borderRadius: '100px',
   h: '20px',
   w: '90px',
