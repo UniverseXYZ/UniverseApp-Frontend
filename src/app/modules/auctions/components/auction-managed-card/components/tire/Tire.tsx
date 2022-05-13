@@ -1,15 +1,15 @@
-import { Box, Button, Flex, Heading, HStack, Icon, Text } from '@chakra-ui/react';
+import { Box, Button, Heading, HStack, Icon, Image, Stack, Text } from '@chakra-ui/react';
 import React, { useCallback, useMemo, useRef, useState } from 'react';
 import { FreeMode, Navigation, Controller } from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Swiper as SwiperClass } from 'swiper/types';
 
 import { ReactComponent as Arrow3Icon } from '@assets/images/arrow-3.svg';
-import { ReactComponent as AuctionWinnerSVG } from '@assets/images/auction-winner.svg';
+import AuctionWinnerIcon from '@assets/images/auction-winner.svg';
 
 import { Select } from '@app/components';
 
-import * as styles from './Tire.styles';
+import * as s from './Tire.styles';
 
 interface ITireProps {
   name: string;
@@ -40,40 +40,38 @@ export const Tire = (props: ITireProps) => {
 
   const renderWinnerItem = useCallback((winner) => (
     <HStack spacing={'10px'}>
-      <Icon viewBox={'0 0 14 16'}>
-        <AuctionWinnerSVG />
-      </Icon>
+      <Image src={AuctionWinnerIcon} alt={'Winner icon'} />
       <Heading fontSize={'11px'}>{winner.name}</Heading>
       <Text fontSize={'10px'}>{winner.amountNFTs} NFTs</Text>
     </HStack>
   ), []);
 
   return (
-    <Box {...styles.Wrapper}>
-      <Flex justifyContent={'space-between'} mb={'20px'}>
-        <HStack fontSize={'14px'}>
-          <Heading fontSize={'14px'}>{name}</Heading>
+    <Box {...s.Wrapper}>
+      <Stack {...s.TitleWrapper}>
+        <Heading fontSize={'14px'}>{name}</Heading>
+        <HStack spacing={'20px'} fontSize={'14px'} flex={1}>
           <Text>Winners: <strong>{winners.length}</strong></Text>
           <Text>Total NFTs: <strong>{totalNFTs}</strong></Text>
         </HStack>
 
         <Select
-          buttonProps={{ minWidth: '200px', }}
+          buttonProps={s.WinnerSelectorButton}
           items={winners}
           value={winners[0]}
           renderSelectedItem={renderWinnerItem}
           renderItem={renderWinnerItem}
         />
-      </Flex>
+      </Stack>
 
       <Box pos={'relative'}>
-        <Button ref={prevRef} variant={'simple'} {...styles.SwiperLeftButton}>
+        <Button ref={prevRef} variant={'simple'} {...s.SwiperLeftButton}>
           <Icon viewBox={'0 0 6 12'} pos={'relative'}>
             <Arrow3Icon />
           </Icon>
         </Button>
 
-        <Button ref={nextRef} variant={'simple'} {...styles.SwiperRightButton}>
+        <Button ref={nextRef} variant={'simple'} {...s.SwiperRightButton}>
           <Icon viewBox={'0 0 6 12'} transform={'rotate(180deg)'}>
             <Arrow3Icon />
           </Icon>
@@ -95,10 +93,10 @@ export const Tire = (props: ITireProps) => {
           {new Array(15).fill(null).map((NFT, i) => (
             <SwiperSlide key={i} style={{ width: '85px' }}>
               <Box
-                {...styles.NFTAsset}
+                {...s.NFTAsset}
                 bg={`url(${assetUrl}) center / cover`}
               >
-                <Box {...styles.AmountBadge}>5</Box>
+                <Box {...s.AmountBadge}>5</Box>
               </Box>
             </SwiperSlide>
           ))}

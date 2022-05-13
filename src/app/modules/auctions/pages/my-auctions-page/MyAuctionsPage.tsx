@@ -1,9 +1,10 @@
 import {
   Box,
-  Button, Container,
-  Flex,
+  Button,
+  Container,
   Heading,
   Image,
+  Stack,
   TabPanel,
   TabPanels,
   Tabs,
@@ -24,13 +25,13 @@ export const MyAuctionsPage = () => {
     <Box layerStyle={'StoneBG'}>
       <Box {...styles.Wrapper}>
         <Container maxW={'1110px'} p={0}>
-          <Flex {...styles.Header}>
+          <Stack direction={{ base: 'column', md: 'row', }} spacing={'20px'} {...styles.Header}>
             <Heading as={'h1'}>My auctions</Heading>
             <Button boxShadow={'lg'} padding={'11px 16px'}>
               <Image src={PlusIcon} alt="icon" mr={'12px'} />
               Set up auction
             </Button>
-          </Flex>
+          </Stack>
 
           <Tabs variant={'line'}>
             <LineTabList>

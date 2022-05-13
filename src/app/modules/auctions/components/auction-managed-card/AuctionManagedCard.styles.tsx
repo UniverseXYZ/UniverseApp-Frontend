@@ -26,7 +26,43 @@ export const Wrapper: BoxProps = {
   padding: '30px',
 };
 
+export const FirstRowWrapper: BoxProps = {
+  alignItems: 'center',
+  flexWrap: {
+    base: 'wrap',
+    md: 'nowrap',
+  },
+  justifyContent: 'space-between',
+  mb: '20px',
+};
+
+export const TitleWrapper: BoxProps = {
+  flex: 1,
+  flexBasis: {
+    base: 'calc(100% - 42px - 14px)',
+    md: 'auto',
+  },
+};
+
+export const LandingPageButton: ButtonProps = {
+  padding: '11px 16px',
+  mt: {
+    base: '14px',
+    md: 'auto',
+  },
+  order: {
+    base: 1,
+    md: 0,
+  },
+  w: {
+    base: '100%',
+    md: 'auto',
+  },
+};
+
 export const ExpandButton: ButtonProps = {
+  ml: '14px',
+
   _hover: {
     bg: 'rgba(0, 0, 0, 0.05)',
   },

@@ -4,9 +4,17 @@ export const Wrapper: BoxProps = {
   sx: {
     'ul': {
       display: 'flex',
+      flexWrap: {
+        base: 'wrap',
+        md: 'nowrap',
+      },
     },
     'li': {
       mr: '8px',
+      mb: {
+        base: '8px',
+        md: '0',
+      },
       '&.selected a': {
         bg: 'linear-gradient(135deg, #BCEB00 15.57%, #00EAEA 84.88%)',
         backgroundOrigin: 'border-box',

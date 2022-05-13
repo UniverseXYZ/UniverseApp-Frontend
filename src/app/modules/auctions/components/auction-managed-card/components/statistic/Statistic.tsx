@@ -41,7 +41,7 @@ export const Statistic = (props: IStatisticProps) => {
       {items.map(({ label, value, isPrice }, i) => (
         <Box key={i} {...styles.ItemWrapper}>
           <Text {...styles.Label}>{label}</Text>
-          <HStack spacing={'4px'}>
+          <HStack spacing={'4px'} flexWrap={'wrap'}>
             {isPrice && (<TokenIcon ticker={TokenTicker.WETH} boxSize={'20px'} />)}
             <Text {...styles.Value}>{value}</Text>
             {isPrice && (

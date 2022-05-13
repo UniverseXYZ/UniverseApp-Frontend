@@ -1,9 +1,15 @@
-import { Box, Button, Flex, Heading, HStack, Icon, SimpleGrid, Skeleton, Tooltip, VStack } from '@chakra-ui/react';
+import {
+  Box,
+  Flex,
+  SimpleGrid,
+  Skeleton,
+  Stack,
+  VStack,
+} from '@chakra-ui/react';
 import React, { useState } from 'react';
 
-import { ReactComponent as ArrowIcon } from '@assets/images/arrow-2.svg';
 
-import * as styles from './AuctionManagedCardSkeleton.styles';
+import * as s from './AuctionManagedCardSkeleton.styles';
 
 export const AuctionManagedCardSkeleton = () => {
 
@@ -11,26 +17,26 @@ export const AuctionManagedCardSkeleton = () => {
   const [statistics] = useState(new Array(4).fill(null));
 
   return (
-    <Box {...styles.GradientWrapper}>
-      <Box {...styles.Wrapper}>
-        <Flex alignItems={'center'} justifyContent={'space-between'} mb={'20px'}>
-          <Skeleton {...styles.Title} />
-          <HStack spacing={'14px'}>
-            <Skeleton {...styles.LandingPageButton} />
-            <Skeleton {...styles.ExpandButton} />
-          </HStack>
+    <Box {...s.GradientWrapper}>
+      <Box {...s.Wrapper}>
+        <Flex {...s.FirstRowWrapper}>
+          <Box {...s.TitleWrapper}>
+            <Skeleton {...s.Title} />
+          </Box>
+          <Skeleton{...s.LandingPageButton} />
+          <Skeleton {...s.ExpandButton} />
         </Flex>
 
         <VStack spacing={'30px'} alignItems={'flex-start'}>
-          <HStack spacing={'12px'}>
-            {badges.map((_, i) => <Skeleton key={i} {...styles.Badge} />)}
-          </HStack>
+          <Stack spacing={'12px'} direction={{ base: 'column', md: 'row' }}>
+            {badges.map((_, i) => <Skeleton key={i} {...s.Badge} />)}
+          </Stack>
 
-          <SimpleGrid columns={4} spacing={'20px'} w={'100%'}>
+          <SimpleGrid columns={{ base: 2, md: 4 }} spacing={'20px'} w={'100%'}>
             {statistics.map((_, i) => (
-              <Box key={i} {...styles.StatisticItem}>
-                <Skeleton {...styles.StatisticItemName} />
-                <Skeleton {...styles.StatisticItemValue} />
+              <Box key={i} {...s.StatisticItem}>
+                <Skeleton {...s.StatisticItemName} />
+                <Skeleton {...s.StatisticItemValue} />
               </Box>
             ))}
           </SimpleGrid>

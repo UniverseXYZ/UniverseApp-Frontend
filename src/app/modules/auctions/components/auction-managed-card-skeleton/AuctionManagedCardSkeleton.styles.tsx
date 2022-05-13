@@ -20,6 +20,24 @@ export const Wrapper: BoxProps = {
   padding: '30px',
 };
 
+export const FirstRowWrapper: BoxProps = {
+  alignItems: 'center',
+  flexWrap: {
+    base: 'wrap',
+    md: 'nowrap',
+  },
+  justifyContent: 'space-between',
+  mb: '20px',
+};
+
+export const TitleWrapper: BoxProps = {
+  flex: 1,
+  flexBasis: {
+    base: 'calc(100% - 42px - 14px)',
+    md: 'auto',
+  },
+};
+
 export const Title: SkeletonProps = {
   ...BaseSkeletonStyles,
   borderRadius: '100px',
@@ -31,13 +49,25 @@ export const LandingPageButton: SkeletonProps = {
   ...BaseSkeletonStyles,
   borderRadius: '12px',
   h: '42px',
-  w: '195px',
+  mt: {
+    base: '14px',
+    md: 'auto',
+  },
+  order: {
+    base: 1,
+    md: 0
+  },
+  w: {
+    base: '100%',
+    md: '195px'
+  },
 };
 
 export const ExpandButton: SkeletonProps = {
   ...BaseSkeletonStyles,
   borderRadius: '12px',
   boxSize: '42px',
+  ml: '14px',
 };
 
 export const Badge: SkeletonProps = {
@@ -50,8 +80,10 @@ export const Badge: SkeletonProps = {
 export const StatisticItem: BoxProps = {
   border: '1px solid rgba(0, 0, 0, 0.1)',
   borderRadius: '10px',
-  padding: '25px 30px',
-  minH: '90px'
+  padding: {
+    base: '14px',
+    md: '25px 30px',
+  },
 };
 
 export const StatisticItemName: SkeletonProps = {

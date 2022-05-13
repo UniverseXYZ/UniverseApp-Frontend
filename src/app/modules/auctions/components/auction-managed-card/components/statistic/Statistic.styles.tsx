@@ -3,7 +3,10 @@ import { BoxProps, TextProps } from '@chakra-ui/react';
 export const ItemWrapper: BoxProps = {
   border: '1px solid rgba(0, 0, 0, 0.1)',
   borderRadius: '10px',
-  padding: '20px 30px',
+  padding: {
+    base: '14px',
+    md: '20px 30px'
+  },
 };
 
 export const Label: TextProps = {

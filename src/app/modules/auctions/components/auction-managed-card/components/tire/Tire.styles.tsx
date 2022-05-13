@@ -1,9 +1,17 @@
-import { BoxProps, ButtonProps } from '@chakra-ui/react';
+import { BoxProps, ButtonProps, StackProps } from '@chakra-ui/react';
 
 export const Wrapper: BoxProps = {
   border: '1px solid rgba(0, 0, 0, 0.1)',
   borderRadius: '10px',
   padding: '30px',
+  w: '100%',
+};
+
+export const TitleWrapper: StackProps = {
+  alignItems: { base: 'flex-start', md: 'center' },
+  direction: { base: 'column', md: 'row' },
+  spacing: { base: '10px', md: '20px' },
+  mb: '20px',
   w: '100%',
 };
 
@@ -71,7 +79,6 @@ export const SwiperLeftButton: ButtonProps = {
   },
 };
 
-
 export const SwiperRightButton: ButtonProps = {
   ...SwiperLeftButton,
   left: 'auto',
@@ -85,4 +92,15 @@ export const SwiperRightButton: ButtonProps = {
   }
 };
 
+export const WinnerSelectorButton: ButtonProps = {
+  minWidth: '200px',
+  mt: {
+    base: '12px',
+    md: 0,
+  },
+  width: {
+    base: '100%',
+    md: 'fit-content',
+  }
+};
 
