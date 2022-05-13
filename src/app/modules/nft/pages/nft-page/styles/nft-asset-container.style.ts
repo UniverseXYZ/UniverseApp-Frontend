@@ -21,6 +21,7 @@ export const NFTAssetContainerStyle: BoxProps = {
   padding: {
     base: '24px 20px',
     xl: '40px 122px',
+    '2xl': '40px 244px'
   },
   top: {
     base: 0,
