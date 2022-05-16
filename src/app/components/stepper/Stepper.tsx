@@ -1,23 +1,46 @@
-import { Box, BoxProps, Icon, Stack, StackProps, Text } from '@chakra-ui/react';
-import React, { useMemo, useRef } from 'react';
+import { Box, BoxProps, Icon, Stack, StackProps, useRadio, useRadioGroup } from '@chakra-ui/react';
+import React, { createContext, useContext, useMemo, useRef } from 'react';
+import useMeasureDirty from 'react-use/lib/useMeasureDirty';
 
 import { ReactComponent as CheckSVG } from '@assets/images/check-black.svg';
 
 import { StepState } from './types';
 import * as s from './Stepper.styles';
-import useMeasureDirty from 'react-use/lib/useMeasureDirty';
 
-export interface IStepProps extends BoxProps {
-  state: StepState;
-  label?: string;
-  title?: string;
+interface IStepperContext {
+  direction: StackProps['direction'];
+  getStepState: (index:  number) => StepState;
+}
+
+const StepperContext = createContext<IStepperContext>({
+  direction: 'row',
+  getStepState: () => 'future',
+});
+
+export interface IStepProps extends Omit<BoxProps, 'children'> {
+  renderAbove?: (state: StepState) => React.ReactNode;
+  renderIcon?: (state: StepState) => React.ReactNode;
+  children?: React.ReactNode | ((state: StepState) => React.ReactNode);
 }
 
 export const Step = (props: IStepProps) => {
-  const { label, title, children, ...rest } = props;
+  const {
+    children,
+    renderAbove,
+    renderIcon,
+    ...rest
+  } = props;
 
   const wrapperRef = useRef<HTMLDivElement>(null);
   const circleRef = useRef<HTMLDivElement>(null);
+
+  const { getInputProps } = useRadio(props);
+
+  const { direction, getStepState } = useContext(StepperContext);
+
+  const input = getInputProps() as { value: number; };
+
+  const state: StepState = getStepState(input.value);
 
   const { height } = useMeasureDirty(wrapperRef);
 
@@ -28,28 +51,65 @@ export const Step = (props: IStepProps) => {
   }, [height]);
 
   return (
-    <Box ref={wrapperRef} {...s.getStepWrapperStyle(rest.state, circleOffsetTop - 1)} {...rest}>
-      {!!label && (<Text {...s.StepLabel}>{label}</Text>)}
-      {!!title && (<Text {...s.StepTitle}>{title}</Text>)}
-      <Box ref={circleRef} {...s.getStepCircleStyles(props.state)}>
-        {props.state === 'done' && (
-          <Icon viewBox={'0 0 10 7'} w={'10px'}>
-            <CheckSVG />
-          </Icon>
+    <Box ref={wrapperRef} {...s.getStepWrapperStyle(state, circleOffsetTop - 1)} {...rest}>
+      <input {...input} />
+
+      {renderAbove ? renderAbove(state) : null}
+
+      <Box ref={circleRef}>
+        {renderIcon ? renderIcon(state) : (
+          <Box {...s.getStepCircleStyles(state)}>
+            {state === 'done' && (
+              <Icon viewBox={'0 0 10 7'} w={'10px'}>
+                <CheckSVG />
+              </Icon>
+            )}
+          </Box>
         )}
       </Box>
-      <Box pt={'8px'}>{children}</Box>
+      {!children ? null : typeof children === 'function' ? children(state) : children}
     </Box>
   );
 }
 
-interface IStepperProps extends StackProps {}
+interface IStepperProps extends StackProps {
+  activeStep: number;
+}
 
 export const Stepper = (props: IStepperProps) => {
   const {
+    activeStep,
     direction = 'row',
+    children,
     ...rest
   } = props;
 
-  return (<Stack direction={direction} spacing={0} {...rest} />);
+  const { getRootProps, getRadioProps } = useRadioGroup({
+    value: activeStep,
+    onChange: console.log
+  })
+
+  const group = getRootProps();
+
+  const value: IStepperContext = {
+    direction,
+    getStepState: (idx) => {
+      switch (true) {
+        case idx === activeStep: return 'current';
+        case idx < activeStep: return 'done';
+        default: return 'future';
+      }
+    }
+  };
+
+  return (
+    <StepperContext.Provider value={value}>
+      <Stack direction={direction} spacing={0} {...group} {...rest}>
+        {React.Children.map(children, (child: any, i) => {
+          const radio = getRadioProps({ value: i });
+          return React.cloneElement(child, { ...child.props, ...radio })
+        })}
+      </Stack>
+    </StepperContext.Provider>
+  );
 }

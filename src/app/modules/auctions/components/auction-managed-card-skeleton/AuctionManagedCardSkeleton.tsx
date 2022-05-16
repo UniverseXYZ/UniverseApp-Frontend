@@ -8,13 +8,58 @@ import {
 } from '@chakra-ui/react';
 import React, { useState } from 'react';
 
+import { Step, Stepper } from '@app/components';
 
+import { IAuctionManagedCardSkeletonState } from './types';
 import * as s from './AuctionManagedCardSkeleton.styles';
 
-export const AuctionManagedCardSkeleton = () => {
+interface IAuctionManagedCardSkeletonProps {
+  state?: IAuctionManagedCardSkeletonState;
+}
+
+export const AuctionManagedCardSkeleton = (props: IAuctionManagedCardSkeletonProps) => {
+  const {
+    state = 'active',
+  } = props;
 
   const [badges] = useState(new Array(3).fill(null));
   const [statistics] = useState(new Array(4).fill(null));
+  const [steps] = useState(new Array(3).fill(null));
+
+  const renderActiveContent = () => (
+    <SimpleGrid columns={{ base: 2, md: 4 }} spacing={'20px'} w={'100%'}>
+      {statistics.map((_, i) => (
+        <Box key={i} {...s.StatisticItem}>
+          <Skeleton {...s.StatisticItemName} />
+          <Skeleton {...s.StatisticItemValue} />
+        </Box>
+      ))}
+    </SimpleGrid>
+  );
+
+  const renderDraftContent = () => (
+    <Stepper activeStep={-1} mt={'46px !important'} mb={'30px !important'} w={'100%'}>
+      {steps.map((_, i) => (
+        <Step
+          key={i}
+          renderAbove={() => (
+            <>
+              <Skeleton {...s.StepLabel} />
+              <Skeleton {...s.StepTitle} />
+            </>
+          )}
+          renderIcon={() => (<Skeleton {...s.StepIcon} />)}
+        >
+          <Skeleton {...s.StepButton} />
+        </Step>
+      ))}
+    </Stepper>
+  );
+
+  const contentRenders: Record<IAuctionManagedCardSkeletonState, () => React.ReactNode> = {
+    active: renderActiveContent,
+    draft: renderDraftContent,
+  };
 
   return (
     <Box {...s.GradientWrapper}>
@@ -31,15 +76,7 @@ export const AuctionManagedCardSkeleton = () => {
           <Stack spacing={'12px'} direction={{ base: 'column', md: 'row' }}>
             {badges.map((_, i) => <Skeleton key={i} {...s.Badge} />)}
           </Stack>
-
-          <SimpleGrid columns={{ base: 2, md: 4 }} spacing={'20px'} w={'100%'}>
-            {statistics.map((_, i) => (
-              <Box key={i} {...s.StatisticItem}>
-                <Skeleton {...s.StatisticItemName} />
-                <Skeleton {...s.StatisticItemValue} />
-              </Box>
-            ))}
-          </SimpleGrid>
+          {contentRenders[state]()}
         </VStack>
       </Box>
     </Box>

@@ -1,4 +1,4 @@
-import { BoxProps, TextProps } from '@chakra-ui/react';
+import { BoxProps } from '@chakra-ui/react';
 
 import { StepState } from './types';
 
@@ -18,34 +18,19 @@ export const getStepWrapperStyle: (s: StepState, circleOffsetTop: number) => Box
     flex: '1',
     textAlign: 'center',
 
-    _notFirst: {
+    _notLast: {
       _after: {
         content: '""',
         position: 'relative',
         top: `calc(${circleOffsetTop}px + var(--circle-size) / 2)`,
         width: 'calc(100% - var(--circle-size) - calc(var(--spacing) * 2))',
-        left: 'calc(-50% + calc(var(--circle-size) / 2 + var(--spacing)))',
+        left: 'calc(50% + calc(var(--circle-size) / 2 + var(--spacing)))',
         height: '1px',
-        backgroundColor: state !== 'future' ? '#BCEB00' : 'rgba(0, 0, 0, 0.1)',
+        backgroundColor: state === 'done' ? '#BCEB00' : 'rgba(0, 0, 0, 0.1)',
         order: '-1',
       }
     }
   };
-};
-
-export const StepLabel: TextProps = {
-  color: 'rgba(0 0 0 / 40%)',
-  fontSize: '10px',
-  fontWeight: '600',
-  lineHeight: '15px',
-};
-
-export const StepTitle: TextProps = {
-  color: 'black',
-  fontSize: '14px',
-  fontWeight: '600',
-  lineHeight: '21px',
-  mb: '2px',
 };
 
 export const getStepCircleStyles: (s: StepState) => BoxProps = (state) => {

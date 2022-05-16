@@ -28,6 +28,8 @@ export const Tire = (props: ITireProps) => {
   const nextRef = useRef(null);
 
   const [swiper, setSwiper] = useState<SwiperClass>();
+
+  const [NFTs] = useState(new Array(5).fill(null));
   const [winners] = useState(new Array(initialWinnersAmount).fill(null).map((_, i) => ({
     id: i + 1,
     name: `Winner #${i + 1}`,
@@ -90,12 +92,9 @@ export const Tire = (props: ITireProps) => {
           controller={{ control: swiper }}
           onSwiper={(swiper) => setSwiper(swiper)}
         >
-          {new Array(15).fill(null).map((NFT, i) => (
+          {NFTs.map((NFT, i) => (
             <SwiperSlide key={i} style={{ width: '85px' }}>
-              <Box
-                {...s.NFTAsset}
-                bg={`url(${assetUrl}) center / cover`}
-              >
+              <Box {...s.NFTAsset} bg={`url(${assetUrl}) center / cover`}>
                 <Box {...s.AmountBadge}>5</Box>
               </Box>
             </SwiperSlide>

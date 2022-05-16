@@ -7,7 +7,7 @@ import { Badge, Tire } from './components';
 import { IAuctionManagedCardState } from './types';
 import * as s from './AuctionManagedCard.styles';
 
-interface IAuctionManagedCardProps {
+export interface IAuctionManagedCardProps {
   state?: IAuctionManagedCardState;
   children?: React.ReactChild;
 }

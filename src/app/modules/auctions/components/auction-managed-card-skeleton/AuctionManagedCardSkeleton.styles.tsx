@@ -100,3 +100,37 @@ export const StatisticItemValue: SkeletonProps = {
   h: '20px',
   w: '90px',
 };
+
+export const StepLabel: SkeletonProps = {
+  ...BaseSkeletonStyles,
+  borderRadius: '12px',
+  mb: '6px',
+  mx: 'auto',
+  h: '12px',
+  w: '50px',
+};
+
+export const StepTitle: SkeletonProps = {
+  ...BaseSkeletonStyles,
+  borderRadius: '12px',
+  mb: '4px',
+  mx: 'auto',
+  h: '16px',
+  w: '120px',
+};
+
+export const StepIcon: SkeletonProps = {
+  ...BaseSkeletonStyles,
+  boxSize: '20px',
+  borderRadius: 'full',
+  m: 'auto',
+};
+
+export const StepButton: SkeletonProps = {
+  ...BaseSkeletonStyles,
+  borderRadius: '12px',
+  mt: '8px',
+  mx: 'auto',
+  h: '42px',
+  w: '80px',
+};

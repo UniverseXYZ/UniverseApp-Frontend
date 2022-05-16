@@ -1,53 +1,85 @@
-import { Box, Button, ButtonProps, Image, Input, InputGroup, InputLeftElement, Stack, VStack } from '@chakra-ui/react';
-import React from 'react';
+import {
+  Box,
+  Button,
+  Image,
+  Input,
+  InputGroup,
+  InputLeftElement,
+  Stack,
+  Text,
+  VStack,
+} from '@chakra-ui/react';
+import React, { useState } from 'react';
 
 import SearchIcon from '@assets/images/search-gray.svg';
 
-import { IStepProps, Pagination, Select, Step, Stepper } from '@app/components';
+import { Pagination, Select, Step, Stepper } from '@app/components';
 import { SORT_BY_ACTIVE_AUCTIONS } from '@app/modules/auctions/constants';
 import {
   AuctionManagedCard,
-  AuctionManagedCardSkeleton,
+  AuctionManagedCardSkeleton, IAuctionManagedCardProps,
   IAuctionManagedCardState,
 } from '@app/modules/auctions/components';
 
-interface IDraftAuctionStepProps extends Omit<IStepProps, 'label' | 'title'> {
-  stepNum: number;
-  title: string;
-  onStart: () => void;
-  onEdit: () => void;
-}
+import * as s from './TabDraftAuctions.styles';
 
-export const DraftAuctionStep = (props: IDraftAuctionStepProps) => {
-  const { stepNum, title, onStart, onEdit, ...rest } = props;
+export const DraftAuctionCard = (props: IAuctionManagedCardProps) => {
+  const [activeStep, setActiveStep] = useState(1);
 
-  const ButtonStyle: ButtonProps = {
-    margin: 'auto',
-    padding: '11px 16px',
-    width: 'fit-content',
-  };
+  const steps = [
+    {
+      title: 'Configure auction',
+      onStart: () => void 0,
+      onEdit: () => void 0,
+    },
+    {
+      title: 'Customize landing',
+      onStart: () => void 0,
+      onEdit: () => void 0,
+    },
+    {
+      title: 'Finalize auction',
+      onStart: () => void 0,
+      onEdit: () => void 0,
+    },
+  ];
 
   return (
-    <Step
-      label={`Step ${stepNum}`}
-      title={title}
-      {...rest}
-    >
-      {rest.state === 'done' && (
-        <Button variant={'outline'} {...ButtonStyle} onClick={onEdit}>Edit</Button>
-      )}
+    <AuctionManagedCard {...props}>
+      <Box mt={'40px !important'} mb={'30px !important'} w={'100%'}>
+        <Stepper activeStep={activeStep}>
+          {steps.map((step, i) => (
+            <Step
+              renderAbove={() => (
+                <>
+                  <Text {...s.StepLabel}>{`Step ${i + 1}`}</Text>
+                  <Text {...s.StepTitle}>{step.title}</Text>
+                </>
+              )}
+            >
+              {(state) => (
+                <Box pt={'8px'}>
+                  {state === 'done' && (
+                    <Button variant={'outline'} {...s.StepButton} onClick={() => setActiveStep(i)}>Edit</Button>
+                  )}
 
-      {(rest.state === 'current' || rest.state === 'future') && (
-        <Button
-          disabled={rest.state === 'future'}
-          boxShadow={rest.state !== 'future' ? 'lg' : 'none'}
-          {...ButtonStyle}
-          onClick={onStart}
-        >Start</Button>
-      )}
-    </Step>
+                  {(state === 'current' || state === 'future') && (
+                    <Button
+                      disabled={state === 'future'}
+                      boxShadow={state !== 'future' ? 'lg' : 'none'}
+                      {...s.StepButton}
+                      onClick={() => setActiveStep(i + 1)}
+                    >Start</Button>
+                  )}
+                </Box>
+              )}
+            </Step>
+          ))}
+        </Stepper>
+      </Box>
+    </AuctionManagedCard>
   );
-}
+};
 
 interface ITabDraftAuctionsProps {}
 
@@ -72,35 +104,9 @@ export const TabDraftAuctions = (props: ITabDraftAuctionsProps) => {
       </Stack>
 
       {auctions.map((auctionCardState, i) => (
-        <AuctionManagedCard key={i} state={auctionCardState}>
-          <Box mt={'40px !important'} mb={'30px !important'} w={'100%'}>
-            <Stepper>
-              <DraftAuctionStep
-                state={'done'}
-                stepNum={1}
-                title={'Configure auction'}
-                onStart={() => console.log('onStart')}
-                onEdit={() => console.log('onEdit')}
-              />
-              <DraftAuctionStep
-                state={'current'}
-                stepNum={2}
-                title={'Customize landing page'}
-                onStart={() => console.log('onStart')}
-                onEdit={() => console.log('onEdit')}
-              />
-              <DraftAuctionStep
-                state={'future'}
-                stepNum={3}
-                title={'Finalize auction'}
-                onStart={() => console.log('onStart')}
-                onEdit={() => console.log('onEdit')}
-              />
-            </Stepper>
-          </Box>
-        </AuctionManagedCard>
+        <DraftAuctionCard key={i} state={auctionCardState} />
       ))}
-      <AuctionManagedCardSkeleton />
+      <AuctionManagedCardSkeleton state={'draft'} />
       <Pagination
         pageCount={10}
         pageRangeDisplayed={5}
