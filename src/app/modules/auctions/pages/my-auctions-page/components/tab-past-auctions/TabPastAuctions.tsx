@@ -1,5 +1,4 @@
 import {
-  Box, Button,
   Image,
   Input,
   InputGroup,
@@ -11,7 +10,7 @@ import React, { useState } from 'react';
 
 import SearchIcon from '@assets/images/search-gray.svg';
 
-import { Alert, Pagination, Select } from '@app/components';
+import { Pagination, Select } from '@app/components';
 import { SORT_BY_ACTIVE_AUCTIONS } from '@app/modules/auctions/constants';
 import {
   AuctionManagedCard,
@@ -19,56 +18,23 @@ import {
   AuctionManagedCardStatistic,
 } from '@app/modules/auctions/components';
 
-import { CardContent, RewardBalance } from './components';
-import * as s from './TabPastAuctions.styles';
+import { CardContent, ICardContentState, RewardBalance } from './components';
 
 interface ITabPastAuctionsProps {}
 
 export const TabPastAuctions = (props: ITabPastAuctionsProps) => {
-  // just for example
-  const [contents] = useState([
-    null,
-    (
-      <CardContent
-        title={'The auction didn’t get bids on all the slots'}
-        description={'You can withdraw your NFTs by clicking a button below.'}
-      >
-        <Alert status={'warning'} w={'fit-content'}>
-          You’ll be able to withdraw your NFTs right after all the rewards are released.
-        </Alert>
-        <Button disabled={true} {...s.ContentButton}>Withdraw NFTs</Button>
-      </CardContent>
-    ),
-    (
-      <CardContent
-        title={'The auction didn’t get bids on'}
-        description={'You can withdraw your NFTs by clicking a button below.'}
-      >
-        <Button {...s.ContentButton}>Withdraw NFTs</Button>
-      </CardContent>
-    ),
-    (
-      <CardContent
-        title={'The auction didn’t get bids on'}
-        description={'You have already withdrawn your NFTs to your wallet.'}
-      />
-    ),
-    (
-      <CardContent
-        title={'The auction was cancelled'}
-        description={'You can withdraw your NFTs by clicking a button below.'}
-      >
-        <Button {...s.ContentButton}>Withdraw NFTs</Button>
-      </CardContent>
-    ),
-  ]);
 
-  const [auctions] = useState([
-    { hasStatistic: true, hasRewardBalance: true, },
-    { hasStatistic: true, hasRewardBalance: true, },
-    { hasStatistic: false, hasRewardBalance: false, },
-    { hasStatistic: false, hasRewardBalance: false, },
-    { hasStatistic: false, hasRewardBalance: false, },
+  // just for example
+  const [auctions] = useState<Array<{
+    hasStatistic: boolean;
+    hasRewardBalance: boolean;
+    contentState: ICardContentState | null;
+  }>>([
+    { hasStatistic: true, hasRewardBalance: true, contentState: null },
+    { hasStatistic: true, hasRewardBalance: true, contentState: 'didntGetBids' },
+    { hasStatistic: false, hasRewardBalance: false, contentState: 'canWithdraw' },
+    { hasStatistic: false, hasRewardBalance: false, contentState: 'alreadyWithdrawn' },
+    { hasStatistic: false, hasRewardBalance: false, contentState: 'auctionWasCancelled' },
   ]);
 
   return (
@@ -107,7 +73,9 @@ export const TabPastAuctions = (props: ITabPastAuctionsProps) => {
                 onClaimFunds={() => console.log('onClaimFunds')}
               />
             )}
-            {contents[i] || null}
+            {!auction.contentState ? null : (
+              <CardContent state={auction.contentState} />
+            )}
           </>
         </AuctionManagedCard>
       ))}

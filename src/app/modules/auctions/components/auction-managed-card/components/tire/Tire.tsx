@@ -5,7 +5,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { Swiper as SwiperClass } from 'swiper/types';
 
 import { ReactComponent as Arrow3Icon } from '@assets/images/arrow-3.svg';
-import AuctionWinnerIcon from '@assets/images/auction-winner.svg';
+import AuctionWinnerIcon from '@assets/images/auction-winner.png';
 
 import { Select } from '@app/components';
 
@@ -42,7 +42,7 @@ export const Tire = (props: ITireProps) => {
 
   const renderWinnerItem = useCallback((winner) => (
     <HStack spacing={'10px'}>
-      <Image src={AuctionWinnerIcon} alt={'Winner icon'} />
+      <Image src={`${AuctionWinnerIcon}`} alt={'Winner icon'} w={'14px'} />
       <Heading fontSize={'11px'}>{winner.name}</Heading>
       <Text fontSize={'10px'}>{winner.amountNFTs} NFTs</Text>
     </HStack>
