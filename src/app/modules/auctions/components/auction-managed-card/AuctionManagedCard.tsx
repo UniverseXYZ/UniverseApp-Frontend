@@ -10,12 +10,14 @@ import * as s from './AuctionManagedCard.styles';
 export interface IAuctionManagedCardProps {
   state?: IAuctionManagedCardState;
   children?: React.ReactChild;
+  renderContentFooter?: () => React.ReactNode;
 }
 
 export const AuctionManagedCard = (props: IAuctionManagedCardProps) => {
   const {
     state = 'active',
-    children
+    children,
+    renderContentFooter,
   } = props;
 
   const [isExpanded, setIsExpanded] = useState(false);
@@ -73,6 +75,10 @@ export const AuctionManagedCard = (props: IAuctionManagedCardProps) => {
               <Tire key={i} name={tire.name} winners={tire.winners} />
             ))}
           </VStack>
+
+          {isExpanded && (
+            renderContentFooter ? renderContentFooter() : null
+          )}
         </VStack>
       </Box>
     </Box>

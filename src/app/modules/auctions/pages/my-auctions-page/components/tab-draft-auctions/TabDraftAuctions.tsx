@@ -1,6 +1,7 @@
 import {
   Box,
   Button,
+  Icon,
   Image,
   Input,
   InputGroup,
@@ -12,6 +13,7 @@ import {
 import React, { useState } from 'react';
 
 import SearchIcon from '@assets/images/search-gray.svg';
+import { ReactComponent as TrashSVG } from '@assets/images/remove2.svg';
 
 import { Pagination, Select, Step, Stepper } from '@app/components';
 import { SORT_BY_ACTIVE_AUCTIONS } from '@app/modules/auctions/constants';
@@ -45,7 +47,23 @@ export const DraftAuctionCard = (props: IAuctionManagedCardProps) => {
   ];
 
   return (
-    <AuctionManagedCard {...props}>
+    <AuctionManagedCard
+      renderContentFooter={() => {
+        if (props.state !== 'draftError' && props.state !== 'draftPending') {
+          return null;
+        }
+
+        return (
+          <Button
+            variant={'simpleOutline'}
+            leftIcon={<Icon viewBox={'0 0 16 16'}><TrashSVG /></Icon>}
+            onClick={() => console.log('Remove auction card')}
+            {...s.RemoveButton}
+          >Remove</Button>
+        )
+      }}
+      {...props}
+    >
       <Box mt={'40px !important'} w={'100%'}>
         <Stepper
           activeStep={activeStep}

@@ -23,3 +23,17 @@ export const StepButton: ButtonProps = {
     md: 'fit-content',
   },
 };
+
+export const RemoveButton: ButtonProps = {
+  border: '1px solid #FF4949',
+  borderRadius: '8px',
+  color: '#FF4949',
+  _hover: {
+    bg: 'rgba(255, 73, 73, 0.05)',
+    borderColor: '#E90000',
+    color: '#E90000',
+  },
+  _active: {
+    transform: 'scale(0.95)',
+  },
+};
