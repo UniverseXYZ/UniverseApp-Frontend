@@ -38,7 +38,12 @@ export const AuctionManagedCardSkeleton = (props: IAuctionManagedCardSkeletonPro
   );
 
   const renderDraftContent = () => (
-    <Stepper activeStep={-1} mt={'46px !important'} mb={'30px !important'} w={'100%'}>
+    <Stepper
+      activeStep={-1}
+      direction={{ base: 'column', md: 'row' }}
+      mt={'46px !important'}
+      w={'100%'}
+    >
       {steps.map((_, i) => (
         <Step
           key={i}
@@ -50,7 +55,9 @@ export const AuctionManagedCardSkeleton = (props: IAuctionManagedCardSkeletonPro
           )}
           renderIcon={() => (<Skeleton {...s.StepIcon} />)}
         >
-          <Skeleton {...s.StepButton} />
+          <Box mb={{ base: i < steps.length - 1 ? '30px' : 0, md: '30px' }}>
+            <Skeleton {...s.StepButton} />
+          </Box>
         </Step>
       ))}
     </Stepper>

@@ -1,10 +1,10 @@
-import { Box, BoxProps, Icon, Stack, StackProps, useRadio, useRadioGroup } from '@chakra-ui/react';
+import { Box, BoxProps, Icon, Stack, StackProps, useBreakpointValue, useRadio, useRadioGroup } from '@chakra-ui/react';
 import React, { createContext, useContext, useMemo, useRef } from 'react';
 import useMeasureDirty from 'react-use/lib/useMeasureDirty';
 
 import { ReactComponent as CheckSVG } from '@assets/images/check-black.svg';
 
-import { StepState } from './types';
+import { StepDirection, StepState } from './types';
 import * as s from './Stepper.styles';
 
 interface IStepperContext {
@@ -36,7 +36,12 @@ export const Step = (props: IStepProps) => {
 
   const { getInputProps } = useRadio(props);
 
-  const { direction, getStepState } = useContext(StepperContext);
+  const { direction: dir, getStepState } = useContext(StepperContext);
+
+  const direction = useBreakpointValue(!dir || typeof dir === 'string'
+    ? { base: dir }
+    : { ...dir } as Record<string, StepDirection>
+  ) as StepDirection;
 
   const input = getInputProps() as { value: number; };
 
@@ -44,19 +49,19 @@ export const Step = (props: IStepProps) => {
 
   const { height } = useMeasureDirty(wrapperRef);
 
-  const circleOffsetTop = useMemo(() => {
+  const iconOffsetTop = useMemo(() => {
     const circleTop = circleRef.current?.getBoundingClientRect().top ?? 0;
     const wrapperTop = wrapperRef.current?.getBoundingClientRect().top ?? 0;
     return circleTop - wrapperTop;
   }, [height]);
 
   return (
-    <Box ref={wrapperRef} {...s.getStepWrapperStyle(state, circleOffsetTop - 1)} {...rest}>
+    <Box ref={wrapperRef} {...s.getStepWrapperStyle(state, direction, iconOffsetTop - 1)} {...rest}>
       <input {...input} />
 
       {renderAbove ? renderAbove(state) : null}
 
-      <Box ref={circleRef}>
+      <Box ref={circleRef} {...s.getStepIconStyle(direction)}>
         {renderIcon ? renderIcon(state) : (
           <Box {...s.getStepCircleStyles(state)}>
             {state === 'done' && (
@@ -79,7 +84,7 @@ interface IStepperProps extends StackProps {
 export const Stepper = (props: IStepperProps) => {
   const {
     activeStep,
-    direction = 'row',
+    direction,
     children,
     ...rest
   } = props;
@@ -87,7 +92,7 @@ export const Stepper = (props: IStepperProps) => {
   const { getRootProps, getRadioProps } = useRadioGroup({
     value: activeStep,
     onChange: console.log
-  })
+  });
 
   const group = getRootProps();
 

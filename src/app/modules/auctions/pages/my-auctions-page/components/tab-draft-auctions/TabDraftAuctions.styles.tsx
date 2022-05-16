@@ -18,5 +18,8 @@ export const StepTitle: TextProps = {
 export const StepButton: ButtonProps = {
   margin: 'auto',
   padding: '11px 16px',
-  width: 'fit-content',
+  width: {
+    base: '100%',
+    md: 'fit-content',
+  },
 };

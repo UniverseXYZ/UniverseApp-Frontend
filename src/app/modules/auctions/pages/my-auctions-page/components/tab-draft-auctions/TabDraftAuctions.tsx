@@ -46,10 +46,14 @@ export const DraftAuctionCard = (props: IAuctionManagedCardProps) => {
 
   return (
     <AuctionManagedCard {...props}>
-      <Box mt={'40px !important'} mb={'30px !important'} w={'100%'}>
-        <Stepper activeStep={activeStep}>
+      <Box mt={'40px !important'} w={'100%'}>
+        <Stepper
+          activeStep={activeStep}
+          direction={{ base: 'column', md: 'row' }}
+        >
           {steps.map((step, i) => (
             <Step
+              key={i}
               renderAbove={() => (
                 <>
                   <Text {...s.StepLabel}>{`Step ${i + 1}`}</Text>
@@ -58,7 +62,7 @@ export const DraftAuctionCard = (props: IAuctionManagedCardProps) => {
               )}
             >
               {(state) => (
-                <Box pt={'8px'}>
+                <Box pt={'8px'} mb={{ base: i < steps.length - 1 ? '30px' : 0, md: '30px' }}>
                   {state === 'done' && (
                     <Button variant={'outline'} {...s.StepButton} onClick={() => setActiveStep(i)}>Edit</Button>
                   )}

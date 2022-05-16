@@ -42,7 +42,7 @@ export const Title: SkeletonProps = {
   ...BaseSkeletonStyles,
   borderRadius: '100px',
   h: '22px',
-  w: '300px',
+  maxW: '300px',
 };
 
 export const LandingPageButton: SkeletonProps = {
@@ -105,7 +105,10 @@ export const StepLabel: SkeletonProps = {
   ...BaseSkeletonStyles,
   borderRadius: '12px',
   mb: '6px',
-  mx: 'auto',
+  mx: {
+    base: 0,
+    md: 'auto',
+  },
   h: '12px',
   w: '50px',
 };
@@ -114,7 +117,10 @@ export const StepTitle: SkeletonProps = {
   ...BaseSkeletonStyles,
   borderRadius: '12px',
   mb: '4px',
-  mx: 'auto',
+  mx: {
+    base: 0,
+    md: 'auto',
+  },
   h: '16px',
   w: '120px',
 };
@@ -130,7 +136,13 @@ export const StepButton: SkeletonProps = {
   ...BaseSkeletonStyles,
   borderRadius: '12px',
   mt: '8px',
-  mx: 'auto',
+  mx: {
+    base: 0,
+    md: 'auto',
+  },
   h: '42px',
-  w: '80px',
+  w: {
+    base: '100%',
+    md: '80px',
+  },
 };
