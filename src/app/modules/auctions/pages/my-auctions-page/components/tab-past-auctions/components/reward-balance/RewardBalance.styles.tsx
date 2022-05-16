@@ -27,7 +27,10 @@ export const RewardBalanceItemWrapper: BoxProps = {
     lg: '60px',
   },
   _notLast: {
-    borderRight: '1px solid rgba(0, 0, 0, 0.1)',
+    borderRight: {
+      base: 0,
+      md: '1px solid rgba(0, 0, 0, 0.1)',
+    },
   },
 };
 

@@ -26,7 +26,7 @@ export const RewardBalance = (props: IRewardBalanceProps) => {
   return (
     <Box {...s.GradientWrapper}>
       <Box {...s.Wrapper}>
-        <SimpleGrid columns={2} spacing={0}>
+        <SimpleGrid columns={{ base: 1, md: 2 }} spacingX={0} spacingY={'30px'}>
           <RewardBalanceItem
             label={'Unreleased funds'}
             tooltip={'For the auctioneer to be able to collect their winnings and for the users to be able to claim their NFTs  the rewards need to be released first.'}
@@ -74,7 +74,7 @@ export const RewardBalanceItem = (props: IRewardBalanceItemProps) => {
             </Icon>
           </Tooltip>
         </Text>
-        <Flex flexDir={'row'} flexWrap={'wrap'} alignItems={'center'} gap={'6px'}>
+        <Flex flexDir={'row'} flexWrap={'wrap'} alignItems={'center'} gap={'6px'} w={'100%'}>
           <TokenIcon ticker={TokenTicker.WETH} boxSize={'28px'} />
           <Stack {...s.AmountContainer}>
             <Text {...s.Amount}>{amount}</Text>
