@@ -8,10 +8,8 @@ import {
   VStack,
 } from '@chakra-ui/react';
 import React from 'react';
-import ReactPaginate from 'react-paginate';
 
 import SearchIcon from '@assets/images/search-gray.svg';
-import ArrowIcon from '@assets/images/arrow-3.svg';
 
 import { Pagination, Select } from '@app/components';
 import { SORT_BY_ACTIVE_AUCTIONS } from '@app/modules/auctions/constants';
@@ -61,5 +59,5 @@ export const TabActiveAuctions = (props: ITabActiveAuctionsProps) => {
         w={'100%'}
       />
     </VStack>
-  )
+  );
 };

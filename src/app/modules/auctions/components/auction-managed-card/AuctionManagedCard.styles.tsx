@@ -8,7 +8,7 @@ export const getGradientWrapperStyle: (state: IAuctionManagedCardState) => BoxPr
     draftError: '#FF4949',
     draftPending: '#FFC700',
     draftComplete: 'linear-gradient(180deg, #BCEB00 0%, #00EAEA 100%)',
-    past: 'rgba(0, 0, 0, 0.1)',
+    past: '#E6E6E6',
   };
 
   return {
