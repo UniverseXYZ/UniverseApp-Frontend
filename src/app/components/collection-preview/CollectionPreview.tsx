@@ -7,6 +7,7 @@ import {
 } from "@app/api";
 import { Loading } from "@app/components";
 import { formatAddress } from "@app/helpers";
+import { IUser } from '@app/modules/account/types';
 import { ICollection } from "@app/modules/collection/types";
 import { collectionKeys } from "@app/utils/query-keys";
 import EthIcon from "@assets/images/eth-icon-new.svg";
@@ -72,7 +73,7 @@ export const CollectionPreview = (props: ICollectionPreviewProps) => {
     }
   );
 
-  const { data: collectionOwner } = useQuery(
+  const { data: collectionOwner } = useQuery<Pick<IUser, "address" | "displayName" | "universePageUrl"> | null>(
     collectionKeys.collectionOwner(collectionAddress || ""),
     async () => {
       try {
@@ -92,15 +93,20 @@ export const CollectionPreview = (props: ICollectionPreviewProps) => {
 
         const contract = new Contract(utils.getAddress(`${collectionAddress}`.toLowerCase()), abi, provider);
 
-        const ownerAddress = await contract.owner();
+        const _ownerAddress = await contract.owner();
 
-        if (ownerAddress) {
-          const artist = await getArtistApi(ownerAddress.toLowerCase());
+        if (_ownerAddress) {
+          const address = _ownerAddress.toLowerCase();
+          const artist = await getArtistApi(address);
 
           if (artist?.mappedArtist?.displayName) {
-            return artist?.mappedArtist?.displayName;
+            return {
+              address: address,
+              displayName: artist?.mappedArtist?.displayName || undefined,
+              universePageUrl: artist?.mappedArtist?.universePageUrl || undefined,
+            };
           }
-          return ownerAddress.toLowerCase();
+          return { address };
         }
       } catch (e) {}
 
@@ -199,9 +205,9 @@ export const CollectionPreview = (props: ICollectionPreviewProps) => {
             {collectionOwner && (
               <Box {...styles.GridItem}>
                 <Text {...styles.GridItemLabel}>Owned by</Text>
-                <NextLink href={`/${collectionOwner}`} passHref>
+                <NextLink href={`/${collectionOwner.universePageUrl || collectionOwner.address}`} passHref>
                   <Link {...styles.GridItemValue}>
-                    {utils.isAddress(collectionOwner) ? formatAddress(collectionOwner) : collectionOwner}
+                    {collectionOwner?.displayName || formatAddress(collectionOwner.address)}
                   </Link>
                 </NextLink>
               </Box>
