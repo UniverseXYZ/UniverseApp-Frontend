@@ -1,4 +1,4 @@
-import { BoxProps, ImageProps, PopoverContentProps, TextProps } from '@chakra-ui/react';
+import { BoxProps, ImageProps, LinkProps, PopoverContentProps, TextProps } from '@chakra-ui/react';
 import { getRandomCollectionBGColor } from '@app/helpers';
 
 export const PopoverContent: PopoverContentProps = {
@@ -44,11 +44,15 @@ export const GridItemLabel: TextProps = {
   fontWeight: 600,
 };
 
-export const GridItemValue: TextProps = {
+export const GridItemValue: TextProps & LinkProps = {
   color: '#4D66EB',
   cursor: 'pointer',
   fontSize: '14px',
   fontWeight: 700,
+
+  _hover: {
+    color: '#1631C8',
+  },
 };
 
 export const StatisticGridItem: BoxProps = {

@@ -35,6 +35,8 @@ module.exports = withPlugins(
         "universeapp-assets-dev.s3.amazonaws.com",
         "universeapp-assets-auctions.s3.amazonaws.com",
         "universeapp-assets-local.s3.amazonaws.com",
+        "universeapp-assets-alpha.s3.amazonaws.com",
+        "universeapp-assets-prod.s3.amazonaws.com",
         "universe-dev-datascraper-video.s3.amazonaws.com",
         "universe-dev-datascraper-images.s3.amazonaws.com",
         "universe-dev-datascraper-audio.s3.amazonaws.com",
@@ -100,6 +102,11 @@ module.exports = withPlugins(
       REACT_APP_COLLECTION_EDITOR: process.env.REACT_APP_COLLECTION_EDITOR,
       PRIVATE_KEY: process.env.PRIVATE_KEY,
       NETWORK_NAME: process.env.NETWORK_NAME,
+    },
+    eslint: {
+      // Warning: This allows production builds to successfully complete even if
+      // your project has ESLint errors.
+      ignoreDuringBuilds: true,
     },
     eslint: {
       // Warning: This allows production builds to successfully complete even if
