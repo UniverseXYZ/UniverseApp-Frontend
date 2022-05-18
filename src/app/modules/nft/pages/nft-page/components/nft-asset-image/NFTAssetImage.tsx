@@ -31,8 +31,8 @@ export const NFTAssetImage = (props: INFTAssetImageProps) => {
   return showError ? (
     <Box {...NFTInfoStyles.BrokenAssetStyle}>
       <BrokenNFT />
-    </Box>)
-   : (
+    </Box>
+    ) : (
     <>
       <Box ref={ref} {...styles.ImageWrapperStyle} {...containerProps}>
         <NextImage

@@ -5,8 +5,8 @@ export const ImageWrapperStyle: BoxProps = {
   w: '100%',
 
   sx: {
-    '> span': {
-      h: 'auto !important',
+    'span': {
+      maxHeight: '530px !important',
     },
     img: {
       borderRadius: '12px',
