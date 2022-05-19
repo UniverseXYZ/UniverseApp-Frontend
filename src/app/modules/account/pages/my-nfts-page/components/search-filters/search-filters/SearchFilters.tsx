@@ -10,6 +10,7 @@ import SaleTypeIcon from '../../../../../../../../assets/images/v2/marketplace/f
 import NFTTypeIcon from '../../../../../../../../assets/images/v2/marketplace/filter-nft-type.svg';
 import PriceRangeIcon from '../../../../../../../../assets/images/v2/marketplace/filter-price-range.svg';
 import CollectionsIcon from '../../../../../../../../assets/images/v2/marketplace/filter-collections.svg';
+import PropertiesIcon from '@assets/images/v2/marketplace/filter-properties.svg';
 
 // Contexts
 import { useFiltersContext } from '../search-filters.context';
@@ -28,7 +29,7 @@ import {
   PriceRangeFilterDropdown,
   CollectionsFilterDropdown,
   CollectionsFilter,
-  ClearAllButton,
+  ClearAllButton, PropertiesFilterDropdown, PropertiesFilter,
 } from '../../../../../../../components/filters';
 import { FiltersPopup } from '../../../../../../../components';
 
@@ -48,6 +49,7 @@ export const SearchFilters = (props: ISearchFiltersProps) => {
 
   const {
     userCollections,
+    collectionAddress,
     disabledSortByFilters,
     searchBarForm,
     collectionFilterForm,
@@ -59,6 +61,7 @@ export const SearchFilters = (props: ISearchFiltersProps) => {
     showNFTTypeFilters,
     showPriceRangeFilters,
     showCollectionFilters,
+    showTraitTypeFilter,
     // OrderBook BE Filters
     hasSelectedOrderBookFilters,
     // Scraper BE Filters
@@ -168,6 +171,13 @@ export const SearchFilters = (props: ISearchFiltersProps) => {
               icon: CollectionsIcon,
               renderFilter: (props) => <CollectionsFilter {...props} items={userCollections} />
             },
+            {
+              name: 'Properties',
+              form: collectionFilterForm,
+              visible: showPriceRangeFilters,
+              icon: PropertiesIcon,
+              renderFilter: (props) => <PropertiesFilter {...props} collectionAddress={`${collectionAddress}`} />
+            },
           ]}
         >
           {() => (
@@ -203,6 +213,16 @@ export const SearchFilters = (props: ISearchFiltersProps) => {
                     items={userCollections}
                     value={collectionFilterForm.values}
                     onSave={(value) => collectionFilterForm.setValues(value)}
+                    onClear={() => collectionFilterForm.resetForm()}
+                  />
+                )}
+
+                {showTraitTypeFilter && (
+                  <PropertiesFilterDropdown
+                    collectionAddress={`${collectionAddress}`}
+                    items={userCollections}
+                    value={1}
+                    onSave={(value) => {}}
                     onClear={() => collectionFilterForm.resetForm()}
                   />
                 )}

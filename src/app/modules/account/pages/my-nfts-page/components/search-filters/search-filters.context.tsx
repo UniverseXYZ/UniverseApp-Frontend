@@ -54,6 +54,7 @@ interface ICollectionFilterFormValue {
 export interface ISearchFiltersContext {
 	// --- STATE ---
 	userAddress?: string;
+	collectionAddress?: string;
 	setUserAddress: (address: string) => void;
 	setCollectionAddress: (address: string) => void;
 	hasSelectedSaleTypeFilter: () => boolean;
@@ -100,12 +101,14 @@ export interface ISearchFiltersContext {
 	showNFTTypeFilters: boolean;
 	showPriceRangeFilters: boolean;
 	showCollectionFilters: boolean;
+	showTraitTypeFilter: boolean;
 	showFiltersToggle: boolean;
 	// --- FILTERS VISIBLITY SETTERS ---
 	setShowSaleTypeFilters: (v: boolean) => void;
 	setShowNFTTypeFilters: (v: boolean) => void;
 	setShowPriceRangeFilters: (v: boolean) => void;
 	setShowCollectcionFilters: (v: boolean) => void;
+	setShowTraitTypeFilter: (v: boolean) => void;
 	setShowFiltersToggle: (v: boolean) => void;
 	};
 
@@ -121,6 +124,7 @@ interface IFiltersRequiredProviderProps {
 interface IFilterProviderOptionalProps {
   defaultSorting: number;
   clearSorting: number;
+	collectionAddress?: string;
 	initialCollection?: string;
 }
 interface IFiltersProviderProps
@@ -140,6 +144,7 @@ const FiltersContextProvider = (props: IFiltersProviderProps) => {
 	const [showNFTTypeFilters, setShowNFTTypeFilters] = useState<boolean>(false);
 	const [showPriceRangeFilters, setShowPriceRangeFilters] = useState<boolean>(false);
 	const [showCollectionFilters, setShowCollectcionFilters] = useState<boolean>(false);
+	const [showTraitTypeFilter, setShowTraitTypeFilter] = useState<boolean>(false);
 	const [disabledSortByFilters, setDisabledSortByFilters] = useState<boolean>(false);
 	const [showFiltersToggle, setShowFiltersToggle] = useState<boolean>(false);
 
@@ -672,7 +677,8 @@ const FiltersContextProvider = (props: IFiltersProviderProps) => {
   const value: ISearchFiltersContext = {
 		// --- STATE ---
 		userAddress: userAddress,
-		setUserAddress: setUserAddress,
+	  collectionAddress: props.collectionAddress,
+	  setUserAddress: setUserAddress,
 		setCollectionAddress: setCollectionAddress,
 		disabledSortByFilters,
 		// --- GETTERS ---
@@ -719,12 +725,14 @@ const FiltersContextProvider = (props: IFiltersProviderProps) => {
 		showNFTTypeFilters: showNFTTypeFilters,
 		showPriceRangeFilters: showPriceRangeFilters,
 		showCollectionFilters: showCollectionFilters,
+		showTraitTypeFilter: showTraitTypeFilter,
 		showFiltersToggle,
 		// --- FILTERS VISIBLITY SETTERS ---
 		setShowSaleTypeFilters,
 		setShowNFTTypeFilters,
 		setShowPriceRangeFilters,
 		setShowCollectcionFilters,
+	  setShowTraitTypeFilter,
 		setShowFiltersToggle,
 	};
 

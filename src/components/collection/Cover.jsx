@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useMemo, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import uploadIcon from '../../assets/images/upload.svg';
 import { editCollectionBanner } from '../../utils/api/mintNFT';
@@ -35,6 +35,10 @@ const Cover = ({ selectedCollection, collectionGeneralInfo, collectionOwner }) =
       }
     }
   };
+
+  const bgColor = useMemo(() => {
+    return getCollectionBackgroundColor(selectedCollection || collectionGeneralInfo);
+  }, []);
 
   return (
     <div className="collection__page__cover">

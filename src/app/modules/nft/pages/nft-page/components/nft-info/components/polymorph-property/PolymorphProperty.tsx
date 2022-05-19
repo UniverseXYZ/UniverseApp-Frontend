@@ -10,7 +10,11 @@ const PropertyStyle: BoxProps = {
   padding: '6px 16px',
 }
 
-export const PolymorphProperty = ({ property }: INFTPropertyProps) => {
+type IPolymorphProperty = Omit<INFTPropertyProps, 'collectionAddress'>;
+
+export const PolymorphProperty = (props: IPolymorphProperty) => {
+  const { property } = props;
+
   return (
     <Box {...PropertyStyle}>
       <Text fontSize={'14px'}>

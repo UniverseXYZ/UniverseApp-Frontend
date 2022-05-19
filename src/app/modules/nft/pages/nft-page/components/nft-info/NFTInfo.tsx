@@ -244,7 +244,7 @@ export const NFTInfo = () => {
   const isAssetImage = isNFTAssetImage(NFT?.artworkTypes ?? []);
   const isAssetAudio = isNFTAssetAudio(NFT?.artworkTypes ?? []);
 
-  const { preview } = useNFTAsset(NFT);
+  const { preview } = useNFTAsset(NFT || {});
 
   const OGImage = preview
     ? preview.indexOf(".mp4") !== -1

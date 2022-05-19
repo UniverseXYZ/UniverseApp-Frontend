@@ -22,19 +22,22 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
   return {
     props: {
+      collectionAddress,
       dehydratedState: dehydrate(queryClient)
     }
   };
 }
 
-export const CollectionPage = () => {
+export const CollectionPage = (props: { collectionAddress: string; }) => {
+  const { collectionAddress } = props;
+
   const setDarkMode = useThemeStore(s => s.setDarkMode);
 
   useEffect(() => setDarkMode(false), []);
 
   return (
     <CollectionPageProvider>
-      <FiltersContextProvider defaultSorting={0}>
+      <FiltersContextProvider defaultSorting={0} collectionAddress={collectionAddress}>
         <CollectionInfo />
       </FiltersContextProvider>
     </CollectionPageProvider>

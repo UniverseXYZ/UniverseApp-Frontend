@@ -12,6 +12,7 @@ export const PolymorphPropertyTrait = (
   {
     property,
     variant = PropertyTraitVariant.default,
+    collectionAddress,
     ...props
   }: IPolymorphPropertyTraitProps
 ) => {
@@ -59,6 +60,7 @@ export const PolymorphPropertyTrait = (
       >
         <NFTProperty
           property={property}
+          collectionAddress={collectionAddress}
           sx={{
             bg: bgColor[variant],
             border: 0,

@@ -67,6 +67,7 @@ export const CollectionInfo = () => {
     setShowSaleTypeFilters,
     setShowPriceRangeFilters,
     setShowNFTTypeFilters,
+    setShowTraitTypeFilter,
     collectionNFTs,
     fetchNextCollectionNFTs,
     fetchNextOrders,
@@ -87,6 +88,7 @@ export const CollectionInfo = () => {
     setShowSaleTypeFilters(true);
     setShowPriceRangeFilters(true);
     setShowNFTTypeFilters(true);
+    setShowTraitTypeFilter(true);
   }, [collectionAddress]);
 
   useEffect(() => {

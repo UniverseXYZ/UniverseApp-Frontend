@@ -1,14 +1,11 @@
-import { Box, Flex, Image, SimpleGrid, Text } from '@chakra-ui/react';
+import { Box, Flex, SimpleGrid } from '@chakra-ui/react';
 import React, { useMemo } from 'react';
-
-import TextBubbleImage from '../../../../../../../../../assets/images/text-bubble.png';
 
 import { useNFTPageData } from '../../../../NFTPage.context';
 import { NFTProperty } from '..';
 import { PolymorphPropertyTrait } from '..';
 import { PolymorphProperty } from '..';
 import { INFTProperty } from '../../../../../../types';
-// import './TabProperties.scss';
 import { EventsEmpty } from '../shared';
 
 interface ITabPropertiesProps {
@@ -16,7 +13,7 @@ interface ITabPropertiesProps {
 }
 
 export const TabProperties = ({ properties = [] }: ITabPropertiesProps) => {
-  const { isPolymorph } = useNFTPageData();
+  const { isPolymorph, collectionAddress } = useNFTPageData();
 
   const polymorphProperties = useMemo(() => {
     if (!isPolymorph) {
@@ -43,10 +40,19 @@ export const TabProperties = ({ properties = [] }: ITabPropertiesProps) => {
         {properties.map((property, i: number) =>
           isPolymorph ? (
             !polymorphProperties.includes(property) ? (
-              <PolymorphPropertyTrait key={i} property={property} />
+              <PolymorphPropertyTrait
+                key={i}
+                property={property}
+                collectionAddress={collectionAddress}
+              />
             ) : null
           ) : (
-            !!property.traitType && !!property.value && <NFTProperty key={i} property={property} />
+            !!property.traitType && !!property.value && (
+              <NFTProperty
+                key={i}
+                property={property}
+                collectionAddress={collectionAddress}
+              />)
           )
         )}
       </SimpleGrid>
