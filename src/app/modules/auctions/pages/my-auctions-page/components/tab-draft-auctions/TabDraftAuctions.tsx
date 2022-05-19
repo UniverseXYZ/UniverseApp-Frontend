@@ -55,7 +55,8 @@ export const DraftAuctionCard = (props: IAuctionManagedCardProps) => {
 
         return (
           <Button
-            variant={'simpleOutline'}
+            variant={'ghostAlt'}
+            colorScheme={'red'}
             leftIcon={<Icon viewBox={'0 0 16 16'}><TrashSVG /></Icon>}
             onClick={() => console.log('Remove auction card')}
             {...s.RemoveButton}

@@ -86,6 +86,7 @@ export const getStepCircleStyles: (s: StepState) => BoxProps = (state) => {
       },
     },
     future: {
+      bg: 'white',
       borderColor: 'rgba(0, 0, 0, 0.1)',
     }
   };

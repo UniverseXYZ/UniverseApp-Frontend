@@ -1,3 +1,81 @@
+import { SystemStyleFunction } from '@chakra-ui/theme-tools';
+
+const variantGhostAlt: SystemStyleFunction = (props) => {
+  const { colorScheme: c } = props;
+
+  type IColorModes = 'red' | 'default';
+  type IStyles = {
+    bg: string;
+    borderColor: string;
+    color: string;
+
+    _hover: {
+      bg: string;
+      borderColor: string;
+      color: string;
+    },
+  };
+
+  const colorModeStyles: Record<IColorModes, IStyles> = {
+    default: {
+      bg: 'none',
+      borderColor: 'rgba(0, 0, 0, 0.1)',
+      color: 'black',
+      _hover: {
+        bg: 'rgba(0, 0, 0, 0.05)',
+        borderColor: 'rgba(0, 0, 0, 0.2)',
+        color: 'inherit',
+      }
+    },
+    red: {
+      bg: 'none',
+      borderColor: '#FF4949',
+      color: '#FF4949',
+      _hover: {
+        bg: 'rgba(255, 73, 73, 0.05)',
+        borderColor: '#E90000',
+        color: '#E90000',
+      }
+    },
+  }
+
+  const s = colorModeStyles[c as IColorModes] || colorModeStyles.default;
+
+  return {
+    bg: s.bg,
+    border: '1px solid',
+    borderColor: s.borderColor,
+    borderRadius: '12px',
+    color: s.color,
+    _hover: {
+      bg: s._hover.bg,
+      borderColor: s._hover.borderColor,
+      color: s._hover.color,
+    },
+    _focus: {
+      boxShadow: 'none',
+    },
+    _active: {
+      transform: 'scale(0.95)',
+    },
+    _disabled: {
+      borderColor: 'rgba(0, 0, 0, 0.1)',
+      color: 'rgba(0 0 0 / 20%)',
+      opacity: 1,
+      _hover: {
+        borderColor: 'rgba(0, 0, 0, 0.1)',
+        color: 'rgba(0 0 0 / 20%)',
+      },
+      _active: {
+        transform: 'scale(1)',
+      },
+    },
+    '.chakra-button__icon': {
+      ml: 0,
+    },
+  }
+};
+
 export const Button = {
   baseStyle: {
     fontFamily: 'Space Grotesk',
@@ -117,6 +195,10 @@ export const Button = {
       _focus: {
         boxShadow: 'none',
       },
+      _disabled: {
+        color: 'rgba(0 0 0 / 20%)',
+        opacity: 1,
+      },
     },
     black: {
       background: 'black',
@@ -144,6 +226,9 @@ export const Button = {
         }
       },
     },
+
+    // v2
+    ghostAlt: variantGhostAlt,
   },
   sizes: {
     lg: {

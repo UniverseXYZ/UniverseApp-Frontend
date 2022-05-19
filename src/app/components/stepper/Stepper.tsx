@@ -34,7 +34,7 @@ export const Step = (props: IStepProps) => {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const circleRef = useRef<HTMLDivElement>(null);
 
-  const { getInputProps } = useRadio(props);
+  const { getInputProps, getCheckboxProps } = useRadio(props);
 
   const { direction: dir, getStepState } = useContext(StepperContext);
 
@@ -44,6 +44,7 @@ export const Step = (props: IStepProps) => {
   ) as StepDirection;
 
   const input = getInputProps() as { value: number; };
+  const checkbox = getCheckboxProps();
 
   const state: StepState = getStepState(input.value);
 
@@ -61,16 +62,19 @@ export const Step = (props: IStepProps) => {
 
       {renderAbove ? renderAbove(state) : null}
 
-      <Box ref={circleRef} {...s.getStepIconStyle(direction)}>
-        {renderIcon ? renderIcon(state) : (
-          <Box {...s.getStepCircleStyles(state)}>
-            {state === 'done' && (
-              <Icon viewBox={'0 0 10 7'} w={'10px'}>
-                <CheckSVG />
-              </Icon>
-            )}
-          </Box>
-        )}
+      <Box {...checkbox}>
+        <Box ref={circleRef} {...s.getStepIconStyle(direction)}>
+
+          {renderIcon ? renderIcon(state) : (
+            <Box {...s.getStepCircleStyles(state)}>
+              {state === 'done' && (
+                <Icon viewBox={'0 0 10 7'} w={'10px'}>
+                  <CheckSVG />
+                </Icon>
+              )}
+            </Box>
+          )}
+        </Box>
       </Box>
       {!children ? null : typeof children === 'function' ? children(state) : children}
     </Box>
