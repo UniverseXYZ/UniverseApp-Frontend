@@ -99,9 +99,13 @@ export const GetUserCollectionsFromScraperApi = async (address: string) : Promis
  * @param size size
  * @returns returns all the collection nfts
  */
-export const GetCollectionNFTsApi = async (address: string, page: string | number, size: string | number, search?: string) => {
+export const GetCollectionNFTsApi = async (address: string, page: string | number, size: string | number, search?: string, traits?: Record<string, string[]>) => {
   try {
-    const url = `${process.env.REACT_APP_DATASCRAPER_BACKEND}/v1/collections/${address}/tokens?page=${page}&size=${size}&search=${search}`;
+    const traitsQuery = !traits
+      ? ''
+      : Object.keys(traits).map((traitType) => `${traitType}=${traits[traitType].join(',')}`).join('&');
+
+    const url = `${process.env.REACT_APP_DATASCRAPER_BACKEND}/v1/collections/${address}/tokens?page=${page}&size=${size}&search=${search}&traits=${encodeURIComponent(traitsQuery)}`;
 
     const { data: { data, ...responseData } } = await axios.get<ICollectionNFTsResponse>(url);
 

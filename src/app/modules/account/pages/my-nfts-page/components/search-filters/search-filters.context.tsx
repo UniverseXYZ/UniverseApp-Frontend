@@ -20,10 +20,12 @@ import {
 	INftTypeFilterValue,
 	IPriceRangeFilterValue,
 	ICollectionsValue,
+	IPropertiesFilterValue,
 	useCollectionsFilter,
 	useSaleTypeFilter,
 	useNFTTypeFilter,
 	usePriceRangeFilter,
+	usePropertiesFilter,
 } from '../../../../../../components/filters';
 
 // Constants
@@ -62,6 +64,7 @@ export interface ISearchFiltersContext {
 	hasSelectedSortByFilter: () => boolean;
 	hasSelectedNftTypeFilter: () => boolean;
 	hasSelectedCollectionFilter: () => boolean;
+	hasSelectedTraitTypesFilter: () => boolean;
 	hasSelectedOrderBookFilters: () => boolean;
 	hasSearchBarFilter: () => boolean;
 	disabledSortByFilters: boolean;
@@ -69,10 +72,11 @@ export interface ISearchFiltersContext {
 	getSelectedFiltersCount: () => number;
 	// --- FORMS ---
 	searchBarForm: FormikProps<ISearchBarValue>;
-	collectionFilterForm: FormikProps<ICollectionFilterFormValue>;
+	collectionForm: FormikProps<ICollectionFilterFormValue>;
 	saleTypeForm: FormikProps<ISaleTypeFilterValue>;
 	nftTypeForm: FormikProps<INftTypeFilterValue>;
 	priceRangeForm: FormikProps<IPriceRangeFilterValue>;
+	traitTypesForm: FormikProps<IPropertiesFilterValue>;
 	sortByForm: FormikProps<ISortByFilterValue>;
 	clearAllForms: () => void;
 	// --- API RETURNED DATA ---
@@ -170,6 +174,7 @@ const FiltersContextProvider = (props: IFiltersProviderProps) => {
 	const { form: nftTypeFilterForm } = useNFTTypeFilter();
 	const { form: priceRangeFilterForm } = usePriceRangeFilter();
 	const { form: collectionFilterForm } = useCollectionsFilter();
+	const { form: traitTypesFilterForm } = usePropertiesFilter();
 
 	// --------- GETTERS ---------
 	const hasSelectedSaleTypeFilter = () => {
@@ -192,6 +197,10 @@ const FiltersContextProvider = (props: IFiltersProviderProps) => {
 		return collectionFilterForm.dirty;
 	}
 
+	const hasSelectedTraitTypesFilter = () => {
+		return traitTypesFilterForm.dirty;
+	}
+
 	const hasSearchBarFilter = () => {
 		return searchBarForm.dirty;
 	}
@@ -207,6 +216,7 @@ const FiltersContextProvider = (props: IFiltersProviderProps) => {
 			hasSelectedPriceFilter(),
 			hasSelectedNftTypeFilter(),
 			hasSelectedCollectionFilter(),
+			hasSelectedTraitTypesFilter(),
 		].forEach((v: boolean) => {
 			if (v) c += 1;
 		});
@@ -232,6 +242,7 @@ const FiltersContextProvider = (props: IFiltersProviderProps) => {
     nftTypeFilterForm.resetForm();
     priceRangeFilterForm.resetForm();
     collectionFilterForm.resetForm();
+		traitTypesFilterForm.resetForm();
     sortByForm.resetForm();
     sortByForm.setFieldValue("sortingIndex", props.clearSorting)
 		searchBarForm.resetForm();
@@ -517,7 +528,13 @@ const FiltersContextProvider = (props: IFiltersProviderProps) => {
 	const _handleGetCollectionNFTs = async ({ pageParam = 1 }) => {
 		const searchQuery = searchBarForm.values.searchValue;
 
-		const collectionNFTs = await GetCollectionNFTsApi(utils.getAddress(collectionAddress), pageParam, PER_PAGE, searchQuery);
+		const collectionNFTs = await GetCollectionNFTsApi(
+			utils.getAddress(collectionAddress),
+			pageParam,
+			PER_PAGE,
+			searchQuery,
+			traitTypesFilterForm.values.properties,
+		);
 		return collectionNFTs;
 	};
 
@@ -601,6 +618,7 @@ const FiltersContextProvider = (props: IFiltersProviderProps) => {
 			'collection-nfts',
 			collectionAddress,
 			searchBarForm.values,
+			traitTypesFilterForm.values.properties,
 		], _handleGetCollectionNFTs,
 		{
 			enabled: !!collectionAddress && (!hasSelectedOrderBookFilters() || (hasSelectedOrderBookFilters() && hasSearchBarFilter())),
@@ -611,7 +629,7 @@ const FiltersContextProvider = (props: IFiltersProviderProps) => {
 			onSuccess: () => {
 				// For Beta, we support either SearchBar search or OrderBook filters. So reset the OrderBookFilters here.
 				if (hasSelectedOrderBookFilters()) {
-					clearForms([ saleTypeFilterForm, nftTypeFilterForm, priceRangeFilterForm, sortByForm ]);
+					clearForms([ saleTypeFilterForm, nftTypeFilterForm, priceRangeFilterForm, traitTypesFilterForm, sortByForm ]);
 					setShowFiltersToggle(false);
 				};
 			},
@@ -687,6 +705,7 @@ const FiltersContextProvider = (props: IFiltersProviderProps) => {
 		hasSelectedSortByFilter,
 		hasSelectedNftTypeFilter,
 		hasSelectedCollectionFilter,
+	  hasSelectedTraitTypesFilter,
 		hasSelectedOrderBookFilters,
 		hasSearchBarFilter,
 		getSelectedFiltersCount,
@@ -695,10 +714,11 @@ const FiltersContextProvider = (props: IFiltersProviderProps) => {
 		setDisabledSortByFilters,
 		// --- FORMS ---
 		searchBarForm: searchBarForm,
-		collectionFilterForm: collectionFilterForm,
+		collectionForm: collectionFilterForm,
 		nftTypeForm: nftTypeFilterForm,
 		saleTypeForm: saleTypeFilterForm,
 		priceRangeForm: priceRangeFilterForm,
+	  traitTypesForm: traitTypesFilterForm,
 		sortByForm: sortByForm,
 		// --- API returned Data ---
 		userCollections: UserCollections || [],

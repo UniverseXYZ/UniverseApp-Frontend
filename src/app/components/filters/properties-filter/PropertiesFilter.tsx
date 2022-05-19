@@ -4,32 +4,44 @@ import {
   AccordionItem,
   AccordionPanel,
   Box,
-  Flex,
   Image,
 } from '@chakra-ui/react';
+import axios from 'axios';
+import { useFormik } from 'formik';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useQuery } from 'react-query';
-import axios from 'axios';
 
 import PropertiesIcon from '@assets/images/v2/marketplace/filter-properties.svg';
 import ArrowIcon from '@assets/images/accordion-arrow.svg';
-import { CollectionsFilter, ICollectionsValue } from '@app/components/filters';
 import { Checkbox, Dropdown, DropdownFilterContainer, SearchInput } from '@app/components';
 
 import * as styles from './PropertiesFilter.styles';
 
+export interface IPropertiesFilterValue {
+  properties: Record<string, string[]>;
+}
+
+export const usePropertiesFilter = () => {
+  const form = useFormik<IPropertiesFilterValue>({
+    initialValues: {
+      properties: {}
+    },
+    onSubmit: () => {},
+  });
+
+  return { form };
+};
+
 interface IPropertiesFilterProps {
   collectionAddress: string;
-  items?: ICollectionsValue[];
   searchPlaceholder?: string;
-  value: number;
-  onChange: (value: number) => void;
+  value: IPropertiesFilterValue;
+  onChange: (value: IPropertiesFilterValue) => void;
 }
 
 export const PropertiesFilter = (props: IPropertiesFilterProps) => {
   const {
     collectionAddress,
-    items = [],
     searchPlaceholder = 'Search',
     value,
     onChange
@@ -38,26 +50,52 @@ export const PropertiesFilter = (props: IPropertiesFilterProps) => {
   const [searchValue, setSearchValue] = useState<string>('');
 
   const { data } = useQuery<Array<{ trait_type: string; value: string[]; }>>(['properties', collectionAddress], async () => {
-    console.log(`${process.env.REACT_APP_DATASCRAPER_BACKEND}/v1/tokens/${collectionAddress}/token-attributes`);
     const { data } = await axios.get(`${process.env.REACT_APP_DATASCRAPER_BACKEND}/v1/tokens/${collectionAddress}/token-attributes`);
     return data;
   });
 
-  const onSearch = useCallback((searchValue: any) => {
+  const handleSearch = useCallback((searchValue: any) => {
     setSearchValue(searchValue.target.value);
   }, []);
 
-  const handleToggleItem = useCallback((item) => {
-    onChange(1);
-  }, [value, onChange]);
+  const handleToggleItem = useCallback((traitType, traitTypeValue) => {
+    if (value.properties.hasOwnProperty(traitType) && (value.properties[traitType] || []).includes(traitTypeValue)) {
+      onChange({
+        properties: {
+          ...value.properties,
+          [traitType]: value.properties[traitType].filter((_value: string) => _value !== traitTypeValue)
+        }
+      });
+    } else {
+      onChange({
+        properties: data?.reduce<Record<string, string[]>>((acc, group) => {
+          if (value.properties.hasOwnProperty(group.trait_type) || group.trait_type === traitType) {
+            acc[group.trait_type] = group.value.filter(
+              (_value) => (value.properties[group.trait_type] || []).includes(_value) || _value === traitTypeValue
+            );
+          }
+          return acc;
+        }, {}) ?? {}
+      });
+    }
+  }, [data, value, onChange]);
 
   const filteredItems = useMemo(() => {
     if (!searchValue) {
-      return items;
+      return data;
     }
 
-    return [...items].filter(collection => collection.name?.toLowerCase().includes(searchValue));
-  }, [items, searchValue]);
+    return !data
+      ? []
+      : data.map((group) => ({
+        ...group,
+        value: group.value.filter(prop => prop?.toLowerCase().includes(searchValue))
+      })).filter(group => group.value.length);
+  }, [data, searchValue]);
+
+  const isChecked = useCallback((traitType, traitTypeValue) => {
+    return value.properties.hasOwnProperty(traitType) && (value.properties[traitType] || []).includes(traitTypeValue);
+  }, [value]);
 
   return (
     <>
@@ -80,12 +118,12 @@ export const PropertiesFilter = (props: IPropertiesFilterProps) => {
             placeholder: searchPlaceholder,
           }}
           value={searchValue}
-          onChange={onSearch}
+          onChange={handleSearch}
         />
       </Box>
       <Box {...styles.WrapperStyle}>
         <Accordion allowToggle allowMultiple>
-          {data?.map((group, i) => (
+          {filteredItems?.map((group, i) => (
             <AccordionItem key={i} {...styles.AccordionItemStyle}>
               <h2>
                 <AccordionButton {...styles.AccordionButtonStyle}>
@@ -99,7 +137,11 @@ export const PropertiesFilter = (props: IPropertiesFilterProps) => {
               <AccordionPanel p={0}>
                 {group.value.map((value, j) => (
                   <Box key={j} py={'6px'} _first={{ pt: 0 }} _last={{ pb: '20px' }}>
-                    <Checkbox size={'lg'}>{value}</Checkbox>
+                    <Checkbox
+                      size={'lg'}
+                      isChecked={isChecked(group.trait_type, value)}
+                      onChange={() => handleToggleItem(group.trait_type, value)}
+                    >{value}</Checkbox>
                   </Box>
                 ))}
               </AccordionPanel>
@@ -112,17 +154,15 @@ export const PropertiesFilter = (props: IPropertiesFilterProps) => {
 };
 
 interface IPropertiesFilterDropdownProps {
-  items?: ICollectionsValue[];
   searchPlaceholder?: string;
-  value: number;
   collectionAddress: string;
-  onSave: (value: number) => void;
+  value: IPropertiesFilterValue;
+  onSave: (value: IPropertiesFilterValue) => void;
   onClear: () => void;
 }
 
 export const PropertiesFilterDropdown = (props: IPropertiesFilterDropdownProps) => {
   const {
-    items,
     searchPlaceholder,
     value: initialValue,
     collectionAddress,
@@ -130,11 +170,11 @@ export const PropertiesFilterDropdown = (props: IPropertiesFilterDropdownProps) 
     onClear,
   } = props;
 
-  const [value, setValue] = useState<number>();
+  const [value, setValue] = useState<IPropertiesFilterValue>({ properties: {} });
   const [isOpened, setIsOpened] = useState(false);
 
   const handleSave = useCallback(() => {
-    onSave(value || 0);
+    onSave(value);
     setIsOpened(false);
   }, [value, onSave]);
 
@@ -148,7 +188,13 @@ export const PropertiesFilterDropdown = (props: IPropertiesFilterDropdownProps) 
       return null;
     }
 
-    return `3D Glasses +2`;
+    const [first, ...rest] = Object.keys(initialValue.properties).map((key) => initialValue.properties[key]).flat();
+
+    if (!first) {
+      return null;
+    }
+
+    return `${first}${rest.length ? ` +${rest.length}` : ''}`;
   }, [initialValue]);
 
   useEffect(() => setValue(initialValue), [initialValue]);
@@ -172,9 +218,8 @@ export const PropertiesFilterDropdown = (props: IPropertiesFilterDropdownProps) 
       >
         <PropertiesFilter
           collectionAddress={collectionAddress}
-          items={items}
           searchPlaceholder={searchPlaceholder}
-          value={value ?? 0}
+          value={value}
           onChange={(value) => setValue(value)}
         />
       </DropdownFilterContainer>

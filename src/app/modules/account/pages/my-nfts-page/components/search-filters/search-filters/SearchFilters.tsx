@@ -40,6 +40,7 @@ interface ISearchFiltersProps {
     saleType: unknown;
     nftType: unknown;
     priceRange: unknown;
+    traitTypes: unknown;
     sortBy: unknown;
   }) => void;
 }
@@ -52,10 +53,11 @@ export const SearchFilters = (props: ISearchFiltersProps) => {
     collectionAddress,
     disabledSortByFilters,
     searchBarForm,
-    collectionFilterForm,
+    collectionForm,
     saleTypeForm,
     nftTypeForm,
     priceRangeForm,
+    traitTypesForm,
     sortByForm,
     showSaleTypeFilters,
     showNFTTypeFilters,
@@ -96,19 +98,21 @@ export const SearchFilters = (props: ISearchFiltersProps) => {
   useEffect(() => {
     onFilterChanges && onFilterChanges({
       searchBar: searchBarForm.values,
-      collectionFilter: collectionFilterForm.values,
+      collectionFilter: collectionForm.values,
       saleType: saleTypeForm.values,
       nftType: nftTypeForm.values,
       priceRange: priceRangeForm.values,
+      traitTypes: traitTypesForm.values,
       sortBy: sortByForm.values,
     });
   }, [
     onFilterChanges,
     searchBarForm.values,
-    collectionFilterForm.values,
+    collectionForm.values,
     saleTypeForm.values,
     nftTypeForm.values,
     priceRangeForm.values,
+    traitTypesForm.values,
     sortByForm.values,
   ])
 
@@ -166,15 +170,15 @@ export const SearchFilters = (props: ISearchFiltersProps) => {
             },
             {
               name: 'Collections',
-              form: collectionFilterForm,
+              form: collectionForm,
               visible: showCollectionFilters,
               icon: CollectionsIcon,
               renderFilter: (props) => <CollectionsFilter {...props} items={userCollections} />
             },
             {
               name: 'Properties',
-              form: collectionFilterForm,
-              visible: showPriceRangeFilters,
+              form: traitTypesForm,
+              visible: showTraitTypeFilter,
               icon: PropertiesIcon,
               renderFilter: (props) => <PropertiesFilter {...props} collectionAddress={`${collectionAddress}`} />
             },
@@ -211,19 +215,18 @@ export const SearchFilters = (props: ISearchFiltersProps) => {
                 {showCollectionFilters && (
                   <CollectionsFilterDropdown
                     items={userCollections}
-                    value={collectionFilterForm.values}
-                    onSave={(value) => collectionFilterForm.setValues(value)}
-                    onClear={() => collectionFilterForm.resetForm()}
+                    value={collectionForm.values}
+                    onSave={(value) => collectionForm.setValues(value)}
+                    onClear={() => collectionForm.resetForm()}
                   />
                 )}
 
                 {showTraitTypeFilter && (
                   <PropertiesFilterDropdown
                     collectionAddress={`${collectionAddress}`}
-                    items={userCollections}
-                    value={1}
-                    onSave={(value) => {}}
-                    onClear={() => collectionFilterForm.resetForm()}
+                    value={traitTypesForm.values}
+                    onSave={(value) => traitTypesForm.setValues(value)}
+                    onClear={() => traitTypesForm.resetForm()}
                   />
                 )}
 
