@@ -91,7 +91,7 @@ export const PropertiesFilter = (props: IPropertiesFilterProps) => {
                 <AccordionButton {...styles.AccordionButtonStyle}>
                   <Box flex='1' textAlign='left' fontSize={'16px'} fontWeight={600}>
                     {group.trait_type}
-                    {/*<Box {...styles.GroupItemsAmountLabelStyle}>11</Box>*/}
+                    <Box {...styles.GroupItemsAmountLabelStyle}>{group.value.length}</Box>
                   </Box>
                   <Image src={ArrowIcon} />
                 </AccordionButton>
