@@ -1,10 +1,61 @@
 import { SystemStyleFunction } from '@chakra-ui/theme-tools';
 
-const variantGhostAlt: SystemStyleFunction = (props) => {
-  const { colorScheme: c } = props;
+const variantPrimary: SystemStyleFunction = (props) => {
+  const { colorScheme: cs } = props;
 
-  type IColorModes = 'red' | 'default';
-  type IStyles = {
+  type IColorScheme = 'xyz' | 'xyzWithoutShadow';
+  type IColorSchemeStyles = {
+    boxShadow: string;
+  };
+
+  const colorSchemeStyles: Record<IColorScheme, IColorSchemeStyles> = {
+    xyz: {
+      boxShadow: 'lg',
+    },
+    xyzWithoutShadow: {
+      boxShadow: 'none',
+    },
+  }
+
+  const s = colorSchemeStyles[cs as IColorScheme] || colorSchemeStyles.xyz;
+
+  return {
+    background: 'linear-gradient(135deg, #BCEB00 15.57%, #00EAEA 84.88%)',
+    color: 'black',
+    boxShadow: s.boxShadow,
+
+    _hover: {
+      background: 'linear-gradient(0deg, rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0.4)), linear-gradient(135deg, #BCEB00 15.57%, #00EAEA 84.88%)',
+    },
+
+    _focus: {
+      background: 'linear-gradient(135deg, #BCEB00 15.57%, #00EAEA 84.88%)',
+      boxShadow: s.boxShadow,
+    },
+
+    _active: {
+      background: 'linear-gradient(0deg, rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0.4)), linear-gradient(135deg, #BCEB00 15.57%, #00EAEA 84.88%)',
+      boxShadow: s.boxShadow,
+      transform: 'scale(0.95)',
+    },
+
+    _disabled: {
+      background: 'rgba(0, 0, 0, 0.1) !important',
+      boxShadow: 'none !important',
+      color: 'rgba(0, 0, 0, 0.6) !important',
+      transform: 'scale(1) !important',
+    },
+
+    '.chakra-button__icon': {
+      m: 0,
+    },
+  }
+};
+const variantGhostAlt: SystemStyleFunction = (props) => {
+  const { colorScheme: cs } = props;
+
+  type IColorScheme = 'red' | 'default';
+  type IColorSchemeStyles = {
     bg: string;
     borderColor: string;
     color: string;
@@ -16,7 +67,7 @@ const variantGhostAlt: SystemStyleFunction = (props) => {
     },
   };
 
-  const colorModeStyles: Record<IColorModes, IStyles> = {
+  const colorSchemeStyles: Record<IColorScheme, IColorSchemeStyles> = {
     default: {
       bg: 'none',
       borderColor: 'rgba(0, 0, 0, 0.1)',
@@ -39,7 +90,7 @@ const variantGhostAlt: SystemStyleFunction = (props) => {
     },
   }
 
-  const s = colorModeStyles[c as IColorModes] || colorModeStyles.default;
+  const s = colorSchemeStyles[cs as IColorScheme] || colorSchemeStyles.default;
 
   return {
     bg: s.bg,
@@ -78,6 +129,7 @@ const variantGhostAlt: SystemStyleFunction = (props) => {
 
 export const Button = {
   baseStyle: {
+    borderRadius: '12px',
     fontFamily: 'Space Grotesk',
     fontSize: '16px',
   },
@@ -228,11 +280,23 @@ export const Button = {
     },
 
     // v2
+    primary: variantPrimary,
     ghostAlt: variantGhostAlt,
   },
   sizes: {
     lg: {
-      height: '50px',
-    }
+      gap: '10px',
+      padding: '14px 24px',
+    },
+    md: {
+      gap: '8px',
+      padding: '11px 16px',
+    },
+    sm: {
+      borderRadius: '10px',
+      fontSize: '14px',
+      gap: '8px',
+      padding: '6px 14px',
+    },
   },
 };

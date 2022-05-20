@@ -28,7 +28,7 @@ export const MyAuctionsPage = () => {
           <Stack direction={{ base: 'column', md: 'row', }} spacing={'20px'} {...styles.Header}>
             <Heading as={'h1'}>My auctions</Heading>
             <Button boxShadow={'lg'} padding={'11px 16px'}>
-              <Image src={PlusIcon} alt="icon" mr={'12px'} />
+              <Image src={PlusIcon} alt="icon" />
               Set up auction
             </Button>
           </Stack>

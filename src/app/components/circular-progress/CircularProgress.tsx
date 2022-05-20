@@ -1,9 +1,22 @@
-import { Box, Icon, IconProps } from '@chakra-ui/react';
+import { Box, Icon, IconProps, keyframes } from '@chakra-ui/react';
 import React from 'react';
 
 interface ICircularProgressProps extends Omit<IconProps,'h' | 'w'> {
   strokeWidth?: string;
 }
+
+
+const animationKeyframes = keyframes`
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+`;
+
+const animation2Keyframes = keyframes`
+  0% { stroke-dasharray: 1, 400; stroke-dashoffset: 0; }
+  50% { stroke-dasharray: 400, 400; stroke-dashoffset: -100; }
+  100% { stroke-dasharray: 400, 400; stroke-dashoffset: -260; }
+`;
+
 
 export const CircularProgress = (props: ICircularProgressProps) => {
   const {
@@ -15,7 +28,7 @@ export const CircularProgress = (props: ICircularProgressProps) => {
     <Icon
       viewBox="0 0 100 100"
       boxSize={boxSize}
-      animation={'animation-b7n1on 2s linear infinite'}
+      animation={`${animationKeyframes} 2s linear infinite`}
       {...rest}
     >
       <Box
@@ -35,7 +48,7 @@ export const CircularProgress = (props: ICircularProgressProps) => {
         stroke-width={strokeWidth}
         stroke={'url(#paint0_linear_10427_133468)'}
         fill={'transparent'}
-        animation={'animation-17vs1pd 1.5s linear infinite'}
+        animation={`${animation2Keyframes} 1.5s linear infinite`}
       />
 
       <linearGradient

@@ -9,8 +9,8 @@ export const StoneBG: SystemStyleObject = {
     position: 'fixed',
     left: 0,
     top: 0,
-    h: '100vh',
-    w: '100vw',
+    h: '100%',
+    w: '100%',
     zIndex: -1,
   }
 }

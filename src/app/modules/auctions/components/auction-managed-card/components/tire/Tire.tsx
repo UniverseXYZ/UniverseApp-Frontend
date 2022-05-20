@@ -1,13 +1,10 @@
-import { Box, Button, Heading, HStack, Icon, Image, Stack, Text } from '@chakra-ui/react';
-import React, { useCallback, useMemo, useRef, useState } from 'react';
-import { FreeMode, Navigation, Controller } from 'swiper';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import { Swiper as SwiperClass } from 'swiper/types';
+import { Box, Heading, HStack, Image, Stack, Text } from '@chakra-ui/react';
+import React, { useCallback, useMemo, useState } from 'react';
 
-import { ReactComponent as Arrow3Icon } from '@assets/images/arrow-3.svg';
 import AuctionWinnerIcon from '@assets/images/auction-winner.png';
 
 import { Select } from '@app/components';
+import { TireNFTs } from '@app/modules/auctions/components';
 
 import * as s from './Tire.styles';
 
@@ -22,14 +19,6 @@ export const Tire = (props: ITireProps) => {
     winners: initialWinnersAmount,
   } = props;
 
-  const assetUrl = 'https://universe-prod-datascraper-images.s3.amazonaws.com/0x16de9D750F4AC24226154C40980Ef83d4D3fD4AD/4231/image.png';
-
-  const prevRef = useRef(null);
-  const nextRef = useRef(null);
-
-  const [swiper, setSwiper] = useState<SwiperClass>();
-
-  const [NFTs] = useState(new Array(5).fill(null));
   const [winners] = useState(new Array(initialWinnersAmount).fill(null).map((_, i) => ({
     id: i + 1,
     name: `Winner #${i + 1}`,
@@ -66,41 +55,7 @@ export const Tire = (props: ITireProps) => {
         />
       </Stack>
 
-      <Box pos={'relative'}>
-        <Button ref={prevRef} variant={'simple'} {...s.SwiperLeftButton}>
-          <Icon viewBox={'0 0 6 12'} pos={'relative'}>
-            <Arrow3Icon />
-          </Icon>
-        </Button>
-
-        <Button ref={nextRef} variant={'simple'} {...s.SwiperRightButton}>
-          <Icon viewBox={'0 0 6 12'} transform={'rotate(180deg)'}>
-            <Arrow3Icon />
-          </Icon>
-        </Button>
-
-        <Swiper
-          modules={[Controller, Navigation, FreeMode]}
-          navigation={{
-            prevEl: prevRef.current,
-            nextEl: nextRef.current,
-          }}
-          loop={false}
-          freeMode={true}
-          slidesPerView={'auto'}
-          spaceBetween={14}
-          controller={{ control: swiper }}
-          onSwiper={(swiper) => setSwiper(swiper)}
-        >
-          {NFTs.map((NFT, i) => (
-            <SwiperSlide key={i} style={{ width: '85px' }}>
-              <Box {...s.NFTAsset} bg={`url(${assetUrl}) center / cover`}>
-                <Box {...s.AmountBadge}>5</Box>
-              </Box>
-            </SwiperSlide>
-          ))}
-        </Swiper>
-      </Box>
+      <TireNFTs NFTs={15} />
     </Box>
   )
 }

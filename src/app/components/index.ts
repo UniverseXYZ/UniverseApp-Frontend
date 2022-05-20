@@ -2,6 +2,7 @@ export * from './alert';
 export * from './back-to-top-button';
 export * from './checkbox';
 export * from './circular-progress';
+export * from './collection-approve';
 export * from './collection-preview';
 export * from './currency-input';
 export * from './currency-select';
