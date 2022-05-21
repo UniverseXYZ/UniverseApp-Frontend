@@ -8,7 +8,8 @@ import {
   Link,
   SimpleGrid,
   Stack,
-  Text, VStack,
+  Text,
+  VStack,
 } from '@chakra-ui/react';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import NextLink from 'next/link';
@@ -16,7 +17,7 @@ import NextLink from 'next/link';
 import ArrowIcon from '@assets/images/arrow-2.svg';
 import { ReactComponent as CheckSVG } from '@assets/images/checkmark.svg';
 
-import { Alert, CircularProgress, CollectionApprove, Step, Stepper } from '@app/components';
+import { Alert, BeforeUnloadPopup, CircularProgress, CollectionApprove, Step, Stepper } from '@app/components';
 
 import { SuccessPopup, Transaction } from './components';
 import * as s from './FinalizeAuctionPage.styles';
@@ -129,6 +130,16 @@ export const FinalizeAuctionPage = () => {
     return EStep.complete;
   }, [proceedState, isAllCollectionsApproved, isAllTransactionsDeposited]);
 
+  const showBeforeUnloadPopup = useMemo(() => {
+    if (activeStep === EStep.complete) {
+      return false;
+    }
+
+    return activeStep !== EStep.proceed
+      || collections.some((c) => c.isApproved)
+      || transactions.some((c) => c.deposited);
+  }, [activeStep, collections, transactions]);
+
   useEffect(() => {
     setShowSuccess(activeStep === EStep.complete);
   }, [activeStep]);
@@ -236,6 +247,7 @@ export const FinalizeAuctionPage = () => {
         auctionStartDate={new Date()}
         onClose={() => setShowSuccess(false)}
       />
+      <BeforeUnloadPopup show={showBeforeUnloadPopup} />
     </>
   )
 };

@@ -36,7 +36,7 @@ export const CircularProgress = (props: ICircularProgressProps) => {
         cx="50"
         cy="50"
         r="42"
-        stroke-width={strokeWidth}
+        strokeWidth={strokeWidth}
         stroke={'rgba(215 215 215 / 20%)'}
         fill={'transparent'}
       />
@@ -45,7 +45,7 @@ export const CircularProgress = (props: ICircularProgressProps) => {
         cx="50"
         cy="50"
         r="42"
-        stroke-width={strokeWidth}
+        strokeWidth={strokeWidth}
         stroke={'url(#paint0_linear_10427_133468)'}
         fill={'transparent'}
         animation={`${animation2Keyframes} 1.5s linear infinite`}
@@ -59,8 +59,8 @@ export const CircularProgress = (props: ICircularProgressProps) => {
         y2="80"
         gradientUnits="userSpaceOnUse"
       >
-        <stop stop-color="#BCEB00"></stop>
-        <stop offset="1" stop-color="#00EAEA"></stop>
+        <stop stopColor="#BCEB00"></stop>
+        <stop offset="1" stopColor="#00EAEA"></stop>
       </linearGradient>
     </Icon>
   );

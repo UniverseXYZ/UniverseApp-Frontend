@@ -64,13 +64,35 @@ const variantAlert: PartsStyleObject<typeof parts> = {
     padding: 0,
     textAlign: 'center',
 
+    p: {
+      color: 'rgba(0, 0, 0, 0.6)',
+      fontSize: {
+        base: '14px',
+        md: '16px'
+      },
+      fontWeight: 400,
+    },
+
     strong: {
       color: 'black',
       fontWeight: 'bold',
     },
   },
   footer: {
+    flexDir: {
+      base: 'column',
+      md: 'row'
+    },
+    gap: '16px',
+    justifyContent: 'center',
     padding: 0,
+
+    button: {
+      w: {
+        base: '100%',
+        md: 'fit-content',
+      }
+    },
   },
 };
 

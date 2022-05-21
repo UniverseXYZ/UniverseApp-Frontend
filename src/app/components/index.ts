@@ -1,6 +1,7 @@
 export * from './alert';
 export * from './alert-popup';
 export * from './back-to-top-button';
+export * from './before-uload-popap';
 export * from './checkbox';
 export * from './circular-progress';
 export * from './collection-approve';

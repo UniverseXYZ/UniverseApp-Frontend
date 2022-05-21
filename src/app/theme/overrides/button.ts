@@ -56,8 +56,8 @@ const variantGhost: SystemStyleFunction = (props) => {
       borderRadius: 'inherit',
       padding: '1px',
       background: 'linear-gradient(101deg,#bceb00,#00eaea)',
-      '-webkit-mask': 'linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0)',
-      '-webkit-mask-composite': 'xor',
+      WebkitMask: 'linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0)',
+      WebkitMaskComposite: 'xor',
       maskComposite: 'exclude',
     },
 

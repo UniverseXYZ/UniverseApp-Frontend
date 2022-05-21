@@ -65,16 +65,16 @@ export const AlertPopup = (props: IAlertPopupProps) => {
       <ModalContent>
         {showCloseButton && (<ModalCloseButton />)}
 
-        <ModalHeader>
-          {!!icon && (
+        {!!icon && (
+          <ModalHeader>
             <Image
               src={ICONS[icon][0]}
               alt={ICONS[icon][1]}
               {...s.Icon}
               animation={icon !== 'spinner' ? '' : `${s.spinnerAnimationKeyframes} 1s linear infinite`}
             />
-          )}
-        </ModalHeader>
+          </ModalHeader>
+        )}
 
         <ModalBody>
           {!!title && (<Heading {...s.Title}>{title}</Heading>)}
