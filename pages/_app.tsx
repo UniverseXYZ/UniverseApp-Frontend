@@ -120,6 +120,11 @@ import { useAuthStore } from "../src/stores/authStore";
 import { useErc20PriceStore } from "../src/stores/erc20PriceStore";
 import "../styles/globals.css";
 
+import dayjs from 'dayjs';
+import AdvancedFormat from 'dayjs/plugin/advancedFormat';
+
+dayjs.extend(AdvancedFormat);
+
 function MyApp({ Component, pageProps }: AppProps) {
   const [queryClient] = useState(
     () =>

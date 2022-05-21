@@ -1,9 +1,12 @@
 import { Box, Button, Center, Heading, HStack, Icon, Stack, Text } from '@chakra-ui/react';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
+import { ReactComponent as CheckSVG } from '@assets/images/checkmark.svg';
+
 import { CircularProgress } from '@app/components';
 import { TireNFTs } from '@app/modules/auctions/components';
-import { ReactComponent as CheckSVG } from '@assets/images/checkmark.svg';
+
+import * as s from './Transaction.styles';
 
 interface ITransactionProps {
   name: string;
@@ -44,23 +47,21 @@ export const Transaction = (props: ITransactionProps) => {
     <Button
       variant={'primary'}
       disabled={disabled}
-      w={{ base: '100%', md: 'fit-content' }}
+      {...s.Button}
       onClick={handleDeposit}
     >Deposit</Button>
-  )
-  const renderPendingState = () => (
-    <Center><CircularProgress /></Center>
-  )
+  );
+  const renderPendingState = () => (<Center><CircularProgress /></Center>);
   const renderDepositedState = () => (
     <Button
       variant={'ghostAlt'}
       disabled={true}
-      w={{ base: '100%', md: 'fit-content' }}
+      {...s.Button}
       rightIcon={<Icon viewBox={'0 0 16 15'}><CheckSVG /></Icon>}
     >
       Completed
     </Button>
-  )
+  );
 
   const stateRenders: Record<TransactionState, () => React.ReactNode> = {
     notDeposited: renderNotDepositedState,
@@ -69,19 +70,8 @@ export const Transaction = (props: ITransactionProps) => {
   };
 
   return (
-    <Box sx={{
-      bg: 'white',
-      borderRadius: '12px',
-      boxShadow: '0px 10px 36px rgba(136, 120, 172, 0.14)',
-      padding: '20px 30px 30px',
-      w: '100%',
-    }}>
-      <Stack
-        direction={{ base: 'column', md: 'row' }}
-        spacing={{ base: '10px', md: '40px' }}
-        alignItems={{ base: 'flex-start', md: 'center' }}
-        mb={'20px'}
-      >
+    <Box {...s.Wrapper}>
+      <Stack {...s.TitleContainer}>
         <Heading fontSize={'16px'} flex={1}>{name}</Heading>
         <Text fontSize={'14px'}>Total NFTs: <strong>{totalNFTs}</strong></Text>
         <Box display={{ base: 'none', md: 'block' }}>
@@ -91,16 +81,7 @@ export const Transaction = (props: ITransactionProps) => {
 
       <Box>
         {tires.map((tire, j) => (
-          <Box key={j} sx={{
-            borderTop: '1px solid rgba(0, 0, 0, 0.1)',
-            padding: '20px 0 30px',
-            _last: {
-              paddingBottom: {
-                base: '30px',
-                md: 0,
-              },
-            },
-          }}>
+          <Box key={j} {...s.TireWrapper}>
             <HStack spacing={'22px'} mb={'20px'}>
               <Heading fontSize={'12px'}>{tire.name}</Heading>
               <Text fontSize={'14px'}>Slots: <strong>{tire.slots}</strong></Text>

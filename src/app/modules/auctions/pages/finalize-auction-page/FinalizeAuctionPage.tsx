@@ -10,7 +10,7 @@ import {
   Stack,
   Text, VStack,
 } from '@chakra-ui/react';
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import NextLink from 'next/link';
 
 import ArrowIcon from '@assets/images/arrow-2.svg';
@@ -18,11 +18,15 @@ import { ReactComponent as CheckSVG } from '@assets/images/checkmark.svg';
 
 import { Alert, CircularProgress, CollectionApprove, Step, Stepper } from '@app/components';
 
-import { Transaction } from './components';
+import { SuccessPopup, Transaction } from './components';
 import * as s from './FinalizeAuctionPage.styles';
 
 export const FinalizeAuctionPage = () => {
-  const [isProceed, setIsProceed] = useState(false);
+  type IProceedState = 'notProceed' | 'pending' | 'proceed';
+
+  const [showSuccess, setShowSuccess] = useState(false);
+
+  const [proceedState, setProceedState] = useState<IProceedState>('notProceed');
 
   type ICollection = {
     name: string;
@@ -73,9 +77,16 @@ export const FinalizeAuctionPage = () => {
     }
   ]);
 
-  const totalNFTs = useMemo(() => {
-    return transactions.reduce((total, tx) => total + tx.tires.reduce((acc, tire) => acc + tire.NFTs, 0), 0);
-  }, [transactions]);
+  const handleProceed = useCallback(() => {
+    setProceedState('pending');
+    setTimeout(() => {
+      setProceedState('proceed');
+    }, 2 * 1000);
+  }, []);
+
+  const handleCancelProceed = useCallback(() => {
+    setProceedState('notProceed');
+  }, []);
 
   const handleApproveCollection = useCallback((collection: ICollection) => {
     setCollections((collections) => collections.map((_collection) => {
@@ -105,104 +116,126 @@ export const FinalizeAuctionPage = () => {
     return transactions.every((tx) => tx.deposited);
   }, [transactions]);
 
+  const totalNFTs = useMemo(() => {
+    return transactions.reduce((total, tx) => total + tx.tires.reduce((acc, tire) => acc + tire.NFTs, 0), 0);
+  }, [transactions]);
+
   const activeStep = useMemo(() => {
     switch (false) {
-      case isProceed: return EStep.proceed;
+      case proceedState === 'proceed': return EStep.proceed;
       case isAllCollectionsApproved: return EStep.collectionsApprove;
       case isAllTransactionsDeposited: return EStep.transactionsDeposit;
     }
     return EStep.complete;
-  }, [isProceed, isAllCollectionsApproved, isAllTransactionsDeposited]);
+  }, [proceedState, isAllCollectionsApproved, isAllTransactionsDeposited]);
+
+  useEffect(() => {
+    setShowSuccess(activeStep === EStep.complete);
+  }, [activeStep]);
+
+  const renderProceedState: Record<IProceedState, () => React.ReactNode> = {
+    notProceed: () => (<Button variant={'primary'} onClick={handleProceed}>Proceed</Button>),
+    pending: () => (<CircularProgress />),
+    proceed: () => (
+      <>
+        <Button
+          variant={'ghostAlt'}
+          disabled={true}
+          rightIcon={<Icon viewBox={'0 0 16 15'}><CheckSVG /></Icon>}
+        >
+          Completed
+        </Button>
+        <Button
+          variant={'ghostAlt'}
+          colorScheme={'red'}
+          onClick={handleCancelProceed}
+          disabled={activeStep === EStep.complete}
+        >Cancel</Button>
+      </>
+    )
+  };
 
   return (
-    <Box layerStyle={'StoneBG'}>
-      <Box {...s.Wrapper}>
-        <Container maxW={'1110px'} p={0} pt={'40px'}>
-          <NextLink href={'/account/auctions'} passHref>
-            <Link {...s.MyAuctionsLink}>
-              <Image src={ArrowIcon} alt={'Arrow icon'} display={'inline-block'} mt={'-2px'} mr={'12px'} />
-              My auctions
-            </Link>
-          </NextLink>
-          <Heading as={'h1'} mb={'16px'}>Finalize auction</Heading>
-          <Text {...s.PageDescription}>
-            The auction landing page will be automatically published after you successfully complete all the transactions below
-          </Text>
+    <>
+      <Box layerStyle={'StoneBG'}>
+        <Box {...s.Wrapper}>
+          <Container maxW={'1110px'} p={0} pt={'40px'}>
+            <NextLink href={'/account/auctions'} passHref>
+              <Link {...s.MyAuctionsLink}>
+                <Image src={ArrowIcon} alt={'Arrow icon'} display={'inline-block'} mt={'-2px'} mr={'12px'} />
+                My auctions
+              </Link>
+            </NextLink>
+            <Heading as={'h1'} mb={'16px'}>Finalize auction</Heading>
+            <Text {...s.PageDescription}>
+              The auction landing page will be automatically published after you successfully complete all the transactions below
+            </Text>
 
-          <Stepper activeStep={activeStep} direction={'column'}>
-            <Step>
-              <Box {...s.StepContainer}>
-                <Heading as={'h2'} {...s.StepTitle}>Create auction</Heading>
-                <Text {...s.StepDescription}>Proceed with the transaction to create the auction instance on the blockchain</Text>
-                <Alert status={'warning'} {...s.Alert}>
-                  You will not be able to make any changes to the auction if you proceed
-                </Alert>
+            <Stepper activeStep={activeStep} direction={'column'}>
+              <Step>
+                <Box {...s.StepContainer}>
+                  <Heading as={'h2'} {...s.StepTitle}>Create auction</Heading>
+                  <Text {...s.StepDescription}>Proceed with the transaction to create the auction instance on the blockchain</Text>
+                  <Alert status={'warning'} {...s.Alert}>
+                    You will not be able to make any changes to the auction if you proceed
+                  </Alert>
 
-                <Stack direction={{ base: 'column', md: 'row' }} spacing={'12px'}>
-                  {!isProceed ? (
-                    <Button variant={'primary'} onClick={() => setIsProceed(true)}>Proceed</Button>
-                  ) : (
-                    <>
-                      <Button
-                        variant={'ghostAlt'}
-                        disabled={true}
-                        rightIcon={<Icon viewBox={'0 0 16 15'}><CheckSVG /></Icon>}
-                      >
-                        Completed
-                      </Button>
-                      <Button
-                        variant={'ghostAlt'}
-                        colorScheme={'red'}
-                        onClick={() => setIsProceed(false)}
-                      >Cancel</Button>
-                    </>
-                  )}
-                </Stack>
-              </Box>
-            </Step>
-            <Step>
-              <Box {...s.StepContainer}>
-                <Heading as={'h2'} {...s.StepTitle}>Set approvals</Heading>
-                <Text {...s.StepDescription}>Approve NFTs for depositing into the auction contract</Text>
-                <Alert status={'warning'} {...s.Alert}>
-                  Depending on the gas fee cost, you may need to have a significant amount of ETH to proceed
-                </Alert>
-                <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacing={'30px'}>
-                  {collections.map((collection, i) => (
-                    <CollectionApprove
-                      key={i}
-                      address={`${i}`}
-                      name={collection.name}
-                      coverUrl={collection.coverUrl}
-                      disabled={activeStep !== EStep.collectionsApprove}
-                      isApproved={collection.isApproved}
-                      onApproved={() => handleApproveCollection(collection)}
-                    />
-                  ))}
-                </SimpleGrid>
-              </Box>
-            </Step>
-            <Step>
-              <Box {...s.StepContainer} pb={0}>
-                <Heading as={'h2'} {...s.StepTitle}>Deposit NFTs</Heading>
-                <Text {...s.StepDescription}>Deposit <Box as={'strong'} color={'black'}>{totalNFTs}</Box> NFTs to the auction contract</Text>
-                <VStack spacing={'30px'} justifyContent={'flex-start'}>
-                  {transactions.map((tx, i) => (
-                    <Transaction
-                      key={i}
-                      name={tx.name}
-                      tires={tx.tires}
-                      disabled={activeStep !== EStep.transactionsDeposit}
-                      isDeposited={tx.deposited}
-                      onDeposit={() => handleDepositTransaction(tx)}
-                    />
-                  ))}
-                </VStack>
-              </Box>
-            </Step>
-          </Stepper>
-        </Container>
+                  <Stack direction={{ base: 'column', md: 'row' }} spacing={'12px'}>
+                    {renderProceedState[proceedState]()}
+                  </Stack>
+                </Box>
+              </Step>
+              <Step>
+                <Box {...s.StepContainer}>
+                  <Heading as={'h2'} {...s.StepTitle}>Set approvals</Heading>
+                  <Text {...s.StepDescription}>Approve NFTs for depositing into the auction contract</Text>
+                  <Alert status={'warning'} {...s.Alert}>
+                    Depending on the gas fee cost, you may need to have a significant amount of ETH to proceed
+                  </Alert>
+                  <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacing={'30px'}>
+                    {collections.map((collection, i) => (
+                      <CollectionApprove
+                        key={i}
+                        address={`${i}`}
+                        name={collection.name}
+                        coverUrl={collection.coverUrl}
+                        disabled={activeStep !== EStep.collectionsApprove}
+                        isApproved={collection.isApproved}
+                        onApproved={() => handleApproveCollection(collection)}
+                      />
+                    ))}
+                  </SimpleGrid>
+                </Box>
+              </Step>
+              <Step>
+                <Box {...s.StepContainer} pb={0}>
+                  <Heading as={'h2'} {...s.StepTitle}>Deposit NFTs</Heading>
+                  <Text {...s.StepDescription}>Deposit <Box as={'strong'} color={'black'}>{totalNFTs}</Box> NFTs to the auction contract</Text>
+                  <VStack spacing={'30px'} justifyContent={'flex-start'}>
+                    {transactions.map((tx, i) => (
+                      <Transaction
+                        key={i}
+                        name={tx.name}
+                        tires={tx.tires}
+                        disabled={activeStep !== EStep.transactionsDeposit}
+                        isDeposited={tx.deposited}
+                        onDeposit={() => handleDepositTransaction(tx)}
+                      />
+                    ))}
+                  </VStack>
+                </Box>
+              </Step>
+            </Stepper>
+          </Container>
+        </Box>
       </Box>
-    </Box>
+      <SuccessPopup
+        isOpened={showSuccess}
+        auctionId={1}
+        auctionName={'My Auction name'}
+        auctionStartDate={new Date()}
+        onClose={() => setShowSuccess(false)}
+      />
+    </>
   )
 };

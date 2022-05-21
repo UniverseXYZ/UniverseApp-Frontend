@@ -1,28 +1,10 @@
 import { SystemStyleFunction } from '@chakra-ui/theme-tools';
 
-const variantPrimary: SystemStyleFunction = (props) => {
-  const { colorScheme: cs } = props;
-
-  type IColorScheme = 'xyz' | 'xyzWithoutShadow';
-  type IColorSchemeStyles = {
-    boxShadow: string;
-  };
-
-  const colorSchemeStyles: Record<IColorScheme, IColorSchemeStyles> = {
-    xyz: {
-      boxShadow: 'lg',
-    },
-    xyzWithoutShadow: {
-      boxShadow: 'none',
-    },
-  }
-
-  const s = colorSchemeStyles[cs as IColorScheme] || colorSchemeStyles.xyz;
-
+const variantPrimary: SystemStyleFunction = () => {
   return {
     background: 'linear-gradient(135deg, #BCEB00 15.57%, #00EAEA 84.88%)',
     color: 'black',
-    boxShadow: s.boxShadow,
+    boxShadow: 'lg',
 
     _hover: {
       background: 'linear-gradient(0deg, rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0.4)), linear-gradient(135deg, #BCEB00 15.57%, #00EAEA 84.88%)',
@@ -30,12 +12,12 @@ const variantPrimary: SystemStyleFunction = (props) => {
 
     _focus: {
       background: 'linear-gradient(135deg, #BCEB00 15.57%, #00EAEA 84.88%)',
-      boxShadow: s.boxShadow,
+      boxShadow: 'lg',
     },
 
     _active: {
       background: 'linear-gradient(0deg, rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0.4)), linear-gradient(135deg, #BCEB00 15.57%, #00EAEA 84.88%)',
-      boxShadow: s.boxShadow,
+      boxShadow: 'lg',
       transform: 'scale(0.95)',
     },
 
@@ -44,6 +26,63 @@ const variantPrimary: SystemStyleFunction = (props) => {
       boxShadow: 'none !important',
       color: 'rgba(0, 0, 0, 0.6) !important',
       transform: 'scale(1) !important',
+    },
+
+    '.chakra-button__icon': {
+      m: 0,
+    },
+  }
+};
+const variantGhost: SystemStyleFunction = (props) => {
+  const { colorScheme: cs } = props;
+
+  return {
+    border: 0,
+    borderRadius: '12px',
+    boxShadow: 'none',
+    color: 'black',
+    transition: '50ms ease-in',
+    position: 'relative',
+
+    _before: {
+      backgroundImage: 'none',
+      boxShadow: 'none',
+      content: '""',
+      position: 'absolute',
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0,
+      borderRadius: 'inherit',
+      padding: '1px',
+      background: 'linear-gradient(101deg,#bceb00,#00eaea)',
+      '-webkit-mask': 'linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0)',
+      '-webkit-mask-composite': 'xor',
+      maskComposite: 'exclude',
+    },
+
+    _hover: {
+      background: 'linear-gradient(135deg, rgba(188, 235, 0, 0.1) 15.57%, rgba(0, 234, 234, 0.1) 84.88%)',
+    },
+
+    _focus: {
+      boxShadow: 'none',
+    },
+
+    _active: {
+      background: 'linear-gradient(135deg, rgba(188, 235, 0, 0.1) 15.57%, rgba(0, 234, 234, 0.1) 84.88%)',
+      transform: 'scale(0.95)',
+    },
+
+    _disabled: {
+      background: 'transparent !important',
+      border: '1px solid rgba(0, 0, 0, 0.2)',
+      boxShadow: 'none !important',
+      color: 'rgba(0, 0, 0, 0.6) !important',
+      transform: 'scale(1) !important',
+      _before: {
+        display: 'none',
+      }
     },
 
     '.chakra-button__icon': {
@@ -282,6 +321,7 @@ export const Button = {
     // v2
     primary: variantPrimary,
     ghostAlt: variantGhostAlt,
+    ghost: variantGhost,
   },
   sizes: {
     lg: {
@@ -300,3 +340,4 @@ export const Button = {
     },
   },
 };
+
