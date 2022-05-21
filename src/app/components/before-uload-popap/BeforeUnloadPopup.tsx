@@ -1,6 +1,7 @@
 import { Button, Text } from '@chakra-ui/react';
 import Router, { useRouter } from 'next/router';
 import React, { useCallback, useEffect, useState } from 'react';
+import { useBeforeUnload } from 'react-use';
 
 import { AlertPopup } from '@app/components';
 
@@ -20,6 +21,8 @@ export const BeforeUnloadPopup = (props: IBeforeUnloadPopupProps) => {
   const router = useRouter();
 
   const [nextUrl, setNextUrl] = useState<string>();
+
+  useBeforeUnload(show, title);
 
   useEffect(() => {
     const handler = (url: string) => {
