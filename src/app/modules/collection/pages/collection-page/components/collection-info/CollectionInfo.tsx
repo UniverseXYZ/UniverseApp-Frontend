@@ -30,7 +30,7 @@ import EditIcon from "../../../../../../../components/svgs/EditIcon";
 import Contracts from "../../../../../../../contracts/contracts.json";
 import { useAuthStore } from "../../../../../../../stores/authStore";
 import { breakpoints } from "../../../../../../theme/constants";
-import { NFTCard, NoNFTsFound } from '../../../../../nft/components';
+import { NFTCard, NoNFTsFound } from "../../../../../nft/components";
 import { NoDescriptionFound } from "../../../../components/no-description-found";
 import { useCollectionPageData } from "../../CollectionPage.context";
 import { CollectionStatistics } from "./components/index";
@@ -43,7 +43,7 @@ export const CollectionInfo = () => {
     isAuthenticated: s.isAuthenticated,
   }));
   const router = useRouter();
-  const [collectionOwner, setCollectionOwner] = useState<string>('');
+  const [collectionOwner, setCollectionOwner] = useState<string>("");
   const [tabIndex, setTabIndex] = useState(0);
   const isMobile = useMedia(`(max-width: ${breakpoints.md})`);
 
@@ -134,8 +134,8 @@ export const CollectionInfo = () => {
   };
 
   const handleTabsChange = (index: number) => {
-    setTabIndex(index)
-  }
+    setTabIndex(index);
+  };
 
   const hasOrderBookFilters = hasSelectedOrderBookFilters();
   const hasOrders = orders?.pages?.length && orders.pages[0].data?.length;
@@ -159,6 +159,17 @@ export const CollectionInfo = () => {
     root: null,
   });
 
+  const schema = {
+    "@context": "http://schema.org",
+    "@type": "CreativeWork",
+    name: `${collection?.name || collection?.address} – Collection`,
+    description: collection?.description || "",
+    image: {
+      "@type": "ImageObject",
+      url: collection?.bannerUrl || collection?.coverUrl || "",
+    },
+  };
+
   return (
     <>
       <OpenGraph
@@ -180,15 +191,27 @@ export const CollectionInfo = () => {
         !collection?.address ? (
         <NotFound />
       ) : (
-        <Box layerStyle={'StoneBG'}>
-          <Cover selectedCollection={collection} collectionGeneralInfo={collectionGeneralInfo} collectionOwner={collectionOwner} />
-          <Box sx={{ position: 'relative', p: '0px 0px 80px 0px' }} >
-            <Flex sx={{ maxWidth: '1110px', margin: '-160px auto 0px', p: isMobile ? '0px 20px' : '0px'}}>
-              <Box w={'100%'}>
-                <Flex sx={{
-                  alignItems: 'center',
-                  mb: '30px',
-                }}>
+        <Box layerStyle={"StoneBG"}>
+          <Cover
+            selectedCollection={collection}
+            collectionGeneralInfo={collectionGeneralInfo}
+            collectionOwner={collectionOwner}
+          />
+          <Box sx={{ position: "relative", p: "0px 0px 80px 0px" }}>
+            <Flex
+              sx={{
+                maxWidth: "1110px",
+                margin: "-160px auto 0px",
+                p: isMobile ? "0px 20px" : "0px",
+              }}
+            >
+              <Box w={"100%"}>
+                <Flex
+                  sx={{
+                    alignItems: "center",
+                    mb: "30px",
+                  }}
+                >
                   <Avatar
                     src={collection?.coverUrl}
                     name={collectionGeneralInfo?.name || collection?.name}
@@ -272,14 +295,20 @@ export const CollectionInfo = () => {
                 </Box>
               </Box>
             </Flex>
-            <Flex sx={{
-              // maxWidth: '1110px',
-              margin: '0 auto',
-              flexDirection: 'column',
-              p: (intersection?.intersectionRect.top ?? 1) === 0 && tabIndex === 0 ? '0px' : '0px 20px'
-            }}>
-              <Tabs mt={'60px'} index={tabIndex} onChange={handleTabsChange}>
-                <TabList maxW={'1110px'} m={'auto'}>
+            <Flex
+              sx={{
+                // maxWidth: '1110px',
+                margin: "0 auto",
+                flexDirection: "column",
+                p:
+                  (intersection?.intersectionRect.top ?? 1) === 0 &&
+                  tabIndex === 0
+                    ? "0px"
+                    : "0px 20px",
+              }}
+            >
+              <Tabs mt={"60px"} index={tabIndex} onChange={handleTabsChange}>
+                <TabList maxW={"1110px"} m={"auto"}>
                   <Tab>Items</Tab>
                   <Tab>Description</Tab>
                 </TabList>
@@ -289,11 +318,16 @@ export const CollectionInfo = () => {
                     <Box
                       ref={filtersRef}
                       sx={{
-                        bg: (intersection?.intersectionRect.top ?? 1) === 0 ? 'white' : 'transparent',
-                        p: (intersection?.intersectionRect.top ?? 1) === 0 && '0px 20px',
-                        pos: 'sticky',
-                        top: '-1px',
-                        mb: '40px',
+                        bg:
+                          (intersection?.intersectionRect.top ?? 1) === 0
+                            ? "white"
+                            : "transparent",
+                        p:
+                          (intersection?.intersectionRect.top ?? 1) === 0 &&
+                          "0px 20px",
+                        pos: "sticky",
+                        top: "-1px",
+                        mb: "40px",
                         zIndex: 20,
                         ".search--sort--filters--section": {
                           mb: 0,
@@ -316,7 +350,13 @@ export const CollectionInfo = () => {
                                   if (!NFTs.length) {
                                     return null;
                                   }
-                                  return (<NFTCard key={order.id} order={order} NFT={NFTs[0]} />);
+                                  return (
+                                    <NFTCard
+                                      key={order.id}
+                                      order={order}
+                                      NFT={NFTs[0]}
+                                    />
+                                  );
                                 });
                               })}
                             </SimpleGrid>
@@ -421,6 +461,10 @@ export const CollectionInfo = () => {
           </Box>
         </Box>
       )}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+      ></script>
     </>
   );
 };

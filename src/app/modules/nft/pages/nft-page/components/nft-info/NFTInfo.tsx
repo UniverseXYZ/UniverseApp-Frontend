@@ -33,20 +33,20 @@ import { useErc20PriceStore } from "../../../../../../../stores/erc20PriceStore"
 import { sendRefreshMetadataRequest } from "../../../../../../../utils/api/marketplace";
 import { LineTabList, OpenGraph } from "../../../../../../components";
 import { getTokenByAddress } from "../../../../../../constants";
+import { IUser } from "../../../../../account/types";
 import {
   NFTCard,
   NFTMenu,
   NFTPageCollectionRelation,
   NFTPageCreatorRelation,
   NFTPageOwnerRelation,
-} from '../../../../components';
+} from "../../../../components";
 import {
   isNFTAssetAudio,
   isNFTAssetImage,
   isNFTAssetVideo,
 } from "../../../../helpers";
-import { IOrder, IERC721AssetType } from "../../../../types";
-import { IUser } from "../../../../../account/types";
+import { IERC721AssetType, IOrder } from "../../../../types";
 import { useNFTPageData } from "../../NFTPage.context";
 import * as styles from "../../styles";
 import { NFTAssetBroken } from "../nft-asset-broken";
@@ -264,6 +264,17 @@ export const NFTInfo = () => {
     ogProps.image = notFoundImgOg;
   }
 
+  const schema = {
+    "@context": "http://schema.org",
+    "@type": "CreativeWork",
+    name: ogProps.title,
+    description: ogProps.description,
+    image: {
+      "@type": "ImageObject",
+      url: ogProps.image,
+    },
+  };
+
   return (
     <>
       <OpenGraph {...ogProps} />
@@ -447,7 +458,9 @@ export const NFTInfo = () => {
                   }}
                   spacing={"20px"}
                 >
-                  {moreFromCollection.map((NFT) => !!NFT.id && (<NFTCard key={NFT.id} NFT={NFT} />))}
+                  {moreFromCollection.map(
+                    (NFT) => !!NFT.id && <NFTCard key={NFT.id} NFT={NFT} />
+                  )}
                 </SimpleGrid>
               </Container>
               <Button
@@ -471,6 +484,10 @@ export const NFTInfo = () => {
       ) : (
         <NotFound />
       )}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+      ></script>
     </>
   );
 };
