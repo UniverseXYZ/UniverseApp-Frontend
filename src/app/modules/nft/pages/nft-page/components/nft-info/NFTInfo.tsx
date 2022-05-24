@@ -88,6 +88,8 @@ export const NFTInfo = () => {
     history,
     offers,
     moreFromCollection,
+    isPolymorph,
+    isLobster,
   } = useNFTPageData();
 
   const [buySectionMeasure, setBuySectionMeasure] = useState<UseMeasureRect>();
@@ -114,13 +116,7 @@ export const NFTInfo = () => {
     return editions.findIndex((edition) => edition === NFT.tokenId) + 1;
   }, [editions]);
 
-  const showMetadata =
-    process.env.REACT_APP_POLYMORPHS_CONTRACT_ADDRESS &&
-    process.env.REACT_APP_LOBSTERS_CONTRACT_ADDRESS &&
-    [
-      process.env.REACT_APP_POLYMORPHS_CONTRACT_ADDRESS.toLowerCase(),
-      process.env.REACT_APP_LOBSTERS_CONTRACT_ADDRESS.toLowerCase(),
-    ].includes((NFT?._collectionAddress || "").toLowerCase() ?? "");
+  const showMetadataTab = isPolymorph || isLobster;
 
   const handleRefresh = async () => {
     try {
@@ -375,7 +371,7 @@ export const NFTInfo = () => {
                 >
                   <LineTabList>
                     <Tab>Properties</Tab>
-                    {showMetadata && <Tab>Metadata</Tab>}
+                    {showMetadataTab && <Tab>Metadata</Tab>}
                     {/* TODO: Add implementation after release */}
                     {/*<Tab>Owners</Tab>*/}
                     {/*<Tab>Bids</Tab>*/}
@@ -388,7 +384,7 @@ export const NFTInfo = () => {
                     <TabPanel>
                       <TabProperties properties={NFT?._properties ?? []} />
                     </TabPanel>
-                    {showMetadata && (
+                    {showMetadataTab && (
                       <TabPanel>
                         <TabMetadata />
                       </TabPanel>
