@@ -1,9 +1,10 @@
-import { getArtistApi } from "@app/api";
-import { useNFTAsset } from "@app/modules/nft/components/nft-card/components/nft-card-asset/hooks";
-import VideoPlaceholder from "@assets/images/open-graph/video-placeholder.png";
+import { getArtistApi } from '@app/api';
+import { useNFTAsset } from '@app/modules/nft/components/nft-card/components/nft-card-asset/hooks';
+import VideoPlaceholder from '@assets/images/open-graph/video-placeholder.png';
 import {
   Box,
   Button,
+  Center,
   Container,
   Flex,
   Heading,
@@ -13,56 +14,40 @@ import {
   TabPanels,
   Tabs,
   Text,
-} from "@chakra-ui/react";
-import BigNumber from "bignumber.js";
-import { utils } from "ethers";
-import { useRouter } from "next/router";
-import NotFound from "pages/404";
-import React, { useCallback, useEffect, useMemo, useState } from "react";
-import ReadMoreAndLess from "react-read-more-less";
-import { UseMeasureRect } from "react-use/lib/useMeasure";
-import {
-  NFTAssetAudio,
-  NFTAssetImage,
-  NFTAssetVideo,
-  NFTBuySection,
-} from "../";
-import notFoundImgOg from "../../../../../../../assets/images/404-og.png";
-import { CollectionPageLoader } from "../../../../../../../containers/collection/CollectionPageLoader";
-import { useErc20PriceStore } from "../../../../../../../stores/erc20PriceStore";
-import { sendRefreshMetadataRequest } from "../../../../../../../utils/api/marketplace";
-import { LineTabList, OpenGraph } from "../../../../../../components";
-import { getTokenByAddress } from "../../../../../../constants";
-import { IUser } from "../../../../../account/types";
+} from '@chakra-ui/react';
+import BigNumber from 'bignumber.js';
+import { utils } from 'ethers';
+import { useRouter } from 'next/router';
+import NotFound from 'pages/404';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import ReadMoreAndLess from 'react-read-more-less';
+import { UseMeasureRect } from 'react-use/lib/useMeasure';
+import { NFTAssetAudio, NFTAssetImage, NFTAssetVideo, NFTBuySection } from '../';
+import notFoundImgOg from '../../../../../../../assets/images/404-og.png';
+import { useErc20PriceStore } from '../../../../../../../stores/erc20PriceStore';
+import { sendRefreshMetadataRequest } from '../../../../../../../utils/api/marketplace';
+import { LineTabList, Loading, OpenGraph } from '../../../../../../components';
+import { getTokenByAddress } from '../../../../../../constants';
+import { IUser } from '../../../../../account/types';
 import {
   NFTCard,
   NFTMenu,
   NFTPageCollectionRelation,
   NFTPageCreatorRelation,
   NFTPageOwnerRelation,
-} from "../../../../components";
-import {
-  isNFTAssetAudio,
-  isNFTAssetImage,
-  isNFTAssetVideo,
-} from "../../../../helpers";
-import { IERC721AssetType, IOrder } from "../../../../types";
-import { useNFTPageData } from "../../NFTPage.context";
-import * as styles from "../../styles";
-import { NFTAssetBroken } from "../nft-asset-broken";
-import { NFTTransferPopup } from "../nft-transfer-popup";
-import {
-  GoBackButton,
-  TabHistory,
-  TabMetadata,
-  TabOffers,
-  TabProperties,
-} from "./components";
-import { TabListings } from "./components/tab-listings";
-import { NFTAcceptOfferPopup } from "./components/tab-offers/components";
-import { RefreshMetadataPopup } from "./components/tab-offers/components/refresh-metadata-popup";
-import { Status } from "./components/tab-offers/components/refresh-metadata-popup/enums";
-import * as styles2 from "./NFTInfo.style";
+} from '../../../../components';
+import { isNFTAssetAudio, isNFTAssetImage, isNFTAssetVideo } from '../../../../helpers';
+import { IERC721AssetType, IOrder, NFTStandard } from '../../../../types';
+import { useNFTPageData } from '../../NFTPage.context';
+import * as styles from '../../styles';
+import { NFTAssetBroken } from '../nft-asset-broken';
+import { NFTTransferPopup } from '../nft-transfer-popup';
+import { GoBackButton, TabHistory, TabMetadata, TabOffers, TabOwners, TabProperties } from './components';
+import { TabListings } from './components/tab-listings';
+import { NFTAcceptOfferPopup } from './components/tab-offers/components';
+import { RefreshMetadataPopup } from './components/tab-offers/components/refresh-metadata-popup';
+import { Status } from './components/tab-offers/components/refresh-metadata-popup/enums';
+import * as styles2 from './NFTInfo.style';
 
 // TODO: hide metadata tab for not Polymorph NFT type
 export const NFTInfo = () => {
@@ -110,11 +95,19 @@ export const NFTInfo = () => {
     }
   }, [collectionAddress]);
 
-  const editions = useMemo<string[]>(() => NFT?.tokenIds ?? [], [NFT]);
+  const handleAcceptOffer = useCallback((offer: IOrder) => {
+    setOfferForAccept(offer);
+    setShowOfferPopup(true);
+  }, []);
 
-  const editionNumber = useMemo(() => {
-    return editions.findIndex((edition) => edition === NFT.tokenId) + 1;
-  }, [editions]);
+  const [ownedEditions, totalEditions] = useMemo<Array<number>>(() => {
+    if (NFT.standard !== NFTStandard.ERC1155) {
+      return [0, 0];
+    }
+
+    // TODO
+    return [2, 10];
+  }, [NFT]);
 
   const showMetadataTab = isPolymorph || isLobster;
 
@@ -260,6 +253,8 @@ export const NFTInfo = () => {
     ogProps.image = notFoundImgOg;
   }
 
+  const showOwnedLabel = NFT.standard === NFTStandard.ERC1155 && ownedEditions > 0;
+
   const schema = {
     "@context": "http://schema.org",
     "@type": "CreativeWork",
@@ -271,14 +266,81 @@ export const NFTInfo = () => {
     },
   };
 
+  type INFTTab = {
+    show: boolean;
+    name: string;
+    renderTab: () => React.ReactNode;
+  }
+
+  const tabs: INFTTab[] = [
+    {
+      show: true,
+      name: 'Properties',
+      renderTab: () => (<TabProperties properties={NFT?._properties ?? []} />),
+    },
+    {
+      show: !!showMetadataTab,
+      name: 'Metadata',
+      renderTab: () => (<TabMetadata />),
+    },
+    {
+      show: NFT.standard === NFTStandard.ERC1155,
+      name: 'Owners',
+      renderTab: () => (<TabOwners />),
+    },
+    {
+      show: false,
+      name: 'Bids',
+      renderTab: () => null, // (<TabBids />),
+    },
+    {
+      show: true,
+      name: 'Offers',
+      renderTab: () => (
+        <TabOffers
+          nft={NFT}
+          offers={offers?.orders?.filter(
+            (item) =>
+              item?.maker?.toLowerCase() !==
+              NFT?._ownerAddress?.toLowerCase()
+          )}
+          usersMap={offerUsersMap}
+          onAcceptOffer={handleAcceptOffer}
+        />
+      ),
+    },
+    {
+      show: true,
+      name: 'History',
+      renderTab: () => (<TabHistory historyData={history} />),
+    },
+    {
+      show: true,
+      name: 'My Listings',
+      renderTab: () => (
+        <TabListings
+          owner={owner}
+          ownerAddress={NFT?._ownerAddress}
+        />
+      ),
+    },
+  ];
+
   return (
     <>
       <OpenGraph {...ogProps} />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+      ></script>
+
       {isLoading ? (
-        <div className="loader-wrapper">
-          <CollectionPageLoader />
-        </div>
-      ) : NFT ? (
+        <Box layerStyle={"StoneBG"} display={'flex'} minH={'calc(100vh - 80px)'}>
+          <Center w={'100%'}>
+            <Loading m={'auto'} />
+          </Center>
+        </Box>
+      ) : !NFT ? <NotFound /> : (
         <>
           <Box layerStyle={"StoneBG"}>
             <Box {...styles.NFTAssetContainerStyle}>
@@ -326,12 +388,11 @@ export const NFTInfo = () => {
                   </Box>
                 </Flex>
 
-                <Text {...styles2.EditionTextStyle}>
-                  Edition&nbsp;
-                  {`${editionNumber}/${
-                    NFT.numberOfEditions || editions.length
-                  }`}
-                </Text>
+                {showOwnedLabel && (
+                  <Text {...styles2.EditionTextStyle}>
+                    Owned {ownedEditions}/{totalEditions}
+                  </Text>
+                )}
 
                 <Flex flexWrap={{ sm: "wrap", md: "nowrap" }} mb={"24px"}>
                   {creator && <NFTPageCreatorRelation creator={creator} />}
@@ -342,7 +403,7 @@ export const NFTInfo = () => {
                       collectionAddress={NFT._collectionAddress}
                     />
                   )}
-                  {owner && (
+                  {(owner && NFT.standard === NFTStandard.ERC721) && (
                     <NFTPageOwnerRelation
                       owner={owner}
                       ownerAddress={NFT?._ownerAddress}
@@ -362,58 +423,15 @@ export const NFTInfo = () => {
                   </Box>
                 )}
 
-                <Tabs
-                  sx={{
-                    h: {
-                      xl: "calc(100vh - 466px)",
-                    },
-                  }}
-                >
+                <Tabs {...styles2.Tabs}>
                   <LineTabList>
-                    <Tab>Properties</Tab>
-                    {showMetadataTab && <Tab>Metadata</Tab>}
-                    {/* TODO: Add implementation after release */}
-                    {/*<Tab>Owners</Tab>*/}
-                    {/*<Tab>Bids</Tab>*/}
-                    <Tab>Offers</Tab>
-                    <Tab>History</Tab>
-                    <Tab>Listings</Tab>
+                    {tabs.map(({ show, name }, i) => !show ? null : <Tab key={i}>{name}</Tab>)}
                   </LineTabList>
 
                   <TabPanels {...styles2.TabPanelsStyle}>
-                    <TabPanel>
-                      <TabProperties properties={NFT?._properties ?? []} />
-                    </TabPanel>
-                    {showMetadataTab && (
-                      <TabPanel>
-                        <TabMetadata />
-                      </TabPanel>
-                    )}
-                    {/* TODO: Add implementation after release */}
-                    {/* <TabPanel><TabOwners /></TabPanel> */}
-                    {/* <TabPanel><TabBids /></TabPanel> */}
-                    <TabPanel>
-                      <TabOffers
-                        nft={NFT}
-                        offers={offers?.orders?.filter(
-                          (item) =>
-                            item?.maker?.toLowerCase() !==
-                            NFT?._ownerAddress?.toLowerCase()
-                        )}
-                        usersMap={offerUsersMap}
-                        setOfferForAccept={setOfferForAccept}
-                        setShowOfferPopup={setShowOfferPopup}
-                      />
-                    </TabPanel>
-                    <TabPanel>
-                      <TabHistory historyData={history} />
-                    </TabPanel>
-                    <TabPanel>
-                      <TabListings
-                        owner={owner}
-                        ownerAddress={NFT?._ownerAddress}
-                      />
-                    </TabPanel>
+                    {tabs.map(({ show, renderTab }, i) => !show ? null : (
+                      <TabPanel key={i}>{renderTab()}</TabPanel>
+                    ))}
                   </TabPanels>
                 </Tabs>
               </Box>
@@ -446,14 +464,7 @@ export const NFTInfo = () => {
                 </Heading>
               )}
               <Container {...styles.MoreNFTsContainerStyle}>
-                <SimpleGrid
-                  columns={{
-                    base: 1,
-                    md: 2,
-                    lg: 4,
-                  }}
-                  spacing={"20px"}
-                >
+                <SimpleGrid columns={[1, null, 2, 4]} spacing={"20px"}>
                   {moreFromCollection.map(
                     (NFT) => !!NFT.id && <NFTCard key={NFT.id} NFT={NFT} />
                   )}
@@ -477,13 +488,7 @@ export const NFTInfo = () => {
             onClose={() => setRefreshMetadataStatus(Status.HIDDEN)}
           />
         </>
-      ) : (
-        <NotFound />
       )}
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
-      ></script>
     </>
   );
 };

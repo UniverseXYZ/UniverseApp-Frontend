@@ -17,12 +17,19 @@ interface INFTOfferProps {
   offer: IOrder;
   usersMap: Record<string, IUser>;
   owner: string;
-  setOfferForAccept: React.Dispatch<React.SetStateAction<IOrder | null>>;
-  setShowOfferPopup: React.Dispatch<React.SetStateAction<boolean>>;
-  cancelOffer: (offer: IOrder) => void;
+  onAcceptOffer: (offer: IOrder) => void;
+  onCancelOffer: (offer: IOrder) => void;
 }
 
-export const  NFTOffer: React.FC<INFTOfferProps> = ({offer, usersMap, owner, setOfferForAccept, setShowOfferPopup, cancelOffer}) => {
+export const  NFTOffer: React.FC<INFTOfferProps> = (props) => {
+  const {
+    offer,
+    usersMap,
+    owner,
+    onAcceptOffer,
+    onCancelOffer,
+  } = props;
+
   const address = useAuthStore(s => s.address);
   const neverExpired = !offer.start && !offer.end;
 
@@ -71,20 +78,13 @@ export const  NFTOffer: React.FC<INFTOfferProps> = ({offer, usersMap, owner, set
         { canAcceptsOffers && (
           <Button
             {...styles.AcceptButtonStyle}
-            onClick={() => {
-              console.log('offer', offer);
-              setOfferForAccept(offer);
-              setShowOfferPopup(true);
-            }}
+            onClick={() => onAcceptOffer(offer)}
           >Accept</Button>
         )}
         { canCancelOffers && (
           <Button
             {...styles.AcceptButtonStyle}
-            onClick={() => {
-              console.log('offer', offer);
-              cancelOffer(offer);
-            }}
+            onClick={() => onCancelOffer(offer)}
           >Cancel</Button>
         )}
       </Flex>

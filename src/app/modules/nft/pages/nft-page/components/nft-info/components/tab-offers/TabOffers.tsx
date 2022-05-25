@@ -1,5 +1,5 @@
 import { Box } from '@chakra-ui/react';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { INFT, IOrder, IERC721AssetType } from '../../../../../../types';
 import { IUser } from '../../../../../../../account/types';
 import { NFTOffer } from './components/nft-offer/NFTOffer';
@@ -14,11 +14,9 @@ import { useAuthStore } from '../../../../../../../../../stores/authStore';
 
 interface ITabOffersProps {
   nft?: INFT;
-  order?: IOrder;
   offers?: IOrder[];
   usersMap?: Record<string, IUser>;
-  setShowOfferPopup: React.Dispatch<React.SetStateAction<boolean>>;
-  setOfferForAccept: React.Dispatch<React.SetStateAction<IOrder | null>>;
+  onAcceptOffer: (offer: IOrder) => void;
 }
 
 enum CancelingText {
@@ -27,13 +25,14 @@ enum CancelingText {
   INDEXING_TAKING_TOO_LONG = 'Receving the event from the blockchain is taking longer than expected. Please be patient.',
 }
 
-export const TabOffers: React.FC<ITabOffersProps> = ({
-  nft,
-  offers,
-  usersMap,
-  setShowOfferPopup,
-  setOfferForAccept,
-}) => {
+export const TabOffers: React.FC<ITabOffersProps> = (props) => {
+  const {
+    nft,
+    offers,
+    usersMap,
+    onAcceptOffer,
+  } = props;
+
   const signer = useAuthStore(s => s.signer);
   const [offerCanceling, setOfferCanceling] = useState(false);
   const [offerCancelingText, setOfferCancelingText] = useState(CancelingText.PROGRESS);
@@ -144,9 +143,8 @@ export const TabOffers: React.FC<ITabOffersProps> = ({
               offer={offer}
               owner={nft._ownerAddress}
               usersMap={usersMap || {}}
-              setOfferForAccept={setOfferForAccept}
-              setShowOfferPopup={setShowOfferPopup}
-              cancelOffer={handleCancelOffer}
+              onAcceptOffer={onAcceptOffer}
+              onCancelOffer={handleCancelOffer}
             />
           )
       )}
