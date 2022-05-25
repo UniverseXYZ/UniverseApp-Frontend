@@ -2,8 +2,8 @@ name: Live Environment
 
 on:
   push:
-    tags:
-      - v*
+    branches:
+      - rshtirmer/deploy
 
 jobs:
   build:
@@ -117,8 +117,8 @@ jobs:
     - name: Configure AWS credetials
       uses: aws-actions/configure-aws-credentials@v1
       with:
-        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-access-key-id: ${{ secrets.AWS_KEY }}
+        aws-secret-access-key: ${{ secrets.AWS_SEC }}
         aws-region: us-east-1
 
     - name: Deploy static site to S3
