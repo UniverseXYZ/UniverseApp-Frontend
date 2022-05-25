@@ -1,24 +1,14 @@
-import {
-  Box,
-  Flex,
-  FormControl,
-  FormErrorMessage,
-  FormLabel,
-  Heading,
-  Input,
-  SimpleGrid,
-  Switch,
-  Text,
-} from '@chakra-ui/react';
-import { useState, useEffect } from 'react';
+import { Box, Flex, FormControl, FormErrorMessage, FormLabel, Heading, SimpleGrid, Text } from '@chakra-ui/react';
+import React, { useEffect, useState } from 'react';
 import { FormikProps } from 'formik';
 import { default as dayjs } from 'dayjs';
 import { default as isSameOrAfter } from 'dayjs/plugin/isSameOrAfter';
+import { NFTStandard } from '@app/modules/nft/types';
 
 import { useMarketplaceSellData } from '../../../../hooks';
 import { SellAmountType, SellMethod } from '../../../../enums';
 import * as styles from '../../styles';
-import { CurrencyInput, DateTimePicker, InputShadow } from '../../../../../../../../components';
+import { AmountSelector, CurrencyInput, DateTimePicker } from '../../../../../../../../components';
 import { IFixedListingForm, IMarketplaceSellContextData } from '../../../../types';
 import { BundleForm } from '../../../bundle-form';
 
@@ -30,7 +20,7 @@ interface IMarketplaceSellContextDataOverride extends Omit<IMarketplaceSellConte
 
 export const SettingsTabFixedListing = () => {
   const [minEndDate, setMinEndDate] = useState(dayjs().add(1, 'hour').toDate());
-  const { form, sellMethod, amountType } = useMarketplaceSellData() as IMarketplaceSellContextDataOverride;
+  const { form, sellMethod, amountType, nft } = useMarketplaceSellData() as IMarketplaceSellContextDataOverride;
 
   const {
     values: { startDate, endDate },
@@ -82,6 +72,27 @@ export const SettingsTabFixedListing = () => {
           </FormControl>
         </Box>
       </Flex>
+      {nft.standard === NFTStandard.ERC1155 && (
+        <Flex sx={styles.settingsItem}>
+          <Box>
+            <Heading as={'h5'}>Amount</Heading>
+            <Text>The amount of editions you’d like to list.</Text>
+          </Box>
+          <Box>
+            <AmountSelector
+              options={{
+                value: form.values.amount,
+                step: 1,
+                max: 10, // TODO: provide correct max value
+                min: 1,
+                onChange: (_, value) => form.setFieldValue('amount', value),
+              }}
+              ml={'auto'}
+              w={['100%', null, 'fit-content !important']}
+            />
+          </Box>
+        </Flex>
+      )}
       <Flex sx={styles.settingsItem} flexDir={'column'}>
         <Box>
           <Heading as={'h5'}>Duration</Heading>

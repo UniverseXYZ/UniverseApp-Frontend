@@ -1,3 +1,4 @@
+export * from './amount-selector';
 export * from './button';
 export * from './checkbox';
 export * from './container';

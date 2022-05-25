@@ -124,7 +124,7 @@ export const SellPage = () => {
             contract: params.collectionAddress.toLowerCase(),
             tokenId: params.tokenId,
           },
-          value: '1',
+          value: `${values.amount}`,
         };
   
         if (amountType === SellAmountType.BUNDLE) {

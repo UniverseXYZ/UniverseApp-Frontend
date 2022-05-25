@@ -1,3 +1,4 @@
+export * from './amount-selector';
 export * from './back-to-top-button';
 export * from './checkbox';
 export * from './collection-preview';
@@ -6,6 +7,7 @@ export * from './currency-select';
 export * from './date-time-picker';
 export * from './dropdown';
 export * from './filters-popup';
+export * from './icon';
 export * from './info-tooltip';
 export * from './input-shadow';
 export * from './item-wrapper';

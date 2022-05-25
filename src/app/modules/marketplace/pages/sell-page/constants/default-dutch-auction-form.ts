@@ -4,6 +4,7 @@ export const defaultDutchAuctionForm: IDutchAuctionForm = {
   bundleName: '',
   bundleDescription: '',
   bundleSelectedNFTs: [],
+  amount: 1,
   price: '',
   priceCurrency: 'ETH',
   endingPrice: '',
