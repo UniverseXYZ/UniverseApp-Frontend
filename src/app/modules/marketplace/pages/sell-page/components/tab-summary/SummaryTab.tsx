@@ -331,7 +331,7 @@ export const SummaryTab = () => {
           <Heading as={'h4'}>Listing</Heading>
 
           <HStack spacing={'4px'} color={'#00000099'} mb={'30px'}>
-            {form.values.amount > 1 ? (
+            {nft.standard === NFTStandard.ERC1155 ? (
               <>
                 <Text>{form.values.amount} of your items will be listed for</Text>
                 <TokenIcon ticker={ticker} size={20} />

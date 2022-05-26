@@ -279,7 +279,7 @@ export const NFTInfo = () => {
       renderTab: () => (<TabProperties properties={NFT?._properties ?? []} />),
     },
     {
-      show: !!showMetadataTab,
+      show: showMetadataTab,
       name: 'Metadata',
       renderTab: () => (<TabMetadata />),
     },

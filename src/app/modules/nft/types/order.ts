@@ -1,6 +1,12 @@
 import { IUser } from '../../account/types';
 import { OrderAssetClass } from '../enums';
 
+export interface IERC1155AssetType {
+  assetClass: OrderAssetClass.ERC1155;
+  contract: string;
+  tokenId: number;
+}
+
 export interface IERC721AssetType {
   assetClass: OrderAssetClass.ERC721;
   contract: string;
@@ -36,7 +42,7 @@ export interface IOrder {
   hash: string;
   id: string;
   make: {
-    assetType: IERC721AssetType | IERC721BundleAssetType | IERC20AssetType;
+    assetType: IERC1155AssetType | IERC721AssetType | IERC721BundleAssetType | IERC20AssetType;
     value: string;
   };
   makeBalance: string;

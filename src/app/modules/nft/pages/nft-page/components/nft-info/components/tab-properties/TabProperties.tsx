@@ -39,7 +39,7 @@ export const TabProperties = ({ properties = [] }: ITabPropertiesProps) => {
           ))}
         </Flex>
       )}
-      <SimpleGrid columns={2} spacing={'20px'}>
+      <SimpleGrid columns={[2, 3, 4, 4, 3]} spacing={'8px'}>
         {properties.map((property, i: number) =>
           isPolymorph ? (
             !polymorphProperties.includes(property) ? (
