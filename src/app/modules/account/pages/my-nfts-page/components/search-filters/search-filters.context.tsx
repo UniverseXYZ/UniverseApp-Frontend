@@ -1,34 +1,45 @@
-import { FC, createContext, useContext, useState, ReactNode } from 'react';
-import { useFormik, FormikProps} from 'formik';
-import { useInfiniteQuery, useQuery, InfiniteData, useQueryClient } from 'react-query';
+import React, { createContext, ReactNode, useContext, useState } from 'react';
+import { FormikProps, useFormik } from 'formik';
+import { InfiniteData, useInfiniteQuery, useQuery, useQueryClient } from 'react-query';
 import { ethers, utils } from 'ethers';
 
 // API Calls & Interfaces
-import { GetActiveSellOrdersApi, GetCollectionApi, GetCollectionNFTsApi, GetNFTApi, GetUserCollectionsFromScraperApi, getUserNFTsApi, IGetUserNFTsProps } from '../../../../../../api';
+import {
+	GetActiveSellOrdersApi,
+	GetCollectionApi,
+	GetCollectionNFTsApi,
+	GetNFTApi,
+	GetUserCollectionsFromScraperApi,
+	getUserNFTsApi,
+	IGetUserNFTsProps,
+} from '../../../../../../api';
 import { ISearchBarDropdownCollection } from '../../../../../collection/types';
-import { IOrder, INFT, IERC721AssetType } from '../../../../../nft/types';
+import {
+	INFT,
+	IOrder,
+	IOrderAssetTypeBundleListing,
+	IOrderAssetTypeERC20,
+	IOrderAssetTypeSingleListing,
+} from '../../../../../nft/types';
 import { IUserOwnedCollection } from '../../../../types';
 import { TokenTicker } from '../../../../../../enums';
-import {
-	ISearchBarValue,
-	ISortByFilterValue,
-	SortOrderOptions,
-} from '../search-filters';
+import { ISearchBarValue, ISortByFilterValue, SortOrderOptions } from '../search-filters';
 import { collectionKeys, nftKeys, orderKeys } from '../../../../../../utils/query-keys';
 import {
-	ISaleTypeFilterValue,
+	ICollectionsValue,
 	INftTypeFilterValue,
 	IPriceRangeFilterValue,
-	ICollectionsValue,
+	ISaleTypeFilterValue,
 	useCollectionsFilter,
-	useSaleTypeFilter,
 	useNFTTypeFilter,
 	usePriceRangeFilter,
+	useSaleTypeFilter,
 } from '../../../../../../components/filters';
+import { getTokenAddressByTicker } from '../../../../../../constants';
+import { OrderAssetClass } from '@app/modules/nft/enums';
 
 // Constants
 const PER_PAGE = 12;
-import { getTokenAddressByTicker } from '../../../../../../constants';
 
 // Interfaces
 interface INFTsResult {
@@ -39,7 +50,7 @@ interface INFTsResult {
 };
 
 type OrdersData = {
-	order: IOrder;
+	order: IOrder<IOrderAssetTypeSingleListing, IOrderAssetTypeERC20>;
 	NFTs: INFT[];
 };
 interface IOrdersResult {
@@ -151,14 +162,14 @@ const FiltersContextProvider = (props: IFiltersProviderProps) => {
     initialValues: {
       searchValue: '',
     },
-    onSubmit: () => {},
+    onSubmit: () => void 0,
 	});
 
 	const sortByForm = useFormik<ISortByFilterValue>({
 		initialValues: {
 			sortingIndex: props.defaultSorting,
 		},
-		onSubmit: () => {},
+		onSubmit: () => void 0,
 	});
 
 	const { form: saleTypeFilterForm } = useSaleTypeFilter();
@@ -372,7 +383,7 @@ const FiltersContextProvider = (props: IFiltersProviderProps) => {
 	 * @param nfts INFT[]
 	 * @returns mapped data with Order and the information about the NFTs inside
 	 */
-	const _mapOrders = (orders: any[], nfts: any[]): OrdersData[] => {
+	const _mapOrders = (orders: Array<IOrder<IOrderAssetTypeSingleListing, IOrderAssetTypeERC20>>, nfts: any[]): OrdersData[] => {
 		const nftsMap = nfts.reduce<Record<string, INFT>>((acc, response) => {
       if (response.status !== 'fulfilled') {
         return acc;
@@ -392,16 +403,17 @@ const FiltersContextProvider = (props: IFiltersProviderProps) => {
     const result = orders.reduce<OrdersData[]>((acc, order) => {
       const NFTsMapKeys = Object.keys(nftsMap);
 
-      switch (order.make.assetType.assetClass) {
-        case 'ERC721':
-          const assetType = order.make.assetType as IERC721AssetType;
-				const checkedAddress = ethers.utils.getAddress(assetType.contract);
+			const orderMakeAsset = order.make.assetType;
 
-          if (NFTsMapKeys.includes(`${checkedAddress}:${assetType.tokenId}`)) {
+      switch (orderMakeAsset.assetClass) {
+        case OrderAssetClass.ERC721:
+					const checkedAddress = ethers.utils.getAddress(orderMakeAsset.contract);
+
+          if (NFTsMapKeys.includes(`${checkedAddress}:${orderMakeAsset.tokenId}`)) {
             acc.push({
               order,
-              NFTs: nftsMap[`${checkedAddress}:${assetType.tokenId}`]
-                ? [nftsMap[`${checkedAddress}:${assetType.tokenId}`]]
+              NFTs: nftsMap[`${checkedAddress}:${orderMakeAsset.tokenId}`]
+                ? [nftsMap[`${checkedAddress}:${orderMakeAsset.tokenId}`]]
                 : []
             })
           }
@@ -481,17 +493,18 @@ const FiltersContextProvider = (props: IFiltersProviderProps) => {
 		apiFilters = {...apiFilters, ..._parseMaker()};
 
 		// Get the orders
-		const { orders, total } = await GetActiveSellOrdersApi(apiFilters);
+		const { orders, total } = await GetActiveSellOrdersApi<IOrderAssetTypeSingleListing, IOrderAssetTypeERC20>(apiFilters);
 
 		// Get the orders NFTs
 		const NFTsRequests: Array<any> = [];
 
 		for (const order of orders) {
-			switch (order.make.assetType.assetClass) {
-				case 'ERC721':
-					const assetType = order.make.assetType as IERC721AssetType;
-          queryClient.setQueryData(orderKeys.listing({collectionAddress: assetType.contract, tokenId: assetType.tokenId.toString()}), order)
-					NFTsRequests.push(GetNFTApi(assetType.contract, assetType.tokenId))
+			const orderMakeAsset = order.make.assetType;
+
+			switch (orderMakeAsset.assetClass) {
+				case OrderAssetClass.ERC721:
+          queryClient.setQueryData(orderKeys.listing({collectionAddress: orderMakeAsset.contract, tokenId: orderMakeAsset.tokenId.toString()}), order)
+					NFTsRequests.push(GetNFTApi(orderMakeAsset.contract, orderMakeAsset.tokenId))
 					break;
 			}
 		}

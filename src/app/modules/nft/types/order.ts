@@ -1,23 +1,13 @@
 import { IUser } from '../../account/types';
 import { OrderAssetClass } from '../enums';
 
-export interface IERC1155AssetType {
-  assetClass: OrderAssetClass.ERC1155;
+export interface IOrderAssetTypeSingleListing {
+  assetClass: OrderAssetClass.ERC721 | OrderAssetClass.ERC1155;
   contract: string;
   tokenId: number;
 }
 
-export interface IERC721AssetType {
-  assetClass: OrderAssetClass.ERC721;
-  contract: string;
-  tokenId: number;
-}
-export interface IERC20AssetType {
-  assetClass: OrderAssetClass.ERC20;
-  contract: string;
-}
-
-export interface IERC721BundleAssetType {
+export interface IOrderAssetTypeBundleListing {
   assetClass: OrderAssetClass.ERC721_BUNDLE;
   contracts: string[];
   tokenIds: Array<Array<number>>;
@@ -25,7 +15,26 @@ export interface IERC721BundleAssetType {
   bundleDescription: string;
 }
 
-export interface IOrder {
+export interface IOrderAssetTypeERC20 {
+  assetClass: OrderAssetClass.ERC20;
+  contract: string;
+}
+
+export interface IOrderAssetTypeETH {
+  assetClass: OrderAssetClass.ETH;
+}
+
+export interface IOrderAsset<
+  T = IOrderAssetTypeSingleListing
+    | IOrderAssetTypeBundleListing
+    | IOrderAssetTypeERC20
+    | IOrderAssetTypeETH
+  > {
+  assetType: T;
+  value: string;
+}
+
+export interface IOrder<M, T> {
   blockNum?: number;
   cancelledTxHash: null | string;
   createdAt: Date;
@@ -41,10 +50,7 @@ export interface IOrder {
   from: string;
   hash: string;
   id: string;
-  make: {
-    assetType: IERC1155AssetType | IERC721AssetType | IERC721BundleAssetType | IERC20AssetType;
-    value: string;
-  };
+  make: IOrderAsset<M>;
   makeBalance: string;
   makeStock: string;
   maker: string;
@@ -55,13 +61,7 @@ export interface IOrder {
   signature: string;
   start: number;
   status: number;
-  take: {
-    assetType: {
-      assetClass: string;
-      contract?: string;
-    }
-    value: string;
-  };
+  take: IOrderAsset<T>;
   taker: string;
   type: string;
   to: string;
@@ -69,8 +69,8 @@ export interface IOrder {
   modified: boolean;
 }
 
-export interface IOrderBackend extends
-  Omit<IOrder,
+export interface IOrderBackend<M, T> extends
+  Omit<IOrder<M, T>,
     'salt' | 'start' | 'end' | 'createdAt' | 'updatedAt'
     > {
   salt: string;

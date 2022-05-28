@@ -3,7 +3,12 @@ import { utils } from 'ethers';
 import BigNumber from 'bignumber.js';
 import React from 'react'
 import { getTokenByAddress } from '../../../../../../../../../../constants';
-import { IERC721AssetType, IOrder } from '../../../../../../../../types';
+import {
+  IOrder,
+  IOrderAssetTypeBundleListing,
+  IOrderAssetTypeERC20,
+  IOrderAssetTypeSingleListing,
+} from '../../../../../../../../types';
 import { IUser } from '../../../../../../../../../account/types';
 import { NFTTabItemWrapper } from '../../..';
 import Blockies from 'react-blockies';
@@ -13,15 +18,18 @@ import { useTokenPrice } from '../../../../../../../../../../hooks';
 import { useAuthStore } from '../../../../../../../../../../../stores/authStore';
 import { getAddedAtLabel } from '@app/modules/nft/pages/nft-page/components/nft-info/components/tab-history/helpers';
 
-interface INFTOfferProps {
-  offer: IOrder;
+interface INFTOfferProps<T> {
+  offer: T;
   usersMap: Record<string, IUser>;
   owner: string;
-  onAcceptOffer: (offer: IOrder) => void;
-  onCancelOffer: (offer: IOrder) => void;
+  onAcceptOffer: (offer: T) => void;
+  onCancelOffer: (offer: T) => void;
 }
 
-export const  NFTOffer: React.FC<INFTOfferProps> = (props) => {
+type IOfferSingleListing = IOrder<IOrderAssetTypeERC20, IOrderAssetTypeSingleListing>;
+type IOfferBundleListing = IOrder<IOrderAssetTypeERC20, IOrderAssetTypeBundleListing>;
+
+export const  NFTOffer = <T extends IOfferSingleListing | IOfferBundleListing>(props: INFTOfferProps<T>) => {
   const {
     offer,
     usersMap,
@@ -41,7 +49,7 @@ export const  NFTOffer: React.FC<INFTOfferProps> = (props) => {
   const canAcceptsOffers = owner?.toLowerCase() === address && !isExpired;
   const canCancelOffers = offer.maker === address && !isExpired;
 
-  const token = getTokenByAddress((offer.make.assetType as IERC721AssetType).contract)
+  const token = getTokenByAddress(offer.make.assetType.contract)
   const formattedPrice = parseFloat(new BigNumber(utils.formatUnits(offer.make.value, token.decimals ?? 18)).toFixed(4));
   const usdPrice = useTokenPrice(token.ticker);
   const usd = new BigNumber(usdPrice).multipliedBy(formattedPrice).toFixed(2);
@@ -50,8 +58,8 @@ export const  NFTOffer: React.FC<INFTOfferProps> = (props) => {
     <NFTTabItemWrapper key={offer.id}>
       <Flex>
         {offerUser && offerUser.profileImageUrl
-        ? <Image src={offerUser.profileImageUrl} {...styles.ImageStyle} />
-        : <Box style={{ borderRadius: '50%', overflow: 'hidden'}} {...styles.ImageStyle} >
+          ? <Image src={offerUser.profileImageUrl} {...styles.ImageStyle} />
+          : <Box style={{ borderRadius: '50%', overflow: 'hidden'}} {...styles.ImageStyle} >
             <Blockies seed={offer.maker} size={9} scale={5} />
           </Box>
         }
@@ -92,3 +100,4 @@ export const  NFTOffer: React.FC<INFTOfferProps> = (props) => {
   );
 
 }
+

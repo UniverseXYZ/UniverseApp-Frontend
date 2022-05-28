@@ -33,7 +33,13 @@ import * as styles from './styles';
 import { TOKENS, TOKENS_MAP } from '../../../../../../constants';
 import { Checkbox, DateTimePicker, Loading, TokenIcon } from '../../../../../../components';
 import { ETH_USD_RATE } from '../../../../../../mocks';
-import { INFT, IOrder } from '../../../../types';
+import {
+  INFT,
+  IOrder,
+  IOrderAssetTypeBundleListing,
+  IOrderAssetTypeERC20,
+  IOrderAssetTypeSingleListing,
+} from '../../../../types';
 import { TokenTicker } from '../../../../../../enums';
 import { sign } from '../../../../../../helpers';
 
@@ -71,12 +77,14 @@ export const NFTMakeAnOfferValidationSchema = Yup.object().shape({
 
 interface INFTMakeAnOfferPopupProps {
   nft?: INFT;
-  order?: IOrder;
+  order?: IOrder<IOrderAssetTypeSingleListing | IOrderAssetTypeBundleListing, IOrderAssetTypeERC20>;
   isOpen: boolean;
   onClose: () => void;
 }
 
-export const NFTMakeAnOfferPopup = ({ nft, order, isOpen, onClose, }: INFTMakeAnOfferPopupProps) => {
+export const NFTMakeAnOfferPopup: React.FC<INFTMakeAnOfferPopupProps> = (props) => {
+  const { nft, order, isOpen, onClose } = props;
+
   const tokensBtnRef = useRef<HTMLButtonElement>(null);
   
   const { setShowError, setErrorBody} = useErrorStore(s => ({setShowError: s.setShowError, setErrorBody: s.setErrorBody}))
@@ -158,7 +166,8 @@ export const NFTMakeAnOfferPopup = ({ nft, order, isOpen, onClose, }: INFTMakeAn
 
         // Add taker info, in case the NFT is not listed
         if (!order) {
-          offerData = {...offerData,
+          offerData = {
+            ...offerData,
             taker: ethers.constants.AddressZero,
             take: {
               value: "1",

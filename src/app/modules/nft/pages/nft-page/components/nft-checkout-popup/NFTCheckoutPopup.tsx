@@ -15,7 +15,7 @@ import {
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { BigNumber, constants, Contract, Signer, utils } from 'ethers';
 import { useMutation, useQueryClient } from 'react-query';
-import axios from 'axios';
+import axios, { AxiosError, AxiosResponse } from 'axios';
 import { useRouter } from 'next/router';
 import { ReactComponent as InfoSVG } from '@assets/images/info.svg';
 import AudioNFTPreviewImage from '@assets/images/v2/audio-nft-preview.png';
@@ -24,9 +24,14 @@ import Contracts from '../../../../../../../contracts/contracts.json';
 import { AmountSelector, Checkbox, Loading, TokenIcon } from '../../../../../../components';
 import { NFTType } from './components';
 import { CheckoutState } from './enums';
-import { IERC20AssetType, IERC721AssetType, INFT, IOrder } from '../../../../types';
+import {
+  INFT,
+  IOrder,
+  IOrderAssetTypeERC20,
+  IOrderAssetTypeSingleListing,
+} from '../../../../types';
 import { isNFTAssetAudio, isNFTAssetImage, isNFTAssetVideo } from '../../../../helpers';
-import { getTokenByAddress } from '../../../../../../constants';
+import { getTokenByAddress, TOKENS_MAP } from '../../../../../../constants';
 import { TokenTicker } from '../../../../../../enums';
 import { NFTCustomError } from '../nft-custom-error/NFTCustomError';
 import { getEtherscanTxUrl } from '../../../../../../../utils/helpers';
@@ -50,15 +55,7 @@ export const NFTCheckoutPopup = () => {
 
   const { address, signer, web3Provider } = useAuthStore(s => ({address: s.address, signer: s.signer, web3Provider: s.web3Provider}))
   const { setShowError, setErrorBody } = useErrorStore(s => ({setShowError: s.setShowError, setErrorBody: s.setErrorBody}))
-  const { NFT, collection, NFTs, order, isOpen, onClose, setIsOpen } = useNftCheckoutStore(s => ({
-    NFT: s.NFT,
-    collection: s.collection,
-    NFTs: s.NFTs,
-    order: s.order,
-    isOpen: s.isOpen,
-    onClose: s.onClose,
-    setIsOpen: s.setIsOpen,
-  }))
+  const { NFT, collection, NFTs, order, isOpen, closeCheckout } = useNftCheckoutStore();
   const queryClient = useQueryClient();
 
   const [state, setState] = useState<CheckoutState>(CheckoutState.CHECKOUT);
@@ -72,38 +69,48 @@ export const NFTCheckoutPopup = () => {
   const [fetchNftCount, setFetchNftCount] = useState(0);
   const [isOrderIndexed, setIsOrderIndexed] = useState(false);
   const [isNftIndexed, setIsNftIndexed] = useState(false);
-  const [newOrderInfo, setNewOrderInfo] = useState<IOrder | null>(null);
-  const [newNftInfo, setNewNftInfo] = useState<INFT | null>(null);
+  const [newOrderInfo, setNewOrderInfo] = useState<IOrder<IOrderAssetTypeSingleListing, IOrderAssetTypeERC20>>();
+  const [newNftInfo, setNewNftInfo] = useState<INFT>();
 
   const [nftInterval, setNftInterval] = useState<NodeJS.Timer>();
   const [orderInterval, setOrderInterval] = useState<NodeJS.Timer>();
 
   const [verificationChecked, setVerificationChecked] = useState(false);
 
-  const prepareMutation = useMutation(({ hash, data }: { hash: string; data: any }) => {
+  type IPrepareMutationData = {
+    hash: string;
+    data: any;
+  };
+
+  const prepareMutation = useMutation<AxiosResponse<any>, AxiosError<any>, IPrepareMutationData>(({ hash, data }) => {
     return axios.post(`${process.env.REACT_APP_MARKETPLACE_BACKEND}/v1/orders/${hash}/prepare`, data);
   });
 
-  const tokenTicker = getTokenByAddress((order?.take?.assetType as IERC20AssetType)?.contract);
+  const priceToken = useMemo(() => {
+    if (!order) {
+      return TOKENS_MAP.ETH;
+    }
 
-  const usdPrice = useTokenPrice(tokenTicker.ticker);
+    return getTokenByAddress(order.take?.assetType?.contract);
+  }, [order]);
+
+  const usdPrice = useTokenPrice(priceToken.ticker);
 
   const handleCheckoutClick = useCallback(async () => {
     try {
-      if (!signer || !web3Provider) {
+      if (!signer || !web3Provider || !order) {
         return;
       }
       setFetchOrderCount(0);
       setState(CheckoutState.PROCESSING);
 
-      const paymentToken = getTokenByAddress((order?.take?.assetType as IERC20AssetType)?.contract);
 
-      if (paymentToken.ticker !== TokenTicker.ETH) {
+      if (priceToken.ticker !== TokenTicker.ETH) {
         const paymentAmount = BigNumber.from(+order.take.value * amount);
 
         const contract = new Contract(
-          (contractsData as any)[(paymentToken.contractName as any)].address,
-          (contractsData as any)[(paymentToken.contractName as any)].abi,
+          (contractsData as any)[(priceToken.contractName as any)].address,
+          (contractsData as any)[(priceToken.contractName as any)].abi,
           signer
         );
         const balance = await contract.balanceOf(address);
@@ -153,9 +160,11 @@ export const NFTCheckoutPopup = () => {
       const orderIndexing = setInterval(async () => {
         setFetchOrderCount((count) => (count += 1));
 
-        const convertedOrder = order.make.assetType as IERC721AssetType;
-        const tokenId = convertedOrder.tokenId?.toString();
-        const collectionAddress = convertedOrder.contract;
+        // TODO: [Bundle] add bundle support
+        const singleListingOrder = order as IOrder<IOrderAssetTypeSingleListing, IOrderAssetTypeERC20>;
+
+        const tokenId = singleListingOrder.make.assetType.tokenId?.toString();
+        const collectionAddress = singleListingOrder.make.assetType.contract;
 
         // Fetch order api until a diffrent response is returned
         const newOrder = await GetActiveListingApi(collectionAddress, tokenId);
@@ -197,8 +206,8 @@ export const NFTCheckoutPopup = () => {
       }
 
       // Check if error comes from api request and if the api has returned a meaningful messages
-      if (prepareMutation.isError && !!(prepareMutation as any)?.error?.response?.data?.message) {
-        setErrorBody((prepareMutation as any)?.error?.response?.data?.message);
+      if (prepareMutation.isError && !!prepareMutation?.error?.response?.data?.message) {
+        setErrorBody(prepareMutation.error.response.data.message);
       } else if (err.response?.data?.message) {
         setErrorBody(err.response.data.message);
       } else if (err.error?.message) {
@@ -207,7 +216,7 @@ export const NFTCheckoutPopup = () => {
 
       setShowError(true);
     }
-  }, [order, address, signer, web3Provider, amount]);
+  }, [order, address, signer, web3Provider, amount, priceToken]);
 
   const sendSellTransaction = async (data: string, from: string, to: string, value: BigNumber) => {
     const sellTx = await (signer as Signer).sendTransaction({
@@ -221,7 +230,6 @@ export const NFTCheckoutPopup = () => {
   };
 
   const handleMyNFTsClick = useCallback(() => {
-    onClose();
     router.push('/my-nfts');
   }, []);
 
@@ -235,9 +243,17 @@ export const NFTCheckoutPopup = () => {
     return null;
   }, [NFT, NFTs]);
 
+  const priceTicker = useMemo(() => {
+    if (!order?.take) {
+      return TokenTicker.ETH;
+    }
+
+    return getTokenByAddress(order.take.assetType.contract).ticker
+  }, [order]);
+
   const listingPrice = useMemo(() => {
-    return Number(utils.formatUnits(order?.take?.value || 0, tokenTicker.decimals));
-  }, [order, tokenTicker]);
+    return Number(utils.formatUnits(order?.take?.value || 0, priceToken.decimals));
+  }, [order, priceToken]);
 
   const listingUSDPrice = useMemo(() => {
     return Math.round(listingPrice * usdPrice);
@@ -254,7 +270,7 @@ export const NFTCheckoutPopup = () => {
   useEffect(() => {
     setState(CheckoutState.CHECKOUT);
     setVerificationChecked(false);
-    setAmount(+order?.make?.value ?? 1);
+    setAmount(+(order?.make.value ?? 1));
   }, [isOpen, NFTs, order]);
 
   useEffect(() => {
@@ -286,8 +302,8 @@ export const NFTCheckoutPopup = () => {
       // Invalidate my nfts query in order to see the new nft
       queryClient.refetchQueries(nftKeys.userNfts(address));
 
-      setNewNftInfo(null);
-      setNewOrderInfo(null);
+      setNewNftInfo(undefined);
+      setNewOrderInfo(undefined);
     }
   }, [isOrderIndexed, isNftIndexed]);
 
@@ -312,10 +328,7 @@ export const NFTCheckoutPopup = () => {
     <Modal
       isCentered
       isOpen={isOpen}
-      onClose={() => {
-        onClose();
-        setIsOpen(false);
-      }}
+      onClose={() => closeCheckout()}
       closeOnEsc={false}
       closeOnOverlayClick={false}
     >
@@ -348,7 +361,7 @@ export const NFTCheckoutPopup = () => {
                 </Box>
                 <Box {...s.PriceContainerStyle}>
                   <HStack spacing={'6px'}>
-                    <TokenIcon ticker={tokenTicker.ticker} size={20} />
+                    <TokenIcon ticker={priceToken.ticker} size={20} />
                     <Text {...s.Text}>{listingPrice}</Text>
                   </HStack>
                   <Text {...s.SecondaryText}>${listingUSDPrice}</Text>
@@ -374,7 +387,7 @@ export const NFTCheckoutPopup = () => {
                 <Text {...s.DataLabel}>Total</Text>
                 <Box {...s.PriceContainerStyle}>
                   <HStack spacing={'6px'}>
-                    <TokenIcon ticker={tokenTicker.ticker} size={24} />
+                    <TokenIcon ticker={priceToken.ticker} size={24} />
                     <Text fontSize={'18px'} fontWeight={700}>{totalPrice}</Text>
                   </HStack>
                   <Text {...s.SecondaryText}>${totalUSDPrice}</Text>
@@ -411,9 +424,7 @@ export const NFTCheckoutPopup = () => {
           {state === CheckoutState.INSUFFICIENT_BALANCE && (
             <NFTCustomError
               title={`Insufficient balance`}
-              message={`You do not have enough ${
-                getTokenByAddress(order?.take.assetType.contract as TokenTicker).ticker
-              } in your wallet!`}
+              message={`You do not have enough ${priceTicker} in your wallet!`}
             ></NFTCustomError>
           )}
 
@@ -507,7 +518,7 @@ export const NFTCheckoutPopup = () => {
 
             <HStack spacing={'16px'} justifyContent={'center'} mt={'32px'}>
               <Button boxShadow={'lg'} onClick={handleMyNFTsClick}>My NFTs</Button>
-              <Button variant={'outline'} onClick={onClose}>Close</Button>
+              <Button variant={'outline'} onClick={closeCheckout}>Close</Button>
             </HStack>
           </>
         )}

@@ -1,12 +1,21 @@
 import React, { FC, createContext, useContext, useCallback } from 'react';
 import { useQuery, useQueryClient } from 'react-query';
 
-import { IOrder, INFT } from '../../types';
+import { IOrder, INFT, IOrderAssetTypeSingleListing, IOrderAssetTypeERC20 } from '../../types';
 import { IUser } from '../../../account/types';
 import { ICollection } from '../../../collection/types/collection';
 import { collectionKeys, nftKeys, orderKeys, userKeys } from '../../../../utils/query-keys';
 import { useRouter } from 'next/router';
-import { GetActiveListingApi, getArtistApi, GetCollectionApi, GetHistoryApi, GetMoreFromCollectionApi, GetNFTApi, GetOrdersApi, INFTHistory } from '@app/api';
+import {
+  GetActiveListingApi,
+  getArtistApi,
+  GetCollectionApi,
+  GetHistoryApi,
+  GetMoreFromCollectionApi,
+  GetNFTApi,
+  GetOrdersApi,
+  INFTTransfer,
+} from '@app/api';
 import { polymorphOwner, queryPolymorphsGraph2 } from '@legacy/graphql/polymorphQueries';
 import { utils } from 'ethers';
 import { lobsterOwner, queryLobstersGraph } from '@legacy/graphql/lobsterQueries';
@@ -22,14 +31,17 @@ export interface INFTPageContext {
   isLoading: boolean;
   isPolymorph: boolean;
   isLobster: boolean;
-  order?: IOrder;
+  order?: IOrder<IOrderAssetTypeSingleListing, IOrderAssetTypeERC20>;
   creator: IUser;
   owner: IUser;
   collection: ICollection;
   collectionAddress: string;
   refetchOffers: () => void;
-  history: INFTHistory | undefined;
-  offers: { orders: IOrder[]; total: number; } | undefined;
+  history?: Array<IOrder<IOrderAssetTypeSingleListing, IOrderAssetTypeERC20> | INFTTransfer>;
+  offers?: {
+    orders: Array<IOrder<IOrderAssetTypeERC20, IOrderAssetTypeSingleListing>>;
+    total: number;
+  };
   moreFromCollection: INFT[] | undefined;
   metadata: IMetadata | null;
 }
@@ -65,10 +77,7 @@ export const NFTPageProvider: FC<INFTPageProviderProps> = ({ children }) => {
   // NFT Order Listing 
   const { data: order, isLoading: isLoadingOrder } = useQuery(
     orderKeys.listing({collectionAddress, tokenId}),
-    async () => {
-      const order = await GetActiveListingApi(collectionAddress, tokenId);
-      return order || undefined
-    },
+    () => GetActiveListingApi(collectionAddress, tokenId),
     {
       enabled: !!tokenId && !!collectionAddress,
     });
@@ -101,7 +110,7 @@ export const NFTPageProvider: FC<INFTPageProviderProps> = ({ children }) => {
   // NFT Offers Query
   const { data: offers, refetch: refetchNFTOffers } = useQuery(
     orderKeys.offers({tokenId, collectionAddress}),
-    () => GetOrdersApi({
+    () => GetOrdersApi<IOrderAssetTypeERC20, IOrderAssetTypeSingleListing>({
       side: 0,
       tokenIds: tokenId,
       collection: collectionAddress

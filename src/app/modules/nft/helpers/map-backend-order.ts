@@ -1,15 +1,17 @@
 import { IOrder, IOrderBackend } from '../types';
 
-export function mapBackendOrder(
-  {
+type IMapBackendOrderFn = <M, T>(data: IOrderBackend<M, T>) => IOrder<M, T>;
+
+export const mapBackendOrder: IMapBackendOrderFn = (data) => {
+  const {
     salt,
     start,
     end,
     createdAt,
     updatedAt,
     ...order
-  }: IOrderBackend
-): IOrder {
+  } = data;
+
   return {
     ...order,
     salt: +salt,

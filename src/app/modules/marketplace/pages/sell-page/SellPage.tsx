@@ -27,7 +27,12 @@ import { IMarketplaceSellContextData, ISellForm } from './types';
 import { sign } from '../../../../helpers';
 import { TOKENS_MAP, ZERO_ADDRESS } from '../../../../constants';
 import { TokenTicker } from '../../../../enums';
-import { INFT } from '../../../nft/types';
+import {
+  INFT,
+  IOrderAssetTypeBundleListing,
+  IOrderAssetTypeERC20, IOrderAssetTypeETH,
+  IOrderAssetTypeSingleListing,
+} from '../../../nft/types';
 import { EncodeOrderApi, GetActiveListingApi, GetHistoryApi, GetNFTApi, GetSaltApi, IEncodeOrderApiData } from '../../../../api';
 import Contracts from '../../../../../contracts/contracts.json';
 import { OrderAssetClass } from '../../../nft/enums';
@@ -68,7 +73,14 @@ export const SellPage = () => {
 
   const queryClient = useQueryClient();
 
-  const encodeOrderMutation = useMutation(EncodeOrderApi);
+  const encodeOrderMutation = useMutation(
+    (data: IEncodeOrderApiData<
+      IOrderAssetTypeSingleListing | IOrderAssetTypeBundleListing,
+      IOrderAssetTypeERC20 | IOrderAssetTypeETH
+      >) => {
+      return EncodeOrderApi(data);
+    }
+  );
 
   const createOrderMutation = useMutation((data: any) => {
     return axios.post(`${process.env.REACT_APP_MARKETPLACE_BACKEND}/v1/orders/order`, data);
@@ -77,16 +89,20 @@ export const SellPage = () => {
       //TODO: Invalidate browse marketplace query key
       queryClient.refetchQueries(orderKeys.browseAny)
 
-      queryClient.invalidateQueries(orderKeys.listing({ collectionAddress: params.collectionAddress.toLowerCase(), tokenId: params.tokenId }));
-      queryClient.invalidateQueries(orderKeys.history({ collectionAddress: params.collectionAddress.toLowerCase(), tokenId: params.tokenId }));
-      queryClient.prefetchQuery(orderKeys.listing({ collectionAddress: params.collectionAddress.toLowerCase(), tokenId: params.tokenId }), async () => {
-        const result = await GetActiveListingApi(params.collectionAddress.toLowerCase(), params.tokenId);
-        return result;
-      })
-      queryClient.prefetchQuery(orderKeys.history({ collectionAddress: params.collectionAddress.toLowerCase(), tokenId: params.tokenId }), async () => {
-        const result = await GetHistoryApi(params.collectionAddress.toLowerCase(), params.tokenId);
-        return result;
+      const listingQueryKey = orderKeys.listing({
+        collectionAddress: params.collectionAddress.toLowerCase(),
+        tokenId: params.tokenId
       });
+      const historyQueryKey = orderKeys.history({
+        collectionAddress: params.collectionAddress.toLowerCase(),
+        tokenId: params.tokenId
+      });
+
+      queryClient.invalidateQueries(listingQueryKey);
+      queryClient.prefetchQuery(listingQueryKey, () => GetActiveListingApi(params.collectionAddress.toLowerCase(), params.tokenId));
+
+      queryClient.invalidateQueries(historyQueryKey);
+      queryClient.prefetchQuery(historyQueryKey, () => GetHistoryApi(params.collectionAddress.toLowerCase(), params.tokenId));
     }
   });
 
@@ -152,15 +168,23 @@ export const SellPage = () => {
           };
         }
   
-        const orderData: IEncodeOrderApiData = {
+        const orderData: IEncodeOrderApiData<
+          IOrderAssetTypeSingleListing | IOrderAssetTypeBundleListing,
+          IOrderAssetTypeERC20 | IOrderAssetTypeETH
+          > = {
           salt: salt,
           maker: address,
           make,
           taker: values.buyerAddress || ZERO_ADDRESS,
           take: {
-            assetType: {
-              assetClass: values.priceCurrency === OrderAssetClass.ETH ? OrderAssetClass.ETH : OrderAssetClass.ERC20,
-            },
+            assetType: values.priceCurrency === OrderAssetClass.ETH
+              ? ({
+                assetClass: OrderAssetClass.ETH,
+              })
+              : ({
+                assetClass: OrderAssetClass.ERC20,
+                contract: contractsData[values.priceCurrency]?.address
+              }),
             value: utils.parseUnits(
               `${values.price}`,
               `${TOKENS_MAP[values.priceCurrency as TokenTicker].decimals}`
@@ -174,10 +198,6 @@ export const SellPage = () => {
             revenueSplits: []
           },
         };
-  
-        if (orderData.take.assetType.assetClass === OrderAssetClass.ERC20) {
-          orderData.take.assetType.contract = contractsData[values.priceCurrency]?.address;
-        }
   
         const { data: encodedOrder } = (await encodeOrderMutation.mutateAsync(orderData));
   
@@ -199,7 +219,7 @@ export const SellPage = () => {
         // Code 4001 is user rejected transaction
         if (err?.code === 4001) {
           return;
-        } 
+        }
   
         // Check if error comes from api request and if the api has returned a meaningful messages
         if (getSaltMutation.isError && !!(getSaltMutation as any)?.error?.response?.data?.message) {

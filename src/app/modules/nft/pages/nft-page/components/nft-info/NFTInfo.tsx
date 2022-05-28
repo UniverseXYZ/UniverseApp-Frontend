@@ -37,7 +37,12 @@ import {
   NFTPageOwnerRelation,
 } from '../../../../components';
 import { isNFTAssetAudio, isNFTAssetImage, isNFTAssetVideo } from '../../../../helpers';
-import { IERC721AssetType, IOrder, NFTStandard } from '../../../../types';
+import {
+  IOrder,
+  IOrderAssetTypeERC20,
+  IOrderAssetTypeSingleListing,
+  NFTStandard,
+} from '../../../../types';
 import { useNFTPageData } from '../../NFTPage.context';
 import * as styles from '../../styles';
 import { NFTAssetBroken } from '../nft-asset-broken';
@@ -80,14 +85,14 @@ export const NFTInfo = () => {
   const [buySectionMeasure, setBuySectionMeasure] = useState<UseMeasureRect>();
   const [isTransferOpened, setIsTransferOpened] = useState(false);
 
-  const [highestOffer, setHighestOffer] = useState<IOrder>();
+  const [highestOffer, setHighestOffer] = useState<IOrder<IOrderAssetTypeERC20, IOrderAssetTypeSingleListing>>();
   const [highestOfferCreator, setHighestOfferCreator] = useState<IUser>();
   const [offerUsersMap, setUsersMap] = useState<Record<string, IUser>>({});
   const [refreshMetadataStatus, setRefreshMetadataStatus] = useState(
     Status.HIDDEN
   );
   const [showOfferPopup, setShowOfferPopup] = useState(false);
-  const [offerForAccept, setOfferForAccept] = useState<IOrder | null>(null);
+  const [offerForAccept, setOfferForAccept] = useState<IOrder<IOrderAssetTypeERC20, IOrderAssetTypeSingleListing>>();
 
   const handleClickViewCollection = useCallback(() => {
     if (collectionAddress) {
@@ -95,7 +100,7 @@ export const NFTInfo = () => {
     }
   }, [collectionAddress]);
 
-  const handleAcceptOffer = useCallback((offer: IOrder) => {
+  const handleAcceptOffer = useCallback((offer: IOrder<IOrderAssetTypeERC20, IOrderAssetTypeSingleListing>) => {
     setOfferForAccept(offer);
     setShowOfferPopup(true);
   }, []);
@@ -147,7 +152,7 @@ export const NFTInfo = () => {
 
       orders?.sort((a, b) => {
         // Order by USD value of orders DESC
-        const tokenContractA = (a.make.assetType as IERC721AssetType).contract;
+        const tokenContractA = a.make.assetType.contract;
         const tokenA = getTokenByAddress(tokenContractA);
         const tokenPriceA = getTokenPriceByTicker(tokenA.ticker);
         const orderPriceA = utils.formatUnits(
@@ -161,7 +166,7 @@ export const NFTInfo = () => {
         let tokenB = null;
         let tokenPriceB = null;
 
-        const tokenContractB = (b.make.assetType as IERC721AssetType).contract;
+        const tokenContractB = b.make.assetType.contract;
 
         if (tokenContractA.toLowerCase() === tokenContractB.toLowerCase()) {
           tokenB = tokenA;
@@ -303,7 +308,7 @@ export const NFTInfo = () => {
             (item) =>
               item?.maker?.toLowerCase() !==
               NFT?._ownerAddress?.toLowerCase()
-          )}
+          ) ?? []}
           usersMap={offerUsersMap}
           onAcceptOffer={handleAcceptOffer}
         />
@@ -312,7 +317,7 @@ export const NFTInfo = () => {
     {
       show: true,
       name: 'History',
-      renderTab: () => (<TabHistory historyData={history} />),
+      renderTab: () => (<TabHistory history={history} />),
     },
     {
       show: true,
@@ -439,19 +444,17 @@ export const NFTInfo = () => {
                 NFT={NFT}
                 owner={owner}
                 order={order}
-                highestOffer={{
-                  offer: highestOffer || ({} as IOrder),
-                  creator: highestOfferCreator || ({} as IUser),
-                }}
+                highestOfferOrder={highestOffer}
+                highestOfferCreator={highestOfferCreator}
                 onMeasureChange={(measure) => setBuySectionMeasure(measure)}
               />
             </Box>
           </Box>
 
-          {showOfferPopup && (
+          {showOfferPopup && offerForAccept && (
             <NFTAcceptOfferPopup
               NFT={NFT}
-              order={offerForAccept || ({} as IOrder)}
+              order={offerForAccept}
               isOpen={showOfferPopup}
               onClose={() => setShowOfferPopup(false)}
             />

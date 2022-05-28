@@ -12,18 +12,12 @@ export const TabOwners: React.FC = () => {
 
   const { NFT } = useNFTPageData();
 
-  const { setIsOpen, setNFT, setCollection, setOrder } = useNftCheckoutStore(
-    (s) => ({
-      setIsOpen: s.setIsOpen,
-      setNFT: s.setNFT,
-      setCollection: s.setCollection,
-      setOrder: s.setOrder,
-    })
-  );
+  const { checkoutNFT } = useNftCheckoutStore();
 
   const [owners] = useState(sortOwners([...Owners]));
 
   const handleBuy = useCallback(() => {
+    // checkoutNFT(); // TODO
     console.log('handleBuy');
   }, []);
 

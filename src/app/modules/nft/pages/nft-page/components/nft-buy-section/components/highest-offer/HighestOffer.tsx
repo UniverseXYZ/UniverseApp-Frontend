@@ -1,32 +1,45 @@
 import { Box, Flex, Image, Text, Tooltip } from '@chakra-ui/react';
-import React from 'react';
+import React, { useMemo } from 'react';
 
 import * as styles from '../../styles';
 
-import { IERC721AssetType, IOrder } from '../../../../../../types';
+import {
+  IOrder,
+  IOrderAssetTypeBundleListing,
+  IOrderAssetTypeERC20,
+  IOrderAssetTypeSingleListing,
+} from '../../../../../../types';
 import { IUser } from '../../../../../../../account/types';
 import Blockies from 'react-blockies';
 import { ethers } from 'ethers';
-import { getTokenByAddress } from '../../../../../../../../constants';
+import { getTokenByAddress, TOKENS_MAP } from '../../../../../../../../constants';
 import { TokenIcon } from '../../../../../../../../components';
 import { shortenEthereumAddress } from '../../../../../../../../../utils/helpers/format';
 import BigNumber from 'bignumber.js';
 import { useTokenPrice } from '../../../../../../../../hooks';
 
 interface IHighestOfferProps {
-  offer?: IOrder;
+  offer?: IOrder<IOrderAssetTypeERC20, IOrderAssetTypeSingleListing | IOrderAssetTypeBundleListing>;
   creator?: IUser;
 }
 
-export const HighestOffer = ({ offer, creator }: IHighestOfferProps) => {
+export const HighestOffer: React.FC<IHighestOfferProps> = (props) => {
+  const { offer, creator } = props;
 
-  const token = getTokenByAddress((offer?.make.assetType as IERC721AssetType).contract);
-  
-  const formattedPrice = ethers.utils.formatUnits(offer?.make?.value || 0, token.decimals ?? 18);
-  
-  const usdPrice = useTokenPrice(token.ticker);
+  const token = getTokenByAddress(offer?.make?.assetType.contract);
 
-  const usd = new BigNumber(usdPrice).multipliedBy(formattedPrice).toFixed(2);
+  const tokenUSDPrice = useTokenPrice(token.ticker);
+
+  const [price, usdPrice] = useMemo(() => {
+    if (!offer) {
+      return [0, 0, TOKENS_MAP.ETH];
+    }
+
+    const price = ethers.utils.formatUnits(offer.make?.value || 0, token.decimals ?? 18);
+    const usdPrice = new BigNumber(tokenUSDPrice).multipliedBy(price).toFixed(2);
+
+    return [price, usdPrice];
+  }, [offer, tokenUSDPrice]);
   
   return (
     <Flex mb={'24px'}>
@@ -53,9 +66,9 @@ export const HighestOffer = ({ offer, creator }: IHighestOfferProps) => {
               />
             </Tooltip>
             <strong>
-              {formattedPrice} {token.ticker}
+              {price} {token.ticker}
             </strong>
-           ${usd}
+           ${usdPrice}
           </Text>
         </Flex>
       </Box>

@@ -29,6 +29,11 @@ export const handleScroll = () => {
   }
 };
 
+/**
+ * @deprecated
+ * @param obj
+ * @returns {boolean}
+ */
 export const isEmpty = (obj) => {
   // eslint-disable-next-line no-restricted-syntax
   for (const prop in obj) {

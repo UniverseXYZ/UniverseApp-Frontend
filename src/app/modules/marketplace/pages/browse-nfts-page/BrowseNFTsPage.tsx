@@ -1,40 +1,24 @@
-import {
-  Box,
-  Button,
-  Center,
-  Flex,
-  Heading,
-  HStack, Icon,
-  Image,
-  SimpleGrid,
-  Text
-} from '@chakra-ui/react';
-import { useRouter } from "next/router";
-import React, { useCallback, useEffect, useRef, useState } from "react";
-import { useInfiniteQuery, useQueryClient } from "react-query";
-import { useIntersection, useMeasure, useSearchParam } from "react-use";
+import { Box, Button, Center, Flex, Heading, HStack, Icon, Image, SimpleGrid, Text } from '@chakra-ui/react';
+import { useRouter } from 'next/router';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { useInfiniteQuery, useQueryClient } from 'react-query';
+import { useIntersection, useMeasure, useSearchParam } from 'react-use';
 
 // Assets
-import OpenGraphImage from "@assets/images/open-graph/marketplace.png";
-import ArrowDownIcon from "@assets/images/arrow-down.svg";
-import NFTTypeIcon from "@assets/images/v2/marketplace/filter-nft-type.svg";
-import PriceRangeIcon from "@assets/images/v2/marketplace/filter-price-range.svg";
-import SaleTypeIcon from "@assets/images/v2/marketplace/filter-sale-type.svg";
-import { ReactComponent as GridSMIcon } from "@assets/images/grid-sm.svg";
-import { ReactComponent as GridLGIcon } from "@assets/images/grid-lg.svg";
+import OpenGraphImage from '@assets/images/open-graph/marketplace.png';
+import ArrowDownIcon from '@assets/images/arrow-down.svg';
+import NFTTypeIcon from '@assets/images/v2/marketplace/filter-nft-type.svg';
+import PriceRangeIcon from '@assets/images/v2/marketplace/filter-price-range.svg';
+import SaleTypeIcon from '@assets/images/v2/marketplace/filter-sale-type.svg';
+import { ReactComponent as GridSMIcon } from '@assets/images/grid-sm.svg';
+import { ReactComponent as GridLGIcon } from '@assets/images/grid-lg.svg';
 
 // Stores
-import { useSignInPopupStore } from "src/stores/signInPopup";
-import { useThemeStore } from "src/stores/themeStore";
+import { useSignInPopupStore } from 'src/stores/signInPopup';
+import { useThemeStore } from 'src/stores/themeStore';
 
 // App
-import {
-  BackToTopButton,
-  FiltersPopup,
-  Loading,
-  OpenGraph,
-  Select,
-} from "@app/components";
+import { BackToTopButton, FiltersPopup, Loading, OpenGraph, Select } from '@app/components';
 import {
   ClearAllButton,
   NFTTypeFilter,
@@ -46,25 +30,26 @@ import {
   useNFTTypeFilter,
   usePriceRangeFilter,
   useSaleTypeFilter,
-} from "@app/components/filters";
-import { getTokenAddressByTicker } from "@app/constants";
-import { TokenTicker } from "@app/enums";
-import { useStaticHeader, useNFTFluidGrid, NFTCardSize } from "@app/hooks";
-import { nftKeys, orderKeys } from "@app/utils/query-keys";
+} from '@app/components/filters';
+import { getTokenAddressByTicker } from '@app/constants';
+import { TokenTicker } from '@app/enums';
+import { NFTCardSize, useNFTFluidGrid, useStaticHeader } from '@app/hooks';
+import { nftKeys, orderKeys } from '@app/utils/query-keys';
 import { OrderAssetClass } from '@app/modules/nft/enums';
 
-import { NFTCard } from "../../../nft/components";
+import { NFTCard } from '../../../nft/components';
 import {
-  IERC721AssetType,
-  IERC721BundleAssetType,
   INFT,
   IOrder,
-} from "../../../nft/types";
-import { SearchBar } from "../../components";
-import { SortOrderOptions, SortOrderOptionsEnum } from "../../constants";
-import { ListingBanner, ToggleButton, ToggleButtonGroup } from "./components";
-import { OPEN_GRAPH_DESCRIPTION, OPEN_GRAPH_TITLE, ORDERS_PER_PAGE } from "./constants";
-import * as styles from "./BrowseNFTsPage.styles";
+  IOrderAssetTypeBundleListing,
+  IOrderAssetTypeERC20,
+  IOrderAssetTypeSingleListing,
+} from '../../../nft/types';
+import { SearchBar } from '../../components';
+import { SortOrderOptions, SortOrderOptionsEnum } from '../../constants';
+import { ListingBanner, ToggleButton, ToggleButtonGroup } from './components';
+import { OPEN_GRAPH_DESCRIPTION, OPEN_GRAPH_TITLE, ORDERS_PER_PAGE } from './constants';
+import * as styles from './BrowseNFTsPage.styles';
 import { GetActiveSellOrdersApi, GetNFTApi } from '../../../../api';
 
 export const BrowseNFTsPage = () => {
@@ -192,14 +177,15 @@ export const BrowseNFTsPage = () => {
         apiFilters["sortBy"] = sortFilter;
       }
 
-      const { orders, total } = await GetActiveSellOrdersApi(apiFilters);
+      const { orders, total } = await GetActiveSellOrdersApi<IOrderAssetTypeSingleListing | IOrderAssetTypeBundleListing, IOrderAssetTypeERC20>(apiFilters);
 
-      const NFTsRequests: Array<any> = [];
+      const NFTsRequests: Array<Promise<INFT>> = [];
 
       for (const order of orders) {
-        switch (order.make.assetType.assetClass) {
-          case "ERC721":
-            const assetType = order.make.assetType as IERC721AssetType;
+        const assetType = order.make.assetType;
+
+        switch (assetType.assetClass) {
+          case OrderAssetClass.ERC721:
             queryClient.setQueryData(
               orderKeys.listing({
                 collectionAddress: assetType.contract,
@@ -211,19 +197,18 @@ export const BrowseNFTsPage = () => {
               GetNFTApi(assetType.contract, assetType.tokenId, false)
             );
             break;
-          case "ERC721_BUNDLE":
-            const assetTypeBundle = order.make.assetType as IERC721BundleAssetType;
-            for (let i = 0; i < assetTypeBundle.contracts.length; i++) {
-              for (const tokenId of assetTypeBundle.tokenIds[i]) {
+          case OrderAssetClass.ERC721_BUNDLE:
+            for (let i = 0; i < assetType.contracts.length; i++) {
+              for (const tokenId of assetType.tokenIds[i]) {
                 queryClient.setQueryData(
                   orderKeys.listing({
-                    collectionAddress: assetTypeBundle.contracts[i],
+                    collectionAddress: assetType.contracts[i],
                     tokenId: tokenId.toString(),
                   }),
                   order
                 );
                 NFTsRequests.push(
-                  GetNFTApi(assetTypeBundle.contracts[i], tokenId, false)
+                  GetNFTApi(assetType.contracts[i], tokenId, false)
                 );
               }
             }
@@ -238,7 +223,7 @@ export const BrowseNFTsPage = () => {
           return acc;
         }
 
-        const NFT: INFT = response.value;
+        const NFT = response.value;
         //TODO: set query cache to this specific nft(nftKeys.info)
         const key = `${NFT._collectionAddress?.toLowerCase()}:${NFT.tokenId}`;
 
@@ -255,13 +240,22 @@ export const BrowseNFTsPage = () => {
         return acc;
       }, {});
 
-      const result = orders.reduce<Array<{ order: IOrder; NFTs: INFT[] }>>(
+      type IResult = Array<{
+        order: IOrder<
+          | IOrderAssetTypeSingleListing
+          | IOrderAssetTypeBundleListing,
+          IOrderAssetTypeERC20>;
+        NFTs: INFT[];
+      }>;
+
+      const result = orders.reduce<IResult>(
         (acc, order) => {
           const NFTsMapKeys = Object.keys(NFTsMap);
 
-          switch (order.make.assetType.assetClass) {
-            case "ERC721":
-              const assetType = order.make.assetType as IERC721AssetType;
+          const assetType = order.make.assetType;
+
+          switch (assetType.assetClass) {
+            case OrderAssetClass.ERC721:
               if (
                 NFTsMapKeys.includes(
                   `${assetType.contract}:${assetType.tokenId}`
@@ -275,15 +269,14 @@ export const BrowseNFTsPage = () => {
                 });
               }
               break;
-            case "ERC721_BUNDLE":
-              const assetTypeBundle = order.make.assetType as IERC721BundleAssetType;
+            case OrderAssetClass.ERC721_BUNDLE:
               const NFTs = [];
 
-              for (let i = 0; i < assetTypeBundle.contracts.length; i++) {
-                for (const tokenId of assetTypeBundle.tokenIds[i]) {
-                  if (NFTsMap[`${assetTypeBundle.contracts[i]}:${tokenId}`]) {
+              for (let i = 0; i < assetType.contracts.length; i++) {
+                for (const tokenId of assetType.tokenIds[i]) {
+                  if (NFTsMap[`${assetType.contracts[i]}:${tokenId}`]) {
                     NFTs.push(
-                      NFTsMap[`${assetTypeBundle.contracts[i]}:${tokenId}`]
+                      NFTsMap[`${assetType.contracts[i]}:${tokenId}`]
                     );
                   }
                 }
@@ -480,7 +473,7 @@ export const BrowseNFTsPage = () => {
                 return (
                   <NFTCard
                     key={order.id}
-                    order={order}
+                    order={order as IOrder<IOrderAssetTypeSingleListing, IOrderAssetTypeERC20>}
                     NFT={NFTs[0]}
                     onTimerEnd={refetch}
                   />

@@ -31,7 +31,12 @@ import * as styles from './styles';
 import { TOKENS, TOKENS_MAP } from '../../../../../../constants';
 import { Loading, TokenIcon } from '../../../../../../components';
 import { ETH_USD_RATE } from '../../../../../../mocks';
-import { IOrder } from '../../../../types';
+import {
+  IOrder,
+  IOrderAssetTypeBundleListing,
+  IOrderAssetTypeERC20,
+  IOrderAssetTypeSingleListing,
+} from '../../../../types';
 import { TokenTicker } from '../../../../../../enums';
 import { sign } from '../../../../../../helpers';
 
@@ -52,7 +57,7 @@ export const NFTPlaceABidValidationSchema = Yup.object().shape({
 });
 
 interface INFTPlaceABidPopupProps {
-  order?: IOrder;
+  order?: IOrder<IOrderAssetTypeSingleListing | IOrderAssetTypeBundleListing, IOrderAssetTypeERC20>;
   isOpen: boolean;
   onClose: () => void;
 }
