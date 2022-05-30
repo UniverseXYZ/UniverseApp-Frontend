@@ -1,9 +1,9 @@
 import { CollectionPreview, TokenIcon } from "@app/components";
 import { getTokenByAddress, TOKENS_MAP } from "@app/constants";
 import { TokenTicker } from "@app/enums";
-import { Box, Flex, HStack, Link, Text, Tooltip } from "@chakra-ui/react";
+import { Box, Flex, HStack, Text, Tooltip } from "@chakra-ui/react";
 import { utils } from "ethers";
-import NextLink from "next/link";
+import { useRouter } from "next/router";
 import React, { useMemo } from "react";
 import { ICollection } from "../../../../../collection/types";
 import { IOrderAssetTypeERC20, INFT, IOrder, IOrderAssetTypeSingleListing } from '../../../../types';
@@ -30,6 +30,8 @@ export const NFTCardContent = (props: INFTCardContentProps) => {
     lastOfferPrice,
     lastOfferPriceToken,
   } = props;
+
+  const router = useRouter();
 
   const [additionPriceLabel, additionPriceValue, additionPriceToken] =
     useMemo(() => {
@@ -103,14 +105,15 @@ export const NFTCardContent = (props: INFTCardContentProps) => {
             collection?.address ? collection : NFT._collectionAddress || null
           }
         >
-          <Text {...styles.CollectionName} tabIndex={0}>
-            <NextLink href={`/collection/${collection?.address}`} passHref>
-              <Link {...styles.CollectionLink}>
-                {collection?.name ||
-                  collection?.address ||
-                  NFT._collectionAddress}
-              </Link>
-            </NextLink>
+          <Text
+            {...styles.CollectionName}
+            isTruncated={true}
+            tabIndex={0}
+            onClick={() => router.push(`/collection/${collection?.address}`)}
+          >
+            {collection?.name ||
+              collection?.address ||
+              NFT._collectionAddress}
           </Text>
         </CollectionPreview>
         <Box>

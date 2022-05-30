@@ -12,7 +12,7 @@ import {
 } from '@chakra-ui/react';
 
 import * as styles from './styles';
-import { Loading } from '..';
+import { Loading } from '../loading';
 import { getEtherscanTxUrl} from '../../../utils/helpers';
 import { formatAddress } from '../../../utils/helpers/format';
 
@@ -26,39 +26,36 @@ interface INFTCancelListingPopupProps {
 
 export const LoadingPopup = ({isOpen, onClose, heading, text, transactions }: INFTCancelListingPopupProps) => {
   return (
-      <Modal isOpen={isOpen} onClose={onClose} isCentered closeOnEsc={false} closeOnOverlayClick={false}>
-        <ModalOverlay />
-        <ModalContent maxW={'480px'} maxH={'400px'}>
-          <ModalCloseButton />
-          <ModalBody pt={'40px !important'} overflow='scroll'>
-            <Heading {...styles.TitleStyle} mb={'24px'}>{heading}</Heading>
+    <Modal isOpen={isOpen} onClose={onClose} isCentered closeOnEsc={false} closeOnOverlayClick={false}>
+      <ModalOverlay />
+      <ModalContent maxW={'480px'} maxH={'400px'}>
+        <ModalCloseButton />
+        <ModalBody pt={'40px !important'} overflow='scroll'>
+          <Heading {...styles.TitleStyle} mb={'24px'}>{heading}</Heading>
 
-            <Loading />
+          <Loading />
 
-            <Text color={'rgba(0, 0, 0, 0.6)'} textAlign={'center'}>
-              {text}
-            </Text>
+          <Text color={'rgba(0, 0, 0, 0.6)'} textAlign={'center'}>
+            {text}
+          </Text>
 
+          <Box mt='5'>
+            {transactions.map((tx, i) => (
+              <Text color={'rgba(0, 0, 0, 0.6)'} textAlign={'center'} key={tx}>
+                Transaction hash #{i + 1}:{' '}
+                <a target="_blank" href={getEtherscanTxUrl(tx)} rel="noreferrer" style={{color: 'blue'}}>
+                  {formatAddress(tx)}
+                </a>
+              </Text>
+            ))}
+          </Box>
+        </ModalBody>
 
-            <Box  mt='5'>
-              {transactions.map((tx, i) => (
-                <Text color={'rgba(0, 0, 0, 0.6)'} textAlign={'center'} key={tx}>
-                  Transaction hash #{i + 1}:{' '}
-                  <a target="_blank" href={getEtherscanTxUrl(tx)} rel="noreferrer" style={{color: 'blue'}}>
-                    {formatAddress(tx)}
-                  </a>
-                </Text>
-              ))}
-            </Box>
+        <ModalFooter justifyContent="center">
+          <Button variant={'outline'} onClick={onClose}>Close</Button>
+        </ModalFooter>
 
-
-          </ModalBody>
-
-          <ModalFooter justifyContent="center">
-              <Button variant={'outline'} onClick={onClose}>Close</Button>
-          </ModalFooter>
-
-        </ModalContent>
-      </Modal>
+      </ModalContent>
+    </Modal>
   );
 };

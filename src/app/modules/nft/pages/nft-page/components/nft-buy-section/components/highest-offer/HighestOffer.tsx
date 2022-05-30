@@ -1,4 +1,4 @@
-import { Box, Flex, Image, Text, Tooltip } from '@chakra-ui/react';
+import { Box, Flex, HStack, Image, Text, Tooltip } from '@chakra-ui/react';
 import React, { useMemo } from 'react';
 
 import * as styles from '../../styles';
@@ -57,20 +57,22 @@ export const HighestOffer: React.FC<IHighestOfferProps> = (props) => {
             {creator && creator?.displayName ? creator?.displayName : shortenEthereumAddress(offer?.maker)}
           </strong>
         </Text>
-        <Flex>
-          <Text {...styles.ContentPriceStyle}>
-            <Tooltip label={'WETH'} {...styles.TooltipCurrencyStyle}>
+        <HStack spacing={'6px'}>
+          <Tooltip label={'WETH'} {...styles.TooltipCurrencyStyle}>
+            <Box>
               <TokenIcon
                 ticker={token.ticker}
                 size={24}
               />
-            </Tooltip>
-            <strong>
-              {price} {token.ticker}
-            </strong>
-           ${usdPrice}
+            </Box>
+          </Tooltip>
+          <Text {...styles.HighestOfferPrice}>
+            {price} {token.ticker}
           </Text>
-        </Flex>
+          <Text {...styles.HighestOfferPriceUSD}>
+            ${usdPrice}
+          </Text>
+        </HStack>
       </Box>
     </Flex>
   );
