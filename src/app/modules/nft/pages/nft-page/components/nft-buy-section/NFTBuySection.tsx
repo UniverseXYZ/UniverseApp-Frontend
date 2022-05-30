@@ -28,12 +28,12 @@ import {
 import { useNFTPageData } from "../../NFTPage.context";
 import { NFTCancelListingPopup } from "../nft-cancel-listing-popup";
 import { NFTChangeListingPricePopup } from "../nft-change-listing-price-popup";
-import { NFTMakeAnOfferPopup } from "../nft-make-an-offer-popup";
 import { NFTPlaceABidPopup } from "../nft-place-a-bid-popup";
 import { HighestBid } from "./components";
 import { HighestOffer } from "./components/highest-offer";
 import { BuyNFTSectionState } from "./enums";
 import * as styles from "./styles";
+import { useNFTMakeOfferStore } from '../../../../../../../stores/nftMakeOfferStore';
 
 interface INFTBuySectionProps {
   NFT?: INFT;
@@ -47,6 +47,8 @@ interface INFTBuySectionProps {
 
 export const NFTBuySection = (props: INFTBuySectionProps) => {
   const { NFT, owner, NFTs, order, highestOfferOrder, highestOfferCreator, onMeasureChange } = props;
+
+  const { makeOffer } = useNFTMakeOfferStore();
 
   const [ref, measure] = useMeasure<HTMLDivElement>();
 
@@ -130,10 +132,7 @@ export const NFTBuySection = (props: INFTBuySectionProps) => {
     );
   }, [order]);
 
-  const [isCheckoutPopupOpened, setIsCheckoutPopupOpened] = useState(false);
   const [isPlaceABidPopupOpened, setIsPlaceABidPopupOpened] = useState(false);
-  const [isMakeAnOfferPopupOpened, setIsMakeAnOfferPopupOpened] =
-    useState(false);
   const [isCancelListingPopupOpened, setIsCancelListingPopupOpened] =
     useState(false);
   const [isChangeListingPricePopupOpened, setIsChangeListingPricePopupOpened] =
@@ -261,7 +260,7 @@ export const NFTBuySection = (props: INFTBuySectionProps) => {
               </Button>
               <Button
                 variant={"outline"}
-                onClick={() => setIsMakeAnOfferPopupOpened(true)}
+                onClick={() => NFT && order && makeOffer(NFT, order)}
               >
                 Make offer
               </Button>
@@ -280,7 +279,7 @@ export const NFTBuySection = (props: INFTBuySectionProps) => {
               {renderBuyNowButton()}
               <Button
                 variant={"outline"}
-                onClick={() => setIsMakeAnOfferPopupOpened(true)}
+                onClick={() => NFT && order && makeOffer(NFT, order)}
               >
                 Make offer
               </Button>
@@ -317,7 +316,7 @@ export const NFTBuySection = (props: INFTBuySectionProps) => {
             <SimpleGrid columns={1} spacingX={"12px"}>
               <Button
                 variant={"outline"}
-                onClick={() => setIsMakeAnOfferPopupOpened(true)}
+                onClick={() => NFT && order && makeOffer(NFT, order)}
               >
                 Make offer
               </Button>
@@ -411,12 +410,6 @@ export const NFTBuySection = (props: INFTBuySectionProps) => {
         order={order}
         isOpen={isPlaceABidPopupOpened}
         onClose={() => setIsPlaceABidPopupOpened(false)}
-      />
-      <NFTMakeAnOfferPopup
-        nft={NFT}
-        order={order}
-        isOpen={isMakeAnOfferPopupOpened}
-        onClose={() => setIsMakeAnOfferPopupOpened(false)}
       />
       <NFTCancelListingPopup
         order={order}

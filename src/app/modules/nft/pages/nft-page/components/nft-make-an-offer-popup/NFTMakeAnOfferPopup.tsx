@@ -1,15 +1,16 @@
 import {
   Box,
   Button,
-  FormControl, FormErrorMessage,
+  FormControl,
+  FormErrorMessage,
   FormLabel,
   Heading,
+  HStack,
   Image,
   Input,
   InputGroup,
   InputLeftElement,
   InputRightAddon,
-  Link,
   Menu,
   MenuButton,
   MenuItem,
@@ -20,8 +21,9 @@ import {
   ModalContent,
   ModalOverlay,
   Text,
+  VStack,
 } from '@chakra-ui/react';
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useFormik } from 'formik';
 import { useMutation } from 'react-query';
 import { BigNumber } from 'bignumber.js';
@@ -29,34 +31,27 @@ import axios from 'axios';
 import { Contract, ethers, utils } from 'ethers';
 import { default as dayjs } from 'dayjs';
 import * as Yup from 'yup';
-import * as styles from './styles';
 import { TOKENS, TOKENS_MAP } from '../../../../../../constants';
-import { Checkbox, DateTimePicker, Loading, TokenIcon } from '../../../../../../components';
-import { ETH_USD_RATE } from '../../../../../../mocks';
-import {
-  INFT,
-  IOrder,
-  IOrderAssetTypeBundleListing,
-  IOrderAssetTypeERC20,
-  IOrderAssetTypeSingleListing,
-} from '../../../../types';
+import { AmountSelector, DateTimePicker, Loading, TokenIcon } from '../../../../../../components';
 import { TokenTicker } from '../../../../../../enums';
 import { sign } from '../../../../../../helpers';
 
 import ArrowIcon from '../../../../../../../assets/images/arrow-down.svg';
 import SuccessIcon from '../../../../../../../assets/images/bid-submitted.png';
-import { IToken } from '../../../../../../types';
 import { GetSaltApi } from '../../../../../../api';
 import { OrderAssetClass } from '../../../../enums';
 
 import Contracts from '../../../../../../../contracts/contracts.json';
 import { useNFTPageData } from '../../NFTPage.context';
 
-import { getEtherscanTxUrl} from '../../../../../../../utils/helpers';
+import { getEtherscanTxUrl } from '../../../../../../../utils/helpers';
 import { formatAddress } from '../../../../../../../utils/helpers/format';
 import { NFTCustomError } from '../nft-custom-error/NFTCustomError';
 import { useAuthStore } from '../../../../../../../stores/authStore';
 import { useErrorStore } from '../../../../../../../stores/errorStore';
+import { useNFTMakeOfferStore } from '../../../../../../../stores/nftMakeOfferStore';
+import * as s from './NFTMakeAnOfferPopup.styles';
+import { IOrderAssetTypeSingleListing } from '@app/modules/nft/types';
 
 // @ts-ignore
 const { contracts: contractsData } = Contracts[process.env.REACT_APP_NETWORK_CHAIN_ID];
@@ -70,23 +65,17 @@ export enum MakeAnOfferState {
 }
 
 export const NFTMakeAnOfferValidationSchema = Yup.object().shape({
+  price: Yup.number().required('This field is required').moreThan(0),
   token: Yup.string().required('This field is required'),
-  amount: Yup.number().required('This field is required').moreThan(0),
   expireAt: Yup.date().typeError('This field is required').required('This field is required').min(new Date()),
 });
 
-interface INFTMakeAnOfferPopupProps {
-  nft?: INFT;
-  order?: IOrder<IOrderAssetTypeSingleListing | IOrderAssetTypeBundleListing, IOrderAssetTypeERC20>;
-  isOpen: boolean;
-  onClose: () => void;
-}
 
-export const NFTMakeAnOfferPopup: React.FC<INFTMakeAnOfferPopupProps> = (props) => {
-  const { nft, order, isOpen, onClose } = props;
+export const NFTMakeAnOfferPopup: React.FC = () => {
+  const { isOpen, order, NFT: nft, close } = useNFTMakeOfferStore();
 
   const tokensBtnRef = useRef<HTMLButtonElement>(null);
-  
+
   const { setShowError, setErrorBody} = useErrorStore(s => ({setShowError: s.setShowError, setErrorBody: s.setErrorBody}))
 
   const { signer, web3Provider } = useAuthStore(s => ({signer: s.signer, web3Provider: s.web3Provider}));
@@ -115,37 +104,44 @@ export const NFTMakeAnOfferPopup: React.FC<INFTMakeAnOfferPopupProps> = (props) 
   const threeDaysAway = new Date();
   threeDaysAway.setDate(threeDaysAway.getDate()+3);
 
-  const formik = useFormik<{ amount: string; token: TokenTicker, expireAt: Date | null; }>({
+  type IMakeOfferFormValue = {
+    price: string;
+    token: TokenTicker;
+    amount: number;
+    expireAt: Date | null;
+  };
 
+  const formik = useFormik<IMakeOfferFormValue>({
     initialValues: {
-      amount: '',
+      price: '',
       token: TOKENS_MAP.WETH.ticker,
+      amount: +(order?.make.value ?? 1),
       expireAt: threeDaysAway,
     },
     validationSchema: NFTMakeAnOfferValidationSchema,
     onSubmit: async (value) => {
       try {
-        if (!signer || !web3Provider) {
+        if (!signer || !web3Provider || !nft) {
           return;
         }
         setState(MakeAnOfferState.PROCESSING);
-  
+
         const address = await signer.getAddress();
         const network = await web3Provider.getNetwork();
-  
+
         const salt = (await getSaltMutation.mutateAsync(address)).data.salt;
-  
+
         const paymentToken = TOKENS_MAP[value.token as TokenTicker];
-        const paymentAmount = utils.parseUnits(value.amount, paymentToken.decimals);
+        const paymentPrice = utils.parseUnits(value.price, paymentToken.decimals);
 
         const contract = new Contract(contractsData[paymentToken.contractName].address, contractsData[paymentToken.contractName].abi, signer);
         const balance = await contract.balanceOf(address);
 
-        if (paymentAmount.gt(balance)) {
+        if (paymentPrice.gt(balance)) {
           setState(MakeAnOfferState.INSUFFICIENT_BALANCE);
           return;
         }
-  
+
         let offerData = {
           type: 'UNIVERSE_V1',
           maker: address,
@@ -155,9 +151,12 @@ export const NFTMakeAnOfferPopup: React.FC<INFTMakeAnOfferPopupProps> = (props) 
               assetClass: OrderAssetClass.ERC20,
               contract: contractsData[paymentToken.contractName].address
             },
-            value: paymentAmount.toString(),
+            value: paymentPrice.toString(),
           },
-          take: order?.make,
+          take: {
+            ...(order?.make ?? {}),
+            value: `${formik.values.amount}`,
+          },
           salt: salt,
           start: 0,
           end: Math.floor((value.expireAt as Date).getTime() / 1000),
@@ -170,11 +169,11 @@ export const NFTMakeAnOfferPopup: React.FC<INFTMakeAnOfferPopupProps> = (props) 
             ...offerData,
             taker: ethers.constants.AddressZero,
             take: {
-              value: "1",
+              value: `${formik.values.amount}`,
               assetType: {
-                tokenId: nft?.tokenId as unknown as number, 
-                contract: nft?._collectionAddress?.toLowerCase() as string, 
-                assetClass: nft?.standard as unknown as OrderAssetClass.ERC721
+                assetClass: nft.standard as unknown as IOrderAssetTypeSingleListing["assetClass"],
+                contract: nft._collectionAddress ?? '',
+                tokenId: +nft.tokenId,
               },
             },
             data: {
@@ -185,20 +184,20 @@ export const NFTMakeAnOfferPopup: React.FC<INFTMakeAnOfferPopupProps> = (props) 
         }
 
         const response = (await encodeDataMutation.mutateAsync(offerData)).data;
-  
+
         const allowance = await contract.allowance(address, process.env.REACT_APP_MARKETPLACE_CONTRACT);
 
-        if(paymentAmount.gt(allowance)) {
+        if(paymentPrice.gt(allowance)) {
           setState(MakeAnOfferState.APPROVAL);
-  
+
           const approveTx = await contract.approve(process.env.REACT_APP_MARKETPLACE_CONTRACT, ethers.constants.MaxUint256);
           setApproveTx(approveTx?.hash);
-  
+
           await approveTx.wait();
-  
+
           setState(MakeAnOfferState.PROCESSING);
         }
-  
+
         const signature = await sign(
           web3Provider.provider,
           response,
@@ -206,21 +205,21 @@ export const NFTMakeAnOfferPopup: React.FC<INFTMakeAnOfferPopupProps> = (props) 
           `${network.chainId}`,
           `${process.env.REACT_APP_MARKETPLACE_CONTRACT}`
         );
-  
+
         const createOrderResponse = (await createOfferMutation.mutateAsync({ ...offerData, signature })).data;
-  
+
         setState(MakeAnOfferState.SUCCESS);
         refetchOffers();
         setApproveTx('');
         } catch(err: any) {
         console.log(err)   
         setState(MakeAnOfferState.FORM);
-  
+
         // Code 4001 is user rejected transaction
         if (err?.code === 4001) {
           return;
-        } 
-  
+        }
+
         // Check if error comes from api request and if the api has returned a meaningful messages
         if (getSaltMutation.isError && !!(getSaltMutation as any)?.error?.response?.data?.message) {
           setErrorBody((getSaltMutation as any)?.error?.response?.data?.message)
@@ -234,6 +233,30 @@ export const NFTMakeAnOfferPopup: React.FC<INFTMakeAnOfferPopupProps> = (props) 
       }
     },
   });
+
+  const isERC1155 = useMemo(() => {
+    switch (order?.make.assetType.assetClass) {
+      case OrderAssetClass.ERC1155: return true;
+      default: return false;
+    }
+  }, [order]);
+
+  const totalPrice = useMemo(() => {
+    const { price, amount } = formik.values;
+    return +(price || 0) * amount;
+  }, [formik]);
+
+  const totalPriceUSD = useMemo(() => {
+    return new BigNumber(totalPrice * tokenPrice).toFixed(2);
+  }, [formik, totalPrice]);
+
+  const handlePriceChange = useCallback((event: React.FormEvent<HTMLInputElement>) => {
+    const value = event.currentTarget.value;
+    const validPrice = Number(value) > -1 && value.length < 21;
+    if(validPrice) {
+      formik.handleChange(event);
+    }
+  }, [formik]);
 
   useEffect(()=> {
     const loadPrice = async () => {
@@ -250,78 +273,102 @@ export const NFTMakeAnOfferPopup: React.FC<INFTMakeAnOfferPopupProps> = (props) 
     setState(MakeAnOfferState.FORM);
   }, [isOpen]);
 
-  const handlePriceChange = (event: React.FormEvent<HTMLInputElement>) => {
-    const value = event.currentTarget.value;
-    const validPrice = Number(value) > -1 && value.length < 21;
-    if(validPrice) {
-      formik.handleChange(event);
-    }
-  }
-
   return (
-    <Modal isCentered isOpen={isOpen} onClose={onClose} closeOnEsc={false} closeOnOverlayClick={false}>
+    <Modal isCentered isOpen={isOpen} onClose={close} closeOnEsc={false} closeOnOverlayClick={false}>
       <ModalOverlay />
       <ModalContent maxW={'480px'}>
         <ModalCloseButton />
         <ModalBody pt={'40px !important'}>
           {state === MakeAnOfferState.FORM && (
             <Box>
-              <Heading {...styles.TitleStyle} mb={'40px'}>Make an offer</Heading>
+              <Heading {...s.TitleStyle} mb={'40px'}>Make an offer</Heading>
 
-              <FormControl mb={'30px'} isInvalid={!!(formik.touched.amount && formik.errors.amount)}>
-                <FormLabel>Price</FormLabel>
-                {/*TODO: improve currency select & currency input components */}
-                <InputGroup>
-                  <InputLeftElement w={'fit-content'}>
-                    <Menu>
-                      <MenuButton as={Button} size={'sm'} {...styles.CurrencyMenuButtonStyle} ref={tokensBtnRef}>
-                        <Image src={TOKENS_MAP[formik.values.token].icons[0]} />
-                        {TOKENS_MAP[formik.values.token].ticker}
-                        <Image src={ArrowIcon} />
-                      </MenuButton>
-                      <MenuList minWidth={'100px'} p={'8px'} position={'relative'} zIndex={3}>
-                        {tokens.map((TOKEN) => (
-                          <MenuItem
-                            key={TOKEN.ticker}
-                            {...styles.CurrencyItemStyle}
-                            onClick={() => formik.setFieldValue('token', TOKEN.ticker)}
-                          >
-                            <Image src={TOKEN.icons[0]} />
-                            {TOKEN.ticker}
-                          </MenuItem>
-                        ))}
-                      </MenuList>
-                    </Menu>
-                  </InputLeftElement>
-                  <Input
-                    type={'text'}
-                    placeholder={'Amount'}
-                    name={'amount'}
-                    value={formik.values.amount}
-                    pl={`${(tokensBtnRef.current?.clientWidth ?? 0) + (2 * 8)}px`}
-                    onChange={(event) => handlePriceChange(event)}
-                    onBlur={formik.handleBlur}
+              <VStack spacing={'24px'} alignItems={'flex-start'}>
+                <FormControl isInvalid={!!(formik.touched.price && formik.errors.price)}>
+                  <FormLabel>Price</FormLabel>
+                  {/*TODO: improve currency select & currency input components */}
+                  <InputGroup>
+                    <InputLeftElement w={'fit-content'}>
+                      <Menu>
+                        <MenuButton as={Button} size={'sm'} {...s.CurrencyMenuButtonStyle} ref={tokensBtnRef}>
+                          <Image src={TOKENS_MAP[formik.values.token].icons[0]} />
+                          {TOKENS_MAP[formik.values.token].ticker}
+                          <Image src={ArrowIcon} />
+                        </MenuButton>
+                        <MenuList minWidth={'100px'} p={'8px'} position={'relative'} zIndex={3}>
+                          {tokens.map((TOKEN) => (
+                            <MenuItem
+                              key={TOKEN.ticker}
+                              {...s.CurrencyItemStyle}
+                              onClick={() => formik.setFieldValue('token', TOKEN.ticker)}
+                            >
+                              <Image src={TOKEN.icons[0]} />
+                              {TOKEN.ticker}
+                            </MenuItem>
+                          ))}
+                        </MenuList>
+                      </Menu>
+                    </InputLeftElement>
+                    <Input
+                      type={'text'}
+                      placeholder={'Amount'}
+                      name={'price'}
+                      value={formik.values.price}
+                      pl={`${(tokensBtnRef.current?.clientWidth ?? 0) + (2 * 8)}px`}
+                      onChange={(event) => handlePriceChange(event)}
+                      onBlur={formik.handleBlur}
+                    />
+                    <InputRightAddon>
+                      $ {!formik.values.price ? '0.00' : (new BigNumber(+formik.values.price * tokenPrice).toFixed(2))}
+                    </InputRightAddon>
+                  </InputGroup>
+                  <FormErrorMessage>{formik.errors.price}</FormErrorMessage>
+                </FormControl>
+
+                {isERC1155 && (
+                  <FormControl>
+                    <HStack spacing={0} justifyContent={'space-between'} w={'100%'}>
+                      <FormLabel>Amount</FormLabel>
+                      <AmountSelector
+                        size={'sm'}
+                        options={{
+                          value: formik.values.amount,
+                          min: 1,
+                          max: +(order?.make.value ?? 1),
+                          onChange: (_, value) => formik.setFieldValue('amount', value),
+                        }}
+                      />
+                    </HStack>
+                  </FormControl>
+                )}
+
+                <FormControl mb={'40px'} isInvalid={!!(formik.touched.expireAt && formik.errors.expireAt)}>
+                  <FormLabel>Offer Expiration</FormLabel>
+                  <DateTimePicker
+                    value={formik.values.expireAt}
+                    modalName={'Offer Expiration'}
+                    onChange={(date) => formik.setFieldValue('expireAt', date)}
+                    onClose={() => formik.setFieldTouched('expireAt', true)}
+                    minDate={dayjs().toDate()}
                   />
-                  <InputRightAddon>
-                    $ {!formik.values.amount ? '0.00' : (new BigNumber(+formik.values.amount * tokenPrice).toFixed(2))}
-                  </InputRightAddon>
-                </InputGroup>
-                <FormErrorMessage>{formik.errors.amount}</FormErrorMessage>
-              </FormControl>
+                  <FormErrorMessage>{formik.errors.expireAt}</FormErrorMessage>
+                </FormControl>
 
-              <FormControl mb={'40px'} isInvalid={!!(formik.touched.expireAt && formik.errors.expireAt)}>
-                <FormLabel>Offer Expiration</FormLabel>
-                <DateTimePicker
-                  value={formik.values.expireAt}
-                  modalName={'Offer Expiration'}
-                  onChange={(date) => formik.setFieldValue('expireAt', date)}
-                  onClose={() => formik.setFieldTouched('expireAt', true)}
-                  minDate={dayjs().toDate()}
-                />
-                <FormErrorMessage>{formik.errors.expireAt}</FormErrorMessage>
-              </FormControl>
+                {isERC1155 && (
+                  <HStack spacing={0} justifyContent={'space-between'} w={'100%'}>
+                    <Text {...s.TotalLabel}>Total</Text>
+                    <VStack spacing={0} alignItems={'flex-end'}>
+                      <HStack spacing={'4px'}>
+                        <TokenIcon ticker={TokenTicker.ETH} boxSize={'18px'} />
+                        <Text {...s.TotalPrice}>{totalPrice}</Text>
+                      </HStack>
+                      <Text {...s.TotalPriceUSD}>${totalPriceUSD}</Text>
+                    </VStack>
+                  </HStack>
+                )}
+              </VStack>
 
-              <Box {...styles.ButtonsContainerStyle}>
+              <Box {...s.ButtonsContainerStyle}>
                 <Button
                   boxShadow={'lg'}
                   disabled={!formik.isValid}
@@ -341,7 +388,7 @@ export const NFTMakeAnOfferPopup: React.FC<INFTMakeAnOfferPopupProps> = (props) 
 
           {state === MakeAnOfferState.PROCESSING && (
             <Box>
-              <Heading {...styles.TitleStyle} mb={'20px'}>Making an offer...</Heading>
+              <Heading {...s.TitleStyle} mb={'20px'}>Making an offer...</Heading>
 
               <Text fontSize={'14px'} mx={'auto'} maxW={'260px'} textAlign={'center'}>
                 Just accept the signature request and wait for us to process your offer
@@ -353,7 +400,7 @@ export const NFTMakeAnOfferPopup: React.FC<INFTMakeAnOfferPopupProps> = (props) 
 
           {state === MakeAnOfferState.APPROVAL && (
             <Box>
-              <Heading {...styles.TitleStyle} mb={'20px'}>Making an offer...</Heading>
+              <Heading {...s.TitleStyle} mb={'20px'}>Making an offer...</Heading>
 
               <Text fontSize={'14px'} mx={'auto'} maxW={'260px'} textAlign={'center'}>
                 Please give an approval for the specified amount ..
@@ -377,7 +424,7 @@ export const NFTMakeAnOfferPopup: React.FC<INFTMakeAnOfferPopupProps> = (props) 
           {state === MakeAnOfferState.SUCCESS && (
             <Box>
               <Image src={SuccessIcon} w={'220px'} h={'165px'} m={'auto'} />
-              <Heading {...styles.TitleStyle} mt={'50px'} mb={'24px'}>Congratulations!</Heading>
+              <Heading {...s.TitleStyle} mt={'50px'} mb={'24px'}>Congratulations!</Heading>
               <Text
                 sx={{
                   color: 'rgba(0, 0, 0, .6)',
@@ -398,7 +445,7 @@ export const NFTMakeAnOfferPopup: React.FC<INFTMakeAnOfferPopupProps> = (props) 
                   mr={'4px'}
                   mt={'-3px'}
                 />
-                <strong>{formik.values.amount}</strong><br />
+                <strong>{formik.values.price}</strong><br />
                 {formik.values.expireAt && (
                   <Box as={'span'}>
                     that ends on <strong>{dayjs(formik.values.expireAt).format('MMM DD, YYYY, HH:mm z')}</strong>
@@ -411,7 +458,7 @@ export const NFTMakeAnOfferPopup: React.FC<INFTMakeAnOfferPopupProps> = (props) 
                 mt={'40px'}
                 mx={'auto'}
                 p={'10px 50px'}
-                onClick={onClose}
+                onClick={close}
               >Close</Button>
             </Box>
           )}
