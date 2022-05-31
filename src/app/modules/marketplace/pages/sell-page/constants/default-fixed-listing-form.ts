@@ -11,4 +11,8 @@ export const defaultFixedListingForm: IFixedListingForm = {
   endDate: null,
   isPrivacy: false,
   buyerAddress: '',
+  royalties: [{
+    address: '',
+    percent: '',
+  }],
 };

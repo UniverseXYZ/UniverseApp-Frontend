@@ -1,71 +1,83 @@
-import { Box, Container, Heading, Image, LinkBox, LinkOverlay, Tab, TabList, TabPanels, Tabs } from '@chakra-ui/react';
+import {
+  Box,
+  Container,
+  Heading,
+  Image,
+  LinkBox,
+  LinkOverlay,
+  SimpleGrid,
+  Tab,
+  TabList,
+  TabPanels,
+  Tabs,
+  TabPanel
+} from '@chakra-ui/react';
 import axios from 'axios';
 import { utils } from 'ethers';
-import { useFormik } from 'formik';
+import { FormikProvider, useFormik } from 'formik';
 import React, { useCallback, useEffect, useState } from 'react';
-import { useMutation, useQuery } from 'react-query';
-import * as Yup from 'yup';
+import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { NextPageContext } from 'next';
 import NextLink from 'next/link';
 
-import bg from '../../../../../assets/images/marketplace/v2/bg.png';
-import arrow from '../../../../../assets/images/arrow.svg';
-import BGImage from './../../../../../assets/images/v2/stone_bg.jpg';
+import bg from '@assets/images/marketplace/v2/bg.png';
+import arrow from '@assets/images/arrow.svg';
+import BGImage from '@assets/images/v2/stone_bg.jpg';
 
 import {
   defaultDutchAuctionForm,
   defaultEnglishAuctionForm,
   defaultFixedListingForm,
-  MarketplaceSellContext,
-  sellPageTabs,
+  sellMethodOptions,
   settingsAmountTypeTitleText,
   settingsMethodsTitleText,
 } from './constants';
-import { SelectMethodType, SettingsTab, SummaryTab, TabPanel } from './components';
+import { IListingPage, ListingPageContext } from './ListingPage.context';
+import { SettingsTab, SummaryTab } from './components';
 import { SellAmountType, SellMethod, SellPageTabs } from './enums';
-import { IMarketplaceSellContextData, ISellForm } from './types';
+import { ISellForm } from './types';
 import { sign } from '../../../../helpers';
 import { TOKENS_MAP, ZERO_ADDRESS } from '../../../../constants';
 import { TokenTicker } from '../../../../enums';
 import {
   INFT,
   IOrderAssetTypeBundleListing,
-  IOrderAssetTypeERC20, IOrderAssetTypeETH,
+  IOrderAssetTypeERC20,
+  IOrderAssetTypeETH,
   IOrderAssetTypeSingleListing,
 } from '../../../nft/types';
-import { EncodeOrderApi, GetActiveListingApi, GetHistoryApi, GetNFTApi, GetSaltApi, IEncodeOrderApiData } from '../../../../api';
+import {
+  EncodeOrderApi,
+  GetActiveListingApi,
+  GetHistoryApi,
+  GetNFTApi,
+  GetSaltApi,
+  IEncodeOrderApiData,
+} from '../../../../api';
 import Contracts from '../../../../../contracts/contracts.json';
 import { OrderAssetClass } from '../../../nft/enums';
-import { useQueryClient } from 'react-query'
-
-// @ts-ignore
-const { contracts: contractsData } = Contracts[process.env.REACT_APP_NETWORK_CHAIN_ID];
-import { Status, Status as PostingPopupStatus } from './components/tab-summary/compoents/posting-popup/enums/index';
+import { Status as PostingPopupStatus } from './components/tab-summary/compoents/posting-popup/enums/index';
 import { nftKeys, orderKeys } from '../../../../utils/query-keys';
 import { useRouter } from 'next/router';
 import { useAuthStore } from '../../../../../stores/authStore';
 import { useErrorStore } from '../../../../../stores/errorStore';
 import { useThemeStore } from 'src/stores/themeStore';
+import { AreaButton } from '@app/modules/marketplace/components';
+import { Icon } from '@app/components';
+import { getListingValidationSchema } from './helpers';
 
-const getValidationSchema = (amountType?: SellAmountType, sellMethod?: SellMethod) => {
-  switch (sellMethod) {
-    case SellMethod.FIXED: return Yup.object().shape({
-      bundleName: amountType === SellAmountType.SINGLE ? Yup.string() : Yup.string().required('Required'),
-      bundleDescription: amountType === SellAmountType.SINGLE ? Yup.string() : Yup.string().max(500, 'Too Long!'), // TODO: use variable maxDescriptionSymbols
-      price: Yup.number()
-        .typeError('Invalid price')
-        .required('Required')
-        .moreThan(0, 'Price must be greater than 0'),
-    });
-    default: return Yup.object().shape({});
-  }
-}
+// @ts-ignore
+const { contracts: contractsData } = Contracts[process.env.REACT_APP_NETWORK_CHAIN_ID];
 
 export const SellPage = () => {
-  // const params = useParams<{ collectionAddress: string; tokenId: string; }>();
   const router = useRouter();
 
-  const params = router.query as { collectionAddress: string; tokenId: string; };
+  type IRouterQuery = {
+    collectionAddress: string;
+    tokenId: string;
+  }
+
+  const params = router.query as IRouterQuery;
 
   const { signer, web3Provider } = useAuthStore(state => ({signer: state.signer, web3Provider: state.web3Provider})) as any;
 
@@ -122,11 +134,12 @@ export const SellPage = () => {
   const [sellMethod, setSellMethod] = useState<SellMethod>();
   const [isPosted, setIsPosted] = useState<boolean>(false);
   const [postingPopupStatus, setPostingPopupStatus] = useState<PostingPopupStatus>(PostingPopupStatus.HIDDEN);
+  const [validateRoyalties, setValidateRoyalties] = useState(false);
 
   const form = useFormik<ISellForm>({
     initialValues: {} as ISellForm,
     validateOnMount: true,
-    validationSchema: getValidationSchema(amountType, sellMethod),
+    validationSchema: getListingValidationSchema(amountType, sellMethod, validateRoyalties),
     onSubmit: async (values: any) => {
       try {
         const network = await web3Provider.getNetwork();
@@ -195,9 +208,15 @@ export const SellPage = () => {
           end: values.endDate ? Math.floor(values.endDate.getTime() / 1000) : 0,
           data: {
             dataType: 'ORDER_DATA',
-            revenueSplits: []
+            revenueSplits: values.royalties?.map((r: any) => ({
+              account: r.address,
+              value: +r.percent,
+            })) ?? []
           },
         };
+
+        console.log('orderData', orderData);
+        return;
   
         const { data: encodedOrder } = (await encodeOrderMutation.mutateAsync(orderData));
   
@@ -234,12 +253,6 @@ export const SellPage = () => {
       }
     },
   });
-
-  const handleSelectAmount = useCallback((amountType: SellAmountType) => {
-    setAmountType(amountType);
-    setSellMethod(undefined);
-    setActiveTab(SellPageTabs.SELL_METHOD);
-  }, []);
 
   const handleSelectSellMethod = useCallback((sellMethod: SellMethod) => {
     setSellMethod(sellMethod);
@@ -287,80 +300,128 @@ export const SellPage = () => {
 
   useEffect(() => setDarkMode(false), []);
 
-  const contextValue: IMarketplaceSellContextData = {
+  useEffect(() => {
+    if (!form.values.royalties) {
+      return;
+    }
+
+    if (form.values.royalties.length > 1) {
+      setValidateRoyalties(true);
+    } else {
+      setValidateRoyalties(form.values.royalties.some((r) => !!r.address || !!r.percent));
+    }
+  }, [form.values.royalties]);
+
+  const contextValue: IListingPage = {
     nft: nft as INFT,
     isPosted,
     amountType: amountType as SellAmountType,
     sellMethod: sellMethod as SellMethod,
     form: form,
-    selectAmount: handleSelectAmount,
-    selectMethod: handleSelectSellMethod,
     goBack: handleGoBack,
     goContinue: handleContinue,
     postingPopupStatus: postingPopupStatus,
     setPostingPopupStatus: setPostingPopupStatus,
   };
 
-  const settingsTabName = (amountType && sellMethod)
-    ? `${settingsAmountTypeTitleText[amountType]} - ${settingsMethodsTitleText[sellMethod]}`
-    : '';
+  type IListingTab = {
+    name: string;
+    heading: string;
+    renderIcon: () => React.ReactNode;
+    renderTab: () => React.ReactNode;
+  };
+
+  const tabs: IListingTab[] = [
+    {
+      name: 'Select sell method',
+      heading: 'Select your sell method',
+      renderIcon: () => <Icon name={'label'} />,
+      renderTab: () => (
+        <SimpleGrid columns={sellMethodOptions.length} spacing={['20px', null, '26px', '30px']} mb={'100px'}>
+          {sellMethodOptions.map((method, i) => (
+            <AreaButton
+              key={i}
+              title={method.title}
+              description={method.description}
+              icon={method.icon}
+              disabled={method.disabled}
+              onClick={() => handleSelectSellMethod(method.value as SellMethod)}
+            />
+          ))}
+        </SimpleGrid>
+      )
+    },
+    {
+      name: 'Settings',
+      heading: (amountType && sellMethod)
+        ? `${settingsAmountTypeTitleText[amountType]} - ${settingsMethodsTitleText[sellMethod]}`
+        : '',
+      renderIcon: () => <Icon name={'settings'} />,
+      renderTab: () => <SettingsTab />
+    },
+    {
+      name: 'Summary',
+      heading: 'Summary',
+      renderIcon: () => <Icon name={'eye'} />,
+      renderTab: () => <SummaryTab />
+    },
+  ];
 
   return (
-    <MarketplaceSellContext.Provider value={contextValue}>
-      <Box sx={{ bg: `url(${BGImage}) center / cover` }}>
-        <Box
-          bgImage={bg}
-          bgSize="contain"
-          bgRepeat="no-repeat"
-          w="100%"
-          sx={{ '--container-max-width': '1100px' }}
-        >
-          <Container maxW={'var(--container-max-width)'} pb={'0 !important'}>
-            <Box px={{ base: '20px', md: '60px', xl: 0 }}>
-              <LinkBox
-                mb={'20px'}
-                fontFamily={'Space Grotesk'}
-                fontWeight={500}
-                display={"inline-block"}
-                _hover={{ textDecoration: 'none' }}
-              >
-                <NextLink href={`/nft/${params.collectionAddress}/${params.tokenId}`}>
-                  <LinkOverlay display={'contents'}>
-                    <Image src={arrow} display="inline" mr="10px" position="relative" top="-2px" />
-                    {nft?.name ?? params.tokenId}
-                  </LinkOverlay>
-                </NextLink>
-              </LinkBox>
+    <ListingPageContext.Provider value={contextValue}>
+      <FormikProvider value={form}>
+        <Box sx={{ bg: `url(${BGImage}) center / cover` }}>
+          <Box
+            bgImage={bg}
+            bgSize="contain"
+            bgRepeat="no-repeat"
+            w="100%"
+            sx={{ '--container-max-width': '1100px' }}
+          >
+            <Container maxW={'var(--container-max-width)'} pb={'0 !important'}>
+              <Box px={{ base: '20px', md: '60px', xl: 0 }}>
+                <LinkBox
+                  mb={'20px'}
+                  fontFamily={'Space Grotesk'}
+                  fontWeight={500}
+                  display={"inline-block"}
+                  _hover={{ textDecoration: "none" }}
+                >
+                  <NextLink href={`/nft/${params.collectionAddress}/${params.tokenId}`}>
+                    <LinkOverlay display={'contents'}>
+                      <Image src={arrow} display="inline" mr="10px" position="relative" top="-2px" />
+                      {nft?.name ?? params.tokenId}
+                    </LinkOverlay>
+                  </NextLink>
+                </LinkBox>
 
-              <Heading as="h1" mb={'50px'}>Sell NFT</Heading>
+                <Heading as="h1" mb={'50px'}>Sell NFT</Heading>
 
-              <Tabs isFitted variant={'arrow'} index={activeTab} onChange={setActiveTab}>
-                <TabList overflowX={'scroll'} padding={'0 5px'}>
-                  {sellPageTabs.map((tab, i) => (
-                    <Tab key={i} minW={'130px'} isDisabled={i > activeTab || isPosted}>
-                      <Image src={activeTab === i ? tab.iconActive : tab.icon} />
-                      {tab.name}
-                    </Tab>
-                  ))}
-                </TabList>
+                <Tabs isFitted variant={'arrow'} index={activeTab} onChange={setActiveTab}>
+                  <TabList overflowX={'scroll'} padding={'0 5px'}>
+                    {tabs.map(({ name, renderIcon }, i) => (
+                      <Tab key={i} minW={'130px'} isDisabled={i > activeTab || isPosted}>
+                        {renderIcon()}
+                        <Box as={'span'} ml={'6px'}>{name}</Box>
+                      </Tab>
+                    ))}
+                  </TabList>
 
-                <TabPanels>
-                  <TabPanel name="Select your sell method">
-                    {activeTab === SellPageTabs.SELL_METHOD && <SelectMethodType />}
-                  </TabPanel>
-                  <TabPanel name={settingsTabName}>
-                    {activeTab === SellPageTabs.SETTINGS && <SettingsTab />}
-                  </TabPanel>
-                  <TabPanel name='Summary'>
-                    {activeTab === SellPageTabs.SUMMARY && <SummaryTab />}
-                  </TabPanel>
-                </TabPanels>
-              </Tabs>
-            </Box>
-          </Container>
+                  <TabPanels>
+                    {tabs.map(({ heading, renderTab }, i) => (
+                      <TabPanel key={i} p={0}>
+                        <Heading as="h3" size="md" my={'60px'}>{heading}</Heading>
+                        {activeTab === i && (renderTab())}
+                      </TabPanel>
+                    ))}
+                  </TabPanels>
+                </Tabs>
+              </Box>
+            </Container>
+          </Box>
         </Box>
-      </Box>
-    </MarketplaceSellContext.Provider>
+      </FormikProvider>
+    </ListingPageContext.Provider>
   );
 };
 

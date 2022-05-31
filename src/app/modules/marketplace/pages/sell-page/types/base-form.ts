@@ -3,4 +3,8 @@ export interface IBaseForm {
   bundleDescription: string;
   bundleSelectedNFTs: string[];
   amount: number;
+  royalties: Array<{
+    address: string;
+    percent: string;
+  }>
 }

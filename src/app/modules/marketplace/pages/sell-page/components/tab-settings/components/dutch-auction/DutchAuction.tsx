@@ -2,19 +2,19 @@ import { Box, Flex, Heading, Input, Switch, Text } from '@chakra-ui/react';
 import React from 'react';
 import { FormikProps } from 'formik';
 
-import { useMarketplaceSellData } from '../../../../hooks';
 import { SellAmountType, SellMethod } from '../../../../enums';
 import * as styles from '../../styles';
 import { CurrencyInput, DateTimePicker, InputShadow } from '../../../../../../../../components';
-import { IMarketplaceSellContextData, IDutchAuctionForm } from '../../../../types';
+import { IDutchAuctionForm } from '../../../../types';
 import { BundleForm } from '../../../bundle-form';
+import { IListingPage, useListingPage } from '@app/modules/marketplace/pages/sell-page/ListingPage.context';
 
-interface IMarketplaceSellContextDataOverride extends Omit<IMarketplaceSellContextData, 'form'> {
+interface IMarketplaceSellContextDataOverride extends Omit<IListingPage, 'form'> {
   form: FormikProps<IDutchAuctionForm>;
 }
 
 export const SettingsTabDutchAuction = () => {
-  const { form, sellMethod, amountType } = useMarketplaceSellData() as IMarketplaceSellContextDataOverride;
+  const { form, sellMethod, amountType } = useListingPage() as IMarketplaceSellContextDataOverride;
 
   if (sellMethod !== SellMethod.DUTCH) {
     return null;

@@ -4,16 +4,14 @@ import {
 } from '@chakra-ui/react';
 import React, { useEffect } from 'react';
 
-// import 'swiper/swiper-bundle.min.css';
-// import 'swiper/swiper.min.css';
+import { useListingPage } from '@app/modules/marketplace/pages';
 
-import { useMarketplaceSellData } from '../../hooks';
 import * as styles from './styles';
 import { SelectNFTs, SettingsTabDutchAuction, SettingsTabEnglishAuction, SettingsTabFixedListing } from './components';
 import { SellAmountType } from '../../enums';
 
 export const SettingsTab = () => {
-  const { form, ...sellData } = useMarketplaceSellData();
+  const { form, ...sellData } = useListingPage();
 
   useEffect(() => {
     form.validateForm();

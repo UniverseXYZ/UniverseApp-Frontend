@@ -18,8 +18,7 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { FreeMode, Navigation } from 'swiper';
 
-// import 'swiper/swiper-bundle.min.css';
-// import 'swiper/swiper.min.css';
+import { useListingPage } from '@app/modules/marketplace/pages';
 
 import searchIcon from '../../../../../../../../../assets/images/search-gray.svg';
 import filtersIcon from '../../../../../../../../../assets/images/marketplace/filters2.svg';
@@ -32,7 +31,6 @@ import { InputShadow, Select } from '../../../../../../../../components';
 import { NFTCard } from '../../../../../../../nft/components';
 import { INFT, INFTBackend } from '../../../../../../../nft/types';
 import { SelectEditionsDropdown } from '../../../select-editions-dropdown';
-import { useMarketplaceSellData } from '../../../../hooks';
 import { useStickyFooter } from '../../../../../../../../hooks';
 import { UncheckBundleEditionsModal } from './components';
 import {
@@ -167,7 +165,7 @@ export const SelectNFTs = ({}: ISelectNFTsProps) => {
 
   const { isOpen: isFiltersOpen, onToggle: onToggleFilters } = useDisclosure();
 
-  const { nft, form, ...sellData } = useMarketplaceSellData();
+  const { nft, form, ...sellData } = useListingPage();
 
   useStickyFooter(actionBarRef);
 

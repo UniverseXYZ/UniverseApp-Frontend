@@ -13,7 +13,8 @@ import {
 import React, { useCallback } from 'react';
 import { useRouter } from 'next/router';
 
-import { useMarketplaceSellData } from '../../../../hooks';
+import { useListingPage } from '@app/modules/marketplace/pages';
+
 import { Status } from './enums';
 import * as styles from './styles';
 import { Loading } from '../../../../../../../../components';
@@ -27,7 +28,7 @@ interface IPostingPopupProps {
 }
 
 export const PostingPopup = ({ status, onClose }: IPostingPopupProps) => {
-  const { nft } = useMarketplaceSellData();
+  const { nft } = useListingPage();
   const isImage = isNFTAssetImage(nft.artworkTypes);
   const isVideo = isNFTAssetVideo(nft.artworkTypes);
   const isAudio = isNFTAssetAudio(nft.artworkTypes);

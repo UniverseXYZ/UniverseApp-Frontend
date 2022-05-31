@@ -10,4 +10,5 @@ export const defaultEnglishAuctionForm: IEnglishAuctionForm = {
   reservePrice: '',
   reservePriceCurrency: 'ETH',
   expirationDate: null,
+  royalties: [],
 };

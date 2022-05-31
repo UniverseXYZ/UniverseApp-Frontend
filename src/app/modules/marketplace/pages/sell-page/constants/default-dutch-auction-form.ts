@@ -14,4 +14,5 @@ export const defaultDutchAuctionForm: IDutchAuctionForm = {
   futureDate: null,
   isPrivacy: false,
   buyerAddress: '',
+  royalties: [],
 };

@@ -7,13 +7,12 @@ import { default as dayjs } from 'dayjs';
 import { default as UTC } from 'dayjs/plugin/utc';
 import { BigNumber, Contract } from 'ethers';
 
-// import 'swiper/swiper-bundle.min.css';
-// import 'swiper/swiper.min.css';
+import { useListingPage } from '@app/modules/marketplace/pages';
+
 import BundleWhiteIcon from '../../../../../../../assets/images/marketplace/v2/bundle-white.svg';
 import CheckBlackIcon from '../../../../../../../assets/images/check-black.svg';
 
 import { Status, Status as PostingPopupStatus } from './compoents/posting-popup/enums';
-import { useMarketplaceSellData } from '../../hooks';
 import { FeeItem, Fees, PostingPopup } from './compoents';
 import { SellAmountType, SellMethod } from '../../enums';
 import { IFixedListingForm } from '../../types';
@@ -67,7 +66,7 @@ export const SummaryTab = () => {
   const [isApproving, setIsApproving] = useState(false);
   const [totalNetPrice, setTotalNetPrice] = useState(0);
 
-  const { nft, isPosted, form, sellMethod, amountType, goBack, postingPopupStatus, setPostingPopupStatus } = useMarketplaceSellData();
+  const { nft, isPosted, form, sellMethod, amountType, goBack, postingPopupStatus, setPostingPopupStatus } = useListingPage();
 
   const update = useUpdate();
 
