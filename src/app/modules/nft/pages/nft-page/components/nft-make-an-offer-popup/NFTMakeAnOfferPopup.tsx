@@ -9,17 +9,12 @@ import {
   HStack,
   Image,
   Input,
-  InputGroup,
-  InputLeftElement,
-  InputRightAddon,
-  Menu,
-  MenuButton,
-  MenuItem,
-  MenuList,
   Modal,
   ModalBody,
   ModalCloseButton,
   ModalContent,
+  ModalFooter,
+  ModalHeader,
   ModalOverlay,
   Text,
   VStack,
@@ -301,16 +296,24 @@ export const NFTMakeAnOfferPopup: React.FC = () => {
   }, [formik.values.royalties]);
 
   return (
-    <Modal isOpen={isOpen} onClose={close} closeOnEsc={false} closeOnOverlayClick={false}>
+    <Modal
+      isOpen={isOpen}
+      scrollBehavior={'inside'}
+      isCentered={true}
+      closeOnEsc={false}
+      closeOnOverlayClick={false}
+      onClose={close}
+    >
       <ModalOverlay />
       <ModalContent maxW={'480px'}>
         <ModalCloseButton />
-        <ModalBody pt={'40px !important'}>
-          {state === MakeAnOfferState.FORM && (
-            <Box>
+        {state == MakeAnOfferState.FORM && (
+          <>
+            <ModalHeader>
+              <Heading {...s.TitleStyle}>Make an offer</Heading>
+            </ModalHeader>
+            <ModalBody>
               <FormikProvider value={formik}>
-                <Heading {...s.TitleStyle} mb={'40px'}>Make an offer</Heading>
-
                 <VStack spacing={'24px'} alignItems={'flex-start'}>
                   <XYZFormControl
                     isInvalid={!!(formik.touched.price && formik.errors.price)}
@@ -455,27 +458,30 @@ export const NFTMakeAnOfferPopup: React.FC = () => {
                     </HStack>
                   )}
                 </VStack>
-
-                <Box {...s.ButtonsContainerStyle}>
-                  <Button
-                    boxShadow={'lg'}
-                    disabled={!formik.isValid}
-                    onClick={() => formik.submitForm()}
-                  >Make an Offer</Button>
-                  {/*<Button variant={'outline'}>Convert ETH</Button>*/}
-                </Box>
               </FormikProvider>
-            </Box>
-          )}
+            </ModalBody>
+            <ModalFooter>
+              <Button
+                boxShadow={'lg'}
+                disabled={!formik.isValid}
+                onClick={() => formik.submitForm()}
+              >Make an Offer</Button>
+              {/*<Button variant={'outline'}>Convert ETH</Button>*/}
+            </ModalFooter>
+          </>
+        )}
 
-          {state === MakeAnOfferState.INSUFFICIENT_BALANCE && (
+        {state === MakeAnOfferState.INSUFFICIENT_BALANCE && (
+          <ModalBody padding={'32px'}>
             <NFTCustomError
               title={`Insufficient balance`}
               message={`You do not have enough ${formik.values.token.ticker} in your wallet!`}
             ></NFTCustomError>
-          )}
+          </ModalBody>
+        )}
 
-          {state === MakeAnOfferState.PROCESSING && (
+        {state === MakeAnOfferState.PROCESSING && (
+          <ModalBody padding={'32px'}>
             <Box>
               <Heading {...s.TitleStyle} mb={'20px'}>Making an offer...</Heading>
 
@@ -485,9 +491,11 @@ export const NFTMakeAnOfferPopup: React.FC = () => {
 
               <Loading my={'64px'} />
             </Box>
-          )}
+          </ModalBody>
+        )}
 
-          {state === MakeAnOfferState.APPROVAL && (
+        {state === MakeAnOfferState.APPROVAL && (
+          <ModalBody padding={'32px'}>
             <Box>
               <Heading {...s.TitleStyle} mb={'20px'}>Making an offer...</Heading>
 
@@ -508,9 +516,11 @@ export const NFTMakeAnOfferPopup: React.FC = () => {
               )}
 
             </Box>
-          )}
+          </ModalBody>
+        )}
 
-          {state === MakeAnOfferState.SUCCESS && (
+        {state === MakeAnOfferState.SUCCESS && (
+          <ModalBody padding={'56px 32px 32px'}>
             <Box>
               <Image src={SuccessIcon} w={'220px'} h={'165px'} m={'auto'} />
               <Heading {...s.TitleStyle} mt={'50px'} mb={'24px'}>Congratulations!</Heading>
@@ -550,8 +560,8 @@ export const NFTMakeAnOfferPopup: React.FC = () => {
                 onClick={close}
               >Close</Button>
             </Box>
-          )}
-        </ModalBody>
+          </ModalBody>
+        )}
       </ModalContent>
     </Modal>
   );
