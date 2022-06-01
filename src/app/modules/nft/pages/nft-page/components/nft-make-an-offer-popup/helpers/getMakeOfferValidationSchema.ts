@@ -1,9 +1,12 @@
 import * as Yup from 'yup';
 import { utils } from 'ethers';
 
-export const getMakeOfferValidationSchema = (validateRoyalties: boolean) => {
+export const getMakeOfferValidationSchema = (validateRoyalties: boolean, userBalance: number) => {
   return Yup.object().shape({
-    price: Yup.number().required('This field is required').moreThan(0),
+    price: Yup.number()
+      .required('This field is required')
+      .moreThan(0)
+      .max(userBalance, `Price must be less than or equal to ${userBalance}`),
     token: Yup.string().required('This field is required'),
     expireAt: Yup.date().typeError('This field is required').required('This field is required').min(new Date()),
     royalties: Yup.array()

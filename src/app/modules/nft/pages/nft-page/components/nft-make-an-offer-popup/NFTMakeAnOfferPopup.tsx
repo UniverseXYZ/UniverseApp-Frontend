@@ -31,13 +31,17 @@ import { BigNumber } from 'bignumber.js';
 import axios from 'axios';
 import { Contract, ethers, utils } from 'ethers';
 import { default as dayjs } from 'dayjs';
-import * as Yup from 'yup';
-import { TOKENS, TOKENS_MAP } from '../../../../../../constants';
-import { AmountSelector, DateTimePicker, Icon, Loading, TokenIcon } from '../../../../../../components';
-import { TokenTicker } from '../../../../../../enums';
+import {
+  AmountSelector,
+  DateTimePicker,
+  Icon,
+  Loading,
+  TokenBalanceInput,
+  TokenIcon,
+  FormControl as XYZFormControl
+} from '../../../../../../components';
 import { sign } from '../../../../../../helpers';
 
-import ArrowIcon from '../../../../../../../assets/images/arrow-down.svg';
 import SuccessIcon from '../../../../../../../assets/images/bid-submitted.png';
 import { GetSaltApi } from '../../../../../../api';
 import { OrderAssetClass } from '../../../../enums';
@@ -54,6 +58,9 @@ import { useNFTMakeOfferStore } from '../../../../../../../stores/nftMakeOfferSt
 import * as s from './NFTMakeAnOfferPopup.styles';
 import { IOrderAssetTypeSingleListing, NFTStandard } from '@app/modules/nft/types';
 import { getMakeOfferValidationSchema } from './helpers';
+import { AVAILABLE_TOKENS } from '@app/modules/nft/pages/nft-page/components/nft-make-an-offer-popup/constants';
+import { IToken } from '@app/types';
+import { TOKENS_MAP } from '@app/constants';
 
 // @ts-ignore
 const { contracts: contractsData } = Contracts[process.env.REACT_APP_NETWORK_CHAIN_ID];
@@ -77,12 +84,11 @@ export const NFTMakeAnOfferPopup: React.FC = () => {
   const { signer, web3Provider } = useAuthStore(s => ({signer: s.signer, web3Provider: s.web3Provider}));
   const { refetchOffers } = useNFTPageData();
 
+  const [userBalance, setUserBalance] = useState(0);
   const [state, setState] = useState<MakeAnOfferState>(MakeAnOfferState.FORM);
   const [tokenPrice, setTokenPrice] = useState(0);
   const [approveTx, setApproveTx] = useState<string>('');
   const [validateRoyalties, setValidateRoyalties] = useState(false);
-
-  const tokens = useMemo(() => TOKENS.filter((token) => ![TOKENS_MAP.ETH.ticker].includes(token.ticker)), []);
 
   const getPriceMutation = useMutation((coingeckoId: any) => {
     return axios.get(`https://api.coingecko.com/api/v3/simple/price?ids=${coingeckoId}&vs_currencies=usd`);
@@ -103,7 +109,7 @@ export const NFTMakeAnOfferPopup: React.FC = () => {
 
   type IMakeOfferFormValue = {
     price: string;
-    token: TokenTicker;
+    token: IToken;
     amount: number;
     expireAt: Date | null;
     royalties: Array<{
@@ -115,7 +121,7 @@ export const NFTMakeAnOfferPopup: React.FC = () => {
   const formik = useFormik<IMakeOfferFormValue>({
     initialValues: {
       price: '',
-      token: TOKENS_MAP.WETH.ticker,
+      token: TOKENS_MAP.WETH,
       amount: +(order?.make.value ?? 1),
       expireAt: threeDaysAway,
       royalties: [{
@@ -123,7 +129,7 @@ export const NFTMakeAnOfferPopup: React.FC = () => {
         percent: '',
       }],
     },
-    validationSchema: getMakeOfferValidationSchema(validateRoyalties),
+    validationSchema: getMakeOfferValidationSchema(validateRoyalties, userBalance),
     onSubmit: async (value) => {
       try {
         if (!signer || !web3Provider || !nft) {
@@ -136,10 +142,9 @@ export const NFTMakeAnOfferPopup: React.FC = () => {
 
         const salt = (await getSaltMutation.mutateAsync(address)).data.salt;
 
-        const paymentToken = TOKENS_MAP[value.token as TokenTicker];
-        const paymentPrice = utils.parseUnits(value.price, paymentToken.decimals);
+        const paymentPrice = utils.parseUnits(value.price, value.token.decimals);
 
-        const contract = new Contract(contractsData[paymentToken.contractName].address, contractsData[paymentToken.contractName].abi, signer);
+        const contract = new Contract(contractsData[value.token.contractName].address, contractsData[value.token.contractName].abi, signer);
         const balance = await contract.balanceOf(address);
 
         if (paymentPrice.gt(balance)) {
@@ -153,7 +158,7 @@ export const NFTMakeAnOfferPopup: React.FC = () => {
           make: {
             assetType: {
               assetClass: OrderAssetClass.ERC20,
-              contract: contractsData[paymentToken.contractName].address
+              contract: contractsData[value.token.contractName].address
             },
             value: paymentPrice.toString(),
           },
@@ -256,11 +261,10 @@ export const NFTMakeAnOfferPopup: React.FC = () => {
     return new BigNumber(totalPrice * tokenPrice).toFixed(2);
   }, [formik, totalPrice]);
 
-  const handlePriceChange = useCallback((event: React.FormEvent<HTMLInputElement>) => {
-    const value = event.currentTarget.value;
+  const handlePriceChange = useCallback((value) => {
     const validPrice = Number(value) > -1 && value.length < 21;
-    if(validPrice) {
-      formik.handleChange(event);
+    if (validPrice) {
+      formik.setFieldValue('price', value);
     }
   }, [formik]);
 
@@ -272,9 +276,8 @@ export const NFTMakeAnOfferPopup: React.FC = () => {
 
   useEffect(()=> {
     const loadPrice = async () => {
-      const token = formik.values.token as TokenTicker;
-      const response = (await getPriceMutation.mutateAsync(TOKENS_MAP[token].coingeckoId)).data
-      setTokenPrice(response[TOKENS_MAP[token].coingeckoId]['usd']);
+      const response = (await getPriceMutation.mutateAsync(formik.values.token.coingeckoId)).data
+      setTokenPrice(response[formik.values.token.coingeckoId]['usd']);
     }
     loadPrice();
   },[formik.values.token])
@@ -298,7 +301,7 @@ export const NFTMakeAnOfferPopup: React.FC = () => {
   }, [formik.values.royalties]);
 
   return (
-    <Modal isCentered isOpen={isOpen} onClose={close} closeOnEsc={false} closeOnOverlayClick={false}>
+    <Modal isOpen={isOpen} onClose={close} closeOnEsc={false} closeOnOverlayClick={false}>
       <ModalOverlay />
       <ModalContent maxW={'480px'}>
         <ModalCloseButton />
@@ -309,46 +312,27 @@ export const NFTMakeAnOfferPopup: React.FC = () => {
                 <Heading {...s.TitleStyle} mb={'40px'}>Make an offer</Heading>
 
                 <VStack spacing={'24px'} alignItems={'flex-start'}>
-                  <FormControl isInvalid={!!(formik.touched.price && formik.errors.price)}>
-                    <FormLabel>Price</FormLabel>
-                    {/*TODO: improve currency select & currency input components */}
-                    <InputGroup>
-                      <InputLeftElement w={'fit-content'}>
-                        <Menu>
-                          <MenuButton as={Button} size={'sm'} {...s.CurrencyMenuButtonStyle} ref={tokensBtnRef}>
-                            <Image src={TOKENS_MAP[formik.values.token].icons[0]} />
-                            {TOKENS_MAP[formik.values.token].ticker}
-                            <Image src={ArrowIcon} />
-                          </MenuButton>
-                          <MenuList minWidth={'100px'} p={'8px'} position={'relative'} zIndex={3}>
-                            {tokens.map((TOKEN) => (
-                              <MenuItem
-                                key={TOKEN.ticker}
-                                {...s.CurrencyItemStyle}
-                                onClick={() => formik.setFieldValue('token', TOKEN.ticker)}
-                              >
-                                <Image src={TOKEN.icons[0]} />
-                                {TOKEN.ticker}
-                              </MenuItem>
-                            ))}
-                          </MenuList>
-                        </Menu>
-                      </InputLeftElement>
-                      <Input
-                        type={'text'}
-                        placeholder={'Amount'}
-                        name={'price'}
-                        value={formik.values.price}
-                        pl={`${(tokensBtnRef.current?.clientWidth ?? 0) + (2 * 8)}px`}
-                        onChange={(event) => handlePriceChange(event)}
-                        onBlur={formik.handleBlur}
-                      />
-                      <InputRightAddon>
-                        $ {!formik.values.price ? '0.00' : (new BigNumber(+formik.values.price * tokenPrice).toFixed(2))}
-                      </InputRightAddon>
-                    </InputGroup>
-                    <FormErrorMessage>{formik.errors.price}</FormErrorMessage>
-                  </FormControl>
+                  <XYZFormControl
+                    isInvalid={!!(formik.touched.price && formik.errors.price)}
+                    label={isERC1155 ? 'Price per item' : 'Price'}
+                    error={formik.errors.price}
+                  >
+                    <TokenBalanceInput
+                      type={'text'}
+                      placeholder={'Amount'}
+
+                      name={'price'}
+                      value={formik.values.price}
+                      onChange={handlePriceChange}
+                      onBlur={formik.handleBlur}
+
+                      availableTokens={AVAILABLE_TOKENS}
+                      token={formik.values.token}
+                      onTokenChange={(token) => formik.setFieldValue('token', token)}
+
+                      onBalanceLoaded={(balance) => setUserBalance(balance)}
+                    />
+                  </XYZFormControl>
 
                   {isERC1155 && (
                     <FormControl>
@@ -463,7 +447,7 @@ export const NFTMakeAnOfferPopup: React.FC = () => {
                       <Text {...s.TotalLabel}>Total</Text>
                       <VStack spacing={0} alignItems={'flex-end'}>
                         <HStack spacing={'4px'}>
-                          <TokenIcon ticker={TokenTicker.ETH} boxSize={'18px'} />
+                          <TokenIcon ticker={formik.values.token.ticker} boxSize={'18px'} />
                           <Text {...s.TotalPrice}>{totalPrice}</Text>
                         </HStack>
                         <Text {...s.TotalPriceUSD}>${totalPriceUSD}</Text>
@@ -487,7 +471,7 @@ export const NFTMakeAnOfferPopup: React.FC = () => {
           {state === MakeAnOfferState.INSUFFICIENT_BALANCE && (
             <NFTCustomError
               title={`Insufficient balance`}
-              message={`You do not have enough ${TOKENS_MAP[formik.values.token].ticker} in your wallet!`}
+              message={`You do not have enough ${formik.values.token.ticker} in your wallet!`}
             ></NFTCustomError>
           )}
 
@@ -543,7 +527,7 @@ export const NFTMakeAnOfferPopup: React.FC = () => {
               >
                 You have successfully made an offer for
                 <TokenIcon
-                  ticker={formik.values.token}
+                  ticker={formik.values.token.ticker}
                   display={'inline-block'}
                   size={18}
                   ml={'8px'}

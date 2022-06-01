@@ -1,0 +1,32 @@
+.Wrapper {
+  position: relative;
+}
+
+.BalanceWrapper {
+  border-top: 1px solid #E5E5E5;
+  bottom: 0;
+  color: #00000066;
+  font-size: 12px;
+  font-weight: 500;
+  left: 1px;
+  padding: 8px 16px;
+  position: absolute;
+  width: calc(100% - 2px);
+  z-index: 1;
+}
+
+.Max {
+  color: black;
+  cursor: pointer;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.TokenDropdownWrapper {
+  position: absolute;
+  top: 12px;
+  right: 16px;
+  z-index: 5;
+}

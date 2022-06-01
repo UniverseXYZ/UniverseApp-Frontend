@@ -7,6 +7,9 @@ import { ReactComponent as EyeSVG } from '@assets/icons/eye.svg';
 import { ReactComponent as LabelSVG } from '@assets/icons/label.svg';
 import { ReactComponent as SettingsSVG } from '@assets/icons/settings.svg';
 import { ReactComponent as TrashSVG } from '@assets/icons/trash.svg';
+import { ReactComponent as DownSVG } from '@assets/icons/down.svg';
+import { ReactComponent as InfoSVG } from '@assets/icons/info.svg';
+import { ReactComponent as CheckSVG } from '@assets/icons/check.svg';
 
 type Icons =
   | 'plus'
@@ -15,6 +18,9 @@ type Icons =
   | 'label'
   | 'settings'
   | 'trash'
+  | 'down'
+  | 'info'
+  | 'check'
 ;
 
 const icons: Record<Icons, React.FC> = {
@@ -24,6 +30,9 @@ const icons: Record<Icons, React.FC> = {
   label: LabelSVG,
   settings: SettingsSVG,
   trash: TrashSVG,
+  down: DownSVG,
+  info: InfoSVG,
+  check: CheckSVG,
 };
 
 interface IIconProps extends BoxProps {
