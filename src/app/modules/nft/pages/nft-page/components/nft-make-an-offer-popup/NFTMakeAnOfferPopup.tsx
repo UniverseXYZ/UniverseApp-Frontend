@@ -1,6 +1,7 @@
 import {
   Box,
   Button,
+  Center,
   FormControl,
   FormErrorMessage,
   FormLabel,
@@ -24,7 +25,7 @@ import {
   VStack,
 } from '@chakra-ui/react';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { useFormik } from 'formik';
+import { FieldArray, FormikErrors, FormikProvider, useFormik } from 'formik';
 import { useMutation } from 'react-query';
 import { BigNumber } from 'bignumber.js';
 import axios from 'axios';
@@ -32,7 +33,7 @@ import { Contract, ethers, utils } from 'ethers';
 import { default as dayjs } from 'dayjs';
 import * as Yup from 'yup';
 import { TOKENS, TOKENS_MAP } from '../../../../../../constants';
-import { AmountSelector, DateTimePicker, Loading, TokenIcon } from '../../../../../../components';
+import { AmountSelector, DateTimePicker, Icon, Loading, TokenIcon } from '../../../../../../components';
 import { TokenTicker } from '../../../../../../enums';
 import { sign } from '../../../../../../helpers';
 
@@ -51,7 +52,8 @@ import { useAuthStore } from '../../../../../../../stores/authStore';
 import { useErrorStore } from '../../../../../../../stores/errorStore';
 import { useNFTMakeOfferStore } from '../../../../../../../stores/nftMakeOfferStore';
 import * as s from './NFTMakeAnOfferPopup.styles';
-import { IOrderAssetTypeSingleListing } from '@app/modules/nft/types';
+import { IOrderAssetTypeSingleListing, NFTStandard } from '@app/modules/nft/types';
+import { getMakeOfferValidationSchema } from './helpers';
 
 // @ts-ignore
 const { contracts: contractsData } = Contracts[process.env.REACT_APP_NETWORK_CHAIN_ID];
@@ -63,12 +65,6 @@ export enum MakeAnOfferState {
   APPROVAL,
   SUCCESS,
 }
-
-export const NFTMakeAnOfferValidationSchema = Yup.object().shape({
-  price: Yup.number().required('This field is required').moreThan(0),
-  token: Yup.string().required('This field is required'),
-  expireAt: Yup.date().typeError('This field is required').required('This field is required').min(new Date()),
-});
 
 
 export const NFTMakeAnOfferPopup: React.FC = () => {
@@ -83,7 +79,8 @@ export const NFTMakeAnOfferPopup: React.FC = () => {
 
   const [state, setState] = useState<MakeAnOfferState>(MakeAnOfferState.FORM);
   const [tokenPrice, setTokenPrice] = useState(0);
-  const [approveTx, setApproveTx] = useState<string>('')
+  const [approveTx, setApproveTx] = useState<string>('');
+  const [validateRoyalties, setValidateRoyalties] = useState(false);
 
   const tokens = useMemo(() => TOKENS.filter((token) => ![TOKENS_MAP.ETH.ticker].includes(token.ticker)), []);
 
@@ -109,6 +106,10 @@ export const NFTMakeAnOfferPopup: React.FC = () => {
     token: TokenTicker;
     amount: number;
     expireAt: Date | null;
+    royalties: Array<{
+      address: string;
+      percent: string;
+    }>;
   };
 
   const formik = useFormik<IMakeOfferFormValue>({
@@ -117,8 +118,12 @@ export const NFTMakeAnOfferPopup: React.FC = () => {
       token: TOKENS_MAP.WETH.ticker,
       amount: +(order?.make.value ?? 1),
       expireAt: threeDaysAway,
+      royalties: [{
+        address: '',
+        percent: '',
+      }],
     },
-    validationSchema: NFTMakeAnOfferValidationSchema,
+    validationSchema: getMakeOfferValidationSchema(validateRoyalties),
     onSubmit: async (value) => {
       try {
         if (!signer || !web3Provider || !nft) {
@@ -145,7 +150,6 @@ export const NFTMakeAnOfferPopup: React.FC = () => {
         let offerData = {
           type: 'UNIVERSE_V1',
           maker: address,
-          taker: ethers.constants.AddressZero,
           make: {
             assetType: {
               assetClass: OrderAssetClass.ERC20,
@@ -153,6 +157,7 @@ export const NFTMakeAnOfferPopup: React.FC = () => {
             },
             value: paymentPrice.toString(),
           },
+          taker: ethers.constants.AddressZero,
           take: {
             ...(order?.make ?? {}),
             value: `${formik.values.amount}`,
@@ -160,14 +165,19 @@ export const NFTMakeAnOfferPopup: React.FC = () => {
           salt: salt,
           start: 0,
           end: Math.floor((value.expireAt as Date).getTime() / 1000),
-          data: order?.data,
+          data: {
+            dataType: 'ORDER_DATA',
+            revenueSplits: value.royalties?.map((r) => ({
+              account: r.address,
+              value: +r.percent,
+            })) ?? []
+          },
         };
 
         // Add taker info, in case the NFT is not listed
         if (!order) {
           offerData = {
             ...offerData,
-            taker: ethers.constants.AddressZero,
             take: {
               value: `${formik.values.amount}`,
               assetType: {
@@ -176,10 +186,6 @@ export const NFTMakeAnOfferPopup: React.FC = () => {
                 tokenId: +nft.tokenId,
               },
             },
-            data: {
-              dataType: "ORDER_DATA",
-              revenueSplits: []
-             }
           }
         }
 
@@ -235,11 +241,11 @@ export const NFTMakeAnOfferPopup: React.FC = () => {
   });
 
   const isERC1155 = useMemo(() => {
-    switch (order?.make.assetType.assetClass) {
-      case OrderAssetClass.ERC1155: return true;
+    switch (nft?.standard) {
+      case NFTStandard.ERC1155: return true;
       default: return false;
     }
-  }, [order]);
+  }, [nft]);
 
   const totalPrice = useMemo(() => {
     const { price, amount } = formik.values;
@@ -258,6 +264,12 @@ export const NFTMakeAnOfferPopup: React.FC = () => {
     }
   }, [formik]);
 
+  type IRoyaltyKey = keyof IMakeOfferFormValue["royalties"][number];
+
+  const getRoyaltyError = useCallback((i: number, prop: IRoyaltyKey) => {
+    return (formik.errors.royalties?.[i] as FormikErrors<Partial<Record<IRoyaltyKey, string>>>)?.[prop] ?? '';
+  }, [formik]);
+
   useEffect(()=> {
     const loadPrice = async () => {
       const token = formik.values.token as TokenTicker;
@@ -273,6 +285,18 @@ export const NFTMakeAnOfferPopup: React.FC = () => {
     setState(MakeAnOfferState.FORM);
   }, [isOpen]);
 
+  useEffect(() => {
+    if (!formik.values.royalties) {
+      return;
+    }
+
+    if (formik.values.royalties.length > 1) {
+      setValidateRoyalties(true);
+    } else {
+      setValidateRoyalties(formik.values.royalties.some((r) => !!r.address || !!r.percent));
+    }
+  }, [formik.values.royalties]);
+
   return (
     <Modal isCentered isOpen={isOpen} onClose={close} closeOnEsc={false} closeOnOverlayClick={false}>
       <ModalOverlay />
@@ -281,101 +305,182 @@ export const NFTMakeAnOfferPopup: React.FC = () => {
         <ModalBody pt={'40px !important'}>
           {state === MakeAnOfferState.FORM && (
             <Box>
-              <Heading {...s.TitleStyle} mb={'40px'}>Make an offer</Heading>
+              <FormikProvider value={formik}>
+                <Heading {...s.TitleStyle} mb={'40px'}>Make an offer</Heading>
 
-              <VStack spacing={'24px'} alignItems={'flex-start'}>
-                <FormControl isInvalid={!!(formik.touched.price && formik.errors.price)}>
-                  <FormLabel>Price</FormLabel>
-                  {/*TODO: improve currency select & currency input components */}
-                  <InputGroup>
-                    <InputLeftElement w={'fit-content'}>
-                      <Menu>
-                        <MenuButton as={Button} size={'sm'} {...s.CurrencyMenuButtonStyle} ref={tokensBtnRef}>
-                          <Image src={TOKENS_MAP[formik.values.token].icons[0]} />
-                          {TOKENS_MAP[formik.values.token].ticker}
-                          <Image src={ArrowIcon} />
-                        </MenuButton>
-                        <MenuList minWidth={'100px'} p={'8px'} position={'relative'} zIndex={3}>
-                          {tokens.map((TOKEN) => (
-                            <MenuItem
-                              key={TOKEN.ticker}
-                              {...s.CurrencyItemStyle}
-                              onClick={() => formik.setFieldValue('token', TOKEN.ticker)}
-                            >
-                              <Image src={TOKEN.icons[0]} />
-                              {TOKEN.ticker}
-                            </MenuItem>
-                          ))}
-                        </MenuList>
-                      </Menu>
-                    </InputLeftElement>
-                    <Input
-                      type={'text'}
-                      placeholder={'Amount'}
-                      name={'price'}
-                      value={formik.values.price}
-                      pl={`${(tokensBtnRef.current?.clientWidth ?? 0) + (2 * 8)}px`}
-                      onChange={(event) => handlePriceChange(event)}
-                      onBlur={formik.handleBlur}
-                    />
-                    <InputRightAddon>
-                      $ {!formik.values.price ? '0.00' : (new BigNumber(+formik.values.price * tokenPrice).toFixed(2))}
-                    </InputRightAddon>
-                  </InputGroup>
-                  <FormErrorMessage>{formik.errors.price}</FormErrorMessage>
-                </FormControl>
-
-                {isERC1155 && (
-                  <FormControl>
-                    <HStack spacing={0} justifyContent={'space-between'} w={'100%'}>
-                      <FormLabel>Amount</FormLabel>
-                      <AmountSelector
-                        size={'sm'}
-                        options={{
-                          value: formik.values.amount,
-                          min: 1,
-                          max: +(order?.make.value ?? 1),
-                          onChange: (_, value) => formik.setFieldValue('amount', value),
-                        }}
+                <VStack spacing={'24px'} alignItems={'flex-start'}>
+                  <FormControl isInvalid={!!(formik.touched.price && formik.errors.price)}>
+                    <FormLabel>Price</FormLabel>
+                    {/*TODO: improve currency select & currency input components */}
+                    <InputGroup>
+                      <InputLeftElement w={'fit-content'}>
+                        <Menu>
+                          <MenuButton as={Button} size={'sm'} {...s.CurrencyMenuButtonStyle} ref={tokensBtnRef}>
+                            <Image src={TOKENS_MAP[formik.values.token].icons[0]} />
+                            {TOKENS_MAP[formik.values.token].ticker}
+                            <Image src={ArrowIcon} />
+                          </MenuButton>
+                          <MenuList minWidth={'100px'} p={'8px'} position={'relative'} zIndex={3}>
+                            {tokens.map((TOKEN) => (
+                              <MenuItem
+                                key={TOKEN.ticker}
+                                {...s.CurrencyItemStyle}
+                                onClick={() => formik.setFieldValue('token', TOKEN.ticker)}
+                              >
+                                <Image src={TOKEN.icons[0]} />
+                                {TOKEN.ticker}
+                              </MenuItem>
+                            ))}
+                          </MenuList>
+                        </Menu>
+                      </InputLeftElement>
+                      <Input
+                        type={'text'}
+                        placeholder={'Amount'}
+                        name={'price'}
+                        value={formik.values.price}
+                        pl={`${(tokensBtnRef.current?.clientWidth ?? 0) + (2 * 8)}px`}
+                        onChange={(event) => handlePriceChange(event)}
+                        onBlur={formik.handleBlur}
                       />
-                    </HStack>
+                      <InputRightAddon>
+                        $ {!formik.values.price ? '0.00' : (new BigNumber(+formik.values.price * tokenPrice).toFixed(2))}
+                      </InputRightAddon>
+                    </InputGroup>
+                    <FormErrorMessage>{formik.errors.price}</FormErrorMessage>
                   </FormControl>
-                )}
 
-                <FormControl mb={'40px'} isInvalid={!!(formik.touched.expireAt && formik.errors.expireAt)}>
-                  <FormLabel>Offer Expiration</FormLabel>
-                  <DateTimePicker
-                    value={formik.values.expireAt}
-                    modalName={'Offer Expiration'}
-                    onChange={(date) => formik.setFieldValue('expireAt', date)}
-                    onClose={() => formik.setFieldTouched('expireAt', true)}
-                    minDate={dayjs().toDate()}
-                  />
-                  <FormErrorMessage>{formik.errors.expireAt}</FormErrorMessage>
-                </FormControl>
-
-                {isERC1155 && (
-                  <HStack spacing={0} justifyContent={'space-between'} w={'100%'}>
-                    <Text {...s.TotalLabel}>Total</Text>
-                    <VStack spacing={0} alignItems={'flex-end'}>
-                      <HStack spacing={'4px'}>
-                        <TokenIcon ticker={TokenTicker.ETH} boxSize={'18px'} />
-                        <Text {...s.TotalPrice}>{totalPrice}</Text>
+                  {isERC1155 && (
+                    <FormControl>
+                      <HStack spacing={0} justifyContent={'space-between'} w={'100%'}>
+                        <FormLabel>Amount</FormLabel>
+                        <AmountSelector
+                          size={'sm'}
+                          options={{
+                            value: formik.values.amount,
+                            min: 1,
+                            max: +(order?.make.value ?? 1),
+                            onChange: (_, value) => formik.setFieldValue('amount', value),
+                          }}
+                        />
                       </HStack>
-                      <Text {...s.TotalPriceUSD}>${totalPriceUSD}</Text>
-                    </VStack>
-                  </HStack>
-                )}
-              </VStack>
+                    </FormControl>
+                  )}
 
-              <Box {...s.ButtonsContainerStyle}>
-                <Button
-                  boxShadow={'lg'}
-                  disabled={!formik.isValid}
-                  onClick={() => formik.submitForm()}
-                >Make an Offer</Button>
-                {/*<Button variant={'outline'}>Convert ETH</Button>*/}
-              </Box>
+                  <FormControl mb={'40px'} isInvalid={!!(formik.touched.expireAt && formik.errors.expireAt)}>
+                    <FormLabel>Offer Expiration</FormLabel>
+                    <DateTimePicker
+                      value={formik.values.expireAt}
+                      modalName={'Offer Expiration'}
+                      onChange={(date) => formik.setFieldValue('expireAt', date)}
+                      onClose={() => formik.setFieldTouched('expireAt', true)}
+                      minDate={dayjs().toDate()}
+                    />
+                    <FormErrorMessage>{formik.errors.expireAt}</FormErrorMessage>
+                  </FormControl>
+
+                  <FormControl mb={'40px'} isInvalid={!!(formik.touched.expireAt && formik.errors.expireAt)}>
+                    <FormLabel>Royalty Splits</FormLabel>
+                    <FieldArray
+                      name="royalties"
+                      render={(arrayHelpers) => (
+                        <>
+                          <VStack spacing={'8px'} w={'100%'}>
+                            {formik.values.royalties.map((royalty, i) => (
+                              <HStack key={i} spacing={'8px'} w={'100%'} alignItems={'flex-start'}>
+                                <FormControl
+                                  isInvalid={!!(
+                                    formik.touched.royalties?.[i] &&
+                                    !!getRoyaltyError(i, 'address')
+                                  )}
+                                >
+                                  <Input
+                                    placeholder={'Enter wallet address'}
+                                    name={`royalties.${i}.address`}
+                                    value={royalty.address}
+                                    onChange={formik.handleChange}
+                                    onBlur={formik.handleBlur}
+                                  />
+                                  <FormErrorMessage>{getRoyaltyError(i, 'address')}</FormErrorMessage>
+                                </FormControl>
+                                <FormControl
+                                  w={'auto'}
+                                  isInvalid={!!(
+                                    formik.touched.royalties?.[i] &&
+                                    !!getRoyaltyError(i, 'percent')
+                                  )}
+                                >
+                                  <Input
+                                    placeholder={'0%'}
+                                    maxW={'128px'}
+                                    name={`royalties.${i}.percent`}
+                                    value={royalty.percent}
+                                    onChange={formik.handleChange}
+                                    onBlur={formik.handleBlur}
+                                  />
+                                  <FormErrorMessage>{getRoyaltyError(i, 'percent')}</FormErrorMessage>
+                                </FormControl>
+                                {formik.values.royalties.length > 1 && (
+                                  <Button
+                                    variant={'simpleOutline'}
+                                    {...s.RoyaltyRemoveButton}
+                                    onClick={() => arrayHelpers.remove(i)}
+                                  >
+                                    <Icon name={'trash'} flex={1} />
+                                  </Button>
+                                )}
+                              </HStack>
+                            ))}
+                          </VStack>
+
+                          <FormControl isInvalid={typeof formik.errors.royalties === 'string'}>
+                            <FormErrorMessage>{formik.errors.royalties}</FormErrorMessage>
+                          </FormControl>
+
+                          {formik.values.royalties.length < 5 && (
+                            <HStack spacing={'10px'} mt={'24px'}>
+                              <Center {...s.RoyaltyAddButtonIconWrapper}>
+                                <Icon name={'plus'} viewBox={'0 0 20 20'} boxSize={'12px'} />
+                              </Center>
+                              <Text
+                                {...s.RoyaltyAddButtonText}
+                                onClick={() => arrayHelpers.push({
+                                  address: '',
+                                  percent: '',
+                                })}
+                              >
+                                Add Wallet
+                              </Text>
+                            </HStack>
+                          )}
+                        </>
+                      )}
+                    />
+                  </FormControl>
+
+                  {isERC1155 && (
+                    <HStack spacing={0} justifyContent={'space-between'} w={'100%'}>
+                      <Text {...s.TotalLabel}>Total</Text>
+                      <VStack spacing={0} alignItems={'flex-end'}>
+                        <HStack spacing={'4px'}>
+                          <TokenIcon ticker={TokenTicker.ETH} boxSize={'18px'} />
+                          <Text {...s.TotalPrice}>{totalPrice}</Text>
+                        </HStack>
+                        <Text {...s.TotalPriceUSD}>${totalPriceUSD}</Text>
+                      </VStack>
+                    </HStack>
+                  )}
+                </VStack>
+
+                <Box {...s.ButtonsContainerStyle}>
+                  <Button
+                    boxShadow={'lg'}
+                    disabled={!formik.isValid}
+                    onClick={() => formik.submitForm()}
+                  >Make an Offer</Button>
+                  {/*<Button variant={'outline'}>Convert ETH</Button>*/}
+                </Box>
+              </FormikProvider>
             </Box>
           )}
 

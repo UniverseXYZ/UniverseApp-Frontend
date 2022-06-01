@@ -260,7 +260,7 @@ export const NFTBuySection = (props: INFTBuySectionProps) => {
               </Button>
               <Button
                 variant={"outline"}
-                onClick={() => NFT && order && makeOffer(NFT, order)}
+                onClick={() => NFT && makeOffer(NFT, undefined)}
               >
                 Make offer
               </Button>
@@ -316,7 +316,7 @@ export const NFTBuySection = (props: INFTBuySectionProps) => {
             <SimpleGrid columns={1} spacingX={"12px"}>
               <Button
                 variant={"outline"}
-                onClick={() => NFT && order && makeOffer(NFT, order)}
+                onClick={() => NFT && makeOffer(NFT, undefined)}
               >
                 Make offer
               </Button>

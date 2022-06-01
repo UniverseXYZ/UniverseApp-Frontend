@@ -6,5 +6,5 @@ export interface IBaseForm {
   royalties: Array<{
     address: string;
     percent: string;
-  }>
+  }>;
 }

@@ -17,7 +17,7 @@ type INFTMakeOfferStore = {
   NFT?: INFT,
   order?: IMakeOfferOrder,
 
-  makeOffer: (NFT: INFT, order: IMakeOfferOrder) => void;
+  makeOffer: (NFT: INFT, order?: IMakeOfferOrder) => void;
   close: () => void;
 }
 
@@ -26,7 +26,7 @@ export const useNFTMakeOfferStore = create<INFTMakeOfferStore>((set, get) => ({
   NFT: undefined,
   order: undefined,
 
-  makeOffer: (NFT, order) => {
+  makeOffer: (NFT, order?) => {
     set(state => ({
       ...state,
       isOpen: true,
