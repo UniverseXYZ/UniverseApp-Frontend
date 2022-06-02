@@ -1,10 +1,8 @@
-import { Box, Image, SimpleGrid, Text } from '@chakra-ui/react';
+import { Box, SimpleGrid, Text } from '@chakra-ui/react';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useFormik } from 'formik';
 
-import NFTTypeIcon from '../../../../assets/images/v2/marketplace/filter-nft-type.svg';
-
-import { Checkbox, Dropdown, DropdownFilterContainer } from '../../../components';
+import { Checkbox, Dropdown, DropdownFilterContainer, Icon } from '../../../components';
 import { NftTypeFilterOptions } from './constants';
 import { INFTTypeFilterProps, INftTypeFilterValue } from './types';
 
@@ -108,7 +106,7 @@ export const NFTTypeFilterDropdown = (props: INFTTypeFilterDropdownProps) => {
     <Dropdown
       label={'NFT type'}
       value={valueLabel}
-      buttonProps={{ leftIcon: <Image src={NFTTypeIcon} /> }}
+      buttonProps={{ leftIcon: <Icon name={'filterNftType'} /> }}
       isOpened={isOpened}
       onOpen={() => setIsOpened(true)}
       onClose={() => {

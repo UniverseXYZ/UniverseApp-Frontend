@@ -6,6 +6,7 @@ import {
   AccordionPanel,
   Box,
   Button,
+  HStack,
   Image,
   Modal,
   ModalBody,
@@ -19,6 +20,8 @@ import {
 import { FormikProps } from 'formik';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useMedia } from 'react-use';
+
+import { Icon, Icons } from '@app/components';
 
 import FilterIcon from '../../../assets/images/marketplace/filters2.svg';
 import CloseIcon from '../../../assets/images/close-menu.svg';
@@ -35,7 +38,7 @@ export interface IFiltersPopupProps {
   mobileFilters: Array<{
     name: string;
     form: FormikProps<any>;
-    icon: string;
+    icon: Icons;
     visible?: boolean;
     renderFilter: (props: { value: any, onChange: (value: any) => void }) => React.ReactNode;
   }>;
@@ -128,10 +131,10 @@ export const FiltersPopup = (props: IFiltersPopupProps) => {
                 {mobileFilters.map(({ renderFilter, visible = true, ...filter }, i) => !visible ? null :(
                   <AccordionItem key={i} {...styles.AccordionItem}>
                     <AccordionButton {...styles.AccordionButton} onClick={handleToggleAccordionItem}>
-                      <Box flex='1' textAlign='left'>
-                        <Image src={filter.icon} {...styles.AccordionButtonImage} />
-                        {filter.name}
-                      </Box>
+                      <HStack spacing={'8px'} flex={1} textAlign='left'>
+                        <Icon name={filter.icon} />
+                        <Box as={'span'}>{filter.name}</Box>
+                      </HStack>
                       <AccordionIcon display={{ base: 'inline-block', md: 'none' }} />
                     </AccordionButton>
                     <AccordionPanel p={'0 0 30px 0'}>

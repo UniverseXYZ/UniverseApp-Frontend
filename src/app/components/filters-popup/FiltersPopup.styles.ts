@@ -1,5 +1,6 @@
 import {
-  AccordionButtonProps, AccordionItemProps,
+  AccordionButtonProps,
+  AccordionItemProps,
   BoxProps,
   ButtonProps,
   ImageProps, ModalBodyProps,
@@ -96,11 +97,4 @@ export const AccordionButton: AccordionButtonProps = {
   _focus: {
     boxShadow: 'none',
   },
-};
-
-export const AccordionButtonImage: ImageProps = {
-  display: 'inline-block',
-  pos: 'relative',
-  top: '-1px',
-  mr: '8px',
 };

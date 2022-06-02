@@ -4,13 +4,6 @@ import { Box, Flex } from '@chakra-ui/react';
 // Styles
 // import './SearchFilters.scss';
 
-// Icons
-import filtersIcon from '../../../../../../../../assets/images/marketplace/filters.svg';
-import SaleTypeIcon from '../../../../../../../../assets/images/v2/marketplace/filter-sale-type.svg';
-import NFTTypeIcon from '../../../../../../../../assets/images/v2/marketplace/filter-nft-type.svg';
-import PriceRangeIcon from '../../../../../../../../assets/images/v2/marketplace/filter-price-range.svg';
-import CollectionsIcon from '../../../../../../../../assets/images/v2/marketplace/filter-collections.svg';
-
 // Contexts
 import { useFiltersContext } from '../search-filters.context';
 
@@ -30,7 +23,7 @@ import {
   CollectionsFilter,
   ClearAllButton,
 } from '../../../../../../../components/filters';
-import { FiltersPopup } from '../../../../../../../components';
+import { FiltersPopup, Icon } from '../../../../../../../components';
 
 interface ISearchFiltersProps {
   onFilterChanges?: (values: {
@@ -134,7 +127,7 @@ export const SearchFilters = (props: ISearchFiltersProps) => {
               {getSelectedFiltersCount()}
             </div>
           ) : (
-            <img src={filtersIcon} alt="Filter" />
+            <Icon name={'filters'} mr={'10px'} />
           )}
           Filters
         </div>
@@ -144,28 +137,28 @@ export const SearchFilters = (props: ISearchFiltersProps) => {
               name: 'Sale type',
               form: saleTypeForm,
               visible: showSaleTypeFilters,
-              icon: SaleTypeIcon,
+              icon: 'filterSaleType',
               renderFilter: (props) => <SaleTypeFilter {...props} />
             },
             {
               name: 'NFT type',
               form: nftTypeForm,
               visible: showNFTTypeFilters,
-              icon: NFTTypeIcon,
+              icon: 'filterNftType',
               renderFilter: (props) => <NFTTypeFilter {...props} />
             },
             {
               name: 'Price range',
               form: priceRangeForm,
               visible: showPriceRangeFilters,
-              icon: PriceRangeIcon,
+              icon: 'filterPriceRange',
               renderFilter: (props) => <PriceRangeFilter {...props} />
             },
             {
               name: 'Collections',
               form: collectionFilterForm,
               visible: showCollectionFilters,
-              icon: CollectionsIcon,
+              icon: 'filterCollection',
               renderFilter: (props) => <CollectionsFilter {...props} items={userCollections} />
             },
           ]}

@@ -7,9 +7,6 @@ import { useIntersection, useMeasure, useSearchParam } from 'react-use';
 // Assets
 import OpenGraphImage from '@assets/images/open-graph/marketplace.png';
 import ArrowDownIcon from '@assets/images/arrow-down.svg';
-import NFTTypeIcon from '@assets/images/v2/marketplace/filter-nft-type.svg';
-import PriceRangeIcon from '@assets/images/v2/marketplace/filter-price-range.svg';
-import SaleTypeIcon from '@assets/images/v2/marketplace/filter-sale-type.svg';
 import { ReactComponent as GridSMIcon } from '@assets/images/grid-sm.svg';
 import { ReactComponent as GridLGIcon } from '@assets/images/grid-lg.svg';
 
@@ -373,19 +370,19 @@ export const BrowseNFTsPage = () => {
             {
               name: "Sale type",
               form: saleTypeFilterForm,
-              icon: SaleTypeIcon,
+              icon: "filterSaleType",
               renderFilter: (props) => <SaleTypeFilter {...props} />,
             },
             {
               name: "NFT Type",
               form: nftTypeFilterForm,
-              icon: NFTTypeIcon,
+              icon: "filterNftType",
               renderFilter: (props) => <NFTTypeFilter {...props} />,
             },
             {
               name: "Price range",
               form: priceRangeFilterForm,
-              icon: PriceRangeIcon,
+              icon: "filterPriceRange",
               renderFilter: (props) => <PriceRangeFilter {...props} />,
             },
           ]}
