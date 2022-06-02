@@ -203,15 +203,7 @@ export const TokenBalanceInput: React.FC<ITokenBalanceInputProps> = (props) => {
       </Box>
 
       {(tokenPriceUSD && rest.value) && (
-        <Box sx={{
-          color: '#00000066',
-          fontSize: '12px',
-          fontWeight: 400,
-          pos: 'absolute',
-          padding: '0 16px',
-          bottom: '44px',
-          zIndex: 3,
-        }}>
+        <Box className={scss.TokenPriceUSD}>
           ≈ ${(tokenPriceUSD * +rest.value).toFixed(2)}
         </Box>
       )}

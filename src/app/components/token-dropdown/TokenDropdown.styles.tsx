@@ -54,14 +54,28 @@ export const MenuButton: MenuButtonProps = {
   },
 
   _disabled: {
-    background: 'transparent !important',
-    border: '1px solid rgba(0, 0, 0, 0.2)',
+    background: 'rgba(0, 0, 0, 0.02)',
     boxShadow: 'none !important',
-    color: 'rgba(0, 0, 0, 0.6) !important',
+    color: 'rgba(0, 0, 0, 0.2) !important',
+    cursor: 'not-allowed',
     transform: 'scale(1) !important',
+
     _before: {
-      display: 'none',
-    }
+      bg: 'rgba(0, 0, 0, 0.1)',
+    },
+
+    '[data-icon]': {
+      opacity: 0.4,
+    },
+
+    _hover: {
+      _before: {
+        bg: 'rgba(0, 0, 0, 0.1)',
+      },
+      '[data-arrow]': {
+        transform: 'rotate(0deg) translateY(1px)',
+      },
+    },
   },
 }
 
