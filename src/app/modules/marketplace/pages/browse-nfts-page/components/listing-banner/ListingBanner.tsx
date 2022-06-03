@@ -5,25 +5,21 @@ import { useRouter } from 'next/router';
 import * as styles from './ListingBanner.styles';
 
 import { useAuthStore } from '../../../../../../../stores/authStore';
+import { useSignInPopupStore } from '../../../../../../../stores/signInPopup';
 
-interface IListingBannerProps {
-  onLogin: () => void;
-}
-
-export const ListingBanner = (props: IListingBannerProps) => {
-  const { onLogin } = props;
-
+export const ListingBanner: React.FC = () => {
   const router = useRouter();
 
-  const isWalletConnected = useAuthStore(state => state.isWalletConnected);
+  const { isWalletConnected } = useAuthStore();
+  const { setShowNotAuthenticatedPopup } = useSignInPopupStore();
 
   const handleListNft = useCallback(() => {
     if (!isWalletConnected) {
-      return onLogin();
+      return setShowNotAuthenticatedPopup(true);
     }
 
     router.push('/my-nfts');
-  }, [isWalletConnected, onLogin]);
+  }, [isWalletConnected, setShowNotAuthenticatedPopup]);
 
   return (
     <Box {...styles.BannerWrapperStyle}>

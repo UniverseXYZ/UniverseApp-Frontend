@@ -61,17 +61,17 @@ export const BundlePageProvider: React.FC<IBundlePageProviderProps> = (props) =>
     }
   );
 
-  const creator = NFTs && NFTs.length ? NFTs[0].owner : {};
-  const moreFromCollection = NFTs && NFTs.length ? NFTs[0].moreFromCollection?.map((NFT) => {
-    NFT.collection = NFTs[0].collection;
-    return NFT;
-  }) : [];
+  // const creator = NFTs && NFTs.length ? NFTs[0].owner : {};
+  // const moreFromCollection = NFTs && NFTs.length ? NFTs[0].moreFromCollection?.map((NFT) => {
+  //   NFT.collection = NFTs[0].collection;
+  //   return NFT;
+  // }) : [];
 
   const value: IBundlePageContext = {
     order,
-    moreFromCollection,
+    moreFromCollection: [],
     NFTs: NFTs || [],
-    creator: creator as IUser,
+    creator: {} as IUser,
     isLoading: isLoadingOrder || isLoadingNFTs,
   };
 

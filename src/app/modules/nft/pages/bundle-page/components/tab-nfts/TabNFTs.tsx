@@ -39,8 +39,9 @@ export const TabNFTs = ({ NFTs: _NFTs }: ITabNFTsProps) => {
             <Box>
               <Text>{NFT.name}</Text>
               <Text>
-                <Image src={NFT.owner?.profileImageUrl} />
-                {NFT.owner?.hasOwnProperty('displayName') && NFT?.owner?.displayName}
+                {/*TODO: fetch owners data for display*/}
+                {/*<Image src={NFT.owner?.profileImageUrl} />*/}
+                {/*{NFT.owner?.hasOwnProperty('displayName') && NFT?.owner?.displayName}*/}
               </Text>
             </Box>
             <Box>x{NFTs[key].length}</Box>

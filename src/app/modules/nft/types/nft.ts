@@ -1,5 +1,4 @@
-import { IUser } from "../../account/types";
-import { ICollection } from "../../collection/types/collection";
+import { ICollection } from "../../collection/types";
 
 export enum NFTArtworkType {
   JPG = 'jpg',
@@ -40,7 +39,6 @@ export interface INFT {
   collectionId: number;
   collection: ICollection | null;
   createdAt?: Date;
-  creator?: IUser;
   description: string | null;
   name: string;
   numberOfEditions: number;
@@ -48,7 +46,6 @@ export interface INFT {
   gifUrl?: string;
   optimizedUrl: string;
   originalUrl: string;
-  owner?: IUser;
   properties: Array<Record<string, string>>;
   royalties: Array<IRoyalty>;
   standard: NFTStandard;
@@ -61,7 +58,6 @@ export interface INFT {
   updatedAt?: Date;
   url: string;
   hidden?: boolean;
-  moreFromCollection?: INFT[];
 }
 
 export interface INFTBackend

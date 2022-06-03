@@ -17,6 +17,8 @@ import { ReactComponent as FilterPriceRangeSVG } from '@assets/icons/filter-pric
 import { ReactComponent as FilterPropertiesSVG } from '@assets/icons/filter-properties.svg';
 import { ReactComponent as FilterSaleTypeSVG } from '@assets/icons/filter-sale-type.svg';
 import { ReactComponent as FiltersSVG } from '@assets/icons/filters.svg';
+import { ReactComponent as GridSMSVG } from '@assets/icons/grid-sm.svg';
+import { ReactComponent as GridMDSVG } from '@assets/icons/grid-md.svg';
 
 export type Icons =
   | 'plus'
@@ -35,6 +37,8 @@ export type Icons =
   | 'filterProperties'
   | 'filterSaleType'
   | 'filters'
+  | 'smGrid'
+  | 'mdGrid'
 ;
 
 const icons: Record<Icons, React.FC> = {
@@ -54,6 +58,8 @@ const icons: Record<Icons, React.FC> = {
   filterProperties: FilterPropertiesSVG,
   filterSaleType: FilterSaleTypeSVG,
   filters: FiltersSVG,
+  smGrid: GridSMSVG,
+  mdGrid: GridMDSVG,
 };
 
 interface IIconProps extends BoxProps {

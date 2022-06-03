@@ -18,7 +18,7 @@ import { SellAmountType, SellMethod } from '../../enums';
 import { IFixedListingForm } from '../../types';
 import { TokenTicker } from '../../../../../../enums';
 import { TokenIcon } from '../../../../../../components';
-import { isNFTAssetAudio, isNFTAssetImage, isNFTAssetVideo, mapBackendNft, mapBackendUser } from '../../../../../nft';
+import { isNFTAssetAudio, isNFTAssetImage, isNFTAssetVideo } from '../../../../../nft';
 import { NFTAssetAudio, NFTAssetImage, NFTAssetVideo } from '../../../../../nft/pages/nft-page/components';
 import * as styles from './styles';
 import { INFT, INFTBackend, NFTStandard } from '../../../../../nft/types';
@@ -126,20 +126,17 @@ export const SummaryTab = () => {
 
   const NFTsForPreview = useMemo<INFT[]>(() => {
     switch(amountType) {
+      case SellAmountType.SINGLE: return [nft];
       case SellAmountType.BUNDLE: {
-        const selectedIds = [`${nft.tokenId}`, ...form.values.bundleSelectedNFTs.map((key) => key.split(':')[0])];
-        return selectedIds.reduce<INFT[]>((acc, id) => {
-          const _myNFT = (myNFTs as INFTBackend[]).find((_myNFT) => `${_myNFT.id}` === id);
-          if (_myNFT) {
-            const myNFT = mapBackendNft(_myNFT);
-            myNFT.owner = mapBackendUser(loggedInArtist);
-            acc.push(myNFT);
-          }
-          return acc;
-        }, []);
-      }
-      case SellAmountType.SINGLE: {
-        return [nft];
+        return [];
+        // const selectedIds = [`${nft.tokenId}`, ...form.values.bundleSelectedNFTs.map((key) => key.split(':')[0])];
+        // return selectedIds.reduce<INFT[]>((acc, id) => {
+        //   const _myNFT = (myNFTs as INFTBackend[]).find((_myNFT) => `${_myNFT.id}` === id);
+        //   if (_myNFT) {
+        //     acc.push(mapBackendNft(_myNFT));
+        //   }
+        //   return acc;
+        // }, []);
       }
     }
   }, [myNFTs, nft, form.values]);

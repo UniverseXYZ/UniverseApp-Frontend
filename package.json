@@ -39,6 +39,7 @@
     "nextjs-progressbar": "^0.0.14",
     "node-sass": "^6.0.1",
     "prop-types": "^15.7.2",
+    "query-string": "^7.1.1",
     "react": "17.0.2",
     "react-animated-css": "^1.2.1",
     "react-animated-css-onscroll": "^1.2.1",

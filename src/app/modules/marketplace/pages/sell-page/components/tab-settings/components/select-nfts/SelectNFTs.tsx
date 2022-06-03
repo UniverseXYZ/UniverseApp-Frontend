@@ -37,8 +37,6 @@ import {
   isNFTAssetAudio,
   isNFTAssetImage,
   isNFTAssetVideo,
-  mapBackendNft,
-  mapBackendUser,
 } from '../../../../../../../nft';
 import { NFTCardFooter } from '../../../../../../../nft/components/nft-card/components';
 import { useAuthStore } from '../../../../../../../../../stores/authStore';
@@ -189,15 +187,16 @@ export const SelectNFTs = ({}: ISelectNFTsProps) => {
   }, [form.values.bundleSelectedNFTs]);
 
   const MyNFTsDB = useMemo(() => {
-    return myNFTs.reduce((acc: INFT[], _NFTBackend: INFTBackend) => {
-      if (_NFTBackend.id !== nft.id && !_NFTBackend.hidden) {
-        const _NFT = mapBackendNft(_NFTBackend);
-        _NFT.owner = mapBackendUser(loggedInArtist);
-        acc.push(_NFT);
-      }
-
-      return acc;
-    }, []);
+    return [];
+    // return myNFTs.reduce((acc: INFT[], _NFTBackend: INFTBackend) => {
+    //   if (_NFTBackend.id !== nft.id && !_NFTBackend.hidden) {
+    //     const _NFT = mapBackendNft(_NFTBackend);
+    //     _NFT.owner = mapBackendUser(loggedInArtist);
+    //     acc.push(_NFT);
+    //   }
+    //
+    //   return acc;
+    // }, []);
   }, [myNFTs, nft]);
 
   const selectedNFTsNumber = useMemo(() => {

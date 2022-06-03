@@ -1,4 +1,4 @@
-import { Box, Button, Center, Flex, Heading, HStack, Icon, Image, SimpleGrid, Text } from '@chakra-ui/react';
+import { Box, Button, Center, Flex, Heading, HStack, Image, SimpleGrid, Text } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useInfiniteQuery, useQueryClient } from 'react-query';
@@ -7,15 +7,13 @@ import { useIntersection, useMeasure, useSearchParam } from 'react-use';
 // Assets
 import OpenGraphImage from '@assets/images/open-graph/marketplace.png';
 import ArrowDownIcon from '@assets/images/arrow-down.svg';
-import { ReactComponent as GridSMIcon } from '@assets/images/grid-sm.svg';
-import { ReactComponent as GridLGIcon } from '@assets/images/grid-lg.svg';
 
 // Stores
 import { useSignInPopupStore } from 'src/stores/signInPopup';
 import { useThemeStore } from 'src/stores/themeStore';
 
 // App
-import { BackToTopButton, FiltersPopup, Loading, OpenGraph, Select } from '@app/components';
+import { BackToTopButton, FiltersPopup, Icon, Loading, OpenGraph, Select } from '@app/components';
 import {
   ClearAllButton,
   NFTTypeFilter,
@@ -28,30 +26,18 @@ import {
   usePriceRangeFilter,
   useSaleTypeFilter,
 } from '@app/components/filters';
-import { getTokenAddressByTicker } from '@app/constants';
-import { TokenTicker } from '@app/enums';
 import { NFTCardSize, useNFTFluidGrid, useStaticHeader } from '@app/hooks';
-import { nftKeys, orderKeys } from '@app/utils/query-keys';
-import { OrderAssetClass } from '@app/modules/nft/enums';
+import { orderKeys } from '@app/utils/query-keys';
 
 import { NFTCard } from '../../../nft/components';
-import {
-  INFT,
-  IOrder,
-  IOrderAssetTypeBundleListing,
-  IOrderAssetTypeERC20,
-  IOrderAssetTypeSingleListing,
-} from '../../../nft/types';
 import { SearchBar } from '../../components';
-import { SortOrderOptions, SortOrderOptionsEnum } from '../../constants';
 import { ListingBanner, ToggleButton, ToggleButtonGroup } from './components';
 import { OPEN_GRAPH_DESCRIPTION, OPEN_GRAPH_TITLE, ORDERS_PER_PAGE } from './constants';
 import * as styles from './BrowseNFTsPage.styles';
-import { GetActiveSellOrdersApi, GetNFTApi } from '../../../../api';
+import { getActiveListingsApi, SortBy, SortByNames, SortByOptions } from './helpers';
 
 export const BrowseNFTsPage = () => {
   const setDarkMode = useThemeStore((s) => s.setDarkMode);
-  const queryClient = useQueryClient();
 
   const router = useRouter();
 
@@ -69,11 +55,7 @@ export const BrowseNFTsPage = () => {
 
   const collectionSearchParam = useSearchParam("collection");
 
-  const [sortBy, setSortBy] = useState(SortOrderOptionsEnum.RecentlyListed);
-
-  const setShowNotAuthenticatedPopup = useSignInPopupStore(
-    (s) => s.setShowNotAuthenticatedPopup
-  );
+  const [sortBy, setSortBy] = useState<SortBy>(SortBy.RecentlyListed);
 
   const [selectedAddress, setSelectedAddress] = useState(
     collectionSearchParam?.toString() || undefined
@@ -97,202 +79,22 @@ export const BrowseNFTsPage = () => {
       priceRangeFilter: priceRangeFilterForm.values,
       sorting: sortBy,
     }),
-    async ({ pageParam = 1 }) => {
-      const apiFilters: any = { page: pageParam, side: 1 };
-
-      // Sale Filters
-      if (saleTypeFilterForm.values.hasOffers) {
-        apiFilters["hasOffers"] = true;
-      }
-
-      if (saleTypeFilterForm.values.buyNow) {
-        apiFilters["side"] = 1;
-      }
-
-      if (saleTypeFilterForm.values.new) {
-        apiFilters["beforeTimestamp"] = Math.floor(new Date().getTime() / 1000);
-      }
-
-      // NFT Filters
-      const assetClassFilters = [];
-      if (nftTypeFilterForm.values.singleItem) {
-        assetClassFilters.push("ERC721");
-      }
-
-      if (nftTypeFilterForm.values.bundle) {
-        assetClassFilters.push("ERC721_BUNDLE");
-      }
-
-      if (assetClassFilters.length) {
-        apiFilters["assetClass"] = assetClassFilters.join(",");
-      }
-
-      // Price Filters
-      if (
-        priceRangeFilterForm.values.currency.token &&
-        priceRangeFilterForm.dirty
-      ) {
-        const ticker = priceRangeFilterForm.values.currency
-          .token as TokenTicker;
-        apiFilters["token"] = getTokenAddressByTicker(ticker);
-      }
-
-      const [minPrice, maxPrice] = priceRangeFilterForm.values.price;
-
-      if (minPrice) {
-        apiFilters["minPrice"] = minPrice;
-      }
-
-      if (maxPrice && priceRangeFilterForm.dirty) {
-        apiFilters["maxPrice"] = maxPrice;
-      }
-
-      // Collection Filters
-      if (selectedAddress) {
-        apiFilters["collection"] = selectedAddress;
-      }
-
-      // Sorting
-      if (sortBy) {
-        let sortFilter = 0;
-        switch (sortBy) {
-          case SortOrderOptionsEnum.EndingSoon:
-            sortFilter = 1;
-            break;
-          case SortOrderOptionsEnum.HighestPrice:
-            sortFilter = 2;
-            break;
-          case SortOrderOptionsEnum.LowestPrice:
-            sortFilter = 3;
-            break;
-          case SortOrderOptionsEnum.RecentlyListed:
-            sortFilter = 4;
-            break;
-          default:
-            break;
-        }
-        apiFilters["sortBy"] = sortFilter;
-      }
-
-      const { orders, total } = await GetActiveSellOrdersApi<IOrderAssetTypeSingleListing | IOrderAssetTypeBundleListing, IOrderAssetTypeERC20>(apiFilters);
-
-      const NFTsRequests: Array<Promise<INFT>> = [];
-
-      for (const order of orders) {
-        const assetType = order.make.assetType;
-
-        switch (assetType.assetClass) {
-          case OrderAssetClass.ERC721:
-            queryClient.setQueryData(
-              orderKeys.listing({
-                collectionAddress: assetType.contract,
-                tokenId: assetType.tokenId.toString(),
-              }),
-              order
-            );
-            NFTsRequests.push(
-              GetNFTApi(assetType.contract, assetType.tokenId, false)
-            );
-            break;
-          case OrderAssetClass.ERC721_BUNDLE:
-            for (let i = 0; i < assetType.contracts.length; i++) {
-              for (const tokenId of assetType.tokenIds[i]) {
-                queryClient.setQueryData(
-                  orderKeys.listing({
-                    collectionAddress: assetType.contracts[i],
-                    tokenId: tokenId.toString(),
-                  }),
-                  order
-                );
-                NFTsRequests.push(
-                  GetNFTApi(assetType.contracts[i], tokenId, false)
-                );
-              }
-            }
-            break;
-        }
-      }
-
-      const NFTsMap = (await Promise.allSettled(NFTsRequests)).reduce<
-        Record<string, INFT>
-      >((acc, response) => {
-        if (response.status !== "fulfilled") {
-          return acc;
-        }
-
-        const NFT = response.value;
-        //TODO: set query cache to this specific nft(nftKeys.info)
-        const key = `${NFT._collectionAddress?.toLowerCase()}:${NFT.tokenId}`;
-
-        queryClient.setQueryData(
-          nftKeys.nftInfo({
-            collectionAddress: NFT._collectionAddress || "",
-            tokenId: NFT.tokenId,
-          }),
-          NFT
-        );
-
-        acc[key] = NFT;
-
-        return acc;
-      }, {});
-
-      type IResult = Array<{
-        order: IOrder<
-          | IOrderAssetTypeSingleListing
-          | IOrderAssetTypeBundleListing,
-          IOrderAssetTypeERC20>;
-        NFTs: INFT[];
-      }>;
-
-      const result = orders.reduce<IResult>(
-        (acc, order) => {
-          const NFTsMapKeys = Object.keys(NFTsMap);
-
-          const assetType = order.make.assetType;
-
-          switch (assetType.assetClass) {
-            case OrderAssetClass.ERC721:
-              if (
-                NFTsMapKeys.includes(
-                  `${assetType.contract}:${assetType.tokenId}`
-                )
-              ) {
-                acc.push({
-                  order,
-                  NFTs: NFTsMap[`${assetType.contract}:${assetType.tokenId}`]
-                    ? [NFTsMap[`${assetType.contract}:${assetType.tokenId}`]]
-                    : [],
-                });
-              }
-              break;
-            case OrderAssetClass.ERC721_BUNDLE:
-              const NFTs = [];
-
-              for (let i = 0; i < assetType.contracts.length; i++) {
-                for (const tokenId of assetType.tokenIds[i]) {
-                  if (NFTsMap[`${assetType.contracts[i]}:${tokenId}`]) {
-                    NFTs.push(
-                      NFTsMap[`${assetType.contracts[i]}:${tokenId}`]
-                    );
-                  }
-                }
-              }
-
-              acc.push({ order, NFTs });
-
-              break;
-          }
-
-          return acc;
-        },
-        []
-      );
-
-      return { total, data: result };
-    },
+    () => getActiveListingsApi({
+      sortBy,
+      collection: selectedAddress || undefined,
+      hasOffers: saleTypeFilterForm.values.hasOffers,
+      buyNow: saleTypeFilterForm.values.buyNow,
+      newest: saleTypeFilterForm.values.new,
+      singleListing: nftTypeFilterForm.values.singleItem,
+      bundleListing: nftTypeFilterForm.values.bundle,
+      tokenTicker: priceRangeFilterForm.values.currency?.token ?? undefined,
+      minPrice: priceRangeFilterForm.values.price[0],
+      maxPrice: priceRangeFilterForm.values.price[1],
+    }),
     {
       retry: false,
+      refetchOnWindowFocus: false,
+      refetchOnReconnect: false,
       getNextPageParam: (lastPage, pages) => {
         return pages.length * ORDERS_PER_PAGE < lastPage.total
           ? pages.length + 1
@@ -417,10 +219,10 @@ export const BrowseNFTsPage = () => {
             </HStack>
           )}
         </FiltersPopup>
-        <HStack spacing={'14px'} w={{ base: '100%', md: 'fit-content' }}>
+        <HStack spacing={'14px'} w={['100%', null, 'fit-content']}>
           <Select
             label={"Sort by"}
-            items={SortOrderOptions}
+            items={SortByOptions}
             value={sortBy}
             buttonProps={{
               justifyContent: "space-between",
@@ -429,6 +231,8 @@ export const BrowseNFTsPage = () => {
                 md: "fit-content"
               },
             }}
+            renderSelectedItem={(item: SortBy) => SortByNames[item]}
+            renderItem={(item: SortBy) => SortByNames[item]}
             onSelect={(val) => setSortBy(val)}
           />
           <ToggleButtonGroup
@@ -439,14 +243,10 @@ export const BrowseNFTsPage = () => {
             }}
           >
             <ToggleButton value={NFTCardSize.LG}>
-              <Icon viewBox={"0 0 14 14"}>
-                <GridLGIcon />
-              </Icon>
+              <Icon name={'mdGrid'} />
             </ToggleButton>
             <ToggleButton value={NFTCardSize.SM}>
-              <Icon viewBox={"0 0 14 14"}>
-                <GridSMIcon />
-              </Icon>
+              <Icon name={'smGrid'} />
             </ToggleButton>
           </ToggleButtonGroup>
         </HStack>
@@ -463,19 +263,14 @@ export const BrowseNFTsPage = () => {
             mb={"40px"}
           >
             {(ordersResult?.pages ?? []).map((page) => {
-              return page.data.map(({ order, NFTs }) => {
-                if (!NFTs.length || order.make.assetType.assetClass !== OrderAssetClass.ERC721) {
-                  return null;
-                }
-                return (
-                  <NFTCard
-                    key={order.id}
-                    order={order as IOrder<IOrderAssetTypeSingleListing, IOrderAssetTypeERC20>}
-                    NFT={NFTs[0]}
-                    onTimerEnd={refetch}
-                  />
-                );
-              });
+              return page.data.map(({ order, NFT }) => (
+                <NFTCard
+                  key={order.id}
+                  order={order}
+                  NFT={NFT}
+                  onTimerEnd={refetch}
+                />
+              ));
             })}
           </SimpleGrid>
         )}
@@ -495,11 +290,7 @@ export const BrowseNFTsPage = () => {
           </Button>
         )}
 
-        <ListingBanner
-          onLogin={() => {
-            setShowNotAuthenticatedPopup(true);
-          }}
-        />
+        <ListingBanner />
         <BackToTopButton />
       </Box>
     </Box>

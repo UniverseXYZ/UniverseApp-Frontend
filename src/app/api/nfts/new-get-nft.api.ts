@@ -42,6 +42,11 @@ export const getURL = (url: string | null | undefined) => {
   return url;
 }
 
+/**
+ * @deprecated
+ * @param data
+ * @param collectionData
+ */
 export const mapNft = (data: INFTBackendType, collectionData: ICollection | null): INFT => {
   const alternativeImage = data.alternativeMediaFiles.find(file => file.type === ARTWORK_TYPES.image);
   const altImgComponents = alternativeImage?.url.split('.');
