@@ -20,7 +20,6 @@ import HiddenNFTs from '../../../../../components/myNFTs/HiddenNFTs';
 import LikedNFTs from '../../../../../components/myNFTs/LikedNFTs';
 import NFTsActivity from '../../../../../components/myNFTs/NFTsActivity';
 import { WalletTab } from './components';
-import FiltersContextProvider from '../../../account/pages/my-nfts-page/components/search-filters/search-filters.context';
 import { useAuthStore } from '../../../../../stores/authStore';
 import Contracts from '../../../../../contracts/contracts.json';
 import { useErrorStore } from '../../../../../stores/errorStore';
@@ -382,9 +381,7 @@ export const MyNFTsPage = () => {
       </div>
 
       {myNFTsSelectedTabIndex === 0 && (
-        <FiltersContextProvider defaultSorting={0} >
-          <WalletTab getTotalNfts={getTotalNfts} />
-        </FiltersContextProvider>
+        <WalletTab getTotalNfts={getTotalNfts} />
       )}
       <div className="container mynfts__page__body">
         {myNFTsSelectedTabIndex === 1 && <DeployedCollections scrollContainer={scrollContainer} />}

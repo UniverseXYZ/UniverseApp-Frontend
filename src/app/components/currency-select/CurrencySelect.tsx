@@ -66,7 +66,7 @@ export const CurrencySelect = ({ value, onChange }: ICurrencySelectProps) => {
         width: 'auto',
       }}
       renderItem={(item) => (<CurrencySelectItem {...item} />)}
-      renderSelectedItem={(value) => !value ? null : (<CurrencySelectItem {...value} />)}
+      renderSelectedItem={(value) => !value ? 'All' : (<CurrencySelectItem {...value} />)}
       buttonProps={{
         mr: '12px',
         minWidth: '225px',

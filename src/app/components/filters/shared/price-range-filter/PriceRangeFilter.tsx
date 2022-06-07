@@ -9,26 +9,58 @@ import {
   RangeSliderTrack,
   SimpleGrid,
 } from '@chakra-ui/react';
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useFormik } from 'formik';
 
-import { CurrencySelect, Dropdown, DropdownFilterContainer, Icon } from '../../../components';
-import { IPriceRangeFilterProps, IPriceRangeFilterValue } from './types';
-import { coins } from '../../../mocks';
+import { CurrencySelect } from '@app/components';
+import { IFilter, IFilterComponentsProps } from '@app/components/filters';
 
-export const usePriceRangeFilter = () => {
+export interface IPriceRangeFilterValue {
+  currency: any | null; // TODO
+  price: number[];
+}
+
+export const usePriceRangeFilter = (): IFilter<IPriceRangeFilterValue> => {
   const form = useFormik<IPriceRangeFilterValue>({
     initialValues: {
       currency: null,
       price: [0, 0],
     },
-    onSubmit: () => {},
+    onSubmit: () => void 0,
   });
 
-  return { form };
+  const getValueLabel = useCallback((value: IPriceRangeFilterValue) => {
+    if (!form.dirty) {
+      return null;
+    }
+
+    const minPrice = value.price[0];
+    const maxPrice = value.price[1];
+
+    if (maxPrice && minPrice) {
+      return `${minPrice}-${maxPrice} ${value.currency?.token || 'All'}`;
+    }
+
+    if (maxPrice) {
+      return `<${maxPrice} ${value.currency?.token || 'All'}`
+    }
+
+    if (minPrice) {
+      return `>${minPrice} ${value.currency?.token || 'All'}`
+    }
+
+    return null;
+  }, [form.dirty]);
+
+  return {
+    name: 'Price Range',
+    icon: 'filterPriceRange',
+    form,
+    getValueLabel,
+  };
 };
 
-export const PriceRangeFilter = (props: IPriceRangeFilterProps) => {
+export const PriceRangeFilter: React.FC<IFilterComponentsProps<IPriceRangeFilterValue>> = (props) => {
   const { value, onChange } = props;
 
   const [isMaxPriceFocused, setIsMaxPriceFocused] = useState<boolean>(false);
@@ -139,72 +171,3 @@ export const PriceRangeFilter = (props: IPriceRangeFilterProps) => {
     </>
   );
 };
-
-export interface IPriceRangeFilterDropdownProps {
-  value: IPriceRangeFilterValue;
-  isDirty: boolean;
-  onSave: (value: IPriceRangeFilterValue) => void;
-  onClear: () => void;
-}
-
-export const PriceRangeFilterDropdown = (props: IPriceRangeFilterDropdownProps) => {
-  const {
-    value: initialValue,
-    isDirty,
-    onSave,
-    onClear,
-  } = props;
-
-  const [isOpened, setIsOpened] = useState(false);
-  const [value, setValue] = useState<IPriceRangeFilterValue>({} as IPriceRangeFilterValue);
-
-  const handleSave = useCallback(() => {
-    onSave(value);
-    setIsOpened(false);
-  }, [value, onSave]);
-
-  const handleClear = useCallback(() => {
-    setValue(initialValue);
-    onClear();
-  }, [initialValue, onClear]);
-
-  const valueLabel = useMemo(() => {
-    if (!isDirty) {
-      return null;
-    }
-    const minPrice = initialValue.price[0];
-    const maxPrice = initialValue.price[1];
-    if (maxPrice && minPrice) {
-      return `${minPrice}-${maxPrice} ${initialValue.currency.token}`;
-    }
-    if (maxPrice) {
-      return `<${maxPrice} ${initialValue.currency.token}`
-    }
-    if (minPrice) {
-      return `>${minPrice} ${initialValue.currency.token}`
-    }
-  }, [initialValue, isDirty]);
-
-  useEffect(() => setValue(initialValue), [initialValue]);
-
-  return (
-    <Dropdown
-      label={'Price range'}
-      value={valueLabel}
-      buttonProps={{ leftIcon: <Icon name={'filterPriceRange'} /> }}
-      isOpened={isOpened}
-      onOpen={() => setIsOpened(true)}
-      onClose={() => {
-        setValue(initialValue);
-        setIsOpened(false);
-      }}
-    >
-      <DropdownFilterContainer
-        onSave={handleSave}
-        onClear={handleClear}
-      >
-        <PriceRangeFilter value={value} onChange={(value) => setValue(value)} />
-      </DropdownFilterContainer>
-    </Dropdown>
-  );
-}

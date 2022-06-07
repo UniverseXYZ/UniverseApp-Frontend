@@ -10,33 +10,13 @@ import {
 } from '@app/modules/nft/types';
 import { mapBackendOrder } from '@app/modules/nft';
 import { getURL } from '@app/api';
-import { OrderAssetClass } from '@app/modules/nft/enums';
 import { TokenTicker } from '@app/enums';
 import { getTokenAddressByTicker } from '@app/constants';
 import { ARTWORK_TYPES } from '@legacy/helpers/pureFunctions/nfts';
 import { getArtworkType } from '@app/helpers';
 import { INFTBackendType } from '@app/types';
 
-export enum SortBy {
-  EndingSoon = 1,
-  HighestPrice = 2,
-  LowestPrice = 3,
-  RecentlyListed = 4,
-}
-
-export const SortByOptions: SortBy[] = [
-  SortBy.EndingSoon,
-  SortBy.HighestPrice,
-  SortBy.LowestPrice,
-  SortBy.RecentlyListed,
-];
-
-export const SortByNames: Record<SortBy, string> = {
-  [SortBy.EndingSoon]: 'Ending soon',
-  [SortBy.HighestPrice]: 'Lowest price first',
-  [SortBy.LowestPrice]: 'Highest price first',
-  [SortBy.RecentlyListed]: 'Recently listed',
-};
+// TODO: move to shared (general) folder
 
 interface INFTBackend {
   contractAddress: string;
@@ -77,6 +57,9 @@ interface INFTBackend {
 }
 
 interface IGetActiveListingsRequestData {
+  page: number;
+  limit: number;
+  search?: string;
   sortBy?: number;
   collection?: string;
   buyNow?: boolean;
@@ -87,31 +70,35 @@ interface IGetActiveListingsRequestData {
   tokenTicker?: TokenTicker;
   minPrice?: number;
   maxPrice?: number;
+  artist?: string;
 }
 
 interface IGetActiveListingsResponse {
   nfts: INFTBackend[];
   page: number;
   size: number;
-  total: number;
 }
 
-export const getActiveListingsApi = async (params: IGetActiveListingsRequestData = {}) => {
+export const getActiveListingsApi = async (params: IGetActiveListingsRequestData = { page: 1, limit: 12 }) => {
   const url = `${process.env.REACT_APP_CLOUD_FUNCTIONS}/queryNfts`;
 
   const queryParams = querystring.stringify({
-    sortBy: params.sortBy,
-    tokenAddress: params.collection,
+    page: params.page,
+    limit: params.limit,
+    searchQuery: params.search || undefined,
+    sortBy: params.sortBy || undefined,
+    contractAddress: params.collection,
     assetClass: [
       params.singleListing && 'ERC721',
       params.bundleListing && 'ERC721_BUNDLE'
-    ].filter(Boolean).join(','),
+    ].filter(Boolean).join(',').trim() || undefined,
     side: params.buyNow ? 1 : undefined,
     hasOffers: params.hasOffers || undefined,
     beforeTimestamp: params.newest ? Math.floor(new Date().getTime() / 1000) : undefined,
-    token: params.tokenTicker ? getTokenAddressByTicker(params.tokenTicker) : undefined,
-    minPrice: params.minPrice ?? undefined,
+    tokenAddress: params.tokenTicker ? getTokenAddressByTicker(params.tokenTicker) : undefined,
+    minPrice: params.minPrice || undefined,
     maxPrice: params.maxPrice || undefined,
+    ownerAddress: params.artist || undefined,
   });
 
   const { data } = await axios.get<IGetActiveListingsResponse>(`${url}?${queryParams}`);
@@ -119,19 +106,19 @@ export const getActiveListingsApi = async (params: IGetActiveListingsRequestData
   const { nfts, ...rest } = data;
 
   type IResult = Array<{
-    order: IOrder<IOrderAssetTypeSingleListing, IOrderAssetTypeERC20>;
+    order: IOrder<IOrderAssetTypeSingleListing, IOrderAssetTypeERC20> | undefined;
     NFT: INFT;
   }>;
 
   return {
     ...rest,
     data: nfts.reduce<IResult>((acc, NFT) => {
-      if (NFT.orders?.[0] && NFT.orders?.[0].make.assetType.assetClass === OrderAssetClass.ERC721) {
-        acc.push({
-          order: mapBackendOrder<IOrderAssetTypeSingleListing, IOrderAssetTypeERC20>(NFT.orders[0]),
-          NFT: parseNFTBackend(NFT),
-        });
-      }
+      acc.push({
+        order: NFT.orders?.length
+          ? mapBackendOrder<IOrderAssetTypeSingleListing, IOrderAssetTypeERC20>(NFT.orders?.[0])
+          : undefined,
+        NFT: parseNFTBackend(NFT),
+      });
 
       return acc;
     }, [])

@@ -1,7 +1,7 @@
 import { Box, Button, Center, Flex, Heading, HStack, Image, SimpleGrid, Text } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { useInfiniteQuery, useQueryClient } from 'react-query';
+import { useInfiniteQuery } from 'react-query';
 import { useIntersection, useMeasure, useSearchParam } from 'react-use';
 
 // Assets
@@ -9,10 +9,10 @@ import OpenGraphImage from '@assets/images/open-graph/marketplace.png';
 import ArrowDownIcon from '@assets/images/arrow-down.svg';
 
 // Stores
-import { useSignInPopupStore } from 'src/stores/signInPopup';
 import { useThemeStore } from 'src/stores/themeStore';
 
 // App
+import { SortBy, SortByNames, SortByOptions } from '@app/constants';
 import { BackToTopButton, FiltersPopup, Icon, Loading, OpenGraph, Select } from '@app/components';
 import {
   ClearAllButton,
@@ -34,7 +34,7 @@ import { SearchBar } from '../../components';
 import { ListingBanner, ToggleButton, ToggleButtonGroup } from './components';
 import { OPEN_GRAPH_DESCRIPTION, OPEN_GRAPH_TITLE, ORDERS_PER_PAGE } from './constants';
 import * as styles from './BrowseNFTsPage.styles';
-import { getActiveListingsApi, SortBy, SortByNames, SortByOptions } from './helpers';
+import { getActiveListingsApi } from './helpers';
 
 export const BrowseNFTsPage = () => {
   const setDarkMode = useThemeStore((s) => s.setDarkMode);
@@ -79,7 +79,9 @@ export const BrowseNFTsPage = () => {
       priceRangeFilter: priceRangeFilterForm.values,
       sorting: sortBy,
     }),
-    () => getActiveListingsApi({
+    ({ pageParam = 1 }) => getActiveListingsApi({
+      page: pageParam,
+      limit: ORDERS_PER_PAGE,
       sortBy,
       collection: selectedAddress || undefined,
       hasOffers: saleTypeFilterForm.values.hasOffers,
@@ -96,7 +98,7 @@ export const BrowseNFTsPage = () => {
       refetchOnWindowFocus: false,
       refetchOnReconnect: false,
       getNextPageParam: (lastPage, pages) => {
-        return pages.length * ORDERS_PER_PAGE < lastPage.total
+        return lastPage.data.length && lastPage.data.length >= ORDERS_PER_PAGE
           ? pages.length + 1
           : undefined;
       },
@@ -167,6 +169,7 @@ export const BrowseNFTsPage = () => {
         {...styles.FiltersStickyWrapper}
         bg={intersection?.intersectionRect.top === 0 ? "white" : "transparent"}
       >
+        {/*TODO: use Filters component*/}
         <FiltersPopup
           mobileFilters={[
             {
@@ -226,10 +229,7 @@ export const BrowseNFTsPage = () => {
             value={sortBy}
             buttonProps={{
               justifyContent: "space-between",
-              w: {
-                base: "100%",
-                md: "fit-content"
-              },
+              w: ["100%", null, "fit-content"],
             }}
             renderSelectedItem={(item: SortBy) => SortByNames[item]}
             renderItem={(item: SortBy) => SortByNames[item]}
@@ -265,7 +265,7 @@ export const BrowseNFTsPage = () => {
             {(ordersResult?.pages ?? []).map((page) => {
               return page.data.map(({ order, NFT }) => (
                 <NFTCard
-                  key={order.id}
+                  key={`${NFT._collectionAddress}:${NFT.tokenId}`}
                   order={order}
                   NFT={NFT}
                   onTimerEnd={refetch}
