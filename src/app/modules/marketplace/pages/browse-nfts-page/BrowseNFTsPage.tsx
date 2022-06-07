@@ -1,4 +1,4 @@
-import { Box, Button, Center, Flex, Heading, HStack, Image, SimpleGrid, Text } from '@chakra-ui/react';
+import { Box, Button, Center, Flex, Heading, HStack, SimpleGrid, Text } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useInfiniteQuery } from 'react-query';
@@ -6,26 +6,22 @@ import { useIntersection, useMeasure, useSearchParam } from 'react-use';
 
 // Assets
 import OpenGraphImage from '@assets/images/open-graph/marketplace.png';
-import ArrowDownIcon from '@assets/images/arrow-down.svg';
 
 // Stores
 import { useThemeStore } from 'src/stores/themeStore';
 
 // App
 import { SortBy, SortByNames, SortByOptions } from '@app/constants';
-import { BackToTopButton, FiltersPopup, Icon, Loading, OpenGraph, Select } from '@app/components';
+import { BackToTopButton, Icon, Loading, OpenGraph, Select } from '@app/components';
+import { Filter, Filters } from '@app/components/filters';
 import {
-  ClearAllButton,
-  NFTTypeFilter,
-  NFTTypeFilterDropdown,
-  PriceRangeFilter,
-  PriceRangeFilterDropdown,
   SaleTypeFilter,
-  SaleTypeFilterDropdown,
-  useNFTTypeFilter,
-  usePriceRangeFilter,
   useSaleTypeFilter,
-} from '@app/components/filters';
+  NFTTypeFilter,
+  useNFTTypeFilter,
+  PriceRangeFilter,
+  usePriceRangeFilter,
+} from '@app/components/filters/shared';
 import { NFTCardSize, useNFTFluidGrid, useStaticHeader } from '@app/hooks';
 import { orderKeys } from '@app/utils/query-keys';
 
@@ -61,9 +57,9 @@ export const BrowseNFTsPage = () => {
     collectionSearchParam?.toString() || undefined
   );
 
-  const { form: saleTypeFilterForm } = useSaleTypeFilter();
-  const { form: nftTypeFilterForm } = useNFTTypeFilter();
-  const { form: priceRangeFilterForm } = usePriceRangeFilter();
+  const saleTypeFilter = useSaleTypeFilter();
+  const nftTypeFilter = useNFTTypeFilter();
+  const priceRangeFilter = usePriceRangeFilter();
 
   const {
     data: ordersResult,
@@ -74,9 +70,9 @@ export const BrowseNFTsPage = () => {
   } = useInfiniteQuery(
     orderKeys.browse({
       selectedAddress,
-      saleFilter: saleTypeFilterForm.values,
-      nftTypeFilter: nftTypeFilterForm.values,
-      priceRangeFilter: priceRangeFilterForm.values,
+      saleFilter: saleTypeFilter.form.values,
+      nftTypeFilter: nftTypeFilter.form.values,
+      priceRangeFilter: priceRangeFilter.form.values,
       sorting: sortBy,
     }),
     ({ pageParam = 1 }) => getActiveListingsApi({
@@ -84,14 +80,14 @@ export const BrowseNFTsPage = () => {
       limit: ORDERS_PER_PAGE,
       sortBy,
       collection: selectedAddress || undefined,
-      hasOffers: saleTypeFilterForm.values.hasOffers,
-      buyNow: saleTypeFilterForm.values.buyNow,
-      newest: saleTypeFilterForm.values.new,
-      singleListing: nftTypeFilterForm.values.singleItem,
-      bundleListing: nftTypeFilterForm.values.bundle,
-      tokenTicker: priceRangeFilterForm.values.currency?.token ?? undefined,
-      minPrice: priceRangeFilterForm.values.price[0],
-      maxPrice: priceRangeFilterForm.values.price[1],
+      hasOffers: saleTypeFilter.form.values.hasOffers,
+      buyNow: saleTypeFilter.form.values.buyNow,
+      newest: saleTypeFilter.form.values.new,
+      singleListing: nftTypeFilter.form.values.singleItem,
+      bundleListing: nftTypeFilter.form.values.bundle,
+      tokenTicker: priceRangeFilter.form.values.currency?.token ?? undefined,
+      minPrice: priceRangeFilter.form.values.price[0],
+      maxPrice: priceRangeFilter.form.values.price[1],
     }),
     {
       retry: false,
@@ -108,9 +104,9 @@ export const BrowseNFTsPage = () => {
   useStaticHeader();
 
   const handleClear = useCallback(() => {
-    saleTypeFilterForm.resetForm();
-    nftTypeFilterForm.resetForm();
-    priceRangeFilterForm.resetForm();
+    saleTypeFilter.form.resetForm();
+    nftTypeFilter.form.resetForm();
+    priceRangeFilter.form.resetForm();
     setSelectedAddress(undefined);
   }, []);
 
@@ -134,11 +130,6 @@ export const BrowseNFTsPage = () => {
   }, [selectedAddress]);
 
   useEffect(() => setDarkMode(false), []);
-
-  const isFiltersDirty =
-    saleTypeFilterForm.dirty ||
-    nftTypeFilterForm.dirty ||
-    priceRangeFilterForm.dirty;
 
   return (
     <Box layerStyle={"StoneBG"}>
@@ -169,59 +160,26 @@ export const BrowseNFTsPage = () => {
         {...styles.FiltersStickyWrapper}
         bg={intersection?.intersectionRect.top === 0 ? "white" : "transparent"}
       >
-        {/*TODO: use Filters component*/}
-        <FiltersPopup
-          mobileFilters={[
-            {
-              name: "Sale type",
-              form: saleTypeFilterForm,
-              icon: "filterSaleType",
-              renderFilter: (props) => <SaleTypeFilter {...props} />,
-            },
-            {
-              name: "NFT Type",
-              form: nftTypeFilterForm,
-              icon: "filterNftType",
-              renderFilter: (props) => <NFTTypeFilter {...props} />,
-            },
-            {
-              name: "Price range",
-              form: priceRangeFilterForm,
-              icon: "filterPriceRange",
-              renderFilter: (props) => <PriceRangeFilter {...props} />,
-            },
-          ]}
-        >
-          {({ openMobileFilters }) => (
-            <HStack spacing={'14px'} {...styles.FiltersWrapper}>
-              <SaleTypeFilterDropdown
-                value={saleTypeFilterForm.values}
-                onSave={(value) => saleTypeFilterForm.setValues(value)}
-                onClear={() => saleTypeFilterForm.resetForm()}
-              />
-              <NFTTypeFilterDropdown
-                value={nftTypeFilterForm.values}
-                onSave={(value) => nftTypeFilterForm.setValues(value)}
-                onClear={() => nftTypeFilterForm.resetForm()}
-              />
-              <PriceRangeFilterDropdown
-                value={priceRangeFilterForm.values}
-                isDirty={priceRangeFilterForm.dirty}
-                onSave={(value) => priceRangeFilterForm.setValues(value)}
-                onClear={() => priceRangeFilterForm.resetForm()}
-              />
-              <Button
-                variant={"dropdown"}
-                rightIcon={<Image src={ArrowDownIcon} {...styles.MoreFiltersButtonArrow} />}
-                {...styles.MoreFiltersButton}
-                onClick={openMobileFilters}
-              >
-                More
-              </Button>
-              {isFiltersDirty && <ClearAllButton onClick={handleClear} />}
-            </HStack>
-          )}
-        </FiltersPopup>
+        <Filters onClearAll={() => handleClear()}>
+          <Filter filter={saleTypeFilter}>
+            <SaleTypeFilter
+              value={saleTypeFilter.form.values}
+              onChange={(value) => saleTypeFilter.form.setValues(value)}
+            />
+          </Filter>
+          <Filter filter={nftTypeFilter}>
+            <NFTTypeFilter
+              value={nftTypeFilter.form.values}
+              onChange={(value) => nftTypeFilter.form.setValues(value)}
+            />
+          </Filter>
+          <Filter filter={priceRangeFilter}>
+            <PriceRangeFilter
+              value={priceRangeFilter.form.values}
+              onChange={(value) => priceRangeFilter.form.setValues(value)}
+            />
+          </Filter>
+        </Filters>
         <HStack spacing={'14px'} w={['100%', null, 'fit-content']}>
           <Select
             label={"Sort by"}

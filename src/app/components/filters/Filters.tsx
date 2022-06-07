@@ -48,12 +48,14 @@ export interface IFilter<T extends unknown> {
 
 interface IFiltersProps extends StackProps {
   show?: boolean;
+  onClearAll?: () => void;
 }
 
 export const Filters: React.FC<IFiltersProps> = (props) => {
   const {
     show = true,
     children,
+    onClearAll,
     ...rest
   } = props;
 
@@ -75,7 +77,8 @@ export const Filters: React.FC<IFiltersProps> = (props) => {
     childrenElements.forEach((child) => {
       child.props.filter.form.resetForm();
     });
-  }, [childrenElements]);
+    onClearAll && onClearAll();
+  }, [childrenElements, onClearAll]);
 
   const handleSave = useCallback(() => {
     if (values) {
