@@ -17,7 +17,7 @@ export const TabOwners: React.FC = () => {
   const [owners] = useState(sortOwners([...Owners]));
 
   const handleBuy = useCallback(() => {
-    // checkoutNFT(); // TODO
+    // checkoutNFT(); // FIXME
   }, []);
 
   return (
