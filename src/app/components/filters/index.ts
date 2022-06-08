@@ -4,4 +4,6 @@ export * from './sale-type-filter';
 export * from './nft-type-filter';
 export * from './price-range-filter';
 
+export * from './components';
+
 export * from './Filters';

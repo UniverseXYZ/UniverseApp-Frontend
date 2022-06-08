@@ -24,11 +24,11 @@ import NoNftsFound from '../../../../../../../components/myNFTs/NoNftsFound';
 import { useAuthStore } from '../../../../../../../stores/authStore';
 
 // Constants
-import { getActiveListingsApi } from '@app/modules/marketplace/pages/browse-nfts-page/helpers';
+import { queryNFTsApi } from '@app/api';
 import { nftKeys } from '@app/utils/query-keys';
 import { SortBy, SortByNames, SortByOptions } from '@app/constants';
 import { Select } from '@app/components';
-import { Filter, Filters } from '@app/components/filters';
+import { Filter, Filters, ToggleFiltersButton } from '@app/components/filters';
 import {
   SaleTypeFilter,
   useSaleTypeFilter,
@@ -40,7 +40,6 @@ import {
   useCollectionsFilter,
   useCollectionsFilterUserCollections,
 } from '@app/components/filters/shared';
-import { ToggleFiltersButton } from '@app/components/filters/components';
 
 import { NFTs_PER_PAGE } from './constants';
 import * as s from './WalletTab.styles';
@@ -111,7 +110,7 @@ export const WalletTab: React.FC<IWalletTabProps> = (props) => {
       priceRangeFilter: priceRangeFilter.form.values,
       collectionsFilter: collectionsFilter.form.values,
     }),
-    ({ pageParam = 1 }) => getActiveListingsApi({
+    ({ pageParam = 1 }) => queryNFTsApi({
       page: pageParam,
       limit: NFTs_PER_PAGE,
       search: debouncedSearch,

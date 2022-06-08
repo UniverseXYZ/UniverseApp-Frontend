@@ -8,7 +8,6 @@ import { ItemWrapper } from '@app/components';
 import { INFT, IOrder, IOrderAssetTypeBundleListing, IOrderAssetTypeERC20 } from '../../types';
 import * as styles from '../nft-card/NFTCard.styles';
 import { NFTCardAsset, NFTCardFooter, BundleLabel } from '../nft-card/components';
-// import { NFTRelationType } from '../../enums';
 
 type IBundleOrder = IOrder<IOrderAssetTypeBundleListing, IOrderAssetTypeERC20>;
 

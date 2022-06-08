@@ -9,16 +9,17 @@ import {
   SimpleGrid,
   Stack,
 } from '@chakra-ui/react';
+import { useRouter } from 'next/router';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useDebounce, useIntersection, useSearchParam } from 'react-use';
 
-import { NFTCard } from '@app/modules/nft/components';
+// Assets
+import SearchIcon from '@assets/images/search-gray.svg';
 
-import NoNftsFound from '../../../../../../../components/myNFTs/NoNftsFound';
-import NftCardSkeleton from '../../../../../../../components/skeletons/nftCardSkeleton/NftCardSkeleton';
-import * as styles from './ArtistNFTsTab.styles';
-import { useRouter } from 'next/router';
+// App
+import { queryNFTsApi } from '@app/api';
 import { SortBy, SortByNames, SortByOptions } from '@app/constants';
+import { NFTCard } from '@app/modules/nft/components';
 import {
   CollectionsFilter,
   NFTTypeFilter, PriceRangeFilter,
@@ -28,14 +29,15 @@ import {
   usePriceRangeFilter,
   useSaleTypeFilter,
 } from '@app/components/filters/shared';
-import SearchIcon from '@assets/images/search-gray.svg';
 import { Select } from '@app/components';
-import { ToggleFiltersButton } from '@app/components/filters/components';
-import { Filter, Filters } from '@app/components/filters';
+import { Filter, Filters, ToggleFiltersButton } from '@app/components/filters';
 import { useInfiniteQuery } from 'react-query';
 import { nftKeys } from '@app/utils/query-keys';
-import { getActiveListingsApi } from '@app/modules/marketplace/pages/browse-nfts-page/helpers';
 import { NFTs_PER_PAGE } from '@app/modules/account/pages/my-nfts-page/components/tab-wallet/constants';
+
+import NoNftsFound from '../../../../../../../components/myNFTs/NoNftsFound';
+import NftCardSkeleton from '../../../../../../../components/skeletons/nftCardSkeleton/NftCardSkeleton';
+import * as styles from './ArtistNFTsTab.styles';
 
 interface IArtistNFTsTabProps {
   artistAddress: string;
@@ -131,7 +133,7 @@ export const ArtistNFTsTab: React.FC<IArtistNFTsTabProps> = (props) => {
       priceRangeFilter: priceRangeFilter.form.values,
       collectionsFilter: collectionsFilter.form.values,
     }),
-    ({ pageParam = 1 }) => getActiveListingsApi({
+    ({ pageParam = 1 }) => queryNFTsApi({
       page: pageParam,
       limit: NFTs_PER_PAGE,
       search: debouncedSearch,

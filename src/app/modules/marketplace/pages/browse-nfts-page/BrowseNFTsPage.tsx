@@ -11,6 +11,7 @@ import OpenGraphImage from '@assets/images/open-graph/marketplace.png';
 import { useThemeStore } from 'src/stores/themeStore';
 
 // App
+import { queryNFTsApi } from '@app/api/nfts';
 import { SortBy, SortByNames, SortByOptions } from '@app/constants';
 import { BackToTopButton, Icon, Loading, OpenGraph, Select } from '@app/components';
 import { Filter, Filters } from '@app/components/filters';
@@ -30,7 +31,6 @@ import { SearchBar } from '../../components';
 import { ListingBanner, ToggleButton, ToggleButtonGroup } from './components';
 import { OPEN_GRAPH_DESCRIPTION, OPEN_GRAPH_TITLE, ORDERS_PER_PAGE } from './constants';
 import * as styles from './BrowseNFTsPage.styles';
-import { getActiveListingsApi } from './helpers';
 
 export const BrowseNFTsPage = () => {
   const setDarkMode = useThemeStore((s) => s.setDarkMode);
@@ -75,7 +75,7 @@ export const BrowseNFTsPage = () => {
       priceRangeFilter: priceRangeFilter.form.values,
       sorting: sortBy,
     }),
-    ({ pageParam = 1 }) => getActiveListingsApi({
+    ({ pageParam = 1 }) => queryNFTsApi({
       page: pageParam,
       limit: ORDERS_PER_PAGE,
       sortBy,
