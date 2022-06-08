@@ -7,7 +7,7 @@ import { ICollectionsFilterCollection } from '../types';
 
 type IUseCollectionsFilterUserCollections = (params: {
   userAddress: string | null;
-  onSuccess?: (response: unknown) => void;
+  onSuccess?: (response: ICollectionsFilterCollection[] | undefined) => void;
   onError?: (error: unknown) => void;
 }) => ICollectionsFilterCollection[] | undefined;
 

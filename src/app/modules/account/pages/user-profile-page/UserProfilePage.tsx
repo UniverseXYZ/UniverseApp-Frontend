@@ -7,10 +7,9 @@ import NotFound from "pages/404";
 import React, { useState } from "react";
 import Skeleton from "react-loading-skeleton";
 import { dehydrate, QueryClient, useQuery } from "react-query";
-import { useMedia, useSearchParam, useWindowSize } from "react-use";
+import { useMedia, useWindowSize } from "react-use";
 import ArtistDetails from "../../../../../components/artist/ArtistDetails";
 import { breakpoints } from "../../../../theme/constants";
-import FiltersContextProvider from "../../../account/pages/my-nfts-page/components/search-filters/search-filters.context";
 import { ArtistNFTsTab } from "./components";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
@@ -50,8 +49,6 @@ export const UserProfilePage: React.FC<IUserProfilePage> = ({
       refetchOnMount: "always",
     }
   );
-
-  const collectionSearchParam = useSearchParam("collection");
 
   if (isError || !data) {
     return <NotFound />;
@@ -125,15 +122,10 @@ export const UserProfilePage: React.FC<IUserProfilePage> = ({
 
             <TabPanels>
               <TabPanel p={0} pt={"30px"}>
-                <FiltersContextProvider
-                  defaultSorting={0}
-                  initialCollection={`${collectionSearchParam}`}
-                >
-                  <ArtistNFTsTab
-                    artistAddress={address}
-                    onTotalLoad={(total) => setTotalNFTs(total)}
-                  />
-                </FiltersContextProvider>
+                <ArtistNFTsTab
+                  artistAddress={address}
+                  onTotalLoad={(total) => setTotalNFTs(total)}
+                />
               </TabPanel>
             </TabPanels>
           </Tabs>

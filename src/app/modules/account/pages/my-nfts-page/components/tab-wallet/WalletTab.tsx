@@ -20,11 +20,14 @@ import { NFTCard } from '@app/modules/nft/components';
 import NftCardSkeleton from '../../../../../../../components/skeletons/nftCardSkeleton/NftCardSkeleton';
 import NoNftsFound from '../../../../../../../components/myNFTs/NoNftsFound';
 
-// Constants
+// Stores
 import { useAuthStore } from '../../../../../../../stores/authStore';
+
+// Constants
 import { getActiveListingsApi } from '@app/modules/marketplace/pages/browse-nfts-page/helpers';
 import { nftKeys } from '@app/utils/query-keys';
-
+import { SortBy, SortByNames, SortByOptions } from '@app/constants';
+import { Select } from '@app/components';
 import { Filter, Filters } from '@app/components/filters';
 import {
   SaleTypeFilter,
@@ -41,20 +44,23 @@ import { ToggleFiltersButton } from '@app/components/filters/components';
 
 import { NFTs_PER_PAGE } from './constants';
 import * as s from './WalletTab.styles';
-import { SortBy, SortByNames, SortByOptions } from '@app/constants';
-import { Select } from '@app/components';
 
 interface IWalletTabProps {
   getTotalNfts: (total: number) => void;
 }
 
 export const WalletTab: React.FC<IWalletTabProps> = (props) => {
-  // TODO: provide total NFTs
   const { getTotalNfts } = props;
 
   const address = useAuthStore(state => state.address);
 
   const filtersRef = useRef(null);
+
+  /**
+   * TODO
+   * Provide total NFTs when API endpoint will be ready
+   * https://app.shortcut.com/universexyz/story/4843/create-api-endpoint-to-receive-total-artist-nfts-number
+   */
 
   const intersection = useIntersection(filtersRef, {
     threshold: 1,
