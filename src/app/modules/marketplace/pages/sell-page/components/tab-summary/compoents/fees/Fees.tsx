@@ -24,7 +24,8 @@ export const Fees: React.FC<IFeesProps> = (props) => {
         continue;
       }
 
-      totals.push(totals[totals.length - 1] - totals[totals.length - 1] * (child.props.percent / 100));
+      const calculatedFrom = totals[totals.length - 1] - totals[totals.length - 1] * (child.props.percent / 100);
+      totals.push(calculatedFrom);
     }
 
     return totals;

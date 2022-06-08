@@ -18,7 +18,6 @@ export const TabOwners: React.FC = () => {
 
   const handleBuy = useCallback(() => {
     // checkoutNFT(); // TODO
-    console.log('handleBuy');
   }, []);
 
   return (

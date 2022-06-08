@@ -108,7 +108,7 @@ export const TabOffers = <T extends IOfferSingleListing | IOfferBundleListing>(p
         fetchCount += 1;
         const stringifiedOffers = offers.map((offer) => offer.id).join('');
 
-        // TODO: [Bundle] add bundle support
+        // FOR FUTURE: [Bundle] add bundle support
         const singleListingOffer = offer as IOrder<IOrderAssetTypeERC20, IOrderAssetTypeSingleListing>;
 
         const tokenId = singleListingOffer.take.assetType.tokenId?.toString();

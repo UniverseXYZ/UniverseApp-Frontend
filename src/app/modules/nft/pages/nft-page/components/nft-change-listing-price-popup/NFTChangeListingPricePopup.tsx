@@ -170,7 +170,7 @@ export const NFTChangeListingPricePopup: React.FC<INFTChangeListingPricePopupPro
   
       const createOrderResponse = (await createOrderMutation.mutateAsync({ ...orderData, signature })).data;
 
-      // TODO: [Bundle] add bundle support
+      // FOR FUTURE: [Bundle] add bundle support
       const singleListingOrder = order as IOrder<IOrderAssetTypeSingleListing, IOrderAssetTypeERC20>;
 
       const tokenIdCollectionPair = {

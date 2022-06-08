@@ -160,7 +160,7 @@ export const NFTCheckoutPopup = () => {
       const orderIndexing = setInterval(async () => {
         setFetchOrderCount((count) => (count += 1));
 
-        // TODO: [Bundle] add bundle support
+        // FOR FUTURE: [Bundle] add bundle support
         const singleListingOrder = order as IOrder<IOrderAssetTypeSingleListing, IOrderAssetTypeERC20>;
 
         const tokenId = singleListingOrder.make.assetType.tokenId?.toString();

@@ -101,7 +101,7 @@ export const SettingsTabFixedListing = () => {
               options={{
                 value: form.values.amount,
                 step: 1,
-                max: 10, // TODO: provide correct max value
+                max: 10, // FIXME: provide correct max value
                 min: 1,
                 onChange: (_, value) => form.setFieldValue('amount', value),
               }}
