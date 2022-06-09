@@ -8,10 +8,10 @@ import React, { useState } from "react";
 import Skeleton from "react-loading-skeleton";
 import { dehydrate, QueryClient, useQuery } from "react-query";
 import { useMedia, useWindowSize } from "react-use";
-import ArtistDetails from "../../../../../components/artist/ArtistDetails";
 import { breakpoints } from "../../../../theme/constants";
 import { ArtistNFTsTab } from "./components";
 import { useStaticHeader } from '@app/hooks';
+import { HeroSection } from "../../components";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const queryClient = new QueryClient();
@@ -40,7 +40,7 @@ export const UserProfilePage: React.FC<IUserProfilePage> = ({
 }) => {
   const windowSize = useWindowSize();
   const isMobile = useMedia(`(max-width: ${breakpoints.md})`);
-  
+
   const [totalNFTs, setTotalNFTs] = useState<number>();
 
   useStaticHeader();
@@ -109,10 +109,9 @@ export const UserProfilePage: React.FC<IUserProfilePage> = ({
         {openGraph}
         <div className="artist__page">
           <Box sx={{ img: { display: "inline" } }}>
-            <ArtistDetails
-              artistAddress={artistUsername}
-              onArtist={artist}
-              loading={isLoading}
+            <HeroSection
+              walletAddress={address}
+              user={artist}
             />
           </Box>
           <Tabs>
