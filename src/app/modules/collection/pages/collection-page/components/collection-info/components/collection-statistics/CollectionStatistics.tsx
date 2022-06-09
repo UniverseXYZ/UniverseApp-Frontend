@@ -1,90 +1,80 @@
-import { Box, Flex, SimpleGrid } from '@chakra-ui/react';
-import FloorPriceIcon from '../../../../../../../../../components/svgs/FloorPriceIcon';
-import FolderIcon from '../../../../../../../../../components/svgs/FolderIcon';
-import UserIcon from '../../../../../../../../../components/svgs/UserIcon';
-import VolumeTraded from '../../../../../../../../../components/svgs/VolumeTraded';
-import currencyIcon from '../../../../../../../../../assets/images/eth-icon-new.svg';
-import * as styles from './styles';
+import { Box, HStack, SimpleGrid, VStack } from '@chakra-ui/react';
 import { utils } from 'ethers';
-import { TOKENS_MAP } from '../../../../../../../../constants';
-import { formatPrice } from '../../../../../../../../utils/formatPrice';
+import React from 'react';
 
-export const CollectionStatistics = ({ nftsCount, ownersCount, floorPrice, volumeTraded }: any) => {
-  let _floorPrice = formatPrice(floorPrice);
+import { TOKENS_MAP } from '@app/constants';
+import { Icon, Icons, TokenIcon } from '@app/components';
+import { TokenTicker } from '@app/enums';
+import { formatPrice } from '@app/utils/formatPrice';
+
+import * as s from './CollectionStatistics.styles';
+
+interface ICollectionStatisticsProps {
+  amountNFTs?: number;
+  amountOwners?: number;
+  floorPrice?: string;
+  volumeTraded?: string;
+}
+
+export const CollectionStatistics: React.FC<ICollectionStatisticsProps> = (props) => {
+  const { amountNFTs, amountOwners, floorPrice, volumeTraded } = props;
+
+  type IItem = {
+    icon: Icons;
+    name: string;
+    isPrice: boolean;
+    value: string | number;
+  }
+
+  const items: IItem[] = [
+    {
+      icon: 'statisticItems',
+      name: 'Items',
+      isPrice: false,
+      value: amountNFTs || '',
+    },
+    {
+      icon: 'statisticOwners',
+      name: 'Owners',
+      isPrice: false,
+      value: amountOwners || '',
+    },
+    {
+      icon: 'statisticFloorPrice',
+      name: 'Floor price',
+      isPrice: true,
+      value: floorPrice ? formatPrice(floorPrice) : '-',
+    },
+    {
+      icon: 'statisticVolumeTraded',
+      name: 'Volume traded',
+      isPrice: true,
+      value: volumeTraded && Number(volumeTraded) > 0
+        ? Number(utils.formatUnits(volumeTraded, `${TOKENS_MAP.ETH.decimals}`)).toFixed(1)
+        : '-',
+    },
+  ];
 
   return (
     <>
-      <SimpleGrid columns={{ base: 1, sm: 2, lg: 4 }} spacing={'1px'} borderRadius={'12px'}>
-        <Flex {...styles.StatisticsContainerStyle}>
-          <Box {...styles.LabelStyle}>
-            <Box
-              sx={{
-                mr: '6px',
-              }}
-            >
-              <FolderIcon />
-            </Box>
-            Items
-          </Box>
-          <Box {...styles.ValueStyle}>{nftsCount}</Box>
-        </Flex>
-        <Flex {...styles.StatisticsContainerStyle}>
-          <Box {...styles.LabelStyle}>
-            <Box
-              sx={{
-                mr: '6px',
-              }}
-            >
-              <UserIcon />
-            </Box>
-            Owners
-          </Box>
-          <Box {...styles.ValueStyle}>{ownersCount}</Box>
-        </Flex>
-        <Flex {...styles.StatisticsContainerStyle}>
-          <Box {...styles.LabelStyle}>
-            <Box
-              sx={{
-                mr: '6px',
-              }}
-            >
-              <FloorPriceIcon />
-            </Box>
-            Floor price
-          </Box>
-          <Box {...styles.ValueStyle}>
-            {floorPrice ? (
-              <>
-                <img src={currencyIcon} alt="Currency" /> {_floorPrice}
-              </>
-            ) : (
-              '-'
-            )}
-          </Box>
-        </Flex>
-        <Flex {...styles.StatisticsContainerStyle}>
-          <Box {...styles.LabelStyle}>
-            <Box
-              sx={{
-                mr: '6px',
-              }}
-            >
-              <VolumeTraded />
-            </Box>
-            Volume traded
-          </Box>
-          <Box {...styles.ValueStyle}>
-            {Number(volumeTraded) > 0 ? (
-              <>
-                <img src={currencyIcon} alt="Currency" />{' '}
-                {Number(utils.formatUnits(volumeTraded, `${TOKENS_MAP.ETH.decimals}`)).toFixed(1)}
-              </>
-            ) : (
-              '-'
-            )}
-          </Box>
-        </Flex>
-      </SimpleGrid>
+      <Box {...s.Wrapper}>
+        <SimpleGrid {...s.Grid}>
+          {items.map(({ icon, name, isPrice, value }, i) => (
+            <VStack key={i} spacing={'10px'} {...s.ItemWrapper}>
+              <HStack spacing={'6px'} {...s.ItemLabel}>
+                <Icon name={icon} />
+                <Box as={'span'}>{name}</Box>
+              </HStack>
+              <HStack spacing={'6px'}>
+                {isPrice && (<TokenIcon ticker={TokenTicker.ETH} h={'28px'} />)}
+                <Box {...s.ItemValue}>
+                  {value}
+                </Box>
+              </HStack>
+            </VStack>
+          ))}
+        </SimpleGrid>
+      </Box>
     </>
   );
 };

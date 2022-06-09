@@ -1,16 +1,16 @@
 import React, { useEffect } from 'react';
-
-import CollectionPageProvider from './CollectionPage.context'
-import FiltersContextProvider from '../../../account/pages/my-nfts-page/components/search-filters/search-filters.context';
 import { GetServerSideProps } from 'next';
 import { dehydrate, QueryClient } from 'react-query';
+
+import { GetCollectionApi } from '@app/api';
 import { collectionKeys } from '@app/utils/query-keys';
+
 import { useThemeStore } from 'src/stores/themeStore';
-import { GetCollectionApi } from '../../../../api';
 import { CollectionInfo } from './components';
+import { CollectionPageProvider } from './CollectionPage.context'
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const { collectionAddress } = context.params as { collectionAddress: string;  };
+  const { collectionAddress } = context.params as { collectionAddress: string; };
   const queryClient = new QueryClient();
   
   await queryClient.prefetchQuery(collectionKeys.centralizedInfo(collectionAddress), async () => {
@@ -34,9 +34,7 @@ export const CollectionPage = () => {
 
   return (
     <CollectionPageProvider>
-      <FiltersContextProvider defaultSorting={0}>
-        <CollectionInfo />
-      </FiltersContextProvider>
+      <CollectionInfo />
     </CollectionPageProvider>
   );
 };

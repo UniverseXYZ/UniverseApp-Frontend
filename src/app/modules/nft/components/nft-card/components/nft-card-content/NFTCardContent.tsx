@@ -109,7 +109,7 @@ export const NFTCardContent = (props: INFTCardContentProps) => {
             {...styles.CollectionName}
             isTruncated={true}
             tabIndex={0}
-            onClick={() => router.push(`/collection/${collection?.address}`)}
+            onClick={() => router.push(`/collection/${collection?.address || NFT._collectionAddress}`)}
           >
             {collection?.name ||
               collection?.address ||

@@ -90,4 +90,5 @@ export const collectionKeys = {
   userCollections: (userAddress: string) =>  ['collections', 'user', {userAddress: userAddress.toLowerCase()}] as const,
   collectionOwner: (address: string) => ['collection', address, 'owner'],
   collectionStatistic: (address: string) => ['collection', address, 'statistic'],
+  collectionNFTs: (address: string, filters: any = {}) => ['collection', address, 'NFTs', {...filters}]
 }

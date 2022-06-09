@@ -1,14 +1,14 @@
-import { cssVar, SystemStyleFunction } from "@chakra-ui/theme-tools"
+import { mode, cssVar, SystemStyleFunction } from "@chakra-ui/theme-tools";
 
 const $arrowBg = cssVar('popper-arrow-bg');
 
-const baseStyle: SystemStyleFunction = () => {
+const baseStyle: SystemStyleFunction = (props) => {
   return {
-    background: 'black',
-    [$arrowBg.variable]: 'black',
+    background: mode('black', 'white')(props),
+    [$arrowBg.variable]: mode('black', 'white')(props),
     borderRadius: '8px',
     boxShadow: '0px 10px 20px rgba(136, 120, 172, 0.2)',
-    color: 'white',
+    color: mode('white', 'black')(props),
     fontFamily: '"Space Grotesk"',
     fontSize: '14px',
     fontWeight: 400,

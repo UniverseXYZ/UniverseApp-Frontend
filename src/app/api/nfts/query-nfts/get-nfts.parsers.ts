@@ -7,7 +7,7 @@ import { ARTWORK_TYPES } from '@legacy/helpers/pureFunctions/nfts';
 import { INFTBackend } from './types';
 
 export const parseNFTBackend = (NFTData: INFTBackend): INFT => {
-  const alternativeImage = NFTData.alternativeMediaFiles.find(file => file.type === ARTWORK_TYPES.image);
+  const alternativeImage = NFTData.alternativeMediaFiles?.find(file => file.type === ARTWORK_TYPES.image);
   const altImgComponents = alternativeImage?.url.split('.');
 
   let isSvg: boolean = false;

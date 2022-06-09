@@ -19,6 +19,19 @@ import { ReactComponent as FilterSaleTypeSVG } from '@assets/icons/filter-sale-t
 import { ReactComponent as FiltersSVG } from '@assets/icons/filters.svg';
 import { ReactComponent as GridSMSVG } from '@assets/icons/grid-sm.svg';
 import { ReactComponent as GridMDSVG } from '@assets/icons/grid-md.svg';
+import { ReactComponent as StatisticItemsSVG } from '@assets/icons/statistic-items.svg';
+import { ReactComponent as StatisticOwnersSVG } from '@assets/icons/statistic-owners.svg';
+import { ReactComponent as StatisticFloorPriceSVG } from '@assets/icons/statistic-floor-price.svg';
+import { ReactComponent as StatisticVolumeTradedSVG } from '@assets/icons/statistic-volume-traded.svg';
+import { ReactComponent as ExternalLinkSVG } from '@assets/icons/external-link.svg';
+import { ReactComponent as PenSVG } from '@assets/icons/pen.svg';
+import { ReactComponent as TwitterSVG } from '@assets/icons/twitter.svg';
+import { ReactComponent as DiscordSVG } from '@assets/icons/discord.svg';
+import { ReactComponent as GlobeSVG } from '@assets/icons/globe.svg';
+import { ReactComponent as InstagramSVG } from '@assets/icons/instagram.svg';
+import { ReactComponent as MediumSVG } from '@assets/icons/medium.svg';
+import { ReactComponent as TelegramSVG } from '@assets/icons/telegram.svg';
+import { ReactComponent as Dots3SVG } from '@assets/icons/3-dots.svg';
 
 export type Icons =
   | 'plus'
@@ -39,6 +52,19 @@ export type Icons =
   | 'filters'
   | 'smGrid'
   | 'mdGrid'
+  | 'statisticItems'
+  | 'statisticOwners'
+  | 'statisticFloorPrice'
+  | 'statisticVolumeTraded'
+  | 'externalLink'
+  | 'pen'
+  | 'twitter'
+  | 'discord'
+  | 'globe'
+  | 'instagram'
+  | 'medium'
+  | 'telegram'
+  | 'dots3'
 ;
 
 const icons: Record<Icons, React.FC> = {
@@ -60,6 +86,19 @@ const icons: Record<Icons, React.FC> = {
   filters: FiltersSVG,
   smGrid: GridSMSVG,
   mdGrid: GridMDSVG,
+  statisticItems: StatisticItemsSVG,
+  statisticOwners: StatisticOwnersSVG,
+  statisticFloorPrice: StatisticFloorPriceSVG,
+  statisticVolumeTraded: StatisticVolumeTradedSVG,
+  externalLink: ExternalLinkSVG,
+  pen: PenSVG,
+  twitter: TwitterSVG,
+  discord: DiscordSVG,
+  globe: GlobeSVG,
+  instagram: InstagramSVG,
+  medium: MediumSVG,
+  telegram: TelegramSVG,
+  dots3: Dots3SVG,
 };
 
 interface IIconProps extends BoxProps {
