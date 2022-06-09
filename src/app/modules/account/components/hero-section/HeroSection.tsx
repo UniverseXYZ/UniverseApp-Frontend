@@ -27,9 +27,10 @@ export const HeroSection = ({ walletAddress, user }: IHeroSectionProps) => {
         {...styles.HeroSectionBackgroundStyle}
         bg={
           user.avatar
-            ? `url(${user.avatar})`
+            ? `url(${user.avatar}) no-repeat center center`
             : 'linear-gradient(135deg, #4568DC 0%, #B06AB3 100%)'
         }
+        bgSize='cover'
       />
       <Animated animationIn="zoomIn">
         <Box {...styles.HeroSectionContainerStyle}>

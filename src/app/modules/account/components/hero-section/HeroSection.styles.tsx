@@ -19,9 +19,6 @@ export const HeroSectionWrapperStyle: BoxProps = {
 }
 
 export const HeroSectionBackgroundStyle: BoxProps = {
-  backgroundSize: 'cover',
-  backgroundPosition: 'center',
-  backgroundRepeat: 'no-repeat',
   width: '100%',
   height: '100%',
   position: 'absolute',
