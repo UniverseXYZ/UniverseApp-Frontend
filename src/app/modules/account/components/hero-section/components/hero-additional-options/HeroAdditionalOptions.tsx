@@ -9,7 +9,7 @@ import {
 } from "@chakra-ui/react";
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
-import Socials from './Socials';
+import { HeroSocials } from '../hero-socials';
 // TODO: move MenuItem to global components
 import { MenuItem } from '@app/modules/nft/components/nft-menu/components';
 import * as styles from '@app/modules/nft/components/nft-menu/styles';
@@ -19,11 +19,12 @@ import twitterIcon from '@assets/images/icons_twitter.svg';
 import socialShareIcon from '@assets/images/social-share.svg';
 import { IUser } from "@app/types";
 
-interface IAdditionalOptionsProps {
+interface IHeroAdditionalOptionsProps {
   user: IUser;
   showEditBtn: boolean;
 }
-const AdditionalOptions = ({ user, showEditBtn }: IAdditionalOptionsProps) => {
+
+export const HeroAdditionalOptions = ({ user, showEditBtn }: IHeroAdditionalOptionsProps) => {
   const router = useRouter();
   const [copied, setCopied] = useState(false);
 
@@ -38,7 +39,7 @@ const AdditionalOptions = ({ user, showEditBtn }: IAdditionalOptionsProps) => {
 
   return (
     <>
-      <Socials
+      <HeroSocials
         instagram={user.instagramLink}
         twitter={user.twitterLink}
         website={user.websiteLink}
@@ -89,5 +90,3 @@ const AdditionalOptions = ({ user, showEditBtn }: IAdditionalOptionsProps) => {
     </>
   );
 };
-
-export default AdditionalOptions;

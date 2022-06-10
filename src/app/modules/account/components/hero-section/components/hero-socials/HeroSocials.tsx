@@ -1,17 +1,17 @@
 import React from 'react';
 import { Box, Image, Link } from "@chakra-ui/react";
-import * as styles from "./HeroSection.styles";
+import * as styles from "../../HeroSection.styles";
 import twitterIcon from '@assets/images/icons_twitter.svg';
 import instagramIcon from '@assets/images/instagram-outlined.svg';
 import websiteIcon from '@assets/images/website.svg';
 
-interface ISocialsProps {
+interface IHeroSocialsProps {
   instagram: string;
   twitter: string;
   website: string;
 }
 
-const Socials = ({ instagram, twitter, website }: ISocialsProps) => {
+export const HeroSocials = ({ instagram, twitter, website }: IHeroSocialsProps) => {
   return (
     <Box {...styles.SocialsWrapperStyle}>
       {instagram && (
@@ -52,5 +52,3 @@ const Socials = ({ instagram, twitter, website }: ISocialsProps) => {
     </Box>
   );
 };
-
-export default Socials;

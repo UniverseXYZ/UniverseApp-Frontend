@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { Text } from "@chakra-ui/react";
 
-interface IBioProps {
+interface IHeroBioProps {
   bio: string;
 }
 
-const Bio = ({ bio }: IBioProps) => {
+export const HeroBio = ({ bio }: IHeroBioProps) => {
 
   const [showMore, setShowMore] = useState(false);
 
@@ -33,5 +33,3 @@ const Bio = ({ bio }: IBioProps) => {
     </Text>
   );
 };
-
-export default Bio;

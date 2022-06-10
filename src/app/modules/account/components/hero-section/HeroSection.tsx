@@ -1,3 +1,4 @@
+import React from "react";
 import {
   Box,
   Heading,
@@ -5,10 +6,8 @@ import {
 } from "@chakra-ui/react";
 import { Animated } from 'react-animated-css';
 import * as styles from './HeroSection.styles';
-import React from "react";
 import { CopyAndLinkAddress } from "@app/components";
-import Bio from "./Bio";
-import AdditionalOptions from "./AdditionalOptions";
+import { HeroBio, HeroAdditionalOptions } from './components';
 import { useAuthStore } from "../../../../../stores/authStore";
 import { IUser } from "@app/types";
 
@@ -46,23 +45,23 @@ export const HeroSection = ({ walletAddress, user }: IHeroSectionProps) => {
                 <CopyAndLinkAddress walletAddress={walletAddress} />
               </Box>
               <Box display={{ base: 'none', lg: 'flex' }}>
-                <AdditionalOptions
+                <HeroAdditionalOptions
                   user={user}
                   showEditBtn={address === walletAddress}
                 />
               </Box>
             </Box>
             <Box display={{ base: 'none', lg: 'flex' }} mt={2}>
-              {user.about && <Bio bio={user.about} />}
+              {user.about && <HeroBio bio={user.about} />}
             </Box>
           </Box>
         </Box>
         {/* Shown on mobile */}
         <Box display={{ base: 'flex', lg: 'none' }} mt={3}>
-          {user.about && <Bio bio={user.about} />}
+          {user.about && <HeroBio bio={user.about} />}
         </Box>
         <Box display={{ base: 'flex', lg: 'none' }} mt={3}>
-          <AdditionalOptions
+          <HeroAdditionalOptions
             user={user}
             showEditBtn={address === walletAddress}
           />

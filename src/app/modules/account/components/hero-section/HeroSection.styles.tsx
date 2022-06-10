@@ -73,14 +73,12 @@ export const InfoTopStyle: BoxProps = {
   display: 'flex',
   alignItems: 'flex-start',
   justifyContent: 'space-between',
-  // flexGrow: '1',
 };
 
 export const MainInfoStyle: BoxProps = {
   display: 'flex',
   alignItems: 'flex-start',
   justifyContent: 'space-between',
-  // flexGrow: '1',
 };
 
 export const AdditionalOptionsStyle: BoxProps = {
