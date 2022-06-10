@@ -89,12 +89,18 @@ const MobileView = (props) => {
     showMobileSearch,
     setShowMobileSearch,
   } = props;
-  const { yourEnsDomain, signOut, isAuthenticating, loggedInArtist } = useAuthStore(s => ({
+  const {
+    yourEnsDomain,
+    signOut,
+    isAuthenticating,
+    loggedInArtist,
+  } = useAuthStore(s => ({
     yourEnsDomain: s.yourEnsDomain,
     signOut: s.signOut,
     isAuthenticating: s.isAuthenticating,
-loggedInArtist: s.loggedInArtist,
+    loggedInArtist: s.loggedInArtist,
   }))
+
   const { yourBalance, usdEthBalance } = useUserBalanceStore(state => ({yourBalance: state.yourBalance, usdEthBalance: state.usdEthBalance}));
 
   const [isAccountDropdownOpened, setIsAccountDropdownOpened] = useState(false);
@@ -513,8 +519,14 @@ loggedInArtist: s.loggedInArtist,
                   <button
                     type="button"
                     onClick={() => {
-                      history.push('/my-nfts');
-                      setIsAccountDropdownOpened(!isAccountDropdownOpened);
+                      if (!loggedInArtist.universePageAddress && !address) return;
+
+                      const path = loggedInArtist.universePageAddress
+                        ? loggedInArtist.universePageAddress
+                        : address;
+                      history.push(`/${path}`);
+
+                      setIsAccountDropdownOpened(false);
                     }}
                   >
                     <img src={myNFTsIcon} alt="My NFTs" />
