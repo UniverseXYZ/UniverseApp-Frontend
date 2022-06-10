@@ -42,10 +42,13 @@ import { Icon, OpenGraph, Select } from '@app/components';
 import { NFTCard, NoNFTsFound } from '@app/modules/nft/components';
 import { SortBy, SortByNames, SortByOptions } from '@app/constants';
 import {
-  NFTTypeFilter, PriceRangeFilter,
+  NFTTypeFilter,
+  PriceRangeFilter,
+  PropertiesFilter,
   SaleTypeFilter,
   useNFTTypeFilter,
   usePriceRangeFilter,
+  usePropertiesFilter,
   useSaleTypeFilter,
 } from '@app/components/filters/shared';
 import { Filter, Filters, ToggleFiltersButton } from '@app/components/filters';
@@ -122,6 +125,7 @@ export const CollectionInfo = () => {
   const saleTypeFilter = useSaleTypeFilter();
   const nftTypeFilter= useNFTTypeFilter();
   const priceRangeFilter = usePriceRangeFilter();
+  const propertiesFilter = usePropertiesFilter();
 
   const dirtyFiltersAmount = useMemo(() => {
     return [
@@ -379,6 +383,13 @@ export const CollectionInfo = () => {
                     <PriceRangeFilter
                       value={priceRangeFilter.form.values}
                       onChange={(value) => priceRangeFilter.form.setValues(value)}
+                    />
+                  </Filter>
+                  <Filter filter={propertiesFilter}>
+                    <PropertiesFilter
+                      collectionAddress={collectionAddress}
+                      value={propertiesFilter.form.values}
+                      onChange={(value) => propertiesFilter.form.setValues(value)}
                     />
                   </Filter>
                 </Filters>
