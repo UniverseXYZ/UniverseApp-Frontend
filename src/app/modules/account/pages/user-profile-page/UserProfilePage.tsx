@@ -1,16 +1,15 @@
 import { getArtistApi } from "@app/api";
-import { OpenGraph, TabLabel } from "@app/components";
+import { OpenGraph } from "@app/components";
 import { userKeys } from "@app/utils/query-keys";
-import { Box, Tab, TabList, TabPanel, TabPanels, Tabs } from "@chakra-ui/react";
+import { Box } from "@chakra-ui/react";
 import { GetServerSideProps } from "next";
 import NotFound from "pages/404";
-import React, { useState } from "react";
+import React from "react";
 import Skeleton from "react-loading-skeleton";
 import { dehydrate, QueryClient, useQuery } from "react-query";
-import { useMedia, useWindowSize } from "react-use";
-import { breakpoints } from "../../../../theme/constants";
-import { ArtistNFTsTab } from "./components";
+import { useWindowSize } from "react-use";
 import { useStaticHeader } from '@app/hooks';
+import { MyNFTs } from "./components";
 import { HeroSection } from "../../components";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
@@ -39,9 +38,6 @@ export const UserProfilePage: React.FC<IUserProfilePage> = ({
   artistUsername,
 }) => {
   const windowSize = useWindowSize();
-  const isMobile = useMedia(`(max-width: ${breakpoints.md})`);
-
-  const [totalNFTs, setTotalNFTs] = useState<number>();
 
   useStaticHeader();
 
@@ -114,23 +110,7 @@ export const UserProfilePage: React.FC<IUserProfilePage> = ({
               user={artist}
             />
           </Box>
-          <Tabs>
-            <TabList maxW={'1110px'} m={'auto'} padding={isMobile ? '20px' : '0px'}>
-              <Tab>NFTs {totalNFTs && (<TabLabel>{totalNFTs}</TabLabel>)}</Tab>
-              {/*<Tab>Active auctions</Tab>*/}
-              {/*<Tab>Future auctions</Tab>*/}
-              {/*<Tab>Past auctions</Tab>*/}
-            </TabList>
-
-            <TabPanels>
-              <TabPanel p={0} pt={"30px"}>
-                <ArtistNFTsTab
-                  artistAddress={address}
-                  onTotalLoad={(total) => setTotalNFTs(total)}
-                />
-              </TabPanel>
-            </TabPanels>
-          </Tabs>
+          <MyNFTs />
           {artist && artist.personalLogo && (
             <div className="artist__personal__logo">
               <img src={artist.personalLogo} alt="Artist personal logo" />

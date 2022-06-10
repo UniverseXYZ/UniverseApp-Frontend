@@ -1,1 +1,1 @@
-export * from './artist-nfts-tab';
+export * from './my-nfts';
