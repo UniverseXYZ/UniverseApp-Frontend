@@ -1,5 +1,5 @@
 import create from "zustand";
-import { getTokenPriceCoingecko } from "../utils/api/etherscan";
+import { getAllTokenPricesCoingecko } from "../utils/api/etherscan";
 import { TokenTicker } from "../app/enums";
 import { useUserBalanceStore } from "./balanceStore";
 
@@ -16,6 +16,17 @@ interface IErc20PriceStoreState {
   getTokenPriceByTicker: (ticker: TokenTicker) => number;
 }
 
+interface TokenPrice {
+  symbol: string;
+  updatedAt: Date;
+  usd: number;
+  name: string;
+}
+
+const findTokenPrice = (tokenPrices: TokenPrice[], token: string) => {
+  return tokenPrices.find((tokenPriceData: TokenPrice) => tokenPriceData.name === token);
+}
+
 export const useErc20PriceStore = create<IErc20PriceStoreState>((set, get) => ({
   // initial state
   ethUsdPrice: 0,
@@ -26,13 +37,12 @@ export const useErc20PriceStore = create<IErc20PriceStoreState>((set, get) => ({
   // fetching functions
   fetchPrices: async () => {
     try {
-      const [ethPrice, daiInfo, usdcInfo, xyzInfo, wethInfo] = await Promise.all([
-        getTokenPriceCoingecko('ethereum'),
-        getTokenPriceCoingecko('dai'),
-        getTokenPriceCoingecko('usd-coin'),
-        getTokenPriceCoingecko('universe-xyz'),
-        getTokenPriceCoingecko('weth'),
-      ]);
+      const tokenPrices: TokenPrice[] = await getAllTokenPricesCoingecko();
+      const ethPrice = findTokenPrice(tokenPrices, 'ethereum');
+      const daiInfo = findTokenPrice(tokenPrices, 'dai');
+      const usdcInfo = findTokenPrice(tokenPrices, 'usd-coin');
+      const xyzInfo = findTokenPrice(tokenPrices, 'universe-xyz');
+      const wethInfo = findTokenPrice(tokenPrices, 'weth');
 
       console.log(`wethPrice: ${wethInfo?.usd}`);
       console.log(`ethPrice: ${ethPrice?.usd}`);

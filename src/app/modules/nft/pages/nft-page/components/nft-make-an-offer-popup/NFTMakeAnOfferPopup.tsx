@@ -56,6 +56,7 @@ import { getMakeOfferValidationSchema } from './helpers';
 import { AVAILABLE_TOKENS } from '@app/modules/nft/pages/nft-page/components/nft-make-an-offer-popup/constants';
 import { IToken } from '@app/types';
 import { TOKENS_MAP } from '@app/constants';
+import { getTokenPriceCoingecko } from '../../../../../../../utils/api/etherscan';
 
 // @ts-ignore
 const { contracts: contractsData } = Contracts[process.env.REACT_APP_NETWORK_CHAIN_ID];
@@ -84,10 +85,6 @@ export const NFTMakeAnOfferPopup: React.FC = () => {
   const [tokenPrice, setTokenPrice] = useState(0);
   const [approveTx, setApproveTx] = useState<string>('');
   const [validateRoyalties, setValidateRoyalties] = useState(false);
-
-  const getPriceMutation = useMutation((coingeckoId: any) => {
-    return axios.get(`https://api.coingecko.com/api/v3/simple/price?ids=${coingeckoId}&vs_currencies=usd`);
-  });
 
   const encodeDataMutation = useMutation((data: any) => {
     return axios.post(`${process.env.REACT_APP_MARKETPLACE_BACKEND}/v1/orders/encoder/order`, data);
@@ -271,8 +268,9 @@ export const NFTMakeAnOfferPopup: React.FC = () => {
 
   useEffect(()=> {
     const loadPrice = async () => {
-      const response = (await getPriceMutation.mutateAsync(formik.values.token.coingeckoId)).data
-      setTokenPrice(response[formik.values.token.coingeckoId]['usd']);
+      const token = formik.values.token as TokenTicker;
+      const response = await getTokenPriceCoingecko(TOKENS_MAP[token].coingeckoId);
+      setTokenPrice(response['usd']);
     }
     loadPrice();
   },[formik.values.token])
