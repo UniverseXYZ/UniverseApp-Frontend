@@ -31,7 +31,6 @@ import SearchIcon from '@assets/images/search-gray.svg';
 // Legacy
 import { CollectionPageLoader } from "@legacy/collection/CollectionPageLoader";
 import NotFound from '../../../../../../../components/notFound/NotFound';
-import Cover from "../../../../../../../components/collection/Cover";
 import NftCardSkeleton from "../../../../../../../components/skeletons/nftCardSkeleton/NftCardSkeleton";
 import Contracts from "../../../../../../../contracts/contracts.json";
 import { useAuthStore } from "../../../../../../../stores/authStore";
@@ -51,15 +50,15 @@ import {
 } from '@app/components/filters/shared';
 import { Filter, Filters, ToggleFiltersButton } from '@app/components/filters';
 import { NFTCardSize, useNFTFluidGrid, useStaticHeader } from '@app/hooks';
-import { formatAddress } from '@app/helpers';
+import { formatAddress, getStrGradient } from '@app/helpers';
 
 import { collectionKeys } from '@app/utils/query-keys';
 import { queryNFTsApi } from '@app/api';
 import { ORDERS_PER_PAGE } from '@app/modules/marketplace/pages/browse-nfts-page/constants';
-
-import { CollectionSocialLinks, CollectionStatistics, NoDescriptionFound } from './components';
-import * as s from './CollectionInfo.styles';
 import { ToggleButton, ToggleButtonGroup } from '@app/modules/marketplace/pages/browse-nfts-page/components';
+
+import { CollectionCover, CollectionSocialLinks, CollectionStatistics, NoDescriptionFound } from './components';
+import * as s from './CollectionInfo.styles';
 
 export const CollectionInfo = () => {
   const router = useRouter();
@@ -201,10 +200,12 @@ export const CollectionInfo = () => {
     },
   };
 
-  const isEditor = (isAuthenticated &&
+  const isOwner = (isAuthenticated &&
     (address?.toLowerCase() === ownerAddress
       || address?.toLowerCase() === process.env.REACT_APP_COLLECTION_EDITOR?.toLowerCase()
     ));
+
+  const [color1, color2] = getStrGradient(collectionAddress);
 
   // FIXME: NotFound + CollectionPageLoader
   // return (<NotFound />);
@@ -227,10 +228,10 @@ export const CollectionInfo = () => {
       ></script>
 
       <Box layerStyle={"StoneBG"}>
-        <Cover
-          selectedCollection={collection}
-          collectionGeneralInfo={collectionGeneralInfo}
-          collectionOwner={ownerAddress}
+        <CollectionCover
+          collectionAddress={collectionAddress}
+          collection={collection}
+          isOwner={isOwner}
         />
         <Box {...s.CollectionInfoWrapper}>
           <Stack
@@ -239,11 +240,15 @@ export const CollectionInfo = () => {
             mb={['16px', null, 0]}
           >
             <HStack spacing={'20px'} mb={'16px'}>
-              <Avatar
-                src={collection?.coverUrl}
-                name={collectionGeneralInfo?.name || collection?.name}
-                {...s.Avatar}
-              />
+              {collection?.coverUrl ? (
+                <Avatar
+                  src={collection?.coverUrl}
+                  name={collectionGeneralInfo?.name || collection?.name}
+                  {...s.Avatar}
+                />
+              ) : (
+                <Box bgGradient={`linear(to-br, ${color1}, ${color2})`} borderRadius={'full'} boxSize={'72px'} />
+              )}
               <VStack spacing={'4px'} alignItems={'flex-start'}>
                 <Heading {...s.CollectionName}>
                   {collectionGeneralInfo?.name || collection.name}
@@ -274,7 +279,7 @@ export const CollectionInfo = () => {
                 telegram={collection?.telegramLink}
               />
               <HStack spacing={'12px'}>
-                {isEditor && (
+                {isOwner && (
                   <Button
                     variant={'ghost'}
                     color={'white'}

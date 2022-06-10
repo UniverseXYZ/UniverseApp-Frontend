@@ -9,7 +9,7 @@ type IMyNftsStore = {
   // Getters
   myNFTs: [],
   savedNfts: [],
-  myMintableCollections:[],
+  myMintableCollections: any[],
   activeTxHashes: [],
   myNFTsSelectedTabIndex: number,
   myUniverseNFTsActiverPage: number,
@@ -19,7 +19,7 @@ type IMyNftsStore = {
   // Setters
   setMyNFTs: (myNFTs: []) => void,
   setSavedNfts: (savedNfts: []) => void,
-  setMyMintableCollections: (myMintableCollections: []) => void,
+  setMyMintableCollections: (myMintableCollections: any[]) => void,
   setActiveTxHashes: (activeTxHashes: []) => void,
   setMyNFTsSelectedTabIndex: (myNFTsSelectedTabIndex: number) => void,
   setMyUniverseNFTsActiverPage: (myUniverseNFTsActiverPage: number) => void,

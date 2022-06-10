@@ -17,8 +17,9 @@ export const NFTCardImageAsset = (props: INFTCardImageAssetProps) => {
     <NextImage
       src={assetUrl}
       alt={NFT.name}
-      width={800}
-      height={800}
+      width={500}
+      height={500}
+      quality={25}
       onLoadingComplete={onLoadingComplete}
       onError={onError}
     />

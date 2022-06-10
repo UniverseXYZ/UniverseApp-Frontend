@@ -33,9 +33,10 @@ interface IQueryNFTsAPIResponse {
 }
 
 export const queryNFTsApi = async (params: IQueryNFTsAPIRequestData = { page: 1, limit: 12 }) => {
-  const url = `${process.env.REACT_APP_CLOUD_FUNCTIONS}/queryNfts`;
+  const url = `${process.env.REACT_APP_CLOUD_FUNCTIONS}/nfts`;
 
   const queryParams = querystring.stringify({
+    action: 'query',
     page: params.page,
     limit: params.limit,
     searchQuery: params.search || undefined,

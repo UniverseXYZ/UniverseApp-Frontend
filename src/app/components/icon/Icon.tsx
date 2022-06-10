@@ -32,6 +32,7 @@ import { ReactComponent as InstagramSVG } from '@assets/icons/instagram.svg';
 import { ReactComponent as MediumSVG } from '@assets/icons/medium.svg';
 import { ReactComponent as TelegramSVG } from '@assets/icons/telegram.svg';
 import { ReactComponent as Dots3SVG } from '@assets/icons/3-dots.svg';
+import { ReactComponent as UploadSVG } from '@assets/icons/upload.svg';
 
 export type Icons =
   | 'plus'
@@ -65,6 +66,7 @@ export type Icons =
   | 'medium'
   | 'telegram'
   | 'dots3'
+  | 'upload'
 ;
 
 const icons: Record<Icons, React.FC> = {
@@ -99,6 +101,7 @@ const icons: Record<Icons, React.FC> = {
   medium: MediumSVG,
   telegram: TelegramSVG,
   dots3: Dots3SVG,
+  upload: UploadSVG,
 };
 
 interface IIconProps extends BoxProps {
