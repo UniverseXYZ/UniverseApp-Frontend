@@ -2,15 +2,25 @@ import { useRadio, useRadioGroup, UseRadioProps } from '@chakra-ui/radio';
 import { Box, HStack } from '@chakra-ui/react';
 import React from 'react';
 
+type IToggleButtonGroupSize = 'md' | 'lg';
+
 interface IRadioCardProps extends UseRadioProps {
+  size: IToggleButtonGroupSize;
   children: React.ReactNode;
 }
 
 function RadioCard(props: IRadioCardProps) {
-  const { getInputProps, getCheckboxProps } = useRadio(props);
+  const { size, ...rest } = props;
+
+  const { getInputProps, getCheckboxProps } = useRadio(rest);
 
   const input = getInputProps()
   const checkbox = getCheckboxProps()
+
+  const sizes: Record<IToggleButtonGroupSize, string> = {
+    md: '6px',
+    lg: '10px',
+  };
 
   return (
     <Box as='label'>
@@ -22,7 +32,7 @@ function RadioCard(props: IRadioCardProps) {
           borderRadius: '7px',
           color: '#CCCCCC',
           cursor: 'pointer',
-          padding: '8px 10px',
+          padding: sizes[size],
           lineHeight: '12px',
           _hover: {
             color: 'rgba(0 0 0 / 40%)',
@@ -52,13 +62,14 @@ export const ToggleButton = (props: IToggleButtonProps) => {
 }
 
 interface IToggleButtonGroupProps {
+  size?: IToggleButtonGroupSize;
   name: string;
   value?: string | number;
   children: React.ReactNode;
   onChange?: (value: string | number) => void;
 }
 export const ToggleButtonGroup = (props: IToggleButtonGroupProps) => {
-  const { name, value, children, onChange } = props;
+  const { size = 'md', name, value, children, onChange } = props;
 
   const { getRootProps, getRadioProps } = useRadioGroup({
     name,
@@ -84,7 +95,7 @@ export const ToggleButtonGroup = (props: IToggleButtonGroupProps) => {
 
         const radio = getRadioProps({ value: elementChild.props.value });
         return (
-          <RadioCard key={i} {...radio}>
+          <RadioCard key={i} size={size} {...radio}>
             {child}
           </RadioCard>
         )

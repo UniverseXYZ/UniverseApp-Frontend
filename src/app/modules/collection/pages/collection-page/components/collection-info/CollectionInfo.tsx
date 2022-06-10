@@ -22,7 +22,7 @@ import { Contract, providers } from 'ethers';
 import { useRouter } from "next/router";
 import { useInfiniteQuery, useQuery } from 'react-query';
 import React, { useCallback, useMemo, useRef, useState } from 'react';
-import { useCopyToClipboard, useDebounce, useIntersection } from 'react-use';
+import { useCopyToClipboard, useDebounce, useIntersection, useMeasure } from 'react-use';
 
 // Assets
 import CollectionOGPlaceholder from "@assets/images/open-graph/collection-placeholder.png";
@@ -50,7 +50,7 @@ import {
   useSaleTypeFilter,
 } from '@app/components/filters/shared';
 import { Filter, Filters, ToggleFiltersButton } from '@app/components/filters';
-import { useStaticHeader } from '@app/hooks';
+import { NFTCardSize, useNFTFluidGrid, useStaticHeader } from '@app/hooks';
 import { formatAddress } from '@app/helpers';
 
 import { collectionKeys } from '@app/utils/query-keys';
@@ -59,6 +59,7 @@ import { ORDERS_PER_PAGE } from '@app/modules/marketplace/pages/browse-nfts-page
 
 import { CollectionSocialLinks, CollectionStatistics, NoDescriptionFound } from './components';
 import * as s from './CollectionInfo.styles';
+import { ToggleButton, ToggleButtonGroup } from '@app/modules/marketplace/pages/browse-nfts-page/components';
 
 export const CollectionInfo = () => {
   const router = useRouter();
@@ -100,6 +101,10 @@ export const CollectionInfo = () => {
       return owner.toLowerCase();
     }
   );
+
+  const [containerRef, { width: containerWidth }] = useMeasure<HTMLDivElement>();
+
+  const NFTGrid = useNFTFluidGrid(containerWidth, 16);
 
   const filtersRef = useRef(null);
 
@@ -201,7 +206,7 @@ export const CollectionInfo = () => {
       || address?.toLowerCase() === process.env.REACT_APP_COLLECTION_EDITOR?.toLowerCase()
     ));
 
-  // FIXME
+  // FIXME: NotFound + CollectionPageLoader
   // return (<NotFound />);
   // return (<CollectionPageLoader />);
 
@@ -333,6 +338,21 @@ export const CollectionInfo = () => {
                     dirtyAmount={dirtyFiltersAmount}
                     onClick={() => setShowFilters(!showFilters)}
                   />
+                  <ToggleButtonGroup
+                    size={'lg'}
+                    name={"nftSize"}
+                    value={NFTGrid.size}
+                    onChange={(val) => {
+                      NFTGrid.setSize(val as NFTCardSize)
+                    }}
+                  >
+                    <ToggleButton value={NFTCardSize.LG}>
+                      <Icon name={'mdGrid'} />
+                    </ToggleButton>
+                    <ToggleButton value={NFTCardSize.SM}>
+                      <Icon name={'smGrid'} />
+                    </ToggleButton>
+                  </ToggleButtonGroup>
                 </Stack>
                 <Filters show={showFilters} mt={'16px'}>
                   <Filter filter={saleTypeFilter}>
@@ -355,10 +375,13 @@ export const CollectionInfo = () => {
                   </Filter>
                 </Filters>
               </Box>
-              <Box px={['16px', null, '24px', '40px']}>
+              <Box ref={containerRef} px={['16px', null, '24px', '40px']}>
                 {/*First load*/}
                 {(isFetching && !isFetchingNextPage && !NFTs?.pages.length) && (
-                  <SimpleGrid columns={[1, null, 2, 4]} spacing={'30px'}>
+                  <SimpleGrid
+                    columns={NFTGrid.columns}
+                    spacing={`${NFTGrid.spacing}px`}
+                  >
                     <NftCardSkeleton />
                     <NftCardSkeleton />
                     <NftCardSkeleton />
@@ -366,7 +389,10 @@ export const CollectionInfo = () => {
                   </SimpleGrid>
                 )}
 
-                <SimpleGrid columns={[1, null, 2, 4]} spacing={'30px'}>
+                <SimpleGrid
+                  columns={NFTGrid.columns}
+                  spacing={`${NFTGrid.spacing}px`}
+                >
                   {(NFTs?.pages ?? []).map((page) => {
                     return page.data.map(({ order, NFT }) => (
                       <NFTCard
@@ -378,11 +404,11 @@ export const CollectionInfo = () => {
                   })}
                 </SimpleGrid>
 
-                {/*FIXME*/}
+                {/*FIXME: NoNFTsFound*/}
                 {/*<NoNFTsFound />*/}
 
                 {(hasNextPage && !isFetching) && (
-                  <Button variant={'outline'} isFullWidth={true} mt={10} onClick={() => fetchNextPage()}>
+                  <Button variant={'ghost'} isFullWidth={true} mt={10} onClick={() => fetchNextPage()}>
                     Load more
                   </Button>
                 )}
