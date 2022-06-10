@@ -53,7 +53,7 @@ import { NFTCardSize, useNFTFluidGrid, useStaticHeader } from '@app/hooks';
 import { formatAddress, getStrGradient } from '@app/helpers';
 
 import { collectionKeys } from '@app/utils/query-keys';
-import { queryNFTsApi } from '@app/api';
+import { getCollectionNFTsTotalApi, queryNFTsApi } from '@app/api';
 import { ORDERS_PER_PAGE } from '@app/modules/marketplace/pages/browse-nfts-page/constants';
 import { ToggleButton, ToggleButtonGroup } from '@app/modules/marketplace/pages/browse-nfts-page/components';
 
@@ -67,8 +67,6 @@ export const CollectionInfo = () => {
 
   const { address, isAuthenticated } = useAuthStore();
 
-  // FIXME: set total NFTs;
-  const [totalNFTs, setTotalNFTs] = useState<number>();
   const [showCopied, setShowCopied] = useState(false);
 
   const {
@@ -176,6 +174,11 @@ export const CollectionInfo = () => {
           : undefined;
       },
     }
+  );
+
+  const { data: NFTsTotal } = useQuery(
+    collectionKeys.collectionNFTsTotal(collectionAddress),
+    () => getCollectionNFTsTotalApi(collectionAddress),
   );
 
   const handleEdit = useCallback(() => {
@@ -291,7 +294,7 @@ export const CollectionInfo = () => {
             </HStack>
           </Stack>
           <CollectionStatistics
-            amountNFTs={totalNFTs}
+            amountNFTs={NFTsTotal}
             amountOwners={collectionGeneralInfo?.owners}
             floorPrice={collectionOrderBookData?.floorPrice}
             volumeTraded={collectionOrderBookData?.volumeTraded}

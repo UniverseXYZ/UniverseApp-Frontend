@@ -17,7 +17,7 @@ import { useDebounce, useIntersection, useSearchParam } from 'react-use';
 import SearchIcon from '@assets/images/search-gray.svg';
 
 // App
-import { queryNFTsApi } from '@app/api';
+import { getArtistNFTsTotalApi, queryNFTsApi } from '@app/api';
 import { SortBy, SortByNames, SortByOptions } from '@app/constants';
 import { NFTCard } from '@app/modules/nft/components';
 import {
@@ -31,8 +31,8 @@ import {
 } from '@app/components/filters/shared';
 import { Select } from '@app/components';
 import { Filter, Filters, ToggleFiltersButton } from '@app/components/filters';
-import { useInfiniteQuery } from 'react-query';
-import { nftKeys } from '@app/utils/query-keys';
+import { useInfiniteQuery, useQuery } from 'react-query';
+import { nftKeys, userKeys } from '@app/utils/query-keys';
 import { NFTs_PER_PAGE } from '@app/modules/account/pages/my-nfts-page/components/tab-wallet/constants';
 
 import NoNftsFound from '../../../../../../../components/myNFTs/NoNftsFound';
@@ -48,12 +48,6 @@ export const ArtistNFTsTab: React.FC<IArtistNFTsTabProps> = (props) => {
   const { artistAddress, onTotalLoad } = props;
 
   const router = useRouter();
-
-  /**
-   * TODO
-   * Provide total NFTs when API endpoint will be ready
-   * https://app.shortcut.com/universexyz/story/4843/create-api-endpoint-to-receive-total-artist-nfts-number
-   */
 
   const initialCollection = useSearchParam("collection");
 
@@ -157,6 +151,14 @@ export const ArtistNFTsTab: React.FC<IArtistNFTsTabProps> = (props) => {
           ? pages.length + 1
           : undefined;
       },
+    }
+  );
+
+  const { data: NFTsTotal } = useQuery(
+    userKeys.totalNFTs(artistAddress),
+    () => getArtistNFTsTotalApi(artistAddress),
+    {
+      onSuccess: (total) => onTotalLoad(total),
     }
   );
 

@@ -78,6 +78,7 @@ export const nftKeys = {
 export const userKeys = {
   all: ['users'] as const,
   info: (userAddress: string) => ['users', 'info', { userAddress: userAddress.toLowerCase() }],
+  totalNFTs: (address: string) => ['user', address, 'NFTs', 'total'],
 };
 
 export const collectionKeys = {
@@ -90,5 +91,6 @@ export const collectionKeys = {
   userCollections: (userAddress: string) =>  ['collections', 'user', {userAddress: userAddress.toLowerCase()}] as const,
   collectionOwner: (address: string) => ['collection', address, 'owner'],
   collectionStatistic: (address: string) => ['collection', address, 'statistic'],
-  collectionNFTs: (address: string, filters: any = {}) => ['collection', address, 'NFTs', {...filters}]
+  collectionNFTs: (address: string, filters: any = {}) => ['collection', address, 'NFTs', {...filters}],
+  collectionNFTsTotal: (address: string) => ['collection', address, 'NFTs', 'total'],
 }

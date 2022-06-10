@@ -10,7 +10,7 @@ import {
 } from '@chakra-ui/react';
 import React, { useMemo, useRef, useState } from 'react';
 import { useDebounce, useIntersection } from 'react-use';
-import { useInfiniteQuery } from 'react-query';
+import { useInfiniteQuery, useQuery } from 'react-query';
 
 // Assets
 import SearchIcon from '@assets/images/search-gray.svg';
@@ -24,8 +24,8 @@ import NoNftsFound from '../../../../../../../components/myNFTs/NoNftsFound';
 import { useAuthStore } from '../../../../../../../stores/authStore';
 
 // Constants
-import { queryNFTsApi } from '@app/api';
-import { nftKeys } from '@app/utils/query-keys';
+import { getArtistNFTsTotalApi, queryNFTsApi } from '@app/api';
+import { nftKeys, userKeys } from '@app/utils/query-keys';
 import { SortBy, SortByNames, SortByOptions } from '@app/constants';
 import { Select } from '@app/components';
 import { Filter, Filters, ToggleFiltersButton } from '@app/components/filters';
@@ -54,12 +54,6 @@ export const WalletTab: React.FC<IWalletTabProps> = (props) => {
   const address = useAuthStore(state => state.address);
 
   const filtersRef = useRef(null);
-
-  /**
-   * TODO
-   * Provide total NFTs when API endpoint will be ready
-   * https://app.shortcut.com/universexyz/story/4843/create-api-endpoint-to-receive-total-artist-nfts-number
-   */
 
   const intersection = useIntersection(filtersRef, {
     threshold: 1,
@@ -134,6 +128,14 @@ export const WalletTab: React.FC<IWalletTabProps> = (props) => {
           ? pages.length + 1
           : undefined;
       },
+    }
+  );
+
+  const { data: NFTsTotal } = useQuery(
+    userKeys.totalNFTs(address),
+    () => getArtistNFTsTotalApi(address),
+    {
+      onSuccess: (total) => getTotalNfts(total),
     }
   );
 
