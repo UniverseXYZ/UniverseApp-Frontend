@@ -145,7 +145,7 @@ const DesktopView = ({
               <button
                 type="button"
                 onClick={() => {
-                  history.push('/polymorphs');
+                  window.open('https://polymorphs.universe.xyz/');
                 }}
               >
                 <img src={polymorphsIcon} alt="Polymorphs" />
@@ -188,7 +188,7 @@ const DesktopView = ({
               <button
                 type="button"
                 onClick={() => {
-                  history.push('/polymorph-rarity');
+                  window.open('https://polymorphs.universe.xyz/polymorph-rarity/');
                 }}
               >
                 <img src={navChartIcon} alt="Polymorphs" />
