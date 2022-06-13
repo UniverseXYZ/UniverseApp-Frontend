@@ -3,6 +3,7 @@ export * from './back-to-top-button';
 export * from './checkbox';
 export * from './collection-preview';
 export * from './copy-and-link-address';
+export * from './create-button';
 export * from './currency-input';
 export * from './currency-select';
 export * from './date-time-picker';
