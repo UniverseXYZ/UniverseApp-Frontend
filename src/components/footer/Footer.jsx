@@ -119,7 +119,10 @@ const Footer = () => {
               <div>
                 <ul>
                   <li>NFT Drops</li>
-                  <li onClick={() => history.push('/polymorphs')} aria-hidden="true">
+                  <li
+                    onClick={() => window.open('https://polymorphs.universe.xyz/')}
+                    aria-hidden="true"
+                  >
                     Polymorphs
                   </li>
                   <li onClick={() => history.push('/lobby-lobsters')} aria-hidden="true">
@@ -138,7 +141,10 @@ const Footer = () => {
               <div>
                 <ul>
                   <li>Rarity Charts</li>
-                  <li onClick={() => history.push('/polymorph-rarity')} aria-hidden="true">
+                  <li
+                    onClick={() => window.open('https://polymorphs.universe.xyz/polymorph-rarity/')}
+                    aria-hidden="true"
+                  >
                     Polymorphs
                   </li>
                   <li
