@@ -70,6 +70,7 @@ import supportIcon from '../../../../assets/images/supportIcon.svg';
 import Badge from '../../../badge/Badge';
 import { useUserBalanceStore } from '../../../../stores/balanceStore';
 import { useAuthStore } from '../../../../stores/authStore';
+import { CreateButton } from "@app/components";
 
 const MobileView = (props) => {
   const {
@@ -89,7 +90,7 @@ const MobileView = (props) => {
     setShowMobileSearch,
   } = props;
   const { yourEnsDomain, signOut, isAuthenticating } = useAuthStore(s => ({yourEnsDomain: s.yourEnsDomain, signOut: s.signOut, isAuthenticating: s.isAuthenticating}))
-  
+
   const { yourBalance, usdEthBalance } = useUserBalanceStore(state => ({yourBalance: state.yourBalance, usdEthBalance: state.usdEthBalance}));
 
   const [isAccountDropdownOpened, setIsAccountDropdownOpened] = useState(false);
@@ -844,6 +845,11 @@ const MobileView = (props) => {
                     </div>
                   </div>
                 </li>
+                {isWalletConnected && (
+                  <li>
+                    <CreateButton isFullWidth />
+                  </li>
+                )}
                 {!isWalletConnected && (
                   <li className="sign__in">
                     <button

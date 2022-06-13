@@ -5,7 +5,11 @@ import collectionIcon from "@assets/images/collection-icon.svg";
 import nftIcon from "@assets/images/nft-icon.svg";
 import * as styles from "./CreateButton.styles";
 
-export const CreateButton = () => {
+interface ICreateButtonProps {
+  isFullWidth: boolean;
+}
+
+export const CreateButton = ({ isFullWidth }: ICreateButtonProps) => {
 
   const router = useRouter();
 
@@ -15,10 +19,11 @@ export const CreateButton = () => {
         as={Button}
         variant="outline"
         className="u-button--contrast"
+        isFullWidth={isFullWidth}
       >
         <Box as="span">Create</Box>
       </MenuButton>
-      <MenuList minWidth='150px'>
+      <MenuList minWidth={isFullWidth ? '85vw' : '150px'}>
         <MenuItem onClick={() => router.push('/my-nfts/create?tabIndex=1&nftType=single')}>
           <Image src={nftIcon} mr={2} alt="NFT" />
           <Text {...styles.LabelStyle}>NFT</Text>
