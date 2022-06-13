@@ -16,7 +16,7 @@ export const CreateButton = () => {
         variant="outline"
         className="u-button--contrast"
       >
-        <Box as="span" display={{ base: 'none', xl: 'inline' }}>Create</Box>
+        <Box as="span">Create</Box>
       </MenuButton>
       <MenuList minWidth='150px'>
         <MenuItem onClick={() => router.push('/my-nfts/create?tabIndex=1&nftType=single')}>
