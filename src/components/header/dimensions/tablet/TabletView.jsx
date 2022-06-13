@@ -561,7 +561,7 @@ const TabletView = (props) => {
                       type="button"
                       onClick={() => {
                         setShowMenu(false);
-                        history.push('/polymorphs');
+                        window.open('https://polymorphs.universe.xyz/');
                       }}
                     >
                       <img src={polymorphsIcon} alt="Polymorphs" />
@@ -600,7 +600,7 @@ const TabletView = (props) => {
                       type="button"
                       onClick={() => {
                         setShowMenu(false);
-                        history.push('/polymorph-rarity');
+                        window.open('https://polymorphs.universe.xyz/polymorph-rarity/');
                       }}
                     >
                       <img src={navChartIcon} alt="Polymorphs" />

@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 import { Route, Switch, useLocation } from 'react-router-dom';
 import Popup from 'reactjs-popup';
-import uuid from 'react-uuid';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { ReactQueryDevtools } from 'react-query/devtools';
 import './assets/scss/normalize.scss';
@@ -85,14 +84,14 @@ const routes = {
   '/about': new UniverseRoute(About),
   '/team': new UniverseRoute(Team),
   '/minting': new UniverseRoute(Minting),
-  '/polymorphs': new UniverseRoute(Polymorphs),
-  '/polymorph-universe': new UniverseRoute(PolymorphUniverse),
+  // '/polymorphs': new UniverseRoute(Polymorphs),
+  // '/polymorph-universe': new UniverseRoute(PolymorphUniverse),
   // '/mint-polymorph': new UniverseRoute(MintPolymorph),
   // '/burn-to-mint': new UniverseRoute(BurnToMint),
   // '/planets/adaka': new UniverseRoute(Planet1),
   // '/planets/prosopon': new UniverseRoute(Planet2),
   // '/planets/kuapo': new UniverseRoute(Planet3),
-  '/polymorphs/:id': new UniverseRoute(PolymorphScramblePage),
+  // '/polymorphs/:id': new UniverseRoute(PolymorphScramblePage),
   '/lobsters/:id': new UniverseRoute(LobsterInfoPage),
   '/v1/nft/:collectionAddress/:tokenId': new UniverseRoute(MarketplaceNFT),
   // '/character-page': new UniverseRoute(CharacterPage),
@@ -105,7 +104,7 @@ const routes = {
   // '/search': new UniverseRoute(Search),
   // '/core-drops': new UniverseRoute(CharectersDrop),
   '/lobby-lobsters': new UniverseRoute(LobbyLobsters),
-  '/polymorph-rarity': new UniverseRoute(RarityCharts),
+  // '/polymorph-rarity': new UniverseRoute(RarityCharts),
   '/my-profile': new UniverseRoute(MyProfile, true),
   // '/setup-auction': new UniverseRoute(SetupAuction, true, false, { exact: false }),
   // '/minting-and-auctions/marketplace/active-auctions': new UniverseRoute(Marketplace),

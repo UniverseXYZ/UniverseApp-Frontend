@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useContext, useMemo } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
+import uuid from 'react-uuid';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import backArrow from '../../../assets/images/go-back-arrow.svg';
 import Tabs from '../../tabs/Tabs';

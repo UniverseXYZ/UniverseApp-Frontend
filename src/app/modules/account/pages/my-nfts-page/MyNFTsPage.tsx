@@ -57,7 +57,7 @@ export const MyNFTsPage = () => {
     { name: 'Wallet', amount: totalNfts },
     { name: 'Universe Collections', amount: nftSummary?.collections },
     { name: 'Saved NFTs', amount: nftSummary?.savedNfts },
-    { name: 'Universe NFTs', amount: (userLobsters.length || 0) + (userPolymorphs.length || 0) },
+    // { name: 'Universe NFTs', amount: (userLobsters.length || 0) + (userPolymorphs.length || 0) },
   ];
 
   // NEW
