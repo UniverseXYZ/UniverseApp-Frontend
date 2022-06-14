@@ -358,7 +358,7 @@ const DesktopView = ({
               className="menu-li"
               onClick={() => setIsAccountDropdownOpened(!isAccountDropdownOpened)}
             >
-              <HeaderAvatar scale={4} />
+              <HeaderAvatar />
               <span className="nav__link__title">My account</span>
               <img className="arrow" src={arrowUP} alt="arrow" />
             </button>
@@ -381,7 +381,7 @@ const DesktopView = ({
                       setIsAccountDropdownOpened(false);
                     }}
                   >
-                    <HeaderAvatar scale={4} />
+                    <HeaderAvatar />
                   </button>
                   <div className="ethereum__address">
                     {yourEnsDomain
