@@ -8,8 +8,8 @@ import {
   InputGroup,
   Container, Stack,
 } from '@chakra-ui/react';
-import React, { useMemo, useRef, useState } from 'react';
-import { useDebounce, useIntersection } from 'react-use';
+import React, { useMemo, useState } from 'react';
+import { useDebounce } from 'react-use';
 import { useInfiniteQuery, useQuery } from 'react-query';
 
 // Assets
@@ -27,7 +27,7 @@ import { useAuthStore } from '../../../../../../../stores/authStore';
 import { getArtistNFTsTotalApi, queryNFTsApi } from '@app/api';
 import { nftKeys, userKeys } from '@app/utils/query-keys';
 import { SortBy, SortByNames, SortByOptions } from '@app/constants';
-import { Select } from '@app/components';
+import { FiltersStickyWrapper, Select } from '@app/components';
 import { Filter, Filters, ToggleFiltersButton } from '@app/components/filters';
 import {
   SaleTypeFilter,
@@ -43,6 +43,7 @@ import {
 
 import { NFTs_PER_PAGE } from './constants';
 import * as s from './WalletTab.styles';
+import { useStaticHeader } from '@app/hooks';
 
 interface IWalletTabProps {
   getTotalNfts: (total: number) => void;
@@ -52,14 +53,6 @@ export const WalletTab: React.FC<IWalletTabProps> = (props) => {
   const { getTotalNfts } = props;
 
   const address = useAuthStore(state => state.address);
-
-  const filtersRef = useRef(null);
-
-  const intersection = useIntersection(filtersRef, {
-    threshold: 1,
-    rootMargin: '0px',
-    root: null,
-  });
 
   const [search, setSearch] = useState('');
   const [debouncedSearch, setDebouncedSearch] = useState(search);
@@ -141,11 +134,7 @@ export const WalletTab: React.FC<IWalletTabProps> = (props) => {
 
   return (
     <>
-      <Box
-        ref={filtersRef}
-        {...s.FiltersWrapper}
-        bg={(intersection?.intersectionRect.top ?? 1) === 0 ? 'white' : 'transparent'}
-      >
+      <FiltersStickyWrapper {...s.FiltersWrapper}>
         <Container maxW={'1110px'} py={'20px !important'}>
           <Stack spacing={'12px'} direction={['column', null, 'row']}>
             <InputGroup flex={1}>
@@ -209,7 +198,7 @@ export const WalletTab: React.FC<IWalletTabProps> = (props) => {
             </Filter>
           </Filters>
         </Container>
-      </Box>
+      </FiltersStickyWrapper>
 
       <Box padding={['0px 20px', null, 0]}>
         {(!isFetching && NFTs?.pages.length === 1 && !NFTs?.pages[0].data.length) ? (

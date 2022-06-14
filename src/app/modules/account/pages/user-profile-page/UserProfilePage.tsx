@@ -11,6 +11,7 @@ import { useMedia, useWindowSize } from "react-use";
 import ArtistDetails from "../../../../../components/artist/ArtistDetails";
 import { breakpoints } from "../../../../theme/constants";
 import { ArtistNFTsTab } from "./components";
+import { useStaticHeader } from '@app/hooks';
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const queryClient = new QueryClient();
@@ -41,6 +42,8 @@ export const UserProfilePage: React.FC<IUserProfilePage> = ({
   const isMobile = useMedia(`(max-width: ${breakpoints.md})`);
   
   const [totalNFTs, setTotalNFTs] = useState<number>();
+
+  useStaticHeader();
 
   const { data, isLoading, isError } = useQuery<any>(
     userKeys.info(artistUsername),

@@ -29,6 +29,7 @@ import { usePolymorphStore } from 'src/stores/polymorphStore';
 import { useMyNftsStore } from 'src/stores/myNftsStore';
 import { useQuery } from 'react-query';
 import { nftKeys } from '@app/utils/query-keys';
+import { useStaticHeader } from '@app/hooks';
  
 // @ts-ignore
 const { contracts } = Contracts[process.env.REACT_APP_NETWORK_CHAIN_ID];
@@ -89,6 +90,8 @@ export const MyNFTsPage = () => {
   const [triggerRefetch, setTriggerRefetch] = useStateIfMounted(false);
 
   useTitle('Universe - My NFTs', { restoreOnUnmount: true });
+
+  useStaticHeader();
 
   useClickAway(createButtonRef, () => {
     setIsDropdownOpened(false);

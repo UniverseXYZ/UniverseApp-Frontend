@@ -7,6 +7,7 @@ export * from './currency-select';
 export * from './date-time-picker';
 export * from './dropdown';
 export * from './filters-popup';
+export * from './filters-sticky-wrapper';
 export * from './form-control';
 export * from './icon';
 export * from './info-tooltip';

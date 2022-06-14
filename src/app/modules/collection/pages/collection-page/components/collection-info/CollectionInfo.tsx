@@ -21,8 +21,8 @@ import {
 import { Contract, providers } from 'ethers';
 import { useRouter } from "next/router";
 import { useInfiniteQuery, useQuery } from 'react-query';
-import React, { useCallback, useMemo, useRef, useState } from 'react';
-import { useCopyToClipboard, useDebounce, useIntersection, useMeasure } from 'react-use';
+import React, { useCallback, useMemo, useState } from 'react';
+import { useCopyToClipboard, useDebounce, useMeasure } from 'react-use';
 
 // Assets
 import CollectionOGPlaceholder from "@assets/images/open-graph/collection-placeholder.png";
@@ -37,8 +37,7 @@ import { useAuthStore } from "../../../../../../../stores/authStore";
 import { useCollectionPageData } from "../../CollectionPage.context";
 
 // App
-import { Icon, OpenGraph, Select } from '@app/components';
-// import NotFound from "pages/404";
+import { FiltersStickyWrapper, Icon, OpenGraph, Select } from '@app/components';
 import { NFTCard, NoNFTsFound } from '@app/modules/nft/components';
 import { SortBy, SortByNames, SortByOptions } from '@app/constants';
 import {
@@ -105,14 +104,6 @@ export const CollectionInfo = () => {
   const [containerRef, { width: containerWidth }] = useMeasure<HTMLDivElement>();
 
   const NFTGrid = useNFTFluidGrid(containerWidth, 16);
-
-  const filtersRef = useRef(null);
-
-  const intersection = useIntersection(filtersRef, {
-    threshold: 1,
-    rootMargin: "0px",
-    root: null,
-  });
 
   useStaticHeader();
 
@@ -315,11 +306,7 @@ export const CollectionInfo = () => {
 
           <TabPanels>
             <TabPanel {...s.NFTsTabPanel}>
-              <Box
-                ref={filtersRef}
-                {...s.FiltersWrapper}
-                bg={(intersection?.intersectionRect.top ?? 1) === 0 ? 'white' : 'transparent'}
-              >
+              <FiltersStickyWrapper {...s.FiltersWrapper}>
                 <Stack spacing={'12px'} direction={['column', null, 'row']}>
                   <InputGroup flex={1}>
                     <InputLeftElement pointerEvents="none">
@@ -396,7 +383,7 @@ export const CollectionInfo = () => {
                     />
                   </Filter>
                 </Filters>
-              </Box>
+              </FiltersStickyWrapper>
               <Box ref={containerRef} px={['16px', null, '24px', '40px']}>
                 {/*First load*/}
                 {(isFetching && !isFetchingNextPage && !NFTs?.pages.length) && (

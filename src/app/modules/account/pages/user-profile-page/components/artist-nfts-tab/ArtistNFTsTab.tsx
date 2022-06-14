@@ -10,8 +10,8 @@ import {
   Stack,
 } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
-import React, { useEffect, useMemo, useRef, useState } from 'react';
-import { useDebounce, useIntersection, useSearchParam } from 'react-use';
+import React, { useEffect, useMemo, useState } from 'react';
+import { useDebounce, useSearchParam } from 'react-use';
 
 // Assets
 import SearchIcon from '@assets/images/search-gray.svg';
@@ -29,7 +29,7 @@ import {
   usePriceRangeFilter,
   useSaleTypeFilter,
 } from '@app/components/filters/shared';
-import { Select } from '@app/components';
+import { FiltersStickyWrapper, Select } from '@app/components';
 import { Filter, Filters, ToggleFiltersButton } from '@app/components/filters';
 import { useInfiniteQuery, useQuery } from 'react-query';
 import { nftKeys, userKeys } from '@app/utils/query-keys';
@@ -50,14 +50,6 @@ export const ArtistNFTsTab: React.FC<IArtistNFTsTabProps> = (props) => {
   const router = useRouter();
 
   const initialCollection = useSearchParam("collection");
-
-  const filtersRef = useRef(null);
-
-  const intersection = useIntersection(filtersRef, {
-    threshold: 1,
-    rootMargin: '0px',
-    root: null,
-  });
 
   const [search, setSearch] = useState('');
   const [debouncedSearch, setDebouncedSearch] = useState(search);
@@ -164,12 +156,7 @@ export const ArtistNFTsTab: React.FC<IArtistNFTsTabProps> = (props) => {
 
   return (
     <Box>
-      <Box
-        ref={filtersRef}
-        {...styles.FiltersWrapperStyle}
-        bg={(intersection?.intersectionRect.top ?? 1) === 0 ? 'white' : 'transparent'}
-        p={['0px 20px', null, 0]}
-      >
+      <FiltersStickyWrapper {...styles.FiltersWrapperStyle} p={['0px 20px', null, 0]}>
         <Container maxW={'1110px'} py={'20px !important'}>
           <Stack spacing={'12px'} direction={['column', null, 'row']}>
             <InputGroup flex={1}>
@@ -233,7 +220,7 @@ export const ArtistNFTsTab: React.FC<IArtistNFTsTabProps> = (props) => {
             </Filter>
           </Filters>
         </Container>
-      </Box>
+      </FiltersStickyWrapper>
 
       <Box padding={['0px 20px', null, 0]}>
         {(!isFetching && NFTs?.pages.length === 1 && !NFTs?.pages[0].data.length) ? (

@@ -1,8 +1,8 @@
 import { Box, Button, Center, Flex, Heading, HStack, SimpleGrid, Text } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useInfiniteQuery } from 'react-query';
-import { useIntersection, useMeasure, useSearchParam } from 'react-use';
+import { useMeasure, useSearchParam } from 'react-use';
 
 // Assets
 import OpenGraphImage from '@assets/images/open-graph/marketplace.png';
@@ -13,7 +13,7 @@ import { useThemeStore } from 'src/stores/themeStore';
 // App
 import { queryNFTsApi } from '@app/api/nfts';
 import { SortBy, SortByNames, SortByOptions } from '@app/constants';
-import { BackToTopButton, Icon, Loading, OpenGraph, Select } from '@app/components';
+import { BackToTopButton, FiltersStickyWrapper, Icon, Loading, OpenGraph, Select } from '@app/components';
 import { Filter, Filters } from '@app/components/filters';
 import {
   SaleTypeFilter,
@@ -36,14 +36,6 @@ export const BrowseNFTsPage = () => {
   const setDarkMode = useThemeStore((s) => s.setDarkMode);
 
   const router = useRouter();
-
-  const filtersRef = useRef(null);
-
-  const intersection = useIntersection(filtersRef, {
-    threshold: 1,
-    root: null,
-    rootMargin: "0px",
-  });
 
   const [ref, { width: containerWidth }] = useMeasure<HTMLDivElement>();
 
@@ -155,11 +147,7 @@ export const BrowseNFTsPage = () => {
         </Box>
       </Flex>
 
-      <Box
-        ref={filtersRef}
-        {...styles.FiltersStickyWrapper}
-        bg={intersection?.intersectionRect.top === 0 ? "white" : "transparent"}
-      >
+      <FiltersStickyWrapper {...styles.FiltersStickyWrapper}>
         <Filters onClearAll={() => handleClear()}>
           <Filter filter={saleTypeFilter}>
             <SaleTypeFilter
@@ -208,7 +196,7 @@ export const BrowseNFTsPage = () => {
             </ToggleButton>
           </ToggleButtonGroup>
         </HStack>
-      </Box>
+      </FiltersStickyWrapper>
 
       <Box {...styles.ContentWrapper}>
         {!isFetching && !ordersResult?.pages[0].data.length ? (
