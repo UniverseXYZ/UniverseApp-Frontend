@@ -1,4 +1,5 @@
 export * from './amount-selector';
+export * from './avatar';
 export * from './back-to-top-button';
 export * from './checkbox';
 export * from './collection-preview';
