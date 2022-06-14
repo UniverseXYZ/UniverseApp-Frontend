@@ -165,6 +165,38 @@ const variantGhostAlt: SystemStyleFunction = (props) => {
     },
   }
 };
+const variantNaked: SystemStyleFunction = (props) => {
+  const { colorScheme: cs } = props;
+
+  return {
+    bg: 'transparent',
+    border: 'none',
+    borderRadius: '12px',
+    color: 'black',
+    _hover: {
+      color: '#00000099',
+    },
+    _focus: {
+      boxShadow: 'none',
+    },
+    _active: {
+      transform: 'scale(0.95)',
+    },
+    _disabled: {
+      color: '#00000033',
+      opacity: 1,
+      _hover: {
+        color: '#00000033',
+      },
+      _active: {
+        transform: 'scale(1)',
+      },
+    },
+    '.chakra-button__icon': {
+      ml: 0,
+    },
+  }
+};
 
 export const Button = {
   baseStyle: {
@@ -322,6 +354,7 @@ export const Button = {
     primary: variantPrimary,
     ghostAlt: variantGhostAlt,
     ghost: variantGhost,
+    naked: variantNaked,
   },
   sizes: {
     lg: {
