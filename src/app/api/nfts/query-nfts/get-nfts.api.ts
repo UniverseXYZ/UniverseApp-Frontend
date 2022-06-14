@@ -24,6 +24,7 @@ interface IQueryNFTsAPIRequestData {
   minPrice?: number;
   maxPrice?: number;
   artist?: string;
+  traits?: Record<string, string[]>;
 }
 
 interface IQueryNFTsAPIResponse {
@@ -53,6 +54,11 @@ export const queryNFTsApi = async (params: IQueryNFTsAPIRequestData = { page: 1,
     minPrice: params.minPrice || undefined,
     maxPrice: params.maxPrice || undefined,
     ownerAddress: params.artist || undefined,
+    traits: !params.traits || !Object.keys(params.traits).length
+      ? undefined
+      : Object.keys(params.traits).map((key) => {
+        return `${key}:${params.traits && params.traits[key].join(',')}`;
+      }).join(':'),
   });
 
   const { data } = await axios.get<IQueryNFTsAPIResponse>(`${url}?${queryParams}`);

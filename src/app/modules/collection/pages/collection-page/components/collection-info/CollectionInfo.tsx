@@ -132,8 +132,9 @@ export const CollectionInfo = () => {
       saleTypeFilter,
       nftTypeFilter,
       priceRangeFilter,
+      propertiesFilter,
     ].filter(filter => filter.form.dirty).length;
-  }, [saleTypeFilter, nftTypeFilter, priceRangeFilter]);
+  }, [saleTypeFilter, nftTypeFilter, priceRangeFilter, propertiesFilter]);
 
   useDebounce(() => {
     setDebouncedSearch(search);
@@ -150,6 +151,7 @@ export const CollectionInfo = () => {
       saleFilter: saleTypeFilter.form.values,
       nftTypeFilter: nftTypeFilter.form.values,
       priceRangeFilter: priceRangeFilter.form.values,
+      propertiesFilter: propertiesFilter.form.values,
       sorting: sortBy,
       search: debouncedSearch,
     }),
@@ -167,6 +169,7 @@ export const CollectionInfo = () => {
       tokenTicker: priceRangeFilter.form.values.currency?.token ?? undefined,
       minPrice: priceRangeFilter.form.values.price[0],
       maxPrice: priceRangeFilter.form.values.price[1],
+      traits: propertiesFilter.form.values.properties,
     }),
     {
       retry: false,
