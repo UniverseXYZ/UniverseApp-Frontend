@@ -30,7 +30,7 @@ import { useMyNftsStore } from 'src/stores/myNftsStore';
 import { useQuery } from 'react-query';
 import { nftKeys } from '@app/utils/query-keys';
 import { useStaticHeader } from '@app/hooks';
- 
+
 // @ts-ignore
 const { contracts } = Contracts[process.env.REACT_APP_NETWORK_CHAIN_ID];
 
@@ -80,7 +80,7 @@ export const MyNFTsPage = () => {
   const tabs = [
     { name: 'Wallet', amount: totalNfts },
     { name: 'Universe Collections', amount: nftSummary?.collections },
-    { name: 'Saved NFTs', amount: nftSummary?.savedNfts },
+    { name: 'Draft NFTs', amount: nftSummary?.savedNfts },
     { name: 'Universe NFTs', amount: (userLobsters.length || 0) + (userPolymorphs.length || 0) },
   ];
 
