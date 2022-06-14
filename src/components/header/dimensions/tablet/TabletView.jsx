@@ -76,7 +76,13 @@ const TabletView = (props) => {
     yourEnsDomain,
     signOut,
     isAuthenticating,
-  } = useAuthStore(s => ({yourEnsDomain: s.yourEnsDomain, signOut: s.signOut, isAuthenticating: s.isAuthenticating}))
+    loggedInArtist,
+  } = useAuthStore(s => ({
+    yourEnsDomain: s.yourEnsDomain,
+    signOut: s.signOut,
+    isAuthenticating: s.isAuthenticating,
+    loggedInArtist: s.loggedInArtist,
+  }))
 
   const { yourBalance, usdEthBalance } = useUserBalanceStore(state => ({yourBalance: state.yourBalance, usdEthBalance: state.usdEthBalance}));
 
@@ -366,7 +372,7 @@ const TabletView = (props) => {
         </>
       )} */}
       {isWalletConnected && (
-        <CreateButton />
+        <CreateButton profilePath={`/${loggedInArtist.universePageAddress}`} />
       )}
       {isWalletConnected && (
         <div className="wallet__connected__tablet">

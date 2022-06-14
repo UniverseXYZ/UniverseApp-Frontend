@@ -89,7 +89,12 @@ const MobileView = (props) => {
     showMobileSearch,
     setShowMobileSearch,
   } = props;
-  const { yourEnsDomain, signOut, isAuthenticating } = useAuthStore(s => ({yourEnsDomain: s.yourEnsDomain, signOut: s.signOut, isAuthenticating: s.isAuthenticating}))
+  const { yourEnsDomain, signOut, isAuthenticating, loggedInArtist } = useAuthStore(s => ({
+    yourEnsDomain: s.yourEnsDomain,
+    signOut: s.signOut,
+    isAuthenticating: s.isAuthenticating,
+    loggedInArtist: s.loggedInArtist,
+  }))
 
   const { yourBalance, usdEthBalance } = useUserBalanceStore(state => ({yourBalance: state.yourBalance, usdEthBalance: state.usdEthBalance}));
 
@@ -846,8 +851,8 @@ const MobileView = (props) => {
                   </div>
                 </li>
                 {isWalletConnected && (
-                  <li>
-                    <CreateButton isFullWidth />
+                  <li className="u-custom-padding">
+                    <CreateButton profilePath={`/${loggedInArtist.universePageAddress}`} isFullWidth />
                   </li>
                 )}
                 {!isWalletConnected && (

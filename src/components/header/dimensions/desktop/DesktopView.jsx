@@ -347,7 +347,7 @@ const DesktopView = ({
 
         {isConnectedAndAuthenticated && (
           <li>
-            <CreateButton />
+            <CreateButton profilePath={`/${loggedInArtist.universePageAddress}`} />
           </li>
         )}
 
