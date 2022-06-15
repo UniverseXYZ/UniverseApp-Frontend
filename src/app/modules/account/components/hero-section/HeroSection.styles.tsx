@@ -40,6 +40,37 @@ export const HeroSectionContainerStyle: BoxProps = {
   margin: '0 auto',
 };
 
+export const PreviewBannerStyle: BoxProps = {
+  display: 'flex',
+  flex: '1',
+  alignItems: 'center',
+  justifyContent: 'space-between',
+  background: 'rgba(0, 0, 0, 0.6)',
+  color: '#fff',
+  padding: {
+    lg: '15px 25px',
+    base: '15px',
+  },
+  borderRadius: '12px',
+  marginBottom: '40px',
+  zIndex: '1',
+};
+
+export const PreviewBannerTextStyle: BoxProps = {
+  fontSize: '12px',
+  lineHeight: '16px',
+  fontFamily: 'Sharp Grotesk',
+  fontWeight: '600',
+};
+
+export const PreviewBannerExitStyle: BoxProps = {
+  fontSize: '14px',
+  lineHeight: '140%',
+  fontWeight: '500',
+  textDecoration: 'underline',
+  cursor: 'pointer'
+};
+
 export const AvatarStyle: BoxProps = {
   borderRadius: '50%',
   display: 'block',

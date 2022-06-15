@@ -7,7 +7,7 @@ import {
 import { Animated } from 'react-animated-css';
 import * as styles from './HeroSection.styles';
 import { CopyAndLinkAddress } from "@app/components";
-import { HeroBio, HeroAdditionalOptions } from './components';
+import { HeroBio, HeroAdditionalOptions, HeroPreviewBanner } from './components';
 import { useAuthStore } from "../../../../../stores/authStore";
 import { IUser } from "@app/types";
 
@@ -31,6 +31,10 @@ export const HeroSection = ({ walletAddress, user }: IHeroSectionProps) => {
         }
         bgSize='cover'
       />
+      {/* TODO - add check when to show banner */}
+      <Box {...styles.HeroSectionContainerStyle}>
+        <HeroPreviewBanner />
+      </Box>
       <Animated animationIn="zoomIn" animationOut="zoomIn" isVisible>
         <Box {...styles.HeroSectionContainerStyle}>
           {user.avatar ? (
