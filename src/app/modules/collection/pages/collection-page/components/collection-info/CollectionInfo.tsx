@@ -29,14 +29,13 @@ import CollectionOGPlaceholder from "@assets/images/open-graph/collection-placeh
 import SearchIcon from '@assets/images/search-gray.svg';
 
 // Legacy
-import { CollectionPageLoader } from "@legacy/collection/CollectionPageLoader";
 import NotFound from '../../../../../../../components/notFound/NotFound';
-import NftCardSkeleton from "../../../../../../../components/skeletons/nftCardSkeleton/NftCardSkeleton";
 import Contracts from "../../../../../../../contracts/contracts.json";
 import { useAuthStore } from "../../../../../../../stores/authStore";
 import { useCollectionPageData } from "../../CollectionPage.context";
 
 // App
+import { CollectionPageSkeleton } from '@app/modules/collection/components';
 import { FiltersStickyWrapper, Icon, OpenGraph, Select } from '@app/components';
 import { NFTCard, NFTCardSkeleton, NoNFTsFound } from '@app/modules/nft/components';
 import { SortBy, SortByNames, SortByOptions } from '@app/constants';
@@ -76,6 +75,8 @@ export const CollectionInfo = () => {
     collectionAddress,
     collectionGeneralInfo,
     collectionOrderBookData,
+    isFetchingCollectionApi,
+    isFetchingCollectionGeneralInfo,
   } = useCollectionPageData();
 
   const { data: ownerAddress } = useQuery(
@@ -208,9 +209,10 @@ export const CollectionInfo = () => {
 
   const [color1, color2] = getStrGradient(collectionAddress);
 
-  // FIXME: NotFound + CollectionPageLoader
-  // return (<NotFound />);
-  // return (<CollectionPageLoader />);
+
+  if (!isFetchingCollectionApi && !isFetchingCollectionGeneralInfo && !collection) {
+    return (<NotFound />);
+  }
 
   return (
     <>
@@ -385,48 +387,47 @@ export const CollectionInfo = () => {
                 </Filters>
               </FiltersStickyWrapper>
               <Box ref={containerRef} px={['16px', null, '24px', '40px']}>
-                <SimpleGrid
-                  columns={NFTGrid.columns}
-                  spacing={`${NFTGrid.spacing}px`}
-                >
-                  {/*First load*/}
-                  {(isFetching && !isFetchingNextPage && !NFTs?.pages.length) && (
-                    <>
-                      <NFTCardSkeleton />
-                      <NFTCardSkeleton />
-                      <NFTCardSkeleton />
-                      <NFTCardSkeleton />
-                    </>
-                  )}
+                {NFTs?.pages.length && !NFTs?.pages[0].data.length ? (<NoNFTsFound/>) : (
+                  <>
+                    <SimpleGrid
+                      columns={NFTGrid.columns}
+                      spacing={`${NFTGrid.spacing}px`}
+                    >
+                      {/*First load*/}
+                      {(isFetching && !isFetchingNextPage && !NFTs?.pages.length) && (
+                        <>
+                          <NFTCardSkeleton />
+                          <NFTCardSkeleton />
+                          <NFTCardSkeleton />
+                          <NFTCardSkeleton />
+                        </>
+                      )}
 
-                  {(NFTs?.pages ?? []).map((page) => {
-                    return page.data.map(({ order, NFT }) => (
-                      <NFTCard
-                        key={`${NFT._collectionAddress}:${NFT.tokenId}`}
-                        NFT={NFT}
-                        order={order}
-                      />
-                    ));
-                  })}
-                </SimpleGrid>
+                      {(NFTs?.pages ?? []).map((page) => {
+                        return page.data.map(({ order, NFT }) => (
+                          <NFTCard
+                            key={`${NFT._collectionAddress}:${NFT.tokenId}`}
+                            NFT={NFT}
+                            order={order}
+                          />
+                        ));
+                      })}
+                    </SimpleGrid>
 
-                {/*FIXME: NoNFTsFound*/}
-                {/*<NoNFTsFound />*/}
-
-                {(hasNextPage && !isFetching) && (
-                  <Button variant={'ghost'} isFullWidth={true} mt={10} onClick={() => fetchNextPage()}>
-                    Load more
-                  </Button>
+                    {(hasNextPage && !isFetching) && (
+                      <Button variant={'ghost'} isFullWidth={true} mt={10} onClick={() => fetchNextPage()}>
+                        Load more
+                      </Button>
+                    )}
+                  </>
                 )}
               </Box>
             </TabPanel>
             <TabPanel {...s.DescriptionTabPanel}>
-              {collection.description ? (
+              {!collection.description ? (<NoDescriptionFound />) : (
                 <Box whiteSpace={"break-spaces"} maxW={[null, null, null, '800px']}>
                   {collection.description}
                 </Box>
-              ) : (
-                <NoDescriptionFound />
               )}
             </TabPanel>
           </TabPanels>
