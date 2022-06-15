@@ -38,7 +38,7 @@ import { useCollectionPageData } from "../../CollectionPage.context";
 
 // App
 import { FiltersStickyWrapper, Icon, OpenGraph, Select } from '@app/components';
-import { NFTCard, NoNFTsFound } from '@app/modules/nft/components';
+import { NFTCard, NFTCardSkeleton, NoNFTsFound } from '@app/modules/nft/components';
 import { SortBy, SortByNames, SortByOptions } from '@app/constants';
 import {
   NFTTypeFilter,
@@ -385,23 +385,20 @@ export const CollectionInfo = () => {
                 </Filters>
               </FiltersStickyWrapper>
               <Box ref={containerRef} px={['16px', null, '24px', '40px']}>
-                {/*First load*/}
-                {(isFetching && !isFetchingNextPage && !NFTs?.pages.length) && (
-                  <SimpleGrid
-                    columns={NFTGrid.columns}
-                    spacing={`${NFTGrid.spacing}px`}
-                  >
-                    <NftCardSkeleton />
-                    <NftCardSkeleton />
-                    <NftCardSkeleton />
-                    <NftCardSkeleton />
-                  </SimpleGrid>
-                )}
-
                 <SimpleGrid
                   columns={NFTGrid.columns}
                   spacing={`${NFTGrid.spacing}px`}
                 >
+                  {/*First load*/}
+                  {(isFetching && !isFetchingNextPage && !NFTs?.pages.length) && (
+                    <>
+                      <NFTCardSkeleton />
+                      <NFTCardSkeleton />
+                      <NFTCardSkeleton />
+                      <NFTCardSkeleton />
+                    </>
+                  )}
+
                   {(NFTs?.pages ?? []).map((page) => {
                     return page.data.map(({ order, NFT }) => (
                       <NFTCard
