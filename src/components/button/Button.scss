@@ -65,3 +65,37 @@
 .light-border-button-shadow{
   box-shadow: 2px 1000px 1px #F9FEFD inset;
 }
+
+.simple-light-border-button {
+  // display: flex;
+  align-items: center;
+  padding: 11px 26px;
+  justify-content: center;
+  border-radius: 12px;
+  background-origin: border-box;
+  font-family: $spaceGroteskFont;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 20px;
+  color: $black;
+  transition: 50ms ease-in;
+  border: 1px solid #c9c9c9;
+  background: transparent;
+  background-image: none;
+  box-shadow: none;
+
+  &:disabled {
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    color: rgba(0, 0, 0, 0.2);
+    box-shadow: none;
+    background: $white;
+    cursor: not-allowed;
+    &:hover {
+      background: $white !important;
+    }
+  }
+  &:hover {
+    box-shadow: 2px 1000px 1px rgba(255, 255, 255, 0.9) inset!important;
+  }
+}

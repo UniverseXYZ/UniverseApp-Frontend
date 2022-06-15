@@ -1,4 +1,5 @@
 import React, { useRef, useState, useEffect, useMemo } from 'react';
+import { useRouter } from 'next/router';
 import PropTypes from 'prop-types';
 import Social from './Social';
 import Button from '../button/Button.jsx';
@@ -114,6 +115,18 @@ const ProfileForm = ({
 
     return image;
   }, [accountImage]);
+
+  const router = useRouter();
+  const handlePreviewMode = () => {
+    if (
+      loggedInArtist.name &&
+      loggedInArtist.universePageAddress &&
+      loggedInArtist.avatar &&
+      loggedInArtist.about
+    ) {
+      router.push(`/${loggedInArtist.universePageAddress}`);
+    }
+  };
 
   return (
     <div className="account-grid-container">
@@ -299,12 +312,19 @@ const ProfileForm = ({
               </div>
             )}
           <div className="account-display-buttons">
-            <Button className="light-button" disabled={disabled || hasError} onClick={saveChanges}>
-              Save Changes
-            </Button>
-            <Button className="light-border-button" onClick={cancelChanges}>
-              Cancel
-            </Button>
+            <div>
+              <Button className="simple-light-border-button" onClick={cancelChanges}>
+                Cancel
+              </Button>
+            </div>
+            <div>
+              <Button className="light-border-button" onClick={handlePreviewMode}>
+                Preview
+              </Button>
+              <Button className="light-button" disabled={disabled || hasError} onClick={saveChanges}>
+                Save Changes
+              </Button>
+            </div>
           </div>
         </div>
       </div>
