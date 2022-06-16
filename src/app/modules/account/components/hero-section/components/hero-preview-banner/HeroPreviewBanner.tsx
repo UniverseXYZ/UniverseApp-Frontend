@@ -19,7 +19,10 @@ export const HeroPreviewBanner = () => {
       <Text
         {...styles.PreviewBannerExitStyle}
         as='span'
-        onClick={() => router.push("/my-account")}
+        onClick={() => router.push({
+          pathname: '/my-account',
+          query: { exitedPreviewMode: true }
+        })}
       >
         Exit Preview Mode
       </Text>

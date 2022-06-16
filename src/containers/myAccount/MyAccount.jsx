@@ -16,10 +16,12 @@ const MyAccount = () => {
   const {
     isWalletConnected,
     loggedInArtist,
+    previewUserData,
     setLoggedInArtist,
   } = useAuthStore(s => ({
     isWalletConnected: s.isWalletConnected,
     loggedInArtist: s.loggedInArtist,
+    previewUserData: s.previewUserData,
     setLoggedInArtist: s.setLoggedInArtist,
   }));
 
@@ -32,17 +34,20 @@ const MyAccount = () => {
   const { editProfileButtonClick, setEditProfileButtonClick } = useAuctionContext();
   const setDarkMode = useThemeStore(s => s.setDarkMode);
   const history = useRouter();
+  const { query: { exitedPreviewMode } } = history;
+  const isFromPreviewMode = exitedPreviewMode === 'true';
+
   const [showLoading, setShowLoading] = useState(false);
-  const [about, setAbout] = useState(loggedInArtist.about);
-  const [twitterLink, setTwitterLink] = useState(loggedInArtist.twitterLink);
-  const [instagramLink, setInstagramLink] = useState(loggedInArtist.instagramLink);
+  const [about, setAbout] = useState(isFromPreviewMode ? previewUserData.about : loggedInArtist.about);
+  const [twitterLink, setTwitterLink] = useState(isFromPreviewMode ? previewUserData.twitterLink : loggedInArtist.twitterLink);
+  const [instagramLink, setInstagramLink] = useState(isFromPreviewMode ? previewUserData.instagramLink : loggedInArtist.instagramLink);
 
   const placeholderText = 'your-address';
-  const [accountName, setAccountName] = useState(loggedInArtist.name);
+  const [accountName, setAccountName] = useState(isFromPreviewMode ? previewUserData.name : loggedInArtist.name);
   const [accountPage, setAccountPage] = useState(
-    `universe.xyz/${loggedInArtist.universePageAddress || placeholderText}`
+    isFromPreviewMode ? previewUserData.universePageAddress : `universe.xyz/${loggedInArtist.universePageAddress || placeholderText}`
   );
-  const [accountImage, setAccountImage] = useState(loggedInArtist.avatar);
+  const [accountImage, setAccountImage] = useState(isFromPreviewMode ? previewUserData.avatar : loggedInArtist.avatar);
   const [showCongrats, setShowCongrats] = useState(false);
   const [fetchedUserData, setFetchedUserData] = useState({
     accountName,

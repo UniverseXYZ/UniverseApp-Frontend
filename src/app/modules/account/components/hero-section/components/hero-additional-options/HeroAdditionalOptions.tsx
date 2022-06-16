@@ -22,9 +22,10 @@ import { IUser } from "@app/types";
 interface IHeroAdditionalOptionsProps {
   user: IUser;
   showEditBtn: boolean;
+  isPreview?: boolean;
 }
 
-export const HeroAdditionalOptions = ({ user, showEditBtn }: IHeroAdditionalOptionsProps) => {
+export const HeroAdditionalOptions = ({ user, showEditBtn, isPreview }: IHeroAdditionalOptionsProps) => {
   const router = useRouter();
   const [copied, setCopied] = useState(false);
 
@@ -49,6 +50,7 @@ export const HeroAdditionalOptions = ({ user, showEditBtn }: IHeroAdditionalOpti
           as={Button}
           variant="simpleOutline"
           leftIcon={<Image src={socialShareIcon} alt="Social share" />}
+          disabled={isPreview}
           {...styles.ButtonStyle}
         >
           <Box as="span" display={{ base: 'none', xl: 'inline' }}>Share</Box>
@@ -82,6 +84,7 @@ export const HeroAdditionalOptions = ({ user, showEditBtn }: IHeroAdditionalOpti
           leftIcon={<Image src={editIcon} alt="Pencil" />}
           ml={3}
           onClick={() => router.push("/my-account")}
+          disabled={isPreview}
           {...styles.ButtonStyle}
         >
           <Box as="span" display={{ base: 'none', xl: 'inline' }}>Edit Profile</Box>

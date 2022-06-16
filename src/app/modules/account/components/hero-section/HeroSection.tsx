@@ -4,6 +4,7 @@ import {
   Heading,
   Image,
 } from "@chakra-ui/react";
+import { useRouter } from "next/router";
 import { Animated } from 'react-animated-css';
 import * as styles from './HeroSection.styles';
 import { CopyAndLinkAddress } from "@app/components";
@@ -17,57 +18,70 @@ interface IHeroSectionProps {
 }
 
 export const HeroSection = ({ walletAddress, user }: IHeroSectionProps) => {
+  const { query: { isPreview } } = useRouter();
+  const { address, previewUserData } = useAuthStore(s => ({
+    address: s.address,
+    previewUserData: s.previewUserData,
+  }));
 
-  const address = useAuthStore((s) => s.address);
+  const userData = {
+    ...user,
+    ...(isPreview && previewUserData)
+  };
 
   return (
     <Box {...styles.HeroSectionWrapperStyle}>
       <Box
         {...styles.HeroSectionBackgroundStyle}
         bg={
-          user.avatar
-            ? `url(${user.avatar}) no-repeat center center`
+          userData.avatar
+            ? `url(${userData.avatar}) no-repeat center center`
             : 'linear-gradient(135deg, #4568DC 0%, #B06AB3 100%)'
         }
         bgSize='cover'
       />
-      {/* TODO - add check when to show banner */}
-      <Box {...styles.HeroSectionContainerStyle}>
-        <HeroPreviewBanner />
-      </Box>
+      {
+        isPreview && (
+          <Box {...styles.HeroSectionContainerStyle}>
+            <HeroPreviewBanner />
+          </Box>
+        )
+      }
       <Animated animationIn="zoomIn" animationOut="zoomIn" isVisible>
         <Box {...styles.HeroSectionContainerStyle}>
-          {user.avatar ? (
-            <Image {...styles.AvatarStyle} src={user.avatar} alt={user.name} />
+          {userData.avatar ? (
+            <Image {...styles.AvatarStyle} src={userData.avatar} alt={userData.name} />
           ) : (
             <Box {...styles.AvatarEmptyStyle} />
           )}
           <Box {...styles.InfoStyle}>
             <Box {...styles.InfoTopStyle}>
               <Box>
-                <Heading as='h1' fontSize={{ sm: '20px', lg: '26px', xl: '32px' }}>{user.name || "Unnamed"}</Heading>
+                <Heading as='h1' fontSize={{ sm: '20px', lg: '26px', xl: '32px' }}>{userData.name || "Unnamed"}</Heading>
                 <CopyAndLinkAddress walletAddress={walletAddress} />
               </Box>
               <Box display={{ base: 'none', lg: 'flex' }}>
                 <HeroAdditionalOptions
-                  user={user}
+                  user={userData}
                   showEditBtn={address === walletAddress}
+                  isPreview={isPreview === 'true'}
                 />
               </Box>
             </Box>
             <Box display={{ base: 'none', lg: 'flex' }} mt={2}>
-              {user.about && <HeroBio bio={user.about} />}
+              {userData.about && <HeroBio bio={userData.about} />}
             </Box>
           </Box>
         </Box>
         {/* Shown on mobile */}
         <Box display={{ base: 'flex', lg: 'none' }} mt={3}>
-          {user.about && <HeroBio bio={user.about} />}
+          {userData.about && <HeroBio bio={userData.about} />}
         </Box>
         <Box display={{ base: 'flex', lg: 'none' }} mt={3}>
           <HeroAdditionalOptions
-            user={user}
+            user={userData}
             showEditBtn={address === walletAddress}
+            isPreview={isPreview === 'true'}
           />
         </Box>
       </Animated>

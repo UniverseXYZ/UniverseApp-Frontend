@@ -47,8 +47,9 @@ const ProfileForm = ({
 
   const hasError = [accountName, accountPage, about].some((e) => !e);
 
-  const { loggedInArtist } = useAuthStore(s => ({
+  const { loggedInArtist, setPreviewUserData } = useAuthStore(s => ({
     loggedInArtist: s.loggedInArtist,
+    setPreviewUserData: s.setPreviewUserData,
   }));
   const [hideIcon, setHideIcon] = useState(false);
   const [inputName, setInputName] = useState('inp empty');
@@ -118,13 +119,26 @@ const ProfileForm = ({
 
   const router = useRouter();
   const handlePreviewMode = () => {
+
+    setPreviewUserData({
+      name: accountName,
+      universePageAddress: accountPage,
+      avatar: getProfileImage,
+      about,
+      instagramLink,
+      twitterLink,
+    });
+
     if (
       loggedInArtist.name &&
       loggedInArtist.universePageAddress &&
       loggedInArtist.avatar &&
       loggedInArtist.about
     ) {
-      router.push(`/${loggedInArtist.universePageAddress}`);
+      router.push({
+        pathname: `/${loggedInArtist.universePageAddress}`,
+        query: { isPreview: true }
+      });
     }
   };
 
@@ -318,7 +332,7 @@ const ProfileForm = ({
               </Button>
             </div>
             <div>
-              <Button className="light-border-button" onClick={handlePreviewMode}>
+              <Button className="light-border-button" disabled={disabled || hasError} onClick={handlePreviewMode}>
                 Preview
               </Button>
               <Button className="light-button" disabled={disabled || hasError} onClick={saveChanges}>
