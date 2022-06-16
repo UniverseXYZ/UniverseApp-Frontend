@@ -132,7 +132,6 @@ const ProfileForm = ({
 
   const router = useRouter();
   const handlePreviewMode = () => {
-
     setPreviewUserData({
       name: accountName,
       universePageAddress: accountPage,
@@ -142,17 +141,10 @@ const ProfileForm = ({
       twitterLink,
     });
 
-    if (
-      loggedInArtist.name &&
-      loggedInArtist.universePageAddress &&
-      loggedInArtist.avatar &&
-      loggedInArtist.about
-    ) {
-      router.push({
-        pathname: `/${loggedInArtist.universePageAddress}`,
-        query: { isPreview: true }
-      });
-    }
+    router.push({
+      pathname: `/${loggedInArtist.universePageAddress}`,
+      query: { isPreview: true }
+    });
   };
 
   return (
