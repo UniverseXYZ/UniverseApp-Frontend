@@ -132,6 +132,9 @@ const MyAccount = () => {
         twitterLink: twitterLink.replace('@', ''),
       });
 
+      // Clear url params
+      if (isFromPreviewMode) history.replace('/my-account');
+
       setTimeout(() => {
         if (accountName && accountImage && accountPage !== 'universe.xyz/your-address') {
           setShowLoading(false);
@@ -178,6 +181,7 @@ const MyAccount = () => {
         cancelChanges={cancelChanges}
         editProfileButtonClick={editProfileButtonClick}
         fetchedUserData={fetchedUserData}
+        isFromPreviewMode={isFromPreviewMode}
       />
       <Popup closeOnDocumentClick={false} open={showCongrats}>
         <CongratsProfilePopup loggedInArtist={loggedInArtist} onClose={() => setShowCongrats(false)} />
