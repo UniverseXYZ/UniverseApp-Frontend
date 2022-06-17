@@ -11,6 +11,7 @@ import { CopyAndLinkAddress } from "@app/components";
 import { HeroBio, HeroAdditionalOptions, HeroPreviewBanner } from './components';
 import { useAuthStore } from "../../../../../stores/authStore";
 import { IUser } from "@app/types";
+import defaultImage from "@assets/images/default-img.svg";
 
 interface IHeroSectionProps {
   walletAddress: string;
@@ -24,11 +25,29 @@ export const HeroSection = ({ walletAddress, user }: IHeroSectionProps) => {
     previewUserData: s.previewUserData,
   }));
 
+
+  const getProfileImage = (accountImage: any) => {
+    const userUploadImageURL =
+      accountImage && typeof accountImage === 'object' && URL.createObjectURL(accountImage);
+    const alreadyUploadedImageURL = accountImage;
+
+    let image;
+    if (userUploadImageURL) {
+      image = userUploadImageURL;
+    } else if (alreadyUploadedImageURL) {
+      image = alreadyUploadedImageURL;
+    } else {
+      image = defaultImage;
+    }
+
+    return image;
+  };
+
   const userData = {
     ...user,
     ...(isPreview && {
       ...previewUserData,
-      avatar: URL.createObjectURL(previewUserData.avatar),
+      avatar: getProfileImage(previewUserData.avatar),
     })
   };
 
