@@ -26,7 +26,10 @@ export const HeroSection = ({ walletAddress, user }: IHeroSectionProps) => {
 
   const userData = {
     ...user,
-    ...(isPreview && previewUserData)
+    ...(isPreview && {
+      ...previewUserData,
+      avatar: URL.createObjectURL(previewUserData.avatar),
+    })
   };
 
   return (

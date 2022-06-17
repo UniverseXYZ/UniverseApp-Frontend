@@ -135,7 +135,7 @@ const ProfileForm = ({
     setPreviewUserData({
       name: accountName,
       universePageAddress: accountPage,
-      avatar: getProfileImage,
+      avatar: accountImage,
       about,
       instagramLink,
       twitterLink,
