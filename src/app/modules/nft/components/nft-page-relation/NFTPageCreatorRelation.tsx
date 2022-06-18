@@ -18,7 +18,7 @@ export const NFTPageCreatorRelation: React.FC<INFTPageCreatorRelationProps> = (p
   return (
     <NFTPageRelation
       type={NFTRelationType.CREATOR}
-      href={`/${creator?.universePageUrl}`}
+      href={`/${creator?.universePageUrl || creatorAddress}`}
       value={`${creator?.displayName || creatorAddress}`}
       renderAvatar={() => (creator?.profileImageUrl
           ? <RelationAvatar src={creator?.profileImageUrl} />
