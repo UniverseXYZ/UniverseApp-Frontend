@@ -378,9 +378,13 @@ export const NFTInfo = () => {
                 )}
 
                 <Flex flexWrap={{ sm: "wrap", md: "nowrap" }} mb={"24px"}>
-                  {creator && <NFTPageCreatorRelation creator={creator} />}
-                  {((collection && collection.id) ||
-                    NFT?._collectionAddress) && (
+                  {NFT.creatorAddress && (
+                    <NFTPageCreatorRelation
+                      creatorAddress={NFT.creatorAddress}
+                      creator={creator}
+                    />
+                  )}
+                  {((collection && collection.id) || NFT?._collectionAddress) && (
                     <NFTPageCollectionRelation
                       collection={collection}
                       collectionAddress={NFT._collectionAddress}

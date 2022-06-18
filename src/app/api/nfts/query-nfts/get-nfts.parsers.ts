@@ -29,6 +29,7 @@ export const parseNFTBackend = (NFTData: INFTBackend): INFT => {
     description: NFTData.metadata?.description ?? '',
     url: NFTData.externalDomainViewUrl,
     standard: NFTData.tokenType as NFTStandard,
+    creatorAddress: NFTData.firstOwner,
 
     thumbnailUrl: getURL(
       altImageUrl ||

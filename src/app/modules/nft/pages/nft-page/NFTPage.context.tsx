@@ -143,10 +143,10 @@ export const NFTPageProvider: FC<INFTPageProviderProps> = ({ children }) => {
  
   // NFT Creator Data Query
   const { data: creator } = useQuery(
-    userKeys.info(data?.NFT._creatorAddress || ""),
-    () => getArtistApi(`${data?.NFT._creatorAddress}`),
+    userKeys.info(data?.NFT.creatorAddress || ""),
+    () => getArtistApi(`${data?.NFT.creatorAddress}`),
     {
-      enabled: !!data?.NFT._creatorAddress,
+      enabled: !!data?.NFT.creatorAddress,
       retry: false,
     },
   );

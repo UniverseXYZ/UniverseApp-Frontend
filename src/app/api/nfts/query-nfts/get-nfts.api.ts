@@ -69,7 +69,7 @@ export const queryNFTsApi = async (params: IQueryNFTsAPIRequestData = { page: 1,
 
   type IResult = Array<{
     NFT: INFT;
-    order: IOrder<IOrderAssetTypeSingleListing, IOrderAssetTypeERC20> | undefined;
+    order?: IOrder<IOrderAssetTypeSingleListing, IOrderAssetTypeERC20>;
     owners: Array<{
       address: string;
       transactionHash?: string;

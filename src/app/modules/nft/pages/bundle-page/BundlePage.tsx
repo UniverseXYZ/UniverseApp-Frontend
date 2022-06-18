@@ -157,7 +157,10 @@ export const BundlePageContent = () => {
             </Flex>
 
             <Flex>
-              <NFTPageCreatorRelation creator={creator} />
+              <NFTPageCreatorRelation
+                creatorAddress={creator.address}
+                creator={creator}
+              />
             </Flex>
 
             <Text mt={'24px'} {...styles.DescriptionStyle}>
@@ -194,7 +197,7 @@ export const BundlePageContent = () => {
               </TabPanels>
             </Tabs>
           </Box>
-          <NFTBuySection NFTs={NFTs} order={order} />
+          <NFTBuySection isAuthUserOwner={false} NFTs={NFTs} order={order} />
         </Box>
       </Box>
       {showOfferPopup && offerForAccept && (
