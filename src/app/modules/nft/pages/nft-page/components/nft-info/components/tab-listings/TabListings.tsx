@@ -2,21 +2,15 @@ import { Box } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
 import { NFTCancelListingPopup } from '../../..';
 import { useAuthStore } from '../../../../../../../../../stores/authStore';
-import { IUser } from '../../../../../../../account/types';
 import { useNFTPageData } from '../../../../NFTPage.context';
 import { EventsEmpty } from '../shared';
 import HistoryEvent from '../shared/history-listings-event/HistoryEvent';
 
-interface ITabListingsProps {
-  owner: IUser;
-  ownerAddress: string | undefined;
-}
+export const TabListings: React.FC = () => {
 
-export const TabListings = (props: ITabListingsProps) => {
-  const { owner, ownerAddress } = props;
+  const authUserAddress = useAuthStore(s => s.address);
 
-  const address = useAuthStore(s => s.address)
-  const { order } = useNFTPageData();
+  const { order, owners } = useNFTPageData();
 
   const [isCancelListingPopupOpened, setIsCancelListingPopupOpened] = useState(false);
   const [isOrderExpired, setIsOrderExpired] = useState(false);
@@ -39,10 +33,10 @@ export const TabListings = (props: ITabListingsProps) => {
     <Box>
       <HistoryEvent
         key={order.id}
-        event={{ ...order, makerData: owner }}
+        event={{ ...order, makerData: owners?.[0].owner ?? undefined }}
         onlyListings
         cancelListing={setIsCancelListingPopupOpened}
-        isOwner={(owner?.address || ownerAddress) === address}
+        isOwner={owners.length ? owners[0].address === authUserAddress : false}
       />
       <NFTCancelListingPopup
         order={order}

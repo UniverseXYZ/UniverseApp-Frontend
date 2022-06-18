@@ -15,6 +15,7 @@ interface IQueryNFTsAPIRequestData {
   search?: string;
   sortBy?: number;
   collection?: string;
+  tokenIds?: string[];
   buyNow?: boolean;
   hasOffers?: boolean;
   newest?: boolean;
@@ -43,6 +44,7 @@ export const queryNFTsApi = async (params: IQueryNFTsAPIRequestData = { page: 1,
     searchQuery: params.search || undefined,
     sortBy: params.sortBy || undefined,
     contractAddress: params.collection,
+    tokenIds: params.tokenIds ? params.tokenIds.join(',') : undefined,
     assetClass: [
       params.singleListing && 'ERC721',
       params.bundleListing && 'ERC721_BUNDLE'
@@ -66,18 +68,30 @@ export const queryNFTsApi = async (params: IQueryNFTsAPIRequestData = { page: 1,
   const { nfts, ...rest } = data;
 
   type IResult = Array<{
-    order: IOrder<IOrderAssetTypeSingleListing, IOrderAssetTypeERC20> | undefined;
     NFT: INFT;
+    order: IOrder<IOrderAssetTypeSingleListing, IOrderAssetTypeERC20> | undefined;
+    owners: Array<{
+      address: string;
+      transactionHash?: string;
+      value: number;
+    }>;
   }>;
 
   return {
     ...rest,
     data: nfts.reduce<IResult>((acc, NFT) => {
       acc.push({
+        NFT: parseNFTBackend(NFT),
         order: NFT.orders?.length
           ? mapBackendOrder<IOrderAssetTypeSingleListing, IOrderAssetTypeERC20>(NFT.orders?.[0])
           : undefined,
-        NFT: parseNFTBackend(NFT),
+        owners: NFT?.owners?.length
+          ? NFT?.owners.map(({ value, owner, transactionHash }) => ({
+            transactionHash,
+            address: owner,
+            value: +value
+          }))
+          : [],
       });
 
       return acc;

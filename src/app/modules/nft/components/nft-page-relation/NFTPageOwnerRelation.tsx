@@ -1,4 +1,4 @@
-import { Box, BoxProps } from '@chakra-ui/react';
+import { Box } from '@chakra-ui/react';
 import React from 'react';
 import Blockies from 'react-blockies';
 
@@ -8,21 +8,22 @@ import { NFTPageRelation } from './NFTPageRelation';
 import { RelationAvatar } from './RelationAvatar';
 
 interface INFTPageOwnerRelationProps {
-  owner: IUser;
   ownerAddress: string | undefined;
-  avatarStyle?: BoxProps;
+  owner?: IUser;
 }
 
-export const NFTPageOwnerRelation = ({ owner, ownerAddress, avatarStyle = {} } : INFTPageOwnerRelationProps) => {
+export const NFTPageOwnerRelation: React.FC<INFTPageOwnerRelationProps> = (props) => {
+  const { ownerAddress, owner } = props;
+
   return (
     <NFTPageRelation
       type={NFTRelationType.OWNER}
       href={`/${owner?.universePageUrl || owner?.address?.toLowerCase() || ownerAddress}`}
       value={`${owner?.displayName || owner?.address || ownerAddress}`}
       renderAvatar={() => (owner?.profileImageUrl
-          ? <RelationAvatar src={owner?.profileImageUrl} {...avatarStyle} />
+          ? <RelationAvatar src={owner?.profileImageUrl} />
           : (
-            <Box style={{ borderRadius: '50%', overflow: 'hidden'}} {...avatarStyle}>
+            <Box borderRadius={'full'} overflow={'hidden'}>
               <Blockies seed={owner?.address || ownerAddress} size={9} scale={4} />
             </Box>
           )

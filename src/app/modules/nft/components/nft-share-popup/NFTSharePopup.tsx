@@ -15,19 +15,20 @@ import {
   ModalOverlay,
   SimpleGrid,
   Text,
-  useClipboard,
 } from '@chakra-ui/react';
 import React, { useCallback, useState } from 'react';
+import { useCopyToClipboard, useLocation } from 'react-use';
 
-import { SearchInput } from '../../../../components';
-import { NftLikes } from '../../../../mocks';
+import LinkSVG from '@assets/images/v2/link.svg';
+import TwitterSVG from '@assets/images/v2/twitter.svg';
+import FacebookSVG from '@assets/images/v2/facebook.svg';
+import TelegramSVG from '@assets/images/v2/telegram.svg';
+import MailSVG from '@assets/images/v2/mail.svg';
+
+import { SearchInput } from '@app/components';
+import { NftLikes } from '@app/mocks';
+
 import * as styles from './styles';
-
-import LinkSVG from './../../../../../assets/images/v2/link.svg';
-import TwitterSVG from './../../../../../assets/images/v2/twitter.svg';
-import FacebookSVG from './../../../../../assets/images/v2/facebook.svg';
-import TelegramSVG from './../../../../../assets/images/v2/telegram.svg';
-import MailSVG from './../../../../../assets/images/v2/mail.svg';
 
 interface INFTSharePopupProps {
   isOpen: boolean;
@@ -35,7 +36,9 @@ interface INFTSharePopupProps {
 }
 
 export const NFTSharePopup = ({ isOpen, onClose }: INFTSharePopupProps) => {
-  const { onCopy } = useClipboard(location?.href ?? '');
+  const [, onCopy] = useCopyToClipboard();
+
+  const location = useLocation();
 
   const [search, setSearch] = useState('');
 
@@ -53,13 +56,13 @@ export const NFTSharePopup = ({ isOpen, onClose }: INFTSharePopupProps) => {
           <Heading {...styles.TitleStyle} mb={'22px'}>Share this page</Heading>
           <SimpleGrid columns={5} spacingX={'20px'}>
             <Box>
-              <Box {...styles.getShareButtonStyle(LinkSVG)} onClick={onCopy} />
+              <Box {...styles.getShareButtonStyle(LinkSVG)} onClick={() => onCopy(location?.href ?? '')} />
               <Text {...styles.ShareButtonTextStyle}>Copy link</Text>
             </Box>
             <LinkBox>
               <LinkOverlay
                 {...styles.getShareButtonStyle(TwitterSVG) as LinkOverlayProps}
-                href={`https://twitter.com/intent/tweet?url=${encodeURIComponent(location?.href)}`}
+                href={`https://twitter.com/intent/tweet?url=${encodeURIComponent(location.href ?? '')}`}
                 target={'_blank'}
               />
               <Text {...styles.ShareButtonTextStyle}>Twitter</Text>
@@ -67,7 +70,7 @@ export const NFTSharePopup = ({ isOpen, onClose }: INFTSharePopupProps) => {
             <Box>
               <LinkOverlay
                 {...styles.getShareButtonStyle(FacebookSVG) as LinkOverlayProps}
-                href={`https://www.facebook.com/dialog/share?app_id=${process.env.REACT_APP_FACEBOOK_APP_ID}&href=${encodeURIComponent(location?.href)}&display=popup`}
+                href={`https://www.facebook.com/dialog/share?app_id=${process.env.REACT_APP_FACEBOOK_APP_ID}&href=${encodeURIComponent(location.href ?? '')}&display=popup`}
                 target={'_blank'}
               />
               <Text {...styles.ShareButtonTextStyle}>Facebook</Text>
@@ -75,7 +78,7 @@ export const NFTSharePopup = ({ isOpen, onClose }: INFTSharePopupProps) => {
             <Box>
               <LinkOverlay
                 {...styles.getShareButtonStyle(TelegramSVG) as LinkOverlayProps}
-                href={`https://telegram.me/share/url?url=${encodeURIComponent(location?.href)}`}
+                href={`https://telegram.me/share/url?url=${encodeURIComponent(location.href ?? '')}`}
                 target={'_blank'}
               />
               <Text {...styles.ShareButtonTextStyle}>Telegram</Text>
@@ -83,7 +86,7 @@ export const NFTSharePopup = ({ isOpen, onClose }: INFTSharePopupProps) => {
             <Box>
               <LinkOverlay
                 {...styles.getShareButtonStyle(MailSVG) as LinkOverlayProps}
-                href={`mailto:?body=${encodeURIComponent(location?.href)}`}
+                href={`mailto:?body=${encodeURIComponent(location.href ?? '')}`}
                 target={'_blank'}
               />
               <Text {...styles.ShareButtonTextStyle}>Email</Text>

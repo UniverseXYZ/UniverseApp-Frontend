@@ -37,16 +37,24 @@ import { useNFTMakeOfferStore } from '../../../../../../../stores/nftMakeOfferSt
 
 interface INFTBuySectionProps {
   NFT?: INFT;
-  owner?: IUser;
-  NFTs?: INFT[];
   order?: IOrder<IOrderAssetTypeSingleListing | IOrderAssetTypeBundleListing, IOrderAssetTypeERC20>;
+  isAuthUserOwner: boolean;
+  NFTs?: INFT[];
   highestOfferOrder?: IOrder<IOrderAssetTypeERC20, IOrderAssetTypeSingleListing | IOrderAssetTypeBundleListing>;
   highestOfferCreator?: IUser;
   onMeasureChange?: (measure: UseMeasureRect) => void;
 }
 
-export const NFTBuySection = (props: INFTBuySectionProps) => {
-  const { NFT, owner, NFTs, order, highestOfferOrder, highestOfferCreator, onMeasureChange } = props;
+export const NFTBuySection: React.FC<INFTBuySectionProps> = (props) => {
+  const {
+    NFT,
+    isAuthUserOwner,
+    NFTs,
+    order,
+    highestOfferOrder,
+    highestOfferCreator,
+    onMeasureChange
+  } = props;
 
   const { makeOffer } = useNFTMakeOfferStore();
 
@@ -80,10 +88,7 @@ export const NFTBuySection = (props: INFTBuySectionProps) => {
 
       if (!order || isOrderExpired) {
         if (NFT) {
-          if (
-            address.toUpperCase() ===
-            (owner?.address.toUpperCase() || NFT?._ownerAddress)
-          ) {
+          if (isAuthUserOwner) {
             setState(BuyNFTSectionState.OWNER_PUT_ON_SALE);
           } else {
             setState(BuyNFTSectionState.BUYER_NO_LISTING_OFFER);
@@ -101,7 +106,7 @@ export const NFTBuySection = (props: INFTBuySectionProps) => {
         }
       }
     } catch (e) {}
-  }, [isAuthenticated, signer, NFT, order, owner]);
+  }, [isAuthenticated, signer, NFT, order, isAuthUserOwner]);
 
   const fetchNftRoyalties = async () => {
     if (NFT?._collectionAddress && NFT.tokenId && signer) {

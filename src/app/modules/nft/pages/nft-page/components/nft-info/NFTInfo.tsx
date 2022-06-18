@@ -37,12 +37,7 @@ import {
   NFTPageOwnerRelation,
 } from '../../../../components';
 import { isNFTAssetAudio, isNFTAssetImage, isNFTAssetVideo } from '../../../../helpers';
-import {
-  IOrder,
-  IOrderAssetTypeERC20,
-  IOrderAssetTypeSingleListing,
-  NFTStandard,
-} from '../../../../types';
+import { IOrder, IOrderAssetTypeERC20, IOrderAssetTypeSingleListing, NFTStandard } from '../../../../types';
 import { useNFTPageData } from '../../NFTPage.context';
 import * as styles from '../../styles';
 import { NFTAssetBroken } from '../nft-asset-broken';
@@ -54,7 +49,6 @@ import { RefreshMetadataPopup } from './components/tab-offers/components/refresh
 import { Status } from './components/tab-offers/components/refresh-metadata-popup/enums';
 import * as styles2 from './NFTInfo.style';
 
-// TODO: hide metadata tab for not Polymorph NFT type
 export const NFTInfo = () => {
   const router = useRouter();
 
@@ -69,10 +63,11 @@ export const NFTInfo = () => {
 
   const {
     NFT,
+    isAuthUserOwner,
     isLoading,
     order,
     creator,
-    owner,
+    owners,
     collection,
     collectionAddress,
     history,
@@ -80,6 +75,8 @@ export const NFTInfo = () => {
     moreFromCollection,
     isPolymorph,
     isLobster,
+    totalEditions,
+    ownedEditions,
   } = useNFTPageData();
 
   const [buySectionMeasure, setBuySectionMeasure] = useState<UseMeasureRect>();
@@ -104,17 +101,6 @@ export const NFTInfo = () => {
     setOfferForAccept(offer);
     setShowOfferPopup(true);
   }, []);
-
-  const [ownedEditions, totalEditions] = useMemo<Array<number>>(() => {
-    if (NFT.standard !== NFTStandard.ERC1155) {
-      return [0, 0];
-    }
-
-    // TODO
-    return [2, 10];
-  }, [NFT]);
-
-  const showMetadataTab = isPolymorph || isLobster;
 
   const handleRefresh = async () => {
     try {
@@ -258,8 +244,6 @@ export const NFTInfo = () => {
     ogProps.image = notFoundImgOg;
   }
 
-  const showOwnedLabel = NFT.standard === NFTStandard.ERC1155 && ownedEditions > 0;
-
   const schema = {
     "@context": "http://schema.org",
     "@type": "CreativeWork",
@@ -284,7 +268,7 @@ export const NFTInfo = () => {
       renderTab: () => (<TabProperties properties={NFT?._properties ?? []} />),
     },
     {
-      show: showMetadataTab,
+      show: isPolymorph || isLobster,
       name: 'Metadata',
       renderTab: () => (<TabMetadata />),
     },
@@ -320,14 +304,9 @@ export const NFTInfo = () => {
       renderTab: () => (<TabHistory history={history} />),
     },
     {
-      show: true,
+      show: NFT.standard === NFTStandard.ERC721 && !!owners.length,
       name: 'My Listings',
-      renderTab: () => (
-        <TabListings
-          owner={owner}
-          ownerAddress={NFT?._ownerAddress}
-        />
-      ),
+      renderTab: () => (<TabListings />),
     },
   ];
 
@@ -379,8 +358,7 @@ export const NFTInfo = () => {
 
                     <NFTMenu
                       NFT={NFT}
-                      owner={owner}
-                      ownerAddress={NFT?._ownerAddress}
+                      isAuthUserOwner={isAuthUserOwner}
                       collectionAddress={collectionAddress}
                       showSell={!order}
                       showBurn={false}
@@ -393,7 +371,7 @@ export const NFTInfo = () => {
                   </Box>
                 </Flex>
 
-                {showOwnedLabel && (
+                {NFT.standard === NFTStandard.ERC1155 && isAuthUserOwner && (
                   <Text {...styles2.EditionTextStyle}>
                     Owned {ownedEditions}/{totalEditions}
                   </Text>
@@ -408,10 +386,10 @@ export const NFTInfo = () => {
                       collectionAddress={NFT._collectionAddress}
                     />
                   )}
-                  {(owner && NFT.standard === NFTStandard.ERC721) && (
+                  {(!!owners.length && NFT.standard === NFTStandard.ERC721) && (
                     <NFTPageOwnerRelation
-                      owner={owner}
-                      ownerAddress={NFT?._ownerAddress}
+                      ownerAddress={owners[0].address}
+                      owner={owners[0].owner ?? undefined}
                     />
                   )}
                 </Flex>
@@ -442,8 +420,8 @@ export const NFTInfo = () => {
               </Box>
               <NFTBuySection
                 NFT={NFT}
-                owner={owner}
                 order={order}
+                isAuthUserOwner={isAuthUserOwner}
                 highestOfferOrder={highestOffer}
                 highestOfferCreator={highestOfferCreator}
                 onMeasureChange={(measure) => setBuySectionMeasure(measure)}

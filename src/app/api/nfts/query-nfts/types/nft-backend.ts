@@ -36,4 +36,9 @@ export interface INFTBackend {
   needToRefresh: boolean;
   source: string;
   orders?: IOrderBackend<IOrderAssetTypeSingleListing, IOrderAssetTypeERC20>[];
+  owners: Array<{
+    owner: string;
+    transactionHash: string;
+    value: string | number;
+  }>;
 }
