@@ -32,7 +32,7 @@ interface IMarketplaceSellContextDataOverride extends Omit<IListingPage, 'form'>
 
 export const SettingsTabFixedListing = () => {
   const [minEndDate, setMinEndDate] = useState(dayjs().add(1, 'hour').toDate());
-  const { form, sellMethod, amountType, nft } = useListingPage() as IMarketplaceSellContextDataOverride;
+  const { form, sellMethod, amountType, nft, ownedEditions } = useListingPage() as IMarketplaceSellContextDataOverride;
 
   const {
     values: { startDate, endDate },
@@ -99,10 +99,10 @@ export const SettingsTabFixedListing = () => {
           <Box>
             <AmountSelector
               options={{
-                value: form.values.amount,
+                value: ownedEditions ? form.values.amount : 0,
                 step: 1,
-                max: 10, // TODO: provide correct max value
-                min: 1,
+                max: ownedEditions,
+                min: ownedEditions ? 1 : 0,
                 onChange: (_, value) => form.setFieldValue('amount', value),
               }}
               ml={'auto'}

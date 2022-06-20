@@ -15,7 +15,7 @@ import {
 import axios from 'axios';
 import { utils } from 'ethers';
 import { FormikProvider, useFormik } from 'formik';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { NextPageContext } from 'next';
 import NextLink from 'next/link';
@@ -53,6 +53,7 @@ import {
   GetNFTApi,
   GetSaltApi,
   IEncodeOrderApiData,
+  queryNFTsApi,
 } from '../../../../api';
 import Contracts from '../../../../../contracts/contracts.json';
 import { OrderAssetClass } from '../../../nft/enums';
@@ -79,7 +80,7 @@ export const SellPage = () => {
 
   const params = router.query as IRouterQuery;
 
-  const { signer, web3Provider } = useAuthStore(state => ({signer: state.signer, web3Provider: state.web3Provider})) as any;
+  const { signer, web3Provider, address: authUserAddress } = useAuthStore();
 
   const { setShowError, setErrorBody } = useErrorStore(s => ({setShowError: s.setShowError, setErrorBody: s.setErrorBody}))
 
@@ -118,12 +119,22 @@ export const SellPage = () => {
     }
   });
 
-  const { data: nft } = useQuery(
+  const { data } = useQuery(
     nftKeys.nftInfo({collectionAddress: params.collectionAddress, tokenId: params.tokenId}),
-    () => GetNFTApi(params.collectionAddress, params.tokenId),
-    {
-      onSuccess: (data) => console.log(data)
-    }
+    async () => {
+      const { data } = await queryNFTsApi({
+        page: 1,
+        limit: 1,
+        collection: params.collectionAddress,
+        tokenIds: [params.tokenId],
+      });
+
+      if (!data.length) {
+        throw new Error('404');
+      }
+
+      return data[0];
+    },
   );
 
   const getSaltMutation = useMutation(GetSaltApi);
@@ -142,6 +153,10 @@ export const SellPage = () => {
     validationSchema: getListingValidationSchema(amountType, sellMethod, validateRoyalties),
     onSubmit: async (values: any) => {
       try {
+        if (!web3Provider || !signer) {
+          return;
+        }
+
         const network = await web3Provider.getNetwork();
         const address = await signer.getAddress();
   
@@ -149,7 +164,7 @@ export const SellPage = () => {
   
         const make: any = {
           assetType: {
-            assetClass: nft?.standard,
+            assetClass: data?.NFT.standard,
             contract: params.collectionAddress.toLowerCase(),
             tokenId: params.tokenId,
           },
@@ -214,9 +229,6 @@ export const SellPage = () => {
             })) ?? []
           },
         };
-
-        console.log('orderData', orderData);
-        return;
   
         const { data: encodedOrder } = (await encodeOrderMutation.mutateAsync(orderData));
   
@@ -253,6 +265,14 @@ export const SellPage = () => {
       }
     },
   });
+
+  const ownedEditions = useMemo(() => {
+    if (!authUserAddress || !data?.owners) {
+      return 0;
+    }
+
+    return data.owners.find(({ address }) => address.toLowerCase() === authUserAddress.toLowerCase())?.value ?? 0;
+  }, [authUserAddress, data?.owners]);
 
   const handleSelectSellMethod = useCallback((sellMethod: SellMethod) => {
     setSellMethod(sellMethod);
@@ -313,10 +333,11 @@ export const SellPage = () => {
   }, [form.values.royalties]);
 
   const contextValue: IListingPage = {
-    nft: nft as INFT,
+    nft: data?.NFT as INFT,
     isPosted,
     amountType: amountType as SellAmountType,
     sellMethod: sellMethod as SellMethod,
+    ownedEditions,
     form: form,
     goBack: handleGoBack,
     goContinue: handleContinue,
@@ -390,7 +411,7 @@ export const SellPage = () => {
                   <NextLink href={`/nft/${params.collectionAddress}/${params.tokenId}`}>
                     <LinkOverlay display={'contents'}>
                       <Image src={arrow} display="inline" mr="10px" position="relative" top="-2px" />
-                      {nft?.name ?? params.tokenId}
+                      {data?.NFT.name ?? params.tokenId}
                     </LinkOverlay>
                   </NextLink>
                 </LinkBox>

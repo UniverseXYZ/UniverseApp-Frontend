@@ -12,6 +12,7 @@ export interface IListingPage {
   isPosted: boolean;
   amountType: SellAmountType;
   sellMethod: SellMethod;
+  ownedEditions: number;
   form: FormikProps<ISellForm>;
   goBack: () => void;
   goContinue: () => void;
