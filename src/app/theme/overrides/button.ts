@@ -322,6 +322,10 @@ export const Button = {
         color: 'rgba(0 0 0 / 20%)',
         opacity: 1,
       },
+      _hover: {
+        border: '1px solid rgba(0, 0, 0, 0.2)',
+        background:' rgba(0, 0, 0, 0.05)',
+      }
     },
     black: {
       background: 'black',
