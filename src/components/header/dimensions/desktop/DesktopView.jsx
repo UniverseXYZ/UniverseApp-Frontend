@@ -38,6 +38,7 @@ import { useRouter } from 'next/router';
 import Badge from '../../../badge/Badge';
 import { useUserBalanceStore } from '../../../../stores/balanceStore';
 import { useAuthStore } from '../../../../stores/authStore';
+import { CreateButton } from "@app/components";
 
 const DesktopView = ({
   isWalletConnected,
@@ -75,6 +76,8 @@ const DesktopView = ({
   }))
 
   const { yourBalance, usdEthBalance } = useUserBalanceStore(state => ({yourBalance: state.yourBalance, usdEthBalance: state.usdEthBalance}))
+
+  const isConnectedAndAuthenticated = isWalletConnected && isAuthenticated
 
   return (
     <div className="desktop__nav">
@@ -341,12 +344,18 @@ const DesktopView = ({
             </div>
           </div>
         </li>
-        {isWalletConnected && isAuthenticated ? (
+
+        {isConnectedAndAuthenticated && (
+          <li>
+            <CreateButton profilePath={`/${loggedInArtist.universePageAddress}`} />
+          </li>
+        )}
+
+        {isConnectedAndAuthenticated ? (
           <li>
             <button
-              style={{ width: 200 }}
               type="button"
-              className="menu-li myAccount"
+              className="menu-li"
               onClick={() => setIsAccountDropdownOpened(!isAccountDropdownOpened)}
             >
               <HeaderAvatar scale={4} />

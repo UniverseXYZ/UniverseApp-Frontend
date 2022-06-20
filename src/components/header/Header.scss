@@ -100,7 +100,9 @@
       }
     }
 
-    .desktop__nav ul li .sign__in {
+    .desktop__nav ul li .sign__in,
+    .desktop__nav ul li .u-button--contrast,
+    .tablet__nav .u-button--contrast, {
       background-image: linear-gradient(101deg, #bceb00, #00eaea);
       background-origin: border-box;
       box-shadow: 2px 1000px 1px $black inset;

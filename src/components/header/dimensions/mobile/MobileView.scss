@@ -405,6 +405,9 @@
           }
         }
       }
+      &.u-custom-padding {
+        padding: 20px 0 0;
+      }
       &.sign__in {
         display: flex;
         align-items: center;
@@ -490,10 +493,10 @@
             background: linear-gradient($white, $white) padding-box, linear-gradient(to right, #bceb00, #00eaea) border-box;
             border: 1px solid transparent;
           }
-    
+
           &[disabled] {
             cursor: not-allowed;
-    
+
             img {
               opacity: 0.2;
             }

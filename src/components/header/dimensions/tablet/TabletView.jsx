@@ -55,6 +55,7 @@ import supportIcon from '../../../../assets/images/supportIcon.svg';
 import Badge from '../../../badge/Badge';
 import { useUserBalanceStore } from '../../../../stores/balanceStore';
 import { useAuthStore } from '../../../../stores/authStore';
+import { CreateButton } from "@app/components";
 
 const TabletView = (props) => {
   const {
@@ -75,7 +76,13 @@ const TabletView = (props) => {
     yourEnsDomain,
     signOut,
     isAuthenticating,
-  } = useAuthStore(s => ({yourEnsDomain: s.yourEnsDomain, signOut: s.signOut, isAuthenticating: s.isAuthenticating}))
+    loggedInArtist,
+  } = useAuthStore(s => ({
+    yourEnsDomain: s.yourEnsDomain,
+    signOut: s.signOut,
+    isAuthenticating: s.isAuthenticating,
+    loggedInArtist: s.loggedInArtist,
+  }))
 
   const { yourBalance, usdEthBalance } = useUserBalanceStore(state => ({yourBalance: state.yourBalance, usdEthBalance: state.usdEthBalance}));
 
@@ -365,9 +372,12 @@ const TabletView = (props) => {
         </>
       )} */}
       {isWalletConnected && (
+        <CreateButton profilePath={`/${loggedInArtist.universePageAddress}`} />
+      )}
+      {isWalletConnected && (
         <div className="wallet__connected__tablet">
           <div
-            style={{ marginRight: 20, display: 'flex', cursor: 'pointer' }}
+            style={{ marginLeft: 20, marginRight: 20, display: 'flex', cursor: 'pointer' }}
             aria-hidden
             onClick={toggleDropdown}
           >
