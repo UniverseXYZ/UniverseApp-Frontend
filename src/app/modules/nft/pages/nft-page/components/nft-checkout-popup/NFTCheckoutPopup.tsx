@@ -376,7 +376,7 @@ export const NFTCheckoutPopup = () => {
                     options={{
                       value: amount,
                       min: 1,
-                      max: +order.make.value,
+                      max: +(order?.make.value ?? 1),
                       onChange: (_, value) => setAmount(value),
                     }}
                   />

@@ -265,7 +265,7 @@ export const NFTPageProvider: FC<INFTPageProviderProps> = ({ children }) => {
     collectionAddress,
     isPolymorph,
     isLobster,
-    creator: creator?.mappedArtist as IUser, // FIXME
+    creator: creator?.mappedArtist as IUser,
     owners: owners || [],
     collection: collection as ICollection,
     NFT: data?.NFT as INFT,
