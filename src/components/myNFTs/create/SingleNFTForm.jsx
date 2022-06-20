@@ -942,7 +942,7 @@ const SingleNFTForm = ({ scrollToTop }) => {
               scrollToTop();
             }}
             message="NFT was successfully saved for later"
-            backButtonText="Go to Saved NFTs"
+            backButtonText="Go to Draft NFTs"
           />
         </Popup>
         <Popup
@@ -951,7 +951,7 @@ const SingleNFTForm = ({ scrollToTop }) => {
         >
           <CongratsPopup
             showCreateMore={showCreateMoreButton}
-            backButtonText="Go to Saved NFTs"
+            backButtonText="Go to Draft NFTs"
             onClose={() => {
               setMyNFTsSelectedTabIndex(2);
               setShowCongratsMintedSavedForLater(false);
