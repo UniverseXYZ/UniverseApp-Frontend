@@ -381,7 +381,7 @@ const TabletView = (props) => {
             aria-hidden
             onClick={toggleDropdown}
           >
-            <HeaderAvatar scale={4} />
+            <HeaderAvatar />
           </div>
           {/* <img
             className="account__icon show__on__tablet"
@@ -399,7 +399,7 @@ const TabletView = (props) => {
               <div ref={ref} className="dropdown drop-account">
                 <div className="dropdown__header">
                   <div className="copy-div">
-                    <HeaderAvatar scale={3} />
+                    <HeaderAvatar />
                     <div className="ethereum__address">
                       {yourEnsDomain
                         ? shortenEnsDomain(yourEnsDomain)

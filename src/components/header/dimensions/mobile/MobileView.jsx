@@ -93,9 +93,8 @@ const MobileView = (props) => {
     yourEnsDomain: s.yourEnsDomain,
     signOut: s.signOut,
     isAuthenticating: s.isAuthenticating,
-    loggedInArtist: s.loggedInArtist,
+loggedInArtist: s.loggedInArtist,
   }))
-
   const { yourBalance, usdEthBalance } = useUserBalanceStore(state => ({yourBalance: state.yourBalance, usdEthBalance: state.usdEthBalance}));
 
   const [isAccountDropdownOpened, setIsAccountDropdownOpened] = useState(false);
@@ -437,7 +436,7 @@ const MobileView = (props) => {
             aria-hidden
             onClick={toggleDropdown}
           >
-            <HeaderAvatar scale={4} />
+            <HeaderAvatar />
           </div>
 
           {isAccountDropdownOpened && (
@@ -445,7 +444,7 @@ const MobileView = (props) => {
               <div ref={ref} className="dropdown drop-account">
                 <div className="dropdown__header">
                   <div className="copy-div">
-                    <HeaderAvatar scale={4} />
+                    <HeaderAvatar />
 
                     {/* <img className="icon-img" src={accountIcon} alt="icon" /> */}
                     <div className="ethereum__address">

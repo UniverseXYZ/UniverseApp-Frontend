@@ -1,33 +1,19 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import Blockies from 'react-blockies';
 import { useAuthStore } from '../../stores/authStore';
+import { Avatar } from '@app/components'
 
-const HeaderAvatar = ({ scale }) => {
+const HeaderAvatar = () => {
   const { loggedInArtist, address } = useAuthStore(s => ({loggedInArtist: s.loggedInArtist, address: s.address}))
 
   return (
-    <>
-      {loggedInArtist.avatar ? (
-        <img
-          className={scale === 3 ? 'blockie-md' : 'blockie-lg'}
-          src={loggedInArtist.avatar}
-          alt="avatar"
-        />
-      ) : (
-        <Blockies
-          className={scale === 3 ? 'blockie-md' : 'blockie-lg'}
-          seed={address}
-          size={9}
-          scale={scale}
-        />
-      )}
-    </>
+    <Avatar
+      src={loggedInArtist.avatar}
+      name={loggedInArtist.name}
+      address={address}
+      width='40px'
+      height='40px'
+    />
   );
-};
-
-HeaderAvatar.propTypes = {
-  scale: PropTypes.number.isRequired,
 };
 
 export default HeaderAvatar;
