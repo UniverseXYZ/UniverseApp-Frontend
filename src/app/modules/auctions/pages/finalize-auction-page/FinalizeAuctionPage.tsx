@@ -187,7 +187,7 @@ export const FinalizeAuctionPage = () => {
                 <Box {...s.StepContainer}>
                   <Heading as={'h2'} {...s.StepTitle}>Create auction</Heading>
                   <Text {...s.StepDescription}>Proceed with the transaction to create the auction instance on the blockchain</Text>
-                  <Alert status={'warning'} {...s.Alert}>
+                  <Alert colorScheme={'blue'} status={'info'} {...s.Alert}>
                     You will not be able to make any changes to the auction if you proceed
                   </Alert>
 
@@ -200,7 +200,7 @@ export const FinalizeAuctionPage = () => {
                 <Box {...s.StepContainer}>
                   <Heading as={'h2'} {...s.StepTitle}>Set approvals</Heading>
                   <Text {...s.StepDescription}>Approve NFTs for depositing into the auction contract</Text>
-                  <Alert status={'warning'} {...s.Alert}>
+                  <Alert colorScheme={'blue'} status={'info'} {...s.Alert}>
                     Depending on the gas fee cost, you may need to have a significant amount of ETH to proceed
                   </Alert>
                   <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacing={'30px'}>

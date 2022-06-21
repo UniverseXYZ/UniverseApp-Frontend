@@ -1,3 +1,4 @@
+
 import { SystemStyleFunction } from '@chakra-ui/theme-tools';
 
 const variantPrimary: SystemStyleFunction = () => {

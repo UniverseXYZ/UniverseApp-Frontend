@@ -2,6 +2,7 @@ import { Icon as ChakraIcon, Alert as ChakraAlert, AlertProps, AlertStatus, Box 
 import { useCallback } from 'react';
 
 import { ReactComponent as DangerSVG } from '@assets/images/danger.svg';
+import { ReactComponent as InfoSVG } from '@assets/images/info.svg';
 
 interface IAlertProps extends Omit<AlertProps, 'status'> {
   status: AlertStatus;
@@ -13,6 +14,7 @@ export const Alert = (props: IAlertProps) => {
   const getIcon = useCallback(() => {
     switch (rest.status) {
       case 'warning': return <ChakraIcon viewBox={'0 0 21 19'} w={'18px'} h={'16px'}><DangerSVG /></ChakraIcon>
+      case 'info': return <ChakraIcon viewBox={'0 0 25 24'} w={'22px'} h={'22px'}><InfoSVG /></ChakraIcon>
       default: return <></>
     }
   }, [rest.status]);

@@ -7,6 +7,11 @@ const colors: Record<string, { bg: string; border: string; text: string; }> = {
     border: 'rgba(228, 182, 19, 0.4)',
     text: '#E4B613'
   },
+  blue: {
+    bg: '#4F6AE50A',
+    border: '#4F6AE566',
+    text: '#4D66EB'
+  },
 };
 
 const variantSubtle: PartsStyleFunction<typeof parts> = (props) => {

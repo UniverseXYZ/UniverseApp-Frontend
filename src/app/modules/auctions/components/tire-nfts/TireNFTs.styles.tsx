@@ -1,7 +1,6 @@
 import { BoxProps, ButtonProps } from '@chakra-ui/react';
 
 export const NFTAsset: BoxProps = {
-  boxSize: '85px',
   borderRadius: '8px',
   pos: 'relative',
 }

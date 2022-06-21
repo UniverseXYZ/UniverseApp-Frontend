@@ -10,10 +10,14 @@ import * as s from './TireNFTs.styles';
 
 interface ITireNFTsProps {
   NFTs: number;
+  NFTBoxSize?: string;
 }
 
-export const TireNFTs = (props: ITireNFTsProps) => {
-  const { NFTs: NFTsAmount } = props;
+export const TireNFTs: React.FC<ITireNFTsProps> = (props) => {
+  const {
+    NFTs: NFTsAmount,
+    NFTBoxSize = '85px'
+  } = props;
 
   const prevRef = useRef(null);
   const nextRef = useRef(null);
@@ -56,8 +60,8 @@ export const TireNFTs = (props: ITireNFTsProps) => {
         onSwiper={(swiper) => setSwiper(swiper)}
       >
         {NFTs.map((_, i) => (
-          <SwiperSlide key={i} style={{ width: '85px' }}>
-            <Box {...s.NFTAsset} bg={`url(${assetUrl}) center / cover`}>
+          <SwiperSlide key={i} style={{ width: NFTBoxSize }}>
+            <Box {...s.NFTAsset} bg={`url(${assetUrl}) center / cover`} boxSize={NFTBoxSize}>
               <Box {...s.AmountBadge}>5</Box>
             </Box>
           </SwiperSlide>
