@@ -1,56 +1,58 @@
 import {
-  Box,
   Button,
-  Container,
+  SimpleGrid,
+  Box,
+  InputLeftElement,
   Image,
   Input,
   InputGroup,
-  InputLeftElement,
-  SimpleGrid,
-  Stack,
+  Container, Stack,
 } from '@chakra-ui/react';
-import { useRouter } from 'next/router';
-import React, { useEffect, useMemo, useState } from 'react';
-import { useDebounce, useMeasure, useSearchParam } from "react-use";
+import React, { useMemo, useState } from 'react';
+import { useDebounce } from 'react-use';
+import { useInfiniteQuery, useQuery } from 'react-query';
 
 // Assets
 import SearchIcon from '@assets/images/search-gray.svg';
 
-// App
+// Components
+import { NFTCard } from '@app/modules/nft/components';
+import NftCardSkeleton from 'src/components/skeletons/nftCardSkeleton/NftCardSkeleton';
+import NoNftsFound from 'src/components/myNFTs/NoNftsFound';
+
+// Stores
+import { useAuthStore } from 'src/stores/authStore';
+
+// Constants
 import { getArtistNFTsTotalApi, queryNFTsApi } from '@app/api';
-import { SortBy, SortByNames, SortByOptions } from '@app/constants';
-import { NFTCard, NFTCardSkeleton } from '@app/modules/nft/components';
-import {
-  CollectionsFilter,
-  NFTTypeFilter, PriceRangeFilter,
-  SaleTypeFilter,
-  useCollectionsFilter, useCollectionsFilterUserCollections,
-  useNFTTypeFilter,
-  usePriceRangeFilter,
-  useSaleTypeFilter,
-} from '@app/components/filters/shared';
-import { FiltersStickyWrapper, Icon, Select } from "@app/components";
-import { Filter, Filters, ToggleFiltersButton } from '@app/components/filters';
-import { useInfiniteQuery, useQuery } from 'react-query';
 import { nftKeys, userKeys } from '@app/utils/query-keys';
-import { NFTs_PER_PAGE } from '@app/modules/account/pages/my-nfts-page/components/tab-wallet/constants';
+import { SortBy, SortByNames, SortByOptions } from '@app/constants';
+import { FiltersStickyWrapper, Select } from '@app/components';
+import { Filter, Filters, ToggleFiltersButton } from '@app/components/filters';
+import {
+  SaleTypeFilter,
+  useSaleTypeFilter,
+  NFTTypeFilter,
+  useNFTTypeFilter,
+  PriceRangeFilter,
+  usePriceRangeFilter,
+  CollectionsFilter,
+  useCollectionsFilter,
+  useCollectionsFilterUserCollections,
+} from '@app/components/filters/shared';
 
-import NoNftsFound from '../../../../../../../components/myNFTs/NoNftsFound';
-import { NFTCardSize, useNFTFluidGrid } from "@app/hooks";
-import { ToggleButton, ToggleButtonGroup } from "@app/modules/marketplace/pages/browse-nfts-page/components";
-import * as styles from './ArtistNFTsTab.styles';
+import { NFTs_PER_PAGE } from './constants';
+import * as s from './WalletTab.styles';
+import { useStaticHeader } from '@app/hooks';
 
-interface IArtistNFTsTabProps {
-  artistAddress: string;
-  onTotalLoad: (total: number) => void;
+interface IWalletTabProps {
+  getTotalNfts: (total: number) => void;
 }
 
-export const ArtistNFTsTab: React.FC<IArtistNFTsTabProps> = (props) => {
-  const { artistAddress, onTotalLoad } = props;
+export const WalletTab: React.FC<IWalletTabProps> = (props) => {
+  const { getTotalNfts } = props;
 
-  const router = useRouter();
-
-  const initialCollection = useSearchParam("collection");
+  const address = useAuthStore(state => state.address);
 
   const [search, setSearch] = useState('');
   const [debouncedSearch, setDebouncedSearch] = useState(search);
@@ -64,14 +66,7 @@ export const ArtistNFTsTab: React.FC<IArtistNFTsTabProps> = (props) => {
   const collectionsFilter = useCollectionsFilter();
 
   const userCollections = useCollectionsFilterUserCollections({
-    userAddress: artistAddress,
-    onSuccess: (response) => {
-      if (response && initialCollection) {
-        collectionsFilter.form.setValues({
-          collections: response.filter((collection) => collection.address === initialCollection),
-        });
-      }
-    }
+    userAddress: address,
   });
 
   const dirtyFiltersAmount = useMemo(() => {
@@ -87,24 +82,6 @@ export const ArtistNFTsTab: React.FC<IArtistNFTsTabProps> = (props) => {
     setDebouncedSearch(search);
   }, 1000, [search]);
 
-  useEffect(() => {
-    const queryParams = {...router.query};
-
-    // if collections loaded
-    if (userCollections?.length) {
-      if (collectionsFilter.form.values.collections?.length) {
-        queryParams.collection = collectionsFilter.form.values.collections[0].address;
-      } else {
-        delete queryParams.collection;
-      }
-
-      router.push({
-        pathname: router.pathname,
-        query: queryParams,
-      }, undefined, { shallow: true });
-    }
-  }, [collectionsFilter.form.values, userCollections]);
-
   const {
     data: NFTs,
     hasNextPage,
@@ -112,7 +89,7 @@ export const ArtistNFTsTab: React.FC<IArtistNFTsTabProps> = (props) => {
     isFetching,
     isFetchingNextPage,
   } = useInfiniteQuery(
-    nftKeys.artistNFTs(artistAddress, {
+    nftKeys.artistNFTs(address, {
       search: debouncedSearch,
       sorting: sortBy,
       saleFilter: saleTypeFilter.form.values,
@@ -125,7 +102,7 @@ export const ArtistNFTsTab: React.FC<IArtistNFTsTabProps> = (props) => {
       limit: NFTs_PER_PAGE,
       search: debouncedSearch,
       sortBy,
-      artist: artistAddress,
+      artist: address,
       hasOffers: saleTypeFilter.form.values.hasOffers,
       buyNow: saleTypeFilter.form.values.buyNow,
       newest: saleTypeFilter.form.values.new,
@@ -148,20 +125,16 @@ export const ArtistNFTsTab: React.FC<IArtistNFTsTabProps> = (props) => {
   );
 
   const { data: NFTsTotal } = useQuery(
-    userKeys.totalNFTs(artistAddress),
-    () => getArtistNFTsTotalApi(artistAddress),
+    userKeys.totalNFTs(address),
+    () => getArtistNFTsTotalApi(address),
     {
-      onSuccess: (total) => onTotalLoad(total),
+      onSuccess: (total) => getTotalNfts(total),
     }
   );
 
-  const [containerRef, { width: containerWidth }] = useMeasure<HTMLDivElement>();
-
-  const NFTGrid = useNFTFluidGrid(containerWidth, 16);
-
   return (
-    <Box>
-      <FiltersStickyWrapper {...styles.FiltersWrapperStyle} p={['0px 20px', null, 0]}>
+    <>
+      <FiltersStickyWrapper {...s.FiltersWrapper}>
         <Container maxW={'1110px'} py={'20px !important'}>
           <Stack spacing={'12px'} direction={['column', null, 'row']}>
             <InputGroup flex={1}>
@@ -196,21 +169,6 @@ export const ArtistNFTsTab: React.FC<IArtistNFTsTabProps> = (props) => {
               dirtyAmount={dirtyFiltersAmount}
               onClick={() => setShowFilters(!showFilters)}
             />
-            <ToggleButtonGroup
-              size={'lg'}
-              name={"nftSize"}
-              value={NFTGrid.size}
-              onChange={(val) => {
-                NFTGrid.setSize(val as NFTCardSize)
-              }}
-            >
-              <ToggleButton value={NFTCardSize.LG}>
-                <Icon name={'mdGrid'} />
-              </ToggleButton>
-              <ToggleButton value={NFTCardSize.SM}>
-                <Icon name={'smGrid'} />
-              </ToggleButton>
-            </ToggleButtonGroup>
           </Stack>
           <Filters show={showFilters} mt={'16px'}>
             <Filter filter={saleTypeFilter}>
@@ -241,26 +199,24 @@ export const ArtistNFTsTab: React.FC<IArtistNFTsTabProps> = (props) => {
           </Filters>
         </Container>
       </FiltersStickyWrapper>
-      <Box ref={containerRef} padding={['0px 20px', null, 0]}>
+
+      <Box padding={['0px 20px', null, 0]}>
         {(!isFetching && NFTs?.pages.length === 1 && !NFTs?.pages[0].data.length) ? (
           <NoNftsFound />
         ) : (
           <Box className="mynfts__page">
             <Box className="container mynfts__page__body">
-              <SimpleGrid
-                columns={NFTGrid.columns}
-                spacing={`${NFTGrid.spacing}px`}
-              >
-                {/*First load*/}
-                {(isFetching && !isFetchingNextPage && !NFTs?.pages.length) && (
-                  <>
-                    <NFTCardSkeleton />
-                    <NFTCardSkeleton />
-                    <NFTCardSkeleton />
-                    <NFTCardSkeleton />
-                  </>
-                )}
+              {/*First load*/}
+              {(isFetching && !isFetchingNextPage && !NFTs?.pages.length) && (
+                <SimpleGrid columns={[1, null, 2, 4]} spacing={'30px'}>
+                  <NftCardSkeleton />
+                  <NftCardSkeleton />
+                  <NftCardSkeleton />
+                  <NftCardSkeleton />
+                </SimpleGrid>
+              )}
 
+              <SimpleGrid columns={[1, null, 2, 4]} spacing={'30px'}>
                 {(NFTs?.pages ?? []).map((page) => {
                   return page.data.map(({ order, NFT }) => (
                     <NFTCard
@@ -281,6 +237,6 @@ export const ArtistNFTsTab: React.FC<IArtistNFTsTabProps> = (props) => {
           </Box>
         )}
       </Box>
-    </Box>
+    </>
   );
 };
