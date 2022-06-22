@@ -4,15 +4,15 @@ import uuid from 'react-uuid';
 
 // TODO:: This component is not used anywhere in the current implementation of the MY NFTs search bar, consider removing it on a later stage.
 
-import closeIcon from '../../../../../../../../assets/images/close-menu.svg';
-import priceIcon from '../../../../../../../../assets/images/marketplace/price.svg';
-import ethereumIcon from '../../../../../../../..//assets/images/eth-icon.svg';
-import daiIcon from '../../../../../../../..//assets/images/dai_icon.svg';
-import usdcIcon from '../../../../../../../..//assets/images/usdc_icon.svg';
-import bondIcon from '../../../../../../../..//assets/images/bond_icon.svg';
-import snxIcon from '../../../../../../../..//assets/images/snx.svg';
-import { getCollectionBackgroundColor } from '../../../../../../../../utils/helpers';
-import { shortenEthereumAddress } from '../../../../../../../../utils/helpers/format';
+import closeIcon from 'src/assets/images/close-menu.svg';
+import priceIcon from 'src/assets/images/marketplace/price.svg';
+import ethereumIcon from 'src//assets/images/eth-icon.svg';
+import daiIcon from 'src//assets/images/dai_icon.svg';
+import usdcIcon from 'src//assets/images/usdc_icon.svg';
+import bondIcon from 'src//assets/images/bond_icon.svg';
+import snxIcon from 'src//assets/images/snx.svg';
+import { getCollectionBackgroundColor } from 'src/utils/helpers';
+import { shortenEthereumAddress } from 'src/utils/helpers/format';
 
 const bidTokens = [
   {

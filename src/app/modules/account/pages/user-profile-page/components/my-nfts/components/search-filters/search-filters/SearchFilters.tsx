@@ -22,8 +22,8 @@ import {
   CollectionsFilterDropdown,
   CollectionsFilter,
   ClearAllButton,
-} from '../../../../../../../components/filters';
-import { FiltersPopup, Icon } from '../../../../../../../components';
+} from '@app/components/filters';
+import { FiltersPopup, Icon } from '@app/components';
 
 interface ISearchFiltersProps {
   onFilterChanges?: (values: {

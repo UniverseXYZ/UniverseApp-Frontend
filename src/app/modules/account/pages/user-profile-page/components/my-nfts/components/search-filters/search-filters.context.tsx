@@ -12,19 +12,19 @@ import {
 	GetUserCollectionsFromScraperApi,
 	getUserNFTsApi,
 	IGetUserNFTsProps,
-} from '../../../../../../api';
-import { ISearchBarDropdownCollection } from '../../../../../collection/types';
+} from '@app/api';
+import { ISearchBarDropdownCollection } from '../../../../../../../collection/types';
 import {
 	INFT,
 	IOrder,
 	IOrderAssetTypeBundleListing,
 	IOrderAssetTypeERC20,
 	IOrderAssetTypeSingleListing,
-} from '../../../../../nft/types';
-import { IUserOwnedCollection } from '../../../../types';
-import { TokenTicker } from '../../../../../../enums';
+} from '../../../../../../../nft/types';
+import { IUserOwnedCollection } from '../../../../../../types';
+import { TokenTicker } from '@app/enums';
 import { ISearchBarValue, ISortByFilterValue, SortOrderOptions } from '../search-filters';
-import { collectionKeys, nftKeys, orderKeys } from '../../../../../../utils/query-keys';
+import { collectionKeys, nftKeys, orderKeys } from '@app/utils/query-keys';
 import {
 	ICollectionsValue,
 	INftTypeFilterValue,
@@ -34,8 +34,8 @@ import {
 	useNFTTypeFilter,
 	usePriceRangeFilter,
 	useSaleTypeFilter,
-} from '../../../../../../components/filters';
-import { getTokenAddressByTicker } from '../../../../../../constants';
+} from '@app/components/filters';
+import { getTokenAddressByTicker } from '@app/constants';
 import { OrderAssetClass } from '@app/modules/nft/enums';
 
 // Constants

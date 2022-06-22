@@ -2,14 +2,14 @@ import React, { useState } from 'react';
 import { DebounceInput } from 'react-debounce-input';
 
 // Icons
-import searchIcon from '../../../../../../../../assets/images/search-gray.svg';
+import searchIcon from 'src/assets/images/search-gray.svg';
 
 // Styles
 // import './SearchField.scss';
 
 // Interfaces
 import { ISearchBarValue } from '../index';
-import { timeout } from '../../../../../../../utils/debounceConfig';
+import { timeout } from '@app/utils/debounceConfig';
 
 // Constants
 const MAX_CHAR_LENGTH = 32;
