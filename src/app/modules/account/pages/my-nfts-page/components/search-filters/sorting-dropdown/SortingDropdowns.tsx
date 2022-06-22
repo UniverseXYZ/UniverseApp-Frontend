@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Dropdown } from '@app/components/dropdown';
+import { Dropdown } from '../../../../../../../components/dropdown';
 import { Box } from '@chakra-ui/react';
 import { ISortByFilterValue } from './types';
 interface ISortByProps {
