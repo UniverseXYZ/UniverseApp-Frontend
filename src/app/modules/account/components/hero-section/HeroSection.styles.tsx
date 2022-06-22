@@ -81,6 +81,26 @@ export const MainInfoStyle: BoxProps = {
   justifyContent: 'space-between',
 };
 
+export const BioStyle: BoxProps = {
+  fontSize: '14px',
+  color: 'rgba(0, 0, 0, 0.6)',
+  whiteSpace: 'pre-wrap',
+  width: {
+    base: '100%',
+    xl:'50%',
+  },
+  wordBreak: 'break-all',
+
+  sx: {
+    '.readMoreText': {
+      color: 'rgba(0, 0, 0, 0.6) !important',
+      fontWeight: 'bold',
+      ml: '6px',
+      textDecoration: 'underline',
+    },
+  }
+};
+
 export const AdditionalOptionsStyle: BoxProps = {
   display: 'flex',
 };
