@@ -17,11 +17,11 @@ import SearchIcon from '@assets/images/search-gray.svg';
 
 // Components
 import { NFTCard } from '@app/modules/nft/components';
-import NftCardSkeleton from '../../../../../../../components/skeletons/nftCardSkeleton/NftCardSkeleton';
-import NoNftsFound from '../../../../../../../components/myNFTs/NoNftsFound';
+import NftCardSkeleton from 'src/components/skeletons/nftCardSkeleton/NftCardSkeleton';
+import NoNftsFound from 'src/components/myNFTs/NoNftsFound';
 
 // Stores
-import { useAuthStore } from '../../../../../../../stores/authStore';
+import { useAuthStore } from 'src/stores/authStore';
 
 // Constants
 import { getArtistNFTsTotalApi, queryNFTsApi } from '@app/api';
@@ -43,7 +43,6 @@ import {
 
 import { NFTs_PER_PAGE } from './constants';
 import * as s from './WalletTab.styles';
-import { useStaticHeader } from '@app/hooks';
 
 interface IWalletTabProps {
   getTotalNfts: (total: number) => void;
