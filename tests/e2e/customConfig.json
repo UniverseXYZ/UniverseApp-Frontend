@@ -1,11 +1,12 @@
 {
-  "baseUrl": "http://localhost:3000",
+  "baseUrl": "http://localhost:3000/",
   "video": false,
   "userAgent": "synpress",
   "retries": { "runMode": 0, "openMode": 0 },
   "integrationFolder": "tests/e2e/specs",
   "screenshotsFolder": "tests/e2e/screenshots",
   "videosFolder": "tests/e2e/videos",
+  "fixturesFolder":"tests/e2e/assets",
   "chromeWebSecurity": true,
   "viewportWidth": 1366,
   "viewportHeight": 768,
