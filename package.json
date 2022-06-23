@@ -90,6 +90,7 @@
     "@types/node": "^16.11.7",
     "@types/react": "17.0.35",
     "@types/react-blockies": "^1.4.1",
+    "@types/react-copy-to-clipboard": "^5.0.2",
     "@types/react-datepicker": "^4.3.4",
     "@types/react-google-recaptcha": "^2.1.5",
     "@types/react-lottie": "^1.2.6",
