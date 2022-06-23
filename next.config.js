@@ -102,11 +102,7 @@ module.exports = withPlugins(
       REACT_APP_COLLECTION_EDITOR: process.env.REACT_APP_COLLECTION_EDITOR,
       PRIVATE_KEY: process.env.PRIVATE_KEY,
       NETWORK_NAME: process.env.NETWORK_NAME,
-    },
-    eslint: {
-      // Warning: This allows production builds to successfully complete even if
-      // your project has ESLint errors.
-      ignoreDuringBuilds: true,
+      REACT_APP_CLOUD_FUNCTIONS: process.env.REACT_APP_CLOUD_FUNCTIONS,
     },
     eslint: {
       // Warning: This allows production builds to successfully complete even if

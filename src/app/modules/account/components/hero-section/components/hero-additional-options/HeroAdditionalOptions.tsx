@@ -18,6 +18,7 @@ import editIcon from '@assets/images/edit-rounded.svg';
 import twitterIcon from '@assets/images/icons_twitter.svg';
 import socialShareIcon from '@assets/images/social-share.svg';
 import { IUser } from "@app/types";
+import { useLocation } from "react-use";
 
 interface IHeroAdditionalOptionsProps {
   user: IUser;
@@ -28,6 +29,8 @@ interface IHeroAdditionalOptionsProps {
 export const HeroAdditionalOptions = ({ user, showEditBtn, isPreview }: IHeroAdditionalOptionsProps) => {
   const router = useRouter();
   const [copied, setCopied] = useState(false);
+
+  const location = useLocation();
 
   const { onCopy } = useClipboard(location?.href ?? "");
 
@@ -70,7 +73,7 @@ export const HeroAdditionalOptions = ({ user, showEditBtn, isPreview }: IHeroAdd
             onClick={() =>
               window.open(
                 `https://twitter.com/intent/tweet?url=${encodeURIComponent(
-                  location?.href
+                  location?.href ?? ''
                 )}`,
                 "_blank"
               )
