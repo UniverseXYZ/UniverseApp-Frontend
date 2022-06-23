@@ -4,7 +4,6 @@ import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { Animated } from 'react-animated-css';
 import { useHistory } from 'react-router';
 import Skeleton from 'react-loading-skeleton';
-import Blockies from 'react-blockies';
 import twitterIcon from '../../assets/images/icons_twitter.svg';
 import instagramIcon from '../../assets/images/instagram-outlined.svg';
 import pencilIcon from '../../assets/images/edit.svg';
@@ -14,6 +13,7 @@ import { useAuctionContext } from '../../contexts/AuctionContext';
 import { shortenEthereumAddress } from '../../utils/helpers/format';
 import { useWindowSize } from 'react-use';
 import { useAuthStore } from '../../stores/authStore';
+import { Avatar } from '@app/components'
 
 const ArtistDetails = ({ artistAddress, onArtist = {}, loading }) => {
   const blockieSizes = {
@@ -37,7 +37,7 @@ const ArtistDetails = ({ artistAddress, onArtist = {}, loading }) => {
   const [blockieScale, setBlockieScale] = useState(31);
   // const [width, height] = useWindowSize();
   const { width, height } = useWindowSize();
-  
+
   useEffect(() => {
     if (width < blockieResizePoints.small && blockieScale !== blockieSizes.small) {
       setBlockieScale(blockieSizes.small);
@@ -57,7 +57,11 @@ const ArtistDetails = ({ artistAddress, onArtist = {}, loading }) => {
         {artistAddress && !onArtist.avatar ? (
           <div className="artist__details__section__container">
             <div className="avatar">
-              <Blockies seed={artistAddress} size={9} scale={blockieScale} />
+              <Avatar
+                address={artistAddress}
+                width={9*blockieScale}
+                height={9*blockieScale}
+              />
               <h6 className="show__on__mobile">Unnamed</h6>
             </div>
             <div className="info">
@@ -102,7 +106,7 @@ const ArtistDetails = ({ artistAddress, onArtist = {}, loading }) => {
                       <span />
                     </div>
                     {/* During SSR we don't have window */}
-                    {typeof window !== `undefined` && 
+                    {typeof window !== `undefined` &&
                       <CopyToClipboard
                         text={window.location.href}
                         onCopy={() => {
@@ -178,7 +182,7 @@ const ArtistDetails = ({ artistAddress, onArtist = {}, loading }) => {
                         <span />
                       </div>
                       {/* During SSR we don't have window */}
-                      {typeof window !== `undefined` && 
+                      {typeof window !== `undefined` &&
                         <CopyToClipboard
                           text={window.location.href}
                           onCopy={() => {

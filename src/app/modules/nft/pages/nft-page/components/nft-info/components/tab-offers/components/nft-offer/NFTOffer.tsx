@@ -11,12 +11,12 @@ import {
 } from '../../../../../../../../types';
 import { IUser } from '../../../../../../../../../account/types';
 import { NFTTabItemWrapper } from '../../..';
-import Blockies from 'react-blockies';
 import * as styles from '../../styles';
 import { shortenEthereumAddress } from '../../../../../../../../../../../utils/helpers/format';
 import { useTokenPrice } from '../../../../../../../../../../hooks';
 import { useAuthStore } from '../../../../../../../../../../../stores/authStore';
 import { getAddedAtLabel } from '@app/modules/nft/pages/nft-page/components/nft-info/components/tab-history/helpers';
+import { Avatar } from '@app/components'
 
 interface INFTOfferProps<T> {
   offer: T;
@@ -60,7 +60,11 @@ export const  NFTOffer = <T extends IOfferSingleListing | IOfferBundleListing>(p
         {offerUser && offerUser.profileImageUrl
           ? <Image src={offerUser.profileImageUrl} {...styles.ImageStyle} />
           : <Box style={{ borderRadius: '50%', overflow: 'hidden'}} {...styles.ImageStyle} >
-            <Blockies seed={offer.maker} size={9} scale={5} />
+            <Avatar
+              address={offer.maker}
+              width='45px'
+              height='45px'
+            />
           </Box>
         }
         <Box>
