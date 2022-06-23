@@ -35,7 +35,7 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/deploym
 
 ## Testing
 
-- The tests are written with [Synpress](https://github.com/synthetixio/synpress)
+- The tests are written with a fork of [Synpress](https://github.com/UniverseXYZ/synpress), that extends the modue with the cypress file upload package. The original repo is [Synpress](https://github.com/synthetixio/synpress)
 
 - Additional Synpress [Commands](https://github.com/synthetixio/synpress/blob/master/support/index.d.ts)
 
