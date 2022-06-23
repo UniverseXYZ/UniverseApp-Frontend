@@ -240,11 +240,6 @@ export const NFTMakeAnOfferPopup: React.FC = () => {
     ["tokenPrice", formik.values?.token],
     async () => {
       const response = await getTokenPriceCoingecko(TOKENS_MAP[formik.values?.token?.ticker].coingeckoId);
-
-      if (!response) {
-        throw new Error('404');
-      }
-
       return response['usd'];
     }
   );
