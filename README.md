@@ -40,6 +40,7 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/deploym
 - Additional Synpress [Commands](https://github.com/synthetixio/synpress/blob/master/support/index.d.ts)
 
 In order to run the tests:
+- node version should be v16.14.0, this includes the node_modules
 
 1. Build the next app `npm run build`
 2. Run the next app `npm run dev`
