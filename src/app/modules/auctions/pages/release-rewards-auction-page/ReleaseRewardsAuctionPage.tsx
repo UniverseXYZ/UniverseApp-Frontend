@@ -2,6 +2,7 @@ import {
   Box,
   Button,
   Container,
+  Flex,
   Heading,
   HStack,
   Icon,
@@ -196,28 +197,30 @@ export const ReleaseRewardsAuctionPage = () => {
               </Step>
               <Step>
                 <Box {...s.StepContainer} pb={0}>
-                  <HStack spacing={'10px'} justifyContent={'space-between'}>
+                  <Flex flexWrap={'wrap'} mb={'24px'}>
                     <Heading as={'h2'} {...s.StepTitle} flex={1}>Capture slot revenue</Heading>
-                    <HStack spacing={'6px'}>
-                      <Text fontSize={'14px'}>Show all slots</Text>
-                      <Tooltip
-                        hasArrow
-                        variant={'black'}
-                        placement={'top'}
-                        label={'Use this toggle if you want to pay gas fees for the specific user separately'}
-                      >
-                        <Icon viewBox={'0 0 16 16'} color={'#00000066'} cursor={'pointer'}>
-                          <InfoSVG />
-                        </Icon>
-                      </Tooltip>
+                    <HStack spacing={'10px'} {...s.ShowAllSlotsContainer}>
+                      <HStack spacing={'6px'}>
+                        <Text fontSize={'14px'}>Show all slots</Text>
+                        <Tooltip
+                          hasArrow
+                          variant={'black'}
+                          placement={'top'}
+                          label={'Use this toggle if you want to pay gas fees for the specific user separately'}
+                        >
+                          <Icon viewBox={'0 0 16 16'} color={'#00000066'} cursor={'pointer'}>
+                            <InfoSVG />
+                          </Icon>
+                        </Tooltip>
+                      </HStack>
+                      <Switch
+                        size={'lg'}
+                        isChecked={showAllSlots}
+                        onChange={() => setShowAllSlots(!showAllSlots)}
+                      />
                     </HStack>
-                    <Switch
-                      size={'lg'}
-                      isChecked={showAllSlots}
-                      onChange={() => setShowAllSlots(!showAllSlots)}
-                    />
-                  </HStack>
-                  <Text {...s.StepDescription}>Once the auction is finalized, the revenue for each slot should be captured.</Text>
+                    <Text {...s.StepDescription} w={'100%'} mb={0}>Once the auction is finalized, the revenue for each slot should be captured.</Text>
+                  </Flex>
                   {!isBidderView ? (
                     <>
                       {!showAllSlots ? (

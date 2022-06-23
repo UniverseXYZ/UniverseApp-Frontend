@@ -1,4 +1,4 @@
-import { AlertProps, BoxProps, LinkProps, TextProps } from '@chakra-ui/react';
+import { BoxProps, LinkProps, StackProps, TextProps } from '@chakra-ui/react';
 
 import BG_LG_Image from '@assets/images/release-rewards-bg-lg.png';
 import BG_MD_Image from '@assets/images/release-rewards-bg-md.png';
@@ -48,7 +48,7 @@ export const StepDescription: TextProps = {
   color: 'rgba(0 0 0 / 60%)',
   fontSize: '14px',
   fontWeight: 400,
-  mb: '30px',
+  mb: '24px',
 };
 
 export const StepContainer: BoxProps = {
@@ -56,7 +56,8 @@ export const StepContainer: BoxProps = {
   pb: '60px',
 };
 
-export const Alert: AlertProps = {
-  mb: '30px',
-  w: 'fit-content',
+export const ShowAllSlotsContainer: StackProps = {
+  mt: ['24px', null, 0],
+  order: [1, null, 0],
+  w: ['100%', null, 'fit-content'],
 };

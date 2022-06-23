@@ -66,11 +66,13 @@ export const Transaction: React.FC<ITransactionProps> = (props) => {
     <Box {...s.Wrapper}>
       <Stack {...s.TitleContainer}>
         <Heading fontSize={'16px'} flex={1}>{name}</Heading>
-        <Text fontSize={'14px'}>Slots: <strong>{slots}</strong></Text>
-        <Text fontSize={'14px'}>Total NFTs: <strong>{NFTs}</strong></Text>
-        <Box display={{ base: 'none', md: 'block' }}>
-          {stateRenders[transactionState]()}
-        </Box>
+        <HStack spacing={'24px'}>
+          <Text fontSize={'14px'}>Slots: <strong>{slots}</strong></Text>
+          <Text fontSize={'14px'}>Total NFTs: <strong>{NFTs}</strong></Text>
+          <Box display={{ base: 'none', md: 'block' }}>
+            {stateRenders[transactionState]()}
+          </Box>
+        </HStack>
       </Stack>
 
       <Box>

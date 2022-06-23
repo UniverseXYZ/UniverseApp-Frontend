@@ -14,8 +14,8 @@ export const TitleContainer: StackProps = {
     md: 'row',
   },
   spacing: {
-    base: '10px',
-    md: '24px',
+    base: '8px',
+    md: 0,
   },
   alignItems: {
     base: 'flex-start',
