@@ -37,7 +37,7 @@ const ArtistDetails = ({ artistAddress, onArtist = {}, loading }) => {
   const [blockieScale, setBlockieScale] = useState(31);
   // const [width, height] = useWindowSize();
   const { width, height } = useWindowSize();
-  
+
   useEffect(() => {
     if (width < blockieResizePoints.small && blockieScale !== blockieSizes.small) {
       setBlockieScale(blockieSizes.small);
@@ -102,7 +102,7 @@ const ArtistDetails = ({ artistAddress, onArtist = {}, loading }) => {
                       <span />
                     </div>
                     {/* During SSR we don't have window */}
-                    {typeof window !== `undefined` && 
+                    {typeof window !== `undefined` &&
                       <CopyToClipboard
                         text={window.location.href}
                         onCopy={() => {
@@ -178,7 +178,7 @@ const ArtistDetails = ({ artistAddress, onArtist = {}, loading }) => {
                         <span />
                       </div>
                       {/* During SSR we don't have window */}
-                      {typeof window !== `undefined` && 
+                      {typeof window !== `undefined` &&
                         <CopyToClipboard
                           text={window.location.href}
                           onCopy={() => {

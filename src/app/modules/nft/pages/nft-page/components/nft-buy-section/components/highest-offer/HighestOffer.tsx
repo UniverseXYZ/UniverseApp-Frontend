@@ -10,13 +10,13 @@ import {
   IOrderAssetTypeSingleListing,
 } from '../../../../../../types';
 import { IUser } from '../../../../../../../account/types';
-import Blockies from 'react-blockies';
 import { ethers } from 'ethers';
 import { getTokenByAddress, TOKENS_MAP } from '../../../../../../../../constants';
 import { TokenIcon } from '../../../../../../../../components';
 import { shortenEthereumAddress } from '../../../../../../../../../utils/helpers/format';
 import BigNumber from 'bignumber.js';
 import { useTokenPrice } from '../../../../../../../../hooks';
+import { Avatar } from '@app/components'
 
 interface IHighestOfferProps {
   offer?: IOrder<IOrderAssetTypeERC20, IOrderAssetTypeSingleListing | IOrderAssetTypeBundleListing>;
@@ -40,14 +40,18 @@ export const HighestOffer: React.FC<IHighestOfferProps> = (props) => {
 
     return [price, usdPrice];
   }, [offer, tokenUSDPrice]);
-  
+
   return (
     <Flex mb={'24px'}>
       {creator && creator.profileImageUrl ? (
         <Image src={creator.profileImageUrl} {...styles.ContentBidUserAvatarStyle} />
       ) : (
         <Box style={{ borderRadius: '50%', overflow: 'hidden' }} {...styles.ContentBidUserAvatarStyle}>
-          <Blockies seed={creator?.address || offer?.maker || ''} size={10} scale={5} />
+          <Avatar
+            address={creator?.address || offer?.maker || ''}
+            width='50px'
+            height='50px'
+          />
         </Box>
       )}
       <Box>
