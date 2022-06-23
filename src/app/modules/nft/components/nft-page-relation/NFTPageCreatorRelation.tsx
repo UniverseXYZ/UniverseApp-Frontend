@@ -1,11 +1,11 @@
 import { Box } from '@chakra-ui/react';
 import React from 'react';
-import Blockies from 'react-blockies';
 
 import { IUser } from '../../../account/types';
 import { NFTRelationType } from '../../enums';
 import { NFTPageRelation } from './NFTPageRelation';
 import { RelationAvatar } from './RelationAvatar';
+import { Avatar } from '@app/components'
 
 interface INFTPageCreatorRelationProps {
   creatorAddress: string;
@@ -24,7 +24,11 @@ export const NFTPageCreatorRelation: React.FC<INFTPageCreatorRelationProps> = (p
           ? <RelationAvatar src={creator?.profileImageUrl} />
           : (
             <Box borderRadius={'full'} overflow={'hidden'}>
-              <Blockies seed={creatorAddress} size={9} scale={4} />
+              <Avatar
+                address={creatorAddress}
+                width='36px'
+                height='36px'
+              />
             </Box>
           )
       )}
