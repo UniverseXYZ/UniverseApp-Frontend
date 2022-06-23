@@ -25,6 +25,7 @@ type IDefaultAuthStoreGeters = {
   isSigning: boolean;
   showWrongNetworkPopup: boolean,
   loggedInArtist: any,
+  previewUserData: any,
 }
 
 type IAuthStore = IDefaultAuthStoreGeters & {
@@ -39,7 +40,7 @@ type IAuthStore = IDefaultAuthStoreGeters & {
   // Event handlers
   onAccountsChanged: (account: string[]) => Promise<void>;
   onChainChanged: () => void;
-  
+
   // Helper functions
   resetConnectionState: () => void;
   removeListeners: () => void;
@@ -52,6 +53,7 @@ type IAuthStore = IDefaultAuthStoreGeters & {
   setLoginFn: (loginFn: () => void) => void
   setShowWrongNetworkPopup: (show: boolean) => void;
   setLoggedInArtist: (artist: any) => void;
+  setPreviewUserData: (artist: any) => void;
   setProviderName: (providerName: string) => void;
 }
 
@@ -64,6 +66,14 @@ const defaultState: IDefaultAuthStoreGeters = {
     avatar: '',
     about: '',
     personalLogo: '',
+    instagramLink: '',
+    twitterLink: '',
+  },
+  previewUserData: {
+    name: '',
+    universePageAddress: '',
+    avatar: '',
+    about: '',
     instagramLink: '',
     twitterLink: '',
   },
@@ -84,7 +94,7 @@ const defaultState: IDefaultAuthStoreGeters = {
   isAuthenticating: false,
 }
 
-export const useAuthStore = 
+export const useAuthStore =
 create<
   IAuthStore,
   SetState<IAuthStore>,
@@ -159,9 +169,9 @@ create<
         ...state,
         providerName: CONNECTORS_NAMES.WalletConnect,
       }));
-  
+
       Cookies.set('providerName', CONNECTORS_NAMES.WalletConnect);
-  
+
       get().removeListeners();
       get().setListeners();
       } catch (err) {
@@ -282,7 +292,7 @@ create<
               isAuthenticating: false,
               isSigning: false,
             }))
-            
+
             useErrorStore.getState().setErrorBody('Please try again in a few minutes.');
             useErrorStore.getState().setErrorTitle('Failed to authenticate');
             useErrorStore.getState().setShowError(true);
@@ -376,6 +386,12 @@ create<
     set(state => ({
       ...state,
       loggedInArtist: artist
+    }))
+  },
+  setPreviewUserData: (user) => {
+    set(state => ({
+      ...state,
+      previewUserData: user
     }))
   }
 })))

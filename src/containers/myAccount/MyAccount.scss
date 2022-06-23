@@ -1062,11 +1062,12 @@
     }
     .account-display-buttons {
       display: flex;
+      justify-content: space-between;
 
       button {
-        margin-right: 10px;
         &.light-border-button {
           box-shadow: 2px 1000px 1px #f5f4f9 inset;
+          margin-right: 10px;
         }
         @include sm {
           margin-right: 0px;
@@ -1083,8 +1084,11 @@
       // }
 
       @include sm {
-        display: grid;
-        justify-content: unset;
+        flex-direction: column-reverse;
+
+        button {
+          width: 100%;
+        }
       }
     }
 
