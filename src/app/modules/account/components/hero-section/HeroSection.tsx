@@ -31,7 +31,7 @@ export const HeroSection = ({ walletAddress, user }: IHeroSectionProps) => {
         }
         bgSize='cover'
       />
-      <Animated animationIn="zoomIn">
+      <Animated animationIn="zoomIn" animationOut="zoomIn" isVisible>
         <Box {...styles.HeroSectionContainerStyle}>
           {user.avatar ? (
             <Image {...styles.AvatarStyle} src={user.avatar} alt={user.name} />

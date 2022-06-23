@@ -513,7 +513,12 @@ loggedInArtist: s.loggedInArtist,
                   <button
                     type="button"
                     onClick={() => {
-                      history.push('/my-nfts');
+                      if (!loggedInArtist.universePageAddress && !address) return;
+
+                      const path = loggedInArtist.universePageAddress
+                        ? loggedInArtist.universePageAddress
+                        : address;
+                      history.push(`/${path}`);
                       setIsAccountDropdownOpened(!isAccountDropdownOpened);
                     }}
                   >
