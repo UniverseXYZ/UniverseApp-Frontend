@@ -12,3 +12,7 @@ export const getEthPriceEtherscan = async () => {
 export const getTokenPriceCoingecko = async (token) => {
   return await fetchJson(`${process.env.REACT_APP_MARKETPLACE_BACKEND}/v1/tokenPrices/${token}`);
 };
+
+export const getAllTokenPricesCoingecko = async () => {
+  return await fetchJson(`${process.env.REACT_APP_MARKETPLACE_BACKEND}/v1/tokenPrices`);
+};
