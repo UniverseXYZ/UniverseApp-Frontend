@@ -21,7 +21,7 @@ import {
 } from '@chakra-ui/react';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { FieldArray, FormikErrors, FormikProvider, useFormik } from 'formik';
-import { useMutation } from 'react-query';
+import { useMutation, useQuery } from 'react-query';
 import { BigNumber } from 'bignumber.js';
 import axios from 'axios';
 import { Contract, ethers, utils } from 'ethers';
@@ -82,7 +82,6 @@ export const NFTMakeAnOfferPopup: React.FC = () => {
 
   const [userBalance, setUserBalance] = useState(0);
   const [state, setState] = useState<MakeAnOfferState>(MakeAnOfferState.FORM);
-  const [tokenPrice, setTokenPrice] = useState(0);
   const [approveTx, setApproveTx] = useState<string>('');
   const [validateRoyalties, setValidateRoyalties] = useState(false);
 
@@ -237,6 +236,14 @@ export const NFTMakeAnOfferPopup: React.FC = () => {
     },
   });
 
+  const { data: tokenPrice } = useQuery(
+    ["tokenPrice", formik.values?.token],
+    async () => {
+      const response = await getTokenPriceCoingecko(TOKENS_MAP[formik.values?.token?.ticker].coingeckoId);
+      return response['usd'];
+    }
+  );
+
   const isERC1155 = useMemo(() => {
     switch (nft?.standard) {
       case NFTStandard.ERC1155: return true;
@@ -266,14 +273,6 @@ export const NFTMakeAnOfferPopup: React.FC = () => {
     return (formik.errors.royalties?.[i] as FormikErrors<Partial<Record<IRoyaltyKey, string>>>)?.[prop] ?? '';
   }, [formik]);
 
-  useEffect(()=> {
-    const loadPrice = async () => {
-      const token = formik.values.token as TokenTicker;
-      const response = await getTokenPriceCoingecko(TOKENS_MAP[token].coingeckoId);
-      setTokenPrice(response['usd']);
-    }
-    loadPrice();
-  },[formik.values.token])
 
   useEffect(() => {
     formik.resetForm();

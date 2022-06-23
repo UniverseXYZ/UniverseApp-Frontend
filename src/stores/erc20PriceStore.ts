@@ -16,15 +16,15 @@ interface IErc20PriceStoreState {
   getTokenPriceByTicker: (ticker: TokenTicker) => number;
 }
 
-interface TokenPrice {
+interface ITokenPrice {
   symbol: string;
   updatedAt: Date;
   usd: number;
   name: string;
 }
 
-const findTokenPrice = (tokenPrices: TokenPrice[], token: string) => {
-  return tokenPrices.find((tokenPriceData: TokenPrice) => tokenPriceData.name === token);
+const findTokenPrice = (tokenPrices: ITokenPrice[], token: string) => {
+  return tokenPrices.find((tokenPriceData: ITokenPrice) => tokenPriceData.name === token);
 }
 
 export const useErc20PriceStore = create<IErc20PriceStoreState>((set, get) => ({
@@ -37,19 +37,13 @@ export const useErc20PriceStore = create<IErc20PriceStoreState>((set, get) => ({
   // fetching functions
   fetchPrices: async () => {
     try {
-      const tokenPrices: TokenPrice[] = await getAllTokenPricesCoingecko();
+      const tokenPrices: ITokenPrice[] = await getAllTokenPricesCoingecko();
       const ethPrice = findTokenPrice(tokenPrices, 'ethereum');
       const daiInfo = findTokenPrice(tokenPrices, 'dai');
       const usdcInfo = findTokenPrice(tokenPrices, 'usd-coin');
       const xyzInfo = findTokenPrice(tokenPrices, 'universe-xyz');
       const wethInfo = findTokenPrice(tokenPrices, 'weth');
 
-      console.log(`wethPrice: ${wethInfo?.usd}`);
-      console.log(`ethPrice: ${ethPrice?.usd}`);
-      console.log(`usdcPrice: ${usdcInfo?.usd}`);
-      console.log(`daiPrice: ${daiInfo?.usd}`);
-      console.log(`xyzPrice: ${xyzInfo?.usd}`);
-      
       set(() => ({
         ethUsdPrice: ethPrice?.usd ?? 0,
         daiUsdPrice: daiInfo?.usd ?? 0,
