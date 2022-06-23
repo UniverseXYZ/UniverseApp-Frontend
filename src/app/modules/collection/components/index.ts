@@ -1,1 +1,1 @@
-export * from './no-description-found';
+export * from './collection-page-skeleton';

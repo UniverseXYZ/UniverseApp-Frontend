@@ -20,7 +20,6 @@ import HiddenNFTs from '../../../../../components/myNFTs/HiddenNFTs';
 import LikedNFTs from '../../../../../components/myNFTs/LikedNFTs';
 import NFTsActivity from '../../../../../components/myNFTs/NFTsActivity';
 import { WalletTab } from './components';
-import FiltersContextProvider from '../../../account/pages/my-nfts-page/components/search-filters/search-filters.context';
 import { useAuthStore } from '../../../../../stores/authStore';
 import Contracts from '../../../../../contracts/contracts.json';
 import { useErrorStore } from '../../../../../stores/errorStore';
@@ -30,7 +29,8 @@ import { usePolymorphStore } from 'src/stores/polymorphStore';
 import { useMyNftsStore } from 'src/stores/myNftsStore';
 import { useQuery } from 'react-query';
 import { nftKeys } from '@app/utils/query-keys';
- 
+import { useStaticHeader } from '@app/hooks';
+
 // @ts-ignore
 const { contracts } = Contracts[process.env.REACT_APP_NETWORK_CHAIN_ID];
 
@@ -80,7 +80,7 @@ export const MyNFTsPage = () => {
   const tabs = [
     { name: 'Wallet', amount: totalNfts },
     { name: 'Universe Collections', amount: nftSummary?.collections },
-    { name: 'Saved NFTs', amount: nftSummary?.savedNfts },
+    { name: 'Draft NFTs', amount: nftSummary?.savedNfts },
     { name: 'Universe NFTs', amount: (userLobsters.length || 0) + (userPolymorphs.length || 0) },
   ];
 
@@ -90,6 +90,8 @@ export const MyNFTsPage = () => {
   const [triggerRefetch, setTriggerRefetch] = useStateIfMounted(false);
 
   useTitle('Universe - My NFTs', { restoreOnUnmount: true });
+
+  useStaticHeader();
 
   useClickAway(createButtonRef, () => {
     setIsDropdownOpened(false);
@@ -382,9 +384,7 @@ export const MyNFTsPage = () => {
       </div>
 
       {myNFTsSelectedTabIndex === 0 && (
-        <FiltersContextProvider defaultSorting={0} >
-          <WalletTab getTotalNfts={getTotalNfts} />
-        </FiltersContextProvider>
+        <WalletTab getTotalNfts={getTotalNfts} />
       )}
       <div className="container mynfts__page__body">
         {myNFTsSelectedTabIndex === 1 && <DeployedCollections scrollContainer={scrollContainer} />}

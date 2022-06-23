@@ -24,7 +24,7 @@ export const MainContainerStyle: BoxProps = {
     },
     '--image-margin-right': {
       base: '0',
-      lg: '60px',
+      lg: '40px',
     },
 
     h4: {

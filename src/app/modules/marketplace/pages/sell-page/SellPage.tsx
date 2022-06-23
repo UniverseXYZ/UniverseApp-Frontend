@@ -1,74 +1,99 @@
-import { Box, Container, Heading, Image, LinkBox, LinkOverlay, Tab, TabList, TabPanels, Tabs } from '@chakra-ui/react';
+import {
+  Box,
+  Container,
+  Heading,
+  Image,
+  LinkBox,
+  LinkOverlay,
+  SimpleGrid,
+  Tab,
+  TabList,
+  TabPanels,
+  Tabs,
+  TabPanel
+} from '@chakra-ui/react';
 import axios from 'axios';
 import { utils } from 'ethers';
-import { useFormik } from 'formik';
-import React, { useCallback, useEffect, useState } from 'react';
-import { useMutation, useQuery } from 'react-query';
-import * as Yup from 'yup';
+import { FormikProvider, useFormik } from 'formik';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { NextPageContext } from 'next';
 import NextLink from 'next/link';
 
-import bg from '../../../../../assets/images/marketplace/v2/bg.png';
-import arrow from '../../../../../assets/images/arrow.svg';
-import BGImage from './../../../../../assets/images/v2/stone_bg.jpg';
+import bg from '@assets/images/marketplace/v2/bg.png';
+import arrow from '@assets/images/arrow.svg';
+import BGImage from '@assets/images/v2/stone_bg.jpg';
 
 import {
   defaultDutchAuctionForm,
   defaultEnglishAuctionForm,
   defaultFixedListingForm,
-  MarketplaceSellContext,
-  sellPageTabs,
+  sellMethodOptions,
   settingsAmountTypeTitleText,
   settingsMethodsTitleText,
 } from './constants';
-import { SelectMethodType, SettingsTab, SummaryTab, TabPanel } from './components';
+import { IListingPage, ListingPageContext } from './ListingPage.context';
+import { SettingsTab, SummaryTab } from './components';
 import { SellAmountType, SellMethod, SellPageTabs } from './enums';
-import { IMarketplaceSellContextData, ISellForm } from './types';
+import { ISellForm } from './types';
 import { sign } from '../../../../helpers';
 import { TOKENS_MAP, ZERO_ADDRESS } from '../../../../constants';
 import { TokenTicker } from '../../../../enums';
-import { INFT } from '../../../nft/types';
-import { EncodeOrderApi, GetActiveListingApi, GetHistoryApi, GetNFTApi, GetSaltApi, IEncodeOrderApiData } from '../../../../api';
+import {
+  INFT,
+  IOrderAssetTypeBundleListing,
+  IOrderAssetTypeERC20,
+  IOrderAssetTypeETH,
+  IOrderAssetTypeSingleListing,
+} from '../../../nft/types';
+import {
+  EncodeOrderApi,
+  GetActiveListingApi,
+  GetHistoryApi,
+  GetNFTApi,
+  GetSaltApi,
+  IEncodeOrderApiData,
+  queryNFTsApi,
+} from '../../../../api';
 import Contracts from '../../../../../contracts/contracts.json';
 import { OrderAssetClass } from '../../../nft/enums';
-import { useQueryClient } from 'react-query'
-
-// @ts-ignore
-const { contracts: contractsData } = Contracts[process.env.REACT_APP_NETWORK_CHAIN_ID];
-import { Status, Status as PostingPopupStatus } from './components/tab-summary/compoents/posting-popup/enums/index';
+import { Status as PostingPopupStatus } from './components/tab-summary/compoents/posting-popup/enums/index';
 import { nftKeys, orderKeys } from '../../../../utils/query-keys';
 import { useRouter } from 'next/router';
 import { useAuthStore } from '../../../../../stores/authStore';
 import { useErrorStore } from '../../../../../stores/errorStore';
 import { useThemeStore } from 'src/stores/themeStore';
+import { AreaButton } from '@app/modules/marketplace/components';
+import { Icon } from '@app/components';
+import { getListingValidationSchema } from './helpers';
 
-const getValidationSchema = (amountType?: SellAmountType, sellMethod?: SellMethod) => {
-  switch (sellMethod) {
-    case SellMethod.FIXED: return Yup.object().shape({
-      bundleName: amountType === SellAmountType.SINGLE ? Yup.string() : Yup.string().required('Required'),
-      bundleDescription: amountType === SellAmountType.SINGLE ? Yup.string() : Yup.string().max(500, 'Too Long!'), // TODO: use variable maxDescriptionSymbols
-      price: Yup.number()
-        .typeError('Invalid price')
-        .required('Required')
-        .moreThan(0, 'Price must be greater than 0'),
-    });
-    default: return Yup.object().shape({});
-  }
-}
+// @ts-ignore
+const { contracts: contractsData } = Contracts[process.env.REACT_APP_NETWORK_CHAIN_ID];
 
 export const SellPage = () => {
-  // const params = useParams<{ collectionAddress: string; tokenId: string; }>();
   const router = useRouter();
 
-  const params = router.query as { collectionAddress: string; tokenId: string; };
+  type IRouterQuery = {
+    collectionAddress: string;
+    tokenId: string;
+  }
 
-  const { signer, web3Provider } = useAuthStore(state => ({signer: state.signer, web3Provider: state.web3Provider})) as any;
+  const params = router.query as IRouterQuery;
+
+  const { signer, web3Provider, address: authUserAddress } = useAuthStore();
 
   const { setShowError, setErrorBody } = useErrorStore(s => ({setShowError: s.setShowError, setErrorBody: s.setErrorBody}))
 
   const queryClient = useQueryClient();
 
-  const encodeOrderMutation = useMutation(EncodeOrderApi);
+  const encodeOrderMutation = useMutation(
+    (data: IEncodeOrderApiData<
+      IOrderAssetTypeSingleListing | IOrderAssetTypeBundleListing,
+      IOrderAssetTypeERC20 | IOrderAssetTypeETH
+      >) => {
+      return EncodeOrderApi(data);
+    }
+  );
 
   const createOrderMutation = useMutation((data: any) => {
     return axios.post(`${process.env.REACT_APP_MARKETPLACE_BACKEND}/v1/orders/order`, data);
@@ -77,25 +102,39 @@ export const SellPage = () => {
       //TODO: Invalidate browse marketplace query key
       queryClient.refetchQueries(orderKeys.browseAny)
 
-      queryClient.invalidateQueries(orderKeys.listing({ collectionAddress: params.collectionAddress.toLowerCase(), tokenId: params.tokenId }));
-      queryClient.invalidateQueries(orderKeys.history({ collectionAddress: params.collectionAddress.toLowerCase(), tokenId: params.tokenId }));
-      queryClient.prefetchQuery(orderKeys.listing({ collectionAddress: params.collectionAddress.toLowerCase(), tokenId: params.tokenId }), async () => {
-        const result = await GetActiveListingApi(params.collectionAddress.toLowerCase(), params.tokenId);
-        return result;
-      })
-      queryClient.prefetchQuery(orderKeys.history({ collectionAddress: params.collectionAddress.toLowerCase(), tokenId: params.tokenId }), async () => {
-        const result = await GetHistoryApi(params.collectionAddress.toLowerCase(), params.tokenId);
-        return result;
+      const listingQueryKey = orderKeys.listing({
+        collectionAddress: params.collectionAddress.toLowerCase(),
+        tokenId: params.tokenId
       });
+      const historyQueryKey = orderKeys.history({
+        collectionAddress: params.collectionAddress.toLowerCase(),
+        tokenId: params.tokenId
+      });
+
+      queryClient.invalidateQueries(listingQueryKey);
+      queryClient.prefetchQuery(listingQueryKey, () => GetActiveListingApi(params.collectionAddress.toLowerCase(), params.tokenId));
+
+      queryClient.invalidateQueries(historyQueryKey);
+      queryClient.prefetchQuery(historyQueryKey, () => GetHistoryApi(params.collectionAddress.toLowerCase(), params.tokenId));
     }
   });
 
-  const { data: nft } = useQuery(
+  const { data } = useQuery(
     nftKeys.nftInfo({collectionAddress: params.collectionAddress, tokenId: params.tokenId}),
-    () => GetNFTApi(params.collectionAddress, params.tokenId),
-    {
-      onSuccess: (data) => console.log(data)
-    }
+    async () => {
+      const { data } = await queryNFTsApi({
+        page: 1,
+        limit: 1,
+        collection: params.collectionAddress,
+        tokenIds: [params.tokenId],
+      });
+
+      if (!data.length) {
+        throw new Error('404');
+      }
+
+      return data[0];
+    },
   );
 
   const getSaltMutation = useMutation(GetSaltApi);
@@ -106,13 +145,18 @@ export const SellPage = () => {
   const [sellMethod, setSellMethod] = useState<SellMethod>();
   const [isPosted, setIsPosted] = useState<boolean>(false);
   const [postingPopupStatus, setPostingPopupStatus] = useState<PostingPopupStatus>(PostingPopupStatus.HIDDEN);
+  const [validateRoyalties, setValidateRoyalties] = useState(false);
 
   const form = useFormik<ISellForm>({
     initialValues: {} as ISellForm,
     validateOnMount: true,
-    validationSchema: getValidationSchema(amountType, sellMethod),
+    validationSchema: getListingValidationSchema(amountType, sellMethod, validateRoyalties),
     onSubmit: async (values: any) => {
       try {
+        if (!web3Provider || !signer) {
+          return;
+        }
+
         const network = await web3Provider.getNetwork();
         const address = await signer.getAddress();
   
@@ -120,11 +164,11 @@ export const SellPage = () => {
   
         const make: any = {
           assetType: {
-            assetClass: nft?.standard,
+            assetClass: data?.NFT.standard,
             contract: params.collectionAddress.toLowerCase(),
             tokenId: params.tokenId,
           },
-          value: '1',
+          value: `${values.amount}`,
         };
   
         if (amountType === SellAmountType.BUNDLE) {
@@ -152,15 +196,23 @@ export const SellPage = () => {
           };
         }
   
-        const orderData: IEncodeOrderApiData = {
+        const orderData: IEncodeOrderApiData<
+          IOrderAssetTypeSingleListing | IOrderAssetTypeBundleListing,
+          IOrderAssetTypeERC20 | IOrderAssetTypeETH
+          > = {
           salt: salt,
           maker: address,
           make,
           taker: values.buyerAddress || ZERO_ADDRESS,
           take: {
-            assetType: {
-              assetClass: values.priceCurrency === OrderAssetClass.ETH ? OrderAssetClass.ETH : OrderAssetClass.ERC20,
-            },
+            assetType: values.priceCurrency === OrderAssetClass.ETH
+              ? ({
+                assetClass: OrderAssetClass.ETH,
+              })
+              : ({
+                assetClass: OrderAssetClass.ERC20,
+                contract: contractsData[values.priceCurrency]?.address
+              }),
             value: utils.parseUnits(
               `${values.price}`,
               `${TOKENS_MAP[values.priceCurrency as TokenTicker].decimals}`
@@ -171,13 +223,12 @@ export const SellPage = () => {
           end: values.endDate ? Math.floor(values.endDate.getTime() / 1000) : 0,
           data: {
             dataType: 'ORDER_DATA',
-            revenueSplits: []
+            revenueSplits: values.royalties?.map((r: any) => ({
+              account: r.address,
+              value: +r.percent,
+            })) ?? []
           },
         };
-  
-        if (orderData.take.assetType.assetClass === OrderAssetClass.ERC20) {
-          orderData.take.assetType.contract = contractsData[values.priceCurrency]?.address;
-        }
   
         const { data: encodedOrder } = (await encodeOrderMutation.mutateAsync(orderData));
   
@@ -199,7 +250,7 @@ export const SellPage = () => {
         // Code 4001 is user rejected transaction
         if (err?.code === 4001) {
           return;
-        } 
+        }
   
         // Check if error comes from api request and if the api has returned a meaningful messages
         if (getSaltMutation.isError && !!(getSaltMutation as any)?.error?.response?.data?.message) {
@@ -215,11 +266,13 @@ export const SellPage = () => {
     },
   });
 
-  const handleSelectAmount = useCallback((amountType: SellAmountType) => {
-    setAmountType(amountType);
-    setSellMethod(undefined);
-    setActiveTab(SellPageTabs.SELL_METHOD);
-  }, []);
+  const ownedEditions = useMemo(() => {
+    if (!authUserAddress || !data?.owners) {
+      return 0;
+    }
+
+    return data.owners.find(({ address }) => address.toLowerCase() === authUserAddress.toLowerCase())?.value ?? 0;
+  }, [authUserAddress, data?.owners]);
 
   const handleSelectSellMethod = useCallback((sellMethod: SellMethod) => {
     setSellMethod(sellMethod);
@@ -267,80 +320,129 @@ export const SellPage = () => {
 
   useEffect(() => setDarkMode(false), []);
 
-  const contextValue: IMarketplaceSellContextData = {
-    nft: nft as INFT,
+  useEffect(() => {
+    if (!form.values.royalties) {
+      return;
+    }
+
+    if (form.values.royalties.length > 1) {
+      setValidateRoyalties(true);
+    } else {
+      setValidateRoyalties(form.values.royalties.some((r) => !!r.address || !!r.percent));
+    }
+  }, [form.values.royalties]);
+
+  const contextValue: IListingPage = {
+    nft: data?.NFT as INFT,
     isPosted,
     amountType: amountType as SellAmountType,
     sellMethod: sellMethod as SellMethod,
+    ownedEditions,
     form: form,
-    selectAmount: handleSelectAmount,
-    selectMethod: handleSelectSellMethod,
     goBack: handleGoBack,
     goContinue: handleContinue,
     postingPopupStatus: postingPopupStatus,
     setPostingPopupStatus: setPostingPopupStatus,
   };
 
-  const settingsTabName = (amountType && sellMethod)
-    ? `${settingsAmountTypeTitleText[amountType]} - ${settingsMethodsTitleText[sellMethod]}`
-    : '';
+  type IListingTab = {
+    name: string;
+    heading: string;
+    renderIcon: () => React.ReactNode;
+    renderTab: () => React.ReactNode;
+  };
+
+  const tabs: IListingTab[] = [
+    {
+      name: 'Select sell method',
+      heading: 'Select your sell method',
+      renderIcon: () => <Icon name={'label'} />,
+      renderTab: () => (
+        <SimpleGrid columns={sellMethodOptions.length} spacing={['20px', null, '26px', '30px']} mb={'100px'}>
+          {sellMethodOptions.map((method, i) => (
+            <AreaButton
+              key={i}
+              title={method.title}
+              description={method.description}
+              icon={method.icon}
+              disabled={method.disabled}
+              onClick={() => handleSelectSellMethod(method.value as SellMethod)}
+            />
+          ))}
+        </SimpleGrid>
+      )
+    },
+    {
+      name: 'Settings',
+      heading: (amountType && sellMethod)
+        ? `${settingsAmountTypeTitleText[amountType]} - ${settingsMethodsTitleText[sellMethod]}`
+        : '',
+      renderIcon: () => <Icon name={'settings'} />,
+      renderTab: () => <SettingsTab />
+    },
+    {
+      name: 'Summary',
+      heading: 'Summary',
+      renderIcon: () => <Icon name={'eye'} />,
+      renderTab: () => <SummaryTab />
+    },
+  ];
 
   return (
-    <MarketplaceSellContext.Provider value={contextValue}>
-      <Box sx={{ bg: `url(${BGImage}) center / cover` }}>
-        <Box
-          bgImage={bg}
-          bgSize="contain"
-          bgRepeat="no-repeat"
-          w="100%"
-          sx={{ '--container-max-width': '1100px' }}
-        >
-          <Container maxW={'var(--container-max-width)'} pb={'0 !important'}>
-            <Box px={{ base: '20px', md: '60px', xl: 0 }}>
-              <LinkBox
-                mb={'20px'}
-                fontFamily={'Space Grotesk'}
-                fontWeight={500}
-                display={"inline-block"}
-                _hover={{ textDecoration: 'none' }}
-              >
-                <NextLink href={`/nft/${params.collectionAddress}/${params.tokenId}`}>
-                  <LinkOverlay display={'contents'}>
-                    <Image src={arrow} display="inline" mr="10px" position="relative" top="-2px" />
-                    {nft?.name ?? params.tokenId}
-                  </LinkOverlay>
-                </NextLink>
-              </LinkBox>
+    <ListingPageContext.Provider value={contextValue}>
+      <FormikProvider value={form}>
+        <Box sx={{ bg: `url(${BGImage}) center / cover` }}>
+          <Box
+            bgImage={bg}
+            bgSize="contain"
+            bgRepeat="no-repeat"
+            w="100%"
+            sx={{ '--container-max-width': '1100px' }}
+          >
+            <Container maxW={'var(--container-max-width)'} pb={'0 !important'}>
+              <Box px={{ base: '20px', md: '60px', xl: 0 }}>
+                <LinkBox
+                  mb={'20px'}
+                  fontFamily={'Space Grotesk'}
+                  fontWeight={500}
+                  display={"inline-block"}
+                  _hover={{ textDecoration: "none" }}
+                >
+                  <NextLink href={`/nft/${params.collectionAddress}/${params.tokenId}`}>
+                    <LinkOverlay display={'contents'}>
+                      <Image src={arrow} display="inline" mr="10px" position="relative" top="-2px" />
+                      {data?.NFT.name ?? params.tokenId}
+                    </LinkOverlay>
+                  </NextLink>
+                </LinkBox>
 
-              <Heading as="h1" mb={'50px'}>Sell NFT</Heading>
+                <Heading as="h1" mb={'50px'}>Sell NFT</Heading>
 
-              <Tabs isFitted variant={'arrow'} index={activeTab} onChange={setActiveTab}>
-                <TabList overflowX={'scroll'} padding={'0 5px'}>
-                  {sellPageTabs.map((tab, i) => (
-                    <Tab key={i} minW={'130px'} isDisabled={i > activeTab || isPosted}>
-                      <Image src={activeTab === i ? tab.iconActive : tab.icon} />
-                      {tab.name}
-                    </Tab>
-                  ))}
-                </TabList>
+                <Tabs isFitted variant={'arrow'} index={activeTab} onChange={setActiveTab}>
+                  <TabList overflowX={'scroll'} padding={'0 5px'}>
+                    {tabs.map(({ name, renderIcon }, i) => (
+                      <Tab key={i} minW={'130px'} isDisabled={i > activeTab || isPosted}>
+                        {renderIcon()}
+                        <Box as={'span'} ml={'6px'}>{name}</Box>
+                      </Tab>
+                    ))}
+                  </TabList>
 
-                <TabPanels>
-                  <TabPanel name="Select your sell method">
-                    {activeTab === SellPageTabs.SELL_METHOD && <SelectMethodType />}
-                  </TabPanel>
-                  <TabPanel name={settingsTabName}>
-                    {activeTab === SellPageTabs.SETTINGS && <SettingsTab />}
-                  </TabPanel>
-                  <TabPanel name='Summary'>
-                    {activeTab === SellPageTabs.SUMMARY && <SummaryTab />}
-                  </TabPanel>
-                </TabPanels>
-              </Tabs>
-            </Box>
-          </Container>
+                  <TabPanels>
+                    {tabs.map(({ heading, renderTab }, i) => (
+                      <TabPanel key={i} p={0}>
+                        <Heading as="h3" size="md" my={'60px'}>{heading}</Heading>
+                        {activeTab === i && (renderTab())}
+                      </TabPanel>
+                    ))}
+                  </TabPanels>
+                </Tabs>
+              </Box>
+            </Container>
+          </Box>
         </Box>
-      </Box>
-    </MarketplaceSellContext.Provider>
+      </FormikProvider>
+    </ListingPageContext.Provider>
   );
 };
 

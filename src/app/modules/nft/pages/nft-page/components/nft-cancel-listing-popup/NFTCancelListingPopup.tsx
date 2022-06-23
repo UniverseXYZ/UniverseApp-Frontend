@@ -16,17 +16,22 @@ import { Contract } from 'ethers';
 import Contracts from '../../../../../../../contracts/contracts.json';
 
 import * as styles from './styles';
-import { IERC721AssetType, IOrder } from '../../../../types';
+import {
+  IOrder,
+  IOrderAssetTypeBundleListing,
+  IOrderAssetTypeERC20, IOrderAssetTypeETH,
+  IOrderAssetTypeSingleListing,
+} from '../../../../types';
 import { orderKeys } from '../../../../../../utils/query-keys';
 import { useAuthStore } from '../../../../../../../stores/authStore';
 import { useLoadingStore } from 'src/stores/loadingStore';
-import { EncodeOrderApi, GetActiveListingApi } from '../../../../../../api';
+import { EncodeOrderApi, GetActiveListingApi, IEncodeOrderApiData } from '../../../../../../api';
 
 // @ts-ignore
 const { contracts: contractsData } = Contracts[process.env.REACT_APP_NETWORK_CHAIN_ID];
 
 interface INFTCancelListingPopupProps {
-  order?: IOrder;
+  order?: IOrder<IOrderAssetTypeSingleListing | IOrderAssetTypeBundleListing, IOrderAssetTypeERC20>;
   isOpen: boolean;
   onClose: () => void;
 }
@@ -46,8 +51,12 @@ export const NFTCancelListingPopup = ({ order, isOpen, onClose }: INFTCancelList
     [order, signer]
   );
 
-  const encodeOrderMutation = useMutation(EncodeOrderApi);
+  type IEncodeOrderMutationData = IEncodeOrderApiData<
+    IOrderAssetTypeSingleListing | IOrderAssetTypeBundleListing,
+    IOrderAssetTypeERC20 | IOrderAssetTypeETH
+    >;
 
+  const encodeOrderMutation = useMutation((data: IEncodeOrderMutationData) => EncodeOrderApi(data));
 
   useEffect(() => {
     return () => {
@@ -55,9 +64,7 @@ export const NFTCancelListingPopup = ({ order, isOpen, onClose }: INFTCancelList
         clearInterval(orderInterval);
       }
     }
-  }, [])
-  
-
+  }, []);
 
   const handleCancelListing = useCallback(async () => {
     const orderData: any = { ...order };
@@ -71,7 +78,7 @@ export const NFTCancelListingPopup = ({ order, isOpen, onClose }: INFTCancelList
       type: order.type,
       data: order.data,
       maker: order.maker,
-      make: order.make as any,
+      make: order.make,
       salt: order.salt,
       start: order.start,
       end: order.end,
@@ -96,9 +103,11 @@ export const NFTCancelListingPopup = ({ order, isOpen, onClose }: INFTCancelList
     const indexInterval = setInterval(async () => {
       fetchCount += 1;
 
-      const convertedOrder = order.make.assetType as IERC721AssetType;
-      const tokenId = convertedOrder.tokenId?.toString();
-      const collectionAddress = convertedOrder.contract;
+      // TODO: [Bundle] add bundle support
+      const singleListingOrder = order as IOrder<IOrderAssetTypeSingleListing, IOrderAssetTypeERC20>;
+
+      const tokenId = singleListingOrder.make?.assetType.tokenId?.toString();
+      const collectionAddress = singleListingOrder.make?.assetType.contract;
 
       // Fetch order api until a diffrent response is returned
       const newOrder = await GetActiveListingApi(collectionAddress,tokenId);

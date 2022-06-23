@@ -1,15 +1,23 @@
-import React, { FC, createContext, useContext, useCallback } from 'react';
+import React, { FC, createContext, useContext, useCallback, useMemo } from 'react';
 import { useQuery, useQueryClient } from 'react-query';
 
-import { IOrder, INFT } from '../../types';
+import { IOrder, INFT, IOrderAssetTypeSingleListing, IOrderAssetTypeERC20 } from '../../types';
 import { IUser } from '../../../account/types';
 import { ICollection } from '../../../collection/types/collection';
 import { collectionKeys, nftKeys, orderKeys, userKeys } from '../../../../utils/query-keys';
 import { useRouter } from 'next/router';
-import { GetActiveListingApi, getArtistApi, GetCollectionApi, GetHistoryApi, GetMoreFromCollectionApi, GetNFTApi, GetOrdersApi, INFTHistory } from '@app/api';
+import {
+  getArtistApi,
+  GetCollectionApi,
+  GetHistoryApi,
+  GetMoreFromCollectionApi,
+  GetOrdersApi,
+  INFTTransfer, queryNFTsApi,
+} from '@app/api';
 import { polymorphOwner, queryPolymorphsGraph2 } from '@legacy/graphql/polymorphQueries';
-import { utils } from 'ethers';
+import { Contract, providers, utils } from 'ethers';
 import { lobsterOwner, queryLobstersGraph } from '@legacy/graphql/lobsterQueries';
+import { useAuthStore } from '../../../../../stores/authStore';
 
 export interface IMetadata {
   nextMorphPrice?: string;
@@ -19,19 +27,31 @@ export interface IMetadata {
 
 export interface INFTPageContext {
   NFT: INFT;
+  isAuthUserOwner: boolean;
   isLoading: boolean;
   isPolymorph: boolean;
   isLobster: boolean;
-  order?: IOrder;
+  order?: IOrder<IOrderAssetTypeSingleListing, IOrderAssetTypeERC20>;
   creator: IUser;
-  owner: IUser;
+  owners: Array<{
+    owner: IUser | null;
+    order?: IOrder<IOrderAssetTypeSingleListing, IOrderAssetTypeERC20>;
+    address: string;
+    transactionHash?: string;
+    value: number;
+  }>;
   collection: ICollection;
   collectionAddress: string;
   refetchOffers: () => void;
-  history: INFTHistory | undefined;
-  offers: { orders: IOrder[]; total: number; } | undefined;
+  history?: Array<IOrder<IOrderAssetTypeSingleListing, IOrderAssetTypeERC20> | INFTTransfer>;
+  offers?: {
+    orders: Array<IOrder<IOrderAssetTypeERC20, IOrderAssetTypeSingleListing>>;
+    total: number;
+  };
   moreFromCollection: INFT[] | undefined;
   metadata: IMetadata | null;
+  totalEditions: number;
+  ownedEditions: number;
 }
 
 export const NFTPageContext = createContext<INFTPageContext>({} as INFTPageContext);
@@ -46,45 +66,58 @@ interface INFTPageProviderProps {
 
 export const NFTPageProvider: FC<INFTPageProviderProps> = ({ children }) => {
   const router = useRouter();
-  // const { collectionAddress, tokenId } = useParams<{ collectionAddress: string; tokenId: string; }>();
-  const { collectionAddress, tokenId } = router.query as { collectionAddress: string; tokenId: string; };
   const queryClient = useQueryClient();
 
+  const { collectionAddress, tokenId } = router.query as {
+    collectionAddress: string;
+    tokenId: string;
+  };
+
+  const authUserAddress = useAuthStore(s => s.address);
+
   // NFT Data query
-  const { data: NFT, isLoading: isLoadingNFT } = useQuery(
+  const { data, isLoading: isLoadingNFT } = useQuery(
     nftKeys.nftInfo({collectionAddress, tokenId}),
-    () => GetNFTApi(collectionAddress, tokenId, false),
+    async () => {
+      const { data } = await queryNFTsApi({
+        page: 1,
+        limit: 1,
+        collection: collectionAddress,
+        tokenIds: [tokenId],
+      });
+
+      if (!data.length) {
+        throw new Error('404');
+      }
+
+      return data[0];
+    },
     {
       enabled: !!collectionAddress && !!tokenId,
     },
   );
 
-  const isPolymorph = NFT?._collectionAddress?.toLowerCase() === process?.env?.REACT_APP_POLYMORPHS_CONTRACT_ADDRESS?.toLowerCase();
-  const isLobster = NFT?._collectionAddress?.toLowerCase() === process?.env?.REACT_APP_LOBSTERS_CONTRACT_ADDRESS?.toLowerCase();
-
-  // NFT Order Listing 
-  const { data: order, isLoading: isLoadingOrder } = useQuery(
-    orderKeys.listing({collectionAddress, tokenId}),
-    async () => {
-      const order = await GetActiveListingApi(collectionAddress, tokenId);
-      return order || undefined
-    },
-    {
-      enabled: !!tokenId && !!collectionAddress,
-    });
+  const isPolymorph = data?.NFT._collectionAddress?.toLowerCase() === process?.env?.REACT_APP_POLYMORPHS_CONTRACT_ADDRESS?.toLowerCase();
+  const isLobster = data?.NFT._collectionAddress?.toLowerCase() === process?.env?.REACT_APP_LOBSTERS_CONTRACT_ADDRESS?.toLowerCase();
 
   // More from collection NFTs query
-  const { data: moreFromCollection, isLoading: isMoreFromCollectionLoading } = useQuery(
-    ['moreFromCollection', collectionAddress, tokenId],
+  const { data: moreFromCollection } = useQuery(
+    ["moreFromCollection", collectionAddress, tokenId],
     async () => {
-      const nfts = await GetMoreFromCollectionApi(collectionAddress, tokenId);
+      const NFTs = await GetMoreFromCollectionApi(collectionAddress, tokenId);
 
-      nfts.forEach(nft => {
+      NFTs.forEach((NFT) => {
         // Set nft info in query cache in order to save requests
-        queryClient.setQueryData(nftKeys.nftInfo({tokenId: nft.tokenId, collectionAddress: nft._collectionAddress || ""}), nft);
+        queryClient.setQueryData(
+          nftKeys.nftInfo({
+            tokenId: NFT.tokenId,
+            collectionAddress: NFT._collectionAddress || ""
+          }),
+          NFT
+        );
       });
 
-      return nfts;
+      return NFTs;
     },
     {
       enabled: !!collectionAddress && !!tokenId,
@@ -101,7 +134,7 @@ export const NFTPageProvider: FC<INFTPageProviderProps> = ({ children }) => {
   // NFT Offers Query
   const { data: offers, refetch: refetchNFTOffers } = useQuery(
     orderKeys.offers({tokenId, collectionAddress}),
-    () => GetOrdersApi({
+    () => GetOrdersApi<IOrderAssetTypeERC20, IOrderAssetTypeSingleListing>({
       side: 0,
       tokenIds: tokenId,
       collection: collectionAddress
@@ -110,38 +143,52 @@ export const NFTPageProvider: FC<INFTPageProviderProps> = ({ children }) => {
  
   // NFT Creator Data Query
   const { data: creator } = useQuery(
-    userKeys.info(NFT?._creatorAddress || ""),
-    () => getArtistApi(`${NFT?._creatorAddress}`),
+    userKeys.info(data?.NFT.creatorAddress || ""),
+    () => getArtistApi(`${data?.NFT.creatorAddress}`),
     {
-      enabled: !!NFT?._creatorAddress,
+      enabled: !!data?.NFT.creatorAddress,
       retry: false,
     },
   );
 
   // NFT Owner Data Query
-  const { data: owner } = useQuery(
-    userKeys.info(NFT?._ownerAddress || ""),
-    () => getArtistApi(`${NFT?._ownerAddress}`),
+  const { data: owners } = useQuery(
+    ['NFT', collectionAddress, tokenId, 'owners'],
+    async () => {
+      const owners = data?.owners ?? [];
+
+      const requests = owners.map((owner) => getArtistApi(`${owner.address}`));
+      const results = await Promise.allSettled(requests);
+
+      return owners.map((owner, i) => ({
+        ...owner,
+        order: undefined, // FOR FUTURE
+        owner: results[i].status === 'fulfilled'
+          ? (results[i] as PromiseFulfilledResult<{ mappedArtist: IUser }>).value.mappedArtist
+          : null,
+      }));
+    },
     {
-      enabled: !!NFT?._ownerAddress, 
+      enabled: !!data?.owners,
       retry: false,
     },
   );
 
+
   // NFT Collection Data Query
   const { data: collection } = useQuery(
-    collectionKeys.centralizedInfo(NFT?._collectionAddress || ""),
-    () => GetCollectionApi(`${NFT?._collectionAddress}`),
+    collectionKeys.centralizedInfo(data?.NFT._collectionAddress || ""),
+    () => GetCollectionApi(`${data?.NFT._collectionAddress}`),
     { 
-      enabled: !!NFT?._collectionAddress,
+      enabled: !!data?.NFT._collectionAddress,
       retry: false,
     },
   );
 
   const { data: polymorphMetadata } = useQuery(
-    ["polymorph", NFT?.tokenId, "metadata"],
+    ["polymorph", tokenId, "metadata"],
     async () => {
-      const response = await queryPolymorphsGraph2(polymorphOwner(NFT?.tokenId));
+      const response = await queryPolymorphsGraph2(polymorphOwner(tokenId));
 
       const metadata: IMetadata = {};
 
@@ -157,14 +204,14 @@ export const NFTPageProvider: FC<INFTPageProviderProps> = ({ children }) => {
       return metadata;
     },
     {
-      enabled: !!NFT && isPolymorph,
+      enabled: isPolymorph,
     }
   );
 
   const { data: lobsterMetadata } = useQuery(
-    ["lobster", NFT?.tokenId, "metadata"],
+    ["lobster", tokenId, "metadata"],
     async () => {
-      const response = await queryLobstersGraph(lobsterOwner(NFT?.tokenId));
+      const response = await queryLobstersGraph(lobsterOwner(tokenId));
 
       const metadata: IMetadata = {};
 
@@ -178,9 +225,33 @@ export const NFTPageProvider: FC<INFTPageProviderProps> = ({ children }) => {
       return metadata;
     },
     {
-      enabled: !!NFT && isLobster,
+      enabled: isLobster,
     }
   );
+
+  const isAuthUserOwner = useMemo(() => {
+    if (!owners || !owners.length || !authUserAddress) {
+      return false;
+    }
+
+    return owners.some(({ address }) => address.toLowerCase() === authUserAddress.toLowerCase());
+  }, [owners, authUserAddress]);
+
+  const totalEditions = useMemo(() => {
+    if (!owners?.length) {
+      return 0;
+    }
+
+    return owners.reduce((acc, { value }) => acc + value, 0);
+  }, [owners]);
+
+  const ownedEditions = useMemo(() => {
+    if (!isAuthUserOwner || !owners) {
+      return 0;
+    }
+
+    return owners.find(({ address }) => address.toLowerCase() === authUserAddress.toLowerCase())?.value ?? 0;
+  }, [owners, isAuthUserOwner, authUserAddress]);
 
   //TODO: This can be reworked to invalidate the queries and they will be automatically refetched
   const refetchOffers = useCallback(() => {
@@ -189,20 +260,23 @@ export const NFTPageProvider: FC<INFTPageProviderProps> = ({ children }) => {
   }, []);
 
   const value: INFTPageContext = {
-    order,
+    order: data?.order,
+    isAuthUserOwner,
     collectionAddress,
     isPolymorph,
     isLobster,
     creator: creator?.mappedArtist as IUser,
-    owner: owner?.mappedArtist as IUser,
+    owners: owners || [],
     collection: collection as ICollection,
-    NFT: NFT as INFT,
-    isLoading: isLoadingNFT || isLoadingOrder,
+    NFT: data?.NFT as INFT,
+    isLoading: isLoadingNFT,
     refetchOffers,
     history,
     offers,
     moreFromCollection,
     metadata: polymorphMetadata || lobsterMetadata || null,
+    totalEditions,
+    ownedEditions,
   };
 
   return (

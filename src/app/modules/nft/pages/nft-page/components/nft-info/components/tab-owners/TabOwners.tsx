@@ -1,37 +1,58 @@
-import { Box, Button, Flex, Image, Text } from '@chakra-ui/react';
-import { useState } from 'react';
+import { Box, Button, HStack, Image, Text } from '@chakra-ui/react';
+import React, { useCallback, useEffect, useState } from 'react';
 
-import { Owners } from '../../../../mocks';
+import { formatAddress, getStrGradient } from '@app/helpers';
+import { IOrder, IOrderAssetTypeERC20, IOrderAssetTypeSingleListing } from '@app/modules/nft/types';
+
+import { useNftCheckoutStore } from '../../../../../../../../../stores/nftCheckoutStore';
 import { useNFTPageData } from '../../../../NFTPage.context';
 import { NFTTabItemWrapper } from '..';
-import * as styles from './styles';
 import { sortOwners } from './helpers';
+import * as s from './TabOwners.styles';
 
-export const TabOwners = () => {
-  const { NFT } = useNFTPageData();
+export const TabOwners: React.FC = () => {
 
-  const [owners] = useState(sortOwners([...Owners]));
+  const { NFT, collection, totalEditions, owners } = useNFTPageData();
+
+  const { checkoutNFT } = useNftCheckoutStore();
+
+  const [sortedOwners, setSortedOwners] = useState<typeof owners>([]);
+
+  const handleBuy = useCallback((order: IOrder<IOrderAssetTypeSingleListing, IOrderAssetTypeERC20>) => {
+    checkoutNFT(NFT, collection, order);
+  }, [NFT, collection]);
+
+  useEffect(() => {
+    setSortedOwners(sortOwners([...owners]))
+  }, [owners]);
 
   return (
     <Box>
-      {owners.map((owner, i) => (
-        <NFTTabItemWrapper key={i} label={i === 0 && owner.price ? 'Lowest ask' : undefined}>
-          <Flex>
-            <Image src={owner.user.photo} {...styles.ImageStyle} />
-            <Box>
-              <Text {...styles.NameStyle}>{owner.user.name}</Text>
-              <Text {...styles.DescriptionStyle}>
-                {owner.edition}/{NFT.tokenIds.length}
-                {!owner.price
-                  ? (<> editions<Box {...styles.PriceStyles}> not for sale</Box></>)
-                  : (<> on sale for <Box {...styles.PriceStyles}> {owner.price.toString()} ETH</Box> each</>)
-                }
-              </Text>
-            </Box>
-          </Flex>
-          {owner.price && (<Button boxShadow={'lg'}>Buy</Button>)}
-        </NFTTabItemWrapper>
-      ))}
+      {sortedOwners.map(({ owner, address, order, value: ownedAmount }, i) => {
+        const [color1, color2] = getStrGradient(address);
+
+        return (
+          <NFTTabItemWrapper key={i} label={i === 0 && !!order ? 'Lowest ask' : undefined}>
+            <HStack spacing={'16px'}>
+              {!!owner?.profileImageUrl
+                ? (<Image src={owner.profileImageUrl} {...s.Image} />)
+                : (<Box {...s.Image} bgGradient={`linear(to-br, ${color1}, ${color2})`} />)
+              }
+              <Box>
+                <Text {...s.Name}>{owner?.displayName || formatAddress(address)}</Text>
+                <Text {...s.Description}>
+                  {ownedAmount}/{totalEditions}
+                  {!order
+                    ? (<> editions<Box {...s.Price}> not for sale</Box></>)
+                    : (<> on sale for <Box {...s.Price}> {order.take.value} ETH</Box> each</>)
+                  }
+                </Text>
+              </Box>
+            </HStack>
+            {!!order && (<Button boxShadow={'lg'} onClick={() => handleBuy(order)}>Buy</Button>)}
+          </NFTTabItemWrapper>
+        );
+      })}
     </Box>
   );
 }

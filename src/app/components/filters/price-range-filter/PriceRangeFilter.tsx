@@ -1,7 +1,6 @@
 import {
   Box,
   FormLabel,
-  Image,
   NumberInput,
   NumberInputField,
   RangeSlider,
@@ -13,16 +12,14 @@ import {
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useFormik } from 'formik';
 
-import PriceRangeIcon from '../../../../assets/images/v2/marketplace/filter-price-range.svg';
-
-import { CurrencySelect, Dropdown, DropdownFilterContainer } from '../../../components';
+import { CurrencySelect, Dropdown, DropdownFilterContainer, Icon } from '../../../components';
 import { IPriceRangeFilterProps, IPriceRangeFilterValue } from './types';
 import { coins } from '../../../mocks';
 
 export const usePriceRangeFilter = () => {
   const form = useFormik<IPriceRangeFilterValue>({
     initialValues: {
-      currency: coins[0],
+      currency: null,
       price: [0, 0],
     },
     onSubmit: () => {},
@@ -194,7 +191,7 @@ export const PriceRangeFilterDropdown = (props: IPriceRangeFilterDropdownProps) 
     <Dropdown
       label={'Price range'}
       value={valueLabel}
-      buttonProps={{ leftIcon: <Image src={PriceRangeIcon} /> }}
+      buttonProps={{ leftIcon: <Icon name={'filterPriceRange'} /> }}
       isOpened={isOpened}
       onOpen={() => setIsOpened(true)}
       onClose={() => {

@@ -3,6 +3,7 @@ import {
   Button,
   Flex,
   Heading,
+  HStack,
   Image,
   Modal,
   ModalBody,
@@ -11,38 +12,49 @@ import {
   ModalOverlay,
   Text,
 } from '@chakra-ui/react';
-import axios from 'axios';
+import axios, { AxiosError, AxiosResponse } from 'axios';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { BigNumber as EthersBigNumber, Contract, Signer, utils } from 'ethers';
 import BigNumber from 'bignumber.js';
 import { useMutation, useQueryClient } from 'react-query';
 
-import AudioNFTPreviewImage from '../../../../../../../../../../../assets/images/v2/audio-nft-preview.png';
+import AudioNFTPreviewImage from '@assets/images/v2/audio-nft-preview.png';
+import CheckIcon from '@assets/images/check-vector.svg';
 
-import { Loading, TokenIcon } from '../../../../../../../../../../components';
+import { AmountSelector, Loading, TokenIcon } from '@app/components';
 import { NFTType } from './components';
 import { AcceptState } from './enums';
-import * as styles from './styles';
-import { IERC20AssetType, IERC721AssetType, INFT, IOrder } from '../../../../../../../../types';
-import { isNFTAssetAudio, isNFTAssetImage, isNFTAssetVideo } from '../../../../../../../../helpers';
-import { TOKENS_MAP, getTokenByAddress } from '../../../../../../../../../../constants';
-import { TokenTicker } from '../../../../../../../../../../enums';
-import { Fee } from '../../../../../../../../../marketplace/pages/sell-page/components/tab-summary/compoents';
-import { getRoyaltiesFromRegistry } from '../../../../../../../../../../../utils/marketplace/utils';
-import { useTokenPrice } from '../../../../../../../../../../hooks';
-import { nftKeys, orderKeys } from '../../../../../../../../../../utils/query-keys';
-import { GetOrdersApi, GetNFTApi } from '../../../../../../../../../../api';
+import * as s from './NFTAcceptOfferPopup.styles';
+import {
+  INFT,
+  IOrder,
+  IOrderAssetTypeBundleListing,
+  IOrderAssetTypeERC20,
+  IOrderAssetTypeSingleListing,
+} from '@app/modules/nft/types';
+import { isNFTAssetAudio, isNFTAssetImage, isNFTAssetVideo } from '@app/modules/nft';
+import { getTokenByAddress } from '@app/constants';
+import { FeeItem, Fees } from '@app/modules/marketplace/pages/sell-page/components/tab-summary/compoents';
+import { getRoyaltiesFromRegistry } from '@legacy/marketplace/utils';
+import { useTokenPrice } from '@app/hooks';
+import { nftKeys, orderKeys } from '@app/utils/query-keys';
+import { GetOrdersApi, GetNFTApi } from '@app/api';
+import { OrderAssetClass } from '@app/modules/nft/enums';
 import { useNFTPageData } from '../../../../../../NFTPage.context';
-import CheckIcon from '../../../../../../../../../../../assets/images/check-vector.svg';
 import Contracts from '../../../../../../../../../../../contracts/contracts.json';
 import { NFTCustomError } from '../../../../../nft-custom-error/NFTCustomError';
 import { useAuthStore } from '../../../../../../../../../../../stores/authStore';
 import { useErrorStore } from '../../../../../../../../../../../stores/errorStore';
 
+type IOfferOrder =
+  | IOrder<IOrderAssetTypeERC20, IOrderAssetTypeSingleListing>
+  | IOrder<IOrderAssetTypeERC20, IOrderAssetTypeBundleListing>;
+
+
 interface INFTAcceptOfferPopupProps {
   NFT?: INFT;
   NFTs?: INFT[];
-  order: IOrder;
+  order: IOfferOrder;
   isOpen: boolean;
   onClose: () => void;
 }
@@ -50,85 +62,93 @@ interface INFTAcceptOfferPopupProps {
 // @ts-ignore
 const { contracts: contractsData } = Contracts[process.env.REACT_APP_NETWORK_CHAIN_ID];
 
-export const NFTAcceptOfferPopup = ({ NFT, NFTs, order, isOpen, onClose }: INFTAcceptOfferPopupProps) => {
+export const NFTAcceptOfferPopup: React.FC<INFTAcceptOfferPopupProps> = (props) => {
+  const { NFT, NFTs, order, isOpen, onClose } = props;
+
   const { address, signer } = useAuthStore(s => ({address: s.address, signer: s.signer}))
 
-  const { setShowError, setErrorBody } = useErrorStore(s => ({setErrorBody: s.setErrorBody, setShowError: s.setShowError}))
+  const { setShowError, setErrorBody } = useErrorStore();
 
-  const contract = useMemo(() => !signer ? null : new Contract(`${NFT?._collectionAddress}`, contractsData[NFT?.standard].abi, signer), [signer]);
+  type IPrepareMutationData = {
+    hash: string;
+    data: any;
+  };
+
+  const prepareMutation = useMutation<AxiosResponse<any>, AxiosError<any>, IPrepareMutationData>(({ hash, data }) => {
+    return axios.post<any>(`${process.env.REACT_APP_MARKETPLACE_BACKEND}/v1/orders/${hash}/prepare`, data);
+  });
 
   const queryClient = useQueryClient();
   const { offers } = useNFTPageData();
 
   const [state, setState] = useState<AcceptState>(AcceptState.CHECKOUT);
+  const [netFinalPrice, setNetFinalPrice] = useState(0);
   const [nftRoyalties, setNftRoyalties] = useState(0);
   const [collectionRoyalties, setCollectionRoyalties] = useState(0);
   const [daoFee, setDaoFee] = useState(0);
-  const [totalRoyalties, setTotalRoyalties] = useState(0);
   const [isNFTAudio] = useState(false);
-  const [fetchCount, setFetchCount] = useState(0);
+  const [amount, setAmount] = useState(1);
 
   // INDEXING
   const [fetchOrderCount, setFetchOrderCount] = useState(0);
   const [fetchNftCount, setFetchNftCount] = useState(0);
   const [isOrderIndexed, setIsOrderIndexed] = useState(false);
   const [isNftIndexed, setIsNftIndexed] = useState(false);
-  const [newOffersInfo, setNewOffersInfo] = useState<IOrder[]>([]);
+  const [newOffersInfo, setNewOffersInfo] = useState<IOfferOrder[]>([]);
   const [newNftInfo, setNewNftInfo] = useState<INFT | null>(null);
   const [nftInterval, setNftInterval] = useState<NodeJS.Timer>();
   const [orderInterval, setOrderInterval] = useState<NodeJS.Timer>();
-  const [nftRoyaltiesValue, setNftRoyaltiesValue] = useState(0);
-  const [collectionRoyaltiesValue, setCollectionRoyaltiesValue] = useState(0);
-  const [daoFeeValue, setDaoFeeValue] = useState(0);
 
-  const tokenTicker = useMemo(() => {
-    return getTokenByAddress((order as any).make.assetType.contract).ticker as TokenTicker;
+  const token = useMemo(() => {
+    return getTokenByAddress(order.make.assetType.contract);
   }, [order]);
 
-  const tokenDecimals = useMemo(() => {
-    return TOKENS_MAP[tokenTicker]?.decimals ?? 18;
-  }, [tokenTicker]);
+  const tokenUSDPrice = useTokenPrice(token.ticker);
 
   const listingPrice = useMemo(() => {
-    return Number(utils.formatUnits((order as any).make.value, tokenDecimals));
-  }, [tokenDecimals]);
+    return Number(utils.formatUnits(order.make.value, token.decimals));
+  }, [order, token]);
 
-  const prepareMutation = useMutation(({ hash, data }: { hash: string; data: any }) => {
-    return axios.post(`${process.env.REACT_APP_MARKETPLACE_BACKEND}/v1/orders/${hash}/prepare`, data);
-  });
+  const listingPriceUSD = useMemo(() => {
+    return new BigNumber(tokenUSDPrice).multipliedBy(listingPrice).toFixed(2);
+  }, [tokenUSDPrice, listingPrice]);
 
-  const usdPrice = useTokenPrice(tokenTicker);
+  const grossFinalPrice = useMemo(() => {
+    return amount * listingPrice;
+  }, [amount, listingPrice])
 
-  const usd = useMemo(() => {
-    return new BigNumber(usdPrice).multipliedBy(listingPrice).toFixed(2);
-  }, [usdPrice, listingPrice]);
+  const netFinalPriceUSD = useMemo(() => {
+    return new BigNumber(tokenUSDPrice).multipliedBy(netFinalPrice).toFixed(2);
+  }, [tokenUSDPrice, netFinalPrice]);
 
-  // Clear intervals on unmount
-  useEffect(() => {
-    return () => {
-      if (nftInterval) {
-        clearInterval(nftInterval);
-      }
+  const previewNFT = useMemo(() => {
+    return NFT || (NFTs as INFT[])[0];
+  }, [NFT, NFTs]);
 
-      if (orderInterval) {
-        clearInterval(orderInterval);
-      }
-    };
-  }, []);
+  const isERC1155 = useMemo(() => {
+    switch (order?.take?.assetType.assetClass) {
+      case OrderAssetClass.ERC1155: return true;
+      default: return false;
+    }
+  }, [order]);
 
   const handleAcceptClick = useCallback(async () => {
     try {
-      if (!signer || !contract) {
+      if (!signer || !order) {
         return;
       }
+      const contract = new Contract(`${NFT?._collectionAddress}`, contractsData[NFT?.standard].abi, signer);
+
       const isApprovedForAll = await contract.isApprovedForAll(address, process.env.REACT_APP_MARKETPLACE_CONTRACT);
+
       if (!isApprovedForAll) {
         setState(AcceptState.APPROVAL);
         const approveTx = await contract.setApprovalForAll(process.env.REACT_APP_MARKETPLACE_CONTRACT, true);
         await approveTx.wait();
       }
-      const paymentToken = getTokenByAddress((order?.make?.assetType as IERC20AssetType)?.contract);
-      const paymentAmount = EthersBigNumber.from(order?.make?.value)
+
+      const paymentToken = getTokenByAddress(order.make.assetType.contract);
+      const paymentAmount = EthersBigNumber.from(+(order?.make?.value ?? 0) * amount);
       const tokenContract = new Contract(contractsData[paymentToken.contractName].address, contractsData[paymentToken.contractName].abi, signer);
       const balance = await tokenContract.balanceOf(order.maker);
 
@@ -137,14 +157,14 @@ export const NFTAcceptOfferPopup = ({ NFT, NFTs, order, isOpen, onClose }: INFTA
         return;
       }
 
-      setFetchCount(0);
+      setFetchOrderCount(0);
       setState(AcceptState.PROCESSING);
 
       const response = await prepareMutation.mutateAsync({
         hash: order.hash,
         data: {
+          amount,
           maker: address,
-          amount: order.take.value,
         },
       });
       console.log('response', response);
@@ -156,13 +176,15 @@ export const NFTAcceptOfferPopup = ({ NFT, NFTs, order, isOpen, onClose }: INFTA
       // This polling mechanic is temporary until we have marketplace web sockets
       const orderIndexing = setInterval(async () => {
         const stringifiedOffers = offers?.orders?.map((offer) => offer.id).join('');
-        setFetchCount((count) => (count += 1));
+        setFetchOrderCount((count) => (count += 1));
 
-        const convertedOrder = order.take.assetType as IERC721AssetType;
-        const tokenId = convertedOrder.tokenId?.toString();
-        const collectionAddress = convertedOrder.contract;
+        // TODO: [Bundle] add bundle support
+        const singleListingOrder = order as IOrder<IOrderAssetTypeERC20, IOrderAssetTypeSingleListing>;
 
-        const newOffers = await GetOrdersApi({
+        const tokenId = singleListingOrder.take.assetType.tokenId?.toString();
+        const collectionAddress = singleListingOrder.take.assetType.contract;
+
+        const newOffers = await GetOrdersApi<IOrderAssetTypeERC20, IOrderAssetTypeSingleListing>({
           side: 0,
           tokenIds: tokenId,
           collection: collectionAddress,
@@ -206,13 +228,49 @@ export const NFTAcceptOfferPopup = ({ NFT, NFTs, order, isOpen, onClose }: INFTA
       }
 
       // Check if error comes from api request and if the api has returned a meaningful messages
-      if (prepareMutation.isError && !!(prepareMutation as any)?.error?.response?.data?.message) {
-        setErrorBody((prepareMutation as any)?.error?.response?.data?.message);
+      if (prepareMutation.isError && !!prepareMutation.error?.response?.data.message) {
+        setErrorBody(prepareMutation.error.response.data.message);
       }
 
       setShowError(true);
     }
-  }, [order, address, signer]);
+  }, [order, address, signer, amount]);
+
+  const sendAcceptOfferTransaction = async (data: string, from: string, to: string, value: EthersBigNumber) => {
+    const sellTx = await (signer as Signer).sendTransaction({
+      data,
+      from,
+      to,
+      value,
+    });
+
+    return sellTx.wait();
+  };
+
+  const fetchNftRoyalties = async () => {
+    if (NFT?._collectionAddress && NFT.tokenId) {
+      try {
+        const { nftRoyaltiesPercent, collectionRoyaltiesPercent, daoFee } = await getRoyaltiesFromRegistry(
+          NFT._collectionAddress,
+          NFT.tokenId,
+          signer
+        );
+        setNftRoyalties(+nftRoyaltiesPercent / 100);
+        setCollectionRoyalties(+collectionRoyaltiesPercent / 100);
+        setDaoFee(+daoFee / 100);
+      } catch (err) {
+        console.log(err);
+      }
+    }
+  };
+
+  useEffect(() => {
+    fetchNftRoyalties();
+  }, [NFT?._collectionAddress, NFT?.tokenId, signer]);
+
+  useEffect(() => {
+    setState(AcceptState.CHECKOUT);
+  }, [isOpen, NFTs]);
 
   useEffect(() => {
     if (isOrderIndexed && isNftIndexed) {
@@ -247,65 +305,24 @@ export const NFTAcceptOfferPopup = ({ NFT, NFTs, order, isOpen, onClose }: INFTA
     }
   }, [isOrderIndexed, isNftIndexed]);
 
-  const sendAcceptOfferTransaction = async (data: string, from: string, to: string, value: EthersBigNumber) => {
-    const sellTx = await (signer as Signer).sendTransaction({
-      data,
-      from,
-      to,
-      value,
-    });
-
-    return sellTx.wait();
-  };
-
-  const fetchNftRoyalties = async () => {
-    if (NFT?._collectionAddress && NFT.tokenId) {
-      try {
-        const { nftRoyaltiesPercent, collectionRoyaltiesPercent, daoFee } = await getRoyaltiesFromRegistry(
-          NFT._collectionAddress,
-          NFT.tokenId,
-          signer
-        );
-        setNftRoyalties(+nftRoyaltiesPercent / 100);
-        setCollectionRoyalties(+collectionRoyaltiesPercent / 100);
-        setDaoFee(+daoFee / 100);
-      } catch (err) {
-        console.log(err);
+  // Clear intervals on unmount
+  useEffect(() => {
+    return () => {
+      if (nftInterval) {
+        clearInterval(nftInterval);
       }
+
+      if (orderInterval) {
+        clearInterval(orderInterval);
+      }
+    };
+  }, []);
+
+  useEffect(() => {
+    if (order && order.take) {
+      setAmount(+order.take.value);
     }
-  };
-
-  const finalPrice = useMemo(() => {
-    const nftRoyaltiesAmount = listingPrice * nftRoyalties / 100;
-    const collectionRoyaltiesAmount = (listingPrice - nftRoyaltiesAmount) * collectionRoyalties / 100;
-    const daoFeeAmount =(listingPrice - nftRoyaltiesAmount - collectionRoyaltiesAmount) * daoFee / 100;
-
-    setNftRoyaltiesValue(nftRoyaltiesAmount);
-    setCollectionRoyaltiesValue(collectionRoyaltiesAmount);
-    setDaoFeeValue(daoFeeAmount);
-
-    return parseFloat((listingPrice - (nftRoyaltiesAmount + collectionRoyaltiesAmount + daoFeeAmount)).toFixed(8));
-  }, [order, totalRoyalties, tokenDecimals, listingPrice]);
-
-  const usdFinal = useMemo(() => {
-    return new BigNumber(usdPrice).multipliedBy(finalPrice).toFixed(2);
-  }, [usdPrice, finalPrice]);
-
-  useEffect(() => {
-    fetchNftRoyalties();
-  }, [NFT?._collectionAddress, NFT?.tokenId, signer]);
-
-  useEffect(() => {
-    setTotalRoyalties(nftRoyalties + collectionRoyalties + daoFee);
-  }, [nftRoyalties, collectionRoyalties, daoFee]);
-
-  const previewNFT = useMemo(() => {
-    return NFT || (NFTs as INFT[])[0];
-  }, [NFT, NFTs]);
-
-  useEffect(() => {
-    setState(AcceptState.CHECKOUT);
-  }, [isOpen, NFTs]);
+  }, [order]);
 
   if (!order) {
     return null;
@@ -319,15 +336,16 @@ export const NFTAcceptOfferPopup = ({ NFT, NFTs, order, isOpen, onClose }: INFTA
         <ModalBody pt={'40px !important'}>
           {state === AcceptState.CHECKOUT && (
             <>
-              <Heading {...styles.TitleStyle}>Accept this offer</Heading>
-              <Flex {...styles.TitlesContainerStyle}>
+              <Heading {...s.TitleStyle}>Accept this offer</Heading>
+
+              <Flex {...s.TitlesContainerStyle}>
                 <Text>Item</Text>
                 <Text>Subtotal</Text>
               </Flex>
 
-              <Flex {...styles.NFTContainerStyle}>
+              <Flex {...s.NFTContainerStyle}>
                 <Box pos={'relative'}>
-                  <Box {...styles.AssetStyle}>
+                  <Box {...s.AssetStyle}>
                     {(isNFTAssetImage(previewNFT.artworkTypes) && <Image src={previewNFT.thumbnailUrl} />) ||
                       (isNFTAssetVideo(previewNFT.artworkTypes) && <video src={previewNFT.thumbnailUrl} />) ||
                       (isNFTAssetAudio(previewNFT.artworkTypes) && <Image src={AudioNFTPreviewImage} />)}
@@ -336,43 +354,66 @@ export const NFTAcceptOfferPopup = ({ NFT, NFTs, order, isOpen, onClose }: INFTA
                 </Box>
                 <Box flex={1} p={'20px'}>
                   <Text>{NFT?.name}</Text>
-                  <Text isTruncated title={NFT?._collectionAddress} {...styles.CollectionNameStyle}>
+                  <Text isTruncated title={NFT?._collectionAddress} {...s.CollectionNameStyle}>
                     {NFT?._collectionAddress}
                   </Text>
                 </Box>
-                <Box {...styles.PriceContainerStyle}>
+                <Box textAlign={'right'}>
                   <Text fontSize={'14px'}>
-                    <TokenIcon ticker={tokenTicker} display={'inline'} size={20} mr={'6px'} mt={'-3px'} />
+                    <TokenIcon ticker={token.ticker} display={'inline'} size={20} mr={'6px'} mt={'-3px'} />
                     {listingPrice}
                   </Text>
-                  <Text {...styles.PriceUSDStyle}>${usd}</Text>
+                  <Text {...s.PriceUSD}>${listingPriceUSD}</Text>
                 </Box>
               </Flex>
 
-              <Box>
-                <Text fontSize={'16px'} fontWeight={700}>
-                  Fees
-                </Text>
-                <Box layerStyle={'Grey'} {...styles.FeesContainerStyle}>
-                  <Fee name={'Creator'} amount={nftRoyalties} total={listingPrice} ticker={tokenTicker} />
-                  <Fee name={'Collection'} amount={collectionRoyalties} total={listingPrice - nftRoyaltiesValue} ticker={tokenTicker}  />
-                  <Fee name={'Universe'} amount={daoFee} total={listingPrice - nftRoyaltiesValue - collectionRoyaltiesValue} ticker={tokenTicker}  />
-                  <Fee name={'Total Fees'} total={nftRoyaltiesValue + collectionRoyaltiesValue + daoFeeValue} ticker={tokenTicker} />
-                </Box>
+              {isERC1155 && (
+                <HStack spacing={0} justifyContent={'space-between'} sx={{
+                  borderBottom: '1px solid rgba(0, 0, 0, 0.1)',
+                  py: '24px',
+                }}>
+                  <Text fontWeight={600}>Custom amount</Text>
+                  <AmountSelector
+                    size={'sm'}
+                    options={{
+                      min: 1,
+                      max: +(order?.take.value ?? 1),
+                      value: amount,
+                      onChange: (_, value) => setAmount(value)
+                    }}
+                  />
+                </HStack>
+              )}
+
+              <Box py={'24px'}>
+                <Text fontSize={'16px'} fontWeight={700} mb={'8px'}>Fees</Text>
+
+                <Fees
+                  fontSize={'14px'}
+                  mb={0}
+                  price={grossFinalPrice}
+                  ticker={token.ticker}
+                  onTotalFee={(totalFee) => setNetFinalPrice(grossFinalPrice - totalFee)}
+                >
+                  <FeeItem name={'Creator'} percent={nftRoyalties} />
+                  <FeeItem name={'Collection'} percent={collectionRoyalties} />
+                  <FeeItem name={'Universe'} percent={daoFee} />
+                </Fees>
               </Box>
 
-              <Flex {...styles.TotalContainerStyle}>
-                <Text>Total</Text>
-                <Box {...styles.PriceContainerStyle}>
-                  <Text fontSize={'18px'}>
-                    <TokenIcon ticker={tokenTicker} display={'inline'} size={24} mr={'6px'} mt={'-3px'} />
-                    {finalPrice}
-                  </Text>
-                  <Text {...styles.PriceUSDStyle}>${usdFinal}</Text>
-                </Box>
-              </Flex>
+              <HStack spacing={0} justifyContent={'space-between'}>
+                <Text {...s.TotalLabel}>Total</Text>
 
-              <Box {...styles.ButtonsContainerStyle}>
+                <Box textAlign={'right'}>
+                  <HStack spacing={'6px'}>
+                    <TokenIcon ticker={token.ticker} boxSize={'24px'} />
+                    <Text {...s.TotalPrice}>{netFinalPrice.toFixed(`${listingPrice}`.length)}</Text>
+                  </HStack>
+                  <Text {...s.PriceUSD}>${netFinalPriceUSD}</Text>
+                </Box>
+              </HStack>
+
+              <Box {...s.ButtonsContainerStyle}>
                 <Button boxShadow={'lg'} onClick={handleAcceptClick}>
                   Accept
                 </Button>
@@ -382,7 +423,7 @@ export const NFTAcceptOfferPopup = ({ NFT, NFTs, order, isOpen, onClose }: INFTA
 
           {state === AcceptState.APPROVAL && (
             <Box>
-              <Heading {...styles.TitleStyle} mb={'20px'}>
+              <Heading {...s.TitleStyle} mb={'20px'}>
                 Accepting offer...
               </Heading>
 
@@ -395,7 +436,7 @@ export const NFTAcceptOfferPopup = ({ NFT, NFTs, order, isOpen, onClose }: INFTA
 
           {state === AcceptState.PROCESSING && (
             <Box>
-              <Heading {...styles.TitleStyle} mb={'20px'}>
+              <Heading {...s.TitleStyle} mb={'20px'}>
                 Accepting offer...
               </Heading>
 
@@ -412,7 +453,7 @@ export const NFTAcceptOfferPopup = ({ NFT, NFTs, order, isOpen, onClose }: INFTA
 
           {state === AcceptState.INDEXING && (
             <Box>
-              <Heading {...styles.TitleStyle} mb={'20px'}>
+              <Heading {...s.TitleStyle} mb={'20px'}>
                 Accepting offer...
               </Heading>
 
@@ -451,21 +492,21 @@ export const NFTAcceptOfferPopup = ({ NFT, NFTs, order, isOpen, onClose }: INFTA
 
           {state === AcceptState.CONGRATULATIONS && (
             <>
-              <Heading {...styles.TitleStyle} mb={'10px'}>
+              <Heading {...s.TitleStyle} mb={'10px'}>
                 Congratulations!
               </Heading>
               <Text color={'rgba(0, 0, 0, 0.6)'} textAlign={'center'}>
                 You have successfully sold <strong>{NFT?.name}</strong>
               </Text>
 
-              <Box {...styles.AssetCongratsStyle}>
+              <Box {...s.AssetCongratsStyle}>
                 {isNFTAssetImage(previewNFT.artworkTypes) && <Image src={previewNFT.thumbnailUrl} />}
                 {isNFTAssetVideo(previewNFT.artworkTypes) && <video src={previewNFT.thumbnailUrl} />}
                 {isNFTAssetAudio(previewNFT.artworkTypes) && <Image src={AudioNFTPreviewImage} />}
                 {!!NFTs && <NFTType type={'bundle'} count={NFTs.length} />}
               </Box>
 
-              <Box {...styles.ButtonsContainerStyle}>
+              <Box {...s.ButtonsContainerStyle}>
                 <Button variant={'outline'} onClick={onClose}>
                   Close
                 </Button>
@@ -476,7 +517,7 @@ export const NFTAcceptOfferPopup = ({ NFT, NFTs, order, isOpen, onClose }: INFTA
           {state === AcceptState.INSUFFICIENT_BALANCE && (
             <NFTCustomError
               title={`Insufficient balance`}
-              message={`The creator of the offer does not have enough ${tokenTicker} in the wallet!`}
+              message={`The creator of the offer does not have enough ${token.ticker} in the wallet!`}
             ></NFTCustomError>
           )}
         </ModalBody>

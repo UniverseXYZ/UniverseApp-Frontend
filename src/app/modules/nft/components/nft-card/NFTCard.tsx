@@ -15,30 +15,24 @@ import {
 
 import { OrderSide, OrderStatus } from "../../../marketplace/enums";
 import { ICollection } from "../../../collection/types";
-import { INFT, IOrder, IERC721AssetType } from "../../types";
+import { INFT, IOrder, IOrderAssetTypeSingleListing, IOrderAssetTypeERC20 } from '../../types';
 import { NFTCardAsset, NFTCardFooter, NFTCardContent, NFTCardCountdown } from './components';
 import * as styles from "./NFTCard.styles";
 import { useAuthStore } from '../../../../../stores/authStore';
 import { useNftCheckoutStore } from '../../../../../stores/nftCheckoutStore';
-import { GetNFTApi, GetCollectionApi, GetActiveListingApi, GetBestAndLastOffer } from "../../../../api";
+import { GetCollectionApi, GetActiveListingApi, GetBestAndLastOffer } from "../../../../api";
 
 type IRenderFuncProps = {
   NFT: INFT;
   collection?: ICollection;
-  isLoadingNFT: boolean;
-  isLoadingCollection: boolean;
-  bestOfferPrice?: number | string;
-  bestOfferPriceToken?: TokenTicker;
-  lastOfferPrice?: number | string;
-  lastOfferPriceToken?: TokenTicker;
-  order?: IOrder | null;
+  order?: IOrder<IOrderAssetTypeSingleListing, IOrderAssetTypeERC20>;
 };
 
 type IRenderFunc = ((props: IRenderFuncProps) => React.ReactNode) | null;
 
 export interface INFTCardProps {
   NFT: INFT;
-  order?: IOrder;
+  order?: IOrder<IOrderAssetTypeSingleListing, IOrderAssetTypeERC20>;
   isSelected?: boolean;
   selectedLabel?: string;
   showBuyNowButton?: boolean;
@@ -53,7 +47,7 @@ export interface INFTCardProps {
 
 export const NFTCard = (props: INFTCardProps) => {
   const {
-    NFT: initialNFT,
+    NFT,
     order: initialOrder,
     isSelected,
     selectedLabel,
@@ -71,26 +65,7 @@ export const NFTCard = (props: INFTCardProps) => {
     isAuthenticated: s.isAuthenticated
   }));
 
-  const { setNFT, setCollection, setIsOpen, setOrder } = useNftCheckoutStore(s => ({
-    setNFT: s. setNFT,
-    setCollection: s. setCollection,
-    setIsOpen: s. setIsOpen,
-    setOrder: s. setOrder,
-  }));
-
-  // Get NFT Info Query
-  const { data: NFT, isLoading: isLoadingNFT } = useQuery(
-    nftKeys.nftInfo({
-      collectionAddress: initialNFT._collectionAddress || "",
-      tokenId: initialNFT.tokenId || "",
-    }),
-    () => GetNFTApi(initialNFT._collectionAddress || "", initialNFT.tokenId, false),
-    {
-      retry: false,
-      enabled: !!initialNFT._collectionAddress && !!initialNFT.tokenId,
-      initialData: initialNFT,
-    }
-  );
+  const { checkoutNFT } = useNftCheckoutStore();
 
   // Get Collection Info Query
   const { data: collection, isLoading: isLoadingCollection } = useQuery(
@@ -130,19 +105,20 @@ export const NFTCard = (props: INFTCardProps) => {
   );
 
   const handleBuy = useCallback(() => {
-    setIsOpen(true);
-    setNFT(NFT || {} as INFT)
-    setOrder(order || {} as IOrder);
-    setCollection(collection as ICollection);
-  }, [NFT, order, collection]);
+    if (NFT && collection && order) {
+      checkoutNFT(NFT, collection, order);
+    }
+  }, [NFT, collection, order]);
 
   const [bestOfferPriceToken, bestOfferPrice] = useMemo(() => {
     if (!bestLastOfferData?.bestOffer) {
       return [null, null];
     }
 
-    const token = getTokenByAddress((bestLastOfferData.bestOffer.make.assetType as IERC721AssetType).contract);
-    const price = utils.formatUnits(bestLastOfferData.bestOffer.make.value || 0, token.decimals ?? 18);
+    const { bestOffer } = bestLastOfferData;
+
+    const token = getTokenByAddress(bestOffer.make.assetType.contract);
+    const price = utils.formatUnits(bestOffer.make.value || 0, token.decimals ?? 18);
 
     return [token, price];
   }, [bestLastOfferData]);
@@ -152,29 +128,18 @@ export const NFTCard = (props: INFTCardProps) => {
       return [null, null];
     }
 
-    const sources: Record<OrderSide, any> = {
-      [OrderSide.BUY]: bestLastOfferData?.lastOffer.make,
-      [OrderSide.SELL]: bestLastOfferData?.lastOffer.take,
-    };
+    const { lastOffer } = bestLastOfferData;
 
-    const source = sources[bestLastOfferData.lastOffer.side as OrderSide];
-
-    let token = getTokenByAddress((source.assetType as IERC721AssetType).contract);
-    let price = utils.formatUnits(source.value || 0, token.decimals ?? 18);
+    const token = getTokenByAddress(lastOffer.make.assetType.contract);
+    const price = utils.formatUnits(lastOffer.make.value || 0, token.decimals ?? 18);
 
     return [token, price];
   }, [bestLastOfferData]);
 
   const renderFuncProps: IRenderFuncProps = {
-    NFT: NFT as INFT,
-    collection: collection,
-    order,
-    isLoadingNFT,
-    isLoadingCollection,
-    bestOfferPrice: bestOfferPrice || "0",
-    bestOfferPriceToken: bestOfferPriceToken?.ticker,
-    lastOfferPrice: lastOfferPrice || "0",
-    lastOfferPriceToken: lastOfferPriceToken?.ticker,
+    NFT,
+    collection,
+    order: order || undefined,
   };
 
   const isBuyButtonAvailable = showBuyNowButton

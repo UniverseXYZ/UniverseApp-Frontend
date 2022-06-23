@@ -22,16 +22,13 @@ import ReportIcon from '../../../../../assets/images/report.svg';
 
 import { MenuItem } from './components';
 import * as styles from './styles';
-import { IUser } from '../../../account/types';
 import { INFT } from '../../types';
 import { NFTReportPopup } from '../nft-report-popup';
 import { NFTSharePopup } from '../nft-share-popup';
-import { useAuthStore } from '../../../../../stores/authStore';
 
 interface INFTMenuProps {
   NFT: INFT;
-  owner: IUser;
-  ownerAddress: string | undefined;
+  isAuthUserOwner: boolean;
   collectionAddress: string;
   showSell?: boolean;
   showTransfer?: boolean;
@@ -55,8 +52,7 @@ interface INFTMenuProps {
 export const NFTMenu = (
   {
     NFT,
-    owner,
-    ownerAddress,
+    isAuthUserOwner = false,
     collectionAddress,
     showSell = true,
     showTransfer = true,
@@ -80,8 +76,6 @@ export const NFTMenu = (
   const router = useRouter();
   const [isReportPopupOpened, setIsReportPopupOpened] = useState(false);
   const [isSharePopupOpened, setIsSharePopupOpened] = useState(false);
-
-  const address = useAuthStore(s => s.address);
 
   const handleSell = useCallback(() => {
     router.push(`/nft/${collectionAddress}/${NFT.tokenId}/sell`)
@@ -141,8 +135,6 @@ export const NFTMenu = (
     }
   }, [onRefresh])
 
-  const isOwner = owner?.address?.toUpperCase() || ownerAddress === `${address}`.toUpperCase();
-
   return (
     <>
       <Menu placement={'bottom-end'}>
@@ -150,16 +142,16 @@ export const NFTMenu = (
           <Image src={DotsIcon} />
         </MenuButton>
         <MenuList {...styles.ListStyle}>
-          {showSell && isOwner && (<MenuItem name={'Sell'} icon={SellIcon} onClick={handleSell} />)}
-          {showTransfer && isOwner && (<MenuItem name={'Transfer'} icon={TransferIcon} onClick={handleTransfer} />)}
+          {showSell && isAuthUserOwner && (<MenuItem name={'Sell'} icon={SellIcon} onClick={handleSell} />)}
+          {showTransfer && isAuthUserOwner && (<MenuItem name={'Transfer'} icon={TransferIcon} onClick={handleTransfer} />)}
           {showShare && (<MenuItem name={'Share'} icon={ShareIcon} onClick={handleShare} />)}
-          {showHideUnhide && isOwner && !NFT.hidden && (<MenuItem name={'Hide'} icon={HideIcon} onClick={handleHideUnhide} />)}
-          {showHideUnhide && isOwner && !!NFT.hidden && (<MenuItem name={'Unhide'} icon={UnhideIcon} onClick={handleHideUnhide} />)}
+          {showHideUnhide && isAuthUserOwner && !NFT.hidden && (<MenuItem name={'Hide'} icon={HideIcon} onClick={handleHideUnhide} />)}
+          {showHideUnhide && isAuthUserOwner && !!NFT.hidden && (<MenuItem name={'Unhide'} icon={UnhideIcon} onClick={handleHideUnhide} />)}
           {showRefresh && (<MenuItem name={'Refresh'} icon={RefreshIcon} onClick={handleRefresh} />)}
           {/*TODO: show edit*/}
           {/*{showEdit && isOwner && (<MenuItem name={'Edit'} icon={EditIcon} onClick={handleEdit} />)}*/}
-          {showBurn && isOwner && (<MenuItem name={'Burn'} icon={BurnIcon} redColor={true} onClick={handleBurn} />)}
-          {showRemove && isOwner && (<MenuItem name={'Remove'} icon={RemoveIcon} redColor={true} onClick={handleRemove} />)}
+          {showBurn && isAuthUserOwner && (<MenuItem name={'Burn'} icon={BurnIcon} redColor={true} onClick={handleBurn} />)}
+          {showRemove && isAuthUserOwner && (<MenuItem name={'Remove'} icon={RemoveIcon} redColor={true} onClick={handleRemove} />)}
           {showReport && (<MenuItem name={'Report'} icon={ReportIcon} redColor={true} onClick={handleReport} />)}
         </MenuList>
       </Menu>

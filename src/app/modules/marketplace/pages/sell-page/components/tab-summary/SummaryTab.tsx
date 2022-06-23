@@ -1,39 +1,31 @@
-import { Box, Button, Center, Flex, Heading, Image, SimpleGrid, Text } from '@chakra-ui/react';
+import { Box, Button, Flex, Heading, HStack, Image, SimpleGrid, Text } from '@chakra-ui/react';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Navigation } from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { useUpdate } from 'react-use';
 import { default as dayjs } from 'dayjs';
 import { default as UTC } from 'dayjs/plugin/utc';
-import { Contract, BigNumber } from 'ethers';
+import { BigNumber, Contract } from 'ethers';
 
-// import 'swiper/swiper-bundle.min.css';
-// import 'swiper/swiper.min.css';
+import { useListingPage } from '@app/modules/marketplace/pages';
 
 import BundleWhiteIcon from '../../../../../../../assets/images/marketplace/v2/bundle-white.svg';
 import CheckBlackIcon from '../../../../../../../assets/images/check-black.svg';
 
 import { Status, Status as PostingPopupStatus } from './compoents/posting-popup/enums';
-import { useMarketplaceSellData } from '../../hooks';
-import { Fee, PostingPopup } from './compoents';
+import { FeeItem, Fees, PostingPopup } from './compoents';
 import { SellAmountType, SellMethod } from '../../enums';
 import { IFixedListingForm } from '../../types';
 import { TokenTicker } from '../../../../../../enums';
 import { TokenIcon } from '../../../../../../components';
-import {
-  isNFTAssetAudio,
-  isNFTAssetImage,
-  isNFTAssetVideo,
-  mapBackendNft,
-  mapBackendUser,
-} from '../../../../../nft';
+import { isNFTAssetAudio, isNFTAssetImage, isNFTAssetVideo } from '../../../../../nft';
 import { NFTAssetAudio, NFTAssetImage, NFTAssetVideo } from '../../../../../nft/pages/nft-page/components';
 import * as styles from './styles';
 import { INFT, INFTBackend, NFTStandard } from '../../../../../nft/types';
 import { ICollection } from '../../../../../collection/types';
 import { SwiperArrowButton } from '../../../../../../components/swiper-arrow-button';
 import Contracts from '../../../../../../../contracts/contracts.json';
-import { fetchRoyalties, fetchDAOFee } from '../../../../../../../utils/api/royaltyRegistry';
+import { fetchDAOFee, fetchRoyalties } from '../../../../../../../utils/api/royaltyRegistry';
 import { CollectionPageLoader } from '../../../../../../../containers/collection/CollectionPageLoader';
 import { getCollectionBackgroundColor } from '../../../../../../../utils/helpers';
 import { shortenEthereumAddress } from '../../../../../../../utils/helpers/format';
@@ -52,8 +44,8 @@ interface IApproveCollection {
   address: string;
 }
 
-// @ts-ignore
-const { contracts: contractsData } = Contracts[process.env.REACT_APP_NETWORK_CHAIN_ID];
+const NETWORK_CHAIN_ID = process.env.REACT_APP_NETWORK_CHAIN_ID as "1" | "4";
+const { contracts: contractsData } = Contracts[NETWORK_CHAIN_ID];
 
 export const SummaryTab = () => {
   const prevRef = useRef(null);
@@ -71,13 +63,10 @@ export const SummaryTab = () => {
   const [collectionRoyalties, setCollectionRoyalties] = useState(0);
   const [daoFee, setDaoFee] = useState(0);
   const [collectionIsAppovedForAll, setCollectionIsApprovedForAll] = useState(false);
-  const [totalFees, setTotalFees] = useState(0);
   const [isApproving, setIsApproving] = useState(false);
-  const [nftRoyaltiesValue, setNftRoyaltiesValue] = useState(0);
-  const [collectionRoyaltiesValue, setCollectionRoyaltiesValue] = useState(0);
-  const [daoFeeValue, setDaoFeeValue] = useState(0);
+  const [totalNetPrice, setTotalNetPrice] = useState(0);
 
-  const { nft, isPosted, form, sellMethod, amountType, goBack, postingPopupStatus, setPostingPopupStatus } = useMarketplaceSellData();
+  const { nft, isPosted, form, sellMethod, amountType, goBack, postingPopupStatus, setPostingPopupStatus } = useListingPage();
 
   const update = useUpdate();
 
@@ -124,42 +113,30 @@ export const SummaryTab = () => {
 
   const [price, ticker] = useMemo<[number, TokenTicker]>(() => {
     switch (sellMethod) {
-      case SellMethod.FIXED: return [
-        +(form.values as IFixedListingForm).price,
-        (form.values as IFixedListingForm).priceCurrency as TokenTicker, // TODO: remove as
-      ];
+      case SellMethod.FIXED:
+        const value = form.values as IFixedListingForm;
+        return [+value.price, value.priceCurrency as TokenTicker] // TODO: remove as
     }
     return [0, TokenTicker.ETH];
   }, [form.values]);
 
-  const totalPrice = useMemo(() => {
-    const nftRoyaltiesAmount = price * creatorRoyalties / 100;
-    const collectionRoyaltiesAmount = (price - nftRoyaltiesAmount) * collectionRoyalties / 100;
-    const daoFeeAmount =(price - nftRoyaltiesAmount - collectionRoyaltiesAmount) * daoFee / 100;
-
-    setNftRoyaltiesValue(nftRoyaltiesAmount);
-    setCollectionRoyaltiesValue(collectionRoyaltiesAmount);
-    setDaoFeeValue(daoFeeAmount);
-
-    return parseFloat((price - (nftRoyaltiesAmount + collectionRoyaltiesAmount + daoFeeAmount)).toFixed(8));
-  }, [form.values, price, totalFees]);
+  const grossTotalPrice = useMemo(() => {
+    return form.values.amount > 1 ? form.values.amount * price : price;
+  }, [form.values, price]);
 
   const NFTsForPreview = useMemo<INFT[]>(() => {
     switch(amountType) {
+      case SellAmountType.SINGLE: return [nft];
       case SellAmountType.BUNDLE: {
-        const selectedIds = [`${nft.tokenId}`, ...form.values.bundleSelectedNFTs.map((key) => key.split(':')[0])];
-        return selectedIds.reduce<INFT[]>((acc, id) => {
-          const _myNFT = (myNFTs as INFTBackend[]).find((_myNFT) => `${_myNFT.id}` === id);
-          if (_myNFT) {
-            const myNFT = mapBackendNft(_myNFT);
-            myNFT.owner = mapBackendUser(loggedInArtist);
-            acc.push(myNFT);
-          }
-          return acc;
-        }, []);
-      }
-      case SellAmountType.SINGLE: {
-        return [nft];
+        return [];
+        // const selectedIds = [`${nft.tokenId}`, ...form.values.bundleSelectedNFTs.map((key) => key.split(':')[0])];
+        // return selectedIds.reduce<INFT[]>((acc, id) => {
+        //   const _myNFT = (myNFTs as INFTBackend[]).find((_myNFT) => `${_myNFT.id}` === id);
+        //   if (_myNFT) {
+        //     acc.push(mapBackendNft(_myNFT));
+        //   }
+        //   return acc;
+        // }, []);
       }
     }
   }, [myNFTs, nft, form.values]);
@@ -217,11 +194,7 @@ export const SummaryTab = () => {
       const isApprovedForAll = await contract.isApprovedForAll(address, process.env.REACT_APP_MARKETPLACE_CONTRACT);
       setCollectionIsApprovedForAll(isApprovedForAll);
     }
-  } 
-
-  useEffect(() => {
-    setTotalFees(creatorRoyalties + collectionRoyalties + daoFee);
-  }, [creatorRoyalties, collectionRoyalties, daoFee])
+  }
 
   useEffect(() => {
     fetchRoyaltyRegistry();
@@ -350,40 +323,53 @@ export const SummaryTab = () => {
             </Box>
           )}
         </Box>
-        <Flex {...styles.TextContainerStyle}>
-          <Center flexDir={'column'} alignItems={'flex-start'} w={'100%'}>
-            <Heading as={'h4'}>Listing</Heading>
-            <Text mb={'30px'} color={'#00000066'}>
-              Your NFT will be listed for
-              <TokenIcon ticker={ticker} size={20} />
-              <Box as={'strong'} color={'black'}>{price}</Box>
-            </Text>
+        <Box {...styles.TextContainerStyle}>
+          <Heading as={'h4'}>Listing</Heading>
 
-            <Heading as={'h4'}>Fees</Heading>
-            <Text mb={'20px'} color={'#00000066'}>
-              Listing is free! At the time of the sale, the following fees will be deducted.
-            </Text>
+          <HStack spacing={'4px'} color={'#00000099'} mb={'30px'}>
+            {nft.standard === NFTStandard.ERC1155 ? (
+              <>
+                <Text>{form.values.amount} of your items will be listed for</Text>
+                <TokenIcon ticker={ticker} size={20} />
+                <Text color={"black"}><strong>{price}</strong></Text>
+                <Text>each</Text>
+              </>
+            ) : (
+              <>
+                <Text>Your NFT will be listed for</Text>
+                <TokenIcon ticker={ticker} size={20} />
+                <Text color={"black"}><strong>{price}</strong></Text>
+              </>
+            )}
+          </HStack>
 
-            <Box layerStyle={'Grey'} {...styles.FeesContainerStyle}>
-              <Fee name={'Creator'} amount={creatorRoyalties} total={price} ticker={ticker} />
-              <Fee name={'Collection'} amount={collectionRoyalties} total={price - nftRoyaltiesValue} ticker={ticker}  />
-              <Fee name={'Universe'} amount={daoFee} total={price - nftRoyaltiesValue - collectionRoyaltiesValue} ticker={ticker}  />
-              <Fee name={'Total Fees'} total={nftRoyaltiesValue + collectionRoyaltiesValue + daoFeeValue} ticker={ticker} />
-            </Box>
+          <Heading as={'h4'}>Fees</Heading>
+          <Text mb={'20px'} color={'#00000099'}>
+            Listing is free! At the time of the sale, the following fees will be deducted.
+          </Text>
 
-            <Heading as={'h4'} mb={'0 !important'}>
-              You will receive:
-              <TokenIcon ticker={ticker} size={24} />
-              {totalPrice}
-            </Heading>
-          </Center>
-        </Flex>
+          <Fees
+            price={grossTotalPrice}
+            ticker={ticker}
+            onTotalFee={(totalFee) => setTotalNetPrice(grossTotalPrice - totalFee)}
+          >
+            <FeeItem name={'Creator'} percent={creatorRoyalties} />
+            <FeeItem name={'Collection'} percent={collectionRoyalties} />
+            <FeeItem name={'Universe'} percent={daoFee} />
+          </Fees>
+
+          <Heading as={'h4'} mb={'0 !important'} display={'inline-flex'} gap={'4px'}>
+            You will receive:
+            <TokenIcon ticker={ticker} size={24} />
+            {totalNetPrice}
+          </Heading>
+        </Box>
       </Flex>
       <Box {...styles.MainContainerStyle} mt={'30px'}>
         <Heading as={'h4'}>Approve collections for sale</Heading>
         <Text color={'#00000066'}>To get set up for listings for the first time, you must approve these collections for sale.</Text>
 
-        <SimpleGrid mt={'30px'} columns={{ base: 1, sm: 1, md: 2, lg: 3, xl: 3 }} spacing={'20px'}>
+        <SimpleGrid mt={'30px'} columns={[1, null, 2, 3]} spacing={'20px'}>
           {collections.map((collectionItem, i) => (
             <Flex
               key={i}
@@ -392,13 +378,7 @@ export const SummaryTab = () => {
                 bg: 'rgba(0, 0, 0, 0.02)',
                 border: '1px solid rgba(0, 0, 0, 0.1)',
                 borderRadius: '10px',
-                padding: {
-                  base: '10px',
-                  sm: '30px',
-                  md: '20px',
-                  lg: '20px',
-                  xl: '30px',
-                },
+                padding: ['10px', '30px', '20px', null, '30px'],
               }}
             >
               <Box

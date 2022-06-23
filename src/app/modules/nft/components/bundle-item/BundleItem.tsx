@@ -1,29 +1,30 @@
 import { Box, LinkBox, LinkOverlay, Text } from '@chakra-ui/react';
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Navigation, Pagination } from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
 import { ItemWrapper } from '@app/components';
 
-import { IERC721BundleAssetType, INFT, IOrder } from '../../types';
+import { INFT, IOrder, IOrderAssetTypeBundleListing, IOrderAssetTypeERC20 } from '../../types';
 import * as styles from '../nft-card/NFTCard.styles';
 import { NFTCardAsset, NFTCardFooter, BundleLabel } from '../nft-card/components';
-// import { NFTRelationType } from '../../enums';
+
+type IBundleOrder = IOrder<IOrderAssetTypeBundleListing, IOrderAssetTypeERC20>;
 
 interface IBundleItemProps {
   NFTs: INFT[];
-  order: IOrder;
+  order: IBundleOrder;
 
   isSelected?: boolean;
   selectedLabel?: string;
   showAssetBubbles?: boolean;
 
-  renderHeader?: ((NFTs: INFT[], order: IOrder) => React.ReactNode) | null;
-  renderAsset?: ((NFT: INFT, order: IOrder) => React.ReactNode) | null;
-  renderContent?: ((NFTs: INFT[], order: IOrder) => React.ReactNode) | null;
-  renderFooter?: ((NFTs: INFT[], order: IOrder) => React.ReactNode) | null;
+  renderHeader?: ((NFTs: INFT[], order: IBundleOrder) => React.ReactNode) | null;
+  renderAsset?: ((NFT: INFT, order: IBundleOrder) => React.ReactNode) | null;
+  renderContent?: ((NFTs: INFT[], order: IBundleOrder) => React.ReactNode) | null;
+  renderFooter?: ((NFTs: INFT[], order: IBundleOrder) => React.ReactNode) | null;
 
-  onClick?: (e: React.MouseEvent<HTMLElement>, NFTs: INFT[], order: IOrder) => void;
+  onClick?: (e: React.MouseEvent<HTMLElement>, NFTs: INFT[], order: IBundleOrder) => void;
 }
 
 export const BundleItem = (
@@ -40,6 +41,11 @@ export const BundleItem = (
     onClick,
   }: IBundleItemProps
 ) => {
+  const bundleName = useMemo(() => {
+    const assetType = order.make.assetType as IOrderAssetTypeBundleListing;
+    return assetType.bundleName;
+  }, [order]);
+
   return (
     <ItemWrapper
       isBundle={true}
@@ -92,20 +98,10 @@ export const BundleItem = (
             {renderContent === null ? null :
               renderContent ? renderContent(NFTs, order) : (
                 <>
-                  <Text fontSize={'14px'} fontWeight={700} mb={'12px'}>
-                    {(order.make.assetType as IERC721BundleAssetType).bundleName}
-                  </Text>
+                  <Text fontSize={'14px'} fontWeight={700} mb={'12px'}>{bundleName}</Text>
 
                   <Box mb={'14px'}>
-                    <Box>
-                      {/*<NFTItemRelation*/}
-                      {/*  type={NFTRelationType.CREATOR}*/}
-                      {/*  image={NFTs[0].owner?.profileImageUrl ?? ''}*/}
-                      {/*  value={NFTs[0].owner?.displayName || NFTs[0]._ownerAddress || ''}*/}
-                      {/*  linkParam={NFTs[0].owner?.universePageUrl ?? ''}*/}
-                      {/*  externalOwner={!NFTs[0].owner?.displayName}*/}
-                      {/*/>*/}
-                    </Box>
+                  {/*  bundle collections*/}
                   </Box>
                 </>
               )

@@ -1,5 +1,5 @@
 import create from "zustand";
-import { getERC20PriceCoingecko, getEthPriceCoingecko } from "../utils/api/etherscan";
+import { getAllTokenPricesCoingecko } from "../utils/api/etherscan";
 import { TokenTicker } from "../app/enums";
 import { useUserBalanceStore } from "./balanceStore";
 
@@ -16,6 +16,17 @@ interface IErc20PriceStoreState {
   getTokenPriceByTicker: (ticker: TokenTicker) => number;
 }
 
+interface ITokenPrice {
+  symbol: string;
+  updatedAt: Date;
+  usd: number;
+  name: string;
+}
+
+const findTokenPrice = (tokenPrices: ITokenPrice[], token: string) => {
+  return tokenPrices.find((tokenPriceData: ITokenPrice) => tokenPriceData.name === token);
+}
+
 export const useErc20PriceStore = create<IErc20PriceStoreState>((set, get) => ({
   // initial state
   ethUsdPrice: 0,
@@ -26,26 +37,19 @@ export const useErc20PriceStore = create<IErc20PriceStoreState>((set, get) => ({
   // fetching functions
   fetchPrices: async () => {
     try {
-      const [ethPrice, daiInfo, usdcInfo, xyzInfo, wethInfo] = await Promise.all([
-        getEthPriceCoingecko(),
-        getERC20PriceCoingecko('dai'),
-        getERC20PriceCoingecko('usd-coin'),
-        getERC20PriceCoingecko('universe-xyz'),
-        getERC20PriceCoingecko('weth'),
-      ]);
+      const tokenPrices: ITokenPrice[] = await getAllTokenPricesCoingecko();
+      const ethPrice = findTokenPrice(tokenPrices, 'ethereum');
+      const daiInfo = findTokenPrice(tokenPrices, 'dai');
+      const usdcInfo = findTokenPrice(tokenPrices, 'usd-coin');
+      const xyzInfo = findTokenPrice(tokenPrices, 'universe-xyz');
+      const wethInfo = findTokenPrice(tokenPrices, 'weth');
 
-      console.log(`wethPrice: ${wethInfo?.market_data?.current_price?.usd}`);
-      console.log(`ethPrice: ${ethPrice?.market_data?.current_price?.usd}`);
-      console.log(`usdcPrice: ${usdcInfo?.market_data?.current_price?.usd}`);
-      console.log(`daiPrice: ${daiInfo?.market_data?.current_price?.usd}`);
-      console.log(`xyzPrice: ${xyzInfo?.market_data?.current_price?.usd}`);
-      
       set(() => ({
-        ethUsdPrice: ethPrice?.market_data?.current_price?.usd ?? 0,
-        daiUsdPrice: daiInfo?.market_data?.current_price?.usd ?? 0,
-        usdcUsdPrice: usdcInfo?.market_data?.current_price?.usd ?? 0,
-        xyzUsdPrice: xyzInfo?.market_data?.current_price?.usd ?? 0,
-        wethUsdPrice: wethInfo?.market_data?.current_price?.usd ?? 0
+        ethUsdPrice: ethPrice?.usd ?? 0,
+        daiUsdPrice: daiInfo?.usd ?? 0,
+        usdcUsdPrice: usdcInfo?.usd ?? 0,
+        xyzUsdPrice: xyzInfo?.usd ?? 0,
+        wethUsdPrice: wethInfo?.usd ?? 0
       }));
 
       const newUsdPrice = get().ethUsdPrice;

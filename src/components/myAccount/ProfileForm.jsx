@@ -1,4 +1,5 @@
 import React, { useRef, useState, useEffect, useMemo } from 'react';
+import { useRouter } from 'next/router';
 import PropTypes from 'prop-types';
 import Social from './Social';
 import Button from '../button/Button.jsx';
@@ -35,7 +36,16 @@ const ProfileForm = ({
   saveChanges,
   cancelChanges,
   fetchedUserData,
+  isFromPreviewMode,
 }) => {
+
+  const hasError = [accountName, accountPage, about].some((e) => !e);
+
+  const { loggedInArtist, setPreviewUserData } = useAuthStore(s => ({
+    loggedInArtist: s.loggedInArtist,
+    setPreviewUserData: s.setPreviewUserData,
+  }));
+
   const disabled =
     fetchedUserData.accountName === accountName &&
     fetchedUserData.accountPage === accountPage &&
@@ -44,11 +54,16 @@ const ProfileForm = ({
     fetchedUserData.instagramLink === instagramLink &&
     fetchedUserData.accountImage === accountImage;
 
-  const hasError = [accountName, accountPage, about].some((e) => !e);
+  const disabledInPreview =
+    fetchedUserData.accountName === loggedInArtist.accountName &&
+    fetchedUserData.accountPage === loggedInArtist.accountPage &&
+    fetchedUserData.about === loggedInArtist.about &&
+    fetchedUserData.twitterLink === loggedInArtist.twitterLink &&
+    fetchedUserData.instagramLink === loggedInArtist.instagramLink &&
+    fetchedUserData.accountImage === loggedInArtist.accountImage;
 
-  const { loggedInArtist } = useAuthStore(s => ({
-    loggedInArtist: s.loggedInArtist,
-  }));
+  const disabledButtons = isFromPreviewMode ? disabledInPreview : disabled;
+
   const [hideIcon, setHideIcon] = useState(false);
   const [inputName, setInputName] = useState('inp empty');
   const accountInput = useRef(null);
@@ -101,7 +116,7 @@ const ProfileForm = ({
   const getProfileImage = useMemo(() => {
     const userUploadImageURL =
       accountImage && typeof accountImage === 'object' && URL.createObjectURL(accountImage);
-    const alreadyUploadedImageURL = loggedInArtist && loggedInArtist.avatar;
+    const alreadyUploadedImageURL = isFromPreviewMode ? accountImage : (loggedInArtist && loggedInArtist.avatar);
 
     let image;
     if (userUploadImageURL) {
@@ -114,6 +129,23 @@ const ProfileForm = ({
 
     return image;
   }, [accountImage]);
+
+  const router = useRouter();
+  const handlePreviewMode = () => {
+    setPreviewUserData({
+      name: accountName,
+      universePageAddress: accountPage,
+      avatar: accountImage,
+      about,
+      instagramLink,
+      twitterLink,
+    });
+
+    router.push({
+      pathname: `/${loggedInArtist.universePageAddress}`,
+      query: { isPreview: true }
+    });
+  };
 
   return (
     <div className="account-grid-container">
@@ -131,7 +163,7 @@ const ProfileForm = ({
             />
           </div>
           <div className="account-picture-editing">
-            <p>We recomend an image of at least 400x400.</p>
+            <p>We recommend an image of at least 400x400.</p>
             {errors.previewImage && <p style={{ color: '#ff4949' }}>{errors.previewImage}</p>}
             <Button className="light-border-button" onClick={() => accountInput.current.click()}>
               Choose File
@@ -299,12 +331,19 @@ const ProfileForm = ({
               </div>
             )}
           <div className="account-display-buttons">
-            <Button className="light-button" disabled={disabled || hasError} onClick={saveChanges}>
-              Save Changes
-            </Button>
-            <Button className="light-border-button" onClick={cancelChanges}>
-              Cancel
-            </Button>
+            <div>
+              <Button className="simple-light-border-button" onClick={cancelChanges}>
+                Cancel
+              </Button>
+            </div>
+            <div>
+              <Button className="light-border-button" disabled={disabledButtons || hasError} onClick={handlePreviewMode}>
+                Preview
+              </Button>
+              <Button className="light-button" disabled={disabledButtons || hasError} onClick={saveChanges}>
+                Save Changes
+              </Button>
+            </div>
           </div>
         </div>
       </div>
@@ -329,6 +368,7 @@ ProfileForm.propTypes = {
   saveChanges: PropTypes.func,
   cancelChanges: PropTypes.func,
   fetchedUserData: PropTypes.oneOfType([PropTypes.object]),
+  isFromPreviewMode: PropTypes.bool,
 };
 
 ProfileForm.defaultProps = {

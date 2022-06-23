@@ -1,174 +1,218 @@
-import { OpenGraph } from "@app/components";
-import { SearchFilters } from "@app/modules/account/pages/my-nfts-page/components/search-filters";
-import { useFiltersContext } from "@app/modules/account/pages/my-nfts-page/components/search-filters/search-filters.context";
-import CollectionOGPlaceholder from "@assets/images/open-graph/collection-placeholder.png";
 import {
   Avatar,
   Box,
   Button,
-  Flex,
+  Heading,
+  HStack,
+  Image,
+  Input,
+  InputGroup,
+  InputLeftElement,
   Link,
   SimpleGrid,
+  Stack,
   Tab,
   TabList,
   TabPanel,
   TabPanels,
   Tabs,
-  Text,
-} from "@chakra-ui/react";
-import { CollectionPageLoader } from "@legacy/collection/CollectionPageLoader";
-import { shortenEthereumAddress } from "@legacy/helpers/format";
-import { Contract } from "ethers";
+  Text, Tooltip, VStack,
+} from '@chakra-ui/react';
+import { Contract, providers } from 'ethers';
 import { useRouter } from "next/router";
-import NotFound from "pages/404";
-import { useEffect, useRef, useState } from "react";
-import { useIntersection, useMedia } from "react-use";
-import Cover from "../../../../../../../components/collection/Cover";
-import SocialLinks from "../../../../../../../components/collection/SocialLinks";
-import NftCardSkeleton from "../../../../../../../components/skeletons/nftCardSkeleton/NftCardSkeleton";
-import EditIcon from "../../../../../../../components/svgs/EditIcon";
+import { useInfiniteQuery, useQuery } from 'react-query';
+import React, { useCallback, useMemo, useState } from 'react';
+import { useCopyToClipboard, useDebounce, useMeasure } from 'react-use';
+
+// Assets
+import CollectionOGPlaceholder from "@assets/images/open-graph/collection-placeholder.png";
+import SearchIcon from '@assets/images/search-gray.svg';
+
+// Legacy
+import NotFound from '../../../../../../../components/notFound/NotFound';
 import Contracts from "../../../../../../../contracts/contracts.json";
 import { useAuthStore } from "../../../../../../../stores/authStore";
-import { breakpoints } from "../../../../../../theme/constants";
-import { NFTCard, NoNFTsFound } from "../../../../../nft/components";
-import { NoDescriptionFound } from "../../../../components/no-description-found";
 import { useCollectionPageData } from "../../CollectionPage.context";
-import { CollectionStatistics } from "./components/index";
+
+// App
+import { CollectionPageSkeleton } from '@app/modules/collection/components';
+import { FiltersStickyWrapper, Icon, OpenGraph, Select } from '@app/components';
+import { NFTCard, NFTCardSkeleton, NoNFTsFound } from '@app/modules/nft/components';
+import { SortBy, SortByNames, SortByOptions } from '@app/constants';
+import {
+  NFTTypeFilter,
+  PriceRangeFilter,
+  PropertiesFilter,
+  SaleTypeFilter,
+  useNFTTypeFilter,
+  usePriceRangeFilter,
+  usePropertiesFilter,
+  useSaleTypeFilter,
+} from '@app/components/filters/shared';
+import { Filter, Filters, ToggleFiltersButton } from '@app/components/filters';
+import { NFTCardSize, useNFTFluidGrid, useStaticHeader } from '@app/hooks';
+import { formatAddress, getStrGradient } from '@app/helpers';
+
+import { collectionKeys } from '@app/utils/query-keys';
+import { getCollectionNFTsTotalApi, queryNFTsApi } from '@app/api';
+import { ORDERS_PER_PAGE } from '@app/modules/marketplace/pages/browse-nfts-page/constants';
+import { ToggleButton, ToggleButtonGroup } from '@app/modules/marketplace/pages/browse-nfts-page/components';
+
+import { CollectionCover, CollectionSocialLinks, CollectionStatistics, NoDescriptionFound } from './components';
+import * as s from './CollectionInfo.styles';
 
 export const CollectionInfo = () => {
-  const [totalNftsCount, setTotalNftsCount] = useState(0);
-  const { address, signer, isAuthenticated } = useAuthStore((s) => ({
-    address: s.address,
-    signer: s.signer,
-    isAuthenticated: s.isAuthenticated,
-  }));
   const router = useRouter();
-  const [collectionOwner, setCollectionOwner] = useState<string>("");
-  const [tabIndex, setTabIndex] = useState(0);
-  const isMobile = useMedia(`(max-width: ${breakpoints.md})`);
+
+  const [_, copyToClipboard] = useCopyToClipboard();
+
+  const { address, isAuthenticated } = useAuthStore();
+
+  const [showCopied, setShowCopied] = useState(false);
 
   const {
     collection,
     collectionAddress,
     collectionGeneralInfo,
     collectionOrderBookData,
-    isLoadingCollectionApi,
     isFetchingCollectionApi,
-    isIdleCollectionApi,
-    isLoadingCollectionGeneralInfo,
     isFetchingCollectionGeneralInfo,
-    isIdleCollectionGeneralInfo,
   } = useCollectionPageData();
 
-  const scrollContainer = useRef(null);
+  const { data: ownerAddress } = useQuery(
+    collectionKeys.collectionOwner(collectionAddress),
+    async () => {
+      const network = providers.getNetwork(
+        +`${process.env.REACT_APP_NETWORK_CHAIN_ID}`
+      );
+      const provider = providers.getDefaultProvider(network);
 
-  const {
-    setCollectionAddress,
-    setShowSaleTypeFilters,
-    setShowPriceRangeFilters,
-    setShowNFTTypeFilters,
-    collectionNFTs,
-    fetchNextCollectionNFTs,
-    fetchNextOrders,
-    hasMoreCollectionNFTs,
-    orders,
-    hasSelectedOrderBookFilters,
-    hasMoreOrders,
-    isFethingOrders,
-    isLoadingOrders,
-    isIdleOrders,
-    isFetchingCollectionNFTs,
-    isLoadingCollectionNFTs,
-    isIdleCollectionNFTs,
-  } = useFiltersContext();
-
-  useEffect(() => {
-    setCollectionAddress(collectionAddress);
-    setShowSaleTypeFilters(true);
-    setShowPriceRangeFilters(true);
-    setShowNFTTypeFilters(true);
-  }, [collectionAddress]);
-
-  useEffect(() => {
-    if (collectionNFTs && totalNftsCount === 0) {
-      setTotalNftsCount(collectionNFTs.pages[0].total);
-    }
-  }, [collectionNFTs]);
-
-  const fetchCollectionOwner = async () => {
-    try {
-      if (!signer) {
-        return;
-      }
       // @ts-ignore
       const { contracts } = Contracts[process.env.REACT_APP_NETWORK_CHAIN_ID];
-      // We use the UniserveERC721Core ABI because it implements the Ownable interface
+
       const collectionContract = new Contract(
-        collectionGeneralInfo?.contractAddress || collection?.address || "",
+        collectionAddress,
         contracts.UniverseERC721Core.abi,
-        signer
+        provider
       );
 
       const owner = await collectionContract.owner();
-      setCollectionOwner(owner.toLowerCase());
-    } catch (err) {
-      console.log(err);
+
+      return owner.toLowerCase();
     }
-  };
+  );
 
-  useEffect(() => {
-    if (
-      (collectionGeneralInfo?.contractAddress || collection?.address) &&
-      signer
-    ) {
-      fetchCollectionOwner();
+  const [containerRef, { width: containerWidth }] = useMeasure<HTMLDivElement>();
+
+  const NFTGrid = useNFTFluidGrid(containerWidth, 16);
+
+  useStaticHeader();
+
+  const [search, setSearch] = useState('');
+  const [debouncedSearch, setDebouncedSearch] = useState(search);
+
+  const [showFilters, setShowFilters] = useState(false);
+  const [sortBy, setSortBy] = useState<SortBy>();
+
+  const saleTypeFilter = useSaleTypeFilter();
+  const nftTypeFilter= useNFTTypeFilter();
+  const priceRangeFilter = usePriceRangeFilter();
+  const propertiesFilter = usePropertiesFilter();
+
+  const dirtyFiltersAmount = useMemo(() => {
+    return [
+      saleTypeFilter,
+      nftTypeFilter,
+      priceRangeFilter,
+      propertiesFilter,
+    ].filter(filter => filter.form.dirty).length;
+  }, [saleTypeFilter, nftTypeFilter, priceRangeFilter, propertiesFilter]);
+
+  useDebounce(() => {
+    setDebouncedSearch(search);
+  }, 1000, [search]);
+
+  const {
+    data: NFTs,
+    fetchNextPage,
+    hasNextPage,
+    isFetching,
+    isFetchingNextPage,
+  } = useInfiniteQuery(
+    collectionKeys.collectionNFTs(collectionAddress, {
+      saleFilter: saleTypeFilter.form.values,
+      nftTypeFilter: nftTypeFilter.form.values,
+      priceRangeFilter: priceRangeFilter.form.values,
+      propertiesFilter: propertiesFilter.form.values,
+      sorting: sortBy,
+      search: debouncedSearch,
+    }),
+    ({ pageParam = 1 }) => queryNFTsApi({
+      page: pageParam,
+      limit: ORDERS_PER_PAGE,
+      sortBy,
+      collection: collectionAddress,
+      search: debouncedSearch,
+      hasOffers: saleTypeFilter.form.values.hasOffers,
+      buyNow: saleTypeFilter.form.values.buyNow,
+      newest: saleTypeFilter.form.values.new,
+      singleListing: nftTypeFilter.form.values.singleItem,
+      bundleListing: nftTypeFilter.form.values.bundle,
+      tokenTicker: priceRangeFilter.form.values.currency?.token ?? undefined,
+      minPrice: priceRangeFilter.form.values.price[0],
+      maxPrice: priceRangeFilter.form.values.price[1],
+      traits: propertiesFilter.form.values.properties,
+    }),
+    {
+      retry: false,
+      refetchOnWindowFocus: false,
+      refetchOnReconnect: false,
+      getNextPageParam: (lastPage, pages) => {
+        return lastPage.data.length && lastPage.data.length >= ORDERS_PER_PAGE
+          ? pages.length + 1
+          : undefined;
+      },
     }
-  }, [collectionGeneralInfo?.contractAddress, collection?.address, signer]);
+  );
 
-  const handleEdit = () => {
-    router.push(
-      `/my-nfts/create?tabIndex=1&nftType=collection&collection=${
-        collection.address || collectionGeneralInfo?.contractAddress
-      }`
-    );
-  };
+  const { data: NFTsTotal } = useQuery(
+    collectionKeys.collectionNFTsTotal(collectionAddress),
+    () => getCollectionNFTsTotalApi(collectionAddress),
+  );
 
-  const handleTabsChange = (index: number) => {
-    setTabIndex(index);
-  };
+  const handleEdit = useCallback(() => {
+    router.push(`/my-nfts/create?tabIndex=1&nftType=collection&collection=${collectionAddress}`)
+  }, []);
 
-  const hasOrderBookFilters = hasSelectedOrderBookFilters();
-  const hasOrders = orders?.pages?.length && orders.pages[0].data?.length;
-  const hasCollectionNFTs =
-    collectionNFTs?.pages?.length && collectionNFTs.pages[0].data?.length;
-  const waitingOrders = isFethingOrders || isLoadingOrders || isIdleOrders;
-  const waitingCollectionNFTs =
-    isFetchingCollectionNFTs || isLoadingCollectionNFTs || isIdleCollectionNFTs;
-  const waitingCollectionOffChainInfo =
-    isFetchingCollectionApi || isLoadingCollectionApi || isIdleCollectionApi;
-  const waitingCollectionGeneralInfo =
-    isLoadingCollectionGeneralInfo ||
-    isFetchingCollectionGeneralInfo ||
-    isIdleCollectionGeneralInfo;
+  const handleCopy = useCallback((address: string) => {
+    copyToClipboard(address);
+    setShowCopied(true);
 
-  const filtersRef = useRef(null);
-
-  const intersection = useIntersection(filtersRef, {
-    threshold: 1,
-    rootMargin: "0px",
-    root: null,
-  });
+    setTimeout(() => setShowCopied(false), 1500);
+  }, []);
 
   const schema = {
     "@context": "http://schema.org",
     "@type": "CreativeWork",
-    name: `${collection?.name || collection?.address} – Collection`,
+    name: `${collection?.name || collectionAddress} – Collection`,
     description: collection?.description || "",
     image: {
       "@type": "ImageObject",
       url: collection?.bannerUrl || collection?.coverUrl || "",
     },
   };
+
+  const isOwner = (isAuthenticated &&
+    (address?.toLowerCase() === ownerAddress
+      || address?.toLowerCase() === process.env.REACT_APP_COLLECTION_EDITOR?.toLowerCase()
+    ));
+
+  const [color1, color2] = getStrGradient(collectionAddress);
+
+
+  if (!isFetchingCollectionApi && !isFetchingCollectionGeneralInfo && !collection) {
+    return (<NotFound />);
+  }
 
   return (
     <>
@@ -181,290 +225,214 @@ export const CollectionInfo = () => {
           CollectionOGPlaceholder
         }
       />
-      {(waitingCollectionGeneralInfo && !collectionGeneralInfo) ||
-      (waitingCollectionOffChainInfo && !collection) ? (
-        <div className="loader-wrapper">
-          <CollectionPageLoader />
-        </div>
-      ) : !waitingCollectionGeneralInfo &&
-        !collectionGeneralInfo?.contractAddress &&
-        !collection?.address ? (
-        <NotFound />
-      ) : (
-        <Box layerStyle={"StoneBG"}>
-          <Cover
-            selectedCollection={collection}
-            collectionGeneralInfo={collectionGeneralInfo}
-            collectionOwner={collectionOwner}
-          />
-          <Box sx={{ position: "relative", p: "0px 0px 80px 0px" }}>
-            <Flex
-              sx={{
-                maxWidth: "1110px",
-                margin: "-160px auto 0px",
-                p: isMobile ? "0px 20px" : "0px",
-              }}
-            >
-              <Box w={"100%"}>
-                <Flex
-                  sx={{
-                    alignItems: "center",
-                    mb: "30px",
-                  }}
-                >
-                  <Avatar
-                    src={collection?.coverUrl}
-                    name={collectionGeneralInfo?.name || collection?.name}
-                    borderRadius={"50%"}
-                    pointerEvents={"none"}
-                    objectFit={"cover"}
-                    w={"65px"}
-                    h={"65px"}
-                  />
-                  <Flex direction={"column"} alignItems={"flex-start"}>
-                    <Text
-                      fontFamily={'"Sharp Grotesk SemiBold",sans-serif'}
-                      fontSize={"20px"}
-                      lineHeight={"130%"}
-                      color={"#fff"}
-                      ml={"20px"}
-                    >
-                      {collectionGeneralInfo?.name || collection.name}
-                    </Text>
-                    <Link
-                      href={`${process.env.REACT_APP_ETHERSCAN_URL}/address/${
-                        collectionGeneralInfo?.contractAddress ||
-                        collection?.address
-                      }`}
-                      isExternal
-                      padding={"4px 10px"}
-                      ml={"18px"}
-                      mt={"10px"}
-                      borderRadius={"20px"}
-                      backgroundColor={"#000"}
-                      opacity={"0.6"}
-                      _hover={{ textDecoration: "none" }}
-                    >
-                      <Text
-                        color={"#4D66EB"}
-                        fontSize={"12px"}
-                        fontWeight={600}
-                      >
-                        {shortenEthereumAddress(
-                          collectionGeneralInfo?.contractAddress ||
-                            collection?.address
-                        )}
-                      </Text>
-                    </Link>
-                  </Flex>
-                  <SocialLinks
-                    instagramLink={collection?.instagramLink || ""}
-                    siteLink={collection?.siteLink || ""}
-                    mediumLink={collection?.mediumLink || ""}
-                    discordLink={collection?.discordLink || ""}
-                    telegramLink={collection?.telegramLink || ""}
-                    twitterLink=""
-                  />
-                  <Box>
-                    {isAuthenticated &&
-                      (address?.toLowerCase() === collectionOwner ||
-                        process.env.REACT_APP_COLLECTION_EDITOR?.toLowerCase() ===
-                          address) && ( //
-                        <Button className="light-button" onClick={handleEdit}>
-                          <span style={{ marginRight: "5px" }}>Edit</span>
-                          <EditIcon />
-                        </Button>
-                      )}
-                  </Box>
-                </Flex>
-                <Box
-                  sx={{
-                    bgColor: "#e5e5e5",
-                    borderRadius: "12px",
-                    overflow: "hidden",
-                    boxSizing: "border-box",
-                    boxShadow: "0px 10px 30px rgba(0, 0, 0, 0.1)",
-                  }}
-                >
-                  <CollectionStatistics
-                    nftsCount={totalNftsCount}
-                    ownersCount={collectionGeneralInfo?.owners}
-                    floorPrice={collectionOrderBookData?.floorPrice}
-                    volumeTraded={collectionOrderBookData?.volumeTraded}
-                  />
-                </Box>
-              </Box>
-            </Flex>
-            <Flex
-              sx={{
-                // maxWidth: '1110px',
-                margin: "0 auto",
-                flexDirection: "column",
-                p:
-                  (intersection?.intersectionRect.top ?? 1) === 0 &&
-                  tabIndex === 0
-                    ? "0px"
-                    : "0px 20px",
-              }}
-            >
-              <Tabs mt={"60px"} index={tabIndex} onChange={handleTabsChange}>
-                <TabList maxW={"1110px"} m={"auto"}>
-                  <Tab>Items</Tab>
-                  <Tab>Description</Tab>
-                </TabList>
-
-                <TabPanels>
-                  <TabPanel px={0}>
-                    <Box
-                      ref={filtersRef}
-                      sx={{
-                        bg:
-                          (intersection?.intersectionRect.top ?? 1) === 0
-                            ? "white"
-                            : "transparent",
-                        p:
-                          (intersection?.intersectionRect.top ?? 1) === 0 &&
-                          "0px 20px",
-                        pos: "sticky",
-                        top: "-1px",
-                        mb: "40px",
-                        zIndex: 20,
-                        ".search--sort--filters--section": {
-                          mb: 0,
-                        },
-                      }}
-                    >
-                      <SearchFilters />
-                    </Box>
-                    {/* Orders NFTs based on search filters */}
-                    {hasOrderBookFilters ? (
-                      hasOrders ? (
-                        <div className="mynfts__page">
-                          <div className="container mynfts__page__body">
-                            <SimpleGrid
-                              spacing={"30px"}
-                              columns={{ base: 1, md: 2, lg: 4 }}
-                            >
-                              {(orders?.pages ?? []).map((page) => {
-                                return page.data.map(({ order, NFTs }) => {
-                                  if (!NFTs.length) {
-                                    return null;
-                                  }
-                                  return (
-                                    <NFTCard
-                                      key={order.id}
-                                      order={order}
-                                      NFT={NFTs[0]}
-                                    />
-                                  );
-                                });
-                              })}
-                            </SimpleGrid>
-
-                            {!waitingOrders && hasMoreOrders && (
-                              <Button
-                                variant={"outline"}
-                                isFullWidth={true}
-                                mt={10}
-                                onClick={() => fetchNextOrders()}
-                              >
-                                Load more
-                              </Button>
-                            )}
-                          </div>
-                        </div>
-                      ) : (
-                        !waitingOrders && <NoNFTsFound />
-                      )
-                    ) : // Collection NFTs
-                    hasCollectionNFTs ? (
-                      <div className="mynfts__page">
-                        <div className="container mynfts__page__body">
-                          <SimpleGrid
-                            spacing={"30px"}
-                            columns={{ base: 1, md: 2, lg: 4 }}
-                          >
-                            {(collectionNFTs?.pages ?? []).map((page) => {
-                              return page.data.map((NFT) => (
-                                <NFTCard key={NFT.id} NFT={NFT} />
-                              ));
-                            })}
-                          </SimpleGrid>
-
-                          {!waitingCollectionNFTs && hasMoreCollectionNFTs && (
-                            <Button
-                              variant={"outline"}
-                              isFullWidth={true}
-                              mt={10}
-                              onClick={() => fetchNextCollectionNFTs()}
-                            >
-                              Load more
-                            </Button>
-                          )}
-
-                          {((hasOrderBookFilters && waitingOrders) ||
-                            (!hasOrderBookFilters &&
-                              waitingCollectionNFTs)) && (
-                            <SimpleGrid
-                              columns={{ base: 1, md: 2, lg: 4 }}
-                              spacing={"30px"}
-                              mt={10}
-                            >
-                              <NftCardSkeleton />
-                              <NftCardSkeleton />
-                              <NftCardSkeleton />
-                              <NftCardSkeleton />
-                            </SimpleGrid>
-                          )}
-                        </div>
-                      </div>
-                    ) : (
-                      !waitingCollectionNFTs && <NoNFTsFound />
-                    )}
-
-                    <div className="mynfts__page">
-                      <div className="container mynfts__page__body">
-                        {((hasOrderBookFilters && waitingOrders) ||
-                          (!hasOrderBookFilters && waitingCollectionNFTs)) && (
-                          <SimpleGrid
-                            columns={{ base: 1, md: 2, lg: 4 }}
-                            spacing={"30px"}
-                            mt={10}
-                          >
-                            <NftCardSkeleton />
-                            <NftCardSkeleton />
-                            <NftCardSkeleton />
-                            <NftCardSkeleton />
-                          </SimpleGrid>
-                        )}
-                      </div>
-                    </div>
-                  </TabPanel>
-                  <TabPanel px={0}>
-                    {collection.description ? (
-                      <div className="container mynfts__page__body">
-                        <Box
-                          sx={{
-                            whiteSpace: "break-spaces",
-                          }}
-                        >
-                          {collection.description}
-                        </Box>
-                      </div>
-                    ) : (
-                      <NoDescriptionFound />
-                    )}
-                  </TabPanel>
-                </TabPanels>
-              </Tabs>
-            </Flex>
-          </Box>
-        </Box>
-      )}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
       ></script>
+
+      <Box layerStyle={"StoneBG"}>
+        <CollectionCover
+          collectionAddress={collectionAddress}
+          collection={collection}
+          isOwner={isOwner}
+        />
+        <Box {...s.CollectionInfoWrapper}>
+          <Stack
+            direction={['column', null, 'row']}
+            justifyContent={'space-between'}
+            mb={['16px', null, 0]}
+          >
+            <HStack spacing={'20px'} mb={'16px'}>
+              {collection?.coverUrl ? (
+                <Avatar
+                  src={collection?.coverUrl}
+                  name={collectionGeneralInfo?.name || collection?.name}
+                  {...s.Avatar}
+                />
+              ) : (
+                <Box bgGradient={`linear(to-br, ${color1}, ${color2})`} borderRadius={'full'} boxSize={'72px'} />
+              )}
+              <VStack spacing={'4px'} alignItems={'flex-start'}>
+                <Heading {...s.CollectionName}>
+                  {collectionGeneralInfo?.name || collection.name}
+                </Heading>
+
+                <HStack spacing={0} {...s.AddressButton}>
+                  <Tooltip hasArrow placement={'top'} label={'Copied'} isOpen={showCopied}>
+                    <Text {...s.AddressButtonText} onClick={() => handleCopy(collectionAddress)}>
+                      {formatAddress(collectionAddress)}
+                    </Text>
+                  </Tooltip>
+                  <Link
+                    href={`${process.env.REACT_APP_ETHERSCAN_URL}/address/${collectionAddress}`}
+                    isExternal
+                    {...s.AddressButtonLink}
+                  >
+                    <Icon name={'externalLink'} />
+                  </Link>
+                </HStack>
+              </VStack>
+            </HStack>
+            <HStack spacing={['12px', null, '30px']}>
+              <CollectionSocialLinks
+                instagram={collection?.instagramLink}
+                site={collection?.siteLink}
+                medium={collection?.mediumLink}
+                discord={collection?.discordLink}
+                telegram={collection?.telegramLink}
+              />
+              <HStack spacing={'12px'}>
+                {isOwner && (
+                  <Button
+                    variant={'ghost'}
+                    color={'white'}
+                    rightIcon={<Icon name={'pen'} />}
+                    onClick={handleEdit}
+                  >Edit</Button>
+                )}
+              </HStack>
+            </HStack>
+          </Stack>
+          <CollectionStatistics
+            amountNFTs={NFTsTotal}
+            amountOwners={collectionGeneralInfo?.owners}
+            floorPrice={collectionOrderBookData?.floorPrice}
+            volumeTraded={collectionOrderBookData?.volumeTraded}
+          />
+        </Box>
+        <Tabs {...s.Tabs}>
+          <TabList {...s.TabList}>
+            <Tab>Items</Tab>
+            <Tab>Description</Tab>
+          </TabList>
+
+          <TabPanels>
+            <TabPanel {...s.NFTsTabPanel}>
+              <FiltersStickyWrapper {...s.FiltersWrapper}>
+                <Stack spacing={'12px'} direction={['column', null, 'row']}>
+                  <InputGroup flex={1}>
+                    <InputLeftElement pointerEvents="none">
+                      <Image src={SearchIcon} />
+                    </InputLeftElement>
+                    <Input
+                      height={'48px'}
+                      pl={'50px'}
+                      placeholder={'Search for an NFT'}
+                      value={search}
+                      onChange={({ target }) => setSearch(target.value)}
+                    />
+                  </InputGroup>
+                  <Box>
+                    <Select
+                      items={SortByOptions}
+                      label={!sortBy ? 'Sort by' : undefined}
+                      value={sortBy}
+                      buttonProps={{
+                        height: '48px',
+                        justifyContent: "space-between",
+                        w: ['100%', null, '200px'],
+                      }}
+                      renderSelectedItem={(item: SortBy) => SortByNames[item]}
+                      renderItem={(item: SortBy) => SortByNames[item]}
+                      onSelect={(val) => setSortBy(val)}
+                    />
+                  </Box>
+                  <ToggleFiltersButton
+                    display={['none', null, 'flex']}
+                    dirtyAmount={dirtyFiltersAmount}
+                    onClick={() => setShowFilters(!showFilters)}
+                  />
+                  <ToggleButtonGroup
+                    size={'lg'}
+                    name={"nftSize"}
+                    value={NFTGrid.size}
+                    onChange={(val) => {
+                      NFTGrid.setSize(val as NFTCardSize)
+                    }}
+                  >
+                    <ToggleButton value={NFTCardSize.LG}>
+                      <Icon name={'mdGrid'} />
+                    </ToggleButton>
+                    <ToggleButton value={NFTCardSize.SM}>
+                      <Icon name={'smGrid'} />
+                    </ToggleButton>
+                  </ToggleButtonGroup>
+                </Stack>
+                <Filters show={showFilters} mt={'16px'}>
+                  <Filter filter={saleTypeFilter}>
+                    <SaleTypeFilter
+                      value={saleTypeFilter.form.values}
+                      onChange={(value) => saleTypeFilter.form.setValues(value)}
+                    />
+                  </Filter>
+                  <Filter filter={nftTypeFilter}>
+                    <NFTTypeFilter
+                      value={nftTypeFilter.form.values}
+                      onChange={(value) => nftTypeFilter.form.setValues(value)}
+                    />
+                  </Filter>
+                  <Filter filter={priceRangeFilter}>
+                    <PriceRangeFilter
+                      value={priceRangeFilter.form.values}
+                      onChange={(value) => priceRangeFilter.form.setValues(value)}
+                    />
+                  </Filter>
+                  <Filter filter={propertiesFilter}>
+                    <PropertiesFilter
+                      collectionAddress={collectionAddress}
+                      value={propertiesFilter.form.values}
+                      onChange={(value) => propertiesFilter.form.setValues(value)}
+                    />
+                  </Filter>
+                </Filters>
+              </FiltersStickyWrapper>
+              <Box ref={containerRef} px={['16px', null, '24px', '40px']}>
+                {NFTs?.pages.length && !NFTs?.pages[0].data.length ? (<NoNFTsFound/>) : (
+                  <>
+                    <SimpleGrid
+                      columns={NFTGrid.columns}
+                      spacing={`${NFTGrid.spacing}px`}
+                    >
+                      {/*First load*/}
+                      {(isFetching && !isFetchingNextPage && !NFTs?.pages.length) && (
+                        <>
+                          <NFTCardSkeleton />
+                          <NFTCardSkeleton />
+                          <NFTCardSkeleton />
+                          <NFTCardSkeleton />
+                        </>
+                      )}
+
+                      {(NFTs?.pages ?? []).map((page) => {
+                        return page.data.map(({ order, NFT }) => (
+                          <NFTCard
+                            key={`${NFT._collectionAddress}:${NFT.tokenId}`}
+                            NFT={NFT}
+                            order={order}
+                          />
+                        ));
+                      })}
+                    </SimpleGrid>
+
+                    {(hasNextPage && !isFetching) && (
+                      <Button variant={'ghost'} isFullWidth={true} mt={10} onClick={() => fetchNextPage()}>
+                        Load more
+                      </Button>
+                    )}
+                  </>
+                )}
+              </Box>
+            </TabPanel>
+            <TabPanel {...s.DescriptionTabPanel}>
+              {!collection.description ? (<NoDescriptionFound />) : (
+                <Box whiteSpace={"break-spaces"} maxW={[null, null, null, '800px']}>
+                  {collection.description}
+                </Box>
+              )}
+            </TabPanel>
+          </TabPanels>
+        </Tabs>
+      </Box>
     </>
   );
 };

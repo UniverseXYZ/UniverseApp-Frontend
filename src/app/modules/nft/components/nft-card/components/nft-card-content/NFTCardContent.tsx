@@ -1,19 +1,19 @@
 import { CollectionPreview, TokenIcon } from "@app/components";
 import { getTokenByAddress, TOKENS_MAP } from "@app/constants";
 import { TokenTicker } from "@app/enums";
-import { Box, Flex, HStack, Link, Text, Tooltip } from "@chakra-ui/react";
+import { Box, Flex, HStack, Text, Tooltip } from "@chakra-ui/react";
 import { utils } from "ethers";
-import NextLink from "next/link";
+import { useRouter } from "next/router";
 import React, { useMemo } from "react";
 import { ICollection } from "../../../../../collection/types";
-import { IERC20AssetType, INFT, IOrder } from "../../../../types";
+import { IOrderAssetTypeERC20, INFT, IOrder, IOrderAssetTypeSingleListing } from '../../../../types';
 import { formatPrice, formatSecondaryPrice } from "./helpers";
 import * as styles from "./NFTCardContent.styles";
 
 export interface INFTCardContentProps {
   NFT: INFT;
   collection?: ICollection;
-  order?: IOrder;
+  order?: IOrder<IOrderAssetTypeSingleListing, IOrderAssetTypeERC20>;
   bestOfferPrice?: number | string;
   bestOfferPriceToken?: TokenTicker;
   lastOfferPrice?: number | string;
@@ -30,6 +30,8 @@ export const NFTCardContent = (props: INFTCardContentProps) => {
     lastOfferPrice,
     lastOfferPriceToken,
   } = props;
+
+  const router = useRouter();
 
   const [additionPriceLabel, additionPriceValue, additionPriceToken] =
     useMemo(() => {
@@ -64,9 +66,7 @@ export const NFTCardContent = (props: INFTCardContentProps) => {
       return [TOKENS_MAP.ETH, ""];
     }
 
-    const token = getTokenByAddress(
-      (order.take.assetType as IERC20AssetType).contract
-    );
+    const token = getTokenByAddress(order.take.assetType.contract);
     const price = utils.formatUnits(order.take.value, `${token.decimals}`);
 
     return [token, price];
@@ -105,14 +105,15 @@ export const NFTCardContent = (props: INFTCardContentProps) => {
             collection?.address ? collection : NFT._collectionAddress || null
           }
         >
-          <Text {...styles.CollectionName} tabIndex={0}>
-            <NextLink href={`/collection/${collection?.address}`} passHref>
-              <Link {...styles.CollectionLink}>
-                {collection?.name ||
-                  collection?.address ||
-                  NFT._collectionAddress}
-              </Link>
-            </NextLink>
+          <Text
+            {...styles.CollectionName}
+            isTruncated={true}
+            tabIndex={0}
+            onClick={() => router.push(`/collection/${collection?.address || NFT._collectionAddress}`)}
+          >
+            {collection?.name ||
+              collection?.address ||
+              NFT._collectionAddress}
           </Text>
         </CollectionPreview>
         <Box>

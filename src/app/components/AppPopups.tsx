@@ -1,5 +1,5 @@
 import { LoadingPopup } from "@app/components/loading-popup";
-import { NFTCheckoutPopup } from "@app/modules/nft/pages/nft-page/components";
+import { NFTCheckoutPopup, NFTMakeAnOfferPopup } from '@app/modules/nft/pages/nft-page/components';
 import NotAuthenticatedPopup from "@legacy/popups/NotAuthenticatedPopup";
 import React from "react";
 import Popup from "reactjs-popup";
@@ -48,6 +48,7 @@ export const Popups = () => {
         transactions={transactions}
       />
       <NFTCheckoutPopup />
+      <NFTMakeAnOfferPopup />
 
       <Popup closeOnDocumentClick={false} open={showNotAuthenticatedPopup}>
         <NotAuthenticatedPopup close={onClose} />

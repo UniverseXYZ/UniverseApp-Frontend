@@ -19,9 +19,6 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation } from 'swiper';
 import { useRouter } from 'next/router';
 
-// import 'swiper/swiper-bundle.min.css';
-// import 'swiper/swiper.min.css';
-
 import AudioNFTPreviewImage from './../../../../../assets/images/v2/audio-nft-preview.png';
 
 import * as styles from '../nft-page/styles';
@@ -37,7 +34,7 @@ import { BundleMenu, NFTCard, NFTPageCreatorRelation } from '../../components';
 import { LineTabList } from '../../../../components';
 import { BundlePageProvider, useBundlePage } from './BundlePage.provider';
 import { TabNFTs } from './components';
-import { IERC721BundleAssetType, INFT, IOrder } from '../../types';
+import { INFT, IOrder, IOrderAssetTypeBundleListing, IOrderAssetTypeERC20 } from '../../types';
 import { isNFTAssetAudio, isNFTAssetImage, isNFTAssetVideo } from '../../helpers';
 import { SwiperArrowButton } from '../../../../components/swiper-arrow-button';
 import { NFTAcceptOfferPopup } from '../nft-page/components/nft-info/components/tab-offers/components';
@@ -55,7 +52,7 @@ export const BundlePageContent = () => {
 
   const [selectedNFTIdx, setSelectedNFTIdx] = useState(0);
   const [showOfferPopup, setShowOfferPopup] = useState(false);
-  const [offerForAccept, setOfferForAccept] = useState<IOrder | null>(null);
+  const [offerForAccept, setOfferForAccept] = useState<IOrder<IOrderAssetTypeERC20, IOrderAssetTypeBundleListing>>();
 
   const handleClickViewCollection = useCallback(() => {
     if (moreFromCollection && moreFromCollection[0]._collectionAddress) {
@@ -66,6 +63,15 @@ export const BundlePageContent = () => {
   const uniqNFTs = useMemo(() => {
     return NFTs ? uniqBy(NFTs, (NFT: INFT) => NFT.thumbnailUrl) : [];
   }, [NFTs]);
+
+  const [bundleName, bundleDescription] = useMemo(() => {
+    if (!order) {
+      return [null, null];
+    }
+
+    const assetType = order.make.assetType as IOrderAssetTypeBundleListing;
+    return [assetType.bundleName, assetType.bundleDescription || ''];
+  }, [order]);
 
   useEffect(() => setDarkMode(false), []);
 
@@ -144,14 +150,17 @@ export const BundlePageContent = () => {
               mb: '12px',
               justifyContent: 'space-between'
             }}>
-              <Heading {...styles2.NameStyle}>{(order.make.assetType as IERC721BundleAssetType).bundleName}</Heading>
+              <Heading {...styles2.NameStyle}>{bundleName}</Heading>
               <Box>
                 <BundleMenu collectionAddress={uniqNFTs[selectedNFTIdx]._collectionAddress} tokenId={uniqNFTs[selectedNFTIdx].tokenId}/>
               </Box>
             </Flex>
 
             <Flex>
-              <NFTPageCreatorRelation creator={creator} />
+              <NFTPageCreatorRelation
+                creatorAddress={creator.address}
+                creator={creator}
+              />
             </Flex>
 
             <Text mt={'24px'} {...styles.DescriptionStyle}>
@@ -160,7 +169,7 @@ export const BundlePageContent = () => {
                 readMoreText="Read more"
                 readLessText="Read less"
               >
-                {(order.make.assetType as IERC721BundleAssetType).bundleDescription || ''}
+                {bundleDescription}
               </ReadMoreAndLess>
             </Text>
 
@@ -175,18 +184,26 @@ export const BundlePageContent = () => {
               <TabPanels sx={{ '> div' : { px: 0, pb: 0 }}}>
                 <TabPanel><TabNFTs NFTs={NFTs} /></TabPanel>
                 {/* <TabPanel><TabBids /></TabPanel> */}
-                <TabPanel><TabOffers setOfferForAccept={setOfferForAccept} setShowOfferPopup={setShowOfferPopup} /></TabPanel>
+                <TabPanel>
+                  <TabOffers
+                    offers={[]}
+                    onAcceptOffer={(offer) => {
+                      setOfferForAccept(offer);
+                      setShowOfferPopup(true);
+                    }}
+                  />
+                </TabPanel>
                 <TabPanel><TabHistory /></TabPanel>
               </TabPanels>
             </Tabs>
           </Box>
-          <NFTBuySection NFTs={NFTs} order={order} />
+          <NFTBuySection isAuthUserOwner={false} NFTs={NFTs} order={order} />
         </Box>
       </Box>
-      {showOfferPopup && (
+      {showOfferPopup && offerForAccept && (
         <NFTAcceptOfferPopup
           NFT={NFTs[0]}
-          order={offerForAccept || {} as IOrder}
+          order={offerForAccept}
           isOpen={showOfferPopup}
           onClose={() => setShowOfferPopup(false)}
         />

@@ -8,40 +8,55 @@ import {
 } from "@chakra-ui/react";
 import { utils } from "ethers";
 import { useRouter } from "next/router";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import Countdown, { zeroPad } from "react-countdown";
 import { useMeasure } from "react-use";
 import { UseMeasureRect } from "react-use/lib/useMeasure";
 import { useNftCheckoutStore } from "src/stores/nftCheckoutStore";
 import ClockIcon from "../../../../../../../assets/images/clock.svg";
 import { useAuthStore } from "../../../../../../../stores/authStore";
-import { isEmpty } from "../../../../../../../utils/helpers";
 import { getRoyaltiesFromRegistry } from "../../../../../../../utils/marketplace/utils";
-import { getTokenByAddress } from "../../../../../../constants";
+import { getTokenByAddress, TOKENS_MAP } from '../../../../../../constants';
 import { IUser } from "../../../../../account/types";
-import { ICollection } from "../../../../../collection/types";
-import { INFT, IOrder, IERC721AssetType, IERC20AssetType } from "../../../../types";
+import {
+  INFT,
+  IOrder,
+  IOrderAssetTypeBundleListing,
+  IOrderAssetTypeERC20,
+  IOrderAssetTypeSingleListing,
+} from '../../../../types';
 import { useNFTPageData } from "../../NFTPage.context";
 import { NFTCancelListingPopup } from "../nft-cancel-listing-popup";
 import { NFTChangeListingPricePopup } from "../nft-change-listing-price-popup";
-import { NFTMakeAnOfferPopup } from "../nft-make-an-offer-popup";
 import { NFTPlaceABidPopup } from "../nft-place-a-bid-popup";
 import { HighestBid } from "./components";
 import { HighestOffer } from "./components/highest-offer";
 import { BuyNFTSectionState } from "./enums";
 import * as styles from "./styles";
+import { useNFTMakeOfferStore } from '../../../../../../../stores/nftMakeOfferStore';
 
 interface INFTBuySectionProps {
   NFT?: INFT;
-  owner?: IUser;
+  order?: IOrder<IOrderAssetTypeSingleListing | IOrderAssetTypeBundleListing, IOrderAssetTypeERC20>;
+  isAuthUserOwner: boolean;
   NFTs?: INFT[];
-  order?: IOrder;
-  highestOffer?: { offer: IOrder; creator: IUser };
+  highestOfferOrder?: IOrder<IOrderAssetTypeERC20, IOrderAssetTypeSingleListing | IOrderAssetTypeBundleListing>;
+  highestOfferCreator?: IUser;
   onMeasureChange?: (measure: UseMeasureRect) => void;
 }
 
-export const NFTBuySection = (props: INFTBuySectionProps) => {
-  const { NFT, owner, NFTs, order, highestOffer, onMeasureChange } = props;
+export const NFTBuySection: React.FC<INFTBuySectionProps> = (props) => {
+  const {
+    NFT,
+    isAuthUserOwner,
+    NFTs,
+    order,
+    highestOfferOrder,
+    highestOfferCreator,
+    onMeasureChange
+  } = props;
+
+  const { makeOffer } = useNFTMakeOfferStore();
 
   const [ref, measure] = useMeasure<HTMLDivElement>();
 
@@ -56,14 +71,7 @@ export const NFTBuySection = (props: INFTBuySectionProps) => {
     isAuthenticated: s.isAuthenticated,
   }));
 
-  const { setIsOpen, setNFT, setCollection, setOrder } = useNftCheckoutStore(
-    (s) => ({
-      setIsOpen: s.setIsOpen,
-      setNFT: s.setNFT,
-      setCollection: s.setCollection,
-      setOrder: s.setOrder,
-    })
-  );
+  const { checkoutNFT } = useNftCheckoutStore();
 
   const { collection } = useNFTPageData();
 
@@ -76,14 +84,11 @@ export const NFTBuySection = (props: INFTBuySectionProps) => {
       const isOrderExpired =
         order && order.end ? order.end * 1000 <= Date.now() : false;
 
-      const address = (await signer.getAddress()) as string;
+      const address = await signer.getAddress();
 
       if (!order || isOrderExpired) {
         if (NFT) {
-          if (
-            address.toUpperCase() ===
-            (owner?.address.toUpperCase() || NFT?._ownerAddress)
-          ) {
+          if (isAuthUserOwner) {
             setState(BuyNFTSectionState.OWNER_PUT_ON_SALE);
           } else {
             setState(BuyNFTSectionState.BUYER_NO_LISTING_OFFER);
@@ -101,7 +106,7 @@ export const NFTBuySection = (props: INFTBuySectionProps) => {
         }
       }
     } catch (e) {}
-  }, [isAuthenticated, signer, NFT, order, owner]);
+  }, [isAuthenticated, signer, NFT, order, isAuthUserOwner]);
 
   const fetchNftRoyalties = async () => {
     if (NFT?._collectionAddress && NFT.tokenId && signer) {
@@ -132,10 +137,7 @@ export const NFTBuySection = (props: INFTBuySectionProps) => {
     );
   }, [order]);
 
-  const [isCheckoutPopupOpened, setIsCheckoutPopupOpened] = useState(false);
   const [isPlaceABidPopupOpened, setIsPlaceABidPopupOpened] = useState(false);
-  const [isMakeAnOfferPopupOpened, setIsMakeAnOfferPopupOpened] =
-    useState(false);
   const [isCancelListingPopupOpened, setIsCancelListingPopupOpened] =
     useState(false);
   const [isChangeListingPricePopupOpened, setIsChangeListingPricePopupOpened] =
@@ -152,14 +154,29 @@ export const NFTBuySection = (props: INFTBuySectionProps) => {
       utcTimestamp < order.end) || // Order has both start & end
     (order.start && !order.end && utcTimestamp > order.start) || // Order has only start
     (!order.start && order.end && utcTimestamp < order.end); // Order has only end
-  const token = getTokenByAddress(
-    (order?.take.assetType as IERC721AssetType)?.contract
-  );
+
+  const token = useMemo(() => {
+    if (!order) {
+      return TOKENS_MAP.ETH;
+    }
+
+    return getTokenByAddress(order.take?.assetType?.contract);
+  }, [order]);
+
   const listingPrice = utils.formatUnits(
     order?.take?.value || 0,
     token.decimals ?? 18
   );
-  const buyNowButton = () => (
+
+  const priceTicker = useMemo(() => {
+    if (!order) {
+      return '';
+    }
+    const orderTakeAsset = order.take.assetType as IOrderAssetTypeERC20;
+    return getTokenByAddress(orderTakeAsset.contract).ticker;
+  }, [order]);
+
+  const renderBuyNowButton = () => (
     <Tooltip
       label={
         "Can't buy this NFT. It's either not available yet or already expired."
@@ -172,10 +189,9 @@ export const NFTBuySection = (props: INFTBuySectionProps) => {
       <Button
         boxShadow={"lg"}
         onClick={() => {
-          setIsOpen(true);
-          setOrder(order || ({} as IOrder));
-          setNFT(NFT || ({} as INFT));
-          setCollection(collection || ({} as ICollection));
+          if (NFT && collection && order) {
+            checkoutNFT(NFT, collection, order);
+          }
         }}
         disabled={!canCheckoutOrder}
         style={{ width: "100%" }}
@@ -183,20 +199,18 @@ export const NFTBuySection = (props: INFTBuySectionProps) => {
         Buy for{" "}
         {listingPrice && listingPrice.length > 7
           ? `${listingPrice.substring(0, 5)}...`
-          : listingPrice}{" "}
-        {
-          getTokenByAddress((order?.take.assetType as IERC20AssetType).contract)
-            .ticker
+          : listingPrice
         }
+        {` ${priceTicker}`}
       </Button>
     </Tooltip>
   );
 
-  const royaltiesText = () => (
+  const renderRoyaltiesText = useCallback(() => !nftRoyalties ? null : (
     <Text {...styles.ContentFeeLabelStyle} textAlign={"center"} mt={"12px"}>
       ({nftRoyalties}% of sales will go to creator)
     </Text>
-  );
+  ), [nftRoyalties]);
 
   if (state === undefined) {
     return <Box ref={ref}></Box>;
@@ -251,7 +265,7 @@ export const NFTBuySection = (props: INFTBuySectionProps) => {
               </Button>
               <Button
                 variant={"outline"}
-                onClick={() => setIsMakeAnOfferPopupOpened(true)}
+                onClick={() => NFT && makeOffer(NFT, undefined)}
               >
                 Make offer
               </Button>
@@ -260,28 +274,28 @@ export const NFTBuySection = (props: INFTBuySectionProps) => {
         )}
         {order && state === BuyNFTSectionState.BUYER_FIXED_LISTING_BUY_N_OFFER && (
           <>
-            {!isEmpty(highestOffer?.offer) && (
+            {highestOfferOrder && highestOfferOrder && (
               <HighestOffer
-                offer={highestOffer?.offer}
-                creator={highestOffer?.creator as IUser}
+                offer={highestOfferOrder}
+                creator={highestOfferCreator}
               />
             )}
             <SimpleGrid columns={2} spacingX={"12px"}>
-              {buyNowButton()}
+              {renderBuyNowButton()}
               <Button
                 variant={"outline"}
-                onClick={() => setIsMakeAnOfferPopupOpened(true)}
+                onClick={() => NFT && order && makeOffer(NFT, order)}
               >
                 Make offer
               </Button>
             </SimpleGrid>
-            {!!nftRoyalties && royaltiesText()}
+            {renderRoyaltiesText()}
           </>
         )}
         {order && state === BuyNFTSectionState.BUYER_FIXED_LISTING_BUY && (
           <>
-            {buyNowButton()}
-            {!!nftRoyalties && royaltiesText()}
+            {renderBuyNowButton()}
+            {renderRoyaltiesText()}
           </>
         )}
         {state === BuyNFTSectionState.BUYER_AUCTION_BID && (
@@ -293,21 +307,21 @@ export const NFTBuySection = (props: INFTBuySectionProps) => {
             >
               Place a bid
             </Button>
-            {!!nftRoyalties && royaltiesText()}
+            {renderRoyaltiesText()}
           </>
         )}
         {state === BuyNFTSectionState.BUYER_NO_LISTING_OFFER && (
           <>
-            {!isEmpty(highestOffer?.offer) && (
+            {highestOfferOrder && highestOfferOrder && (
               <HighestOffer
-                offer={highestOffer?.offer}
-                creator={highestOffer?.creator as IUser}
+                offer={highestOfferOrder}
+                creator={highestOfferCreator}
               />
             )}
             <SimpleGrid columns={1} spacingX={"12px"}>
               <Button
                 variant={"outline"}
-                onClick={() => setIsMakeAnOfferPopupOpened(true)}
+                onClick={() => NFT && makeOffer(NFT, undefined)}
               >
                 Make offer
               </Button>
@@ -316,10 +330,10 @@ export const NFTBuySection = (props: INFTBuySectionProps) => {
         )}
         {state === BuyNFTSectionState.OWNER_PUT_ON_SALE && (
           <>
-            {!isEmpty(highestOffer?.offer) && (
+            {highestOfferOrder && highestOfferOrder && (
               <HighestOffer
-                offer={highestOffer?.offer}
-                creator={highestOffer?.creator as IUser}
+                offer={highestOfferOrder}
+                creator={highestOfferCreator}
               />
             )}
             <Button
@@ -366,10 +380,10 @@ export const NFTBuySection = (props: INFTBuySectionProps) => {
         {order &&
           state === BuyNFTSectionState.OWNER_FIXED_LISTING_CHANGE_PRICE && (
             <>
-              {!isEmpty(highestOffer?.offer) && (
+              {highestOfferOrder && highestOfferOrder && (
                 <HighestOffer
-                  offer={highestOffer?.offer}
-                  creator={highestOffer?.creator as IUser}
+                  offer={highestOfferOrder}
+                  creator={highestOfferCreator}
                 />
               )}
               <SimpleGrid columns={2} spacingX={"12px"}>
@@ -392,35 +406,15 @@ export const NFTBuySection = (props: INFTBuySectionProps) => {
                 mt={"12px"}
               >
                 This NFT is in your wallet and listed for{" "}
-                <strong>
-                  {listingPrice}{" "}
-                  {
-                    getTokenByAddress(
-                      (order?.take.assetType as IERC20AssetType).contract
-                    ).ticker
-                  }
-                </strong>
+                <strong>{listingPrice}{" "}{priceTicker}</strong>
               </Text>
             </>
           )}
       </Box>
-      {/* <NFTCheckoutPopup
-        NFT={NFT}
-        NFTs={NFTs}
-        order={order as IOrder}
-        isOpen={isCheckoutPopupOpened}
-        onClose={() => setIsCheckoutPopupOpened(false)}
-      /> */}
       <NFTPlaceABidPopup
         order={order}
         isOpen={isPlaceABidPopupOpened}
         onClose={() => setIsPlaceABidPopupOpened(false)}
-      />
-      <NFTMakeAnOfferPopup
-        nft={NFT}
-        order={order}
-        isOpen={isMakeAnOfferPopupOpened}
-        onClose={() => setIsMakeAnOfferPopupOpened(false)}
       />
       <NFTCancelListingPopup
         order={order}

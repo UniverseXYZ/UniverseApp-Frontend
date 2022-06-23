@@ -93,8 +93,8 @@ export const Dropdown = (
               }} />
             }
             sx={{
-              '.chakra-button__icon:nth-of-type(1)': {
-                marginRight: '10px',
+              '.chakra-button__icon': {
+                margin: 0,
               },
             }}
             fontSize={'14px'}

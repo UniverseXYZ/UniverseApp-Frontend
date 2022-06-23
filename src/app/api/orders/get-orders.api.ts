@@ -1,9 +1,13 @@
 import axios from 'axios';
-import { ICollectionOrderBookData } from '../../modules/collection/types/collection';
-
-import { OrderAssetClass } from '../../modules/nft/enums';
-import { IOrder, IOrderBackend } from '../../modules/nft/types';
-import { mapBackendOrder } from '../../modules/nft/helpers';
+import { ICollectionOrderBookData } from '@app/modules/collection/types';
+import { OrderAssetClass } from '@app/modules/nft/enums';
+import {
+  IOrder,
+  IOrderAssetTypeERC20,
+  IOrderAssetTypeSingleListing,
+  IOrderBackend,
+} from '@app/modules/nft/types';
+import { mapBackendOrder } from '@app/modules/nft';
 
 export interface IGetOrdersApiParams {
   page: number;
@@ -15,51 +19,57 @@ export interface IGetOrdersApiParams {
   tokenIds: string;
 }
 
-export type IGetOrdersApiResponse = [IOrderBackend[], number];
-export type IGetBestAndLastOfferResponse = {
-  bestOffer: IOrder,
-  lastOffer: IOrder
-};
-
-export type IGetOrdersApiFn = (params: Partial<IGetOrdersApiParams>) => Promise<{ orders: IOrder[], total: number; }>;
-export type IGetBestAndLastApiFn = (collection:string, tokenId:string) => Promise<IGetBestAndLastOfferResponse>;
-export type IGetActiveListingFn = (collection:string, tokenId:string) => Promise<IOrder | null>;
+export type IGetOrdersApiResponse<M, T> = [
+  IOrderBackend<M, T>[],
+  number
+];
+export type IGetOrdersApiFn = <M, T>(params: Partial<IGetOrdersApiParams>) => Promise<{
+  total: number;
+  orders: Array<IOrder<M, T>>,
+}>;
 
 // TODO: Create a specific endpoint for fetching buy orders for a specific sell order.
 // This endpoint is very generic and is not optimized
-export const GetOrdersApi: IGetOrdersApiFn = async (params = {}) => {
+export const GetOrdersApi: IGetOrdersApiFn = async <M, T>(params = {}) => {
   const url = `${process.env.REACT_APP_MARKETPLACE_BACKEND}/v1/orders`;
 
-  const { data: [orders, total] } = await axios.get<IGetOrdersApiResponse>(url, { params });
+  const { data: [orders, total] } = await axios.get<IGetOrdersApiResponse<M, T>>(url, { params });
 
-  return { total, orders: orders.map((order) => mapBackendOrder(order)) };
+  return {
+    total,
+    orders: orders.map((order) => mapBackendOrder(order)),
+  };
 };
 
+export const GetActiveSellOrdersApi: IGetOrdersApiFn = async <M, T>(params = {}) => {
+  const url = `${process.env.REACT_APP_MARKETPLACE_BACKEND}/v1/orders/browse`;
+
+  const { data: [orders, total] } = await axios.get<IGetOrdersApiResponse<M, T>>(url, { params });
+
+  return {
+    total,
+    orders: orders.map((order) => mapBackendOrder(order)),
+  };
+};
+
+export type IGetActiveListingFn = (collection:string, tokenId:string) => Promise<IOrder<IOrderAssetTypeSingleListing, IOrderAssetTypeERC20> | undefined>;
 export const GetActiveListingApi: IGetActiveListingFn = async (collection:string, tokenId:string) => {
   const url = `${process.env.REACT_APP_MARKETPLACE_BACKEND}/v1/orders/listing/${collection}/${tokenId}`;
 
-  const {data: order} = await axios.get<IOrderBackend>(url);
+  const { data } = await axios.get<IOrderBackend<IOrderAssetTypeSingleListing, IOrderAssetTypeERC20>>(url);
 
-  return order ? mapBackendOrder(order) : null
+  return data ? mapBackendOrder(data) : undefined;
 };
 
-
-export const GetActiveSellOrdersApi: IGetOrdersApiFn = async (params = {}) => {
-  const url = `${process.env.REACT_APP_MARKETPLACE_BACKEND}/v1/orders/browse`;
-
-
-  const { data: [orders, total] } = await axios.get<IGetOrdersApiResponse>(url, { params });
-
-  return { total, orders: orders.map((order) => mapBackendOrder(order)) };
+export type IGetBestAndLastOfferResponse = {
+  bestOffer: IOrder<IOrderAssetTypeERC20, IOrderAssetTypeSingleListing>,
+  lastOffer: IOrder<IOrderAssetTypeERC20, IOrderAssetTypeSingleListing>,
 };
-
-
-export const GetBestAndLastOffer: IGetBestAndLastApiFn = async (collection:string, tokenId:string) => {
+export type IGetBestAndLastApiFn = (collection: string, tokenId: string) => Promise<IGetBestAndLastOfferResponse>;
+export const GetBestAndLastOffer: IGetBestAndLastApiFn = async (collection, tokenId) => {
   const url = `${process.env.REACT_APP_MARKETPLACE_BACKEND}/v1/orders/card/${collection.toLowerCase()}/${tokenId}`;
-
-  const { data: {lastOffer, bestOffer} } = await axios.get<IGetBestAndLastOfferResponse>(url);
-
-  return {lastOffer, bestOffer}
+  const { data } = await axios.get<IGetBestAndLastOfferResponse>(url);
+  return data;
 };
 
 /**
@@ -82,3 +92,4 @@ export const GetCollectionOrderBookData = async (address: string) : Promise<ICol
     return {} as ICollectionOrderBookData;
   }
 };
+

@@ -1,13 +1,14 @@
 import { Box, Flex, FormControl, FormErrorMessage, Heading, Input, Text } from '@chakra-ui/react';
 import React from 'react';
 
+import { useListingPage } from '@app/modules/marketplace/pages/sell-page';
+
 import * as styles from '../tab-settings/styles';
-import { useMarketplaceSellData } from '../../hooks';
 
 const maxDescriptionSymbols = 500;
 
 export const BundleForm = () => {
-  const { form } = useMarketplaceSellData();
+  const { form } = useListingPage();
   return (
     <>
       <Flex sx={styles.settingsItem}>

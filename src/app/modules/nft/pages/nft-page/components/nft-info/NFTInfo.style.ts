@@ -1,4 +1,4 @@
-import { BoxProps, ButtonProps, HeadingProps, TabPanelsProps, TextProps, TooltipProps } from '@chakra-ui/react';
+import { BoxProps, HeadingProps, TabPanelsProps, TabsProps, TextProps } from '@chakra-ui/react';
 
 export const EditionTextStyle: TextProps = {
   color: 'rgba(0, 0, 0, 0.6)',
@@ -60,4 +60,10 @@ export const TabPanelsStyle: TabPanelsProps = {
       }
     }
   }
+};
+
+export const Tabs: Omit<TabsProps, 'children'> = {
+  h: {
+    xl: "calc(100vh - 466px)",
+  },
 };

@@ -1,25 +1,19 @@
 import { Box, Icon } from '@chakra-ui/react';
 
 import { ReactComponent as InfoSVG } from '@assets/images/info.svg';
-import { IOrder } from '@app/modules/nft/types';
-import { INFTHistory } from '@app/api';
+import { IOrder, IOrderAssetTypeERC20, IOrderAssetTypeSingleListing } from '@app/modules/nft/types';
+import { INFTTransfer } from '@app/api';
 
 import HistoryEvent from '../shared/history-listings-event/HistoryEvent';
 import * as styles from './styles';
 
 interface ITabHistoryProps {
-  historyData?: INFTHistory;
+  history?: Array<IOrder<IOrderAssetTypeSingleListing, IOrderAssetTypeERC20> | INFTTransfer>;
 }
 
 export const TabHistory = (props: ITabHistoryProps) => {
-  const {
-    historyData = {
-      orderHistory: [],
-      mintEvent: null as any
-    }
-  } = props;
+  const { history = [] } = props;
 
-  const events = [...historyData?.orderHistory, historyData?.mintEvent];
   return (
     <Box>
       <Box {...styles.AlertStyle}>
@@ -28,9 +22,7 @@ export const TabHistory = (props: ITabHistoryProps) => {
         </Icon>
         Currently we show just the Universe history but we working on implementing the general NFT history.
       </Box>
-      {events.map(
-        (event: IOrder | any, i: number) => event && <HistoryEvent key={i} event={event} />
-      )}
+      {history.map((event, i) => event && <HistoryEvent key={i} event={event} />)}
     </Box>
   );
 };

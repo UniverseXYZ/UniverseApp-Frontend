@@ -23,3 +23,15 @@ export const ContentPriceStyle: TextProps = {
     }
   },
 };
+
+export const HighestOfferPrice: TextProps = {
+  color: 'black',
+  fontSize: '20px',
+  lineHeight: '20px',
+  fontWeight: 700,
+};
+
+export const HighestOfferPriceUSD: TextProps = {
+  color: 'rgba(0, 0, 0, 0.4)',
+  fontWeight: 500,
+};

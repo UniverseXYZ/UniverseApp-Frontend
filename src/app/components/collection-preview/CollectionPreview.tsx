@@ -93,10 +93,9 @@ export const CollectionPreview = (props: ICollectionPreviewProps) => {
 
         const contract = new Contract(utils.getAddress(`${collectionAddress}`.toLowerCase()), abi, provider);
 
-        const _ownerAddress = await contract.owner();
+        const address = (await contract.owner())?.toLowerCase?.() ?? undefined;
 
-        if (_ownerAddress) {
-          const address = _ownerAddress.toLowerCase();
+        if (address) {
           const artist = await getArtistApi(address);
 
           if (artist?.mappedArtist?.displayName) {

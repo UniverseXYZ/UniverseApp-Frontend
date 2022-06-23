@@ -3,7 +3,7 @@ import { ethers } from "ethers";
 import { mapNft } from "..";
 import { IUserOwnedCollection } from "../../modules/account/types";
 import { ICollection, ICollectionBackend, ISearchBarDropdownCollection, ICollectionScrapper, ICollectionInfoResponse } from "../../modules/collection/types/collection";
-import { mapBackendCollection, mapDropdownCollection } from "../../modules/nft";
+import { mapBackendCollection } from "../../modules/nft";
 import { INFT } from "../../modules/nft/types";
 import { INFTBackendType } from "../../types";
 
@@ -64,9 +64,12 @@ export const GetCollectionsFromScraperApi = async (search: string) : Promise<ISe
   try {
     const { data } = await axios.get<ICollectionScrapper[]>(url);
 
-    const mappedData: ISearchBarDropdownCollection[] = data.map((item) => mapDropdownCollection(item));
-
-    return mappedData;
+    return data.map((item) => ({
+      id: item._id,
+      address: item.contractAddress,
+      name: item.name,
+      image: undefined,
+    }));
   } catch (e) {
     console.log(e);
     return [];

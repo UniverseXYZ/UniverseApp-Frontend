@@ -2,10 +2,9 @@ import { Box, Flex, Image } from '@chakra-ui/react';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useFormik } from 'formik';
 
-import CollectionsIcon from '../../../../assets/images/v2/marketplace/filter-collections.svg';
 import CloseIcon from '../../../../assets/images/close-menu.svg';
 
-import { Checkbox, Dropdown, DropdownFilterContainer, SearchInput } from '../../../components';
+import { Checkbox, Dropdown, DropdownFilterContainer, Icon, SearchInput } from '../../../components';
 import * as styles from './styles';
 import { CollectionImagePlaceholder } from './components';
 import { shortenEthereumAddress } from '../../../../utils/helpers/format';
@@ -183,7 +182,7 @@ export const CollectionsFilterDropdown = (props: ICollectionsFilterDropdownProps
     <Dropdown
       label={'Collections'}
       value={valueLabel}
-      buttonProps={{ leftIcon: <Image src={CollectionsIcon} /> }}
+      buttonProps={{ leftIcon: <Icon name={'filterCollection'} /> }}
       isOpened={isOpened}
       onOpen={() => setIsOpened(true)}
       onClose={() => {

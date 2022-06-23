@@ -5,7 +5,7 @@ import { ZERO_ADDRESS } from '../../constants';
 import { OrderSide, OrderStatus } from '../../modules/marketplace/enums';
 import { getArtistApi } from '..';
 import { IUser } from '../../modules/account/types';
-import { IOrder } from '../../modules/nft/types';
+import { IOrder, IOrderAssetTypeERC20, IOrderAssetTypeSingleListing } from '../../modules/nft/types';
 
 export interface INFTTransfer {
   contractAddress: string;
@@ -23,12 +23,9 @@ export interface INFTTransfer {
   timeLastUpdated: string;
   makerData: IUser | undefined;
 }
-export interface INFTHistory {
-  orderHistory: IOrder[];
-  mintEvent: INFTTransfer;
-}
+
 // Call to the scraper to get nft transfers and use the first one(mint)
-const getTransferData = async (collectionAddress: string, tokenId: string) => {
+const getTransferData = async (collectionAddress: string, tokenId: string): Promise<{ data: INFTTransfer[] }> => {
   const url = `${process.env.REACT_APP_DATASCRAPER_BACKEND}/v1/transfers/${utils.getAddress(collectionAddress)}/${tokenId}`;
   
   const { data } = await axios.get(url);
@@ -36,7 +33,7 @@ const getTransferData = async (collectionAddress: string, tokenId: string) => {
   return data;
 }
 
-const getHistoryData = async (collectionAddress: string, tokenId: string): Promise<[IOrder[], number]> => {
+const getHistoryData = async (collectionAddress: string, tokenId: string): Promise<[Array<IOrder<IOrderAssetTypeSingleListing, IOrderAssetTypeERC20>>, number]> => {
   const url = `${process.env.REACT_APP_MARKETPLACE_BACKEND}/v1/orders/listing/${collectionAddress.toLowerCase()}/${tokenId}/history`;
 
   const { data } = await axios.get(url, {
@@ -48,57 +45,65 @@ const getHistoryData = async (collectionAddress: string, tokenId: string): Promi
   return data;
 }
 
-export const GetHistoryApi = async (collectionAddress: string, tokenId: string): Promise<INFTHistory> => {
+export type IGetHistoryResponse = Array<IOrder<IOrderAssetTypeSingleListing, IOrderAssetTypeERC20> | INFTTransfer>;
+
+export const GetHistoryApi = async (collectionAddress: string, tokenId: string): Promise<IGetHistoryResponse> => {
 
   const [transferResponse, orderHistoryResponse] = await Promise.all([
     getTransferData(collectionAddress, tokenId),
     getHistoryData(collectionAddress, tokenId)
   ])
 
-  const mintEvent: INFTTransfer = transferResponse.data.find((data: INFTTransfer) => data.from === ZERO_ADDRESS);
-  const orderHistory = orderHistoryResponse[0];
-    // Api call to get the order creator or the minter data
-    for (let i = 0; i < orderHistory.length; i++) {
-      const order = orderHistory[i];
-      if (order.side === OrderSide.BUY && order.status === OrderStatus.FILLED) {
-        const listingOrder = {
-          ...order,
-          id: `${order.id}-listing`,
-          createdAt: order.createdAt,
-          side: OrderSide.BUY,
-          status: OrderStatus.CREATED,
-          modified: true
-        }
-        orderHistory.push(listingOrder);
-        order.createdAt = order.updatedAt;
-      } else if (order.side === OrderSide.SELL && order.status === OrderStatus.FILLED) {
-        const listingOrder = {
-          ...order,
-          createdAt: order.createdAt,
-          side: OrderSide.SELL,
-          status: OrderStatus.CREATED,
-          modified: true
-        }
-        orderHistory.push(listingOrder);
-        order.createdAt = order.updatedAt;
-        order.maker = order.taker;
-      }
-      if (order.maker) {
-        const makerData = await getArtistApi(order.maker);
-        order.makerData = makerData.mappedArtist ? makerData.mappedArtist : { address: order.maker };
-      }
-    }
-    
-    if (mintEvent) {
-      const makerData = await getArtistApi(mintEvent.to);
-      mintEvent.makerData = makerData.mappedArtist ? makerData.mappedArtist : { address: mintEvent.to };
-      mintEvent.matchedTxHash = mintEvent.hash;
-    }
+  const mintEvent = transferResponse.data.find((data: INFTTransfer) => data.from === ZERO_ADDRESS);
 
-    return {
-      orderHistory: orderHistory.sort((a, b) => {
-        return new Date(b.createdAt).valueOf() - new Date(a.createdAt).valueOf();
-      }),
-      mintEvent: mintEvent
+  const orderHistory = orderHistoryResponse[0];
+
+  // Api call to get the order creator or the minter data
+  for (let i = 0; i < orderHistory.length; i++) {
+    const order = orderHistory[i];
+    if (order.side === OrderSide.BUY && order.status === OrderStatus.FILLED) {
+      const listingOrder = {
+        ...order,
+        id: `${order.id}-listing`,
+        createdAt: order.createdAt,
+        side: OrderSide.BUY,
+        status: OrderStatus.CREATED,
+        modified: true
+      }
+      orderHistory.push(listingOrder);
+      order.createdAt = order.updatedAt;
+    } else if (order.side === OrderSide.SELL && order.status === OrderStatus.FILLED) {
+      const listingOrder = {
+        ...order,
+        createdAt: order.createdAt,
+        side: OrderSide.SELL,
+        status: OrderStatus.CREATED,
+        modified: true
+      }
+      orderHistory.push(listingOrder);
+      order.createdAt = order.updatedAt;
+      order.maker = order.taker;
     }
+    if (order.maker) {
+      const makerData = await getArtistApi(order.maker);
+      order.makerData = makerData.mappedArtist ? makerData.mappedArtist : { address: order.maker };
+    }
+  }
+
+  if (mintEvent) {
+    const makerData = await getArtistApi(mintEvent.to);
+    mintEvent.makerData = makerData.mappedArtist ? makerData.mappedArtist : { address: mintEvent.to };
+    mintEvent.matchedTxHash = mintEvent.hash;
+  }
+
+  const history: Array<IOrder<IOrderAssetTypeSingleListing, IOrderAssetTypeERC20> | INFTTransfer>
+    = orderHistory.sort((a, b) => {
+      return new Date(b.createdAt).valueOf() - new Date(a.createdAt).valueOf();
+    });
+
+  if (mintEvent) {
+    history.push(mintEvent);
+  }
+
+  return history;
 };

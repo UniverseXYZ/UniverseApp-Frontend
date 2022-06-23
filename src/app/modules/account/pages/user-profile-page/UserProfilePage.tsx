@@ -1,17 +1,16 @@
 import { getArtistApi } from "@app/api";
-import { OpenGraph, TabLabel } from "@app/components";
+import { OpenGraph } from "@app/components";
 import { userKeys } from "@app/utils/query-keys";
-import { Box, Tab, TabList, TabPanel, TabPanels, Tabs } from "@chakra-ui/react";
+import { Box } from "@chakra-ui/react";
 import { GetServerSideProps } from "next";
 import NotFound from "pages/404";
-import React, { useState } from "react";
+import React from "react";
 import Skeleton from "react-loading-skeleton";
 import { dehydrate, QueryClient, useQuery } from "react-query";
-import { useMedia, useSearchParam, useWindowSize } from "react-use";
-import ArtistDetails from "../../../../../components/artist/ArtistDetails";
-import { breakpoints } from "../../../../theme/constants";
-import FiltersContextProvider from "../../../account/pages/my-nfts-page/components/search-filters/search-filters.context";
-import { ArtistNFTsTab } from "./components";
+import { useWindowSize } from "react-use";
+import { MyNFTs } from "./components";
+import { useStaticHeader } from '@app/hooks';
+import { HeroSection } from "../../components";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const queryClient = new QueryClient();
@@ -39,9 +38,8 @@ export const UserProfilePage: React.FC<IUserProfilePage> = ({
   artistUsername,
 }) => {
   const windowSize = useWindowSize();
-  const isMobile = useMedia(`(max-width: ${breakpoints.md})`);
-  
-  const [totalNFTs, setTotalNFTs] = useState<number>();
+
+  useStaticHeader();
 
   const { data, isLoading, isError } = useQuery<any>(
     userKeys.info(artistUsername),
@@ -50,8 +48,6 @@ export const UserProfilePage: React.FC<IUserProfilePage> = ({
       refetchOnMount: "always",
     }
   );
-
-  const collectionSearchParam = useSearchParam("collection");
 
   if (isError || !data) {
     return <NotFound />;
@@ -109,34 +105,12 @@ export const UserProfilePage: React.FC<IUserProfilePage> = ({
         {openGraph}
         <div className="artist__page">
           <Box sx={{ img: { display: "inline" } }}>
-            <ArtistDetails
-              artistAddress={artistUsername}
-              onArtist={artist}
-              loading={isLoading}
+            <HeroSection
+              walletAddress={address}
+              user={artist}
             />
           </Box>
-          <Tabs>
-            <TabList maxW={'1110px'} m={'auto'} padding={isMobile ? '20px' : '0px'}>
-              <Tab>NFTs {totalNFTs && (<TabLabel>{totalNFTs}</TabLabel>)}</Tab>
-              {/*<Tab>Active auctions</Tab>*/}
-              {/*<Tab>Future auctions</Tab>*/}
-              {/*<Tab>Past auctions</Tab>*/}
-            </TabList>
-
-            <TabPanels>
-              <TabPanel p={0} pt={"30px"}>
-                <FiltersContextProvider
-                  defaultSorting={0}
-                  initialCollection={`${collectionSearchParam}`}
-                >
-                  <ArtistNFTsTab
-                    artistAddress={address}
-                    onTotalLoad={(total) => setTotalNFTs(total)}
-                  />
-                </FiltersContextProvider>
-              </TabPanel>
-            </TabPanels>
-          </Tabs>
+          <MyNFTs />
           {artist && artist.personalLogo && (
             <div className="artist__personal__logo">
               <img src={artist.personalLogo} alt="Artist personal logo" />

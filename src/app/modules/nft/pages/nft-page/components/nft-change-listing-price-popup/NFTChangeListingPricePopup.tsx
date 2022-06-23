@@ -32,7 +32,14 @@ import SuccessIcon from '../../../../../../../assets/images/bid-submitted.png';
 import * as styles from './styles';
 import { getTokenAddressByTicker, getTokenByAddress, TOKENS, TOKENS_MAP } from '../../../../../../constants';
 import { Loading, TokenIcon } from '../../../../../../components';
-import { IERC721AssetType, INFT, IOrder } from '../../../../types';
+import {
+  INFT,
+  IOrder,
+  IOrderAssetTypeBundleListing,
+  IOrderAssetTypeERC20,
+  IOrderAssetTypeETH,
+  IOrderAssetTypeSingleListing,
+} from '../../../../types';
 import { TokenTicker } from '../../../../../../enums';
 import { EncodeOrderApi, GetSaltApi, IEncodeOrderApiData } from '../../../../../../api';
 import { sign } from '../../../../../../helpers';
@@ -40,6 +47,7 @@ import { NFTCancelListingPopup } from '..';
 import { nftKeys, orderKeys } from '../../../../../../utils/query-keys';
 import { useAuthStore } from '../../../../../../../stores/authStore';
 import { useErrorStore } from '../../../../../../../stores/errorStore';
+import { OrderAssetClass } from '@app/modules/nft/enums';
 
 export enum ChangeListingPriceState {
   FORM,
@@ -54,18 +62,20 @@ export const NFTChangeListingPriceValidationSchema = Yup.object().shape({
 
 interface INFTChangeListingPricePopupProps {
   nft?: INFT;
-  order?: IOrder;
+  order?: IOrder<IOrderAssetTypeSingleListing | IOrderAssetTypeBundleListing, IOrderAssetTypeERC20>;
   isOpen: boolean;
   onClose: () => void;
 }
 
-export const NFTChangeListingPricePopup = ({ nft, order, isOpen, onClose, }: INFTChangeListingPricePopupProps) => {
+export const NFTChangeListingPricePopup: React.FC<INFTChangeListingPricePopupProps> = (props) => {
+  const { nft, order, isOpen, onClose } = props;
+
   const tokensBtnRef = useRef<HTMLButtonElement>(null);
 
   const [state, setState] = useState<ChangeListingPriceState>(ChangeListingPriceState.FORM);
   const queryClient = useQueryClient();
   const [isCancelListingPopupOpened, setIsCancelListingPopupOpened] = useState(false);
-  const [oldOrder, setOldOrder] = useState<IOrder>();
+  const [oldOrder, setOldOrder] = useState<IOrder<IOrderAssetTypeSingleListing | IOrderAssetTypeBundleListing, IOrderAssetTypeERC20>>();
 
   const tokens = useMemo(() => TOKENS, []);
 
@@ -75,16 +85,26 @@ export const NFTChangeListingPricePopup = ({ nft, order, isOpen, onClose, }: INF
 
   const getSaltMutation = useMutation(GetSaltApi);
 
-  const encodeOrderMutation = useMutation(EncodeOrderApi);
+  type IEncodeOrderMutationData = IEncodeOrderApiData<
+    IOrderAssetTypeSingleListing | IOrderAssetTypeBundleListing,
+    IOrderAssetTypeERC20 | IOrderAssetTypeETH
+    >;
+
+  const encodeOrderMutation = useMutation((data: IEncodeOrderMutationData) => EncodeOrderApi(data));
 
   const createOrderMutation = useMutation((data: any) => {
     return axios.post(`${process.env.REACT_APP_MARKETPLACE_BACKEND}/v1/orders/order`, data);
   });
 
-  const formik = useFormik<{ amount: string; token: TokenTicker }>({
+  type IFormValue = {
+    amount: string;
+    token: TokenTicker;
+  };
+
+  const formik = useFormik<IFormValue>({
     initialValues: {
-      amount: ethers.utils.formatUnits(BigNumber.from(order?.take?.value || 0),  getTokenByAddress((order?.take?.assetType as IERC721AssetType)?.contract)?.decimals),
-      token: getTokenByAddress((order?.take?.assetType as IERC721AssetType)?.contract)?.ticker,
+      amount: '',
+      token: TOKENS_MAP.ETH.ticker,
     },
     validationSchema: NFTChangeListingPriceValidationSchema,
     onSubmit: async (value) => {
@@ -109,57 +129,36 @@ export const NFTChangeListingPricePopup = ({ nft, order, isOpen, onClose, }: INF
 
   const updateListing = async (value: any) => {
     try {
-
-      if (nft == undefined || oldOrder == undefined || !web3Provider || !signer) {
+      if (!nft || !oldOrder || !web3Provider || !signer) {
         return;
       }
 
       setState(ChangeListingPriceState.PROCESSING);
+
       const network = await web3Provider.getNetwork();
       const address = await signer.getAddress();
   
       const salt = (await getSaltMutation.mutateAsync(address)).data.salt;
-  
-      const make: any = {
-        assetType: {
-          assetClass: nft?.standard,
-          contract: nft?._collectionAddress?.toLowerCase(),
-          tokenId: nft.tokenId,
-        },
-        value: '1',
-      };
-  
-      // TODO Refactor - add logic for bundles
-  
-      const orderData: IEncodeOrderApiData = {
-        salt: salt,
-        maker: oldOrder.maker,
-        make: make,
-        taker: oldOrder.taker,
-        take: oldOrder.take,
-        type: oldOrder.type,
-        start: oldOrder.start,
-        end: oldOrder.end,
-        data: oldOrder.data,
-      };
+
       const newToken = TOKENS_MAP[value.token as TokenTicker];
-  
-      orderData.take.value = ethers.utils.parseUnits(
-        `${value.amount}`,
-        `${newToken.decimals}`
-      ).toString();
+
+      const orderData: IEncodeOrderMutationData = {
+        ...oldOrder,
+        salt,
+        take: {
+          assetType: (newToken.ticker !== TokenTicker.ETH)
+            ? ({
+              assetClass: OrderAssetClass.ERC20,
+              contract: getTokenAddressByTicker(newToken.ticker),
+            })
+            : ({
+              assetClass: OrderAssetClass.ETH,
+            }),
+          value: `${ethers.utils.parseUnits(`${value.amount}`, `${newToken.decimals}`)}`,
+        },
+      };
       
-      if (newToken.ticker !== TokenTicker.ETH) {
-        const tokenAddress = getTokenAddressByTicker(newToken.ticker)
-        orderData.take.assetType.contract = tokenAddress;
-        orderData.take.assetType.assetClass = "ERC20"
-      } else {
-        // ETH order must never have contract address
-        delete orderData.take.assetType.contract;
-        orderData.take.assetType.assetClass = "ETH"
-      }
-      
-      const { data: encodedOrder } = (await encodeOrderMutation.mutateAsync(orderData as IEncodeOrderApiData));
+      const { data: encodedOrder } = (await encodeOrderMutation.mutateAsync(orderData));
   
       const signature = await sign(
         web3Provider.provider,
@@ -171,9 +170,12 @@ export const NFTChangeListingPricePopup = ({ nft, order, isOpen, onClose, }: INF
   
       const createOrderResponse = (await createOrderMutation.mutateAsync({ ...orderData, signature })).data;
 
+      // TODO: [Bundle] add bundle support
+      const singleListingOrder = order as IOrder<IOrderAssetTypeSingleListing, IOrderAssetTypeERC20>;
+
       const tokenIdCollectionPair = {
-        collectionAddress: orderData.make.assetType.contract || "",
-        tokenId: orderData.make.assetType.tokenId || ""
+        collectionAddress: singleListingOrder?.make.assetType.contract || "",
+        tokenId: `${singleListingOrder.make.assetType.tokenId || ""}`,
       }
 
       queryClient.setQueryData(orderKeys.listing(tokenIdCollectionPair), createOrderResponse)
@@ -194,17 +196,20 @@ export const NFTChangeListingPricePopup = ({ nft, order, isOpen, onClose, }: INF
 
   useEffect(() => {
     if (isOpen) {
-      formik.setValues({
-        amount: ethers.utils.formatUnits(BigNumber.from(order?.take?.value || 0),  getTokenByAddress((order?.take?.assetType as IERC721AssetType)?.contract)?.decimals),
-        token: getTokenByAddress((order?.take?.assetType as IERC721AssetType)?.contract)?.ticker,
-      });
+      if (order?.take) {
+        const token = getTokenByAddress(order.take.assetType.contract);
+        formik.setValues({
+          amount: ethers.utils.formatUnits(BigNumber.from(order.take.value || 0), token.decimals),
+          token: token.ticker,
+        });
+      }
     } else {
       formik.resetForm();
       formik.validateForm();
     }
 
     setState(ChangeListingPriceState.FORM);
-  }, [isOpen]);
+  }, [order, isOpen]);
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} isCentered closeOnEsc={false} closeOnOverlayClick={false}>

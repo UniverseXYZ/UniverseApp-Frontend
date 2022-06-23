@@ -35,11 +35,12 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/deploym
 
 ## Testing
 
-- The tests are written with [Synpress](https://github.com/synthetixio/synpress)
+- The tests are written with a fork of [Synpress](https://github.com/UniverseXYZ/synpress), that extends the modue with the cypress file upload package. The original repo is [Synpress](https://github.com/synthetixio/synpress)
 
 - Additional Synpress [Commands](https://github.com/synthetixio/synpress/blob/master/support/index.d.ts)
 
 In order to run the tests:
+- node version should be v16.14.0, this includes the node_modules
 
 1. Build the next app `npm run build`
 2. Run the next app `npm run dev`

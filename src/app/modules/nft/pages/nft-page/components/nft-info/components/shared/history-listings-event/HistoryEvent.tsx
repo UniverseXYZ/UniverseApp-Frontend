@@ -8,31 +8,41 @@ import { useAuthStore } from '../../../../../../../../../../stores/authStore';
 import { getEtherscanTxUrl } from '../../../../../../../../../../utils/helpers';
 import { shortenEthereumAddress } from '../../../../../../../../../../utils/helpers/format';
 import { getTokenByAddress, TOKENS_MAP, ZERO_ADDRESS } from '../../../../../../../../../constants';
-import { TokenTicker } from '../../../../../../../../../enums';
 import { useTokenPrice } from '../../../../../../../../../hooks';
 import { IToken } from '../../../../../../../../../types';
 import { OrderSide, OrderStatus } from '../../../../../../../../marketplace/enums';
-import { IERC20AssetType, IERC721AssetType, IOrder } from '../../../../../../../types';
+import {
+  IOrder,
+  IOrderAssetTypeERC20,
+  IOrderAssetTypeSingleListing,
+} from '../../../../../../../types';
 import { HistoryType } from '../../../../../enums';
 import { actionIcon, nameLabels } from '../../tab-history/constants';
 import { getAddedAtLabel } from '../../tab-history/helpers';
 import * as styles from '../../tab-history/styles';
 import EtherScanIcon from './../../../../../../../../../../assets/images/etherscan.svg';
+import { INFTTransfer } from '@app/api';
+
+type IOrderHistory = IOrder<IOrderAssetTypeSingleListing, IOrderAssetTypeERC20>;
 
 interface IHistoryEventProps {
-  event: IOrder;
+  event: IOrderHistory | INFTTransfer;
   onlyListings?: boolean;
   cancelListing?: React.Dispatch<React.SetStateAction<boolean>>;
   isOwner?: boolean;
 }
 
-const HistoryEvent: React.FC<IHistoryEventProps> = ({ event, onlyListings, cancelListing, isOwner }) => {
+const HistoryEvent: React.FC<IHistoryEventProps> = (props) => {
+  const { event: _event, onlyListings, cancelListing, isOwner } = props;
+
+  const event = _event as IOrderHistory;
+
   const web3Provider = useAuthStore(s => s.web3Provider);
   const [blockDate, setBlockDate] = useState(new Date());
 
   let type: HistoryType = HistoryType.MINTED;
   let price = '';
-  let token: IToken = null as any;
+  let token: IToken = TOKENS_MAP.ETH;
 
   if (event.from !== ZERO_ADDRESS) {
     const side = event.side;
@@ -49,12 +59,12 @@ const HistoryEvent: React.FC<IHistoryEventProps> = ({ event, onlyListings, cance
     }
 
     if (side === OrderSide.BUY) {
-      token = getTokenByAddress((event.make.assetType as IERC721AssetType).contract);
-      const tokenDecimals = TOKENS_MAP[token.ticker]?.decimals ?? 18;
+      token = getTokenByAddress(event.make.assetType.contract);
+      const tokenDecimals = token?.decimals ?? 18;
 
       price = new BigNumber(utils.formatUnits(event.make.value, tokenDecimals)).toFixed(2);
     } else {
-      token = getTokenByAddress((event.take.assetType as IERC20AssetType).contract);
+      token = getTokenByAddress(event.take.assetType.contract);
       const tokenDecimals = token?.decimals ?? 18;
 
       price = new BigNumber(utils.formatUnits(event.take.value, tokenDecimals)).toFixed(2);

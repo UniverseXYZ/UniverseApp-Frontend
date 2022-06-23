@@ -3,10 +3,8 @@ import { PartsStyleObject, PartsStyleInterpolation } from '@chakra-ui/theme-tool
 
 const variantLine: PartsStyleObject<typeof parts> = {
   tablist: {
-    borderBottom: {
-      base: 0,
-      lg: '1px solid rgba(0, 0, 0, 0.1)',
-    },
+    borderBottom: '1px solid',
+    borderColor: 'rgba(0, 0, 0, 0.1)',
     // borderBottom: 0,
     scrollBehavior: 'smooth',
     overflowX: 'scroll',

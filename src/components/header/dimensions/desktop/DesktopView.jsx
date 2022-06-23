@@ -38,6 +38,7 @@ import { useRouter } from 'next/router';
 import Badge from '../../../badge/Badge';
 import { useUserBalanceStore } from '../../../../stores/balanceStore';
 import { useAuthStore } from '../../../../stores/authStore';
+import { CreateButton } from "@app/components";
 
 const DesktopView = ({
   isWalletConnected,
@@ -75,6 +76,8 @@ const DesktopView = ({
   }))
 
   const { yourBalance, usdEthBalance } = useUserBalanceStore(state => ({yourBalance: state.yourBalance, usdEthBalance: state.usdEthBalance}))
+
+  const isConnectedAndAuthenticated = isWalletConnected && isAuthenticated
 
   return (
     <div className="desktop__nav">
@@ -341,15 +344,21 @@ const DesktopView = ({
             </div>
           </div>
         </li>
-        {isWalletConnected && isAuthenticated ? (
+
+        {isConnectedAndAuthenticated && (
+          <li>
+            <CreateButton profilePath={`/${loggedInArtist.universePageAddress}`} />
+          </li>
+        )}
+
+        {isConnectedAndAuthenticated ? (
           <li>
             <button
-              style={{ width: 200 }}
               type="button"
-              className="menu-li myAccount"
+              className="menu-li"
               onClick={() => setIsAccountDropdownOpened(!isAccountDropdownOpened)}
             >
-              <HeaderAvatar scale={4} />
+              <HeaderAvatar />
               <span className="nav__link__title">My account</span>
               <img className="arrow" src={arrowUP} alt="arrow" />
             </button>
@@ -372,7 +381,7 @@ const DesktopView = ({
                       setIsAccountDropdownOpened(false);
                     }}
                   >
-                    <HeaderAvatar scale={4} />
+                    <HeaderAvatar />
                   </button>
                   <div className="ethereum__address">
                     {yourEnsDomain
@@ -427,7 +436,12 @@ const DesktopView = ({
                 <button
                   type="button"
                   onClick={() => {
-                    history.push('/my-nfts');
+                    if (!loggedInArtist.universePageAddress && !address) return;
+
+                    const path = loggedInArtist.universePageAddress
+                      ? loggedInArtist.universePageAddress
+                      : address;
+                    history.push(`/${path}`);
                     setIsAccountDropdownOpened(false);
                   }}
                 >
