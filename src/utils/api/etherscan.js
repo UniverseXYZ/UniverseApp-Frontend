@@ -9,12 +9,6 @@ export const getEthPriceEtherscan = async () => {
   return result;
 };
 
-export const getEthPriceCoingecko = async () => {
-  const result = await fetchJson(`https://api.coingecko.com/api/v3/coins/ethereum`);
-  return result;
-};
-
-export const getERC20PriceCoingecko = async (erc20token) => {
-  const result = await fetchJson(`https://api.coingecko.com/api/v3/coins/${erc20token}`);
-  return result;
+export const getTokenPriceCoingecko = async (token) => {
+  return await fetchJson(`${process.env.REACT_APP_MARKETPLACE_BACKEND}/v1/tokenPrices/${token}`);
 };
