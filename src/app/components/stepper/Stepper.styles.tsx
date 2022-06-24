@@ -19,14 +19,15 @@ export const getStepWrapperStyle: (s: StepState, d: StepDirection, iconOffsetTop
       top: `calc(${iconOffsetTop}px + var(--icon-size) / 2)`,
       width: 'calc(100% - var(--icon-size) - calc(var(--spacing) * 2))',
       left: 'calc(50% + calc(var(--icon-size) / 2 + var(--spacing)))',
-      height: '1px',
+      height: '2px',
     },
     column: {
       position: 'absolute',
-      top: `calc(var(--icon-size))`,
+      top: `calc(var(--icon-size) + var(--spacing))`,
       left: 'calc(var(--icon-size) / 2)',
-      width: '1px',
-      height: 'calc(100% - var(--icon-size))',
+      transform: 'translateX(-50%)',
+      width: '2px',
+      height: 'calc(100% - var(--icon-size) - (var(--spacing) * 2))',
     }
   };
 
@@ -92,7 +93,7 @@ export const getStepCircleStyles: (s: StepState) => BoxProps = (state) => {
   };
 
   return {
-    border: '1px solid transparent',
+    border: '2px solid transparent',
     borderRadius: '50%',
     boxSize: '20px',
     margin: '0 auto',
