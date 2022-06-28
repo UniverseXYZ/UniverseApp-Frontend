@@ -12,3 +12,4 @@ export * from './slider';
 export * from './switch';
 export * from './tabs';
 export * from './tooltip';
+export * from './textarea';

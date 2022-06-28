@@ -13,6 +13,7 @@ interface INFTAssetImageProps {
   alt: string;
   containerProps?: BoxProps;
   allowFullscreen?: boolean;
+  objectFit?: string;
 }
 
 export const NFTAssetImage = (props: INFTAssetImageProps) => {
@@ -21,6 +22,7 @@ export const NFTAssetImage = (props: INFTAssetImageProps) => {
     alt,
     containerProps = {},
     allowFullscreen = true,
+    objectFit = 'contain',
   } = props;
 
   const [ref, { width }] = useMeasure<HTMLDivElement>();
@@ -41,7 +43,7 @@ export const NFTAssetImage = (props: INFTAssetImageProps) => {
           layout={'fixed'}
           width={width}
           height={width}
-          objectFit={'contain'}
+          objectFit={objectFit}
           style={{
             cursor: allowFullscreen ? 'zoom-in' : 'default',
           }}

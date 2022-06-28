@@ -9,6 +9,7 @@ import { Status } from './components/tab-summary/compoents/posting-popup/enums';
 
 export interface IListingPage {
   nft: INFT;
+  nftS: INFT[];
   isPosted: boolean;
   amountType: SellAmountType;
   sellMethod: SellMethod;

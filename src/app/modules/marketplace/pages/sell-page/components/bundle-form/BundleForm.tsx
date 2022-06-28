@@ -1,4 +1,4 @@
-import { Box, Flex, FormControl, FormErrorMessage, Heading, Input, Text } from '@chakra-ui/react';
+import { Box, Flex, FormControl, FormErrorMessage, Heading, Input, Text, Textarea } from '@chakra-ui/react';
 import React from 'react';
 
 import { useListingPage } from '@app/modules/marketplace/pages/sell-page';
@@ -15,7 +15,7 @@ export const BundleForm = () => {
         <Box width={'100% !important'} pr={'0 !important'}>
           <Box mb={'30px'}>
             <FormControl isInvalid={!!(form.touched.bundleName && form.errors.bundleName)}>
-              <Heading as={'h5'}>Bundle name</Heading>
+              <Heading as={'h5'}>Bundle name*</Heading>
               <Input
                 placeholder={'Enter name'}
                 name={'bundleName'}
@@ -32,12 +32,12 @@ export const BundleForm = () => {
             flexWrap={'wrap'}
             justifyContent={'space-between'}
           >
-            <Heading as={'h5'}>Bundle description (optional)</Heading>
+            <Heading as={'h5'}>Bundle description</Heading>
             <Text order={{ base: 3, md: 0 }}>
-              {form.values.bundleDescription.length} of {maxDescriptionSymbols} characters used
+              {form.values.bundleDescription.length}/{maxDescriptionSymbols}
             </Text>
             <FormControl isInvalid={!!(form.touched.bundleDescription && form.errors.bundleDescription)}>
-              <Input
+              <Textarea
                 placeholder={'Bundle description'}
                 name={'bundleDescription'}
                 value={form.values.bundleDescription}

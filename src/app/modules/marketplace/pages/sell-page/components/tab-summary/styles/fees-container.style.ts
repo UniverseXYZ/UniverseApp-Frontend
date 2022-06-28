@@ -2,7 +2,7 @@ import { BoxProps } from '@chakra-ui/react';
 
 export const FeesContainerStyle: BoxProps = {
   color: '#00000066',
-  mb: '30px',
+  mb: '24px',
   p: '28px 30px',
   w: '100%',
 

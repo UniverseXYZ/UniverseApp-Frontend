@@ -10,6 +10,7 @@ import { BigNumber, Contract } from 'ethers';
 import { useListingPage } from '@app/modules/marketplace/pages';
 
 import BundleWhiteIcon from '../../../../../../../assets/images/marketplace/v2/bundle-white.svg';
+import LinearIcon from '../../../../../../../assets/images/marketplace/v2/linear-icon.svg';
 import CheckBlackIcon from '../../../../../../../assets/images/check-black.svg';
 
 import { Status, Status as PostingPopupStatus } from './compoents/posting-popup/enums';
@@ -17,8 +18,14 @@ import { FeeItem, Fees, PostingPopup } from './compoents';
 import { SellAmountType, SellMethod } from '../../enums';
 import { IFixedListingForm } from '../../types';
 import { TokenTicker } from '../../../../../../enums';
-import { TokenIcon } from '../../../../../../components';
-import { isNFTAssetAudio, isNFTAssetImage, isNFTAssetVideo } from '../../../../../nft';
+import { Select, TokenIcon } from '../../../../../../components';
+import {
+  isNFTAssetAudio,
+  isNFTAssetImage,
+  isNFTAssetVideo,
+  mapBackendNft,
+  mapBackendUser,
+} from '../../../../../nft';
 import { NFTAssetAudio, NFTAssetImage, NFTAssetVideo } from '../../../../../nft/pages/nft-page/components';
 import * as styles from './styles';
 import { INFT, INFTBackend, NFTStandard } from '../../../../../nft/types';
@@ -33,6 +40,8 @@ import { useRouter } from 'next/router';
 import { useAuthStore } from '../../../../../../../stores/authStore';
 import { useMyNftsStore } from 'src/stores/myNftsStore';
 // import './SummaryTab.scss';
+import Moment from 'react-moment';
+import 'moment-timezone';
 
 dayjs.extend(UTC);
 
@@ -47,9 +56,31 @@ interface IApproveCollection {
 const NETWORK_CHAIN_ID = process.env.REACT_APP_NETWORK_CHAIN_ID as "1" | "4";
 const { contracts: contractsData } = Contracts[NETWORK_CHAIN_ID];
 
+const SelectNft = ({item, activeIndex, nfts} : any) => {
+  const selectedItem = nfts[activeIndex] === item;
+
+  return (
+    <Flex justifyContent={"space-between"}>
+      <Box>
+        {`${item.name} #${item.tokenId}`}
+      </Box>
+      {(selectedItem && 
+        <Box>
+          <Image src={LinearIcon} display={'inline-block'} mr={'8px'} mt={'-3px'} w={'18px'} />
+        </Box>
+      )}
+    </Flex>
+  )
+};
+
+const getSum = (arr: number[]) => {
+  return arr.reduce((a: number, b: number) => a + b, 0);
+}
+
 export const SummaryTab = () => {
   const prevRef = useRef(null);
   const nextRef = useRef(null);
+  const swiperRef = useRef(null);
 
   const { signer, address, loggedInArtist} = useAuthStore(state => ({signer: state.signer, address: state.address, loggedInArtist: state.loggedInArtist}))
   const myNFTs = useMyNftsStore(s => s.myNFTs)
@@ -59,14 +90,19 @@ export const SummaryTab = () => {
 
   const [activeIndex, setActiveIndex] = useState(0);
   const [collections, setCollections] = useState<IApproveCollection[]>([]);
-  const [creatorRoyalties, setCreatorRoyalties] = useState(0);
-  const [collectionRoyalties, setCollectionRoyalties] = useState(0);
+  const [creatorsRoyalties, setCreatorsRoyalties] = useState([]);
+  const [collectionsRoyalties, setCollectionsRoyalties] = useState([0]);
   const [daoFee, setDaoFee] = useState(0);
+  const [nftsRoyaltiesValues, setNftsRoyaltiesValues] = useState([]);
+  const [nftsRoyaltiesSum, setNftsRoyaltiesSum] = useState(0);
+  const [collectionsRoyaltiesValues, setCollectionsRoyaltiesValues] = useState([]);
+  const [collectionsRoyaltiesSum, setCollectionsRoyaltiesSum] = useState(0);
+  const [daoFeeValue, setDaoFeeValue] = useState(0);
+  const [totalFees, setTotalFees] = useState(0);
   const [collectionIsAppovedForAll, setCollectionIsApprovedForAll] = useState(false);
   const [isApproving, setIsApproving] = useState(false);
-  const [totalNetPrice, setTotalNetPrice] = useState(0);
 
-  const { nft, isPosted, form, sellMethod, amountType, goBack, postingPopupStatus, setPostingPopupStatus } = useListingPage();
+  const { nft, nfts, isPosted, form, sellMethod, amountType, goBack, postingPopupStatus, setPostingPopupStatus } = useListingPage() as IMarketplaceSellContextDataOverride;
 
   const update = useUpdate();
 
@@ -90,7 +126,7 @@ export const SummaryTab = () => {
   }, [nft]);
 
   const handleApproveCollection = useCallback(async ({ standard, address }: IApproveCollection) => {
-    if(!signer) {
+    if (!signer) {
       return;
     }
     
@@ -108,36 +144,70 @@ export const SummaryTab = () => {
       return collectionItem.address !== address
         ? collectionItem
         : { ...collectionItem, approved: true };
-    }))
+    }));
   }, [collections]);
 
   const [price, ticker] = useMemo<[number, TokenTicker]>(() => {
     switch (sellMethod) {
-      case SellMethod.FIXED:
-        const value = form.values as IFixedListingForm;
-        return [+value.price, value.priceCurrency as TokenTicker] // TODO: remove as
-    }
+      case SellMethod.FIXED: return [
+        +(form.values as IFixedListingForm).price,
+        (form.values as IFixedListingForm).priceCurrency as TokenTicker, // TODO: remove as
+      ];
+    };
     return [0, TokenTicker.ETH];
   }, [form.values]);
 
-  const grossTotalPrice = useMemo(() => {
-    return form.values.amount > 1 ? form.values.amount * price : price;
-  }, [form.values, price]);
+  const totalPrice = useMemo(() => {
+    if (amountType === SellAmountType.BUNDLE) {
+      const nftsRoyaltiesValues = [];
+      const collectionsRoyaltiesValues = [];
+
+      for (let i = 0; i < nfts.length; i++) {
+        const nftRoyaltiesAmount = price * creatorsRoyalties[i] / 100;
+        const collectionRoyaltiesAmount = (price - nftRoyaltiesAmount) * collectionsRoyalties[i] / 100;
+
+        nftsRoyaltiesValues.push(nftRoyaltiesAmount);
+        collectionsRoyaltiesValues.push(collectionRoyaltiesAmount);
+      }
+      setNftsRoyaltiesValues(nftsRoyaltiesValues);
+      setCollectionsRoyaltiesValues(collectionsRoyaltiesValues);
+      
+      const nftsRoyaltiesSum = getSum(nftsRoyaltiesValues);
+      const collectionsRoyaltiesSum = getSum(collectionsRoyaltiesValues);
+      setNftsRoyaltiesSum(nftsRoyaltiesSum);
+      setCollectionsRoyaltiesSum(collectionsRoyaltiesSum);
+      
+      const daoFeeAmount = (price - nftsRoyaltiesSum - collectionsRoyaltiesSum) * daoFee / 100;
+      setDaoFeeValue(daoFeeAmount);
+
+      return parseFloat((price - (nftsRoyaltiesSum + collectionsRoyaltiesSum + daoFeeAmount)).toFixed(8));
+    } else if (amountType === SellAmountType.SINGLE) {
+      const nftRoyaltiesAmount = price * creatorsRoyalties[0] / 100;
+      const collectionRoyaltiesAmount = (price - nftRoyaltiesAmount) * collectionsRoyalties[0] / 100;
+      const daoFeeAmount = (price - nftRoyaltiesAmount - collectionRoyaltiesAmount) * daoFee / 100;
+
+      setDaoFeeValue(daoFeeAmount);
+      setNftsRoyaltiesValues([nftRoyaltiesAmount]);
+      setCollectionsRoyaltiesValues([collectionRoyaltiesAmount]);
+  
+      return parseFloat((price - (nftRoyaltiesAmount + collectionRoyaltiesAmount + daoFeeAmount)).toFixed(8));
+    }
+  }, [form.values, price, totalFees]);
 
   const NFTsForPreview = useMemo<INFT[]>(() => {
-    switch(amountType) {
-      case SellAmountType.SINGLE: return [nft];
-      case SellAmountType.BUNDLE: {
-        return [];
-        // const selectedIds = [`${nft.tokenId}`, ...form.values.bundleSelectedNFTs.map((key) => key.split(':')[0])];
-        // return selectedIds.reduce<INFT[]>((acc, id) => {
-        //   const _myNFT = (myNFTs as INFTBackend[]).find((_myNFT) => `${_myNFT.id}` === id);
-        //   if (_myNFT) {
-        //     acc.push(mapBackendNft(_myNFT));
-        //   }
-        //   return acc;
-        // }, []);
-      }
+    if (amountType === SellAmountType.BUNDLE) {
+      const selectedIds = [`${nft.tokenId}`, ...form.values.bundleSelectedNFTs.map((key) => key.split(':')[0])];
+      return selectedIds.reduce<INFT[]>((acc, id) => {
+        const _myNFT = (myNFTs as INFTBackend[]).find((_myNFT) => `${_myNFT.id}` === id);
+        if (_myNFT) {
+          const myNFT = mapBackendNft(_myNFT);
+          myNFT.owner = mapBackendUser(loggedInArtist);
+          acc.push(myNFT);
+        }
+        return acc;
+      }, []);
+    } else {
+      return [nft];
     }
   }, [myNFTs, nft, form.values]);
 
@@ -145,15 +215,17 @@ export const SummaryTab = () => {
     return collections.every((collectionItem) => collectionItem.approved);
   }, [collections]);
 
-    const fetchRoyaltyRegistry = async () => {
-      if (params.collectionAddress && params.tokenId && signer) {
-        try {
+  const fetchRoyaltyRegistry = async () => {
+    if (amountType === SellAmountType.BUNDLE) {
+      try {
+        for (let i = 0; i < nfts.length; i++) {
+          const nft = nfts[i];
           const [ ,royalties] = await fetchRoyalties(
-            params.collectionAddress,
+            nft._collectionAddress,
             signer,
-            params.tokenId
+            nft.tokenId
           );
-    
+
           // Index 0 is nft royalties
           if (royalties.length && royalties[0].length) {
             const nftRoyalties = royalties[0].map((royalty: [string, BigNumber]) => ({
@@ -161,7 +233,9 @@ export const SummaryTab = () => {
               amount: BigNumber.from(royalty[1]),
             }));
             const total = nftRoyalties.reduce((total: number, obj: any) => +obj.amount + total, 0);
-            setCreatorRoyalties(total / 100 || 0);
+            setCreatorsRoyalties((royalties) => [...royalties, total / 100 || 0]);
+          } else {
+            setCreatorsRoyalties((royalties) => [...royalties, 0]);
           }
     
           // Index 1 is collection royalties
@@ -171,21 +245,54 @@ export const SummaryTab = () => {
               amount: BigNumber.from(royalty[1]),
             }));
             const total = collectionRoyalties.reduce((total: number, obj: any) => +obj.amount + total, 0);
-            setCollectionRoyalties(total / 100 || 0);
+            setCollectionsRoyalties((royalties) => [...royalties, (total / 100 || 0)]);
+          } else {
+            setCollectionsRoyalties((royalties) => [...royalties, 0]);
+          }
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    } else if (amountType === SellAmountType.SINGLE) {
+      if (nft._collectionAddress && nft.tokenId && signer) {
+        try {
+          const [ ,royalties] = await fetchRoyalties(
+            nft._collectionAddress,
+            signer,
+            nft.tokenId
+          );
+
+          // Index 0 is nft royalties
+          if (royalties.length && royalties[0].length) {
+            const nftRoyalties = royalties[0].map((royalty: [string, BigNumber]) => ({
+              address: royalty[0],
+              amount: BigNumber.from(royalty[1]),
+            }));
+            const total = nftRoyalties.reduce((total: number, obj: any) => +obj.amount + total, 0);
+            setCreatorsRoyalties([total / 100 || 0]);
+          }
+    
+          // Index 1 is collection royalties
+          if (royalties.length && royalties[1].length) {
+            const collectionRoyalties = royalties[1].map((royalty: [string, BigNumber]) => ({
+              address: royalty[0],
+              amount: BigNumber.from(royalty[1]),
+            }));
+            const total = collectionRoyalties.reduce((total: number, obj: any) => +obj.amount + total, 0);
+            setCollectionsRoyalties([total / 100 || 0]);
           }
         } catch (err) {
           console.log(err);
         }
-
-        try {
-          const [ ,_daoFee] = await fetchDAOFee(signer);
-          setDaoFee(+BigNumber.from(_daoFee) / 100 || 0);
-
-        } catch (err) {
-          console.log(err);
-        }
-
       }
+    }
+    try {
+      const [ ,_daoFee] = await fetchDAOFee(signer);
+      setDaoFee(+BigNumber.from(_daoFee) / 100 || 0);
+
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   const fetchIsApprovedForAll = async () => {
@@ -194,15 +301,26 @@ export const SummaryTab = () => {
       const isApprovedForAll = await contract.isApprovedForAll(address, process.env.REACT_APP_MARKETPLACE_CONTRACT);
       setCollectionIsApprovedForAll(isApprovedForAll);
     }
-  }
+  };
+
+  useEffect(() => {
+    if (amountType === SellAmountType.BUNDLE) {
+      const creatorsRoyaltiesSum = getSum(creatorsRoyalties);
+      const collectionsRoyaltiesSum = getSum(collectionsRoyalties);
+
+      setTotalFees(creatorsRoyaltiesSum + collectionsRoyaltiesSum + daoFee);
+    } else if (amountType === SellAmountType.SINGLE) {
+      setTotalFees(creatorsRoyalties[0] + collectionsRoyalties[0] + daoFee);
+    }
+  }, [creatorsRoyalties, collectionsRoyalties, daoFee]);
 
   useEffect(() => {
     fetchRoyaltyRegistry();
-  }, [params.collectionAddress, params.tokenId, signer])
+  }, [nft, nfts]);
 
   useEffect(() => {
     fetchIsApprovedForAll();
-  }, [params.collectionAddress, params.tokenId, signer])
+  }, [nfts, params.collectionAddress, params.tokenId, signer]);
 
   useEffect(() => {
     if (isPosted) {
@@ -235,13 +353,28 @@ export const SummaryTab = () => {
 
   useEffect(() => {
     update();
-  }, [])
+  }, []);
+
+  const offset = new Date().getTimezoneOffset();
+  const timezone = offset / -60;
+
+  const determineSign = (offset: number): string => {
+    let sign = '';
+    if(offset > 0) {
+      sign = '-';
+    } else if (offset < 0) {
+      sign = '+';
+    }
+    return sign;
+  };
+
+  const sign = determineSign(offset);
 
   return (
     <>
       <Flex {...styles.MainContainerStyle}>
         <Box {...styles.ImageContainerStyle}>
-          {amountType === 'single' && (
+          {amountType === SellAmountType.SINGLE && (
             <>
               {
                 isNFTAssetImage(nft.artworkTypes) &&
@@ -273,31 +406,35 @@ export const SummaryTab = () => {
             </>
           )}
 
-          {amountType === 'bundle' && (
+          {amountType === SellAmountType.BUNDLE && (
             <Box w={'var(--image-size)'} pos={'relative'}>
               <Box {...styles.BundleLabelStyle}>
-                <Image src={BundleWhiteIcon} display={'inline-block'} mr={'6px'} mt={'-3px'} w={'20px'} />
-                {activeIndex + 1} of {NFTsForPreview.length}
+                <Image src={BundleWhiteIcon} display={'inline-block'} mr={'8px'} mt={'-3px'} w={'18px'} />
+                {activeIndex + 1} of {nfts.length}
               </Box>
               <SwiperArrowButton ref={prevRef} dir={'left'} left={'15px'} />
               <SwiperArrowButton ref={nextRef} dir={'right'} right={'15px'} />
               {prevRef?.current && nextRef?.current && (
                 <Swiper
+                  ref={swiperRef}
                   modules={[Navigation]}
                   navigation={{
                     prevEl: prevRef.current,
                     nextEl: nextRef.current,
                   }}
                   loop={true}
-                  onRealIndexChange={(s) => setActiveIndex(s.realIndex)}
+                  onRealIndexChange={(s) => {
+                    setActiveIndex(s.realIndex);
+                  }}
                 >
-                  {NFTsForPreview.map((_NFT, i) => (
+                  {nfts.map((_NFT, i) => (
                     <SwiperSlide key={i}>
                       {isNFTAssetImage(_NFT.artworkTypes) &&
                         <NFTAssetImage
                           image={_NFT.originalUrl}
                           alt={nft.name}
-                          containerProps={{ boxSize: 'var(--image-size)' }}
+                          containerProps={{ boxSize: 'var(--image-size)', height: '100%' }}
+                          objectFit='fill'
                           allowFullscreen={false}
                         />
                       }
@@ -323,47 +460,96 @@ export const SummaryTab = () => {
             </Box>
           )}
         </Box>
-        <Box {...styles.TextContainerStyle}>
-          <Heading as={'h4'}>Listing</Heading>
-
-          <HStack spacing={'4px'} color={'#00000099'} mb={'30px'}>
-            {nft.standard === NFTStandard.ERC1155 ? (
-              <>
-                <Text>{form.values.amount} of your items will be listed for</Text>
-                <TokenIcon ticker={ticker} size={20} />
-                <Text color={"black"}><strong>{price}</strong></Text>
-                <Text>each</Text>
-              </>
-            ) : (
-              <>
-                <Text>Your NFT will be listed for</Text>
-                <TokenIcon ticker={ticker} size={20} />
-                <Text color={"black"}><strong>{price}</strong></Text>
-              </>
+        <Flex {...styles.TextContainerStyle}>
+          <Center flexDir={'column'} alignItems={'flex-start'} w={'100%'}>
+            <Heading as={'h4'}>Listing</Heading>
+            <Text mb={'16px'} color={'#00000066'}>
+              Your NFT will be listed for
+              <TokenIcon ticker={ticker} size={20} />
+              <Box as={'strong'} color={'black'}>{price}</Box>
+            </Text>
+            {(form.values.startDate || form.values.endDate) && (
+              <Flex {...styles.DatesContainerStyle}>
+                {form.values.startDate && (
+                  <Flex className='date-item' flex={1} flexDir={"column"} layerStyle={'Grey'} mr={{ base: 0, md: "16px"}} mb={{ base: "16px", md: 0}}>
+                    <Box>
+                      Start date
+                    </Box>
+                    <Box>
+                      <Moment format="MMMM DD, YYYY, HH:mm">{form.values.startDate}</Moment>
+                        {' '}UTC{sign}{timezone}  
+                    </Box>
+                  </Flex>
+                )}
+                {form.values.endDate && (
+                  <Flex className='date-item' flex={1} flexDir={"column"} layerStyle={'Grey'}>
+                    <Box>
+                      End date
+                    </Box>
+                    <Box>
+                      <Moment format="MMMM DD, YYYY, HH:mm">{form.values.endDate}</Moment>
+                        {' '}UTC{sign}{timezone}
+                    </Box>
+                  </Flex>
+                )}
+              </Flex>
             )}
-          </HStack>
+            <Heading as={'h4'}>Fees</Heading>
+            <Text mb={'20px'} color={'#00000066'}>
+              Listing is free! At the time of the sale, the following fees will be deducted.
+            </Text>
 
-          <Heading as={'h4'}>Fees</Heading>
-          <Text mb={'20px'} color={'#00000099'}>
-            Listing is free! At the time of the sale, the following fees will be deducted.
-          </Text>
+            {amountType === SellAmountType.SINGLE && (
+              <Box layerStyle={'Grey'} {...styles.FeesContainerStyle}>
+                <Fee name={'Creator'} amount={creatorsRoyalties[0]} total={price} ticker={ticker} />
+                <Fee name={'Collection'} amount={collectionsRoyalties[0]} total={price - nftsRoyaltiesValues[0]} ticker={ticker}  />
+                <Fee name={'Universe'} amount={daoFee} total={price - nftsRoyaltiesValues[0] - collectionsRoyaltiesValues[0]} ticker={ticker}  />
+                <Fee name={'Total Fees'} total={nftsRoyaltiesValues[0] + collectionsRoyaltiesValues[0] + daoFeeValue} ticker={ticker} />
+              </Box>
+            )}
 
-          <Fees
-            price={grossTotalPrice}
-            ticker={ticker}
-            onTotalFee={(totalFee) => setTotalNetPrice(grossTotalPrice - totalFee)}
-          >
-            <FeeItem name={'Creator'} percent={creatorRoyalties} />
-            <FeeItem name={'Collection'} percent={collectionRoyalties} />
-            <FeeItem name={'Universe'} percent={daoFee} />
-          </Fees>
+            {amountType === SellAmountType.BUNDLE && (
+              <Box layerStyle={'Grey'} {...styles.FeesContainerStyle}>
+                <Select
+                  items={nfts}
+                  value={`${nfts[activeIndex].name} #${nfts[activeIndex].tokenId}`}
+                  popoverProps={{
+                    matchWidth: true,
+                  }}
+                  popoverContentProps={{
+                    width: '100%',
+                  }}
+                  containerProps={{
+                    width: '100%',
+                    color: 'black'
+                  }}
+                  buttonProps={{
+                    justifyContent: "space-between",
+                    color: 'black',
+                    w: '100%',
+                    mb: '16px'
+                  }}
+                  renderItem={(nft) => (<SelectNft item={nft} activeIndex={activeIndex} nfts={nfts}/>)}
+                  onSelect={(selectedNft) => {
+                    const index = nfts.map((nft) => nft.name).indexOf(selectedNft.name);
+                    swiperRef.current.swiper.slideTo(index + 1);
+                    setActiveIndex(index);
+                  }}
+                />
+                <Fee name={'Creator'} amount={creatorsRoyalties[activeIndex]} total={price} ticker={ticker} />
+                <Fee name={'Collection'} amount={collectionsRoyalties[activeIndex]} total={price - nftsRoyaltiesValues[activeIndex]} ticker={ticker}  />
+                <Fee name={'Universe'} amount={daoFee} total={price - nftsRoyaltiesValues[activeIndex] - collectionsRoyaltiesValues[activeIndex]} ticker={ticker}  />
+                <Fee name={'Total Fees'} total={nftsRoyaltiesSum + collectionsRoyaltiesSum + daoFeeValue} ticker={ticker} />
+              </Box>
+            )}
 
-          <Heading as={'h4'} mb={'0 !important'} display={'inline-flex'} gap={'4px'}>
-            You will receive:
-            <TokenIcon ticker={ticker} size={24} />
-            {totalNetPrice}
-          </Heading>
-        </Box>
+            <Heading as={'h4'} mb={'0 !important'}>
+              You will receive:
+              <TokenIcon ticker={ticker} size={24} />
+              {totalPrice}
+            </Heading>
+          </Center>
+        </Flex>
       </Flex>
       <Box {...styles.MainContainerStyle} mt={'30px'}>
         <Heading as={'h4'}>Approve collections for sale</Heading>
