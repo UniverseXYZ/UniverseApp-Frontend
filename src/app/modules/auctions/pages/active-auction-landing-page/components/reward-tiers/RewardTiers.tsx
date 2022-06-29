@@ -2,7 +2,7 @@ import { Box, Button, Container, Heading, Image, Text } from "@chakra-ui/react";
 
 import * as styles from './RewardTiers.styles';
 import React, { useCallback } from "react";
-import auctionLPlaceholder from '@assets/images/auction-lp-placeholder.png';
+import auctionTierPlaceholder from '@assets/images/auction-tier-placeholder.png';
 
 export const RewardTiers = () => {
 
@@ -21,19 +21,19 @@ export const RewardTiers = () => {
           <Box display='flex' justifyContent='center' alignItems='flex-start' alignContent='flex-start'>
             <Box {...styles.TierImagesWrapperStyle}>
               <Image
-                src={auctionLPlaceholder}
+                src={auctionTierPlaceholder}
                 alt={'Premium tier'}
                 borderRadius={'12px'}
                 boxSize={{ base: '150px', lg: '200px' }}
               />
               <Image
-                src={auctionLPlaceholder}
+                src={auctionTierPlaceholder}
                 alt={'Premium tier'}
                 borderRadius={'12px'}
                 boxSize={{ base: '150px', lg: '200px' }}
               />
               <Image
-                src={auctionLPlaceholder}
+                src={auctionTierPlaceholder}
                 alt={'Premium tier'}
                 borderRadius={'12px'}
                 boxSize={{ base: '150px', lg: '200px' }}
@@ -64,14 +64,14 @@ export const RewardTiers = () => {
           <Box display='flex' justifyContent='center'>
             <Box {...styles.TierImagesWrapperStyle}>
               <Image
-                src={auctionLPlaceholder}
-                alt={'Premium tier'}
+                src={auctionTierPlaceholder}
+                alt={'Gold tier'}
                 borderRadius={'12px'}
                 boxSize={{ base: '150px', lg: '200px' }}
               />
               <Image
-                src={auctionLPlaceholder}
-                alt={'Premium tier'}
+                src={auctionTierPlaceholder}
+                alt={'Gold tier'}
                 borderRadius={'12px'}
                 boxSize={{ base: '150px', lg: '200px' }}
               />
@@ -96,8 +96,8 @@ export const RewardTiers = () => {
           <Box display='flex' justifyContent='center'>
             <Box {...styles.TierImagesWrapperStyle}>
               <Image
-                src={auctionLPlaceholder}
-                alt={'Premium tier'}
+                src={auctionTierPlaceholder}
+                alt={'Silver tier'}
                 borderRadius={'12px'}
                 boxSize={{ base: '150px', lg: '200px' }}
               />

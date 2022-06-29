@@ -45,11 +45,11 @@ export const TierWrapperStyle: BoxProps = {
     base: '20px',
     md: '40px 20px',
   },
-    sx: {
-      '> *': {
-        flex: '1',
-      }
+  sx: {
+    '> *': {
+      flex: '1',
     }
+  }
 };
 
 export const TierImagesWrapperStyle: BoxProps = {
