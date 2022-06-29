@@ -1,17 +1,21 @@
 import { Box, Button, Container, Heading, Image, Text, Tooltip } from "@chakra-ui/react";
 import React, { useCallback, useState } from "react";
+import Slider from 'react-slick';
 
 import * as styles from './AuctionPreview.styles';
 import { CopyString, TokenIcon } from "@app/components";
 
 import auctionLPlaceholder from '@assets/images/auction-lp-placeholder.png';
 import auctionTierPlaceholder from '@assets/images/auction-tier-placeholder.png';
+import checkIcon from '@assets/images/check-black.svg';
 import CreatorAvatarImage from '@assets/images/_MOCK_AUCTION_CREATOR2.png';
 import arrowDown from '@assets/images/arrow-down.svg';
 import cancelIcon from '@assets/images/cancel-icon.svg';
 import { TOKENS_MAP } from "@app/constants";
 import { useMedia } from "react-use";
 import { breakpoints } from "@app/theme/constants";
+import leftArrow from "@assets/images/marketplace/bundles-left-arrow.svg";
+import rightArrow from "@assets/images/marketplace/bundles-right-arrow.svg";
 
 const BiddersList = () => {
   return (
@@ -118,14 +122,93 @@ const BiddersBlock = () => {
   )
 }
 
+const PrevArrow = (props) => {
+  const { onClick } = props;
+
+  return (
+    <Button
+      className={'u-left'}
+      variant="simpleOutline"
+      size="xs"
+      leftIcon={<Image src={leftArrow} alt="Left arrow" />}
+      onClick={onClick}
+      {...styles.SliderArrowsStyle}
+    />
+  );
+}
+
+const NextArrow = (props) => {
+  const { onClick } = props;
+
+  return (
+    <Button
+      className={'u-right'}
+      variant="simpleOutline"
+      size="xs"
+      leftIcon={<Image src={rightArrow} alt="Right arrow" />}
+      onClick={onClick}
+      {...styles.SliderArrowsStyle}
+    />
+  );
+}
 
 export const AuctionPreview = () => {
 
   const isTablet = useMedia(`(max-width: ${breakpoints.lg})`);
 
+  const settings = {
+    dots: false,
+    infinite: false,
+    speed: 500,
+    slidesToShow: 4,
+    slidesToScroll: 1,
+    initialSlide: 0,
+    nextArrow: <NextArrow />,
+    prevArrow: <PrevArrow />,
+    responsive: [
+      {
+        breakpoint: 960,
+        settings: {
+          slidesToShow: 2,
+        }
+      },
+      {
+        breakpoint: 768,
+        settings: {
+          slidesToShow: 1,
+        }
+      },
+    ]
+  };
+
   return (
     <Box {...styles.WrapperStyle}>
       <Container {...styles.ContainerStyle}>
+        <Box mb={14}>
+          <Slider {...settings}>
+            { [...Array(10)].map((a, i) =>{
+              return <div key={i}><Box  gap={2} {...styles.AuctionItemStyle} className={i === 2 ? 'u-active' : ''}>
+                {
+                  i === 2 && (
+                    <Box {...styles.ActiveAuctionIconStyle}>
+                      <Image src={checkIcon} alt="Cancel" />
+                    </Box>
+                  )
+                }
+                <Image
+                  src={auctionLPlaceholder}
+                  alt={'Premium tier'}
+                  borderRadius={'12px'}
+                  boxSize={'40px'}
+                />
+                <Box>
+                  <Text fontSize="14px" lineHeight="20px" fontWeight="700">Auction Title Two</Text>
+                  <Text fontSize="12px" lineHeight="18px" color="rgba(0, 0, 0, 0.6)">Ends in 2d : 8h : 10m : 15s</Text>
+                </Box>
+              </Box></div>
+            })}
+          </Slider>
+        </Box>
         <Box {...styles.TierWrapperStyle}>
           <Box display='flex' justifyContent='center' alignItems='flex-start' alignContent='flex-start'>
             <Image

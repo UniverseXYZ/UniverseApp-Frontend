@@ -5,10 +5,79 @@ export const WrapperStyle: BoxProps = {
   padding: '80px 0',
 };
 
+export const SliderArrowsStyle: ButtonProps = {
+  padding: '8px',
+  position: 'absolute',
+  top: '35%',
+  _hover: {
+    bg: '#fff',
+  },
+  sx: {
+    '&.u-left': {
+      left: '-25px',
+    },
+    '&.u-right': {
+      right: '-25px',
+    },
+    '.chakra-button__icon': {
+      margin: '0'
+    }
+  }
+}
+
+export const AuctionItemStyle: BoxProps = {
+  bg: 'transparent',
+  border: '1px solid rgba(0, 0, 0, 0.1)',
+  borderRadius: '12px',
+  cursor: 'pointer',
+  display: 'flex',
+  alignItems: 'center',
+  margin: '10px',
+  padding: '10px',
+  position: 'relative',
+  _hover: {
+    bg: '#fff',
+  },
+  sx: {
+    '&.u-active': {
+      bg: '#fff',
+      _before: {
+        backgroundImage: 'none',
+        boxShadow: 'none',
+        content: '""',
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        borderRadius: 'inherit',
+        padding: '3px',
+        background: 'linear-gradient(101deg,#bceb00,#00eaea)',
+        WebkitMask: 'linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0)',
+        WebkitMaskComposite: 'xor',
+        maskComposite: 'exclude',
+      },
+    }
+  }
+};
+
+export const ActiveAuctionIconStyle: BoxProps = {
+  borderRadius: '50%',
+  bg: 'linear-gradient(135deg, #BCEB00 15.57%, #00EAEA 84.88%)',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  width: '20px',
+  height: '20px',
+  position: 'absolute',
+  top: '-8px',
+  right: '-8px',
+}
+
 export const ContainerStyle: ContainerProps = {
   margin: '0 auto',
   maxW: '1110px',
-  padding: { base: '0 20px', xl: '0' },
+  padding: { base: '0 20px', md: '0 30px', lg: '0' },
 };
 
 export const TierWrapperStyle: BoxProps = {
