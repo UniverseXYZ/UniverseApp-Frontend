@@ -109,6 +109,23 @@ export const TopBiddersStyle: BoxProps = {
   boxShadow: '0px 10px 36px rgba(136, 120, 172, 0.14)',
   marginTop: '20px',
   paddingTop: '32px',
+  position: 'relative',
+  _before: {
+    backgroundImage: 'none',
+    boxShadow: 'none',
+    content: '""',
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    borderRadius: 'inherit',
+    padding: '3px',
+    background: 'linear-gradient(90deg, #2AD0CA 0%, #E1F664 22.92%, #FEB0FE 46.88%, #ABB3FC 68.23%, #5DF7A4 87.5%, #58C4F6 100%)',
+    WebkitMask: 'linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0)',
+    WebkitMaskComposite: 'xor',
+    maskComposite: 'exclude',
+  },
 };
 
 export const BiddersListStyle: BoxProps = {

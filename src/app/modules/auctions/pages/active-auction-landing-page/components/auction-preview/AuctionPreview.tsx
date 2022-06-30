@@ -191,7 +191,7 @@ export const AuctionPreview = () => {
                 {
                   i === 2 && (
                     <Box {...styles.ActiveAuctionIconStyle}>
-                      <Image src={checkIcon} alt="Cancel" />
+                      <Image src={checkIcon} alt="Active" />
                     </Box>
                   )
                 }
