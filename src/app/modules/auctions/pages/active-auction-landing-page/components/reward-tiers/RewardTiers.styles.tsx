@@ -2,7 +2,7 @@ import { BoxProps, ButtonProps, ContainerProps, HeadingProps, TextProps } from "
 
 export const WrapperStyle: BoxProps = {
   bg: '#fff',
-  padding: '120px 0',
+  padding: { base: '60px 0', lg: '120px 0' },
 };
 
 export const ContainerStyle: ContainerProps = {
@@ -18,7 +18,7 @@ export const HeadingWrapperStyle: BoxProps = {
 };
 
 export const HeadingStyle: HeadingProps = {
-  fontSize: '26px',
+  fontSize: { base: '20px', md: '26px'  },
   lineHeight: '32px',
   fontWeight: 600,
   marginBottom: '8px',

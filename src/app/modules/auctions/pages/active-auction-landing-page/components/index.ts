@@ -1,3 +1,4 @@
 export * from './auction-preview';
 export * from './bid-to-win';
 export * from './reward-tiers';
+export * from './user-info';
