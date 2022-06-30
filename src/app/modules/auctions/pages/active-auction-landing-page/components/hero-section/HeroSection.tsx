@@ -16,7 +16,7 @@ import { useMedia } from "react-use";
 import { breakpoints } from "@app/theme/constants";
 import leftArrow from "@assets/images/marketplace/bundles-left-arrow.svg";
 import rightArrow from "@assets/images/marketplace/bundles-right-arrow.svg";
-import { ConfirmWithdrawBidPopup} from '../index'
+import { ConfirmWithdrawBidPopup, PlaceBidPopup } from '../index'
 
 const BiddersList = () => {
   return (
@@ -86,10 +86,7 @@ const SingleBidder = () => {
 const BiddersBlock = () => {
 
   const [isConfirmVisible, setIsConfirmVisible] = useState(false);
-
-  const handlePlaceBid = useCallback(() => {
-    // TODO - BE implementation
-  }, []);
+  const [isPlaceBidVisible, setIsPlaceBidVisible] = useState(false);
 
   return (
     <Box {...styles.TopBiddersStyle}>
@@ -107,7 +104,7 @@ const BiddersBlock = () => {
           <Text as='span' color='rgba(0, 0, 0, 0.4)'>(#25 in the list)</Text>
         </Box>
         <Box display="flex">
-          <Button {...styles.BidButtonStyle} onClick={handlePlaceBid}>
+          <Button {...styles.BidButtonStyle} onClick={() => setIsPlaceBidVisible(true)}>
             Place a bid
           </Button>
           <Tooltip label="Cancel my bid" aria-label='Cancel my bid' fontSize='md'>
@@ -121,6 +118,12 @@ const BiddersBlock = () => {
           </Tooltip>
         </Box>
       </Box>
+      { isPlaceBidVisible && (
+        <PlaceBidPopup
+          isOpened={isPlaceBidVisible}
+          onClose={() => setIsPlaceBidVisible(false)}
+        />
+      )}
       { isConfirmVisible && (
         <ConfirmWithdrawBidPopup
           isOpened={isConfirmVisible}
