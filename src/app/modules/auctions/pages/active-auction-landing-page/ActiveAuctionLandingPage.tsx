@@ -1,7 +1,6 @@
 import { Box } from '@chakra-ui/react';
 import { OpenGraph } from '@app/components';
 import { ActionSection, CreatorSection, HeroSection, TiersSection } from './components';
-import * as styles from './ActiveAuctionLandingPage.styles';
 
 export const ActiveAuctionLandingPage = () => {
 
