@@ -1,6 +1,6 @@
 import { Box } from '@chakra-ui/react';
 import { OpenGraph } from '@app/components';
-import { AuctionPreview, BidToWin, RewardTiers, UserInfo } from './components';
+import { ActionSection, CreatorSection, HeroSection, TiersSection } from './components';
 import * as styles from './ActiveAuctionLandingPage.styles';
 
 export const ActiveAuctionLandingPage = () => {
@@ -9,10 +9,10 @@ export const ActiveAuctionLandingPage = () => {
     <Box layerStyle={'StoneBG'}>
       {/* TODO - set open graph correctly */}
       {/* <OpenGraph title={'Universe Minting - Products - Auction House'} /> */}
-      <AuctionPreview />
-      <RewardTiers />
-      <UserInfo />
-      <BidToWin />
+      <HeroSection />
+      <TiersSection />
+      <CreatorSection />
+      <ActionSection />
     </Box>
   );
 };

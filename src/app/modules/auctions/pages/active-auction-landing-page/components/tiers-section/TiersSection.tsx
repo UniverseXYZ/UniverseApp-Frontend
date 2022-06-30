@@ -1,10 +1,10 @@
 import { Box, Button, Container, Heading, Image, Text } from "@chakra-ui/react";
 
-import * as styles from './RewardTiers.styles';
+import * as styles from './TiersSection.styles';
 import React, { useCallback } from "react";
 import auctionTierPlaceholder from '@assets/images/auction-tier-placeholder.png';
 
-export const RewardTiers = () => {
+export const TiersSection = () => {
 
   const handlePreviewNFTs = useCallback(() => {
     // TODO

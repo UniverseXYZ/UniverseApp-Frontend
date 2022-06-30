@@ -1,9 +1,9 @@
 import { Box, Button, Container, Heading } from '@chakra-ui/react';
 import { useCallback } from 'react';
 
-import * as styles from './BidToWin.styles';
+import * as styles from './ActionSection.styles';
 
-export const BidToWin = () => {
+export const ActionSection = () => {
 
   const handlePlaceBid = useCallback(() => {
     // TODO - BE implementation

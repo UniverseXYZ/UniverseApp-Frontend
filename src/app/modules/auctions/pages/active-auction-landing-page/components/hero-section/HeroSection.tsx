@@ -2,7 +2,7 @@ import { Box, Button, Container, Heading, Image, Text, Tooltip } from "@chakra-u
 import React, { useCallback, useState } from "react";
 import Slider, { CustomArrowProps } from 'react-slick';
 
-import * as styles from './AuctionPreview.styles';
+import * as styles from './HeroSection.styles';
 import { CopyString, TokenIcon } from "@app/components";
 
 import auctionLPlaceholder from '@assets/images/auction-lp-placeholder.png';
@@ -152,7 +152,7 @@ const NextArrow = (props: CustomArrowProps) => {
   );
 }
 
-export const AuctionPreview = () => {
+export const HeroSection = () => {
 
   const isTablet = useMedia(`(max-width: ${breakpoints.lg})`);
 

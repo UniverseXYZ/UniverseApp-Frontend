@@ -1,12 +1,12 @@
 import { Box, Button, Container, Heading, Image, Text } from "@chakra-ui/react";
 
-import * as styles from './UserInfo.styles';
+import * as styles from './CreatorSection.styles';
 import React from "react";
 import CreatorAvatarImage from '@assets/images/_MOCK_AUCTION_CREATOR2.png';
 import twitterIcon from "@assets/images/icons_twitter.svg";
 import instagramIcon from '@assets/images/instagram-outlined.svg';
 
-export const UserInfo = () => {
+export const CreatorSection = () => {
 
   return (
     <Box {...styles.WrapperStyle}>
