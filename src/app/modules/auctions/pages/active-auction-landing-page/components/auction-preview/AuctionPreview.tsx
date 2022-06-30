@@ -1,6 +1,6 @@
 import { Box, Button, Container, Heading, Image, Text, Tooltip } from "@chakra-ui/react";
 import React, { useCallback, useState } from "react";
-import Slider from 'react-slick';
+import Slider, { CustomArrowProps } from 'react-slick';
 
 import * as styles from './AuctionPreview.styles';
 import { CopyString, TokenIcon } from "@app/components";
@@ -122,7 +122,7 @@ const BiddersBlock = () => {
   )
 }
 
-const PrevArrow = (props) => {
+const PrevArrow = (props: CustomArrowProps) => {
   const { onClick } = props;
 
   return (
@@ -137,7 +137,7 @@ const PrevArrow = (props) => {
   );
 }
 
-const NextArrow = (props) => {
+const NextArrow = (props: CustomArrowProps) => {
   const { onClick } = props;
 
   return (
