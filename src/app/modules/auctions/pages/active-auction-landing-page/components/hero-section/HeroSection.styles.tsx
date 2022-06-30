@@ -98,8 +98,14 @@ export const TierWrapperStyle: BoxProps = {
 };
 
 export const AuctionHeadingStyle: HeadingProps = {
-  fontSize: '26px',
-  lineHeight: '32px',
+  fontSize: {
+    base: '20px',
+    md: '26px',
+  },
+  lineHeight: {
+    base: '24px',
+    md: '32px',
+  },
   fontWeight: 600,
 };
 

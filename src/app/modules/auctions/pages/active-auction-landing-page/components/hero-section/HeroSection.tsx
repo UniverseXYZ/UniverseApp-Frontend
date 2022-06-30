@@ -155,6 +155,7 @@ const NextArrow = (props: CustomArrowProps) => {
 export const HeroSection = () => {
 
   const isTablet = useMedia(`(max-width: ${breakpoints.lg})`);
+  const isMobile = useMedia(`(max-width: ${breakpoints.md})`);
 
   const settings = {
     dots: false,
@@ -171,44 +172,40 @@ export const HeroSection = () => {
         settings: {
           slidesToShow: 2,
         }
-      },
-      {
-        breakpoint: 768,
-        settings: {
-          slidesToShow: 1,
-        }
-      },
+      }
     ]
   };
 
   return (
     <Box {...styles.WrapperStyle}>
       <Container {...styles.ContainerStyle}>
-        <Box mb={14}>
-          <Slider {...settings}>
-            { [...Array(10)].map((a, i) =>{
-              return <div key={i}><Box  gap={2} {...styles.AuctionItemStyle} className={i === 2 ? 'u-active' : ''}>
-                {
-                  i === 2 && (
-                    <Box {...styles.ActiveAuctionIconStyle}>
-                      <Image src={checkIcon} alt="Active" />
-                    </Box>
-                  )
-                }
-                <Image
-                  src={auctionLPlaceholder}
-                  alt={'Premium tier'}
-                  borderRadius={'12px'}
-                  boxSize={'40px'}
-                />
-                <Box>
-                  <Text fontSize="14px" lineHeight="20px" fontWeight="700">Auction Title Two</Text>
-                  <Text fontSize="12px" lineHeight="18px" color="rgba(0, 0, 0, 0.6)">Ends in 2d : 8h : 10m : 15s</Text>
-                </Box>
-              </Box></div>
-            })}
-          </Slider>
-        </Box>
+        { !isMobile && (
+          <Box mb={14}>
+            <Slider {...settings}>
+              { [...Array(10)].map((a, i) =>{
+                return <div key={i}><Box  gap={2} {...styles.AuctionItemStyle} className={i === 2 ? 'u-active' : ''}>
+                  {
+                    i === 2 && (
+                      <Box {...styles.ActiveAuctionIconStyle}>
+                        <Image src={checkIcon} alt="Active" />
+                      </Box>
+                    )
+                  }
+                  <Image
+                    src={auctionLPlaceholder}
+                    alt={'Premium tier'}
+                    borderRadius={'12px'}
+                    boxSize={'40px'}
+                  />
+                  <Box>
+                    <Text fontSize="14px" lineHeight="20px" fontWeight="700">Auction Title Two</Text>
+                    <Text fontSize="12px" lineHeight="18px" color="rgba(0, 0, 0, 0.6)">Ends in 2d : 8h : 10m : 15s</Text>
+                  </Box>
+                </Box></div>
+              })}
+            </Slider>
+          </Box>
+        )}
         <Box {...styles.TierWrapperStyle}>
           <Box display='flex' justifyContent='center' alignItems='flex-start' alignContent='flex-start'>
             <Image
