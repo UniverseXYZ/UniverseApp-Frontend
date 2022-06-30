@@ -16,6 +16,7 @@ import { useMedia } from "react-use";
 import { breakpoints } from "@app/theme/constants";
 import leftArrow from "@assets/images/marketplace/bundles-left-arrow.svg";
 import rightArrow from "@assets/images/marketplace/bundles-right-arrow.svg";
+import { ConfirmWithdrawBidPopup} from '../index'
 
 const BiddersList = () => {
   return (
@@ -84,6 +85,8 @@ const SingleBidder = () => {
 
 const BiddersBlock = () => {
 
+  const [isConfirmVisible, setIsConfirmVisible] = useState(false);
+
   const handlePlaceBid = useCallback(() => {
     // TODO - BE implementation
   }, []);
@@ -112,12 +115,18 @@ const BiddersBlock = () => {
               variant="ghost"
               leftIcon={<Image src={cancelIcon} alt="Cancel" />}
               ml={3}
-              onClick={() => {}}
+              onClick={() => setIsConfirmVisible(true)}
               {...styles.CancelButtonStyle}
             />
           </Tooltip>
         </Box>
       </Box>
+      { isConfirmVisible && (
+        <ConfirmWithdrawBidPopup
+          isOpened={isConfirmVisible}
+          onClose={() => setIsConfirmVisible(false)}
+        />
+      )}
     </Box>
   )
 }
