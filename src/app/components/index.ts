@@ -6,6 +6,7 @@ export * from './checkbox';
 export * from './circular-progress';
 export * from './collection-approve';
 export * from './collection-preview';
+export * from './copy-string';
 export * from './currency-input';
 export * from './currency-select';
 export * from './date-time-picker';
