@@ -61,3 +61,14 @@ export const SubItemStyle: StackProps = {
 
   }
 };
+
+export const CopyStyle: StackProps = {
+  opacity: '.4',
+  cursor: 'pointer'
+};
+
+export const JsonWrapperStyle: StackProps = {
+  height: '140px',
+  overflow: 'auto',
+  margin: '12px 0 !important'
+};

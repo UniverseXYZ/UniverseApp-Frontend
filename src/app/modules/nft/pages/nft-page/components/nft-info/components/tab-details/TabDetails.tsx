@@ -1,25 +1,34 @@
-import { HStack, Text, useBreakpointValue, VStack } from '@chakra-ui/react';
+import { Box, HStack, Image, Text, useBreakpointValue, VStack } from "@chakra-ui/react";
 import React, { useCallback, useState } from 'react';
 import { useCopyToClipboard } from 'react-use';
 import { useNFTPageData } from '@app/modules/nft/pages/nft-page/NFTPage.context';
 import * as styles from './TabDetails.styles';
+import copyOutlinedIcon from '@assets/images/copy-outlined.svg';
 
 export const TabDetails: React.FC = () => {
-  const testData = useNFTPageData();
-  const { NFT, collectionAddress, isPolymorph, isLobster, metadata } = testData
+  const { NFT, collectionAddress, isPolymorph, isLobster, metadata } = useNFTPageData();
 
-  const formatAddress = (addr: string, mdSlice = 13) => {
-    return useBreakpointValue({
-      base: `${addr.slice(0, 6)}...${addr.slice(-4)}`,
-      md: `${addr.slice(0, mdSlice)}...${addr.slice(-4)}`,
-    })
-  }
+  const formattedContractAddress = useBreakpointValue({
+    base: `${collectionAddress.slice(0, 6)}...${collectionAddress.slice(-4)}`,
+    md: `${collectionAddress.slice(0, 13)}...${collectionAddress.slice(-4)}`,
+  });
+
+  const formattedGenome = useBreakpointValue({
+    base: `${metadata?.genomeString?.slice(0, 6)}...${metadata?.genomeString?.slice(-4)}`,
+    md: `${metadata?.genomeString?.slice(0, 13)}...${metadata?.genomeString?.slice(-4)}`,
+  });
+
+  const formattedRoyaltiesAddress = (addr: string) => useBreakpointValue({
+    base: `${addr.slice(0, 6)}...${addr.slice(-4)}`,
+    md: `${addr.slice(0, 6)}...${addr.slice(-4)}`,
+  });
 
   const [, copyToClipboard] = useCopyToClipboard();
 
   const [copiedContractAddress, setCopiedContractAddress] = useState(false);
   const [copiedTokenId, setCopiedTokenId] = useState(false);
   const [copiedGenome, setCopiedGenome] = useState(false);
+  const [copiedJson, setCopiedJson] = useState(false);
 
   const handleCopyContractAddress = useCallback(() => {
     copyToClipboard(collectionAddress);
@@ -42,6 +51,14 @@ export const TabDetails: React.FC = () => {
     setTimeout(() => setCopiedGenome(false), 1000);
   }, [metadata]);
 
+  const handleCopyJson = useCallback(() => {
+    // TODO - pass copy string
+    copyToClipboard("json");
+    setCopiedJson(true);
+
+    setTimeout(() => setCopiedJson(false), 1000);
+  }, [metadata]);
+
   type IDetailItem = {
     show: boolean;
     name: string;
@@ -55,7 +72,7 @@ export const TabDetails: React.FC = () => {
       renderValue: () => (
         copiedContractAddress
           ? <Text {...styles.HashStyle} cursor={"default"}>Copied!</Text>
-          : <Text {...styles.HashStyle} onClick={handleCopyContractAddress}>{formatAddress(collectionAddress)}</Text>
+          : <Text {...styles.HashStyle} onClick={handleCopyContractAddress}>{formattedContractAddress}</Text>
       )
     },
     {
@@ -87,7 +104,7 @@ export const TabDetails: React.FC = () => {
       renderValue: () => (
         copiedGenome
           ? <Text {...styles.HashStyle} cursor={"default"}>Copied!</Text>
-          : <Text {...styles.HashStyle} onClick={handleCopyGenome}>{formatAddress(metadata?.genomeString ?? "")}</Text>
+          : <Text {...styles.HashStyle} onClick={handleCopyGenome}>{formattedGenome}</Text>
       )
     },
     {
@@ -97,7 +114,7 @@ export const TabDetails: React.FC = () => {
         <VStack spacing={"4px"} {...styles.SubWrapperStyle}>
           {NFT.royalties?.map(({ address, amount }, i) => (
             <HStack key={i} {...styles.SubItemStyle}>
-              <Text>{formatAddress(address, 6)}</Text>
+              <Text>{formattedRoyaltiesAddress(address)}</Text>
               <span/>
               <Text>{amount}%</Text>
             </HStack>
@@ -115,6 +132,24 @@ export const TabDetails: React.FC = () => {
           {renderValue()}
         </HStack>
       ))}
+      {/* This item is separate because of its different structure */}
+      <HStack {...styles.ItemStyle} className="u-column">
+        <Box display="flex" justifyContent="space-between" width="100%">
+          <Text>JSON</Text>
+          {
+            copiedJson
+              ? <Text {...styles.HashStyle} cursor={"default"}>Copied!</Text>
+              : <Image src={copyOutlinedIcon}  {...styles.CopyStyle} alt="Copy" onClick={handleCopyJson} />
+          }
+        </Box>
+        <Box color="rgba(0, 0, 0, 0.6)" {...styles.JsonWrapperStyle}>
+          test long text test long text test long text test long text test long text test long text
+          test long text test long text test long text test long text test long text test long text
+          test long text test long text test long text test long text test long text test long text
+          test long text test long text test long text test long text test long text test long text
+          test long text test long text test long text test long text test long text test long text
+        </Box>
+      </HStack>
     </VStack>
   );
 };
