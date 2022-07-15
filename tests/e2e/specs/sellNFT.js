@@ -2,8 +2,7 @@
 import { AppTest } from "../utils/app";
 
 describe("Sell NFT", () => {
-  const date_todat = new Date();
-  const day_todat = String(date_todat.getDate());
+
   const pickDate = () => {
     cy.get("span").contains("Select date...").click({ force: true });
     cy.get(".react-datepicker__day--today").click({ force: true });
@@ -14,20 +13,13 @@ describe("Sell NFT", () => {
     cy.get("div").contains("Add Wallet").click({ force: true });
   };
 
-  const fillRoyalties = (address, field) => {
-    cy.get(`input[name="royalties.${field}.address"]`).type(`${address}`, {
-      force: true,
-    });
-    cy.get(`input[name="royalties.${field}.percent"]`).type("5", {
-      force: true,
-    });
-  };
+
 
   const clickOnERC = () => {
     cy.get("p").contains("ERC-721").should("be.visible").click({ force: true });
   };
 
-  xit("should sell", () => {
+  it("should sell", () => {
     cy.visit("");
     AppTest.signInWithMetamask(true);
 
@@ -55,13 +47,13 @@ describe("Sell NFT", () => {
 
     // get current metamask wallet and use it for royalties
     cy.fetchMetamaskWalletAddress().then((address) => {
-      fillRoyalties(address, "0");
+      AppTest.fillRoyalties(address, "0");
     });
 
     // adds a wallet for the royalty split
     addWallet();
     // add random wallet
-    fillRoyalties("0xA5Fccbcf9eE6e70823a2769dF73580Ac3AC9B1Bb", "1");
+    AppTest.fillRoyalties(AppTest.dummyAddress_1, "1");
 
     // check if "Continue" button is active and click it
     cy.get("button")
@@ -70,7 +62,7 @@ describe("Sell NFT", () => {
       .should("not.be.disabled")
       .click({ force: true });
 
-    // @TODO: crete a sequence to Approve collections for sale if the collection is not approved
+    // @TODO: Crete a sequence to Approve collections for sale if the collection is not approved
 
     // check if "Post your listing" button is active and click it
     cy.get("button")
@@ -100,7 +92,7 @@ describe("Sell NFT", () => {
     // click on the nft
     clickOnERC();
 
-    // @TODO: add a change price sequence when it is working corectly
+    // @TODO: Add a change price sequence when we are unblocked
     // change price is canceling the listing
     // find "Change price" button and ckeck for availability
     //   cy.get("button")
