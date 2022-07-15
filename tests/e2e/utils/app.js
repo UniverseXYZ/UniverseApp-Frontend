@@ -19,6 +19,15 @@ export const AppTest = {
     cy.confirmMetamaskSignatureRequest();
   },
 
+  fillRoyalties: (address, field) => {
+    cy.get(`input[name="royalties.${field}.address"]`).type(`${address}`, {
+      force: true,
+    });
+    cy.get(`input[name="royalties.${field}.percent"]`).type("5", {
+      force: true,
+    });
+  },
+
   navigateToMintFromNavBarLink: () => {
     // Check that Products is visible in Nav bar
     cy.get("[class=nav__link__title]")
@@ -30,6 +39,7 @@ export const AppTest = {
       .contains("Minting")
       .click({ force: true });
   },
+
   requireSignInToMint: () => {
     // check if modal for connecting wallet pops up if user is not signed in
     cy.get("[class=wrong__network__popup]")
@@ -56,4 +66,6 @@ export const AppTest = {
     // Possibly caused by wrong default behaviour within Synpress
     cy.confirmMetamaskTransaction({ gasFee: 5, gasLimit: 5000000 });
   },
+
+  dummyAddress_1: "0x856F28F374Aca7616a48136662eB3F740d7c7cbA",
 };

@@ -46,6 +46,11 @@ In order to run the tests:
 2. Run the next app `npm run dev`
 3. Open new terminal and run the tests `npm run synpress:run`
 
+- additionally for test development purposes:
+    - `npm run synpress:runDev` will run synpress with the `-ne` (`--noExit`) flag that keep the runner open after test finishes and will only run the first file inside the `specs` folder
+
+    - "synpress:open" will open the cypress test panel. Tests that are run like this won’t be able to use puppeteer (metamask commands will not work)
+
 
 ## Modules Structure
 ```
