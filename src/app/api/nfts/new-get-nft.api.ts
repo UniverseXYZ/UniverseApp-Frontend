@@ -15,7 +15,7 @@ export const GetNFTApi = async (collectionAddress: string, tokenId: string | num
       axios.get<INFTBackendType>(url),
       GetCollectionApi(collectionAddress)
     ])
-  
+
     return mapNft(data, collectionData);
   }
 
@@ -74,10 +74,10 @@ export const mapNft = (data: INFTBackendType, collectionData: ICollection | null
     videoUrl: getURL(data.metadata?.animation_url) || '',
     gifUrl: getURL(data.metadata?.gif) || '',
     previewUrl: getURL(data.metadata?.image_preview_url) || '',
-    thumbnailUrl: getURL(altImageUrl || 
-      data.metadata?.image_thumbnail_url || 
-      data.metadata?.image_preview_url || 
-      data.metadata?.image_original_url || 
+    thumbnailUrl: getURL(altImageUrl ||
+      data.metadata?.image_thumbnail_url ||
+      data.metadata?.image_preview_url ||
+      data.metadata?.image_original_url ||
       data.metadata?.image ||
       alternativeImage?.url ||
       data.metadata?.image_url) || '',
@@ -100,7 +100,7 @@ export const mapNft = (data: INFTBackendType, collectionData: ICollection | null
     numberOfEditions: 1,
     properties: [],
     tokenUri: '',
-    royalties: [],
+    royalties: data.metadata?.royalties?.length ? data.metadata?.royalties : undefined,
     creatorAddress: data.firstOwner,
     _ownerAddress: data.owners?.length ? data.owners[data.owners.length - 1].owner || data.owners[data.owners.length - 1].address : undefined,
     _creatorAddress: data.firstOwner,

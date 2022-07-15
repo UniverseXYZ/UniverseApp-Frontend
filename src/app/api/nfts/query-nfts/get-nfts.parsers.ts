@@ -74,7 +74,7 @@ export const parseNFTBackend = (NFTData: INFTBackend): INFT => {
     id: '',
     numberOfEditions: 0,
     txHash: null,
-    royalties: [],
+    royalties: (NFTData.metadata?.royalties ?? []),
     tokenUri: '',
     tokenIds: [],
   };

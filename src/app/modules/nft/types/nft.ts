@@ -48,7 +48,7 @@ export interface INFT {
   optimizedUrl: string;
   originalUrl: string;
   properties: Array<Record<string, string>>;
-  royalties: Array<IRoyalty>;
+  royalties?: Array<IRoyalty>;
   standard: NFTStandard;
   thumbnailUrl: string;
   previewUrl?: string;
