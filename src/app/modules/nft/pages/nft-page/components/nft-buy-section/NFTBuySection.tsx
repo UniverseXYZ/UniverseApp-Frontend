@@ -396,6 +396,7 @@ export const NFTBuySection: React.FC<INFTBuySectionProps> = (props) => {
                 <Button
                   variant={"outline"}
                   onClick={() => setIsCancelListingPopupOpened(true)}
+                  data-cy={"cancel-listing-button"}
                 >
                   Cancel listing
                 </Button>
