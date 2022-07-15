@@ -1,5 +1,6 @@
 import React, { FC, createContext, useContext, useCallback, useMemo } from 'react';
 import { useQuery, useQueryClient } from 'react-query';
+import axios from 'axios';
 
 import { IOrder, INFT, IOrderAssetTypeSingleListing, IOrderAssetTypeERC20 } from '../../types';
 import { IUser } from '../../../account/types';
@@ -16,6 +17,7 @@ import {
 } from '@app/api';
 import { polymorphOwner, queryPolymorphsGraph2 } from '@legacy/graphql/polymorphQueries';
 import { Contract, providers, utils } from 'ethers';
+import Contracts from "@legacy/contracts.json";
 import { lobsterOwner, queryLobstersGraph } from '@legacy/graphql/lobsterQueries';
 import { useAuthStore } from '../../../../../stores/authStore';
 
@@ -50,6 +52,7 @@ export interface INFTPageContext {
   };
   moreFromCollection: INFT[] | undefined;
   metadata: IMetadata | null;
+  nftMetadata: string | null;
   totalEditions: number;
   ownedEditions: number;
 }
@@ -140,7 +143,7 @@ export const NFTPageProvider: FC<INFTPageProviderProps> = ({ children }) => {
       collection: collectionAddress
     }),
   );
- 
+
   // NFT Creator Data Query
   const { data: creator } = useQuery(
     userKeys.info(data?.NFT.creatorAddress || ""),
@@ -179,7 +182,7 @@ export const NFTPageProvider: FC<INFTPageProviderProps> = ({ children }) => {
   const { data: collection } = useQuery(
     collectionKeys.centralizedInfo(data?.NFT._collectionAddress || ""),
     () => GetCollectionApi(`${data?.NFT._collectionAddress}`),
-    { 
+    {
       enabled: !!data?.NFT._collectionAddress,
       retry: false,
     },
@@ -229,6 +232,42 @@ export const NFTPageProvider: FC<INFTPageProviderProps> = ({ children }) => {
     }
   );
 
+  const { data: NFTMetadata } = useQuery(
+    ['NFT', collectionAddress, tokenId, 'metadata', 'JSON'],
+    async () => {
+      try {
+        const network = providers.getNetwork(
+          +`${process.env.REACT_APP_NETWORK_CHAIN_ID}`
+        );
+        const provider = providers.getDefaultProvider(network);
+
+        const chainId = process.env.REACT_APP_NETWORK_CHAIN_ID || null;
+
+        if (chainId === null) {
+          throw new Error("Chain ID is missing !");
+        }
+
+        // @ts-ignore
+        const { abi } = Contracts[chainId].contracts.UniverseERC721Core;
+
+        const contract = new Contract(utils.getAddress(`${collectionAddress}`.toLowerCase()), abi, provider);
+
+        const url = await contract.tokenURI(tokenId);
+
+        if (url) {
+          const { data: metadata } = await axios.get(url);
+
+          return JSON.stringify(metadata); // HERE IS YOUR JSON :)
+        }
+      } catch (e) {}
+
+      return undefined;
+    },
+    {
+      enabled: !!collectionAddress && !!tokenId,
+    }
+  );
+
   const isAuthUserOwner = useMemo(() => {
     if (!owners || !owners.length || !authUserAddress) {
       return false;
@@ -275,6 +314,7 @@ export const NFTPageProvider: FC<INFTPageProviderProps> = ({ children }) => {
     offers,
     moreFromCollection,
     metadata: polymorphMetadata || lobsterMetadata || null,
+    nftMetadata: NFTMetadata || null,
     totalEditions,
     ownedEditions,
   };

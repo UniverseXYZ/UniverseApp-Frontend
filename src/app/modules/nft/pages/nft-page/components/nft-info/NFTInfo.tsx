@@ -42,7 +42,7 @@ import { useNFTPageData } from '../../NFTPage.context';
 import * as styles from '../../styles';
 import { NFTAssetBroken } from '../nft-asset-broken';
 import { NFTTransferPopup } from '../nft-transfer-popup';
-import { GoBackButton, TabHistory, TabMetadata, TabOffers, TabOwners, TabProperties } from './components';
+import { GoBackButton, TabHistory, TabDetails, TabOffers, TabOwners, TabProperties } from './components';
 import { TabListings } from './components/tab-listings';
 import { NFTAcceptOfferPopup } from './components/tab-offers/components';
 import { RefreshMetadataPopup } from './components/tab-offers/components/refresh-metadata-popup';
@@ -268,11 +268,6 @@ export const NFTInfo = () => {
       renderTab: () => (<TabProperties properties={NFT?._properties ?? []} />),
     },
     {
-      show: isPolymorph || isLobster,
-      name: 'Metadata',
-      renderTab: () => (<TabMetadata />),
-    },
-    {
       show: NFT.standard === NFTStandard.ERC1155,
       name: 'Owners',
       renderTab: () => (<TabOwners />),
@@ -297,6 +292,11 @@ export const NFTInfo = () => {
           onAcceptOffer={handleAcceptOffer}
         />
       ),
+    },
+    {
+      show: true,
+      name: 'Details',
+      renderTab: () => (<TabDetails />),
     },
     {
       show: true,
