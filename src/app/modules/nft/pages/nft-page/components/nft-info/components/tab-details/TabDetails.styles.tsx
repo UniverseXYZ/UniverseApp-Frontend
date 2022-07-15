@@ -68,7 +68,11 @@ export const CopyStyle: StackProps = {
 };
 
 export const JsonWrapperStyle: StackProps = {
+  color: 'rgba(0, 0, 0, 0.4)',
+  fontSize: '14px',
+  lineHeight: '18px',
   height: '140px',
   overflow: 'auto',
-  margin: '12px 0 !important'
+  margin: '12px 0 !important',
+  wordBreak: 'break-word'
 };

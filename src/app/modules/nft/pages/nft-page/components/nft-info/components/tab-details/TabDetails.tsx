@@ -6,7 +6,7 @@ import * as styles from './TabDetails.styles';
 import copyOutlinedIcon from '@assets/images/copy-outlined.svg';
 
 export const TabDetails: React.FC = () => {
-  const { NFT, collectionAddress, isPolymorph, isLobster, metadata } = useNFTPageData();
+  const { NFT, collectionAddress, isPolymorph, isLobster, metadata, nftMetadata } = useNFTPageData();
 
   const formattedContractAddress = useBreakpointValue({
     base: `${collectionAddress.slice(0, 6)}...${collectionAddress.slice(-4)}`,
@@ -52,8 +52,7 @@ export const TabDetails: React.FC = () => {
   }, [metadata]);
 
   const handleCopyJson = useCallback(() => {
-    // TODO - pass copy string
-    copyToClipboard("json");
+    copyToClipboard(nftMetadata as string);
     setCopiedJson(true);
 
     setTimeout(() => setCopiedJson(false), 1000);
@@ -143,11 +142,7 @@ export const TabDetails: React.FC = () => {
           }
         </Box>
         <Box color="rgba(0, 0, 0, 0.6)" {...styles.JsonWrapperStyle}>
-          test long text test long text test long text test long text test long text test long text
-          test long text test long text test long text test long text test long text test long text
-          test long text test long text test long text test long text test long text test long text
-          test long text test long text test long text test long text test long text test long text
-          test long text test long text test long text test long text test long text test long text
+          {nftMetadata && nftMetadata.split(",").join(",\n")}
         </Box>
       </HStack>
     </VStack>
