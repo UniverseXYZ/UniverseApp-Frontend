@@ -79,10 +79,7 @@ const CreateNFT = () => {
         {!collectionAddress && !savedNFTID && (
           <h1 className="page--title">
             {tabIndex === 0 ||
-            (tabIndex === 1 && NFTType === "single") ||
-            (tabIndex === 1 && NFTType === "collection")
-              ? "Create NFT"
-              : "Create NFT collection"}
+            (tabIndex === 1 && NFTType === "single") ? "Create NFT" : "Create NFT collection"}
           </h1>
         )}
         {savedNFTID && (
