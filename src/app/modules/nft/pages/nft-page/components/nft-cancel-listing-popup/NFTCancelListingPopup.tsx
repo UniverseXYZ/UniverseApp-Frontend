@@ -113,7 +113,7 @@ export const NFTCancelListingPopup = ({ order, isOpen, onClose }: INFTCancelList
       const newOrder = await GetActiveListingApi(collectionAddress,tokenId);
 
       // Change query information about order
-      if (!newOrder?.id || order.id !== newOrder.id) {
+      if (!newOrder?._id || order._id !== newOrder._id) {
         clearInterval(indexInterval);
 
         queryClient.invalidateQueries(orderKeys.history({tokenId, collectionAddress}));

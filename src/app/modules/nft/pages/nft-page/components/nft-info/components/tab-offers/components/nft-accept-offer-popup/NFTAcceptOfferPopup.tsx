@@ -175,7 +175,7 @@ export const NFTAcceptOfferPopup: React.FC<INFTAcceptOfferPopupProps> = (props) 
       setState(AcceptState.INDEXING);
       // This polling mechanic is temporary until we have marketplace web sockets
       const orderIndexing = setInterval(async () => {
-        const stringifiedOffers = offers?.orders?.map((offer) => offer.id).join('');
+        const stringifiedOffers = offers?.orders?.map((offer) => offer._id).join('');
         setFetchOrderCount((count) => (count += 1));
 
         // TODO: [Bundle] add bundle support
@@ -191,7 +191,7 @@ export const NFTAcceptOfferPopup: React.FC<INFTAcceptOfferPopupProps> = (props) 
         });
 
         // Change query information about order
-        const newStringifiedoffers = newOffers?.orders?.map((offer) => offer.id).join('');
+        const newStringifiedoffers = newOffers?.orders?.map((offer) => offer._id).join('');
         if (stringifiedOffers !== newStringifiedoffers) {
           clearInterval(orderIndexing);
           setNewOffersInfo(newOffers.orders);

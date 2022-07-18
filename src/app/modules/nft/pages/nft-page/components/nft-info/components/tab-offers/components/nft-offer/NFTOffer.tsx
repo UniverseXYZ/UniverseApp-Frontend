@@ -55,7 +55,7 @@ export const  NFTOffer = <T extends IOfferSingleListing | IOfferBundleListing>(p
   const usd = new BigNumber(usdPrice).multipliedBy(formattedPrice).toFixed(2);
 
   return (
-    <NFTTabItemWrapper key={offer.id}>
+    <NFTTabItemWrapper key={offer._id}>
       <Flex>
         {offerUser && offerUser.profileImageUrl
           ? <Image src={offerUser.profileImageUrl} {...styles.ImageStyle} />

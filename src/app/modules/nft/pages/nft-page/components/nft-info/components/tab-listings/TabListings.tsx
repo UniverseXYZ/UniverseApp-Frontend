@@ -32,7 +32,7 @@ export const TabListings: React.FC = () => {
   return (
     <Box>
       <HistoryEvent
-        key={order.id}
+        key={order._id}
         event={{ ...order, makerData: owners?.[0].owner ?? undefined }}
         onlyListings
         cancelListing={setIsCancelListingPopupOpened}

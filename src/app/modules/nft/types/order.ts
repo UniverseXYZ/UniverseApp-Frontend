@@ -1,5 +1,5 @@
-import { IUser } from '../../account/types';
-import { OrderAssetClass } from '../enums';
+import { IUser } from "../../account/types";
+import { OrderAssetClass } from "../enums";
 
 export interface IOrderAssetTypeSingleListing {
   assetClass: OrderAssetClass.ERC721 | OrderAssetClass.ERC1155;
@@ -25,11 +25,12 @@ export interface IOrderAssetTypeETH {
 }
 
 export interface IOrderAsset<
-  T = IOrderAssetTypeSingleListing
+  T =
+    | IOrderAssetTypeSingleListing
     | IOrderAssetTypeBundleListing
     | IOrderAssetTypeERC20
     | IOrderAssetTypeETH
-  > {
+> {
   assetType: T;
   value: string;
 }
@@ -39,7 +40,7 @@ export interface IOrder<M, T> {
   cancelledTxHash: null | string;
   createdAt: Date;
   data: {
-    dataType: 'ORDER_DATA';
+    dataType: "ORDER_DATA";
     revenueSplits?: Array<{
       account: string;
       value: number;
@@ -49,7 +50,7 @@ export interface IOrder<M, T> {
   fill: string;
   from: string;
   hash: string;
-  id: string;
+  _id: string;
   make: IOrderAsset<M>;
   makeBalance: string;
   makeStock: string;
@@ -69,10 +70,11 @@ export interface IOrder<M, T> {
   modified: boolean;
 }
 
-export interface IOrderBackend<M, T> extends
-  Omit<IOrder<M, T>,
-    'salt' | 'start' | 'end' | 'createdAt' | 'updatedAt'
-    > {
+export interface IOrderBackend<M, T>
+  extends Omit<
+    IOrder<M, T>,
+    "salt" | "start" | "end" | "createdAt" | "updatedAt"
+  > {
   salt: string;
   start: string;
   end: string;
