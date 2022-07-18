@@ -383,6 +383,9 @@ const NFTCollectionForm = ({ scrollToTop }) => {
         : '',
     [coverImage]
   );
+
+  const createCollectionButtonDisabled = !collectionName || !tokenName || !coverImage;
+
   return (
     <div className="nft--collection--settings--page">
       <RouterPrompt
@@ -572,7 +575,7 @@ const NFTCollectionForm = ({ scrollToTop }) => {
           <Button
             className="light-button"
             onClick={handleMinting}
-            disabled={!collectionName || !tokenName}
+            disabled={createCollectionButtonDisabled}
           >
             Create collection
           </Button>

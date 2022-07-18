@@ -120,7 +120,6 @@ export const BioStyle: BoxProps = {
     base: '100%',
     xl:'50%',
   },
-  wordBreak: 'break-all',
 
   sx: {
     '.readMoreText': {
