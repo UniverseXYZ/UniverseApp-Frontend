@@ -1,6 +1,6 @@
 import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
-import React, { useState } from "react";
+import React,{ useState } from "react";
 import Popup from "reactjs-popup";
 // import './MyAccount.scss';
 import Head from "../../components/myAccount/Head.jsx";
@@ -10,7 +10,7 @@ import LoadingPopup from "../../components/popups/LoadingPopup.jsx";
 import { useAuctionContext } from "../../contexts/AuctionContext.jsx";
 import { useAuthStore } from "../../stores/authStore";
 import { useErrorStore } from "../../stores/errorStore";
-import { saveProfileInfo, saveUserImage } from "../../utils/api/profile.js";
+import { saveProfileInfo,saveUserImage } from "../../utils/api/profile.js";
 
 export const MyAccount = () => {
   const { loggedInArtist, previewUserData, setLoggedInArtist } = useAuthStore(
@@ -74,6 +74,7 @@ export const MyAccount = () => {
   const saveChanges = async () => {
     try {
       setShowLoading(true);
+      //@ts-ignore
       setEditProfileButtonClick(true);
       if (
         // !accountImage ||
