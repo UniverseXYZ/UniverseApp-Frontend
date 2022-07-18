@@ -222,13 +222,20 @@ export const SellPage = () => {
           start: values.startDate ? Math.floor(values.startDate.getTime()/1000) : 0,
           end: values.endDate ? Math.floor(values.endDate.getTime() / 1000) : 0,
           data: {
-            dataType: 'ORDER_DATA',
-            revenueSplits: values.royalties?.map((r: any) => ({
-              account: r.address,
-              value: +r.percent,
-            })) ?? []
+            dataType: 'ORDER_DATA'
           },
         };
+
+        const hasRevenueSplits =
+          values.royalties?.filter((v: any) => v.address && v.percent).length >
+          0;
+
+        if (hasRevenueSplits) {
+          orderData.data.revenueSplits = values.royalties.map((r: any) => ({
+            account: r.address,
+            value: +r.percent,
+          }));
+        }
   
         const { data: encodedOrder } = (await encodeOrderMutation.mutateAsync(orderData));
   

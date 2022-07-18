@@ -40,7 +40,7 @@ export interface IOrder<M, T> {
   createdAt: Date;
   data: {
     dataType: 'ORDER_DATA';
-    revenueSplits: Array<{
+    revenueSplits?: Array<{
       account: string;
       value: number;
     }>;
