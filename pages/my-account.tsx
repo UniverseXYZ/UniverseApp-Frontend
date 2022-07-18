@@ -1,3 +1,4 @@
-import MyAccount from '../src/containers/myAccount/MyAccount.jsx';
-
-export default MyAccount;
+export {
+  getServerSideProps,
+  MyAccount as default,
+} from "../src/containers/myAccount/MyAccount";
