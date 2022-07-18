@@ -106,7 +106,7 @@ export const TabOffers = <T extends IOfferSingleListing | IOfferBundleListing>(p
       let fetchCount = 0;
       const orderIndexing = setInterval(async () => {
         fetchCount += 1;
-        const stringifiedOffers = offers.map((offer) => offer.id).join('');
+        const stringifiedOffers = offers.map((offer) => offer._id).join('');
 
         // TODO: [Bundle] add bundle support
         const singleListingOffer = offer as IOrder<IOrderAssetTypeERC20, IOrderAssetTypeSingleListing>;
@@ -122,7 +122,7 @@ export const TabOffers = <T extends IOfferSingleListing | IOfferBundleListing>(p
         });
 
         // Change query information about order
-        const newStringifiedoffers = newOffers?.orders?.map((offer) => offer.id).join('');
+        const newStringifiedoffers = newOffers?.orders?.map((offer) => offer._id).join('');
         if (stringifiedOffers !== newStringifiedoffers) {
           clearInterval(orderIndexing);
           queryClient.setQueryData(orderKeys.offers({ tokenId, collectionAddress }), newOffers || undefined);
@@ -151,7 +151,7 @@ export const TabOffers = <T extends IOfferSingleListing | IOfferBundleListing>(p
         .filter((offer) => offer.end * 1000 > new Date().getTime())
         .map((offer) => offer && nft && nft._ownerAddress && (
           <NFTOffer
-            key={offer.id}
+            key={offer._id}
             offer={offer}
             owner={nft._ownerAddress}
             usersMap={usersMap || {}}

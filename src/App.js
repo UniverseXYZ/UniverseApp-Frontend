@@ -181,7 +181,7 @@ const App = () => {
                                 text={loadingBody}
                                 transactions={transactions}
                               />
-                              {NFT?.tokenId && order?.id && (
+                              {NFT?.tokenId && order?._id && (
                                 <NFTCheckoutPopup
                                   NFT={NFT}
                                   collection={collection}

@@ -57,7 +57,7 @@ export const BundlePageProvider: React.FC<IBundlePageProviderProps> = (props) =>
       return await Promise.all(NFTsPromises);
     },
     {
-      enabled: !!order?.id
+      enabled: !!order?._id
     }
   );
 

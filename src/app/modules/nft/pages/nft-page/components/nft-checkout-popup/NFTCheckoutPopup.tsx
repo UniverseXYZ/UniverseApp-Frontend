@@ -204,7 +204,7 @@ export const NFTCheckoutPopup = () => {
         const newOrder = await GetActiveListingApi(collectionAddress, tokenId);
 
         // Change query information about order
-        if (!newOrder?.id || order.id !== newOrder.id) {
+        if (!newOrder?._id || order._id !== newOrder._id) {
           clearInterval(orderIndexing);
           setNewOrderInfo(newOrder);
           setIsOrderIndexed(true);
