@@ -34,7 +34,7 @@ export const Maintanance = () => (
 
     <Box my={'80px'} textAlign={'center'}>
       <Heading fontSize={'16px'} mb={'24px'}>
-        In the meantime, make sure to check the NFT Embed at <Link href={'nftembed.org'} target={'blank'} color={'#4D66EB'}>nftembed.org</Link>
+        In the meantime, make sure to check the NFT Embed at <Link href={'https://nftembed.org'} target={'blank'} color={'#4D66EB'}>nftembed.org</Link>
       </Heading>
 
       <Image
