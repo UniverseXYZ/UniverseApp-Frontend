@@ -37,8 +37,8 @@ const LobsterRarityChartsLoader = React.memo(({ number }) =>
   ))
 );
 
-// LobsterRarityChartsLoader.propTypes = {
-//   number: PropTypes.number.isRequired,
-// };
+LobsterRarityChartsLoader.propTypes = {
+  number: PropTypes.number.isRequired,
+};
 
 export default LobsterRarityChartsLoader;

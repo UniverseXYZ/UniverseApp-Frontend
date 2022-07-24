@@ -32,8 +32,8 @@ const RarityChartsLoader = React.memo(({ number }) =>
   ))
 );
 
-// RarityChartsLoader.propTypes = {
-//   number: PropTypes.number.isRequired,
-// };
+RarityChartsLoader.propTypes = {
+  number: PropTypes.number.isRequired,
+};
 
 export default RarityChartsLoader;
