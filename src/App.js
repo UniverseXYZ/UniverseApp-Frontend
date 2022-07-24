@@ -62,6 +62,7 @@ import { LoadingPopup } from './app/modules/marketplace/components/popups/loadin
 import { MyNFTsPage, UserProfilePage } from './app/modules/account';
 import { useNftCheckoutPopupContext } from './app/providers/NFTCheckoutProvider';
 import { NFTCheckoutPopup } from './app/modules/nft/pages/nft-page/components';
+import { Maintanance } from './app/components/maintanance';
 
 class UniverseRoute {
   constructor(
@@ -83,7 +84,7 @@ const routes = {
   '/': new UniverseRoute(Homepage),
   '/about': new UniverseRoute(About),
   '/team': new UniverseRoute(Team),
-  '/minting': new UniverseRoute(Minting),
+  '/minting': new UniverseRoute(Maintanance, false, true),
   // '/polymorphs': new UniverseRoute(Polymorphs),
   // '/polymorph-universe': new UniverseRoute(PolymorphUniverse),
   // '/mint-polymorph': new UniverseRoute(MintPolymorph),
@@ -93,14 +94,14 @@ const routes = {
   // '/planets/kuapo': new UniverseRoute(Planet3),
   // '/polymorphs/:id': new UniverseRoute(PolymorphScramblePage),
   '/lobsters/:id': new UniverseRoute(LobsterInfoPage),
-  '/v1/nft/:collectionAddress/:tokenId': new UniverseRoute(MarketplaceNFT),
+  // '/v1/nft/:collectionAddress/:tokenId': new UniverseRoute(MarketplaceNFT),
   // '/character-page': new UniverseRoute(CharacterPage),
-  '/v1/marketplace': new UniverseRoute(BrowseNFT),
-  '/marketplace': new UniverseRoute(BrowseNFTsPage, false, true),
-  '/nft/:collectionAddress/:tokenId': new UniverseRoute(NFTPage, false, true),
-  '/nft/:collectionAddress/:tokenId/sell': new UniverseRoute(SellPage, false, true),
-  '/bundle/:hash': new UniverseRoute(BundlePage, false, true),
-  '/nft-marketplace/:steps': new UniverseRoute(NFTMarketplace),
+  // '/v1/marketplace': new UniverseRoute(BrowseNFT),
+  '/marketplace': new UniverseRoute(Maintanance, false, true),
+  '/nft/:collectionAddress/:tokenId': new UniverseRoute(Maintanance, false, true),
+  '/nft/:collectionAddress/:tokenId/sell': new UniverseRoute(Maintanance, false, true),
+  '/bundle/:hash': new UniverseRoute(Maintanance, false, true),
+  '/nft-marketplace/:steps': new UniverseRoute(Maintanance, false, true),
   // '/search': new UniverseRoute(Search),
   // '/core-drops': new UniverseRoute(CharectersDrop),
   '/lobby-lobsters': new UniverseRoute(LobbyLobsters),
@@ -109,9 +110,9 @@ const routes = {
   // '/setup-auction': new UniverseRoute(SetupAuction, true, false, { exact: false }),
   // '/minting-and-auctions/marketplace/active-auctions': new UniverseRoute(Marketplace),
   // '/minting-and-auctions/marketplace/future-auctions': new UniverseRoute(Marketplace),
-  '/v1/my-nfts': new UniverseRoute(MyNFTs, true),
-  '/my-nfts': new UniverseRoute(MyNFTsPage, true, true),
-  '/my-nfts/create': new UniverseRoute(CreateNFT, true),
+  // '/v1/my-nfts': new UniverseRoute(MyNFTs, true),
+  '/my-nfts': new UniverseRoute(Maintanance, true, true),
+  '/my-nfts/create': new UniverseRoute(Maintanance, true),
   '/my-account': new UniverseRoute(MyAccount, true),
   // '/my-auctions': new UniverseRoute(Auctions, true),
   // '/create-tiers': new UniverseRoute(CreateTiers, true),
@@ -119,9 +120,9 @@ const routes = {
   // '/finalize-auction': new UniverseRoute(FinalizeAuction, true),
   // '/customize-auction-landing-page': new UniverseRoute(CustomizeAuction, true),
   // '/auction-review': new UniverseRoute(AuctionReview, true),
-  '/:artistUsername': new UniverseRoute(UserProfilePage, false, true),
-  '/v1/:artistUsername': new UniverseRoute(Artist),
-  '/collection/:collectionAddress': new UniverseRoute(CollectionPage, false, true),
+  '/:artistUsername': new UniverseRoute(Maintanance, false, true),
+  // '/v1/:artistUsername': new UniverseRoute(Artist),
+  '/collection/:collectionAddress': new UniverseRoute(Maintanance, false, true),
   // '/:artist/:auction': new UniverseRoute(AuctionLandingPage),
   '*': new UniverseRoute(NotFound, false, false, { exact: false }),
 };

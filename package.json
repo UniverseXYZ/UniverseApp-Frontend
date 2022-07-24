@@ -96,7 +96,9 @@
     "node-fetch": ">=2.6.7",
     "url-parse": ">=1.5.2",
     "tmpl": ">=1.0.5",
-    "react-error-overlay": "6.0.9"
+    "react-error-overlay": "6.0.9",
+    "@types/react": "17.0.1",
+    "@types/react-dom": "17.0.1"
   },
   "scripts": {
     "start": "react-scripts start",
