@@ -9,7 +9,13 @@ export const Maintanance = () => (
   <Box layerStyle={'StoneBG'} mt={'8px'}>
     <Box textAlign={'center'} mt={'64px'}>
 
-      <Image src={CharlesGif} m={'auto'} />
+      <Image
+        src={CharlesGif}
+        pos={'relative'}
+        top={'2px'}
+        left={'50%'}
+        transform={'translateX(-50%)'}
+      />
 
       <Box pos={'relative'} mb={'64px'}>
         <Marquee gradient={false}>
@@ -26,28 +32,33 @@ export const Maintanance = () => (
         </Box>
       </Box>
 
-      <Heading fontSize={'32px'} mb={'16px'}>Don’t worry, Charles is working on it!</Heading>
-      <Text color={'#00000099'} fontSize={'18px'}>
-        The marketplace is under maintenance, we’ll be back soon!
-      </Text>
+      <Box px={['16px', null, null, 0]}>
+        <Heading fontSize={'32px'} mb={'16px'}>Don’t worry, Charles is working on it!</Heading>
+        <Text color={'#00000099'} fontSize={'18px'}>
+          The marketplace is under maintenance, we’ll be back soon!
+        </Text>
+      </Box>
     </Box>
 
-    <Box my={'80px'} textAlign={'center'}>
+    <Box my={'80px'} textAlign={'center'} px={['16px', null, null, 0]}>
       <Heading fontSize={'16px'} mb={'24px'}>
         In the meantime, make sure to check the NFT Embed at <Link href={'https://nftembed.org'} target={'blank'} color={'#4D66EB'}>nftembed.org</Link>
       </Heading>
 
-      <Image
-        src={NFTEmbed}
-        alt={'NFT Embed'}
-        boxShadow={'0px 10px 36px rgba(46, 35, 72, 0.14)'}
-        m={'auto'}
-        maxW={'730px'}
-        transition={'200ms'}
-        _hover={{
-          transform: 'scale(1.1)',
-        }}
-      />
+      <Link href={'https://nftembed.org'} target={'blank'} outline={'none !important'}>
+        <Image
+          src={NFTEmbed}
+          alt={'NFT Embed'}
+          boxShadow={'0px 10px 36px rgba(46, 35, 72, 0.14)'}
+          m={'auto'}
+          maxW={'730px'}
+          w={'100%'}
+          transition={'200ms'}
+          _hover={{
+            transform: 'scale(1.05)',
+          }}
+        />
+      </Link>
     </Box>
   </Box>
 );
