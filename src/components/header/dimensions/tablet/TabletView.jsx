@@ -514,6 +514,7 @@ const TabletView = (props) => {
                       onClick={() => window.open('https://nftembed.org')}
                     >
                       <img src={marketplaceIcon} alt="NFT Marketplace" />
+                      <span>NFT Marketplace</span>
                       {/* <span className="tooltiptext">Coming soon</span> */}
                     </button>
                   </div>
