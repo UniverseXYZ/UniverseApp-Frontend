@@ -511,15 +511,9 @@ const TabletView = (props) => {
                     <button
                       type="button"
                       // className="disable"
-                      onClick={() => {
-                        setShowMenu(false);
-                        history.push('/marketplace');
-                      }}
+                      onClick={() => window.open('https://nftembed.org')}
                     >
                       <img src={marketplaceIcon} alt="NFT Marketplace" />
-                      <span>
-                        NFT Marketplace <Badge text="beta" />
-                      </span>
                       {/* <span className="tooltiptext">Coming soon</span> */}
                     </button>
                   </div>

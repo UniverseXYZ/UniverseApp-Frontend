@@ -97,7 +97,14 @@ const routes = {
   // '/v1/nft/:collectionAddress/:tokenId': new UniverseRoute(MarketplaceNFT),
   // '/character-page': new UniverseRoute(CharacterPage),
   // '/v1/marketplace': new UniverseRoute(BrowseNFT),
-  '/marketplace': new UniverseRoute(Maintanance, false, true),
+  '/marketplace': new UniverseRoute(
+    () => {
+      window.location.href = 'https://nftembed.org';
+      return null;
+    },
+    false,
+    true
+  ),
   '/nft/:collectionAddress/:tokenId': new UniverseRoute(Maintanance, false, true),
   '/nft/:collectionAddress/:tokenId/sell': new UniverseRoute(Maintanance, false, true),
   '/bundle/:hash': new UniverseRoute(Maintanance, false, true),

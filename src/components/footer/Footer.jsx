@@ -93,9 +93,8 @@ const Footer = () => {
               <div>
                 <ul>
                   <li>Products</li>
-                  <li onClick={() => history.push('/marketplace')} aria-hidden="true">
+                  <li onClick={() => window.open('https://nftembed.org')} aria-hidden="true">
                     NFT Marketplace
-                    <Badge text="beta" />
                   </li>
                   <li aria-hidden="true" onClick={() => history.push('/minting')}>
                     Minting
