@@ -88,12 +88,7 @@ const DesktopView = ({
               <button
                 type="button"
                 // className="disable"
-                onClick={() => {
-                  setIsMintingDropdownOpened(false);
-                  if (location.pathname !== '/marketplace') {
-                    history.push('/marketplace');
-                  }
-                }}
+                onClick={() => window.open('https://nftembed.org')}
               >
                 <img src={marketplaceIcon} alt="NFT Marketplace" />
                 <span>NFT Marketplace</span>
