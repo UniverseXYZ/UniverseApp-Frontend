@@ -78,7 +78,7 @@ const NonFungibleUniverse = () => {
         'xyzDAO is intent on leading the way in the adoption of new approaches, technologies, and standards that have been proven superior to the established way of doing things.',
       loaded: false,
       action: 'Explore',
-      link: 'https://dao.universe.xyz/',
+      link: 'https://gov.universe.xyz/',
       newTab: true,
     },
   ]);

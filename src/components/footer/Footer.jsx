@@ -187,13 +187,13 @@ const Footer = () => {
                   <li>DAO</li>
                   <li
                     aria-hidden="true"
-                    onClick={() => window.open('https://dao.universe.xyz/governance')}
+                    onClick={() => window.open('https://gov.universe.xyz/governance')}
                   >
                     Governance
                   </li>
                   <li
                     aria-hidden="true"
-                    onClick={() => window.open('https://dao.universe.xyz/yield-farming')}
+                    onClick={() => window.open('https://gov.universe.xyz/yield-farming')}
                   >
                     Yield Farming
                   </li>
@@ -208,7 +208,7 @@ const Footer = () => {
                   </li>
                   <li
                     aria-hidden="true"
-                    onClick={() => window.open('https://dao.universe.xyz/airdrop')}
+                    onClick={() => window.open('https://gov.universe.xyz/airdrop')}
                   >
                     Airdrop
                   </li>

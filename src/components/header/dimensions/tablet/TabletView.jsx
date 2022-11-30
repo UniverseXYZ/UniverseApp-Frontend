@@ -672,7 +672,7 @@ const TabletView = (props) => {
                   <div>
                     <button
                       type="button"
-                      onClick={() => window.open('https://dao.universe.xyz/governance')}
+                      onClick={() => window.open('https://gov.universe.xyz/governance')}
                     >
                       <img src={governanceIcon} alt="Governance" />
                       <span>Governance</span>
@@ -681,7 +681,7 @@ const TabletView = (props) => {
                   <div>
                     <button
                       type="button"
-                      onClick={() => window.open('https://dao.universe.xyz/yield-farming')}
+                      onClick={() => window.open('https://gov.universe.xyz/yield-farming')}
                     >
                       <img src={yieldFarmingIcon} alt="Yield Farming" />
                       <span>Yield Farming</span>
@@ -708,7 +708,7 @@ const TabletView = (props) => {
                   <div>
                     <button
                       type="button"
-                      onClick={() => window.open('https://dao.universe.xyz/airdrop')}
+                      onClick={() => window.open('https://gov.universe.xyz/airdrop')}
                     >
                       <img src={airdropIcon} alt="Airdrop" />
                       <span>Airdrop</span>

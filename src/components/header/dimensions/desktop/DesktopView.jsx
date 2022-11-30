@@ -277,7 +277,7 @@ const DesktopView = ({
                 type="button"
                 onClick={() => {
                   setIsDAODropdownOpened(false);
-                  window.open('https://dao.universe.xyz/governance');
+                  window.open('https://gov.universe.xyz/governance');
                 }}
               >
                 <img src={governanceIcon} alt="Governance" />
@@ -287,7 +287,7 @@ const DesktopView = ({
                 type="button"
                 onClick={() => {
                   setIsDAODropdownOpened(false);
-                  window.open('https://dao.universe.xyz/yield-farming');
+                  window.open('https://gov.universe.xyz/yield-farming');
                 }}
               >
                 <img src={yieldFarmingIcon} alt="Yield Farming" />
@@ -317,7 +317,7 @@ const DesktopView = ({
                 type="button"
                 onClick={() => {
                   setIsDAODropdownOpened(false);
-                  window.open('https://dao.universe.xyz/airdrop');
+                  window.open('https://gov.universe.xyz/airdrop');
                 }}
               >
                 <img src={airdropIcon} alt="Airdrop" />
