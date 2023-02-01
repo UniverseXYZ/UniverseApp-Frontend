@@ -54,6 +54,9 @@ import { useAuthContext } from '../../../../contexts/AuthContext';
 import { useAuctionContext } from '../../../../contexts/AuctionContext';
 import supportIcon from '../../../../assets/images/supportIcon.svg';
 import Badge from '../../../badge/Badge';
+import torrentIcon from '../../../../assets/images/torrent.svg';
+import displayIcon from '../../../../assets/images/display.svg';
+import embedIcon from '../../../../assets/images/embed.png';
 
 const TabletView = (props) => {
   const {
@@ -513,9 +516,33 @@ const TabletView = (props) => {
                       // className="disable"
                       onClick={() => window.open('https://nftembed.org')}
                     >
-                      <img src={marketplaceIcon} alt="NFT Marketplace" />
-                      <span>NFT Marketplace</span>
+                      <img src={marketplaceIcon} alt="Marketplace" />
+                      <span>Marketplace</span>
                       {/* <span className="tooltiptext">Coming soon</span> */}
+                    </button>
+                  </div>
+                  <div>
+                    <button type="button" onClick={() => window.open('https://nftembed.org/')}>
+                      <img style={{ maxWidth: '20px' }} src={embedIcon} alt="NFT Embed" />
+                      <span>NFT Embed</span>
+                    </button>
+                  </div>
+                  <div>
+                    <button
+                      type="button"
+                      onClick={() => window.open('https://graviton.xyz/products/torrent')}
+                    >
+                      <img style={{ maxWidth: '20px' }} src={torrentIcon} alt="NFT Torrent" />
+                      <span>NFT Torrent</span>
+                    </button>
+                  </div>
+                  <div>
+                    <button
+                      type="button"
+                      onClick={() => window.open('https://graviton.xyz/products/display')}
+                    >
+                      <img style={{ maxWidth: '20px' }} src={displayIcon} alt="NFT Display" />
+                      <span>NFT Display</span>
                     </button>
                   </div>
                   <div>

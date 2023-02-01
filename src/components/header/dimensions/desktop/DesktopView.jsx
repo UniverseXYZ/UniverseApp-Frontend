@@ -30,6 +30,10 @@ import supportIcon from '../../../../assets/images/supportIcon.svg';
 import myProfileIcon from '../../../../assets/images/my-profile.svg';
 import myNFTsIcon from '../../../../assets/images/my-nfts.svg';
 import signOutIcon from '../../../../assets/images/sign-out.svg';
+import torrentIcon from '../../../../assets/images/torrent.svg';
+import displayIcon from '../../../../assets/images/display.svg';
+import embedIcon from '../../../../assets/images/embed.png';
+
 import {
   shortenEnsDomain,
   shortenEthereumAddress,
@@ -90,8 +94,35 @@ const DesktopView = ({
                 // className="disable"
                 onClick={() => window.open('https://nftembed.org')}
               >
-                <img src={marketplaceIcon} alt="NFT Marketplace" />
-                <span>NFT Marketplace</span>
+                <img src={marketplaceIcon} alt="Marketplace" />
+                <span>Marketplace</span>
+                {/* <span className="tooltiptext">Coming soon</span> */}
+              </button>
+              <button
+                type="button"
+                // className="disable"
+                onClick={() => window.open('https://www.nftembed.org/')}
+              >
+                <img style={{ maxWidth: '20px' }} src={embedIcon} alt="NFT Embed" />
+                <span>NFT Embed</span>
+                {/* <span className="tooltiptext">Coming soon</span> */}
+              </button>
+              <button
+                type="button"
+                // className="disable"
+                onClick={() => window.open('https://graviton.xyz/products/torrent')}
+              >
+                <img style={{ maxWidth: '20px' }} src={torrentIcon} alt="NFT Torrent" />
+                <span>NFT Torrent</span>
+                {/* <span className="tooltiptext">Coming soon</span> */}
+              </button>
+              <button
+                type="button"
+                // className="disable"
+                onClick={() => window.open('https://graviton.xyz/products/display')}
+              >
+                <img style={{ maxWidth: '20px' }} src={displayIcon} alt="NFT Display" />
+                <span>NFT Display</span>
                 {/* <span className="tooltiptext">Coming soon</span> */}
               </button>
               <button type="button" onClick={() => history.push('/minting')}>
